@@ -162,7 +162,7 @@ See [Development Process](../../../docs/development/PROCESS.md) for complete tec
 
 ### Definition of "Complete"
 
-Work is ONLY complete when:
+ALL agents MUST follow this workflow. Work is ONLY complete when:
 
 1. **Guidelines have been reviewed** ([Guidelines README](../../../docs/guidelines/README.md) and all referenced standards)
 2. Voorhees has approved the approach

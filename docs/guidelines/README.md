@@ -1,67 +1,141 @@
-# Agent Guidelines
+# Documentation & Development Guidelines
 
-This directory contains common guidelines and restrictions that apply to multiple agents to avoid duplication in individual agent files.
+## Purpose
 
-## 📋 Guidelines Index
+Clear, concise guidelines for maintaining documentation and development standards across the Atomiton project.
 
-### 🚨 CRITICAL MANDATORY REQUIREMENTS
+## Documentation Standards
 
-- **[DEVELOPMENT_PROCESS.md](../development/PROCESS.md)** - **MANDATORY CODE QUALITY CHECKS** - ALL agents must run format/lint/typecheck/build before completing work
-- **[DEVELOPMENT_PROCESS.md](../development/PROCESS.md)** - **MANDATORY PRE-COMMIT HOOK COMPLIANCE** - NO agent may use `--no-verify` without explicit Ryan permission
+### Core Principle: Documents Explain, They Don't Track
 
-### Core Restrictions & Authority
+**Documents should contain:**
+- ✅ Concepts and architecture
+- ✅ How things work and why
+- ✅ Design decisions and rationale
+- ✅ API references and examples
+- ✅ Development philosophy
 
-- **[ENVIRONMENT_RESTRICTIONS.md](../development/ENVIRONMENT.md)** - Environment and repository configuration authority matrix
+**Documents should NOT contain:**
+- ❌ Task lists or TODOs (use `/docs/TODO.md`)
+- ❌ Working checklists or progress tracking
+- ❌ Status updates or "currently broken" alerts
+- ❌ Temporal language ("now", "currently", "at this time")
+- ❌ Implementation status or bug reports
 
-### ⚠️ Archived Documents
+### Writing Guidelines
 
-**IMPORTANT**: Any documents in `archived/` folders are OUTDATED and should NEVER be used for current work. They exist only for historical reference.
+1. **Keep it evergreen** - Write documentation that remains valid over time
+2. **Vision over reality** - Document the design, track gaps in TODO.md
+3. **Clear structure** - Use hierarchical headings and tables of contents
+4. **Simple language** - Avoid unnecessary jargon
+5. **Archive don't delete** - Move outdated docs to archive folders
 
-### Development Process & Standards
+## Development Standards
 
-- **[DEVELOPMENT_PROCESS.md](../development/PROCESS.md)** - **MANDATORY TECHNICAL REQUIREMENTS** - Code quality checks, validation pipeline, and crisis management procedures
-- **[DEVELOPMENT_CORE_VALUES.md](../development/CORE_VALUES.md)** - Core development principles and values
+### Mandatory Code Quality Checks
 
-## 🎯 How Agents Should Use Guidelines
+**Before ANY code is considered complete:**
 
-### 🚨 MANDATORY FOR ALL AGENTS
+```bash
+# Run in this order - ALL must pass with exit code 0
+npm run format:fix     # Auto-format code
+npm run lint:fix       # Auto-fix linting issues
+npm run lint           # Verify no errors remain (warnings acceptable)
+npm run typecheck      # TypeScript compilation check
+npm run build          # Successful build
+```
 
-**EVERY AGENT** must follow the complete workflow defined in the Agent Execution Plan which includes:
+### Pre-Commit Hook Compliance
+
+- ✅ **REQUIRED**: All commits must pass pre-commit hooks
+- ❌ **FORBIDDEN**: Using `--no-verify` without explicit permission
+- ✅ **FIX**: Address the underlying issues, don't bypass checks
+
+### TypeScript Standards
+
+- **NO** `@ts-ignore` or `@ts-expect-error` without permission
+- **NO** `eslint-disable` comments without permission  
+- **NO** type casting (`as Type`) without permission
+- **NO** `any` types - always use concrete types
+- **ALWAYS** fix the root cause of type errors
+- **NEVER** use inline `require()` statements
+- **USE** `unknown` instead of `any` when type is truly unknown, then narrow it
+
+## Document Management
+
+### Where Things Belong
+
+| Content Type | Location |
+|-------------|----------|
+| Tasks & TODOs | `/docs/TODO.md` |
+| Architecture & Design | `/docs/architecture/README.md` |
+| Development Process | `/docs/development/` |
+| Guidelines & Standards | `/docs/guidelines/README.md` (this file) |
+| Temporary Status | `/docs/status/` |
+| Historical/Outdated | `*/archive/` folders |
+
+### Document Categories
+
+- **Architecture** - System design, technology choices, component structure
+- **Development** - Process, standards, testing strategies
+- **Guidelines** - Best practices, team agreements (this document)
+- **Status** - Temporary project state (not in version control ideally)
+
+### Archiving Process
+
+When documents become outdated:
+1. Create `archive/` folder if it doesn't exist
+2. Move file with descriptive name (e.g., `COMPONENT_DESIGN_v1.md`)
+3. Add archive header noting why it was archived
+4. Update any references to point to current docs
+
+## Agent Workflow (For AI Agents)
+
+### Mandatory Workflow
+
+All agents must follow the complete workflow defined in the Agent Execution Plan:
 
 1. Pre-development planning with Voorhees and Michael
 2. Quality consultation during development
-3. Code quality checks (detailed in DEVELOPMENT_PROCESS.md)
+3. Code quality checks (all must pass)
 4. Karen's code review using explicit approval criteria
 5. Barbara's documentation updates
 6. Karen's final approval
 
 **NO WORK IS COMPLETE** until Karen gives final approval.
 
-**Note**: The complete workflow process is maintained separately to avoid circular documentation dependencies.
+### Guidelines Compliance
 
-### In Agent Files
+Agents must review applicable guidelines before work:
+- **Code Quality**: All checks must pass with exit code 0
+- **TypeScript**: No suppression without permission
+- **Documentation**: Follow standards in this document
+- **Pre-commit**: Never use `--no-verify`
 
-Instead of duplicating restrictions, reference the appropriate guideline:
+## Summary Checklists
 
-```markdown
-## CRITICAL: Guidelines Compliance
+### Before Writing Documentation
+- [ ] Is this explaining a concept (not tracking tasks)?
+- [ ] Will this be valid in 6 months?
+- [ ] Does similar documentation already exist?
+- [ ] Am I putting tasks in TODO.md instead?
 
-**BEFORE ANY WORK**, review applicable guidelines:
+### Before Committing Code
+- [ ] `npm run format:fix` - auto-format code
+- [ ] `npm run lint:fix` - auto-fix linting issues
+- [ ] `npm run lint` - verify no errors remain
+- [ ] `npm run typecheck` - passes
+- [ ] `npm run build` - succeeds
+- [ ] Pre-commit hooks pass (no `--no-verify`)
 
-- **MANDATORY Code Quality**: [DEVELOPMENT_PROCESS.md](../../docs/development/PROCESS.md)
-- **Environment Changes**: [ENVIRONMENT_RESTRICTIONS.md](../../docs/development/ENVIRONMENT.md)
-- **UI Standards**: [Component Architecture](../../docs/ui/components/ARCHITECTURE.md)
-- **TypeScript Standards**: [TYPESCRIPT_STANDARDS.md](../../docs/development/TYPESCRIPT.md)
-```
-
-### Benefits
-
-- **Consistency**: Single source of truth for common rules
-- **Maintainability**: Update guidelines in one place
-- **Clarity**: Agents focus on their core responsibilities
-- **Scalability**: Easy to add new guidelines as needed
+### When Reviewing Documentation
+- [ ] No task lists or checkboxes (except examples)
+- [ ] No temporal language or status updates
+- [ ] Clear structure with headings
+- [ ] Will remain valid over time
 
 ---
 
-**Maintained by**: All agents contribute, Parker owns environment guidelines  
-**Last Updated**: 2025-01-30
+**Last Updated**: September 1, 2025  
+**Status**: Living document - Update as needed  
+**Archive**: Previous detailed guidelines in [`/docs/guidelines/archive/`](/docs/guidelines/archive/)
