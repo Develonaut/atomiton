@@ -1,12 +1,14 @@
 {
-  "name": "atomiton",
+  "name": "@atomiton/root",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "prettier": "^3.6.2",
