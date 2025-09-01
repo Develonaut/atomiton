@@ -51,11 +51,18 @@ npm run build
 
 **All must pass with exit code 0** - no exceptions.
 
-### Pre-Commit Hooks
+### Pre-Commit Hooks (Implemented with Husky)
 
+- ✅ **Automated**: Husky 9.1.7 enforces quality checks before every commit
 - ✅ **Required**: All commits must pass pre-commit hooks
 - ❌ **Forbidden**: Never use `--no-verify` without explicit permission
-- 🔧 **Process**: Hooks will auto-format and lint-fix staged files
+- 🔧 **Process**: Hooks automatically run:
+  1. Format check (Prettier)
+  2. Lint check (ESLint with --max-warnings 0)
+  3. TypeScript check (tsc --noEmit)
+  4. Build verification
+
+**Note**: All checks must pass with exit code 0 or the commit will be blocked
 
 ## TypeScript Standards
 
@@ -270,6 +277,6 @@ Before pushing:
 
 ---
 
-**Last Updated**: September 1, 2025  
+**Last Updated**: December 30, 2024  
 **Status**: Living document - Core standards that evolve with the project  
 **Archive**: Detailed documentation in [`/docs/development/archive/`](/docs/development/archive/)

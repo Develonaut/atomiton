@@ -114,6 +114,7 @@ Each package/app has its own `.claude/CLAUDE.md` that references this root confi
 - Never create documentation files unless explicitly requested
 - Follow existing code conventions and patterns
 - Run format/lint/typecheck/build before completing work
+- Log progress to `.claude/LOG.md` (1 line per milestone)
 
 ---
 

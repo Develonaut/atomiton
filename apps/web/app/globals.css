@@ -1,5 +1,6 @@
-@import "tailwindcss";
-@plugin "tailwind-scrollbar";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
     --shade-01: #fcfcfc;
@@ -31,26 +32,6 @@
     --box-shadow-popover: 0 153px 61px 0 rgba(0, 0, 0, 0.01),
         0 86px 52px 0 rgba(0, 0, 0, 0.04), 0 38px 38px 0 rgba(0, 0, 0, 0.06),
         0 10px 21px 0 rgba(0, 0, 0, 0.07);
-}
-
-@theme {
-    --breakpoint-*: initial;
-    --breakpoint-sm: 480px;
-    --breakpoint-md: 767px;
-    --breakpoint-lg: 1023px;
-    --breakpoint-xl: 1259px;
-    --breakpoint-2xl: 1419px;
-    --breakpoint-3xl: 1719px;
-    --breakpoint-4xl: 1899px;
-    --color-shade-01: var(--shade-01);
-    --color-shade-02: var(--shade-02);
-    --color-shade-03: var(--shade-03);
-    --color-shade-04: var(--shade-04);
-    --color-shade-05: var(--shade-05);
-    --color-shade-06: var(--shade-06);
-    --color-shade-07: var(--shade-07);
-    --color-shade-08: var(--shade-08);
-    --color-shade-09: var(--shade-09);
     --color-surface-01: var(--shade-01);
     --color-surface-02: var(--shade-02);
     --color-surface-03: var(--shade-03);
@@ -169,10 +150,10 @@
         @apply px-1.5 py-0.5 bg-surface-03 rounded-md shadow-[0_0px_0px_1px_rgba(0,0,0,0.11),0px_2px_0.8px_0px_rgba(255,255,255,0.27)_inset,0px_-1px_0.6px_0px_rgba(0,0,0,0.20)_inset,0px_1px_4.2px_-1px_rgba(0,0,0,0.25)] text-body-sm text-secondary;
     }
     .social {
-        @apply flex items-center justify-center size-10 border border-s-02 rounded-xl transition-colors hover:bg-surface-03;
+        @apply flex items-center justify-center w-10 h-10 border border-s-02 rounded-xl transition-colors hover:bg-surface-03;
     }
     .content {
-        @apply text-p-md [&_p]:mb-4 [&_p]:last:mb-0 [&_strong]:font-bold [&_ul]:mb-4 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-1 [&_ul]:last:mb-0 [&_ul>li]:pl-6 [&_ul>li]:relative [&_ul>li]:before:absolute [&_ul>li]:before:left-2 [&_ul>li]:before:top-2.25 [&_ul>li]:before:size-1.25 [&_ul>li]:before:bg-primary [&_ul>li]:before:rounded-full;
+        @apply text-p-md [&_p]:mb-4 [&_p]:last:mb-0 [&_strong]:font-bold [&_ul]:mb-4 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-1 [&_ul]:last:mb-0 [&_ul>li]:pl-6 [&_ul>li]:relative [&_ul>li]:before:absolute [&_ul>li]:before:left-2 [&_ul>li]:before:top-2.25 [&_ul>li]:before:w-1.25 [&_ul>li]:before:h-1.25 [&_ul>li]:before:bg-primary [&_ul>li]:before:rounded-full;
     }
     .loop-slider--thumb:after {
         content: "";

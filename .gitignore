@@ -36,3 +36,6 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Claude agent tracking (for Ryan's use only)
+.claude/LOG.md

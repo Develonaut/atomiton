@@ -31,6 +31,7 @@
 1. **ALL agents MUST follow this workflow before starting ANY work**
 2. **NO code can be added, committed, or pushed without EXPLICIT permission from Ryan**
 3. **This workflow supersedes all other workflow documentation**
+4. **ALL agents MUST log progress to `.claude/LOG.md` using format: `[YYYY-MM-DD HH:MM] [Agent] Status` (1 line max)**
 
 ## Required Guidelines Review
 
@@ -50,6 +51,18 @@ Agents have automatic permission for all file operations within the `atomiton` d
 - Use all discovery tools (Glob, Grep, Read, bash commands)
 
 **Note**: Git operations (add, commit, push) still require explicit Ryan permission.
+
+## Progress Logging Requirements
+
+**ALL agents MUST log progress at these checkpoints:**
+
+- Task start: `[HH:MM] [Agent] Started [task description]`
+- Major milestones: `[HH:MM] [Agent] [What was completed]`
+- Task completion: `[HH:MM] [Agent] Completed [task] - [outcome]`
+
+Keep entries to 1 line maximum. Write to `.claude/LOG.md`.
+
+**IMPORTANT**: Agents should NEVER read LOG.md - it's purely for Ryan's tracking. Just append your progress.
 
 ## Complete Work Verification Process
 

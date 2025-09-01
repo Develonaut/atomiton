@@ -73,6 +73,7 @@ npm run build          # Successful build
 | Architecture & Design  | `/docs/architecture/README.md`           |
 | Development Process    | `/docs/development/`                     |
 | Guidelines & Standards | `/docs/guidelines/README.md` (this file) |
+| Migration Strategies   | `/docs/strategies/`                      |
 | Temporary Status       | `/docs/status/`                          |
 | Historical/Outdated    | `*/archive/` folders                     |
 
@@ -81,7 +82,26 @@ npm run build          # Successful build
 - **Architecture** - System design, technology choices, component structure
 - **Development** - Process, standards, testing strategies
 - **Guidelines** - Best practices, team agreements (this document)
+- **Strategies** - Detailed migration and implementation plans for major changes
 - **Status** - Temporary project state (not in version control ideally)
+
+### Migration Strategies Directory
+
+The `/docs/strategies/` directory contains detailed implementation plans for major migrations and architectural changes:
+
+- **Purpose**: Step-by-step guides for complex technical transitions
+- **Content**: Risk assessments, rollback plans, phase breakdowns, success metrics
+- **Examples**: Framework migrations, database transitions, infrastructure changes
+- **Naming**: Use descriptive names like `nextjs-to-vite-migration.md`
+
+Strategy documents should include:
+
+1. Current state analysis
+2. Target state definition
+3. Phase-by-phase approach with timelines
+4. Risk assessment and mitigation
+5. Rollback procedures
+6. Success metrics and validation criteria
 
 ### Archiving Process
 
