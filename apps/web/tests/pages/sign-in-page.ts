@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './base-page';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./base-page";
 
 /**
  * Sign-in page object model
@@ -14,19 +14,31 @@ export class SignInPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.formContainer = page.locator('form, [data-testid="signin-form"]').first();
-    this.emailInput = page.locator('input[type="email"], input[name="email"], #email').first();
-    this.passwordInput = page.locator('input[type="password"], input[name="password"], #password').first();
-    this.signInButton = page.locator('button[type="submit"], [data-testid="signin-button"]').first();
-    this.createAccountLink = page.locator('a[href*="create-account"], text="Create Account"').first();
-    this.resetPasswordLink = page.locator('a[href*="reset-password"], text="Reset Password"').first();
+    this.formContainer = page
+      .locator('form, [data-testid="signin-form"]')
+      .first();
+    this.emailInput = page
+      .locator('input[type="email"], input[name="email"], #email')
+      .first();
+    this.passwordInput = page
+      .locator('input[type="password"], input[name="password"], #password')
+      .first();
+    this.signInButton = page
+      .locator('button[type="submit"], [data-testid="signin-button"]')
+      .first();
+    this.createAccountLink = page
+      .locator('a[href*="create-account"], text="Create Account"')
+      .first();
+    this.resetPasswordLink = page
+      .locator('a[href*="reset-password"], text="Reset Password"')
+      .first();
   }
 
   /**
    * Navigate to the sign-in page
    */
   async visit() {
-    await this.goto('/sign-in');
+    await this.goto("/sign-in");
   }
 
   /**
@@ -34,7 +46,7 @@ export class SignInPage extends BasePage {
    */
   async isSignInFormVisible(): Promise<boolean> {
     try {
-      await this.formContainer.waitFor({ state: 'visible', timeout: 5000 });
+      await this.formContainer.waitFor({ state: "visible", timeout: 5000 });
       return true;
     } catch {
       return false;

@@ -86,8 +86,8 @@ const nodePackage = await getNodePackage(nodeId);
 // UI packages provide theme injection for adapters
 const themeAdapter = createReactFlowAdapter({
   theme: {
-    getCategoryColor: category => uiTheme.colors.categories[category],
-    getStatusColor: status => uiTheme.colors.status[status],
+    getCategoryColor: (category) => uiTheme.colors.categories[category],
+    getStatusColor: (status) => uiTheme.colors.status[status],
     fonts: uiTheme.fonts,
     spacing: uiTheme.spacing,
   },

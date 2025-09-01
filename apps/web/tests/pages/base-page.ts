@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { waitForPageLoad, checkNoErrors } from '../utils/test-helpers';
+import { Page, Locator } from "@playwright/test";
+import { waitForPageLoad, checkNoErrors } from "../utils/test-helpers";
 
 /**
  * Base page class with common functionality
@@ -38,7 +38,7 @@ export class BasePage {
    */
   async isLoaded(): Promise<boolean> {
     try {
-      await this.page.waitForLoadState('domcontentloaded', { timeout: 5000 });
+      await this.page.waitForLoadState("domcontentloaded", { timeout: 5000 });
       return true;
     } catch {
       return false;
@@ -49,9 +49,13 @@ export class BasePage {
    * Wait for any loading states to complete
    */
   async waitForNoLoading() {
-    const loadingElements = this.page.locator('[data-testid="loading"], .loading, .spinner').first();
-    await loadingElements.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {
-      // Loading elements might not be present, that's okay
-    });
+    const loadingElements = this.page
+      .locator('[data-testid="loading"], .loading, .spinner')
+      .first();
+    await loadingElements
+      .waitFor({ state: "hidden", timeout: 10000 })
+      .catch(() => {
+        // Loading elements might not be present, that's okay
+      });
   }
 }

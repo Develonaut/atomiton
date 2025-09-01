@@ -9,6 +9,7 @@ Clear, concise guidelines for maintaining documentation and development standard
 ### Core Principle: Documents Explain, They Don't Track
 
 **Documents should contain:**
+
 - ✅ Concepts and architecture
 - ✅ How things work and why
 - ✅ Design decisions and rationale
@@ -16,6 +17,7 @@ Clear, concise guidelines for maintaining documentation and development standard
 - ✅ Development philosophy
 
 **Documents should NOT contain:**
+
 - ❌ Task lists or TODOs (use `/docs/TODO.md`)
 - ❌ Working checklists or progress tracking
 - ❌ Status updates or "currently broken" alerts
@@ -54,7 +56,7 @@ npm run build          # Successful build
 ### TypeScript Standards
 
 - **NO** `@ts-ignore` or `@ts-expect-error` without permission
-- **NO** `eslint-disable` comments without permission  
+- **NO** `eslint-disable` comments without permission
 - **NO** type casting (`as Type`) without permission
 - **NO** `any` types - always use concrete types
 - **ALWAYS** fix the root cause of type errors
@@ -65,14 +67,14 @@ npm run build          # Successful build
 
 ### Where Things Belong
 
-| Content Type | Location |
-|-------------|----------|
-| Tasks & TODOs | `/docs/TODO.md` |
-| Architecture & Design | `/docs/architecture/README.md` |
-| Development Process | `/docs/development/` |
+| Content Type           | Location                                 |
+| ---------------------- | ---------------------------------------- |
+| Tasks & TODOs          | `/docs/TODO.md`                          |
+| Architecture & Design  | `/docs/architecture/README.md`           |
+| Development Process    | `/docs/development/`                     |
 | Guidelines & Standards | `/docs/guidelines/README.md` (this file) |
-| Temporary Status | `/docs/status/` |
-| Historical/Outdated | `*/archive/` folders |
+| Temporary Status       | `/docs/status/`                          |
+| Historical/Outdated    | `*/archive/` folders                     |
 
 ### Document Categories
 
@@ -84,6 +86,7 @@ npm run build          # Successful build
 ### Archiving Process
 
 When documents become outdated:
+
 1. Create `archive/` folder if it doesn't exist
 2. Move file with descriptive name (e.g., `COMPONENT_DESIGN_v1.md`)
 3. Add archive header noting why it was archived
@@ -107,6 +110,7 @@ All agents must follow the complete workflow defined in the Agent Execution Plan
 ### Guidelines Compliance
 
 Agents must review applicable guidelines before work:
+
 - **Code Quality**: All checks must pass with exit code 0
 - **TypeScript**: No suppression without permission
 - **Documentation**: Follow standards in this document
@@ -115,12 +119,14 @@ Agents must review applicable guidelines before work:
 ## Summary Checklists
 
 ### Before Writing Documentation
+
 - [ ] Is this explaining a concept (not tracking tasks)?
 - [ ] Will this be valid in 6 months?
 - [ ] Does similar documentation already exist?
 - [ ] Am I putting tasks in TODO.md instead?
 
 ### Before Committing Code
+
 - [ ] `npm run format:fix` - auto-format code
 - [ ] `npm run lint:fix` - auto-fix linting issues
 - [ ] `npm run lint` - verify no errors remain
@@ -129,6 +135,7 @@ Agents must review applicable guidelines before work:
 - [ ] Pre-commit hooks pass (no `--no-verify`)
 
 ### When Reviewing Documentation
+
 - [ ] No task lists or checkboxes (except examples)
 - [ ] No temporal language or status updates
 - [ ] Clear structure with headings

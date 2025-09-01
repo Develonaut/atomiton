@@ -7,6 +7,7 @@ This document outlines the comprehensive Playwright testing setup for the Atomit
 ## Test Structure
 
 ### Core Testing Philosophy
+
 1. **Critical paths first**: Home, sign-in, create, profile routes
 2. **Progressive coverage**: Smoke tests → Visual snapshots → Comprehensive coverage
 3. **3D-aware**: Special handling for WebGL/3D content with proper wait strategies
@@ -34,6 +35,7 @@ tests/
 ## Test Types
 
 ### 1. Critical Route Smoke Tests (`critical-routes.spec.ts`)
+
 - **Purpose**: Verify core user paths load successfully
 - **Coverage**: Home, sign-in, create, profile
 - **Features**:
@@ -43,6 +45,7 @@ tests/
   - Essential visual snapshots
 
 ### 2. Visual Snapshot Tests (`visual-snapshots.spec.ts`)
+
 - **Purpose**: Comprehensive visual regression testing
 - **Features**:
   - 3D content stabilization with extended wait times
@@ -51,6 +54,7 @@ tests/
   - Loading state detection
 
 ### 3. All Routes Coverage (`all-routes.spec.ts`)
+
 - **Purpose**: Systematic testing of all application routes
 - **Coverage**: All 15 identified routes
 - **Features**:
@@ -62,18 +66,21 @@ tests/
 ## Key Features
 
 ### 3D/Animation Support
+
 - **waitFor3DContent()**: Specialized function for WebGL content
 - **Extended timeouts**: Up to 15 seconds for complex 3D scenes
 - **Canvas detection**: Automatic WebGL context validation
 - **Network idle**: Ensures all assets are loaded before testing
 
 ### Page Object Pattern
+
 - **BasePage**: Common functionality for all pages
 - **Specialized pages**: Route-specific interactions and validations
 - **Reusable components**: Consistent selectors and wait strategies
 - **Error handling**: Graceful degradation for missing elements
 
 ### CI/CD Integration
+
 - **GitHub Actions**: Automated test execution on push/PR
 - **Artifact storage**: Test reports and screenshots preserved
 - **Browser installation**: Automatic Playwright browser setup
@@ -82,6 +89,7 @@ tests/
 ## Configuration
 
 ### Playwright Config (`playwright.config.ts`)
+
 - **Base URL**: http://localhost:3000
 - **Browsers**: Chrome, Firefox, Safari (desktop + mobile)
 - **Web Server**: Automatic Next.js dev server startup
@@ -89,11 +97,12 @@ tests/
 - **Reporting**: HTML reports with JSON exports
 
 ### Test Scripts (package.json)
+
 ```json
 {
   "test": "playwright test",
   "test:critical": "playwright test tests/critical-routes.spec.ts",
-  "test:visual": "playwright test tests/visual-snapshots.spec.ts", 
+  "test:visual": "playwright test tests/visual-snapshots.spec.ts",
   "test:all-routes": "playwright test tests/all-routes.spec.ts",
   "test:headed": "playwright test --headed",
   "test:debug": "playwright test --debug",
@@ -104,6 +113,7 @@ tests/
 ## Running Tests
 
 ### Local Development
+
 ```bash
 # Install dependencies
 pnpm install
@@ -126,12 +136,15 @@ pnpm run test:ui          # Interactive UI mode
 ```
 
 ### Continuous Integration
+
 Tests automatically run on:
+
 - Push to `main` or `develop` branches
 - Pull requests targeting `main` or `develop`
 - Manual workflow dispatch
 
 Artifacts:
+
 - HTML test reports (30-day retention)
 - Screenshots and videos of failures
 - JSON test results for integration
@@ -139,6 +152,7 @@ Artifacts:
 ## Test Writing Guidelines
 
 ### Page Objects
+
 ```typescript
 // Use the base page for common functionality
 class MyPage extends BasePage {
@@ -150,6 +164,7 @@ class MyPage extends BasePage {
 ```
 
 ### 3D Content Testing
+
 ```typescript
 // For pages with 3D/WebGL content
 await waitFor3DContent(page);
@@ -161,13 +176,14 @@ await createPage.waitFor3DReady();
 ```
 
 ### Visual Snapshots
+
 ```typescript
 // Consistent snapshot capture
-await takePageSnapshot(page, 'my-page.png');
+await takePageSnapshot(page, "my-page.png");
 
 // With viewport specification
 await page.setViewportSize(VIEWPORTS.tablet);
-await takePageSnapshot(page, 'my-page-tablet.png');
+await takePageSnapshot(page, "my-page-tablet.png");
 ```
 
 ## Troubleshooting
@@ -190,6 +206,7 @@ await takePageSnapshot(page, 'my-page-tablet.png');
    - Review artifact uploads for debugging
 
 ### Debug Commands
+
 ```bash
 # Show test report
 pnpm run test:report
@@ -227,10 +244,11 @@ pnpm exec playwright codegen localhost:3000
 ## Contact
 
 For questions about the testing setup or to report issues:
+
 - **Brian (Tester)**: Primary test implementation and maintenance
 - **Team Lead**: Strategic guidance and approval process
 - **Repository Issues**: Bug reports and feature requests
 
 ---
 
-*Generated as part of the comprehensive Atomiton testing infrastructure setup*
+_Generated as part of the comprehensive Atomiton testing infrastructure setup_

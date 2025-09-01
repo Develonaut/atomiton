@@ -9,6 +9,7 @@ This document establishes standards for all documentation in the Atomiton projec
 ### 1. Documentation is for Understanding, Not Task Tracking
 
 **Documents should explain:**
+
 - What something is
 - How it works
 - Why decisions were made
@@ -16,6 +17,7 @@ This document establishes standards for all documentation in the Atomiton projec
 - Concepts and philosophy
 
 **Documents should NOT contain:**
+
 - ❌ Working checklists
 - ❌ Task lists or TODOs
 - ❌ Progress tracking
@@ -23,6 +25,7 @@ This document establishes standards for all documentation in the Atomiton projec
 - ❌ "Currently broken" alerts
 
 **Where task tracking belongs:**
+
 - ✅ `/docs/TODO.md` - For all project tasks and tracking
 - ✅ GitHub Issues - For bug reports and feature requests
 - ✅ Project boards - For sprint planning
@@ -30,6 +33,7 @@ This document establishes standards for all documentation in the Atomiton projec
 ### 2. Keep Documentation Evergreen
 
 Documentation should be written to remain valid over time:
+
 - Focus on concepts and architecture, not implementation status
 - Describe the vision and design, not current bugs
 - Avoid temporal language like "currently", "now", "at this time"
@@ -44,24 +48,28 @@ Documentation should be written to remain valid over time:
 ## Documentation Categories
 
 ### Architecture Documentation (`/docs/architecture/`)
+
 - System design and structure
 - Technology decisions and rationale
 - Component relationships
 - Data flow and patterns
 
 ### Development Documentation (`/docs/development/`)
+
 - Coding standards
 - Development workflows
 - Testing strategies
 - Core values and principles
 
 ### Guidelines Documentation (`/docs/guidelines/`)
+
 - Standards and best practices
 - Process documentation
 - Team agreements
 - This document
 
 ### Status Documentation (`/docs/status/`)
+
 - Current project state
 - Temporary status updates
 - Sprint summaries
@@ -70,18 +78,21 @@ Documentation should be written to remain valid over time:
 ## Writing Guidelines
 
 ### Structure
+
 1. Start with a clear purpose statement
 2. Use hierarchical headings (##, ###, ####)
 3. Include a table of contents for long documents
 4. Keep sections focused and concise
 
 ### Language
+
 - Write in present tense for timeless concepts
 - Use clear, simple language
 - Define technical terms on first use
 - Avoid jargon when possible
 
 ### Formatting
+
 - Use code blocks for examples
 - Use tables for comparisons
 - Use bullet points for lists
@@ -91,19 +102,22 @@ Documentation should be written to remain valid over time:
 ### Examples
 
 **Good Documentation:**
+
 ```markdown
 ## Blueprint System
 
-The Blueprint system enables visual workflow creation through a node-based editor. 
+The Blueprint system enables visual workflow creation through a node-based editor.
 Users connect nodes to define data flow and execution order.
 
 ### Core Components
+
 - **Nodes**: Individual units of work
 - **Connections**: Data flow between nodes
 - **Canvas**: Visual editing workspace
 ```
 
 **Bad Documentation:**
+
 ```markdown
 ## Blueprint System Status
 
@@ -116,18 +130,21 @@ Users connect nodes to define data flow and execution order.
 ## Adding New Documentation
 
 ### Before Writing
+
 1. Check if similar documentation exists
 2. Determine the appropriate category
 3. Consider if it belongs in TODO.md instead
 4. Plan the structure
 
 ### While Writing
+
 1. Focus on explaining, not tracking
 2. Keep it evergreen
 3. Use clear examples
 4. Cross-reference related docs
 
 ### After Writing
+
 1. Review for temporal language
 2. Remove any task lists
 3. Ensure it will remain valid
@@ -136,12 +153,14 @@ Users connect nodes to define data flow and execution order.
 ## Maintenance
 
 ### Regular Reviews
+
 - Archive outdated documentation
 - Update navigation files
 - Remove temporal language
 - Move tasks to TODO.md
 
 ### When Implementation Changes
+
 - Update architecture docs to reflect new design
 - Don't document bugs or broken states
 - Add fixes to TODO.md, not documentation
@@ -149,6 +168,7 @@ Users connect nodes to define data flow and execution order.
 ## Quick Checklist
 
 Before committing documentation, ensure:
+
 - ✅ No task lists or checkboxes (except in examples)
 - ✅ No "currently broken" or status alerts
 - ✅ Focused on explaining concepts

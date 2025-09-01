@@ -123,7 +123,7 @@ interface NodeDefinition {
 interface PortDefinition {
   id: string;
   name: string;
-  type: 'input' | 'output';
+  type: "input" | "output";
   dataType: DataType;
   required: boolean;
   multiple: boolean; // Array support
@@ -133,19 +133,19 @@ interface PortDefinition {
 
 // Data Type System
 type DataType =
-  | 'string'
-  | 'number'
-  | 'boolean'
-  | 'object'
-  | 'array'
-  | 'file'
-  | 'directory'
-  | 'image'
-  | 'manifest'
-  | 'model3d'
-  | 'any'
-  | 'null'
-  | 'undefined'
+  | "string"
+  | "number"
+  | "boolean"
+  | "object"
+  | "array"
+  | "file"
+  | "directory"
+  | "image"
+  | "manifest"
+  | "model3d"
+  | "any"
+  | "null"
+  | "undefined"
   | CustomDataType;
 
 // Execution Context
@@ -327,7 +327,9 @@ class NodeRegistry {
   }
 
   static getByCategory(category: NodeCategory): NodeDefinition[] {
-    return Array.from(this.nodes.values()).filter(node => node.category === category);
+    return Array.from(this.nodes.values()).filter(
+      (node) => node.category === category,
+    );
   }
 }
 ```
@@ -336,17 +338,26 @@ class NodeRegistry {
 
 ```typescript
 interface ExecutionStrategy {
-  execute(node: BaseNode, context: NodeExecutionContext): Promise<NodeExecutionResult>;
+  execute(
+    node: BaseNode,
+    context: NodeExecutionContext,
+  ): Promise<NodeExecutionResult>;
 }
 
 class SandboxedExecutionStrategy implements ExecutionStrategy {
-  async execute(node: BaseNode, context: NodeExecutionContext): Promise<NodeExecutionResult> {
+  async execute(
+    node: BaseNode,
+    context: NodeExecutionContext,
+  ): Promise<NodeExecutionResult> {
     // Sandboxed execution implementation
   }
 }
 
 class DirectExecutionStrategy implements ExecutionStrategy {
-  async execute(node: BaseNode, context: NodeExecutionContext): Promise<NodeExecutionResult> {
+  async execute(
+    node: BaseNode,
+    context: NodeExecutionContext,
+  ): Promise<NodeExecutionResult> {
     // Direct execution implementation
   }
 }
@@ -375,22 +386,36 @@ class BlueprintNode extends BaseNode {
 ```typescript
 // Automatic type conversion rules
 const TypeCompatibility = {
-  string: ['any'],
-  number: ['string', 'any'],
-  boolean: ['string', 'number', 'any'],
-  object: ['string', 'any'],
-  array: ['string', 'any'],
-  file: ['string', 'any'],
-  directory: ['string', 'any'],
-  image: ['file', 'string', 'any'],
-  any: ['string', 'number', 'boolean', 'object', 'array', 'file', 'directory', 'image'],
+  string: ["any"],
+  number: ["string", "any"],
+  boolean: ["string", "number", "any"],
+  object: ["string", "any"],
+  array: ["string", "any"],
+  file: ["string", "any"],
+  directory: ["string", "any"],
+  image: ["file", "string", "any"],
+  any: [
+    "string",
+    "number",
+    "boolean",
+    "object",
+    "array",
+    "file",
+    "directory",
+    "image",
+  ],
 } as const;
 
 // Port connection validation
 class PortValidator {
-  static canConnect(outputPort: PortDefinition, inputPort: PortDefinition): boolean {
+  static canConnect(
+    outputPort: PortDefinition,
+    inputPort: PortDefinition,
+  ): boolean {
     const compatible = TypeCompatibility[outputPort.dataType] || [];
-    return compatible.includes(inputPort.dataType) || inputPort.dataType === 'any';
+    return (
+      compatible.includes(inputPort.dataType) || inputPort.dataType === "any"
+    );
   }
 
   static validateConnection(connection: Connection): ValidationResult {
@@ -410,11 +435,11 @@ interface DynamicPortDefinition extends PortDefinition {
 // Example: CSV Parser with dynamic output ports based on CSV headers
 class CSVParserNode extends DataNode {
   generateOutputPorts(csvHeaders: string[]): PortDefinition[] {
-    return csvHeaders.map(header => ({
+    return csvHeaders.map((header) => ({
       id: `column_${header}`,
       name: header,
-      type: 'output',
-      dataType: 'any',
+      type: "output",
+      dataType: "any",
       required: false,
       multiple: false,
     }));
@@ -429,27 +454,27 @@ class CSVParserNode extends DataNode {
 ```typescript
 // Node configuration with JSON Schema
 const nodeConfigSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     outputDirectory: {
-      type: 'string',
-      default: 'output',
-      description: 'Directory for output files',
+      type: "string",
+      default: "output",
+      description: "Directory for output files",
     },
     batchSize: {
-      type: 'number',
+      type: "number",
       minimum: 1,
       maximum: 1000,
       default: 100,
-      description: 'Batch size for processing',
+      description: "Batch size for processing",
     },
     enableValidation: {
-      type: 'boolean',
+      type: "boolean",
       default: true,
-      description: 'Enable input validation',
+      description: "Enable input validation",
     },
   },
-  required: ['outputDirectory'],
+  required: ["outputDirectory"],
 };
 
 // Runtime validation with Zod
@@ -484,7 +509,10 @@ class ConfigFormGenerator {
 
 ```typescript
 class NodeExecutionManager {
-  async execute(node: BaseNode, context: NodeExecutionContext): Promise<NodeExecutionResult> {
+  async execute(
+    node: BaseNode,
+    context: NodeExecutionContext,
+  ): Promise<NodeExecutionResult> {
     // 1. Pre-execution validation
     await this.validateInputs(node, context);
 
@@ -521,7 +549,7 @@ interface ProgressReporter {
 class ProcessingNode extends BaseNode {
   async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
     const items = context.inputs.items as any[];
-    context.reportProgress(0, 'Starting processing...');
+    context.reportProgress(0, "Starting processing...");
 
     for (let i = 0; i < items.length; i++) {
       await this.processItem(items[i]);
@@ -547,7 +575,10 @@ interface ResourceLimits {
 class ResourceManager {
   private activeAllocations = new Map<string, ResourceAllocation>();
 
-  async allocate(nodeId: string, limits: ResourceLimits): Promise<ResourceToken> {
+  async allocate(
+    nodeId: string,
+    limits: ResourceLimits,
+  ): Promise<ResourceToken> {
     // Check available resources
     await this.checkAvailability(limits);
 
@@ -597,7 +628,7 @@ class PluginManager {
     await plugin.initialize();
 
     // Register all node definitions
-    plugin.getNodeDefinitions().forEach(def => {
+    plugin.getNodeDefinitions().forEach((def) => {
       NodeRegistry.register(def);
     });
 
@@ -661,7 +692,9 @@ class LazyNodeLoader {
     return this.loadedNodes.get(nodeId)!;
   }
 
-  private static async loadNodeDefinition(nodeId: string): Promise<NodeDefinition> {
+  private static async loadNodeDefinition(
+    nodeId: string,
+  ): Promise<NodeDefinition> {
     // Dynamic import and registration
     const module = await import(`../built-in/${nodeId}`);
     return module.default;
@@ -678,7 +711,7 @@ class ExecutionCache {
   async get(
     nodeId: string,
     inputs: Record<string, any>,
-    config: Record<string, any>
+    config: Record<string, any>,
   ): Promise<NodeExecutionResult | null> {
     const key = this.generateCacheKey(nodeId, inputs, config);
     const entry = this.cache.get(key);
@@ -694,7 +727,7 @@ class ExecutionCache {
     nodeId: string,
     inputs: Record<string, any>,
     config: Record<string, any>,
-    result: NodeExecutionResult
+    result: NodeExecutionResult,
   ): Promise<void> {
     const key = this.generateCacheKey(nodeId, inputs, config);
     this.cache.set(key, {
@@ -711,18 +744,18 @@ class ExecutionCache {
 ### Unit Testing Framework
 
 ```typescript
-describe('NodeSystem', () => {
-  describe('BaseNode', () => {
-    it('should validate configuration', async () => {
+describe("NodeSystem", () => {
+  describe("BaseNode", () => {
+    it("should validate configuration", async () => {
       const node = new TestNode();
-      const result = await node.validate({ requiredField: 'value' });
+      const result = await node.validate({ requiredField: "value" });
       expect(result.valid).toBe(true);
     });
 
-    it('should execute successfully', async () => {
+    it("should execute successfully", async () => {
       const node = new TestNode();
       const context = createTestContext({
-        inputs: { data: 'test' },
+        inputs: { data: "test" },
       });
 
       const result = await node.execute(context);
@@ -730,8 +763,8 @@ describe('NodeSystem', () => {
     });
   });
 
-  describe('NodeRegistry', () => {
-    it('should register and retrieve nodes', () => {
+  describe("NodeRegistry", () => {
+    it("should register and retrieve nodes", () => {
       const definition = createTestNodeDefinition();
       NodeRegistry.register(definition);
 
@@ -745,12 +778,12 @@ describe('NodeSystem', () => {
 ### Integration Testing
 
 ```typescript
-describe('NodeExecution', () => {
-  it('should execute a complete workflow', async () => {
+describe("NodeExecution", () => {
+  it("should execute a complete workflow", async () => {
     const blueprint = createTestBlueprint([
-      { type: 'csv-parser', config: { file: 'test.csv' } },
-      { type: 'sku-generator', config: { prefix: 'TEST' } },
-      { type: 'file-writer', config: { output: 'result.json' } },
+      { type: "csv-parser", config: { file: "test.csv" } },
+      { type: "sku-generator", config: { prefix: "TEST" } },
+      { type: "file-writer", config: { output: "result.json" } },
     ]);
 
     const engine = new BlueprintExecutionEngine();
@@ -823,7 +856,11 @@ class SecurityValidator {
 class NodeVersionManager {
   private migrations = new Map<string, Migration[]>();
 
-  registerMigration(fromVersion: string, toVersion: string, migration: Migration): void {
+  registerMigration(
+    fromVersion: string,
+    toVersion: string,
+    migration: Migration,
+  ): void {
     const key = `${fromVersion}->${toVersion}`;
     if (!this.migrations.has(key)) {
       this.migrations.set(key, []);
@@ -831,7 +868,10 @@ class NodeVersionManager {
     this.migrations.get(key)!.push(migration);
   }
 
-  async migrate(nodeDefinition: NodeDefinition, targetVersion: string): Promise<NodeDefinition> {
+  async migrate(
+    nodeDefinition: NodeDefinition,
+    targetVersion: string,
+  ): Promise<NodeDefinition> {
     let current = nodeDefinition;
     const path = this.findMigrationPath(current.version, targetVersion);
 
@@ -1008,15 +1048,19 @@ interface RuntimeRequirements {
 ```typescript
 // 1. Blender Render Node - Desktop only with Blender installed
 const BlenderRenderNodeConstraints: NodePlatformConstraints = {
-  requiredPlatforms: ['desktop'],
-  requiredCapabilities: ['canExecuteNativeApps', 'canReadFiles', 'canWriteFiles'],
+  requiredPlatforms: ["desktop"],
+  requiredCapabilities: [
+    "canExecuteNativeApps",
+    "canReadFiles",
+    "canWriteFiles",
+  ],
   externalDependencies: [
     {
-      name: 'blender',
-      version: '>=3.0.0',
-      platform: ['desktop'],
-      checkCommand: 'blender --version',
-      installInstructions: 'Install Blender from https://blender.org',
+      name: "blender",
+      version: ">=3.0.0",
+      platform: ["desktop"],
+      checkCommand: "blender --version",
+      installInstructions: "Install Blender from https://blender.org",
     },
   ],
   runtimeRequirements: {
@@ -1027,20 +1071,24 @@ const BlenderRenderNodeConstraints: NodePlatformConstraints = {
 
 // 2. File System Node - Desktop/Server only
 const FileSystemNodeConstraints: NodePlatformConstraints = {
-  requiredPlatforms: ['desktop'],
-  requiredCapabilities: ['canReadFiles', 'canWriteFiles', 'canCreateDirectories'],
+  requiredPlatforms: ["desktop"],
+  requiredCapabilities: [
+    "canReadFiles",
+    "canWriteFiles",
+    "canCreateDirectories",
+  ],
 };
 
 // 3. Web API Node - Browser only
 const WebAPINodeConstraints: NodePlatformConstraints = {
-  requiredPlatforms: ['browser'],
-  requiredCapabilities: ['canAccessNetwork'],
+  requiredPlatforms: ["browser"],
+  requiredCapabilities: ["canAccessNetwork"],
 };
 
 // 4. Local Storage Node - Browser/Desktop
 const LocalStorageNodeConstraints: NodePlatformConstraints = {
-  requiredCapabilities: ['hasLocalStorage'],
-  optionalCapabilities: ['hasIndexedDB'],
+  requiredCapabilities: ["hasLocalStorage"],
+  optionalCapabilities: ["hasIndexedDB"],
 };
 ```
 
@@ -1069,7 +1117,7 @@ class PlatformManager {
       if (!constraints.requiredPlatforms.includes(this.platformInfo.platform)) {
         return {
           compatible: false,
-          reason: `Node requires one of: ${constraints.requiredPlatforms.join(', ')}`,
+          reason: `Node requires one of: ${constraints.requiredPlatforms.join(", ")}`,
           alternative: this.suggestAlternative(constraints),
         };
       }
@@ -1086,12 +1134,14 @@ class PlatformManager {
 
     // Check required capabilities
     if (constraints.requiredCapabilities) {
-      const missing = constraints.requiredCapabilities.filter(cap => !this.capabilities[cap]);
+      const missing = constraints.requiredCapabilities.filter(
+        (cap) => !this.capabilities[cap],
+      );
 
       if (missing.length > 0) {
         return {
           compatible: false,
-          reason: `Missing required capabilities: ${missing.join(', ')}`,
+          reason: `Missing required capabilities: ${missing.join(", ")}`,
           alternative: this.suggestAlternative(constraints),
         };
       }
@@ -1099,12 +1149,16 @@ class PlatformManager {
 
     // Check external dependencies
     if (constraints.externalDependencies) {
-      const missingDeps = await this.checkExternalDependencies(constraints.externalDependencies);
+      const missingDeps = await this.checkExternalDependencies(
+        constraints.externalDependencies,
+      );
       if (missingDeps.length > 0) {
         return {
           compatible: false,
-          reason: `Missing external dependencies: ${missingDeps.map(d => d.name).join(', ')}`,
-          installInstructions: missingDeps.map(d => d.installInstructions).filter(Boolean),
+          reason: `Missing external dependencies: ${missingDeps.map((d) => d.name).join(", ")}`,
+          installInstructions: missingDeps
+            .map((d) => d.installInstructions)
+            .filter(Boolean),
         };
       }
     }
@@ -1142,7 +1196,9 @@ class PlatformManager {
   /**
    * Suggest alternative nodes for incompatible ones
    */
-  private suggestAlternative(constraints: NodePlatformConstraints): NodeDefinition | undefined {
+  private suggestAlternative(
+    constraints: NodePlatformConstraints,
+  ): NodeDefinition | undefined {
     // Logic to suggest compatible alternatives
     // For example, if Blender node is unavailable, suggest a web-based 3D renderer
     return undefined;
@@ -1161,15 +1217,15 @@ class GracefulDegradationManager {
   provideFallback(nodeId: string, reason: string): FallbackStrategy {
     const strategies = {
       // File system fallbacks
-      'file-reader': this.provideFileReaderFallback(),
-      'file-writer': this.provideFileWriterFallback(),
+      "file-reader": this.provideFileReaderFallback(),
+      "file-writer": this.provideFileWriterFallback(),
 
       // External app fallbacks
-      'blender-render': this.provideBlenderFallback(),
-      'image-editor': this.provideImageEditorFallback(),
+      "blender-render": this.provideBlenderFallback(),
+      "image-editor": this.provideImageEditorFallback(),
 
       // Native feature fallbacks
-      'clipboard-access': this.provideClipboardFallback(),
+      "clipboard-access": this.provideClipboardFallback(),
       notification: this.provideNotificationFallback(),
     };
 
@@ -1178,19 +1234,26 @@ class GracefulDegradationManager {
 
   private provideFileReaderFallback(): FallbackStrategy {
     return {
-      type: 'user-upload',
-      message: 'File system access not available. Please upload files manually.',
-      action: 'showFileUploader',
-      limitations: ['Cannot read from arbitrary file paths', 'User must select files'],
+      type: "user-upload",
+      message:
+        "File system access not available. Please upload files manually.",
+      action: "showFileUploader",
+      limitations: [
+        "Cannot read from arbitrary file paths",
+        "User must select files",
+      ],
     };
   }
 
   private provideBlenderFallback(): FallbackStrategy {
     return {
-      type: 'alternative-service',
-      message: 'Blender not available. Consider using web-based 3D rendering.',
-      alternatives: ['three-js-renderer', 'babylon-js-renderer'],
-      limitations: ['Reduced rendering capabilities', 'Limited 3D format support'],
+      type: "alternative-service",
+      message: "Blender not available. Consider using web-based 3D rendering.",
+      alternatives: ["three-js-renderer", "babylon-js-renderer"],
+      limitations: [
+        "Reduced rendering capabilities",
+        "Limited 3D format support",
+      ],
     };
   }
 }
@@ -1276,20 +1339,24 @@ class BlueprintPortabilityAnalyzer {
       const constraints = this.getNodeConstraints(node.type);
 
       if (constraints.requiredPlatforms) {
-        constraints.requiredPlatforms.forEach(p => platformRequirements.add(p));
+        constraints.requiredPlatforms.forEach((p) =>
+          platformRequirements.add(p),
+        );
       }
 
       if (constraints.externalDependencies) {
-        constraints.externalDependencies.forEach(d => externalDependencies.add(d));
+        constraints.externalDependencies.forEach((d) =>
+          externalDependencies.add(d),
+        );
       }
 
       // Check for platform conflicts
       if (platformRequirements.size > 1) {
         issues.push({
-          type: 'platform-conflict',
-          message: `Blueprint contains nodes requiring different platforms: ${Array.from(platformRequirements).join(', ')}`,
+          type: "platform-conflict",
+          message: `Blueprint contains nodes requiring different platforms: ${Array.from(platformRequirements).join(", ")}`,
           affectedNodes: [node.id],
-          severity: 'error',
+          severity: "error",
         });
       }
     }

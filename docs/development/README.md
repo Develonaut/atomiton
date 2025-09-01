@@ -9,16 +9,19 @@ Core development philosophy, standards, and practices for the Atomiton project.
 ### Core Principles
 
 **DRY (Don't Repeat Yourself)**
+
 - Create reusable components and utilities
 - Single source of truth for logic and data
 - Extract common patterns into shared packages
 
 **KISS (Keep It Simple)**
+
 - Clear, readable code over clever solutions
 - Focused components with single responsibilities
 - Progressive complexity - start simple, enhance as needed
 
 **Test-Driven Development**
+
 - Write tests for critical paths
 - Focus on behavior, not implementation
 - Keep tests maintainable and meaningful
@@ -59,6 +62,7 @@ npm run build
 ### Strict Rules
 
 **Never without explicit permission:**
+
 - `@ts-ignore` or `@ts-expect-error`
 - `eslint-disable` comments
 - Type casting with `as Type`
@@ -66,6 +70,7 @@ npm run build
 - `any` type - always use concrete types
 
 **Always:**
+
 - Fix the root cause of type errors
 - Use proper ES6 imports at file top
 - Maintain strict type safety
@@ -82,10 +87,10 @@ function processData(input: string): ProcessedData {
 
 // ✅ Good - Unknown for truly unknown types (then narrow)
 function handleUnknown(value: unknown): string {
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     return value;
   }
-  throw new Error('Expected string');
+  throw new Error("Expected string");
 }
 
 // ❌ Bad - Using any
@@ -112,14 +117,14 @@ function processData(input) {
 ### Test Structure
 
 ```typescript
-describe('Feature', () => {
-  it('should behave correctly when used normally', () => {
+describe("Feature", () => {
+  it("should behave correctly when used normally", () => {
     // Arrange - Set up test data
     // Act - Perform the action
     // Assert - Verify the result
   });
 
-  it('should handle errors gracefully', () => {
+  it("should handle errors gracefully", () => {
     // Test error conditions
   });
 });
@@ -134,6 +139,7 @@ describe('Feature', () => {
 - **No arbitrary metrics** - Coverage percentage is not a goal
 
 **What to test:**
+
 - User-facing functionality
 - Business logic and algorithms
 - Error handling and edge cases
@@ -141,6 +147,7 @@ describe('Feature', () => {
 - Data transformations
 
 **What NOT to test:**
+
 - Simple getters/setters
 - Framework code
 - UI styling
@@ -195,12 +202,14 @@ When we migrate to Mantine UI, use compound components:
 ### Making Changes
 
 **Incremental Approach:**
+
 - Small, focused commits
 - Test after each change
 - Keep the build green
 - Maximum 20 files per commit (ideally less)
 
 **When Refactoring:**
+
 - Separate refactoring from feature work
 - Maintain functionality during refactor
 - Update tests to match new structure
@@ -240,17 +249,20 @@ When we migrate to Mantine UI, use compound components:
 ### Daily Development Checklist
 
 Before starting:
+
 - [ ] Pull latest changes
 - [ ] Install dependencies if package.json changed
 - [ ] Check TODO.md for context
 
 Before committing:
+
 - [ ] Run quality pipeline (format → lint → typecheck → build)
 - [ ] Write/update tests for new functionality
 - [ ] Ensure no console.logs or debug code
 - [ ] Verify no secrets or sensitive data
 
 Before pushing:
+
 - [ ] Commits are logical and focused
 - [ ] Branch is up to date with main
 - [ ] All tests pass locally
