@@ -8,7 +8,7 @@ import Comments from "@/components/Comments";
 import Image from "@/components/Image";
 import useStore from "@/store";
 
-const LayoutEditor = ({}) => {
+const LayoutEditor = () => {
   const { isVisibleComments, isResizeImage } = useStore((state) => state);
   const image = "/images/robot.png";
 

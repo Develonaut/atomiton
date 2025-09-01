@@ -3,7 +3,7 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Menu from "./Menu";
 
-const Head = ({}) => (
+const Head = () => (
   <div className="p-4 pb-3 border-b border-s-01">
     <div className="flex justify-between items-center mb-3">
       <Link href="/">

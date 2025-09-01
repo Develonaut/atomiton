@@ -6,7 +6,7 @@ import Icon from "@/components/Icon";
 import Modal from "@/components/Modal";
 import Settings from "./Settings";
 
-const User = ({}) => {
+const User = () => {
   const [open, setOpen] = useState(false);
 
   const navigation = [

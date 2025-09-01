@@ -3,7 +3,7 @@ import Item from "./Item";
 
 import { content } from "./content";
 
-const Scene = ({}) => {
+const Scene = () => {
   const [selected, setSelected] = useState(4);
 
   return (

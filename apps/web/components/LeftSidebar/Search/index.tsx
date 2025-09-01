@@ -1,7 +1,7 @@
 import Icon from "@/components/Icon";
 import { useState } from "react";
 
-const Search = ({}) => {
+const Search = () => {
   const [search, setSearch] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

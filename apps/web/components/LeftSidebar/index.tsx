@@ -10,7 +10,7 @@ const tabs = [
   { id: 1, name: "Assets" },
 ];
 
-const LeftSidebar = ({}) => {
+const LeftSidebar = () => {
   const [tab, setTab] = useState(tabs[0]);
 
   return (
