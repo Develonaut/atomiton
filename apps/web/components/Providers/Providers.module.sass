@@ -1,0 +1,41 @@
+@use "@/styles/helpers" as *
+
+div.toast
+    gap: 12px
+    max-width: calc(100vw - 32px)
+    padding: 6px 16px 6px 6px
+    background-color: var(--color-bg-surface2)
+    border-radius: 32px
+    box-shadow: var(--box-shadow-hover)
+    +heading
+    color: var(--text-color)
+    white-space: nowrap
+
+.like,
+.icon
+    & + div
+        margin: 0
+
+.like
+    margin-right: -6px
+    svg
+        fill: $primary_03
+
+.icon
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 32px
+    height: 32px
+    background: rgba($primary_02, 0.1)
+    border: 1.5px solid rgba($primary_02, 0.2)
+    border-radius: 50%
+    svg
+        fill: $primary_02
+
+.error
+    .icon
+        background: rgba($primary_03, 0.1)
+        border-color: rgba($primary_03, 0.2)
+        svg
+            fill: $primary_03

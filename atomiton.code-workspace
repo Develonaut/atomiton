@@ -1,0 +1,46 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": ".",
+    },
+    {
+      "name": "Web",
+      "path": "./apps/web",
+    },
+    {
+      "name": "Documentation",
+      "path": "./docs",
+    },
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.workspaceSymbols.scope": "allOpenProjects",
+    "eslint.workingDirectories": ["apps/web", "apps/docs", "packages/ui"],
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.turbo": true,
+      "**/dist": true,
+      "**/.next": true,
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/.turbo": true,
+      "**/dist": true,
+      "**/.next": true,
+      "**/pnpm-lock.yaml": true,
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "bradlc.vscode-tailwindcss",
+      "ms-vscode.vscode-typescript-next",
+    ],
+  },
+}

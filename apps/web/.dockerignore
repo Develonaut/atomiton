@@ -1,0 +1,7 @@
+# Playwright test dockerignore
+node_modules
+.next
+.turbo
+test-results
+playwright-report
+*.log
