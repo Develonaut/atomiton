@@ -1,11 +1,12 @@
 import React from "react";
+import { RouterProvider } from "react-router-dom";
 import Providers from "@/components/Providers";
-import HomePage from "@/templates/HomePage";
+import { router } from "./router";
 
 function App() {
   return (
     <Providers>
-      <HomePage />
+      <RouterProvider router={router} />
     </Providers>
   );
 }

@@ -30,11 +30,53 @@ export default defineConfig({
     video: "retain-on-failure",
   },
 
-  /* Configure projects for major browsers */
+  /* Snapshot directory */
+  snapshotDir: "./tests/snapshots",
+  snapshotPathTemplate: "{snapshotDir}/routes/{arg}{ext}",
+
+  /* Configure projects for major browsers and environments */
   projects: [
+    // Next.js environment (baseline for snapshots)
+    {
+      name: "nextjs-desktop",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://localhost:3000",
+      },
+      testMatch: "**/visual-snapshots.spec.ts",
+    },
+    {
+      name: "nextjs-mobile",
+      use: {
+        ...devices["Pixel 5"],
+        baseURL: "http://localhost:3000",
+      },
+      testMatch: "**/visual-snapshots.spec.ts",
+    },
+
+    // Vite environment (comparison against baseline)
+    {
+      name: "vite-desktop",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://localhost:3001",
+      },
+      testMatch: "**/visual-snapshots.spec.ts",
+    },
+    {
+      name: "vite-mobile",
+      use: {
+        ...devices["Pixel 5"],
+        baseURL: "http://localhost:3001",
+      },
+      testMatch: "**/visual-snapshots.spec.ts",
+    },
+
+    // Default chromium for other tests
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: "**/visual-snapshots.spec.ts",
     },
 
     // Disabled for faster smoke tests - enable if needed for full testing
@@ -69,14 +111,14 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    stdout: "ignore",
-    stderr: "pipe",
-  },
+  /* Server configuration - handled manually for dual environment testing */
+  // webServer: {
+  //   command: "npm run dev",
+  //   url: "http://localhost:3000",
+  //   reuseExistingServer: !process.env.CI,
+  //   stdout: "ignore",
+  //   stderr: "pipe",
+  // },
 
   /* Global setup and teardown */
   // globalSetup: require.resolve('./tests/global-setup'),
@@ -92,11 +134,13 @@ export default defineConfig({
 
     /* Threshold for visual comparisons */
     toHaveScreenshot: {
-      threshold: 0.2,
+      threshold: 0.3, // Allow for slight rendering differences between Next.js/Vite
       animations: "disabled",
+      scale: "css",
+      caret: "hide",
     },
     toMatchSnapshot: {
-      threshold: 0.2,
+      threshold: 0.3,
     },
   },
 

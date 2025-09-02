@@ -52,6 +52,8 @@
 
 ## Phase-by-Phase Approach
 
+**Strategic Decision**: Following Option A - Complete Vite Migration First before tackling UI library changes. This provides immediate developer experience improvements and maintains single focus area for easier debugging.
+
 ### Phase 1: Setup and Configuration (Days 1-2) ✅ COMPLETE
 
 **Objectives:**
@@ -130,13 +132,14 @@
    </html>
    ```
 
-### Phase 2: Core Migration (Days 3-5)
+### Phase 2: Routing Migration (Days 3-4)
 
 **Objectives:**
 
-- Migrate routing from Next.js App Router to React Router
-- Update entry point and app structure
-- Handle metadata and SEO
+- Migrate routing from Next.js App Router to React Router v6
+- Replace Next.js navigation hooks with React Router equivalents
+- Update all Link components
+- Maintain parallel setup during migration
 
 **Tasks:**
 

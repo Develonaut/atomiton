@@ -16,6 +16,8 @@ export default defineConfig({
   // Define global constants for compatibility
   define: {
     global: "globalThis",
+    "process.env": {},
+    "process.env.__NEXT_ROUTER_BASEPATH": JSON.stringify(""),
   },
   // Temporarily disable CSS processing for Phase 1
   // css: {

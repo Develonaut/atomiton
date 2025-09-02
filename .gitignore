@@ -15,6 +15,26 @@ node_modules
 # Testing
 coverage
 
+# Playwright Test Artifacts
+playwright-report/
+playwright/.cache/
+test-results/
+tests/**/*.spec.ts-snapshots/
+tests/**/*.spec.js-snapshots/
+trace.zip
+*.trace.zip
+videos/
+screenshots/
+
+# Playwright temporary files
+test-snapshots.sh
+playwright-snapshots.config.ts
+
+# Keep only the organized snapshots we want
+!tests/snapshots/
+!tests/snapshots/routes/
+!tests/snapshots/routes/*.png
+
 # Turbo
 .turbo
 
@@ -39,3 +59,4 @@ yarn-error.log*
 
 # Claude agent tracking (for Ryan's use only)
 .claude/LOG.md
+**/.claude/LOG.md
