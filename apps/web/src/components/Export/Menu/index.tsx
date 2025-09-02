@@ -37,7 +37,7 @@ const Menu = ({ items, onClick, isActive }: Props) => {
               name={item.icon}
             />
           </div>
-          <div>{item.title}</div>
+          <div className="text-body-sm">{item.title}</div>
           <Icon
             className={`!size-4 ml-auto fill-secondary transition-opacity ${
               isActive === item.id ? "opacity-100" : "opacity-0"

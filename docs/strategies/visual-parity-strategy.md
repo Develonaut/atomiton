@@ -114,6 +114,19 @@ The following differences are **intentional** and should be ignored:
 - **Root Cause**: Shadow CSS variables are identical - visual difference may be rendering
 - **Note**: Component code and styles match exactly
 
+#### 5. **Menu Font Sizes** ✅ FIXED
+
+- **Status**: ✅ FIXED (December 2, 2024)
+- **Routes**: All pages (Left Sidebar dropdown) and `/create` (Export menu)
+- **Issue**: Menu items had larger font than reference app
+- **Expected**: Smaller font size matching reference app
+- **Root Cause**: Missing text size class on menu item labels
+- **Solution**: Added `text-body-sm` class to menu items
+- **Files Modified**:
+  - `/src/components/LeftSidebar/Head/Menu/index.tsx` (line 66)
+  - `/src/components/Export/Menu/index.tsx` (line 40)
+- **Impact**: All menu items now use 11px font size matching reference app's refined appearance
+
 ### 🟢 **MEDIUM PRIORITY** - Visual Polish
 
 #### 7. **Card Shadows & Borders** ✅ INVESTIGATED
@@ -186,6 +199,14 @@ The following differences are **intentional** and should be ignored:
    - Added border-radius values (1.25rem, 1.75rem, 4xl)
    - Fixed robot image display on /create route
    - File: `tailwind.config.js`, `/src/components/LayoutEditor/index.tsx`
+
+6. **Complete Opacity Modifiers Fix** (December 2, 2024)
+   - Fixed ALL color opacity modifiers (e.g., text-secondary/80, bg-shade-01/50)
+   - Added RGB format variables for ALL colors (shade, surface, semantic colors)
+   - Added 15 new RGB CSS variables (--shade-01-rgb through --color-purple-rgb)
+   - Updated entire Tailwind config to use rgb() format with <alpha-value>
+   - Now all Tailwind opacity modifiers work with all color utilities
+   - Files: `src/index.css`, `tailwind.config.js`
 
 ---
 

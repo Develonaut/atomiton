@@ -63,7 +63,7 @@ const Menu = () => {
         >
           {items.map((item, index) => (
             <MenuItem
-              className="flex justify-between items-center gap-2.5 h-9 w-full px-2 rounded-xl transition-colors hover:bg-surface-03 nth-3:relative nth-3:mb-4 nth-3:after:absolute nth-3:after:top-[calc(100%+0.5rem)] nth-3:after:-left-2 nth-3:after:-right-2 nth-3:after:h-0.25 nth-3:after:bg-s-01 nth-3:after:pointer-events-none"
+              className="flex justify-between items-center gap-2.5 h-9 w-full px-2 rounded-xl text-body-sm transition-colors hover:bg-surface-03 nth-3:relative nth-3:mb-4 nth-3:after:absolute nth-3:after:top-[calc(100%+0.5rem)] nth-3:after:-left-2 nth-3:after:-right-2 nth-3:after:h-0.25 nth-3:after:bg-s-01 nth-3:after:pointer-events-none"
               key={index}
               as="button"
               onClick={item.onClick}
