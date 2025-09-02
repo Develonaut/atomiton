@@ -306,7 +306,7 @@
    ```bash
    # Current structure (root level)
    apps/web/
-   ├── app/          # Next.js app directory
+   ├── app/          # Next.js app directory (to be renamed to pages/)
    ├── components/   # React components
    ├── hooks/        # Custom hooks
    ├── store/        # Zustand stores
@@ -318,7 +318,7 @@
    # Target structure (organized in src/)
    apps/web/
    ├── src/
-   │   ├── app/        # App pages (to be removed after full migration)
+   │   ├── pages/      # Page routes (renamed from app for clarity)
    │   ├── components/ # React components
    │   ├── hooks/      # Custom hooks
    │   ├── store/      # Zustand stores
