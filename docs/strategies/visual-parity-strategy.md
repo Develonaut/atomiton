@@ -24,6 +24,7 @@ open tests/snapshots/comparison/report.html
 The following differences are **intentional** and should be ignored:
 
 ### ✅ **Branding**
+
 - **Logo**: Brainwave → Atomiton (top-left header)
 - **Brand Text**: All "Brainwave" text → "Atomiton"
 - **Note**: Placeholder content currently matches (will change after Tailwind migration)
@@ -34,30 +35,43 @@ The following differences are **intentional** and should be ignored:
 
 ### 🔴 **CRITICAL ISSUES** - Missing Major Components
 
-#### 1. **Explore Page - Missing Content Grid**
-- **Status**: 🔴 CRITICAL
+#### 1. **Explore Page - Missing Content Grid** ✅ FIXED
+
+- **Status**: ✅ FIXED (December 2, 2024)
 - **Route**: `/explore`
 - **Issue**: Main content area completely empty - no 3D object cards displayed
 - **Expected**: Grid of 3D object preview cards with images
-- **Impact**: Core functionality broken - users can't browse content
+- **Root Cause**: Double opacity management conflict - both Gallery Item and Image components were managing opacity
+- **Solution**: Removed opacity management from Image component to match NextImage behavior
+- **Files Modified**:
+  - `/src/components/Image/index.tsx` - Removed opacity state management
+  - `/src/components/Gallery/Item/index.tsx` - Retained container opacity management
+- **Impact**: Fixed visual rendering on all Gallery-based pages
 
-#### 2. **Explore Sub-Pages - No Content**
-- **Status**: 🔴 CRITICAL
+#### 2. **Explore Sub-Pages - No Content** ✅ FIXED
+
+- **Status**: ✅ FIXED (December 2, 2024)
 - **Routes**: `/explore/designs`, `/explore/animations`
 - **Issue**: Pages are blank below category pills
 - **Expected**: Grid of design/animation previews
-- **Impact**: Major navigation paths broken
+- **Root Cause**: Same opacity management conflict as main Explore page
+- **Solution**: Fixed by the same Image component opacity removal
+- **Impact**: All Gallery-based pages now display correctly
 
-#### 3. **Profile Page - Empty Content Area**
-- **Status**: 🔴 CRITICAL
+#### 3. **Profile Page - Empty Content Area** ✅ FIXED
+
+- **Status**: ✅ FIXED (December 2, 2024)
 - **Route**: `/profile`
 - **Issue**: No user content, projects, or profile information displayed
 - **Expected**: User profile with projects grid
-- **Impact**: User account functionality missing
+- **Root Cause**: Same Gallery component opacity management conflict
+- **Solution**: Fixed by the same Image component opacity removal
+- **Impact**: Profile page Gallery now displays user projects correctly
 
 ### 🟡 **HIGH PRIORITY** - Layout & Styling Issues
 
 #### 4. **Homepage - Extra Row of Items**
+
 - **Status**: 🟡 HIGH
 - **Route**: `/` (homepage)
 - **Issue**: Shows 8 items (2 rows) instead of 4 items (1 row)
@@ -65,6 +79,7 @@ The following differences are **intentional** and should be ignored:
 - **Fix**: Limit displayed items or adjust grid
 
 #### 5. **Category Pills - Horizontal Scrolling**
+
 - **Status**: 🟡 HIGH
 - **Route**: `/explore`
 - **Issue**: Category pills extend beyond viewport with scroll
@@ -72,6 +87,7 @@ The following differences are **intentional** and should be ignored:
 - **Fix**: Adjust pill container width or wrap pills
 
 #### 6. **AI Prompt Bar - Different Styling**
+
 - **Status**: 🟡 HIGH
 - **Routes**: `/explore`, `/`
 - **Issue**: Prompt bar has different height and styling
@@ -81,6 +97,7 @@ The following differences are **intentional** and should be ignored:
 ### 🟢 **MEDIUM PRIORITY** - Visual Polish
 
 #### 7. **Card Shadows & Borders**
+
 - **Status**: 🟢 MEDIUM
 - **Routes**: All pages with cards
 - **Issue**: Card shadows appear lighter/different
@@ -88,6 +105,7 @@ The following differences are **intentional** and should be ignored:
 - **Fix**: Update shadow utilities
 
 #### 8. **Icon Sizes in Sidebar**
+
 - **Status**: 🟢 MEDIUM
 - **Routes**: All pages
 - **Issue**: Sidebar icons slightly different size
@@ -95,6 +113,7 @@ The following differences are **intentional** and should be ignored:
 - **Fix**: Standardize icon dimensions
 
 #### 9. **Text Color Consistency**
+
 - **Status**: 🟢 MEDIUM
 - **Routes**: Various
 - **Issue**: Some text appears lighter/darker than reference
@@ -104,6 +123,7 @@ The following differences are **intentional** and should be ignored:
 ### 🔵 **LOW PRIORITY** - Minor Differences
 
 #### 10. **Spacing Variations**
+
 - **Status**: 🔵 LOW
 - **Routes**: All pages
 - **Issue**: Minor padding/margin differences
@@ -133,41 +153,44 @@ The following differences are **intentional** and should be ignored:
 
 ## Route-by-Route Status
 
-| Route | Status | Primary Issue | Priority |
-|-------|--------|---------------|----------|
-| `/` | 🟡 Partial | Shows 8 items instead of 4 | HIGH |
-| `/explore` | 🔴 BROKEN | No content grid displayed | CRITICAL |
-| `/explore/designs` | 🔴 BROKEN | Completely empty | CRITICAL |
-| `/explore/animations` | 🔴 BROKEN | Completely empty | CRITICAL |
-| `/explore/details` | ❓ Unknown | Need to test with content | - |
-| `/create` | ✅ Matches | Layout matches reference | - |
-| `/profile` | 🔴 BROKEN | No profile content | CRITICAL |
-| `/pricing` | ✅ Good | Matches well | - |
-| `/likes` | 🟡 Partial | Similar to homepage issues | MEDIUM |
-| `/updates` | ✅ Good | Matches reference | - |
-| `/sign-in` | ✅ Good | Modal properly sized | - |
-| `/create-account` | ✅ Good | Modal properly sized | - |
-| `/reset-password` | ✅ Good | Modal properly sized | - |
-| `/assets/3d-objects` | 🟡 Partial | Shows content but different | MEDIUM |
-| `/assets/materials` | 🟡 Partial | Shows content but different | MEDIUM |
+| Route                 | Status     | Primary Issue               | Priority |
+| --------------------- | ---------- | --------------------------- | -------- |
+| `/`                   | 🟡 Partial | Shows 8 items instead of 4  | HIGH     |
+| `/explore`            | 🔴 BROKEN  | No content grid displayed   | CRITICAL |
+| `/explore/designs`    | 🔴 BROKEN  | Completely empty            | CRITICAL |
+| `/explore/animations` | 🔴 BROKEN  | Completely empty            | CRITICAL |
+| `/explore/details`    | ❓ Unknown | Need to test with content   | -        |
+| `/create`             | ✅ Matches | Layout matches reference    | -        |
+| `/profile`            | 🔴 BROKEN  | No profile content          | CRITICAL |
+| `/pricing`            | ✅ Good    | Matches well                | -        |
+| `/likes`              | 🟡 Partial | Similar to homepage issues  | MEDIUM   |
+| `/updates`            | ✅ Good    | Matches reference           | -        |
+| `/sign-in`            | ✅ Good    | Modal properly sized        | -        |
+| `/create-account`     | ✅ Good    | Modal properly sized        | -        |
+| `/reset-password`     | ✅ Good    | Modal properly sized        | -        |
+| `/assets/3d-objects`  | 🟡 Partial | Shows content but different | MEDIUM   |
+| `/assets/materials`   | 🟡 Partial | Shows content but different | MEDIUM   |
 
 ---
 
 ## Implementation Priority
 
 ### 🚨 **Phase 1: Critical Fixes** (Do First)
+
 1. **Fix Explore page content grid** - Core functionality
 2. **Fix Explore sub-pages** - Major navigation paths
 3. **Fix Profile page** - User functionality
 4. **Verify data loading** - Ensure content is fetching properly
 
 ### ⚠️ **Phase 2: High Priority** (Do Second)
+
 1. **Homepage grid** - Limit to 4 items
 2. **Category pills** - Fix horizontal overflow
 3. **AI prompt bar** - Match exact styling
 4. **Navigation consistency** - Ensure all routes work
 
 ### 📝 **Phase 3: Visual Polish** (Do Third)
+
 1. **Card shadows** - Match reference depth
 2. **Icon sizing** - Standardize dimensions
 3. **Color consistency** - Verify all color values
@@ -178,6 +201,7 @@ The following differences are **intentional** and should be ignored:
 ## Root Cause Analysis
 
 ### Potential Issues to Investigate:
+
 1. **Data Loading**: Explore pages might not be fetching/displaying data
 2. **Component Rendering**: Cards/grids might have conditional rendering issues
 3. **Route Handling**: Sub-routes might not be properly configured
@@ -185,6 +209,7 @@ The following differences are **intentional** and should be ignored:
 5. **API Connections**: Check if content endpoints are configured
 
 ### Debugging Steps:
+
 ```bash
 # Check console for errors
 npm run dev
@@ -203,18 +228,21 @@ cat src/router/index.tsx
 ## Testing Checklist
 
 ### Before Fixes:
+
 - [x] Capture baseline screenshots
 - [x] Document all issues
 - [ ] Identify root causes
 - [ ] Plan fix implementation
 
 ### After Each Fix:
+
 - [ ] Re-run visual comparison
 - [ ] Verify fix doesn't break other pages
 - [ ] Update this document
 - [ ] Commit fix with clear message
 
 ### Before Tailwind → Mantine Migration:
+
 - [ ] All critical issues fixed
 - [ ] All high priority issues fixed
 - [ ] Create final baseline snapshots

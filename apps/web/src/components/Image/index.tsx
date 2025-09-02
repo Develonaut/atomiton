@@ -1,4 +1,4 @@
-import { useState, ImgHTMLAttributes } from "react";
+import { ImgHTMLAttributes } from "react";
 
 interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
   src: string;
@@ -12,20 +12,11 @@ interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
 }
 
 const Image = ({ className, fill, width, height, ...props }: ImageProps) => {
-  const [loaded, setLoaded] = useState(false);
-
-  const handleLoad = () => {
-    setLoaded(true);
-  };
-
   // If fill is true, use absolute positioning like Next.js Image
   if (fill) {
     return (
       <img
-        className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
-          loaded ? "opacity-100" : "opacity-0"
-        } ${className || ""}`}
-        onLoad={handleLoad}
+        className={`absolute inset-0 w-full h-full ${className || ""}`}
         {...props}
         loading="lazy"
       />
@@ -34,10 +25,7 @@ const Image = ({ className, fill, width, height, ...props }: ImageProps) => {
 
   return (
     <img
-      className={`inline-block align-top transition-opacity duration-300 ${
-        loaded ? "opacity-100" : "opacity-0"
-      } ${className || ""}`}
-      onLoad={handleLoad}
+      className={`inline-block align-top ${className || ""}`}
       width={width}
       height={height}
       {...props}
