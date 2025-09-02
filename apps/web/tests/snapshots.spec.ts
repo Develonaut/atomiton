@@ -19,29 +19,11 @@ const routes = [
 ];
 
 test.describe("Visual Snapshots", () => {
-  // Test Next.js
-  test.describe("Next.js", () => {
-    test.use({ baseURL: "http://localhost:3000" });
-
-    for (const route of routes) {
-      test(route.name, async ({ page }) => {
-        await page.goto(route.path);
-        await page.waitForLoadState("networkidle");
-        await expect(page).toHaveScreenshot(`${route.name}-nextjs.png`);
-      });
-    }
-  });
-
-  // Test Vite
-  test.describe("Vite", () => {
-    test.use({ baseURL: "http://localhost:3001" });
-
-    for (const route of routes) {
-      test(route.name, async ({ page }) => {
-        await page.goto(route.path);
-        await page.waitForLoadState("networkidle");
-        await expect(page).toHaveScreenshot(`${route.name}-vite.png`);
-      });
-    }
-  });
+  for (const route of routes) {
+    test(route.name, async ({ page }) => {
+      await page.goto(route.path);
+      await page.waitForLoadState("networkidle");
+      await expect(page).toHaveScreenshot(`${route.name}.png`);
+    });
+  }
 });

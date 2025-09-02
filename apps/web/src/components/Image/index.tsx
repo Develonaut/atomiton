@@ -21,7 +21,6 @@ const Image = ({ className, fill, width, height, ...props }: ImageProps) => {
   // If fill is true, use absolute positioning like Next.js Image
   if (fill) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
       <img
         className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
           loaded ? "opacity-100" : "opacity-0"
@@ -34,7 +33,6 @@ const Image = ({ className, fill, width, height, ...props }: ImageProps) => {
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element
     <img
       className={`inline-block align-top transition-opacity duration-300 ${
         loaded ? "opacity-100" : "opacity-0"

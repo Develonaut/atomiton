@@ -1,82 +1,154 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-// Import template components - using relative paths for Vite
-import HomePage from "../templates/HomePage";
-import CreatePage from "../templates/CreatePage";
-import ExplorePage from "../templates/Explore/ExplorePage";
-import DetailsPageAdapter from "../components/DetailsPageAdapter";
-import DesignsPage from "../templates/Explore/DesignsPage";
-import AnimationsPage from "../templates/Explore/AnimationsPage";
-import ProfilePage from "../templates/ProfilePage";
-import PricingPage from "../templates/PricingPage";
-import LikesPage from "../templates/LikesPage";
-import UpdatesPage from "../templates/UpdatesPage";
-import SignInPageAdapter from "../components/SignInPageAdapter";
-import CreateAccountPageAdapter from "../components/CreateAccountPageAdapter";
-import ResetPasswordPageAdapter from "../components/ResetPasswordPageAdapter";
-import AssetsObjects3dPage from "../templates/Assets/Objects3dPage";
-import AssetsMaterialsPage from "../templates/Assets/MaterialsPage";
+// Loading component for lazy loaded routes
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="text-lg">Loading...</div>
+  </div>
+);
+
+// Lazy load all route components for code splitting
+const HomePage = lazy(() => import("../templates/HomePage"));
+const CreatePage = lazy(() => import("../templates/CreatePage"));
+const ExplorePage = lazy(() => import("../templates/Explore/ExplorePage"));
+const DetailsPageAdapter = lazy(() => import("../components/DetailsPageAdapter"));
+const DesignsPage = lazy(() => import("../templates/Explore/DesignsPage"));
+const AnimationsPage = lazy(() => import("../templates/Explore/AnimationsPage"));
+const ProfilePage = lazy(() => import("../templates/ProfilePage"));
+const PricingPage = lazy(() => import("../templates/PricingPage"));
+const LikesPage = lazy(() => import("../templates/LikesPage"));
+const UpdatesPage = lazy(() => import("../templates/UpdatesPage"));
+const SignInPageAdapter = lazy(() => import("../components/SignInPageAdapter"));
+const CreateAccountPageAdapter = lazy(() => import("../components/CreateAccountPageAdapter"));
+const ResetPasswordPageAdapter = lazy(() => import("../components/ResetPasswordPageAdapter"));
+const AssetsObjects3dPage = lazy(() => import("../templates/Assets/Objects3dPage"));
+const AssetsMaterialsPage = lazy(() => import("../templates/Assets/MaterialsPage"));
+
+// Wrapper component to handle suspense
+const SuspenseWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
+);
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <SuspenseWrapper>
+        <HomePage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/create",
-    element: <CreatePage />,
+    element: (
+      <SuspenseWrapper>
+        <CreatePage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/explore",
-    element: <ExplorePage />,
+    element: (
+      <SuspenseWrapper>
+        <ExplorePage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/explore/details",
-    element: <DetailsPageAdapter />,
+    element: (
+      <SuspenseWrapper>
+        <DetailsPageAdapter />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/explore/designs",
-    element: <DesignsPage />,
+    element: (
+      <SuspenseWrapper>
+        <DesignsPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/explore/animations",
-    element: <AnimationsPage />,
+    element: (
+      <SuspenseWrapper>
+        <AnimationsPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/profile",
-    element: <ProfilePage />,
+    element: (
+      <SuspenseWrapper>
+        <ProfilePage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/pricing",
-    element: <PricingPage />,
+    element: (
+      <SuspenseWrapper>
+        <PricingPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/likes",
-    element: <LikesPage />,
+    element: (
+      <SuspenseWrapper>
+        <LikesPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/updates",
-    element: <UpdatesPage />,
+    element: (
+      <SuspenseWrapper>
+        <UpdatesPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/sign-in",
-    element: <SignInPageAdapter />,
+    element: (
+      <SuspenseWrapper>
+        <SignInPageAdapter />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/create-account",
-    element: <CreateAccountPageAdapter />,
+    element: (
+      <SuspenseWrapper>
+        <CreateAccountPageAdapter />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/reset-password",
-    element: <ResetPasswordPageAdapter />,
+    element: (
+      <SuspenseWrapper>
+        <ResetPasswordPageAdapter />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/assets/3d-objects",
-    element: <AssetsObjects3dPage />,
+    element: (
+      <SuspenseWrapper>
+        <AssetsObjects3dPage />
+      </SuspenseWrapper>
+    ),
   },
   {
     path: "/assets/materials",
-    element: <AssetsMaterialsPage />,
+    element: (
+      <SuspenseWrapper>
+        <AssetsMaterialsPage />
+      </SuspenseWrapper>
+    ),
   },
 ]);

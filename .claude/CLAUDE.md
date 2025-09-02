@@ -1,6 +1,6 @@
 # Claude Agent Instructions - Atomiton Project
 
-- Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. An agent should verbally confirm they have reviewed the AGENT_EXECUTION_PLAN.md before they are allowed to start.
+Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. An agent should verbally confirm they have reviewed the AGENT_EXECUTION_PLAN.md before they are allowed to start.
 
 ## 🎯 Project Overview
 

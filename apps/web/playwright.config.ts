@@ -18,7 +18,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3000",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3001",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -36,32 +36,14 @@ export default defineConfig({
 
   /* Configure projects for major browsers and environments */
   projects: [
-    // Next.js environment (baseline for snapshots)
-    {
-      name: "nextjs-desktop",
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: "http://localhost:3000",
-      },
-      testMatch: "**/visual-snapshots.spec.ts",
-    },
-    {
-      name: "nextjs-mobile",
-      use: {
-        ...devices["Pixel 5"],
-        baseURL: "http://localhost:3000",
-      },
-      testMatch: "**/visual-snapshots.spec.ts",
-    },
-
-    // Vite environment (comparison against baseline)
+    // Vite environment for visual snapshots
     {
       name: "vite-desktop",
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3001",
       },
-      testMatch: "**/visual-snapshots.spec.ts",
+      testMatch: "**/snapshots.spec.ts",
     },
     {
       name: "vite-mobile",
@@ -69,14 +51,14 @@ export default defineConfig({
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3001",
       },
-      testMatch: "**/visual-snapshots.spec.ts",
+      testMatch: "**/snapshots.spec.ts",
     },
 
     // Default chromium for other tests
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      testIgnore: "**/visual-snapshots.spec.ts",
+      testIgnore: "**/snapshots.spec.ts",
     },
 
     // Disabled for faster smoke tests - enable if needed for full testing
@@ -134,7 +116,7 @@ export default defineConfig({
 
     /* Threshold for visual comparisons */
     toHaveScreenshot: {
-      threshold: 0.3, // Allow for slight rendering differences between Next.js/Vite
+      threshold: 0.3,
       animations: "disabled",
       scale: "css",
       caret: "hide",

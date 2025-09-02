@@ -6,7 +6,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
-    port: 3001, // Use different port to avoid conflicts with Next.js
+    port: 3001,
     host: true,
   },
   build: {
@@ -39,9 +39,7 @@ export default defineConfig({
   // Define global constants for compatibility
   define: {
     global: "globalThis",
-    // TODO: Remove this once Nextjs migration is complete.
     "process.env": {},
-    "process.env.__NEXT_ROUTER_BASEPATH": JSON.stringify(""),
   },
   // Asset processing
   assetsInclude: [
