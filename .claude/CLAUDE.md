@@ -1,5 +1,7 @@
 # Claude Agent Instructions - Atomiton Project
 
+- Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. You MUST state that you are going to have the agent review the AGENT_EXECUTION_PLAN.md before having them perform the request task.
+
 ## 🎯 Project Overview
 
 Atomiton is a Blueprint automation platform that enables visual workflow creation through a node-based editor. The project uses a monorepo structure with separate UI and API packages.
@@ -31,7 +33,7 @@ atomiton/                       # Project root
 
 ### 🚨 MANDATORY FOR ALL AGENTS
 
-- **BEFORE ANY WORK**: [Code Quality Requirements](../docs/development/PROCESS.md) - ALL agents MUST run format/lint/typecheck/build before completing work
+- **BEFORE ANY WORK**: [Code Quality Requirements](../docs/development/README.md) - ALL agents MUST run format/lint/typecheck/build before completing work
 
 ### UI Development Work
 
@@ -120,4 +122,3 @@ Each package/app has its own `.claude/CLAUDE.md` that references this root confi
 
 **Last Updated**: 2025-08-31
 **Documentation Root**: `./docs/` (relative to project root)
-- Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. You MUST state that you are going to have the agent review the AGENT_EXECUTION_PLAN.md before having them perform the request task.
