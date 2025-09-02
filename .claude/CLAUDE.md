@@ -120,3 +120,4 @@ Each package/app has its own `.claude/CLAUDE.md` that references this root confi
 
 **Last Updated**: 2025-08-31
 **Documentation Root**: `./docs/` (relative to project root)
+- Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. You MUST state that you are going to have the agent review the AGENT_EXECUTION_PLAN.md before having them perform the request task.

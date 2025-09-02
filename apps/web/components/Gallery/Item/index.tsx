@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import Link from "@/router/Link";
-import NextImage from "next/image";
+import Image from "@/components/Image";
 import { Tooltip } from "react-tooltip";
 import Icon from "@/components/Icon";
 
@@ -40,7 +40,7 @@ const Item = ({ value }: Props) => {
       }`}
     >
       <Link href="/explore/details">
-        <NextImage
+        <Image
           src={value.image}
           className="inline-block align-top w-full h-auto"
           width={366}

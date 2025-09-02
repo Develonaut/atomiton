@@ -5,9 +5,11 @@ import { router } from "./router";
 
 function App() {
   return (
-    <Providers>
-      <RouterProvider router={router} />
-    </Providers>
+    <div className="bg-surface-01 font-inter text-body-md text-primary antialiased">
+      <Providers>
+        <RouterProvider router={router} />
+      </Providers>
+    </div>
   );
 }
 

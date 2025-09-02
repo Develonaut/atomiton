@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { Rnd, RndResizeCallback } from "react-rnd";
-import Image from "next/image";
+import Image from "@/components/Image";
 
 type Props = {
   image: string;

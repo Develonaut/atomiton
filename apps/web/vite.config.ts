@@ -12,6 +12,29 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: true,
+    // Asset optimization
+    assetsInlineLimit: 4096, // Inline assets smaller than 4kb
+    rollupOptions: {
+      output: {
+        // Asset file naming
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name!.split(".");
+          const extType = info[info.length - 1];
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            return `images/[name]-[hash][extname]`;
+          }
+          if (/woff2?|eot|ttf|otf/i.test(extType)) {
+            return `fonts/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+        // Chunk splitting for better caching
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          ui: ["framer-motion", "react-tooltip"],
+        },
+      },
+    },
   },
   // Define global constants for compatibility
   define: {
@@ -20,8 +43,13 @@ export default defineConfig({
     "process.env": {},
     "process.env.__NEXT_ROUTER_BASEPATH": JSON.stringify(""),
   },
-  // Temporarily disable CSS processing for Phase 1
-  // css: {
-  //   postcss: false,
-  // },
+  // Asset processing
+  assetsInclude: [
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.svg",
+    "**/*.gif",
+    "**/*.webp",
+  ],
 });
