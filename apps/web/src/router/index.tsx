@@ -12,23 +12,35 @@ const LoadingFallback = () => (
 const HomePage = lazy(() => import("../templates/HomePage"));
 const CreatePage = lazy(() => import("../templates/CreatePage"));
 const ExplorePage = lazy(() => import("../templates/Explore/ExplorePage"));
-const DetailsPageAdapter = lazy(() => import("../components/DetailsPageAdapter"));
+const DetailsPageAdapter = lazy(
+  () => import("../components/DetailsPageAdapter"),
+);
 const DesignsPage = lazy(() => import("../templates/Explore/DesignsPage"));
-const AnimationsPage = lazy(() => import("../templates/Explore/AnimationsPage"));
+const AnimationsPage = lazy(
+  () => import("../templates/Explore/AnimationsPage"),
+);
 const ProfilePage = lazy(() => import("../templates/ProfilePage"));
 const PricingPage = lazy(() => import("../templates/PricingPage"));
 const LikesPage = lazy(() => import("../templates/LikesPage"));
 const UpdatesPage = lazy(() => import("../templates/UpdatesPage"));
 const SignInPageAdapter = lazy(() => import("../components/SignInPageAdapter"));
-const CreateAccountPageAdapter = lazy(() => import("../components/CreateAccountPageAdapter"));
-const ResetPasswordPageAdapter = lazy(() => import("../components/ResetPasswordPageAdapter"));
-const AssetsObjects3dPage = lazy(() => import("../templates/Assets/Objects3dPage"));
-const AssetsMaterialsPage = lazy(() => import("../templates/Assets/MaterialsPage"));
+const CreateAccountPageAdapter = lazy(
+  () => import("../components/CreateAccountPageAdapter"),
+);
+const ResetPasswordPageAdapter = lazy(
+  () => import("../components/ResetPasswordPageAdapter"),
+);
+const AssetsObjects3dPage = lazy(
+  () => import("../templates/Assets/Objects3dPage"),
+);
+const AssetsMaterialsPage = lazy(
+  () => import("../templates/Assets/MaterialsPage"),
+);
 
 // Wrapper component to handle suspense
-const SuspenseWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
-);
+const SuspenseWrapper: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => <Suspense fallback={<LoadingFallback />}>{children}</Suspense>;
 
 export const router = createBrowserRouter([
   {

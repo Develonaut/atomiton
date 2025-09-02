@@ -303,6 +303,7 @@
 **Tasks:**
 
 1. **Move directories into src/**
+
    ```bash
    # Current structure (root level)
    apps/web/
@@ -314,7 +315,7 @@
    ├── tests/        # Test files
    ├── types/        # TypeScript types
    └── utils/        # Utility functions
-   
+
    # Target structure (organized in src/)
    apps/web/
    ├── src/
@@ -339,20 +340,21 @@
    - Update Vite alias configuration
 
 3. **Update configuration files**
+
    ```typescript
    // vite.config.ts
    export default defineConfig({
-     root: '.',
-     publicDir: 'public',
+     root: ".",
+     publicDir: "public",
      build: {
-       outDir: 'dist',
+       outDir: "dist",
      },
      resolve: {
        alias: {
-         '@': path.resolve(__dirname, './src'),
-         '@components': path.resolve(__dirname, './src/components'),
-         '@hooks': path.resolve(__dirname, './src/hooks'),
-         '@utils': path.resolve(__dirname, './src/utils'),
+         "@": path.resolve(__dirname, "./src"),
+         "@components": path.resolve(__dirname, "./src/components"),
+         "@hooks": path.resolve(__dirname, "./src/hooks"),
+         "@utils": path.resolve(__dirname, "./src/utils"),
        },
      },
    });
