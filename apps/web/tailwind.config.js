@@ -79,14 +79,22 @@ export default {
       },
       spacing: {
         '0.25': '0.0625rem',
+        '0.5': '0.125rem',
         '0.75': '0.1875rem',
         '1.25': '0.3125rem',
+        '1.5': '0.375rem',
         '2.25': '0.5625rem',
+        '2.5': '0.625rem',
         '2.75': '0.6875rem',
+        '3.5': '0.875rem',
         '4.75': '1.1875rem',
+        '5.5': '1.375rem',
+        '7.5': '1.875rem',
+        '8.5': '2.125rem',
         '15': '3.75rem',
         '18': '4.5rem',
         '55': '13.75rem',
+        '63': '15.75rem',
         '280': '70rem',
       },
       size: {
@@ -221,7 +229,9 @@ export default {
   plugins: [
     tailwindScrollbar,
     function({ addVariant }) {
-      // HeadlessUI v2 uses data-[state] attributes
+      // HeadlessUI v2 data attributes - These match the actual rendered attributes
+      // When open: has data-open="" attribute
+      // When closed: has data-closed="" attribute  
       addVariant('data-open', '&[data-open]');
       addVariant('data-closed', '&[data-closed]');
       addVariant('data-focus', '&[data-focus]');
@@ -229,9 +239,10 @@ export default {
       addVariant('data-selected', '&[data-selected]');
       addVariant('data-active', '&[data-active]');
       addVariant('data-disabled', '&[data-disabled]');
-      // Legacy support for older HeadlessUI
-      addVariant('data-headlessui-open', '&[data-headlessui-state~="open"]');
-      addVariant('data-headlessui-closed', '&[data-headlessui-state~="closed"]');
+      addVariant('data-checked', '&[data-checked]');
+      // Additional variants for nested state checking
+      addVariant('group-data-open', ':merge(.group)[data-open] &');
+      addVariant('group-data-closed', ':merge(.group)[data-closed] &');
     }
   ],
 };

@@ -134,11 +134,69 @@
     button {
         @apply cursor-pointer;
     }
+    
+    /* Essential CSS Reset - Missing from Vite */
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+    
+    /* Next.js default styles that Vite doesn't include */
+    html,
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    
+    
+    /* Form elements normalization - very selective */
+    button {
+        font-family: inherit;
+    }
+    
+    /* Input appearance fixes only */
+    input[type="text"],
+    input[type="number"] {
+        -webkit-appearance: none;
+    }
+    
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
 }
 
 @layer components {
     .center {
         @apply max-w-280 w-full mx-auto px-10 max-xl:px-5;
+    }
+    
+    /* HeadlessUI positioning fixes */
+    [data-headlessui-portal] {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+    }
+    
+    [data-headlessui-portal] > * {
+        pointer-events: auto;
+    }
+    
+    /* Dropdown anchor positioning */
+    .headlessui-dropdown {
+        isolation: isolate;
+    }
+    
+    /* Input label positioning fix - minimal interference */
+    .relative > .absolute.pointer-events-none {
+        z-index: 1;
     }
     .sidebar {
         @apply fixed top-3 bottom-3 z-10 w-60 bg-surface-01 border border-s-01 rounded-[1.25rem];

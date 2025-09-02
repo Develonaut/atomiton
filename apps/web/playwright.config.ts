@@ -41,6 +41,7 @@ export default defineConfig({
       name: "vite-desktop",
       use: {
         ...devices["Desktop Chrome"],
+        viewport: { width: 1920, height: 1080 },
         baseURL: "http://localhost:3001",
       },
       testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
