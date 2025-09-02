@@ -2,21 +2,21 @@ import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 // Import template components - using relative paths for Vite
-import HomePage from "../../templates/HomePage";
-import CreatePage from "../../templates/CreatePage";
-import ExplorePage from "../../templates/Explore/ExplorePage";
+import HomePage from "../templates/HomePage";
+import CreatePage from "../templates/CreatePage";
+import ExplorePage from "../templates/Explore/ExplorePage";
 import DetailsPageAdapter from "../components/DetailsPageAdapter";
-import DesignsPage from "../../templates/Explore/DesignsPage";
-import AnimationsPage from "../../templates/Explore/AnimationsPage";
-import ProfilePage from "../../templates/ProfilePage";
-import PricingPage from "../../templates/PricingPage";
-import LikesPage from "../../templates/LikesPage";
-import UpdatesPage from "../../templates/UpdatesPage";
+import DesignsPage from "../templates/Explore/DesignsPage";
+import AnimationsPage from "../templates/Explore/AnimationsPage";
+import ProfilePage from "../templates/ProfilePage";
+import PricingPage from "../templates/PricingPage";
+import LikesPage from "../templates/LikesPage";
+import UpdatesPage from "../templates/UpdatesPage";
 import SignInPageAdapter from "../components/SignInPageAdapter";
 import CreateAccountPageAdapter from "../components/CreateAccountPageAdapter";
 import ResetPasswordPageAdapter from "../components/ResetPasswordPageAdapter";
-import AssetsObjects3dPage from "../../templates/Assets/Objects3dPage";
-import AssetsMaterialsPage from "../../templates/Assets/MaterialsPage";
+import AssetsObjects3dPage from "../templates/Assets/Objects3dPage";
+import AssetsMaterialsPage from "../templates/Assets/MaterialsPage";
 
 export const router = createBrowserRouter([
   {
