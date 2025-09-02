@@ -8,7 +8,7 @@ interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
   fill?: boolean;
   className?: string;
   priority?: boolean; // Next.js Image prop - ignored in Vite
-  quality?: number;   // Next.js Image prop - ignored in Vite
+  quality?: number; // Next.js Image prop - ignored in Vite
 }
 
 const Image = ({ className, fill, width, height, ...props }: ImageProps) => {
