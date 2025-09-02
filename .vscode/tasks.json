@@ -148,6 +148,22 @@
       "problemMatcher": ["$tsc"],
       "detail": "Build web app only"
     },
+    {
+      "label": "Generate Comparison Screenshots",
+      "type": "shell",
+      "command": "cd apps/web && pnpm test:snapshots:compare",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": [],
+      "detail": "Generate visual comparison screenshots between local and reference app"
+    },
   ],
   "inputs": [
     {

@@ -43,7 +43,9 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         baseURL: "http://localhost:3001",
       },
-      testMatch: "**/snapshots.spec.ts",
+      testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
+      snapshotDir: "./tests/snapshots/desktop",
+      snapshotPathTemplate: "{snapshotDir}/{arg}{ext}",
     },
     {
       name: "vite-mobile",
@@ -51,7 +53,9 @@ export default defineConfig({
         ...devices["Pixel 5"],
         baseURL: "http://localhost:3001",
       },
-      testMatch: "**/snapshots.spec.ts",
+      testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
+      snapshotDir: "./tests/snapshots/mobile",
+      snapshotPathTemplate: "{snapshotDir}/{arg}{ext}",
     },
 
     // Default chromium for other tests

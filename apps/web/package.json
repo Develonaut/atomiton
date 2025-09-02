@@ -18,6 +18,7 @@
     "test:ui": "playwright test --ui",
     "test:snapshots": "./scripts/kill-dev-servers.sh && ./scripts/start-dev-servers.sh && playwright test tests/snapshots.spec.ts --update-snapshots",
     "test:snapshots:auto": "./scripts/run-snapshot-tests.sh --update",
+    "test:snapshots:compare": "./scripts/generate-comparison-screenshots.sh",
     "test:install": "playwright install",
     "kill:servers": "./scripts/kill-dev-servers.sh",
     "dev:all": "./scripts/kill-dev-servers.sh && npm run dev & wait"
