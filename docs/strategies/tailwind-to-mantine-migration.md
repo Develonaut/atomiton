@@ -1,28 +1,87 @@
-# Tailwind CSS to Mantine UI Migration Strategy
+# Tailwind CSS & HeadlessUI to Mantine UI Migration Strategy
 
 ## Executive Summary
 
-This document outlines a comprehensive migration strategy for transitioning the Atomiton project from Tailwind CSS to Mantine UI. The migration is designed to prevent application breakage, preserve the current visual design, and implement verification checkpoints throughout the process.
+This document outlines a comprehensive migration strategy for transitioning the Atomiton project from Tailwind CSS AND HeadlessUI to Mantine UI. The migration will completely eliminate both Tailwind CSS and HeadlessUI dependencies, replacing them entirely with Mantine UI components while preserving the current visual design exactly.
 
 **Update:** The project has been downgraded from Tailwind CSS v4 to v3.4.15 to enable Vite compatibility. This doesn't change the migration strategy but simplifies it as we're now working with the more stable v3 syntax.
+
+**Critical Requirements:**
+
+1. **Visual Regression Testing**: Screenshots MUST be regenerated for EVERY pull request to ensure zero visual regression
+2. **HeadlessUI Removal**: ALL HeadlessUI components must be replaced with Mantine equivalents - no exceptions
+3. **Visual Parity**: The application must look EXACTLY the same after migration
+
+## Critical Migration Rules
+
+### \u26a0\ufe0f NON-NEGOTIABLE REQUIREMENTS
+
+1. **Visual Regression Testing on EVERY PR**
+   - Screenshots MUST be regenerated for every pull request
+   - ANY visual difference will BLOCK the PR until reviewed
+   - **USER APPROVAL REQUIRED**: If ANY visual regression is detected, the user (Ryan) MUST explicitly approve before proceeding
+   - Zero tolerance policy - pixel-perfect matching required unless explicitly approved
+   - Use `npx playwright test tests/snapshots.spec.ts --update-snapshots` to regenerate
+
+2. **Complete HeadlessUI Elimination**
+   - NO HeadlessUI components can remain after migration
+   - Every HeadlessUI import must be replaced with Mantine
+   - This includes: Menu, Popover, Dialog, Listbox, Combobox, Disclosure, Switch, Transition
+   - Mantine has equivalents for ALL HeadlessUI components
+
+3. **Visual Parity Enforcement**
+   - The application must look IDENTICAL after migration
+   - No "close enough" - must be EXACT
+   - Use the snapshot comparison tools to verify
+   - Any visual regression is grounds for PR rejection
+
+### Visual Regression Testing Process
+
+```bash
+# For EVERY pull request:
+
+# 1. Before making changes, capture baseline
+npm run test:snapshots
+
+# 2. Make your Mantine migration changes
+
+# 3. Regenerate snapshots
+npx playwright test tests/snapshots.spec.ts --update-snapshots
+
+# 4. Compare snapshots
+npm run test:snapshots
+
+# 5. If ANY differences detected:
+#    - STOP and notify Ryan for review
+#    - Get explicit approval before proceeding
+#    - If approved: commit the new snapshots
+#    - If not approved: fix the visual issues and repeat
+
+# 6. Commit snapshots with your PR (only after approval if changes detected)
+git add tests/snapshots/
+git commit -m "chore: update snapshots after [component] migration"
+```
 
 ## Migration Overview
 
 ### Goals
 
-- Replace Tailwind CSS with Mantine UI for better data-heavy component support
+- **Completely eliminate Tailwind CSS dependency**
+- **Completely eliminate HeadlessUI dependency**
+- Replace both with Mantine UI for better data-heavy component support
 - Maintain application functionality throughout the migration
-- Preserve the current visual design and user experience
+- Preserve the current visual design and user experience (pixel-perfect)
 - Enable the Compound component pattern for the packages/ui library
 - Minimize risk and enable rollback at any phase
 
 ### Key Principles
 
 1. **Incremental Migration**: Components migrated one at a time
-2. **Visual Parity**: Each migrated component must match the original appearance
-3. **Continuous Verification**: Automated tests at each phase
-4. **Reversibility**: Each phase can be rolled back independently
-5. **Zero Downtime**: Application remains functional throughout
+2. **Absolute Visual Parity**: Each migrated component must match the original appearance EXACTLY
+3. **Continuous Visual Regression Testing**: Screenshots regenerated and compared on EVERY PR
+4. **Complete HeadlessUI Removal**: No HeadlessUI components should remain after migration
+5. **Reversibility**: Each phase can be rolled back independently
+6. **Zero Downtime**: Application remains functional throughout
 
 ## Phase 1: Foundation Setup (2 days)
 
@@ -102,6 +161,48 @@ pnpm remove @mantine/core @mantine/hooks @mantine/dates @mantine/form
 # Revert configuration files
 git checkout -- postcss.config.js app/layout.tsx
 ```
+
+## Phase 1.5: HeadlessUI Inventory & Replacement Strategy (1 day)
+
+### Objectives
+
+- Identify ALL HeadlessUI components in the codebase
+- Map each to Mantine equivalent
+- Document replacement strategy for each
+
+### HeadlessUI Component Inventory
+
+| HeadlessUI Component | Location              | Mantine Replacement | Notes                       |
+| -------------------- | --------------------- | ------------------- | --------------------------- |
+| Menu                 | LeftSidebar/Head/Menu | Menu                | Dropdown menu functionality |
+| Popover              | Multiple locations    | Popover             | Tooltips and floating UI    |
+| Dialog               | Modal components      | Modal               | Dialog/modal windows        |
+| Listbox              | Select components     | Select              | Dropdown selections         |
+| Combobox             | Search components     | Autocomplete        | Search with suggestions     |
+| Disclosure           | Accordion components  | Accordion           | Expandable content          |
+| Switch               | Toggle components     | Switch              | On/off toggles              |
+| Transition           | Animation wrappers    | Transition          | Animation utilities         |
+
+### Replacement Strategy
+
+```typescript
+// Example: Replacing HeadlessUI Menu with Mantine Menu
+// BEFORE (HeadlessUI)
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/react";
+
+// AFTER (Mantine)
+import { Menu } from "@mantine/core";
+// Menu.Target replaces MenuButton
+// Menu.Dropdown replaces MenuItems
+// Menu.Item replaces MenuItem
+```
+
+### Verification
+
+- [ ] All HeadlessUI imports identified
+- [ ] Mantine replacements confirmed for each
+- [ ] No functional gaps identified
+- [ ] Migration complexity assessed
 
 ## Phase 2: Component Mapping & Analysis (1 day)
 
@@ -216,9 +317,63 @@ test("Tabs visual consistency", async ({ page }) => {
   await page.goto("/test-components/tabs?mantine=true");
   const mantineScreenshot = await page.screenshot();
 
-  // Compare screenshots
-  expect(mantineScreenshot).toMatchSnapshot("tabs-reference.png");
+  // Compare screenshots - MUST be pixel perfect
+  expect(mantineScreenshot).toMatchSnapshot("tabs-reference.png", {
+    maxDiffPixels: 0, // ZERO tolerance for visual differences
+  });
 });
+```
+
+#### PR Visual Regression Workflow
+
+```yaml
+# .github/workflows/visual-regression-pr.yml
+name: Visual Regression on PR
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  visual-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node and pnpm
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Generate new screenshots
+        run: pnpm test:snapshots --update-snapshots
+
+      - name: Compare with baseline
+        run: pnpm test:snapshots
+
+      - name: Upload diff images if failed
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: visual-regression-diffs
+          path: tests/snapshots/diff/
+
+      - name: Comment on PR with results
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Visual regression detected! Please review the diff images in the artifacts.'
+            })
 ```
 
 ### Verification Checkpoints
@@ -283,14 +438,18 @@ test("Tabs visual consistency", async ({ page }) => {
 ### Migration Checklist per Component
 
 ```markdown
+- [ ] Identify and remove ALL HeadlessUI usage
 - [ ] Create Mantine version
 - [ ] Add feature flag
-- [ ] Match styling exactly
+- [ ] Match styling EXACTLY (pixel-perfect)
 - [ ] Update unit tests
 - [ ] Add visual regression test
+- [ ] Regenerate screenshots
+- [ ] Verify ZERO visual differences
 - [ ] Test accessibility
 - [ ] Document API changes
 - [ ] Update Storybook (if applicable)
+- [ ] Confirm NO HeadlessUI imports remain
 ```
 
 ### Quality Gates
@@ -298,10 +457,12 @@ test("Tabs visual consistency", async ({ page }) => {
 Each wave must pass before proceeding:
 
 1. All components render correctly
-2. Visual regression tests pass (95% similarity)
+2. Visual regression tests pass (100% similarity - ZERO tolerance)
 3. Unit tests pass
 4. Accessibility audit passes
 5. Performance metrics within 5% of baseline
+6. NO HeadlessUI imports detected in migrated components
+7. Screenshots regenerated and approved
 
 ### Verification Checkpoints
 
@@ -333,13 +494,19 @@ pnpm test:visual
 pnpm test:e2e
 ```
 
-#### 5.2 Remove Tailwind Dependencies
+#### 5.2 Remove Tailwind and HeadlessUI Dependencies
 
 ```bash
 # After confirming all tests pass
+# Remove Tailwind
 pnpm remove tailwindcss @tailwindcss/postcss tailwind-scrollbar
 rm tailwind.config.js
-# Remove Tailwind imports from globals.css
+
+# Remove HeadlessUI
+pnpm remove @headlessui/react
+
+# Remove imports from globals.css
+# Remove all Tailwind directives (@tailwind base, @tailwind components, @tailwind utilities)
 ```
 
 #### 5.3 Code Cleanup
@@ -485,11 +652,13 @@ export const Card = Object.assign(MantineCard, {
 
 ### Visual Requirements
 
-- [ ] Visual regression tests show >95% similarity
-- [ ] Responsive layouts maintained
+- [ ] Visual regression tests show 100% similarity (PIXEL PERFECT)
+- [ ] Screenshots regenerated for EVERY PR
+- [ ] Responsive layouts maintained exactly
 - [ ] Animations smooth and consistent
 - [ ] Dark mode (if applicable) works correctly
 - [ ] Print styles (if applicable) maintained
+- [ ] NO visual differences tolerated
 
 ### Performance Requirements
 
@@ -561,13 +730,21 @@ jobs:
 
 Initiate rollback if:
 
-- Visual regression tests fail >5% of components
+- ANY visual regression detected (0% tolerance)
 - Performance degrades >10%
 - Critical bugs found in production
 - Bundle size increases >20%
 - Development velocity severely impacted
+- ANY HeadlessUI components cannot be properly replaced
 
 ## Post-Migration Tasks
+
+### Verification
+
+- [ ] Confirm ZERO HeadlessUI imports remain
+- [ ] Run full visual regression suite
+- [ ] Regenerate all screenshots as new baseline
+- [ ] Verify 100% visual parity achieved
 
 ### Documentation Updates
 
@@ -576,6 +753,7 @@ Initiate rollback if:
 - [ ] Create migration guide for contributors
 - [ ] Update Storybook stories
 - [ ] Record architecture decision
+- [ ] Document visual regression testing process
 
 ### Team Training
 
@@ -587,7 +765,9 @@ Initiate rollback if:
 ### Technical Debt
 
 - [ ] Remove all Tailwind references
+- [ ] Remove all HeadlessUI imports and references
 - [ ] Clean up unused dependencies
+- [ ] Verify NO @headlessui/react imports remain anywhere
 - [ ] Optimize component bundles
 - [ ] Set up component testing
 - [ ] Establish component guidelines
