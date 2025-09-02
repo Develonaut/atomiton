@@ -101,9 +101,9 @@
       "detail": "Start development server for web app only"
     },
     {
-      "label": "Prepare and Commit",
+      "label": "Prepare, Commit and Push",
       "type": "shell",
-      "command": "cd apps/web && pnpm format:fix && pnpm lint:fix && git add -A && git commit -m \"${input:commitMessage}\"",
+      "command": "cd apps/web && pnpm format:fix && pnpm lint:fix && git add -A && git commit -m \"${input:commitMessage}\" && git push",
       "group": "build",
       "presentation": {
         "echo": true,
@@ -114,7 +114,7 @@
         "clear": true
       },
       "problemMatcher": [],
-      "detail": "Auto-format, lint-fix, stage all changes, and commit with message"
+      "detail": "Auto-format, lint-fix, stage all changes, commit with message, and push to remote"
     },
     {
       "label": "Quick Fix",
