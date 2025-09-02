@@ -56,7 +56,7 @@ const Filters = ({ onlyBtnIcon }: Props) => {
           className={
             onlyBtnIcon
               ? "fill-primary"
-              : "!size-4 mr-2 fill-secondary transition-colors group-hover:fill-primary"
+              : "!size-4 mr-2 fill-secondary/70 transition-colors group-hover:fill-primary/70"
           }
           name="filter"
         />

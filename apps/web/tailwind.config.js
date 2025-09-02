@@ -220,12 +220,5 @@ export default {
   },
   plugins: [
     tailwindScrollbar,
-    function({ addVariant }) {
-      addVariant('data-open', '&[data-headlessui-state~="open"]');
-      addVariant('data-closed', '&[data-headlessui-state~="closed"]');
-      addVariant('data-focus', '&[data-headlessui-state~="focus"]');
-      addVariant('data-active', '&[data-headlessui-state~="active"]');
-      addVariant('data-disabled', '&[data-headlessui-state~="disabled"]');
-    }
   ],
 };

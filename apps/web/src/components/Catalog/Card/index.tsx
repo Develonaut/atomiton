@@ -31,7 +31,7 @@ const Card = ({ value }: Props) => (
     </div>
     <div className="grow p-3 max-md:p-1">
       <div className="mb-1 text-body-md-str">{value.title}</div>
-      <div className="text-body-sm text-secondary">{value.category}</div>
+      <div className="text-body-sm text-secondary/80">{value.category}</div>
     </div>
   </Link>
 );

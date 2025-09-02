@@ -48,7 +48,7 @@ const Details = () => {
           <div className="text-body-md-str">randomdash</div>
         </div>
         <div className="flex items-center gap-1.5 text-secondary">
-          <Icon className="!size-4 fill-secondary" name="clock" />3 Jun, 2025
+          <Icon className="!size-4 fill-secondary/70" name="clock" />3 Jun, 2025
         </div>
       </div>
       <Images />
@@ -76,7 +76,7 @@ const Details = () => {
             data-tooltip-place="top"
           >
             <Icon
-              className="!size-4 fill-secondary transition-colors group-hover:fill-primary/60"
+              className="!size-4 fill-secondary/70 transition-colors group-hover:fill-primary/60"
               name={action.icon}
             />
           </button>
