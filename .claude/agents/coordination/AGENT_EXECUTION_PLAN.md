@@ -38,9 +38,9 @@
 **BEFORE STARTING ANY WORK**, ALL agents MUST review:
 
 - **[Guidelines README](../../../docs/guidelines/README.md)** - READ THIS FIRST - Index to all technical standards and requirements
-- **[Development Process](../../../docs/development/PROCESS.md)** - MANDATORY code quality checks and validation pipeline
-- **[Core Values](../../../docs/development/CORE_VALUES.md)** - Core development principles
-- **[Environment Restrictions](../../../docs/development/ENVIRONMENT.md)** - Environment and repository configuration authority
+- **[Development Process](../../../docs/development/archive/PROCESS.md)** - MANDATORY code quality checks and validation pipeline
+- **[Core Values](../../../docs/development/archive/CORE_VALUES.md)** - Core development principles
+- **[Environment Guidelines](../../../docs/guidelines/README.md)** - Environment and repository configuration authority
 
 ## File Access Permissions
 
@@ -101,7 +101,7 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **MANDATORY - ALL must pass with exit code 0:**
 
-See [Development Process](../../../docs/development/PROCESS.md) for complete technical requirements.
+See [Development Process](../../../docs/development/archive/PROCESS.md) for complete technical requirements.
 
 **Work is NOT complete until ALL checks pass.**
 
@@ -169,9 +169,9 @@ See [Development Process](../../../docs/development/PROCESS.md) for complete tec
 
 **ALL technical requirements are referenced from the [Guidelines README](../../../docs/guidelines/README.md)** which indexes standards in:
 
-- [Development Process](../../../docs/development/PROCESS.md) - Code quality and validation
-- [TypeScript Standards](../../../docs/development/TYPESCRIPT.md) - TypeScript requirements
-- [Core Values](../../../docs/development/CORE_VALUES.md) - Development principles
+- [Development Process](../../../docs/development/archive/PROCESS.md) - Code quality and validation
+- [TypeScript Standards](../../../docs/development/archive/TYPESCRIPT.md) - TypeScript requirements
+- [Core Values](../../../docs/development/archive/CORE_VALUES.md) - Development principles
 
 ### Definition of "Complete"
 
@@ -224,7 +224,7 @@ This workflow references technical requirements from the **[Guidelines README](.
 
 For specific MVP prototype implementation details, see:
 
-- [MVP Prototype Implementation](../../../docs/planning/MVP_PROTOTYPE_IMPLEMENTATION.md)
+- [Next.js to Vite Migration](../../../docs/strategies/nextjs-to-vite-migration.md)
 
 ---
 

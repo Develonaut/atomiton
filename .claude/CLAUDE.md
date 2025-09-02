@@ -1,6 +1,6 @@
 # Claude Agent Instructions - Atomiton Project
 
-- Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. You MUST state that you are going to have the agent review the AGENT_EXECUTION_PLAN.md before having them perform the request task.
+- Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. An agent should verbally confirm they have reviewed the AGENT_EXECUTION_PLAN.md before they are allowed to start.
 
 ## 🎯 Project Overview
 
@@ -34,17 +34,6 @@ atomiton/                       # Project root
 ### 🚨 MANDATORY FOR ALL AGENTS
 
 - **BEFORE ANY WORK**: [Code Quality Requirements](../docs/development/README.md) - ALL agents MUST run format/lint/typecheck/build before completing work
-
-### UI Development Work
-
-- **Start here**: [Design Guidelines](../docs/ui/design/README.md) - Critical UI requirements and design standards
-
-### Blueprint System Work
-
-- **Start here**: [Blueprint Development Guide](../docs/architecture/BLUEPRINT_GUIDE.md) - Required reading for all Blueprint features
-
-### All Other Development
-
 - **Agent workflows**: [Agents Overview](./agents/README.md) - Team coordination and specific requirements
 - **Guidelines**: [Guidelines Index](../docs/guidelines/README.md) - Environment restrictions and development standards
 
@@ -58,29 +47,25 @@ atomiton/                       # Project root
 
 ### Development Guidelines
 
-- [Development Process](../docs/development/PROCESS.md)
-- [Core Values](../docs/development/CORE_VALUES.md)
-- [UI Strategy](../docs/ui/components/ARCHITECTURE.md)
-- [Environment Restrictions](../docs/development/ENVIRONMENT.md)
+- [Development Overview](../docs/development/README.md)
+- [Development Process](../docs/development/archive/PROCESS.md)
+- [Core Values](../docs/development/archive/CORE_VALUES.md)
+- [TypeScript Guidelines](../docs/development/archive/TYPESCRIPT.md)
+- [Testing Strategy](../docs/development/archive/TESTING.md)
 
 ### Technical Architecture
 
-- [Project Architecture](../docs/architecture/SYSTEM.md)
-- [Technical Stack](../docs/architecture/STACK.md)
-- [Technical Architecture](../docs/architecture/)
-- [Navigation Structure](../docs/architecture/NAVIGATION.md)
-- [Node System Integration](../docs/architecture/INTEGRATION.md)
+- [Architecture Overview](../docs/architecture/README.md)
+- [Project Architecture](../docs/architecture/archive/SYSTEM.md)
+- [Technical Stack](../docs/architecture/archive/STACK.md)
+- [Navigation Structure](../docs/architecture/archive/NAVIGATION.md)
+- [Node System Integration](../docs/architecture/archive/INTEGRATION.md)
+- [Blueprint Guide](../docs/architecture/archive/BLUEPRINT_GUIDE.md)
 
-### Project Planning
+### Migration Strategies
 
-- [MVP Roadmap](../docs/planning/MVP_ROADMAP.md)
-- [MVP Implementation](../docs/planning/MVP_PROTOTYPE_IMPLEMENTATION.md)
-- [Current Status](../docs/status/CURRENT_STATUS.md)
-
-### Visual Design
-
-- [Design Guidelines](../docs/ui/design/README.md)
-- [UI Design Standards](../docs/ui/design/DESIGN_GUIDELINES.md)
+- [Next.js to Vite Migration](../docs/strategies/nextjs-to-vite-migration.md)
+- [Tailwind to Mantine Migration](../docs/strategies/tailwind-to-mantine-migration.md)
 
 ## ✅ Permissions
 
