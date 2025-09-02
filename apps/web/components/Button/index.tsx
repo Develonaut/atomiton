@@ -1,5 +1,5 @@
 import React from "react";
-import Link, { LinkProps } from "next/link";
+import Link from "@/router/Link";
 import Icon from "@/components/Icon";
 
 type CommonProps = {
@@ -21,7 +21,8 @@ type ButtonAsAnchor = {
 
 type ButtonAsLink = {
   as: "link";
-} & LinkProps;
+  href: string;
+} & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">;
 
 type ButtonProps = CommonProps &
   (ButtonAsButton | ButtonAsAnchor | ButtonAsLink);
@@ -54,7 +55,7 @@ const Button: React.FC<ButtonProps> = ({
           ? "bg-gradient-to-b from-[#E36323] to-[#DF5A18] shadow-[0px_1px_0px_0px_rgba(255,255,255,0.33)_inset,0px_0px_0px_1px_#BF4A0F,0px_3px_4px_-1px_rgba(252,96,16,0.95)] text-shade-01 fill-shade-01 after:absolute after:inset-0 after:rounded-xl after:bg-white/10 after:opacity-0 after:transition-opacity hover:after:opacity-100"
           : ""
       } ${className || ""}`}
-      {...(isLink ? (props as LinkProps) : props)}
+      {...(isLink ? (props as ButtonAsLink) : props)}
     >
       {icon && <Icon className="relative z-2" name={icon} />}
       <div className="relative z-2 flex items-center gap-2">{children}</div>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/router/Link";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import NavLink from "./NavLink";

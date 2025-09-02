@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/router/Link";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";

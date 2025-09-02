@@ -11,6 +11,7 @@ export const useRouter = () => {
     replace: (url: string) => navigate(url, { replace: true }),
     back: () => navigate(-1),
     forward: () => navigate(1),
+    refresh: () => window.location.reload(),
   };
 };
 

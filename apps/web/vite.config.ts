@@ -16,6 +16,7 @@ export default defineConfig({
   // Define global constants for compatibility
   define: {
     global: "globalThis",
+    // TODO: Remove this once Nextjs migration is complete.
     "process.env": {},
     "process.env.__NEXT_ROUTER_BASEPATH": JSON.stringify(""),
   },

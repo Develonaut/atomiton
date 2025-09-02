@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/router/hooks";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Icon from "@/components/Icon";
 import VideoPlayer from "@/components/VideoPlayer";

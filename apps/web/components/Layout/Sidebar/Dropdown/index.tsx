@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { usePathname } from "@/router/hooks";
+import Link from "@/router/Link";
 import AnimateHeight from "react-animate-height";
 import Icon from "@/components/Icon";
 
@@ -34,7 +34,9 @@ const Dropdown = ({ value }: DropdownProps) => {
         onClick={() => !value.href && setHeight(height === 0 ? "auto" : 0)}
       >
         {value.href && (
-          <Link className="absolute inset-0 z-2" href={value.href}></Link>
+          <Link className="absolute inset-0 z-2" href={value.href}>
+            <span className="sr-only">{value.title}</span>
+          </Link>
         )}
         <div
           className={`flex justify-center items-center size-8 mr-3 rounded-lg transition ${

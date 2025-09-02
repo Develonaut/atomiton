@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/router/Link";
 import Icon from "@/components/Icon";
 
 type FieldProps = {

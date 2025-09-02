@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { usePathname } from "@/router/hooks";
+import Link from "@/router/Link";
 import Image from "@/components/Image";
 import Notifications from "@/components/Notifications";
 import User from "@/components/User";

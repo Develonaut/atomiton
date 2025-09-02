@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "@/router/Link";
+import { usePathname } from "@/router/hooks";
 
 type Props = {
   item: {

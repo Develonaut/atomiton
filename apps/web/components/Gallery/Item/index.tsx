@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import Link from "next/link";
+import Link from "@/router/Link";
 import NextImage from "next/image";
 import { Tooltip } from "react-tooltip";
 import Icon from "@/components/Icon";
