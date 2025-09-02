@@ -292,7 +292,79 @@
    - [x] State management functions
    - [x] All components render without errors
 
-### Phase 5: Deployment Configuration (Days 10-11)
+### Phase 5: Source Code Organization (Days 10-11)
+
+**Objectives:**
+
+- Reorganize codebase into proper src/ directory structure
+- Move all application code into src/ folder
+- Maintain clean separation between source and config files
+
+**Tasks:**
+
+1. **Move directories into src/**
+   ```bash
+   # Current structure (root level)
+   apps/web/
+   ├── app/          # Next.js app directory
+   ├── components/   # React components
+   ├── hooks/        # Custom hooks
+   ├── store/        # Zustand stores
+   ├── templates/    # Page templates
+   ├── tests/        # Test files
+   ├── types/        # TypeScript types
+   └── utils/        # Utility functions
+   
+   # Target structure (organized in src/)
+   apps/web/
+   ├── src/
+   │   ├── app/        # App pages (to be removed after full migration)
+   │   ├── components/ # React components
+   │   ├── hooks/      # Custom hooks
+   │   ├── store/      # Zustand stores
+   │   ├── templates/  # Page templates
+   │   ├── types/      # TypeScript types
+   │   ├── utils/      # Utility functions
+   │   ├── router/     # React Router setup
+   │   ├── App.tsx     # Main app component
+   │   ├── main.tsx    # Vite entry point
+   │   └── index.css   # Global styles
+   ├── tests/          # Test files (keep at root)
+   └── public/         # Static assets
+   ```
+
+2. **Update import paths**
+   - Update all relative imports to reflect new structure
+   - Update tsconfig.json path mappings
+   - Update Vite alias configuration
+
+3. **Update configuration files**
+   ```typescript
+   // vite.config.ts
+   export default defineConfig({
+     root: '.',
+     publicDir: 'public',
+     build: {
+       outDir: 'dist',
+     },
+     resolve: {
+       alias: {
+         '@': path.resolve(__dirname, './src'),
+         '@components': path.resolve(__dirname, './src/components'),
+         '@hooks': path.resolve(__dirname, './src/hooks'),
+         '@utils': path.resolve(__dirname, './src/utils'),
+       },
+     },
+   });
+   ```
+
+4. **Benefits of reorganization**
+   - Clear separation between source code and config
+   - Better IDE navigation and search
+   - Consistent with Vite project conventions
+   - Easier to maintain and scale
+
+### Phase 6: Deployment Configuration (Days 12-13)
 
 **Objectives:**
 
