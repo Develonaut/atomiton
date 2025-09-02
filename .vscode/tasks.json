@@ -101,20 +101,36 @@
       "detail": "Start development server for web app only"
     },
     {
-      "label": "dev:docs",
+      "label": "Prepare and Commit",
       "type": "shell",
-      "command": "pnpm --filter @atomiton/docs dev",
+      "command": "cd apps/web && pnpm format:fix && pnpm lint:fix && git add -A && git commit -m \"${input:commitMessage}\"",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "problemMatcher": [],
+      "detail": "Auto-format, lint-fix, stage all changes, and commit with message"
+    },
+    {
+      "label": "Quick Fix",
+      "type": "shell",
+      "command": "cd apps/web && pnpm format:fix && pnpm lint:fix && git add -A && echo '✅ All files formatted, linted, and staged!'",
       "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
         "focus": false,
         "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
+        "showReuseMessage": false,
+        "clear": true
       },
       "problemMatcher": [],
-      "detail": "Start development server for docs app only"
+      "detail": "Auto-format, lint-fix, and stage all changes (no commit)"
     },
     {
       "label": "build:web",
@@ -132,21 +148,13 @@
       "problemMatcher": ["$tsc"],
       "detail": "Build web app only"
     },
+  ],
+  "inputs": [
     {
-      "label": "build:docs",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/docs build",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": ["$tsc"],
-      "detail": "Build docs app only"
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Enter commit message",
+      "default": "chore: update code"
     }
   ]
 }

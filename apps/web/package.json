@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "prepare-commit": "./scripts/prepare-commit.sh",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:snapshots": "./scripts/kill-dev-servers.sh && ./scripts/start-dev-servers.sh && playwright test tests/snapshots.spec.ts --update-snapshots",
