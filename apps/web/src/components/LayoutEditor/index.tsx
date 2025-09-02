@@ -21,7 +21,7 @@ const LayoutEditor = () => {
         {isResizeImage ? (
           <ResizeImage image={image} />
         ) : (
-          <div className="fixed left-63 right-63 top-0 bottom-0 relative">
+          <div className="fixed inset-0 ml-63 mr-63 z-1">
             <Image className="object-cover" src={image} fill alt="home" />
           </div>
         )}
