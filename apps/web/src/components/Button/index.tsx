@@ -48,7 +48,7 @@ const Button: React.FC<ButtonProps> = ({
           : ""
       } ${
         isSecondary
-          ? "shadow-[0_0.5px_1px_0px_rgba(255,255,255,0.15)_inset,0px_2px_4px_-1px_rgba(13,13,13,0.50),0px_-1px_1.2px_0.35px_#121212_inset,0px_0px_0px_1px_#333] text-shade-01 fill-surface-01 after:absolute after:inset-0 after:bg-gradient-to-b after:from-shade-07 after:to-shade-08 after:rounded-xl after:transition-opacity hover:after:opacity-90"
+          ? "bg-gradient-to-b from-shade-07 to-shade-08 shadow-[0_0.5px_1px_0px_rgba(255,255,255,0.15)_inset,0px_2px_4px_-1px_rgba(13,13,13,0.50),0px_-1px_1.2px_0.35px_#121212_inset,0px_0px_0px_1px_#333] text-shade-01 fill-surface-01 after:absolute after:inset-0 after:rounded-xl after:bg-white/10 after:opacity-0 after:transition-opacity hover:after:opacity-100"
           : ""
       } ${
         isRed

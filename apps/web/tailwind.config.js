@@ -220,5 +220,18 @@ export default {
   },
   plugins: [
     tailwindScrollbar,
+    function({ addVariant }) {
+      // HeadlessUI v2 uses data-[state] attributes
+      addVariant('data-open', '&[data-open]');
+      addVariant('data-closed', '&[data-closed]');
+      addVariant('data-focus', '&[data-focus]');
+      addVariant('data-hover', '&[data-hover]');
+      addVariant('data-selected', '&[data-selected]');
+      addVariant('data-active', '&[data-active]');
+      addVariant('data-disabled', '&[data-disabled]');
+      // Legacy support for older HeadlessUI
+      addVariant('data-headlessui-open', '&[data-headlessui-state~="open"]');
+      addVariant('data-headlessui-closed', '&[data-headlessui-state~="closed"]');
+    }
   ],
 };
