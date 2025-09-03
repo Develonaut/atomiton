@@ -12,16 +12,17 @@ Our codebase follows the principle that **good code is self-documenting**. Comme
 
 ```typescript
 // Bad
-console.log('Logging user data'); // Logs user data to console
+console.log("Logging user data"); // Logs user data to console
 const userId = user.id; // Get the user ID
-if (isValid) { // Check if valid
+if (isValid) {
+  // Check if valid
   return true; // Return true
 }
 ```
 
 ```typescript
 // Good
-console.log('Logging user data');
+console.log("Logging user data");
 const userId = user.id;
 if (isValid) {
   return true;
@@ -33,6 +34,7 @@ if (isValid) {
 ✅ **Use comments for these specific cases:**
 
 #### 1. Complex Business Logic
+
 ```typescript
 // Calculate compound interest with irregular payment schedules
 // Formula accounts for variable payment dates and leap years
@@ -40,6 +42,7 @@ const interest = calculateCompoundInterest(principal, rate, periods);
 ```
 
 #### 2. Non-Obvious Algorithmic Decisions
+
 ```typescript
 // Using binary search instead of linear scan for O(log n) performance
 // on sorted datasets larger than 1000 items
@@ -47,6 +50,7 @@ const index = binarySearch(sortedArray, target);
 ```
 
 #### 3. External API Quirks or Workarounds
+
 ```typescript
 // Stripe webhook signatures expire after 5 minutes
 // We need to validate immediately to avoid replay attacks
@@ -54,14 +58,15 @@ const isValidSignature = validateWebhookSignature(payload, signature);
 ```
 
 #### 4. File/Module Documentation Headers
+
 ```typescript
 /**
  * Blueprint Node Engine
- * 
+ *
  * Manages the execution flow of visual programming nodes,
  * handling dependency resolution, parallel processing,
  * and error propagation across the node graph.
- * 
+ *
  * Key concepts:
  * - Nodes execute based on input availability
  * - Cycles are detected and prevented
@@ -70,6 +75,7 @@ const isValidSignature = validateWebhookSignature(payload, signature);
 ```
 
 #### 5. Function Documentation (when behavior isn't obvious)
+
 ```typescript
 /**
  * Debounces function calls to prevent excessive API requests
@@ -78,13 +84,14 @@ const isValidSignature = validateWebhookSignature(payload, signature);
  */
 function debounce<T extends (...args: any[]) => any>(
   func: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   // Implementation...
 }
 ```
 
 #### 6. TODO/FIXME for Known Issues
+
 ```typescript
 // TODO: Optimize this query when user count exceeds 100k
 // Current approach loads all users into memory
@@ -112,7 +119,7 @@ function processUser(user: User) {
     // Return null if user is invalid
     return null;
   }
-  
+
   // Get user email
   const email = user.email;
   // Convert email to lowercase
@@ -126,7 +133,7 @@ function processUser(user: User) {
   if (!user) {
     return null;
   }
-  
+
   const normalizedEmail = user.email.toLowerCase();
   return { ...user, email: normalizedEmail };
 }
@@ -136,7 +143,7 @@ function processUser(user: User) {
   if (!user) {
     return null;
   }
-  
+
   // Email normalization prevents duplicate accounts due to case differences
   // This matches our authentication provider's behavior
   const normalizedEmail = user.email.toLowerCase();
