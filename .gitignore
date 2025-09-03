@@ -15,12 +15,10 @@ node_modules
 # Testing
 coverage
 
-# Playwright Test Artifacts
+# Playwright Test Artifacts  
 playwright-report/
 playwright/.cache/
 test-results/
-tests/**/*.spec.ts-snapshots/
-tests/**/*.spec.js-snapshots/
 trace.zip
 *.trace.zip
 videos/
@@ -30,10 +28,8 @@ screenshots/
 test-snapshots.sh
 playwright-snapshots.config.ts
 
-# Keep only the organized snapshots we want
-!tests/snapshots/
-!tests/snapshots/routes/
-!tests/snapshots/routes/*.png
+# Visual regression test snapshots are committed for baseline comparison
+# (snapshots are needed for visual regression testing)
 
 # Turbo
 .turbo
@@ -45,6 +41,7 @@ playwright-snapshots.config.ts
 out/
 build
 dist
+preview-dist/
 
 
 # Debug
