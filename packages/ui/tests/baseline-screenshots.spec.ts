@@ -34,6 +34,16 @@ test.describe("Baseline Screenshots - Full Page Capture", () => {
       // Wait a bit more for any animations to complete
       await browserPage.waitForTimeout(1000);
 
+      // Hide Next.js dev mode elements that might appear
+      await browserPage.addStyleTag({
+        content: `
+          /* Hide Next.js error overlay and dev indicators */
+          nextjs-portal, [id^="__next"], div[style*="z-index: 9999"] { 
+            display: none !important; 
+          }
+        `,
+      });
+
       // Get the full page dimensions
       const dimensions = await browserPage.evaluate(() => {
         return {
