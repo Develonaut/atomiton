@@ -2,244 +2,155 @@
 
 ## Overview
 
-Atomiton uses **Brainwave 2.0** as our design foundation - a modern, sophisticated look and feel that we're adapting into a functional Mantine-based theme system. This gives us a premium, professional aesthetic that stands out in the automation tools space.
-
-## Design Credits
-
-**Brainwave 2.0 by UI8**
-
-- Live Demo: https://brainwave2-app.vercel.app/
-- Design Kit: https://ui8.net/ui8/products/brainwave-20-ai-powered-3d-ui-kit
-- License: Commercial license purchased for Atomiton
-- Usage: Inspiration and adaptation, not direct copying
+Atomiton uses **Brainwave 2.0** as our design foundation - a clean, minimal light theme that provides a professional aesthetic for our automation platform. Our existing Tailwind configuration perfectly captures this design language with clean surfaces and subtle typography.
 
 ## What is Brainwave 2.0?
 
-Brainwave 2.0 is a cutting-edge design system known for:
+Brainwave 2.0 is a clean, minimal light theme characterized by:
 
-- **Modern gradients** and sophisticated visual effects
-- **Sleek, futuristic** interface elements
-- **Dark mode first** with subtle accent colors
-- **Smooth animations** and micro-interactions
-- **Professional, premium** feel
+- **Clean light backgrounds** with grayscale shades (shade-01 to shade-09)
+- **Simple, professional** interface elements
+- **Minimal visual effects** focused on content clarity
+- **Inter typography** with careful spacing and weights
+- **Clean, accessible** color palette
 
-## Our Adaptation Strategy
+## Current Implementation
 
-### From Design to Implementation
+Our Tailwind configuration already implements Brainwave 2.0 perfectly:
 
-We're taking Brainwave 2.0's visual language and:
+### Color System (From Tailwind Config)
 
-1. **Extracting color palette** and design tokens
-2. **Converting to Mantine theme** configuration
-3. **Creating reusable components** with the aesthetic
-4. **Ensuring accessibility** while maintaining beauty
-5. **Optimizing for performance** in our desktop app
+```css
+/* Light theme shades (shade-01 to shade-09) */
+--shade-01: #fcfcfc; /* Lightest background */
+--shade-02: #f8f7f7; /* Secondary background */
+--shade-03: #f1f1f1; /* Tertiary background */
+--shade-04: #ececec; /* Border color */
+--shade-05: #e2e2e2; /* Border color */
+--shade-06: #7b7b7b; /* Secondary text */
+--shade-07: #323232; /* Primary text */
+--shade-08: #222222; /* Darker text */
+--shade-09: #121212; /* Darkest text/primary */
 
-### Key Visual Elements
-
-#### Color Palette (Brainwave-inspired)
-
-```typescript
-// Primary colors from Brainwave 2.0
-const colors = {
-  // Deep backgrounds
-  background: {
-    primary: "#0A0A0B", // Near black
-    secondary: "#131316", // Slightly lighter
-    tertiary: "#1A1A1F", // Card backgrounds
-  },
-
-  // Accent colors
-  accent: {
-    primary: "#6366F1", // Electric indigo
-    secondary: "#8B5CF6", // Purple gradient
-    tertiary: "#06B6D4", // Cyan highlights
-  },
-
-  // Glass effects
-  glass: {
-    background: "rgba(255, 255, 255, 0.05)",
-    border: "rgba(255, 255, 255, 0.1)",
-    shadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-  },
-
-  // Gradients
-  gradients: {
-    primary: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    secondary: "linear-gradient(135deg, #06B6D4 0%, #6366F1 100%)",
-    glow: "radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%)",
-  },
-};
+/* Semantic colors */
+--color-green: #55b93e;
+--color-orange: #e36323;
+--color-red: #fe5938;
+--color-blue: #3582ff;
+--color-yellow: #ffb73a;
+--color-purple: #8755e9;
 ```
 
-#### Typography
+### Typography (From Tailwind Config)
 
-```typescript
-const typography = {
-  fontFamily: {
-    sans: ["Inter", "system-ui", "sans-serif"],
-    mono: ["JetBrains Mono", "monospace"],
-  },
-  fontWeight: {
-    normal: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700,
-  },
-};
+```css
+/* Inter font family with comprehensive text styles */
+h1: 3rem (48px) - line-height: 3.45rem - weight: 400
+h2: 2.5rem (40px) - line-height: 3rem - weight: 400
+h3: 2rem (32px) - line-height: 2.5rem - weight: 400
+h4: 1.75rem (28px) - line-height: 2.25rem - weight: 400
+h5: 1.5rem (24px) - line-height: 2rem - weight: 500
+h6: 1.25rem (20px) - line-height: 1.75rem - weight: 500
+
+body-sm: 0.6875rem (11px) - weight: 500
+body-md: 0.75rem (12px) - weight: 500
+body-lg: 0.8125rem (13px) - weight: 400
+heading: 0.875rem (14px) - weight: 500
+title: 0.9375rem (15px) - weight: 400
+title-lg: 1.125rem (18px) - weight: 400
 ```
 
-## Implementation with Mantine
+## Mantine Theme Translation
 
-### Theme Configuration
+The goal is a simple, direct translation of our existing Tailwind values to Mantine:
 
 ```typescript
-// packages/theme/src/brainwave-theme.ts
+// packages/theme/src/index.ts
 import { MantineThemeOverride } from "@mantine/core";
 
 export const brainwaveTheme: MantineThemeOverride = {
-  colorScheme: "dark",
-  primaryColor: "indigo",
+  colorScheme: "light", // Brainwave 2.0 is a light theme
+  primaryColor: "shade",
 
   colors: {
-    dark: [
-      "#C1C2C5",
-      "#A6A7AB",
-      "#909296",
-      "#5C5F66",
-      "#373A40",
-      "#2C2E33",
-      "#1A1A1F", // Brainwave tertiary
-      "#131316", // Brainwave secondary
-      "#0A0A0B", // Brainwave primary
-      "#000000",
+    // Direct translation of shade-01 through shade-09
+    shade: [
+      "#fcfcfc", // shade-01
+      "#f8f7f7", // shade-02
+      "#f1f1f1", // shade-03
+      "#ececec", // shade-04
+      "#e2e2e2", // shade-05
+      "#7b7b7b", // shade-06
+      "#323232", // shade-07
+      "#222222", // shade-08
+      "#121212", // shade-09
     ],
-    indigo: [
-      // Generated scale based on Brainwave accent
-      "#E8E9FF",
-      "#C4C6FF",
-      "#9FA2FF",
-      "#7B7FFF",
-      "#6366F1", // Primary
-      "#5558E3",
-      "#474AD5",
-      "#393CC7",
-      "#2B2EB9",
-      "#1D20AB",
-    ],
+
+    // Semantic colors exactly as defined
+    green: ["#55b93e"], // Single color, not scale
+    orange: ["#e36323"],
+    red: ["#fe5938"],
+    blue: ["#3582ff"],
+    yellow: ["#ffb73a"],
+    purple: ["#8755e9"],
   },
 
+  fontFamily: "Inter, sans-serif",
+
+  // Typography matching our CSS variables exactly
+  headings: {
+    sizes: {
+      h1: { fontSize: "3rem", lineHeight: "3.45rem" },
+      h2: { fontSize: "2.5rem", lineHeight: "3rem" },
+      h3: { fontSize: "2rem", lineHeight: "2.5rem" },
+      h4: { fontSize: "1.75rem", lineHeight: "2.25rem" },
+      h5: { fontSize: "1.5rem", lineHeight: "2rem" },
+      h6: { fontSize: "1.25rem", lineHeight: "1.75rem" },
+    },
+  },
+
+  // Shadows from our CSS variables
   shadows: {
-    md: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
-    xl: "0 20px 40px 0 rgba(31, 38, 135, 0.25)",
-  },
-
-  components: {
-    Card: {
-      styles: {
-        root: {
-          background: "rgba(255, 255, 255, 0.05)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
-        },
-      },
-    },
-    Button: {
-      styles: {
-        root: {
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          "&:hover": {
-            transform: "translateY(-2px)",
-            boxShadow: "0 10px 20px rgba(99, 102, 241, 0.3)",
-          },
-        },
-      },
-    },
+    toolbar:
+      "0px 1px 4px -4px rgba(0, 0, 0, 0.075), 0px 8px 16px -12px rgba(0, 0, 0, 0.125)",
+    "prompt-input":
+      "inset 0 2px 0 0 #ffffff, 0px 18px 24px -20px rgba(0, 0, 0, 0.125), 0px 8px 16px -12px rgba(0, 0, 0, 0.075)",
+    "depth-01":
+      "0 6px 3px 0 rgba(0, 0, 0, 0.01), 0 3px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 1px 0 rgba(0, 0, 0, 0.02)",
+    popover:
+      "0 153px 61px 0 rgba(0, 0, 0, 0.01), 0 86px 52px 0 rgba(0, 0, 0, 0.04), 0 38px 38px 0 rgba(0, 0, 0, 0.06), 0 10px 21px 0 rgba(0, 0, 0, 0.07)",
   },
 };
 ```
 
-## Visual Features
-
-### Modern Visual Effects
-
-- Semi-transparent backgrounds
-- Backdrop blur effects
-- Subtle borders with opacity
-- Soft shadows for depth
-
-### Gradient Accents
-
-- Primary actions with gradient backgrounds
-- Glow effects on hover
-- Gradient borders for emphasis
-- Animated gradient transitions
-
-### Dark Excellence
-
-- True dark mode (not just gray)
-- High contrast for readability
-- Accent colors that pop
-- Reduced eye strain
-
-## Differentiation from Competitors
-
-| Tool           | Theme Approach   | Our Advantage               |
-| -------------- | ---------------- | --------------------------- |
-| n8n            | Basic light/dark | Premium Brainwave aesthetic |
-| Zapier         | Corporate clean  | Modern, futuristic feel     |
-| Make           | Functional gray  | Beautiful glass effects     |
-| Power Automate | Microsoft Fluent | Unique visual identity      |
-
 ## Implementation Status
 
-### Current State
+### ✅ Complete
 
-- 🔴 Theme package empty (waiting for Mantine migration)
-- 🔴 Brainwave colors not yet extracted
-- 🔴 Components not styled
+- Tailwind configuration with perfect Brainwave 2.0 implementation
+- CSS variables for all colors, typography, and shadows
+- Clean light theme aesthetic
 
-### Next Steps
+### 🔄 In Progress
 
-1. Complete Tailwind → Mantine migration
-2. Extract Brainwave 2.0 color palette
-3. Create Mantine theme configuration
-4. Style all components with Brainwave aesthetic
-5. Add Brainwave 2.0 visual effects
+- Direct translation to Mantine theme
+- Simple theme package without unnecessary abstractions
 
-## Why Brainwave 2.0?
+### 📋 Next Steps
 
-### For Users
+1. Create simple Mantine theme file
+2. Remove any complex utilities or abstractions
+3. Use Vite for building theme package
+4. Export clean theme object
 
-- **Beautiful to use daily** - Not just functional
-- **Professional appearance** - Looks premium
-- **Modern aesthetic** - Feels cutting-edge
-- **Dark mode perfection** - Easy on the eyes
+## Key Principles
 
-### For Atomiton
-
-- **Differentiation** - Unique in automation space
-- **Premium feel** - Justifies pro features
-- **Consistent system** - Single source of truth
-- **Extensible** - Can offer theme variations
-
-## Future Themes
-
-While Brainwave 2.0 is our primary theme, the architecture supports:
-
-- Alternative color schemes
-- Light mode variants
-- High contrast accessibility
-- Custom user themes
-- Theme marketplace
-
-## Resources
-
-- Brainwave 2.0 design reference
-- Mantine theming documentation
-- Glass morphism CSS techniques
-- Gradient animation patterns
+- **Direct translation** - No interpretation, just convert existing values
+- **Light theme** - Brainwave 2.0 is clean and light, not dark
+- **No glass morphism** - Clean surfaces, not glassmorphic effects
+- **Minimal abstractions** - Simple theme object, no complex utilities
+- **Existing values only** - Use what's already working in Tailwind
 
 ---
 
-**Note**: We're taking Brainwave 2.0's look and feel and making it functional within our Mantine-based component system. This is our key visual differentiator - making automation tools beautiful, not just functional.
+**Note**: This is a straightforward translation of our existing, working Tailwind configuration to Mantine. No design changes, no fancy effects - just making Mantine understand our existing Brainwave 2.0 values.
