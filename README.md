@@ -1,5 +1,10 @@
 # Atomiton
 
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Stage](https://img.shields.io/badge/Stage-Pre--Alpha-red.svg)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Code of Conduct](https://img.shields.io/badge/Code%20of-Conduct-ff69b4.svg)](CODE_OF_CONDUCT.md)
+
 > **⚠️ VERY EARLY STAGE - HOPES & DREAMS PROJECT ⚠️**
 >
 > This project is so new that nothing works yet. It's literally just hopes and dreams at this point. I'm sharing it publicly because I'm excited about what it could become, not because it's ready to use. Think of this as watching a house being built from the foundation up - right now we're still drawing the blueprints!
@@ -75,7 +80,7 @@ This is a solo learning project, but if you're interested:
 Seriously, it doesn't do anything. But if you're curious:
 
 ```bash
-git clone https://github.com/yourusername/atomiton.git
+git clone https://github.com/Develonaut/atomiton.git
 cd atomiton
 pnpm install
 pnpm dev
