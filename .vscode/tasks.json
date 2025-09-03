@@ -2,239 +2,55 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🚀 Dev - Start Everything",
+      "label": "🚀 dev",
+      "detail": "Start dev server with hot reload",
       "type": "shell",
       "command": "pnpm dev",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "detail": "Start development servers for all apps 🎉"
-    },
-    {
-      "label": "🏗️ Build All",
-      "type": "shell",
-      "command": "pnpm build",
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": ["$tsc"],
-      "detail": "Build all packages and apps 📦"
+      "problemMatcher": []
     },
     {
-      "label": "✨ Lint Everything",
+      "label": "🏗️ build",
+      "detail": "Build all packages for production",
       "type": "shell",
-      "command": "pnpm lint",
+      "command": "pnpm build",
       "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": ["$eslint-stylish"],
-      "detail": "Make the code sparkle ✨"
+      "problemMatcher": ["$tsc"]
     },
     {
-      "label": "🔍 Type Check",
-      "type": "shell",
-      "command": "pnpm check-types",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": ["$tsc"],
-      "detail": "TypeScript strict mode check 💪"
-    },
-    {
-      "label": "💅 Format Code",
-      "type": "shell",
-      "command": "pnpm format",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "detail": "Make it pretty with Prettier 🎨"
-    },
-    {
-      "label": "🖥️ Dev - Client Only",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/client dev",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "detail": "Start the React client app (Next.js for now) 🎯"
-    },
-    {
-      "label": "🖥️ Build - Client",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/client build",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": ["$tsc"],
-      "detail": "Build client app for production 📦"
-    },
-    {
-      "label": "🖥️ Dev - Desktop",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/desktop dev",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "detail": "Launch Electron desktop app 🖥️"
-    },
-    {
-      "label": "🔥 Quick Fix & Stage",
-      "type": "shell",
-      "command": "pnpm format:fix && pnpm lint:fix && git add -A && echo '✅ All files formatted, linted, and staged!'",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": false,
-        "clear": true
-      },
-      "problemMatcher": [],
-      "detail": "Auto-format, lint-fix, and stage all changes (no commit) 🔧"
-    },
-    {
-      "label": "🚢 Ship It! (Commit & Push)",
-      "type": "shell",
-      "command": "pnpm format:fix && pnpm lint:fix && git add -A && git commit -m \"${input:commitMessage}\" && git push",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "showReuseMessage": false,
-        "clear": true
-      },
-      "problemMatcher": [],
-      "detail": "Format, lint, commit, and push to GitHub 🚀"
-    },
-    {
-      "label": "📸 Visual Snapshots",
-      "type": "shell",
-      "command": "cd apps/client && pnpm test:snapshots:compare",
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "dedicated",
-        "showReuseMessage": false,
-        "clear": true
-      },
-      "problemMatcher": [],
-      "detail": "Compare UI with Brainwave reference 📸"
-    },
-    {
-      "label": "🧪 Test All",
+      "label": "🧪 test",
+      "detail": "Run all unit and integration tests",
       "type": "shell",
       "command": "pnpm test",
       "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "detail": "Run all tests 🧪"
+      "problemMatcher": []
     },
     {
-      "label": "🎨 UI Migration - Mantine",
+      "label": "🔍 lint",
+      "detail": "Check code for style and quality issues",
       "type": "shell",
-      "command": "echo 'Ready to migrate to Mantine! Check docs/workspace/strategies/tailwind-to-mantine-migration.md'",
+      "command": "pnpm lint",
       "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "shared",
-        "showReuseMessage": false,
-        "clear": true
-      },
-      "problemMatcher": [],
-      "detail": "Start the Tailwind → Mantine migration 🎨"
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
-      "label": "📚 Open Docs",
+      "label": "✨ format",
+      "detail": "Auto-format code with Prettier",
       "type": "shell",
-      "command": "code docs/workspace/CURRENT.md docs/workspace/NEXT.md",
-      "group": "none",
-      "presentation": {
-        "echo": false,
-        "reveal": "never",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": false,
-        "clear": false
-      },
-      "problemMatcher": [],
-      "detail": "Open current work tracking docs 📚"
-    }
-  ],
-  "inputs": [
+      "command": "pnpm format",
+      "group": "build",
+      "problemMatcher": []
+    },
     {
-      "id": "commitMessage",
-      "type": "promptString",
-      "description": "Enter commit message 💬",
-      "default": "feat: making it beautiful ✨"
+      "label": "🔎 typecheck",
+      "detail": "Verify TypeScript types across all packages",
+      "type": "shell",
+      "command": "pnpm check-types",
+      "group": "build",
+      "problemMatcher": ["$tsc"]
     }
   ]
 }
