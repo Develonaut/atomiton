@@ -22,6 +22,11 @@
   },
   "dependencies": {
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "@mantine/core": "^7.17.8",
+    "@atomiton/theme": "workspace:*"
+  },
+  "peerDependencies": {
+    "@mantine/core": "^7.0.0"
   }
 }
