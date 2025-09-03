@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 test.describe("Baseline Screenshots - Full Page Capture", () => {
   const pages = [
@@ -58,11 +58,15 @@ test.describe("Baseline Screenshots - Full Page Capture", () => {
         height: dimensions.height,
       });
 
-      // Take full page screenshot
-      await browserPage.screenshot({
-        path: `screenshots/baseline-${page.name.toLowerCase().replace(/\s+/g, "-")}.png`,
-        fullPage: true,
-      });
+      // Take full page screenshot using Playwright's visual comparison
+      // This only updates the file if pixels actually changed
+      await expect(browserPage).toHaveScreenshot(
+        `baseline-${page.name.toLowerCase().replace(/\s+/g, "-")}.png`,
+        {
+          fullPage: true,
+          maxDiffPixels: 100, // Allow tiny differences for anti-aliasing
+        },
+      );
 
       console.log(
         `✅ Captured full page screenshot for ${page.name} (${dimensions.width}x${dimensions.height}px)`,
@@ -82,16 +86,19 @@ test.describe("Baseline Screenshots - Full Page Capture", () => {
           await browserPage.evaluate((y) => window.scrollTo(0, y), yPosition);
           await browserPage.waitForTimeout(500); // Wait for scroll to complete
 
-          // Capture section screenshot
-          await browserPage.screenshot({
-            path: `screenshots/baseline-${page.name.toLowerCase().replace(/\s+/g, "-")}-section-${i + 1}.png`,
-            clip: {
-              x: 0,
-              y: yPosition,
-              width: 1280,
-              height: Math.min(viewportHeight, dimensions.height - yPosition),
+          // Capture section screenshot using visual comparison
+          await expect(browserPage).toHaveScreenshot(
+            `baseline-${page.name.toLowerCase().replace(/\s+/g, "-")}-section-${i + 1}.png`,
+            {
+              clip: {
+                x: 0,
+                y: yPosition,
+                width: 1280,
+                height: Math.min(viewportHeight, dimensions.height - yPosition),
+              },
+              maxDiffPixels: 100,
             },
-          });
+          );
 
           console.log(`  ✅ Section ${i + 1}/${sections} captured`);
         }

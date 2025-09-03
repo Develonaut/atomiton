@@ -13,10 +13,22 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
 
+  // Configure screenshot comparison
+  expect: {
+    // Store screenshots in the screenshots folder
+    toHaveScreenshot: {
+      animations: "disabled",
+      caret: "hide",
+    },
+  },
+
   projects: [
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      // Set the directory for this project's screenshots
+      snapshotDir: "./screenshots",
+      snapshotPathTemplate: "{snapshotDir}/{arg}{ext}",
     },
   ],
 
