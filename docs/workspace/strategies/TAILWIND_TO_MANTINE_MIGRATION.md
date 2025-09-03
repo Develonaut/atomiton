@@ -146,52 +146,52 @@ All baseline screenshots have been captured. Each screenshot captures the **full
 
 ### Page Screenshots
 
-| Page | Path | Screenshot Size | File | Status |
-|------|------|----------------|------|--------|
-| Home | `/` | 1280x720px | `screenshots/baseline-home.png` | ✅ Captured |
-| Buttons | `/buttons` | 1280x4427px | `screenshots/baseline-buttons.png` | ✅ Captured |
-| Cards | `/cards` | 1280x3478px | `screenshots/baseline-cards.png` | ✅ Captured |
-| Colors | `/colors` | 1280x872px | `screenshots/baseline-colors.png` | ✅ Captured |
-| Comment | `/comment` | 1280x1458px | `screenshots/baseline-comment.png` | ✅ Captured |
-| Depths | `/depths` | 1280x720px | `screenshots/baseline-depths.png` | ✅ Captured |
-| Dropdown | `/dropdown` | 1280x1862px | `screenshots/baseline-dropdown.png` | ✅ Captured |
-| Iconography | `/iconography` | 1280x4888px | `screenshots/baseline-iconography.png` | ✅ Captured |
-| Inputs | `/inputs` | 1280x2147px | `screenshots/baseline-inputs.png` | ✅ Captured |
-| Menu | `/menu` | 1280x1667px | `screenshots/baseline-menu.png` | ✅ Captured |
-| Modal | `/modal` | 1280x4144px | `screenshots/baseline-modal.png` | ✅ Captured |
-| Notifications | `/notifications` | 1280x2200px | `screenshots/baseline-notifications.png` | ✅ Captured |
-| Prompt Input | `/prompt-input` | 1280x1465px | `screenshots/baseline-prompt-input.png` | ✅ Captured |
-| Sidebar | `/sidebar` | 1280x2522px | `screenshots/baseline-sidebar.png` | ✅ Captured |
-| Toolbar | `/toolbar` | 1280x1649px | `screenshots/baseline-toolbar.png` | ✅ Captured |
-| Topbar | `/topbar` | 1280x1435px | `screenshots/baseline-topbar.png` | ✅ Captured |
-| Typography | `/typography` | 1280x2195px | `screenshots/baseline-typography.png` | ✅ Captured |
+| Page          | Path             | Screenshot Size | File                                     | Status      |
+| ------------- | ---------------- | --------------- | ---------------------------------------- | ----------- |
+| Home          | `/`              | 1280x720px      | `screenshots/baseline-home.png`          | ✅ Captured |
+| Buttons       | `/buttons`       | 1280x4427px     | `screenshots/baseline-buttons.png`       | ✅ Captured |
+| Cards         | `/cards`         | 1280x3478px     | `screenshots/baseline-cards.png`         | ✅ Captured |
+| Colors        | `/colors`        | 1280x872px      | `screenshots/baseline-colors.png`        | ✅ Captured |
+| Comment       | `/comment`       | 1280x1458px     | `screenshots/baseline-comment.png`       | ✅ Captured |
+| Depths        | `/depths`        | 1280x720px      | `screenshots/baseline-depths.png`        | ✅ Captured |
+| Dropdown      | `/dropdown`      | 1280x1862px     | `screenshots/baseline-dropdown.png`      | ✅ Captured |
+| Iconography   | `/iconography`   | 1280x4888px     | `screenshots/baseline-iconography.png`   | ✅ Captured |
+| Inputs        | `/inputs`        | 1280x2147px     | `screenshots/baseline-inputs.png`        | ✅ Captured |
+| Menu          | `/menu`          | 1280x1667px     | `screenshots/baseline-menu.png`          | ✅ Captured |
+| Modal         | `/modal`         | 1280x4144px     | `screenshots/baseline-modal.png`         | ✅ Captured |
+| Notifications | `/notifications` | 1280x2200px     | `screenshots/baseline-notifications.png` | ✅ Captured |
+| Prompt Input  | `/prompt-input`  | 1280x1465px     | `screenshots/baseline-prompt-input.png`  | ✅ Captured |
+| Sidebar       | `/sidebar`       | 1280x2522px     | `screenshots/baseline-sidebar.png`       | ✅ Captured |
+| Toolbar       | `/toolbar`       | 1280x1649px     | `screenshots/baseline-toolbar.png`       | ✅ Captured |
+| Topbar        | `/topbar`        | 1280x1435px     | `screenshots/baseline-topbar.png`        | ✅ Captured |
+| Typography    | `/typography`    | 1280x2195px     | `screenshots/baseline-typography.png`    | ✅ Captured |
 
 ### Component Conversion Tracking
 
 #### Core Components to Convert
 
-| Component | Location | Uses HeadlessUI | Uses Tailwind | Mantine Equivalent | Status |
-|-----------|----------|----------------|---------------|-------------------|--------|
-| Button | `components/Button` | ❌ | ✅ | Button | ❌ Not Started |
-| Card | `components/Card` | ❌ | ✅ | Card | ❌ Not Started |
-| Field (Input) | `components/Field` | ❌ | ✅ | TextInput | ❌ Not Started |
-| Select | `components/Select` | ✅ Menu | ✅ | Select | ❌ Not Started |
-| Switch | `components/Switch` | ✅ Switch | ✅ | Switch | ❌ Not Started |
-| Tabs | `components/Tabs` | ❌ | ✅ | Tabs | ❌ Not Started |
-| Tooltip | `components/Tooltip` | ❌ | ✅ | Tooltip | ❌ Not Started |
-| ColorPicker | `components/ColorPicker` | ✅ Popover | ✅ | ColorPicker | ❌ Not Started |
+| Component     | Location                 | Uses HeadlessUI | Uses Tailwind | Mantine Equivalent | Status         |
+| ------------- | ------------------------ | --------------- | ------------- | ------------------ | -------------- |
+| Button        | `components/Button`      | ❌              | ✅            | Button             | ❌ Not Started |
+| Card          | `components/Card`        | ❌              | ✅            | Card               | ❌ Not Started |
+| Field (Input) | `components/Field`       | ❌              | ✅            | TextInput          | ❌ Not Started |
+| Select        | `components/Select`      | ✅ Menu         | ✅            | Select             | ❌ Not Started |
+| Switch        | `components/Switch`      | ✅ Switch       | ✅            | Switch             | ❌ Not Started |
+| Tabs          | `components/Tabs`        | ❌              | ✅            | Tabs               | ❌ Not Started |
+| Tooltip       | `components/Tooltip`     | ❌              | ✅            | Tooltip            | ❌ Not Started |
+| ColorPicker   | `components/ColorPicker` | ✅ Popover      | ✅            | ColorPicker        | ❌ Not Started |
 
 #### Complex Components (Multiple HeadlessUI/Tailwind)
 
-| Component | HeadlessUI Components Used | Status |
-|-----------|---------------------------|--------|
-| Export | Menu, Dialog | ❌ Not Started |
-| FileMenu | Menu | ❌ Not Started |
-| FiltersMenu | Menu | ❌ Not Started |
-| ProfileMenu | Menu | ❌ Not Started |
-| Settings | Multiple | ❌ Not Started |
-| ShareFile | Dialog | ❌ Not Started |
-| PromptInput | Combobox, Popover | ❌ Not Started |
+| Component   | HeadlessUI Components Used | Status         |
+| ----------- | -------------------------- | -------------- |
+| Export      | Menu, Dialog               | ❌ Not Started |
+| FileMenu    | Menu                       | ❌ Not Started |
+| FiltersMenu | Menu                       | ❌ Not Started |
+| ProfileMenu | Menu                       | ❌ Not Started |
+| Settings    | Multiple                   | ❌ Not Started |
+| ShareFile   | Dialog                     | ❌ Not Started |
+| PromptInput | Combobox, Popover          | ❌ Not Started |
 
 ### Testing Commands
 
