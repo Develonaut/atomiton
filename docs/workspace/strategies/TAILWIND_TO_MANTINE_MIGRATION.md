@@ -4,7 +4,7 @@
 
 This document outlines a comprehensive migration strategy for transitioning the Atomiton project from Tailwind CSS AND HeadlessUI to Mantine UI. The migration will completely eliminate both Tailwind CSS and HeadlessUI dependencies, replacing them entirely with Mantine UI components while preserving the current visual design exactly.
 
-**Update:** The project has been downgraded from Tailwind CSS v4 to v3.4.15 to enable Vite compatibility. This doesn't change the migration strategy but simplifies it as we're now working with the more stable v3 syntax.
+**New Approach (Updated):** We will use the Brainwave 2.0 reference app as our migration platform. This Next.js + Tailwind app will be moved into `packages/ui`, where we'll systematically convert each component to Mantine while maintaining visual parity through Playwright snapshot testing.
 
 **Critical Requirements:**
 
@@ -82,6 +82,82 @@ git commit -m "chore: update snapshots after [component] migration"
 4. **Complete HeadlessUI Removal**: No HeadlessUI components should remain after migration
 5. **Reversibility**: Each phase can be rolled back independently
 6. **Zero Downtime**: Application remains functional throughout
+
+## Phase 0: Reference App Migration Setup (NEW - 1 day)
+
+### Objectives
+
+- Move Brainwave 2.0 reference app into packages/ui
+- Set up Playwright visual regression testing baseline
+- Create component conversion tracking system
+
+### Tasks
+
+#### 0.1 Reference App Setup
+
+```bash
+# Copy Brainwave reference app to packages/ui
+cp -r brainwave-reference-app/* packages/ui/
+
+# Install dependencies
+cd packages/ui
+pnpm install
+
+# Verify Next.js app runs
+pnpm dev
+```
+
+#### 0.2 Baseline Screenshot Capture
+
+```bash
+# Set up Playwright for visual testing
+pnpm add -D @playwright/test
+
+# Create snapshot tests for ALL pages
+# tests/baseline.spec.ts
+test.describe('Baseline Screenshots', () => {
+  const pages = [
+    '/',
+    '/dashboard',
+    '/settings',
+    // ... all reference app pages
+  ];
+
+  for (const page of pages) {
+    test(`Capture ${page}`, async ({ page: browserPage }) => {
+      await browserPage.goto(page);
+      await browserPage.screenshot({
+        path: `screenshots/baseline${page.replace('/', '-')}.png`,
+        fullPage: true
+      });
+    });
+  }
+});
+
+# Capture all baseline screenshots
+pnpm playwright test tests/baseline.spec.ts
+```
+
+#### 0.3 Component Inventory & Tracking
+
+Create a tracking document for all components in the reference app:
+
+```markdown
+# Component Conversion Tracking
+
+| Component | Location              | Status      | Mantine Equivalent | Visual Test |
+| --------- | --------------------- | ----------- | ------------------ | ----------- |
+| Button    | components/Button.tsx | ❌ Tailwind | Button             | ❌          |
+| Card      | components/Card.tsx   | ❌ Tailwind | Card               | ❌          |
+| ...       | ...                   | ...         | ...                | ...         |
+```
+
+### Verification Checkpoints
+
+- [ ] Reference app running in packages/ui
+- [ ] All pages captured as baseline screenshots
+- [ ] Component inventory complete
+- [ ] Playwright visual tests configured
 
 ## Phase 1: Foundation Setup (2 days)
 
@@ -546,13 +622,62 @@ If critical issues discovered after Tailwind removal:
 3. Investigate and fix issues
 4. Retry removal process
 
-## Phase 6: packages/ui Library Creation (1 day)
+## Phase 6: Final Migration to Vite (1 day)
 
 ### Objectives
 
-- Extract components to packages/ui
-- Implement Compound component pattern
-- Set up component exports
+- Convert packages/ui from Next.js to Vite
+- Remove all Next.js dependencies
+- Integrate converted components into apps/client
+
+### Tasks
+
+#### 6.1 Vite Conversion
+
+```bash
+# Remove Next.js dependencies
+pnpm remove next react-dom
+
+# Add Vite
+pnpm add -D vite @vitejs/plugin-react
+
+# Create vite.config.ts
+# Set up library mode for component exports
+```
+
+#### 6.2 Component Library Structure
+
+```
+packages/ui/
+├── src/
+│   ├── components/  # All Mantine-converted components
+│   │   ├── Button/
+│   │   ├── Card/
+│   │   └── ...
+│   ├── hooks/
+│   ├── utils/
+│   └── index.ts    # Barrel exports
+├── vite.config.ts
+└── package.json
+```
+
+#### 6.3 Integration with apps/client
+
+```typescript
+// apps/client can now import from packages/ui
+import { Button, Card, Input } from "@atomiton/ui";
+
+// All components are now Mantine-based
+// Visual parity confirmed through testing
+```
+
+### Verification Checkpoints
+
+- [ ] packages/ui converted to Vite
+- [ ] All components exported correctly
+- [ ] apps/client successfully imports components
+- [ ] Visual regression tests still passing
+- [ ] No Next.js dependencies remain
 
 ### Structure
 
@@ -677,23 +802,26 @@ export const Card = Object.assign(MantineCard, {
 
 ## Timeline & Resources
 
-### Overall Timeline: 11 days
+### Overall Timeline: 12 days
 
-| Phase               | Duration | Resources    | Dependencies |
-| ------------------- | -------- | ------------ | ------------ |
-| Phase 1: Foundation | 2 days   | 1 developer  | None         |
-| Phase 2: Analysis   | 1 day    | 1 developer  | Phase 1      |
-| Phase 3: Pilot      | 2 days   | 1 developer  | Phase 2      |
-| Phase 4: Migration  | 5 days   | 2 developers | Phase 3      |
-| Phase 5: Cleanup    | 2 days   | 1 developer  | Phase 4      |
-| Phase 6: Library    | 1 day    | 1 developer  | Phase 5      |
+| Phase                    | Duration | Resources    | Dependencies |
+| ------------------------ | -------- | ------------ | ------------ |
+| Phase 0: Reference Setup | 1 day    | 1 developer  | None         |
+| Phase 1: Foundation      | 2 days   | 1 developer  | Phase 0      |
+| Phase 2: Analysis        | 1 day    | 1 developer  | Phase 1      |
+| Phase 3: Pilot           | 2 days   | 1 developer  | Phase 2      |
+| Phase 4: Migration       | 5 days   | 2 developers | Phase 3      |
+| Phase 5: Cleanup         | 2 days   | 1 developer  | Phase 4      |
+| Phase 6: Vite Conversion | 1 day    | 1 developer  | Phase 5      |
 
 ### Critical Path
 
-1. Vite migration must be complete (prerequisite)
-2. Phase 1-3 must be sequential
-3. Phase 4 can be parallelized with 2 developers
-4. Phase 5-6 must be sequential
+1. Reference app setup in packages/ui (Phase 0)
+2. Baseline screenshots captured before any changes
+3. Phase 1-3 must be sequential
+4. Phase 4 can be parallelized with 2 developers
+5. Phase 5-6 must be sequential
+6. Final integration with apps/client after all components converted
 
 ## Monitoring & Verification
 
@@ -772,16 +900,38 @@ Initiate rollback if:
 - [ ] Set up component testing
 - [ ] Establish component guidelines
 
+## Migration Workflow Summary (NEW)
+
+### The New Component-by-Component Process
+
+1. **Start with Reference App**: Brainwave 2.0 reference app in packages/ui
+2. **Capture Baseline**: Screenshot all pages with Playwright
+3. **Convert Component**: Pick one component, convert from Tailwind to Mantine
+4. **Visual Test**: Run Playwright to detect any visual differences
+5. **Iterate**: Fix any visual discrepancies until pixel-perfect
+6. **Commit**: Once perfect, commit the converted component
+7. **Repeat**: Move to next component
+8. **Final Step**: When all converted, remove Next.js, switch to Vite
+9. **Integration**: Import all components into apps/client
+
+### Benefits of This Approach
+
+- **Isolated Environment**: packages/ui is separate from production code
+- **Visual Safety Net**: Every change is validated against baseline screenshots
+- **Incremental Progress**: One component at a time, reducing risk
+- **Clean Migration**: apps/client only touched after all components ready
+- **Reusable Library**: packages/ui becomes the central UI component library
+
 ## Conclusion
 
-This migration strategy provides a systematic, low-risk approach to transitioning from Tailwind CSS to Mantine UI. The phased approach ensures the application remains functional throughout the migration, while comprehensive testing and verification steps prevent regression. The use of feature flags and parallel implementations allows for quick rollback if issues arise.
+This updated migration strategy leverages the Brainwave 2.0 reference app as a migration platform, providing a controlled environment for component conversion. By working in packages/ui with comprehensive visual regression testing, we ensure pixel-perfect migration before touching the production application.
 
 Key success factors:
 
-1. Incremental migration minimizes risk
-2. Visual regression testing ensures design consistency
-3. Feature flags enable safe testing in production
-4. Comprehensive rollback plans at each phase
-5. Clear success criteria and verification checkpoints
+1. Reference app provides complete component inventory
+2. Baseline screenshots ensure zero visual regression
+3. Isolated environment prevents production issues
+4. Component-by-component approach minimizes risk
+5. Final Vite conversion simplifies the stack
 
-The estimated 11-day timeline assumes one to two developers working full-time, with potential for parallelization in Phase 4 to accelerate the migration.
+The estimated 12-day timeline assumes one to two developers working full-time, with potential for parallelization in Phase 4 to accelerate the migration.

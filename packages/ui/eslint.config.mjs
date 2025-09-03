@@ -1,13 +1,16 @@
-import { config } from "@repo/eslint-config/react-internal";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
 
-/** @type {import("eslint").Linter.Config} */
-export default [
-  ...config,
-  {
-    ignores: [
-      "preview-dist/**",
-      "**/fixtures/.cache/**",
-      "**/.turbo/**",
-    ]
-  }
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
+
+export default eslintConfig;
