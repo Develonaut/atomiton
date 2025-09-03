@@ -164,7 +164,7 @@ importers:
     dependencies:
       '@mantine/core':
         specifier: ^7.0.0
-        version: 7.17.8(@mantine/hooks@7.17.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        version: 7.17.8(@mantine/hooks@8.2.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
@@ -183,9 +183,18 @@ importers:
 
   packages/ui:
     dependencies:
+      '@atomiton/theme':
+        specifier: workspace:*
+        version: link:../theme
       '@headlessui/react':
         specifier: ^2.2.4
         version: 2.2.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@mantine/core':
+        specifier: ^8.2.8
+        version: 8.2.8(@mantine/hooks@8.2.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@mantine/hooks':
+        specifier: ^8.2.8
+        version: 8.2.8(react@19.1.1)
       next:
         specifier: 15.3.4
         version: 15.3.4(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -229,6 +238,9 @@ importers:
       eslint-config-next:
         specifier: 15.3.4
         version: 15.3.4(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2)
+      tailwind-scrollbar:
+        specifier: ^4.0.2
+        version: 4.0.2(react@19.1.1)(tailwindcss@4.1.12)
       tailwindcss:
         specifier: ^4
         version: 4.1.12
@@ -875,8 +887,15 @@ packages:
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/hooks@7.17.8':
-    resolution: {integrity: sha512-96qygbkTjRhdkzd5HDU8fMziemN/h758/EwrFu7TlWrEP10Vw076u+Ap/sG6OT4RGPZYYoHrTlT+mkCZblWHuw==}
+  '@mantine/core@8.2.8':
+    resolution: {integrity: sha512-dybAXrlQ+QiIhpnVCkdH6P4Sjm9I9RymYXfDp97oj9KfGRMEJGLDdPAwp/2GhXe7UdDkzqD48JCkbfRWF2Q+qA==}
+    peerDependencies:
+      '@mantine/hooks': 8.2.8
+      react: ^18.x || ^19.x
+      react-dom: ^18.x || ^19.x
+
+  '@mantine/hooks@8.2.8':
+    resolution: {integrity: sha512-KK1krCcXizWT6JF8gWexv58imQBbviylAJqSqdZ4zUPgrpe81ehMyfxo5Z9EZsnSwMxkB4RLMhCCJhC5g8GvLA==}
     peerDependencies:
       react: ^18.x || ^19.x
 
@@ -4169,10 +4188,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@mantine/core@7.17.8(@mantine/hooks@7.17.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@mantine/core@7.17.8(@mantine/hooks@8.2.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@floating-ui/react': 0.26.28(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@mantine/hooks': 7.17.8(react@19.1.1)
+      '@mantine/hooks': 8.2.8(react@19.1.1)
       clsx: 2.1.1
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
@@ -4183,7 +4202,21 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/hooks@7.17.8(react@19.1.1)':
+  '@mantine/core@8.2.8(@mantine/hooks@8.2.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@floating-ui/react': 0.26.28(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@mantine/hooks': 8.2.8(react@19.1.1)
+      clsx: 2.1.1
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      react-number-format: 5.4.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      react-remove-scroll: 2.7.1(@types/react@19.1.0)(react@19.1.1)
+      react-textarea-autosize: 8.5.9(@types/react@19.1.0)(react@19.1.1)
+      type-fest: 4.41.0
+    transitivePeerDependencies:
+      - '@types/react'
+
+  '@mantine/hooks@8.2.8(react@19.1.1)':
     dependencies:
       react: 19.1.1
 
@@ -6793,6 +6826,13 @@ snapshots:
     dependencies:
       prism-react-renderer: 2.4.1(react@19.1.1)
       tailwindcss: 3.4.15
+    transitivePeerDependencies:
+      - react
+
+  tailwind-scrollbar@4.0.2(react@19.1.1)(tailwindcss@4.1.12):
+    dependencies:
+      prism-react-renderer: 2.4.1(react@19.1.1)
+      tailwindcss: 4.1.12
     transitivePeerDependencies:
       - react
 
