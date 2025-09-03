@@ -9,7 +9,13 @@
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "playwright test",
+    "test:update": "playwright test --update-snapshots",
+    "preview": "vite build --config vite.preview.config.ts && vite preview --port 3000 --outDir ../preview-dist",
+    "preview:dev": "vite --config vite.preview.config.ts --port 3000",
+    "preview:build": "vite build --config vite.preview.config.ts",
+    "preview:serve": "vite preview --port 3000 --outDir preview-dist"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
@@ -18,13 +24,19 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "^9.34.0",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "@playwright/experimental-ct-react": "^1.48.0",
+    "@playwright/test": "^1.48.0",
+    "@axe-core/playwright": "^4.10.2",
+    "vite": "^5.4.8",
+    "@vitejs/plugin-react": "^4.3.2"
   },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "@mantine/core": "^7.17.8",
-    "@atomiton/theme": "workspace:*"
+    "@atomiton/theme": "workspace:*",
+    "react-router-dom": "^6.28.0"
   },
   "peerDependencies": {
     "@mantine/core": "^7.0.0"
