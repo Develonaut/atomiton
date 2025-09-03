@@ -19,23 +19,13 @@
   - [n8n Analysis](./research/n8n-analysis.md) - Learning from n8n
   - [Competitor Analysis](./research/competitor-analysis.md) - Market research
 
-### 📁 Supporting Documentation
+### 📁 Development Documentation
 
-- **[architecture/](./architecture/)** - Legacy architecture docs (being migrated to domains/)
-- **[development/](./development/)** - Development guidelines
-- **[guidelines/](./guidelines/)** - Documentation guidelines
-- **[strategies/](./strategies/)** - Migration strategies
-- **[guides/](./guides/)** - User guides (empty until features exist)
-- **[reference/](./reference/)** - API reference (empty until APIs exist)
-- **[decisions/](./decisions/)** - Architecture decision records
-
-### 🔒 Private Documentation
-
-- **[workspace/](./workspace/)** - Active development workspace (not for public)
-  - CURRENT.md - What's being worked on
-  - NEXT.md - Upcoming work
-  - strategies/ - Active strategies
-  - sessions/ - Claude Code session notes
+- **[workspace/](./workspace/)** - Active development workspace
+  - [CURRENT.md](./workspace/CURRENT.md) - What's being worked on
+  - [NEXT.md](./workspace/NEXT.md) - Upcoming work
+  - strategies/ - Migration strategies
+  - sessions/ - Development session notes
 
 ## Where to Start
 
