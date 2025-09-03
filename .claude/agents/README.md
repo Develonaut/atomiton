@@ -16,7 +16,6 @@ agents/
 ├── Michael.md
 ├── Jeeves.md
 ├── Parker.md
-├── Picasso.md
 ├── Ryan.md
 └── Voorhees.md
 ```
@@ -25,9 +24,8 @@ agents/
 
 ### Core Development Team
 
-- **🎯 Ryan** - The Component Perfectionist - UI components and nodes
+- **🎯 Ryan** - The Component Perfectionist & Visual Artist - UI components, nodes, and Blueprint editor
 - **🏗️ Michael** - The System Architect - Backend architecture and APIs
-- **🎨 Picasso** - The Visual Artist - Blueprint editor and visual design
 - **🔌 Parker** - The Integration Orchestrator - Platform integration and environment
 - **🚀 Jeeves** - The Software Development Systems Engineer - CI/CD and deployment pipelines
 
@@ -62,7 +60,6 @@ Use the Task tool with:
 
 - subagent_type: "ui-component-architect" (Ryan)
 - subagent_type: "blueprint-system-architect" (Michael)
-- subagent_type: "visual-blueprint-editor" (Picasso)
 - subagent_type: "platform-integration-orchestrator" (Parker)
 - subagent_type: "devops-deployment-engineer" (Jeeves)
 - subagent_type: "ui-comprehensive-tester" (Brian)
@@ -85,16 +82,6 @@ All work must follow the mandatory workflow including:
 
 ## 📋 Agent-Specific Requirements
 
-### 🎨 Picasso (visual-blueprint-editor)
-
-- **MUST** review ALL visual references before UI work:
-  1. `/docs/ui/design/DESIGN_GUIDELINES.md` - Modern UI patterns
-  2. `/packages/theme/src/colors/dracula.ts` - Official colors
-  3. `/docs/architecture/INTEGRATION.md` - How to merge them
-- **MUST** read `/docs/ui/design/EDITOR_VISION.md` before any work
-- Focus on React Flow integration with glass morphism effects
-- Create visual masterpieces for the Blueprint editor
-
 ### 🏗️ Michael (blueprint-system-architect)
 
 - **MUST** read `/docs/ui/design/EDITOR_VISION.md` for system requirements
@@ -106,10 +93,12 @@ All work must follow the mandatory workflow including:
 
 - **MUST** review ALL visual references BEFORE any UI work:
   1. `/docs/ui/design/DESIGN_GUIDELINES.md` - Extract modern patterns
-  2. `/packages/theme/src/colors/dracula.ts` - Use exact colors
-  3. `/docs/architecture/INTEGRATION.md` - Follow integration patterns
-- **MUST** read `/docs/ui/design/EDITOR_VISION.md` for UI patterns
-- Handles ALL UI components including nodes
+  2. `/docs/domains/ui/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
+  3. `/packages/theme/src/colors/brainwave.ts` - Use exact colors
+  4. `/docs/architecture/INTEGRATION.md` - Follow integration patterns
+  5. `/docs/ui/design/EDITOR_VISION.md` - Blueprint editor requirements
+- Handles ALL UI components including nodes and Blueprint editor
+- Focus on React Flow integration with Brainwave 2.0 aesthetic
 - Use Mantine UI v7 components
 - Every component should be reusable and beautiful
 
@@ -165,10 +154,9 @@ All work must follow the mandatory workflow including:
 
 ### UI Development
 
-1. **Picasso** - Visual design and React Flow integration
-2. **Ryan** - Component implementation and reusability
-3. **Brian** - Cross-browser and responsive testing
-4. **Karen** - Feature completion validation
+1. **Ryan** - Component implementation, visual design, React Flow integration, and reusability
+2. **Brian** - Cross-browser and responsive testing
+3. **Karen** - Feature completion validation
 
 ### Backend Development
 

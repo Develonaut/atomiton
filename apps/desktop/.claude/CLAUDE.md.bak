@@ -1,0 +1,31 @@
+# Claude Agent Instructions - Electron Package
+
+This workspace is part of the Atomiton monorepo. All agent instructions, guidelines, and project documentation are maintained in the root `.claude` directory.
+
+## 📁 Primary Configuration
+
+Please refer to the root configuration for all agent instructions and guidelines:
+**[Root CLAUDE.md](../../../.claude/CLAUDE.md)**
+
+## 🔗 Quick Links to Essential Documentation
+
+- **[Agent Team Overview](../../../.claude/agents/README.md)** - Agent personas and coordination
+- **[Development Guidelines](../../../docs/guidelines/README.md)** - Code quality and standards
+- **[System Architecture](../../../docs/architecture/SYSTEM.md)** - System design
+- **[Technical Stack](../../../docs/architecture/STACK.md)** - Technology choices
+
+## 📦 Package Context
+
+This is the **Electron package** workspace. When working in this directory:
+
+- All permissions granted at the root level apply here
+- This package contains the desktop application wrapper
+- Follow the Development Guidelines for Electron-specific implementations
+
+## ✅ Permission Inheritance
+
+All permissions and approvals granted at the root level automatically apply to this workspace subdirectory.
+
+---
+
+_This file references the centralized configuration to avoid duplication and ensure consistency across the monorepo._

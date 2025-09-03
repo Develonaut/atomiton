@@ -82,7 +82,7 @@ Each package/app has its own `.claude/CLAUDE.md` that references this root confi
 - `packages/ui/.claude/CLAUDE.md` - UI components and Blueprint editor
 - `packages/core/.claude/CLAUDE.md` - Core Blueprint engine
 - `packages/nodes/.claude/CLAUDE.md` - Node implementations
-- `packages/theme/.claude/CLAUDE.md` - Dracula theme
+- `packages/theme/.claude/CLAUDE.md` - Brainwave 2.0 theme
 - `packages/electron/.claude/CLAUDE.md` - Desktop app
 - `packages/playwright/.claude/CLAUDE.md` - E2E tests
 - `apps/client/.claude/CLAUDE.md` - Main Vite application

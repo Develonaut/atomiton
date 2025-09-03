@@ -14,7 +14,6 @@ This directory contains the complete team of specialized agents for the Atomiton
 ### Specialized Roles
 
 - **[Barbara](../Barbara.md)** - Documentation Orchestrator
-- **[Picasso](../Picasso.md)** - UI/UX Design & Visual Assets
 - **[Parker](../Parker.md)** - DevOps & Infrastructure
 - **[Jeeves](../Jeeves.md)** - Project Management & Coordination
 - **[Megamind](../Megamind.md)** - AI/ML & Advanced Features

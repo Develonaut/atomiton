@@ -1,90 +1,63 @@
 # Atomiton Documentation
 
-Central hub for all project documentation - focused, actionable, and evergreen.
+> ⚠️ **Documentation for features that don't exist yet!** We're documenting the vision and architecture before building. It's aspirational documentation.
 
-## 📚 Core Documentation
+## Documentation Structure
 
-### [Architecture](./architecture/)
+### 📁 Core Documentation
 
-**Vision & system design for the Atomiton platform**
+- **[domains/](./domains/)** - Architecture domains (mirrors package structure)
+  - Each domain has its own README and roadmap
+  - This is the primary technical documentation
+- **[project/](./project/)** - Project overview
+  - [README](./project/README.md) - Project introduction
+  - [ROADMAP](./project/ROADMAP.md) - Development roadmap
+  - [SUSTAINABILITY](./project/SUSTAINABILITY.md) - Monetization ideas
+  - [MISSION](./project/MISSION.md) - Project mission
 
-- Platform overview and core concepts
-- Technology stack (current vs target)
-- Package structure and responsibilities
-- Implementation roadmap
+- **[research/](./research/)** - Analysis and research
+  - [n8n Analysis](./research/n8n-analysis.md) - Learning from n8n
+  - [Competitor Analysis](./research/competitor-analysis.md) - Market research
 
-### [Development](./development/)
+### 📁 Supporting Documentation
 
-**Standards & practices for day-to-day development**
+- **[architecture/](./architecture/)** - Legacy architecture docs (being migrated to domains/)
+- **[development/](./development/)** - Development guidelines
+- **[guidelines/](./guidelines/)** - Documentation guidelines
+- **[strategies/](./strategies/)** - Migration strategies
+- **[guides/](./guides/)** - User guides (empty until features exist)
+- **[reference/](./reference/)** - API reference (empty until APIs exist)
+- **[decisions/](./decisions/)** - Architecture decision records
 
-- Development philosophy (DRY, KISS, TDD)
-- Code quality pipeline (format → lint → typecheck → build)
-- TypeScript standards (no `any` types!)
-- Testing strategy (quality over coverage)
-- Component patterns and workflow
+### 🔒 Private Documentation
 
-### [Guidelines](./guidelines/)
+- **[workspace/](./workspace/)** - Active development workspace (not for public)
+  - CURRENT.md - What's being worked on
+  - NEXT.md - Upcoming work
+  - strategies/ - Active strategies
+  - sessions/ - Claude Code session notes
 
-**Documentation & development guidelines**
+## Where to Start
 
-- Documentation standards (explain, don't track)
-- Code quality requirements
-- Document management and organization
-- Agent workflow standards
+### For Contributors
 
-### [TODO](./TODO.md)
+1. Read [project/README.md](./project/README.md) for overview
+2. Check [domains/README.md](./domains/README.md) for architecture
+3. See [workspace/NEXT.md](./workspace/NEXT.md) for what needs doing
 
-**Living task list - all project tasks and priorities**
+### For Users
 
-- Current sprint priorities
-- Implementation roadmap tasks
-- Gap tracking between vision and reality
-- ⚠️ All task tracking lives here, not in other docs
+Nothing works yet! This is all hopes and dreams. Come back in a few months.
 
-## 📁 Additional Resources
+## Key Messages
 
-### Agent System
-
-- [Agents](./../.claude/agents/) - AI agent personas and coordination
-- [Execution Plan](./../.claude/agents/coordination/AGENT_EXECUTION_PLAN.md) - Workflow requirements
-
-### Status & Planning
-
-- Status tracking (when needed) goes in `/docs/status/`
-- Historical/outdated docs in `*/archive/` folders
-
-## 🎯 Quick Start for Developers
-
-1. **Read first**: [Development Standards](./development/)
-2. **Understand vision**: [Architecture](./architecture/)
-3. **Check tasks**: [TODO.md](./TODO.md)
-4. **Follow guidelines**: [Documentation Guidelines](./guidelines/)
-
-## 📋 Documentation Principles
-
-✅ **Documents should:**
-
-- Explain concepts and architecture
-- Document decisions and rationale
-- Remain valid over time
-- Focus on the "why" and "how"
-
-❌ **Documents should NOT:**
-
-- Contain task lists or TODOs
-- Track progress or status
-- Include "currently broken" alerts
-- Use temporal language
-
-## 🔄 Maintenance
-
-- **Living documents** - Update as standards evolve
-- **Archive outdated** - Move to `archive/` folders
-- **Track gaps** - Use TODO.md for vision vs reality
-- **Keep evergreen** - Write for long-term validity
+- **Very early stage** - Nothing works yet
+- **Building in public** - Sharing the journey
+- **Beautiful UI first** - Using Brainwave 2.0 aesthetic
+- **Simple over complex** - 20-50 nodes, not 500+
+- **Desktop-first** - Full local control
+- **Free core forever** - MIT licensed
 
 ---
 
-**Last Updated**: September 1, 2025  
-**Maintained by**: Documentation Team  
-**Remember**: Tasks go in TODO.md, not in documentation!
+_Remember: This documentation describes what we're building, not what exists!_

@@ -1,0 +1,163 @@
+/**
+ * Node Type Definitions
+ *
+ * Core types for the node execution system that were moved from @atomiton/core
+ * to keep the nodes package self-contained.
+ */
+
+// ==========================
+// Execution Types
+// ==========================
+
+export interface NodeExecutionContext {
+  /** Node instance ID */
+  nodeId: string;
+
+  /** Node instance ID (alias for compatibility) */
+  instanceId?: string;
+
+  /** Blueprint ID for context */
+  blueprintId?: string;
+
+  /** Input data from connected ports */
+  inputs: Record<string, unknown>;
+
+  /** Node configuration */
+  config?: Record<string, unknown>;
+
+  /** Workspace root directory */
+  workspaceRoot?: string;
+
+  /** Temporary directory for execution */
+  tempDirectory?: string;
+
+  /** Execution start time */
+  startTime: Date;
+
+  /** Execution limits and constraints */
+  limits: {
+    /** Maximum execution time in milliseconds */
+    maxExecutionTimeMs: number;
+    /** Maximum memory usage in MB */
+    maxMemoryMB?: number;
+    /** Maximum disk space in MB */
+    maxDiskSpaceMB?: number;
+  };
+
+  /** Progress reporting function */
+  reportProgress: (progress: number, message?: string) => void;
+
+  /** Log message functions */
+  log: {
+    debug?: (message: string, data?: Record<string, unknown>) => void;
+    info?: (message: string, data?: Record<string, unknown>) => void;
+    warn?: (message: string, data?: Record<string, unknown>) => void;
+    error?: (message: string, data?: Record<string, unknown>) => void;
+  };
+
+  /** Abort signal for cancellation */
+  abortSignal?: AbortSignal;
+
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
+}
+
+export interface NodeExecutionResult {
+  /** Whether execution succeeded */
+  success: boolean;
+
+  /** Output data for connected ports */
+  outputs?: Record<string, unknown>;
+
+  /** Error message if execution failed */
+  error?: string;
+
+  /** Additional metadata about the execution */
+  metadata?: Record<string, unknown>;
+
+  /** Performance metrics */
+  metrics?: {
+    executionTime: number;
+    memoryUsed?: number;
+  };
+}
+
+// ==========================
+// Port and Node Definition Types
+// ==========================
+
+export interface PortDefinition {
+  /** Unique port identifier */
+  id: string;
+
+  /** Display name for the port */
+  name: string;
+
+  /** Port type (input/output) */
+  type: string;
+
+  /** Data type for this port */
+  dataType: string;
+
+  /** Whether this port is required */
+  required?: boolean;
+
+  /** Whether this port accepts multiple connections */
+  multiple?: boolean;
+
+  /** Description of what this port does */
+  description?: string;
+
+  /** Default value for this port */
+  defaultValue?: unknown;
+}
+
+export interface NodeDefinition {
+  /** Unique node type identifier */
+  id: string;
+
+  /** Display name for the node */
+  name: string;
+
+  /** Node description */
+  description?: string;
+
+  /** Node category for organization */
+  category: string;
+
+  /** Node type for runtime identification */
+  type: string;
+
+  /** Version of this node definition */
+  version?: string;
+
+  /** Input port definitions */
+  inputPorts?: PortDefinition[];
+
+  /** Output port definitions */
+  outputPorts?: PortDefinition[];
+
+  /** Legacy input definitions (for compatibility) */
+  inputs?: PortDefinition[];
+
+  /** Legacy output definitions (for compatibility) */
+  outputs?: PortDefinition[];
+
+  /** Icon identifier for UI */
+  icon?: string;
+
+  /** Default configuration for this node */
+  defaultConfig?: Record<string, unknown>;
+
+  /** Configuration schema for UI form generation */
+  configSchema?: Record<string, unknown>;
+
+  /** Execute function for the node */
+  execute?: (
+    context: NodeExecutionContext,
+    config?: Record<string, unknown>,
+  ) => Promise<NodeExecutionResult>;
+
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
+}

@@ -90,7 +90,7 @@ color: orange
 
 ## Current Priorities
 
-1. **Cloudflare Pages Setup** - Web app deployment pipeline
+1. **Cloudflare Pages Setup** - Client app deployment pipeline
 2. **Electron Build Pipeline** - Cross-platform desktop app distribution
 3. **GitHub Actions Integration** - Automated testing and deployment
 4. **Release Automation** - Version bumping and changelog generation
