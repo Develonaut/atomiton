@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
-import { Container, Title, Text, SimpleGrid, Stack, Divider } from '@mantine/core';
-import { Input } from '../../src/components/Input';
+import React, { useState } from "react";
+import {
+  Container,
+  Title,
+  Text,
+  SimpleGrid,
+  Stack,
+  Divider,
+} from "@mantine/core";
+import { Input } from "../../src/components/Input";
 
 export function InputPage() {
-  const [validatedValue, setValidatedValue] = useState('Valid input');
-  const [errorValue, setErrorValue] = useState('Invalid input');
+  const [validatedValue, setValidatedValue] = useState("Valid input");
+  const [errorValue, setErrorValue] = useState("Invalid input");
 
   return (
     <Container size="xl" py="md">
       <Stack gap="lg">
         <div>
-          <Title order={2} mb="sm">Inputs</Title>
+          <Title order={2} mb="sm">
+            Inputs
+          </Title>
           <Text c="dimmed">
             All input variations and states using the Brainwave 2.0 theme
           </Text>
@@ -20,36 +29,46 @@ export function InputPage() {
 
         {/* Basic Text Inputs */}
         <div>
-          <Title order={3} mb="md">Basic Text Inputs</Title>
+          <Title order={3} mb="md">
+            Basic Text Inputs
+          </Title>
           <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
             <Stack gap="sm">
               <Input placeholder="Basic input" />
-              <Text size="xs" c="dimmed">Default state</Text>
+              <Text size="xs" c="dimmed">
+                Default state
+              </Text>
             </Stack>
 
             <Stack gap="sm">
               <Input label="With Label" placeholder="Enter text here" />
-              <Text size="xs" c="dimmed">With label</Text>
+              <Text size="xs" c="dimmed">
+                With label
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 value={validatedValue}
                 onChange={(e) => setValidatedValue(e.target.value)}
-                validated 
+                validated
                 label="Validated Input"
               />
-              <Text size="xs" c="dimmed">Validated state</Text>
+              <Text size="xs" c="dimmed">
+                Validated state
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 value={errorValue}
                 onChange={(e) => setErrorValue(e.target.value)}
                 error="This field has an error"
                 label="Error Input"
               />
-              <Text size="xs" c="dimmed">Error state</Text>
+              <Text size="xs" c="dimmed">
+                Error state
+              </Text>
             </Stack>
           </SimpleGrid>
         </div>
@@ -58,20 +77,26 @@ export function InputPage() {
 
         {/* Disabled States */}
         <div>
-          <Title order={3} mb="md">Disabled States</Title>
+          <Title order={3} mb="md">
+            Disabled States
+          </Title>
           <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
             <Stack gap="sm">
               <Input disabled placeholder="Disabled input" />
-              <Text size="xs" c="dimmed">Disabled empty</Text>
+              <Text size="xs" c="dimmed">
+                Disabled empty
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
-                disabled 
+              <Input
+                disabled
                 value="Disabled with value"
                 label="Disabled Input"
               />
-              <Text size="xs" c="dimmed">Disabled with value</Text>
+              <Text size="xs" c="dimmed">
+                Disabled with value
+              </Text>
             </Stack>
           </SimpleGrid>
         </div>
@@ -80,43 +105,50 @@ export function InputPage() {
 
         {/* Text Areas */}
         <div>
-          <Title order={3} mb="md">Text Areas</Title>
+          <Title order={3} mb="md">
+            Text Areas
+          </Title>
           <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
             <Stack gap="sm">
-              <Input 
-                multiline 
-                placeholder="Basic textarea" 
-              />
-              <Text size="xs" c="dimmed">Basic textarea</Text>
+              <Input multiline placeholder="Basic textarea" />
+              <Text size="xs" c="dimmed">
+                Basic textarea
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 multiline
                 label="Description"
                 placeholder="Enter a longer description here..."
               />
-              <Text size="xs" c="dimmed">With label</Text>
+              <Text size="xs" c="dimmed">
+                With label
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 multiline
                 value="This textarea has been validated and shows the success state with a checkmark icon."
                 validated
                 label="Validated Textarea"
               />
-              <Text size="xs" c="dimmed">Validated state</Text>
+              <Text size="xs" c="dimmed">
+                Validated state
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 multiline
                 value="This textarea has an error"
                 error="Content is too short"
                 label="Error Textarea"
               />
-              <Text size="xs" c="dimmed">Error state</Text>
+              <Text size="xs" c="dimmed">
+                Error state
+              </Text>
             </Stack>
           </SimpleGrid>
         </div>
@@ -125,33 +157,33 @@ export function InputPage() {
 
         {/* Size Variations */}
         <div>
-          <Title order={3} mb="md">Size Variations</Title>
+          <Title order={3} mb="md">
+            Size Variations
+          </Title>
           <SimpleGrid cols={3} spacing="md" verticalSpacing="md">
             <Stack gap="sm">
-              <Input 
-                size="sm"
-                label="Small Input"
-                placeholder="Small size"
-              />
-              <Text size="xs" c="dimmed">Small size</Text>
+              <Input size="sm" label="Small Input" placeholder="Small size" />
+              <Text size="xs" c="dimmed">
+                Small size
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 size="md"
                 label="Medium Input"
                 placeholder="Medium size (default)"
               />
-              <Text size="xs" c="dimmed">Medium size</Text>
+              <Text size="xs" c="dimmed">
+                Medium size
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
-                size="lg"
-                label="Large Input"
-                placeholder="Large size"
-              />
-              <Text size="xs" c="dimmed">Large size</Text>
+              <Input size="lg" label="Large Input" placeholder="Large size" />
+              <Text size="xs" c="dimmed">
+                Large size
+              </Text>
             </Stack>
           </SimpleGrid>
         </div>
@@ -160,27 +192,34 @@ export function InputPage() {
 
         {/* Interactive States */}
         <div>
-          <Title order={3} mb="md">Interactive Testing</Title>
+          <Title order={3} mb="md">
+            Interactive Testing
+          </Title>
           <Text size="sm" c="dimmed" mb="md">
-            These inputs are fully interactive for testing focus, hover, and typing behaviors.
+            These inputs are fully interactive for testing focus, hover, and
+            typing behaviors.
           </Text>
           <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
             <Stack gap="sm">
-              <Input 
+              <Input
                 label="Focus Test"
                 placeholder="Click to focus and test border colors"
               />
-              <Text size="xs" c="dimmed">Test focus states</Text>
+              <Text size="xs" c="dimmed">
+                Test focus states
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 multiline
                 label="Multiline Focus"
                 placeholder="Click to focus this textarea and test the focus styling on multiline inputs"
                 minRows={3}
               />
-              <Text size="xs" c="dimmed">Multiline focus test</Text>
+              <Text size="xs" c="dimmed">
+                Multiline focus test
+              </Text>
             </Stack>
           </SimpleGrid>
         </div>
@@ -189,26 +228,32 @@ export function InputPage() {
 
         {/* Required Fields */}
         <div>
-          <Title order={3} mb="md">Required Fields</Title>
+          <Title order={3} mb="md">
+            Required Fields
+          </Title>
           <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
             <Stack gap="sm">
-              <Input 
+              <Input
                 label="Required Field"
                 placeholder="This field is required"
                 required
               />
-              <Text size="xs" c="dimmed">Required input</Text>
+              <Text size="xs" c="dimmed">
+                Required input
+              </Text>
             </Stack>
 
             <Stack gap="sm">
-              <Input 
+              <Input
                 multiline
                 label="Required Description"
                 placeholder="This textarea is required"
                 required
                 minRows={3}
               />
-              <Text size="xs" c="dimmed">Required textarea</Text>
+              <Text size="xs" c="dimmed">
+                Required textarea
+              </Text>
             </Stack>
           </SimpleGrid>
         </div>
