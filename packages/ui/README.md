@@ -1,37 +1,203 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Atomiton UI - Brainwave 2.0 Components
+
+A comprehensive UI component library and design system for the Atomiton platform. This package contains reusable components implementing the Brainwave 2.0 design system, built for desktop-first experiences.
+
+## Overview
+
+The Atomiton UI package serves as both a component library and a visual development environment where components are showcased, tested, and validated. It's designed specifically for the Atomiton Blueprint automation platform and will be packaged as a desktop application.
+
+### Key Features
+
+- **Brainwave 2.0 Design System**: Complete implementation of the modern Brainwave design language
+- **Desktop-First**: Optimized for desktop application experiences
+- **Component Showcase**: Interactive pages for testing and validating components
+- **Visual Regression Testing**: Automated screenshot testing with Playwright
+- **Theme Integration**: Seamless integration with `@atomiton/theme` package
+- **Hot Reloading**: Real-time development with theme changes
+
+## Technology Stack
+
+- **Build Tool**: [Vite](https://vitejs.dev) - Fast, modern development and build tooling
+- **Framework**: [React 19](https://react.dev) with TypeScript
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with custom Brainwave theme
+- **Routing**: [React Router v7](https://reactrouter.com) for client-side navigation
+- **UI Primitives**: [Headless UI](https://headlessui.com) for accessible components
+- **Testing**: [Playwright](https://playwright.dev) for visual regression tests
+- **Monorepo**: Part of Turborepo-based Atomiton monorepo
+
+## Project Structure
+
+```
+packages/ui/
+├── src/                          # Vite application source
+│   ├── App.tsx                   # Main app with routing
+│   ├── main.tsx                  # Application entry point
+│   └── globals.css               # Global styles
+├── components/                   # Reusable UI components
+│   ├── Button/                   # Button variations
+│   ├── Layout/                   # Layout components
+│   ├── ThemeProvider/            # Theme context provider
+│   └── ...                       # 60+ other components
+├── templates/                    # Component showcase pages
+│   ├── HomePage/                 # Navigation and overview
+│   ├── ButtonsPage/              # Button component demos
+│   ├── ColorsPage/               # Color system showcase
+│   └── ...                       # Pages for each component type
+├── tests/                        # Playwright test files
+├── screenshots/                  # Visual regression baselines
+└── vite.config.ts               # Vite configuration
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and pnpm (managed via Turborepo)
+- This package requires the `@atomiton/theme` package to be built first
+
+### Installation
+
+From the project root:
 
 ```bash
-npm install
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install all dependencies
+pnpm install
+
+# Build theme dependency (required)
+pnpm --filter @atomiton/theme build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Start development server
+pnpm dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Start with theme hot-reloading (recommended)
+pnpm dev:with-theme
+```
 
-## Learn More
+Open [http://localhost:3002](http://localhost:3002) to view the component showcase.
 
-To learn more about Next.js, take a look at the following resources:
+### Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command               | Description                               |
+| --------------------- | ----------------------------------------- |
+| `pnpm dev`            | Start Vite development server             |
+| `pnpm dev:with-theme` | Start dev server with theme hot-reloading |
+| `pnpm build`          | Build for production                      |
+| `pnpm preview`        | Preview production build                  |
+| `pnpm lint`           | Run ESLint with zero warnings policy      |
+| `pnpm lint:fix`       | Fix linting issues automatically          |
+| `pnpm typecheck`      | Run TypeScript type checking              |
+| `pnpm test`           | Run Playwright visual regression tests    |
+| `pnpm test:ui`        | Run tests with Playwright UI              |
+| `pnpm test:headed`    | Run tests in headed browser mode          |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Component Development
 
-## Deploy on Vercel
+### Adding New Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create component directory in `/components/`
+2. Implement component with TypeScript and Tailwind
+3. Create showcase page in `/templates/`
+4. Add route to `src/App.tsx`
+5. Update visual regression tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Design System Integration
+
+Components automatically inherit from the Brainwave 2.0 theme via:
+
+- **Theme Provider**: `components/ThemeProvider` wraps the entire app
+- **Tailwind Config**: Uses `@atomiton/theme` for consistent design tokens
+- **CSS Variables**: Theme-aware custom properties for colors, spacing, typography
+
+### Component Guidelines
+
+- Use TypeScript for all components
+- Follow existing naming conventions
+- Implement responsive design (desktop-first)
+- Include proper accessibility attributes
+- Document props with JSDoc comments
+
+## Testing
+
+### Visual Regression Testing
+
+The package uses Playwright for comprehensive visual regression testing:
+
+```bash
+# Run all tests
+pnpm test
+
+# Update screenshots (after intentional changes)
+pnpm test --update-snapshots
+
+# Run specific test
+pnpm test baseline-buttons
+```
+
+Test files are located in `/tests/` and baseline screenshots in `/screenshots/`.
+
+### Test Structure
+
+Each component page has corresponding Playwright tests that:
+
+- Navigate to the component page
+- Take full-page screenshots
+- Compare against baseline images
+- Detect visual regressions automatically
+
+## Integration with Atomiton
+
+This UI package integrates with the larger Atomiton ecosystem:
+
+- **Theme Package**: `@atomiton/theme` provides design tokens and Tailwind configuration
+- **Core Package**: Components will be consumed by `@atomiton/core` Blueprint engine
+- **Client App**: Final application in `apps/client` uses these components
+- **Desktop App**: `packages/electron` packages everything as a desktop application
+
+## Desktop-First Considerations
+
+This UI library is designed specifically for desktop applications:
+
+- **Fixed Viewports**: Optimized for standard desktop resolutions
+- **Mouse Interactions**: Hover states, right-click menus, drag-and-drop
+- **Keyboard Navigation**: Full keyboard accessibility support
+- **Desktop Patterns**: Native-feeling UI patterns and interactions
+- **Performance**: Optimized for desktop rendering and interactions
+
+## Monorepo Development
+
+This package is part of the Atomiton Turborepo monorepo:
+
+```bash
+# From project root, run UI commands
+pnpm --filter ui dev
+pnpm --filter ui build
+pnpm --filter ui test
+
+# Run with workspace dependencies
+pnpm --filter ui... dev  # Includes dependencies
+```
+
+## Contributing
+
+1. Follow the established component patterns
+2. Maintain visual regression tests
+3. Update documentation for new components
+4. Ensure TypeScript compliance
+5. Test in desktop context
+
+## Brainwave 2.0 Design System
+
+The components implement the complete Brainwave 2.0 design system including:
+
+- **Typography**: Responsive type scale with system fonts
+- **Colors**: Semantic color system with dark/light theme support
+- **Spacing**: Consistent spacing scale based on 4px grid
+- **Shadows**: Layered shadow system for depth perception
+- **Interactions**: Smooth animations and micro-interactions
+- **Icons**: Comprehensive icon system integrated with components
+
+For detailed design specifications, see the `@atomiton/theme` package documentation.

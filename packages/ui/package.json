@@ -1,36 +1,45 @@
 {
   "name": "brainwave-2-components",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "vite",
+    "dev:with-theme": "concurrently \"pnpm --filter @atomiton/theme dev\" \"vite\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:install": "playwright install"
   },
   "dependencies": {
     "@atomiton/theme": "workspace:*",
     "@headlessui/react": "^2.2.4",
-    "@mantine/core": "^8.2.8",
-    "@mantine/hooks": "^8.2.8",
-    "next": "15.3.4",
+    "@tailwindcss/vite": "^4.1.12",
     "rc-slider": "^11.1.8",
     "react": "^19.0.0",
     "react-animate-height": "^3.2.3",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.8.2",
     "react-textarea-autosize": "^8.5.9"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@atomiton/typescript-config": "workspace:*",
     "@playwright/test": "^1.55.0",
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^5.0.2",
+    "concurrently": "^8.2.0",
     "eslint": "^9",
-    "eslint-config-next": "15.3.4",
-    "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^7.1.4",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

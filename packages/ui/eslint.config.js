@@ -1,0 +1,1 @@
+export { config as default } from "@atomiton/eslint-config/react-internal";
