@@ -2,6 +2,26 @@
 
 This guide outlines how to integrate and structure packages in the Atomiton monorepo.
 
+## Table of Contents
+
+- [Package Organization](#package-organization)
+  - [Scoped vs Top-Level Packages](#scoped-vs-top-level-packages)
+- [Creating a New Package](#creating-a-new-package)
+  - [Package Structure](#1-package-structure)
+  - [Package.json Configuration](#2-packagejson-configuration)
+  - [TypeScript Configuration](#3-typescript-configuration)
+  - [Vite Configuration](#4-vite-configuration)
+- [Package Dependencies](#package-dependencies)
+  - [Internal Dependencies](#internal-dependencies)
+  - [Shared Configurations](#shared-configurations)
+- [Build Pipeline](#build-pipeline)
+- [Co-located Documentation](#co-located-documentation)
+- [Testing Strategy](#testing-strategy)
+- [Publishing](#publishing)
+- [Migration Guide](#migration-guide)
+- [Best Practices](#best-practices)
+- [Common Patterns](#common-patterns)
+
 ## Package Organization
 
 ### Scoped vs Top-Level Packages

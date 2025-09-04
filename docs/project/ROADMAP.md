@@ -6,6 +6,23 @@
 **Status**: Strategic roadmap capitalizing on n8n analysis insights  
 **Budget**: $0 (all free resources, user-powered compute)
 
+## Table of Contents
+
+- [1. Current State Assessment](#1-current-state-assessment-q1-2025---now)
+- [2. Q1 2025: Foundation & Beautiful UI](#2-q1-2025-foundation--beautiful-ui-jan-mar)
+- [3. Q2 2025: Core Functionality](#3-q2-2025-core-functionality-apr-jun)
+- [4. Q3 2025: Desktop Excellence](#4-q3-2025-desktop-excellence-jul-sep)
+- [5. Q4 2025: AI Integration & Polish](#5-q4-2025-ai-integration--polish-oct-dec)
+- [6. 2026: Scale & Ecosystem](#6-2026-scale--ecosystem)
+- [7. Success Metrics](#7-success-metrics)
+- [8. Risk Mitigation](#8-risk-mitigation)
+- [9. Resource Requirements](#9-resource-requirements)
+- [10. Competitive Advantages](#10-competitive-advantages)
+- [11. Go-to-Market Strategy](#11-go-to-market-strategy)
+- [12. Technical Architecture Evolution](#12-technical-architecture-evolution)
+- [13. Revenue Model Evolution](#13-revenue-model-evolution)
+- [14. Why We'll Win](#14-why-well-win)
+
 ---
 
 ## 1. Current State Assessment (Q1 2025 - Now)

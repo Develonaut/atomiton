@@ -2,6 +2,24 @@
 
 Foundation layer providing core abstractions, types, interfaces, and shared utilities for the entire Atomiton platform.
 
+## Table of Contents
+
+- [Progress Tracking](#-progress-tracking)
+- [Overview](#overview)
+- [Features](#features)
+  - [Platform Detection](#platform-detection)
+  - [Storage Abstraction](#storage-abstraction)
+  - [Event System](#event-system)
+  - [State Management](#state-management)
+  - [Error Handling](#error-handling)
+  - [Execution Engine](#execution-engine)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Architecture](#architecture)
+- [Testing](#testing)
+- [Contributing](#contributing)
+
 ## 📊 Progress Tracking
 
 - **[Current Work](./CURRENT.md)** - Active development tasks

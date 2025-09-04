@@ -1,5 +1,23 @@
 # Core Development Principles
 
+## Table of Contents
+
+- [Foundation Principles](#foundation-principles)
+  - [DRY (Don't Repeat Yourself)](#dry-dont-repeat-yourself)
+  - [Composition Over Inheritance](#composition-over-inheritance)
+  - [Separation of Concerns](#separation-of-concerns)
+  - [YAGNI (You Aren't Gonna Need It)](#yagni-you-arent-gonna-need-it)
+  - [KISS (Keep It Simple, Stupid)](#kiss-keep-it-simple-stupid)
+- [Code Quality Standards](#code-quality-standards)
+- [Performance Principles](#performance-principles)
+- [Error Handling](#error-handling)
+- [Testing Philosophy](#testing-philosophy)
+- [Documentation Standards](#documentation-standards)
+- [API Design](#api-design)
+- [Security Principles](#security-principles)
+- [Monitoring & Observability](#monitoring--observability)
+- [Continuous Improvement](#continuous-improvement)
+
 ## Foundation Principles
 
 ### DRY (Don't Repeat Yourself)

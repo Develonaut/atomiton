@@ -24,9 +24,9 @@ color: indigo
 
 **MUST review before ANY UI work:**
 
-- `/packages/ui/docs/COMPONENT_BUILDING_GUIDE.md` - Component API design and consistency goals
-- `/packages/ui/docs/COMPONENT_PHILOSOPHY.md` - Component patterns
-- `/packages/ui/docs/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
+- `/packages/ui/docs/COMPONENT_BUILDING_GUIDE.md` - Complete component building guide with all patterns
+- `/packages/ui/docs/COMPONENT_PHILOSOPHY.md` - Philosophy, simplicity, and API design patterns
+- `/packages/ui/docs/COMPONENT_ORGANIZATION.md` - File structure and organization
 - `/packages/theme/src/colors/brainwave.ts` - Exact colors
 - `/docs/guides/PACKAGE_INTEGRATION.md` - Integration patterns
 - `/packages/ui/docs/README.md` - UI framework documentation

@@ -1,5 +1,18 @@
 # Component Organization Guide
 
+## Table of Contents
+
+- [The "Bento Box" Principle 🍱](#the-bento-box-principle-)
+- [Ideal Component Structure](#ideal-component-structure)
+- [File Responsibilities](#file-responsibilities)
+- [Component Examples](#component-examples)
+- [Compound Components](#compound-components)
+- [Anti-Patterns](#anti-patterns)
+- [Import/Export Patterns](#importexport-patterns)
+- [File Naming Conventions](#file-naming-conventions)
+- [Organization Benefits](#organization-benefits)
+- [Summary](#summary)
+
 ## The "Bento Box" Principle 🍱
 
 When you open a component, it should feel like opening a beautiful bento box:

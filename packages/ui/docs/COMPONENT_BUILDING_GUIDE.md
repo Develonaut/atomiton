@@ -4,11 +4,9 @@
 
 ## Quick Links to Supporting Docs
 
-- 📖 **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Why we build components this way (simplicity, style props, 3-5 variants max)
+- 📖 **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Why we build components this way (simplicity, style props, 3-5 variants max, API patterns)
 - 🍱 **[Component Organization](./COMPONENT_ORGANIZATION.md)** - How to structure files (the "bento box" principle)
-- 🎨 **[API Design Principles](./API_DESIGN_PRINCIPLES.md)** - Detailed API patterns and conventions
-- ⚡ **[Quick Reference](./QUICK_REFERENCE.md)** - Cheat sheet for common patterns
-- 🗺️ **[Roadmap](./ROADMAP.md)** - What we're actually building and why
+- 🗺️ **[Roadmap](../ROADMAP.md)** - What we're actually building and why
 
 ## Table of Contents
 
@@ -20,6 +18,10 @@
 6. [Common Patterns](#common-patterns)
 7. [Testing & Documentation](#testing--documentation)
 8. [Complete Example](#complete-example)
+9. [Quality Checklist](#quality-checklist)
+10. [React Best Practices](#react-best-practices-dan-abramov-style)
+11. [Technical Implementation Details](#technical-implementation-details)
+12. [Quick Reference Cheat Sheet](#quick-reference-cheat-sheet)
 
 ## Before You Start
 
@@ -211,8 +213,6 @@ export type { ButtonProps } from "./Button.types";
 ```
 
 ## Naming Conventions
-
-**Full details in [API Design Principles](./API_DESIGN_PRINCIPLES.md)**
 
 ### Props
 
@@ -538,9 +538,163 @@ Before marking a component complete:
 
 - **Philosophy questions?** → [Component Philosophy](./COMPONENT_PHILOSOPHY.md)
 - **Organization questions?** → [Component Organization](./COMPONENT_ORGANIZATION.md)
-- **API patterns?** → [API Design Principles](./API_DESIGN_PRINCIPLES.md)
-- **Quick lookup?** → [Quick Reference](./QUICK_REFERENCE.md)
-- **What to build?** → [Roadmap](./ROADMAP.md)
+- **What to build?** → [Roadmap](../ROADMAP.md)
+
+## React Best Practices (Dan Abramov Style)
+
+### Simplicity Over Complexity
+
+Components should be short, focused, and do one thing well:
+
+```tsx
+// ✅ Good - Simple and focused
+function SaveButton({ onSave, isSaving }) {
+  return (
+    <button onClick={onSave} disabled={isSaving}>
+      {isSaving ? "Saving..." : "Save"}
+    </button>
+  );
+}
+
+// ❌ Bad - Too many responsibilities
+function SaveButton({ onSave, user, permissions, analytics, theme, ...props }) {
+  // 100 lines of complex logic...
+}
+```
+
+### Extract Complex Logic to Hooks
+
+Keep components simple by moving logic to custom hooks:
+
+```tsx
+// ✅ Good - Logic extracted to hook
+function UserProfile({ userId }) {
+  const { user, loading, error } = useUser(userId);
+
+  if (loading) return <Spinner />;
+  if (error) return <ErrorMessage error={error} />;
+
+  return <Profile user={user} />;
+}
+
+// Custom hook handles complexity
+function useUser(userId) {
+  // All the complex logic here
+}
+```
+
+### Avoid Premature Abstraction
+
+Start simple, refactor when patterns emerge:
+
+```tsx
+// Start with duplication
+<Button onClick={handleSave}>Save</Button>
+<Button onClick={handleCancel}>Cancel</Button>
+
+// Extract when pattern is clear (not before!)
+function ActionButtons({ onSave, onCancel }) {
+  return (
+    <>
+      <Button onClick={onSave}>Save</Button>
+      <Button onClick={onCancel}>Cancel</Button>
+    </>
+  );
+}
+```
+
+### Early Returns for Clarity
+
+Handle edge cases first:
+
+```tsx
+function Comment({ comment }) {
+  if (!comment) return null;
+  if (comment.deleted) return <DeletedComment />;
+  if (comment.hidden) return null;
+
+  // Main logic here
+  return <div>{comment.text}</div>;
+}
+```
+
+## Technical Implementation Details
+
+### The `cn` Utility Pattern
+
+We use `clsx` + `tailwind-merge` for className management:
+
+```tsx
+// src/utils/cn.ts
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+**Why this approach?**
+
+- `clsx` handles conditional classes efficiently (0.5KB)
+- `tailwind-merge` resolves Tailwind conflicts intelligently
+- Prevents style conflicts like `p-2 p-4` (keeps only `p-4`)
+
+### CVA for Variant Management
+
+Use class-variance-authority for clean variant styles:
+
+```tsx
+const buttonStyles = cva("base-styles", {
+  variants: {
+    variant: {
+      /* ... */
+    },
+    size: {
+      /* ... */
+    },
+  },
+  defaultVariants: {
+    variant: "primary",
+    size: "md",
+  },
+});
+```
+
+### Quick Reference Cheat Sheet
+
+#### Component File Structure
+
+```
+Button/
+  Button.tsx          # Component
+  Button.types.ts     # Types
+  Button.styles.ts    # CVA styles
+  index.ts           # Exports
+```
+
+#### Essential Imports
+
+```tsx
+import { cn } from "@/utils/cn";
+import { cva } from "class-variance-authority";
+import { extractStyleProps } from "@/utils/style-props";
+import type { StyleProps } from "@/types/style-props";
+```
+
+#### T-Shirt Sizes Always
+
+```tsx
+size?: "xs" | "sm" | "md" | "lg" | "xl";
+```
+
+#### Data Attributes Pattern
+
+```tsx
+data-variant={variant}
+data-state={loading ? "loading" : "idle"}
+data-disabled={disabled || undefined}
+```
 
 ---
 

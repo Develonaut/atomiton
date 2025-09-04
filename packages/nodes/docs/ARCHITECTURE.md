@@ -1,5 +1,22 @@
 # Nodes Architecture - Technical Deep Dive
 
+## Table of Contents
+
+- [Core Abstractions](#core-abstractions)
+  - [Node Package Interface](#1-node-package-interface)
+  - [Separation of Concerns](#2-separation-of-concerns)
+  - [Configuration Schema](#3-configuration-schema)
+  - [Port System](#4-port-system)
+- [Node Discovery and Registration](#node-discovery-and-registration)
+- [Execution Model](#execution-model)
+- [Integration with Core](#integration-with-core)
+- [UI Integration](#ui-integration)
+- [Event Flow](#event-flow)
+- [Testing Strategy](#testing-strategy)
+- [Performance Considerations](#performance-considerations)
+- [Security Model](#security-model)
+- [Future Considerations](#future-considerations)
+
 ## Core Abstractions
 
 ### 1. Node Package Interface

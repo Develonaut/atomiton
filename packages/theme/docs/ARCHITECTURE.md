@@ -1,5 +1,18 @@
 # Theme Architecture - Integration Patterns & Implementation
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture Principles](#architecture-principles)
+- [Core Components](#core-components)
+- [Integration Patterns](#integration-patterns)
+- [Implementation Details](#implementation-details)
+- [Runtime Theme Switching](#runtime-theme-switching)
+- [Performance Optimizations](#performance-optimizations)
+- [Testing Strategy](#testing-strategy)
+- [Migration Guide](#migration-guide)
+- [Future Roadmap](#future-roadmap)
+
 ## Overview
 
 The Atomiton theme system provides a centralized, type-safe approach to styling that integrates seamlessly with Mantine UI while maintaining consistency across all components. This architecture enables runtime theme switching, excellent developer experience, and extensibility for future theme variants.

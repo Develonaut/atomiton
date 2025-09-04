@@ -1,5 +1,26 @@
 # Node Developer Guide
 
+## Table of Contents
+
+- [Quick Start: Creating Your First Node](#quick-start-creating-your-first-node)
+- [Prerequisites](#prerequisites)
+- [Step 1: Set Up the File Structure](#step-1-set-up-the-file-structure)
+- [Step 2: Define Configuration Schema](#step-2-define-configuration-schema)
+- [Step 3: Implement Business Logic](#step-3-implement-business-logic)
+- [Step 4: Create the UI Component](#step-4-create-the-ui-component)
+- [Step 5: Register Your Node](#step-5-register-your-node)
+- [Step 6: Write Tests](#step-6-write-tests)
+- [Advanced Topics](#advanced-topics)
+  - [State Management](#state-management)
+  - [Error Handling](#error-handling)
+  - [Performance Optimization](#performance-optimization)
+  - [Custom Visualization](#custom-visualization)
+- [Node Types](#node-types)
+- [API Reference](#api-reference)
+- [Best Practices](#best-practices)
+- [Common Patterns](#common-patterns)
+- [Troubleshooting](#troubleshooting)
+
 ## Quick Start: Creating Your First Node
 
 This guide walks you through creating a new node for the Atomiton system. We'll build a simple "Text Transform" node as an example.

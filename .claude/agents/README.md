@@ -92,11 +92,11 @@ All work must follow the mandatory workflow including:
 ### 🎯 Ryan (ui-component-architect)
 
 - **MUST** review ALL visual references BEFORE any UI work:
-  1. `/packages/ui/docs/COMPONENT_PHILOSOPHY.md` - Component patterns
-  2. `/packages/ui/docs/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
-  3. `/packages/theme/src/colors/brainwave.ts` - Use exact colors
-  4. `/docs/strategies/PACKAGE_INTEGRATION.md` - Integration patterns
-  5. `/packages/ui/docs/README.md` - UI framework documentation
+  1. `/packages/ui/docs/COMPONENT_BUILDING_GUIDE.md` - Complete building guide
+  2. `/packages/ui/docs/COMPONENT_PHILOSOPHY.md` - Philosophy and API patterns
+  3. `/packages/ui/docs/COMPONENT_ORGANIZATION.md` - File organization
+  4. `/packages/theme/src/colors/brainwave.ts` - Use exact colors
+  5. `/docs/guides/PACKAGE_INTEGRATION.md` - Integration patterns
 - Handles ALL UI components including nodes and Blueprint editor
 - Focus on React Flow integration with Brainwave 2.0 aesthetic
 - Use Mantine UI v7 components
