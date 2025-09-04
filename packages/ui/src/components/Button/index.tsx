@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "@/components/Link";
+import Link, { LinkProps } from "@/components/Link";
 
 type CommonProps = {
   className?: string;

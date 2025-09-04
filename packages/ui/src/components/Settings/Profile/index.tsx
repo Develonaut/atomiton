@@ -7,7 +7,7 @@ import Option from "../Option";
 
 const Profile = () => {
   const [privateProfile, setPrivateProfile] = useState(false);
-  const [link, setLink] = useState("brainwave.app/@username");
+  const [link, setLink] = useState("atomiton.app/@username");
 
   return (
     <>

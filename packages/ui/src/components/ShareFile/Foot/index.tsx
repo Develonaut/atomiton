@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 
 const Foot = () => {
-  const link = "https://brainwave.co/file/k373nH";
+  const link = "https://atomiton.com/file/k373nH";
 
   return (
     <div className="flex items-center gap-2 p-4 border-t border-[#ECECEC] bg-[#F8F7F7] rounded-b-[1.75rem]">

@@ -1,6 +1,6 @@
-# Atomiton UI - Brainwave 2.0 Components
+# Atomiton UI Components
 
-A comprehensive UI component library and design system for the Atomiton platform. This package contains reusable components implementing the Brainwave 2.0 design system, built for desktop-first experiences.
+A comprehensive UI component library and design system for the Atomiton platform. This package contains reusable components implementing the Atomiton design system, built for desktop-first experiences.
 
 ## Overview
 
@@ -8,7 +8,7 @@ The Atomiton UI package serves as both a component library and a visual developm
 
 ### Key Features
 
-- **Brainwave 2.0 Design System**: Complete implementation of the modern Brainwave design language
+- **Atomiton Design System**: Complete implementation of the modern Atomiton design language
 - **Desktop-First**: Optimized for desktop application experiences
 - **Component Showcase**: Interactive pages for testing and validating components
 - **Visual Regression Testing**: Automated screenshot testing with Playwright
@@ -19,7 +19,7 @@ The Atomiton UI package serves as both a component library and a visual developm
 
 - **Build Tool**: [Vite](https://vitejs.dev) - Fast, modern development and build tooling
 - **Framework**: [React 19](https://react.dev) with TypeScript
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with custom Brainwave theme
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with custom Atomiton theme
 - **Routing**: [React Router v7](https://reactrouter.com) for client-side navigation
 - **UI Primitives**: [Headless UI](https://headlessui.com) for accessible components
 - **Testing**: [Playwright](https://playwright.dev) for visual regression tests
@@ -106,7 +106,7 @@ Open [http://localhost:3002](http://localhost:3002) to view the component showca
 
 ### Design System Integration
 
-Components automatically inherit from the Brainwave 2.0 theme via:
+Components automatically inherit from the Atomiton theme via:
 
 - **Theme Provider**: `components/ThemeProvider` wraps the entire app
 - **Tailwind Config**: Uses `@atomiton/theme` for consistent design tokens
@@ -189,9 +189,9 @@ pnpm --filter ui... dev  # Includes dependencies
 4. Ensure TypeScript compliance
 5. Test in desktop context
 
-## Brainwave 2.0 Design System
+## Atomiton Design System
 
-The components implement the complete Brainwave 2.0 design system including:
+The components implement the complete Atomiton design system including:
 
 - **Typography**: Responsive type scale with system fonts
 - **Colors**: Semantic color system with dark/light theme support

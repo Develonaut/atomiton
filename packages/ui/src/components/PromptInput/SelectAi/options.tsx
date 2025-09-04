@@ -1,7 +1,7 @@
 export const options = [
   {
     id: 0,
-    title: "Brainwave 2.5",
+    title: "Atomiton AI 2.5",
     description: "Great for 3D modeling",
   },
   {
