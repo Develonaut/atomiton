@@ -4,31 +4,53 @@
 
 ## Priority Order
 
-### 1. Mantine UI Migration 🎨 (PRIORITY)
+### 1. Custom UI Framework Development 🎨 (PRIORITY)
 
-**Why**: Beautiful UI is our key differentiator
+**Why**: Beautiful, lightweight UI is our key differentiator
 
-#### Step 1: Vite Migration
+#### Step 1: Vite Migration ✅ COMPLETE
 
-- [ ] Follow strategy: [vite-migration.md](./strategies/vite-migration.md)
-- [ ] 5-phase approach documented
-- [ ] Estimated: 11 days
+- ✅ Follow strategy: [vite-migration.md](./strategies/vite-migration.md)
+- ✅ 5-phase approach documented
+- ✅ All packages migrated to Vite (ui, core, nodes, theme)
+- ✅ Estimated: 11 days (completed faster due to existing structure)
 
-#### Step 2: Mantine Migration
+#### Step 2: Build Custom Tailwind-Based UI Framework
 
-- [ ] Follow strategy: [tailwind-to-mantine-migration.md](./strategies/tailwind-to-mantine-migration.md)
-- [ ] 6-phase approach documented
-- [ ] Apply Brainwave 2.0 aesthetic
-- [ ] Create Brainwave 2.0 visual components
-- [ ] Ensure "beautiful" benchmark achieved
-- [ ] Extract to packages/ui once complete
+**New Direction**: Build our own lightweight, composable UI framework using:
+
+- React for component logic
+- Props and state-driven component APIs (not utility classes)
+- Tailwind CSS for internal implementation
+- Headless UI for accessible primitives
+- Compound Component patterns for composition
+- Optional className prop for customization
+
+**Goals**:
+
+- [ ] Create lightweight alternative to heavy runtime-styled frameworks
+- [ ] Take inspiration from Radix, Material UI, Mantine's best patterns
+- [ ] Props-driven API (variant="primary" size="lg") not utility classes
+- [ ] Tailwind powers the implementation, not the API
+- [ ] Apply Brainwave 2.0 aesthetic as the default theme
+- [ ] Make it reusable - potentially open-source for others
+- [ ] Keep components composable and customizable
+- [ ] Extract to packages/ui as a standalone framework
+
+**Advantages**:
+
+- Zero runtime styling overhead
+- Full control over component behavior
+- Smaller bundle size
+- CSS-based with Tailwind utilities
+- Can become its own project/product
 
 ### 2. Complete Domain Documentation
 
 **Why**: Need clear architecture before building more
 
-- [ ] Create ROADMAP.md for each domain
-- [ ] Document existing nodes package
+- ✅ Create ROADMAP.md for each domain (completed in previous work)
+- ✅ Document existing nodes package (completed in previous work)
 - [ ] Document existing electron package
 - [ ] Create workflow domain spec
 
@@ -82,4 +104,4 @@
 
 ---
 
-**Last Updated**: 2025-01-02
+**Last Updated**: 2025-09-04

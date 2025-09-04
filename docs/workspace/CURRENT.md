@@ -1,4 +1,4 @@
-# Current Work - January 2, 2025
+# Current Work - September 4, 2025
 
 ## Active Focus
 
@@ -15,15 +15,17 @@ Reorganizing docs to domain-driven structure based on n8n analysis:
 
 ### Package Integration
 
-**Status**: 🟢 Complete (not wired)
+**Status**: 🟢 Complete
 
-Added existing packages to monorepo:
+Added existing packages to monorepo with full Turborepo integration:
 
-- ✅ core package added
-- ✅ nodes package added
+- ✅ core package added and integrated with Turborepo
+- ✅ nodes package added and integrated with Turborepo
 - ✅ electron package added
 - ✅ theme package added
-- 🔴 Not wired to UI yet (intentional)
+- ✅ All packages use Vite for consistent builds
+- ✅ Shared ESLint and TypeScript configurations
+- 🔴 Not wired to UI yet (intentional - UI migration priority)
 
 ## Today's Goals
 
@@ -63,4 +65,32 @@ See [BLOCKERS.md](./BLOCKERS.md)
 
 ---
 
-**Last Updated**: 2025-01-02 17:45
+## Recent Completed Work (September 4, 2025)
+
+### UI Framework Decision
+
+- ✅ Decided to build custom Tailwind-based UI framework instead of Mantine
+- ✅ Created comprehensive strategy document for custom framework
+- ✅ Framework will use React, Tailwind, Headless UI, and Compound Components
+- ✅ Inspired by best patterns from Radix, Material UI, Mantine
+- ✅ Focus on lightweight, CSS-first approach with zero runtime overhead
+
+## Completed Work (September 4, 2025)
+
+### Turborepo Integration
+
+- ✅ Hooked up core and nodes packages to Turborepo
+- ✅ Configured shared ESLint and TypeScript configs
+- ✅ Migrated both packages from `tsc` to Vite builds
+- ✅ Committed packages to git with proper formatting
+
+### Vite Build Consistency
+
+- ✅ All packages now use Vite for builds (core, nodes, theme, ui)
+- ✅ Node.js targeting configured for core/nodes packages
+- ✅ Proper externalization of Node.js modules
+- ✅ Source maps and dual format (ES/CJS) outputs
+
+---
+
+**Last Updated**: 2025-09-04

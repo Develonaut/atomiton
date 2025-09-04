@@ -176,7 +176,7 @@ interface IAIAssistant {
 ```json
 {
   "frontend": "Vite + React 18 (fast HMR)",
-  "styling": "Mantine UI (data-heavy components)",
+  "styling": "Custom UI Framework with Tailwind (zero runtime overhead)",
   "build": "Turborepo (better than n8n's custom system)",
   "desktop": "Electron (n8n doesn't have desktop)",
   "storage": "SQLite (simpler than TypeORM complexity)"
