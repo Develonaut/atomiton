@@ -16,6 +16,7 @@
   - [Implicit State Sharing](#implicit-state-sharing)
   - [Polymorphic Components](#polymorphic-components-with-as-prop)
   - [Data Attributes for State](#data-attributes-for-state)
+  - [Class Variance Authority (CVA)](#class-variance-authority-cva)
   - [Consistent Naming Conventions](#consistent-naming-conventions)
 - [Design Tokens System](#design-tokens-system)
 
@@ -655,6 +656,452 @@ export const Button = ({
 3. **Keep state values semantic** - "loading", not "state-1"
 4. **Document your data attributes** - Make them part of your component's API
 5. **Be consistent** - All components should follow the same pattern
+
+### Class Variance Authority (CVA)
+
+CVA is our chosen solution for managing component variants and their associated styles. It's a powerful pattern that solves the complexity of variant management elegantly.
+
+#### Prop Resolvers: The Foundation of Our System
+
+Before diving into CVA, it's important to understand **prop resolvers** - the core pattern that powers our component system.
+
+**What is a Prop Resolver?**
+
+A prop resolver is a pure function that transforms one set of props into another. It's the foundation for handling prop aliases, defaults, and transformations:
+
+```tsx
+// Simple prop resolver
+type PropResolver<T = any> = (props: T) => T;
+
+// Example: System props resolver
+const resolveSystemProps = (props) => {
+  const resolved = { ...props };
+
+  // Transform shorthand props to full names
+  if (props.m !== undefined) {
+    resolved.margin = resolved.margin || props.m;
+    delete resolved.m;
+  }
+
+  if (props.px !== undefined) {
+    resolved.paddingX = resolved.paddingX || props.px;
+    delete resolved.px;
+  }
+
+  return resolved;
+};
+
+// Usage
+const originalProps = { m: 4, px: 2, className: "custom" };
+const resolvedProps = resolveSystemProps(originalProps);
+// Result: { margin: 4, paddingX: 2, className: "custom" }
+```
+
+**Composing Multiple Resolvers**
+
+Our system allows composing multiple resolvers for complex transformations:
+
+```tsx
+// Compose multiple resolvers
+const composePropResolvers = (...resolvers) => {
+  return (props) => {
+    let resolved = props;
+    for (const resolver of resolvers) {
+      resolved = resolver(resolved);
+    }
+    return resolved;
+  };
+};
+
+// Create a custom resolver pipeline
+const myComponentResolver = composePropResolvers(
+  resolveSystemProps, // Handle m, px, etc.
+  resolveLoadingState, // loading → disabled
+  resolveIconProps, // startIcon → leftIcon
+);
+```
+
+**Standard System Props Map**
+
+We maintain a centralized map of standard prop transformations that all components support:
+
+```tsx
+export const SYSTEM_PROPS_MAP = {
+  // Layout shorthands
+  w: "width",
+  h: "height",
+  fullW: "fullWidth",
+  fullH: "fullHeight",
+
+  // Spacing shorthands
+  m: "margin",
+  mt: "marginTop",
+  px: "paddingX",
+  py: "paddingY",
+
+  // Typography shorthands
+  fs: "fontSize",
+  fw: "fontWeight",
+
+  // Icon aliases
+  startIcon: "leftIcon",
+  endIcon: "rightIcon",
+} as const;
+```
+
+**Why This Pattern Works**
+
+1. **Pure Functions**: Easy to test and reason about
+2. **Composable**: Mix and match different resolvers
+3. **Type Safe**: Full TypeScript support
+4. **Consistent**: Same prop transformations across all components
+5. **Flexible**: Add custom resolvers for specific components
+
+#### What is CVA?
+
+Class Variance Authority (CVA) is a library that provides a declarative API for managing component variants. Think of it as a "style recipe generator" - you define the ingredients (variants) and CVA handles creating the right combination of classes based on the props you pass.
+
+```tsx
+// Without CVA - Manual variant management is error-prone
+const getButtonClasses = (variant, size, disabled) => {
+  let classes = "base-button ";
+
+  if (variant === "primary") {
+    classes += "bg-blue-500 text-white hover:bg-blue-600 ";
+  } else if (variant === "secondary") {
+    classes += "bg-gray-200 text-gray-900 hover:bg-gray-300 ";
+  }
+
+  if (size === "sm") {
+    classes += "h-8 px-3 text-sm ";
+  } else if (size === "lg") {
+    classes += "h-12 px-6 text-lg ";
+  }
+
+  if (disabled) {
+    classes += "opacity-50 cursor-not-allowed ";
+  }
+
+  return classes.trim();
+};
+
+// With CVA - Declarative and maintainable
+const buttonVariants = cva(
+  "base-button", // Base classes applied to all variants
+  {
+    variants: {
+      variant: {
+        primary: "bg-blue-500 text-white hover:bg-blue-600",
+        secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
+      },
+      size: {
+        sm: "h-8 px-3 text-sm",
+        lg: "h-12 px-6 text-lg",
+      },
+      disabled: {
+        true: "opacity-50 cursor-not-allowed",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+    },
+  },
+);
+```
+
+#### Why CVA?
+
+**1. Eliminates Conditional Class Logic**
+
+Without CVA, components become cluttered with conditional logic:
+
+```tsx
+// ❌ BAD - Conditional logic mixed with rendering
+const Button = ({
+  variant,
+  size,
+  fullWidth,
+  disabled,
+  className,
+  ...props
+}) => {
+  return (
+    <button
+      className={cn(
+        "inline-flex items-center justify-center font-medium",
+        variant === "primary" && "bg-blue-500 text-white",
+        variant === "secondary" && "bg-gray-200 text-gray-900",
+        variant === "ghost" && "bg-transparent hover:bg-gray-100",
+        size === "sm" && "h-8 px-3 text-sm",
+        size === "md" && "h-10 px-4 text-base",
+        size === "lg" && "h-12 px-6 text-lg",
+        fullWidth && "w-full",
+        disabled && "opacity-50 cursor-not-allowed",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
+// ✅ GOOD - Clean separation of concerns
+const buttonVariants = cva(
+  "inline-flex items-center justify-center font-medium",
+  {
+    variants: {
+      variant: {
+        primary: "bg-blue-500 text-white",
+        secondary: "bg-gray-200 text-gray-900",
+        ghost: "bg-transparent hover:bg-gray-100",
+      },
+      size: {
+        sm: "h-8 px-3 text-sm",
+        md: "h-10 px-4 text-base",
+        lg: "h-12 px-6 text-lg",
+      },
+      fullWidth: {
+        true: "w-full",
+      },
+    },
+  },
+);
+
+const Button = ({ variant, size, fullWidth, className, ...props }) => {
+  return (
+    <button
+      className={cn(buttonVariants({ variant, size, fullWidth }), className)}
+      {...props}
+    />
+  );
+};
+```
+
+**2. Type Safety Out of the Box**
+
+CVA automatically generates TypeScript types from your variant configuration:
+
+```tsx
+// CVA infers these types automatically
+type ButtonVariants = VariantProps<typeof buttonVariants>;
+// Results in:
+// {
+//   variant?: "primary" | "secondary" | "ghost" | null
+//   size?: "sm" | "md" | "lg" | null
+//   fullWidth?: boolean | null
+// }
+
+// Your component props are automatically typed
+interface ButtonProps extends ButtonVariants {
+  children: React.ReactNode;
+}
+
+// TypeScript will error on invalid variants
+<Button variant="invalid" /> // ❌ Type error!
+<Button variant="primary" /> // ✅ Valid
+```
+
+**3. Compound Variants for Complex States**
+
+CVA handles complex variant combinations elegantly:
+
+```tsx
+const buttonVariants = cva("base", {
+  variants: {
+    variant: {
+      primary: "bg-blue-500",
+      secondary: "bg-gray-200",
+      danger: "bg-red-500",
+    },
+    size: {
+      sm: "text-sm",
+      lg: "text-lg",
+    },
+    disabled: {
+      true: "opacity-50",
+    },
+  },
+  // Compound variants - apply styles when multiple conditions are met
+  compoundVariants: [
+    {
+      variant: "primary",
+      size: "lg",
+      class: "font-bold uppercase", // Special styling for large primary buttons
+    },
+    {
+      variant: "danger",
+      disabled: true,
+      class: "bg-red-300", // Lighter red when disabled
+    },
+  ],
+});
+```
+
+**4. Prevents Class Name Conflicts**
+
+CVA works seamlessly with tailwind-merge through our `cn` utility:
+
+```tsx
+// CVA generates the variant classes
+const variantClasses = buttonVariants({ variant: "primary", size: "lg" });
+// Result: "base-button bg-blue-500 h-12 px-6 text-lg"
+
+// cn() ensures proper class merging with user overrides
+const finalClasses = cn(variantClasses, "px-8");
+// Result: "base-button bg-blue-500 h-12 text-lg px-8" (px-6 replaced by px-8)
+```
+
+**5. Maintainable Style Organization**
+
+Variants are defined in one place, making updates straightforward:
+
+```tsx
+// Button.styles.ts - All variant logic in one file
+export const buttonVariants = cva(
+  [
+    // Base styles as an array for readability
+    "relative",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "font-medium",
+    "transition-all",
+    "outline-none",
+    "focus-visible:ring-2",
+  ],
+  {
+    variants: {
+      variant: {
+        /* ... */
+      },
+      size: {
+        /* ... */
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
+      size: "md",
+    },
+  },
+);
+
+// Button.tsx - Component logic stays clean
+import { buttonVariants } from "./Button.styles";
+
+export const Button = ({ variant, size, className, ...props }) => {
+  return (
+    <button
+      className={cn(buttonVariants({ variant, size }), className)}
+      {...props}
+    />
+  );
+};
+```
+
+**6. Excellent Developer Experience**
+
+CVA provides clear, predictable behavior:
+
+```tsx
+// Explicit variant selection
+<Button variant="primary" size="lg" />
+
+// Use default variants (no props needed)
+<Button />
+
+// Override with className when needed
+<Button variant="primary" className="shadow-xl" />
+
+// Variants are optional and can be undefined
+const myVariant = condition ? "secondary" : undefined;
+<Button variant={myVariant} /> // Falls back to default
+```
+
+**7. Performance Benefits**
+
+CVA generates classes at build time when possible:
+
+```tsx
+// These classes are computed once and reused
+const primaryLarge = buttonVariants({ variant: "primary", size: "lg" });
+// No runtime string concatenation for common combinations
+
+// Dynamic variants are still efficient
+const dynamicClasses = buttonVariants({
+  variant: userPreference,
+  size: viewportSize,
+});
+```
+
+#### CVA Best Practices in Our Codebase
+
+1. **Define variants in separate `.styles.ts` files**
+
+   ```tsx
+   // Button.styles.ts
+   export const buttonVariants = cva(/* ... */);
+   ```
+
+2. **Use arrays for base classes (better readability)**
+
+   ```tsx
+   const buttonVariants = cva(
+     ["inline-flex", "items-center", "justify-center"],
+     {
+       /* variants */
+     },
+   );
+   ```
+
+3. **Always combine with `cn()` for proper merging**
+
+   ```tsx
+   className={cn(buttonVariants({ variant }), className)}
+   ```
+
+4. **Export variant types for external use**
+
+   ```tsx
+   export type ButtonVariants = VariantProps<typeof buttonVariants>;
+   ```
+
+5. **Keep variants focused and minimal**
+
+   ```tsx
+   // ✅ GOOD - Clear, distinct variants
+   variant: {
+     primary: "...",
+     secondary: "...",
+     ghost: "...",
+   }
+
+   // ❌ BAD - Too many similar variants
+   variant: {
+     primary: "...",
+     primaryLight: "...",
+     primaryDark: "...",
+     primaryMuted: "...",
+     // ... 10 more variants
+   }
+   ```
+
+6. **Use compound variants sparingly**
+   - Only for truly special cases
+   - Document why the compound variant exists
+   - Consider if composition would be better
+
+#### How CVA Fits Our Philosophy
+
+CVA aligns perfectly with our component philosophy:
+
+- **Simplicity**: Declarative API is easier to understand than conditional logic
+- **Maintainability**: All variant styles in one place
+- **Type Safety**: Automatic TypeScript types prevent errors
+- **Performance**: Efficient class generation and reuse
+- **Flexibility**: Works with our `cn` utility and className overrides
+- **Testability**: Variants can be tested in isolation
+
+By using CVA, we get a powerful, type-safe system for managing component variants while keeping our components clean and focused on behavior rather than styling logic.
 
 ### Consistent Naming Conventions
 

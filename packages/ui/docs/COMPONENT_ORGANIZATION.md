@@ -44,7 +44,7 @@ Clean, semantic prop interfaces:
 
 ```tsx
 import type { StyleProps } from "@/types/style-props";
-import type { VariantProps } from "class-variance-authority";
+import type { VariantProps } from "@/utils/cva";
 import type { buttonStyles } from "./Button.styles";
 
 export interface ButtonProps
@@ -74,7 +74,7 @@ export interface ButtonProps
 CVA configuration for all visual styles:
 
 ```tsx
-import { cva } from "class-variance-authority";
+import { cva } from "@/utils/cva";
 
 export const buttonStyles = cva(
   // Base styles

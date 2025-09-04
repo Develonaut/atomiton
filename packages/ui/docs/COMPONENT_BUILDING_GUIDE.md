@@ -69,7 +69,7 @@ Start with clean, semantic interfaces:
 
 ```tsx
 import type { StyleProps } from "@/types/style-props";
-import type { VariantProps } from "class-variance-authority";
+import type { VariantProps } from "@/utils/cva";
 import type { buttonStyles } from "./Button.styles";
 
 export interface ButtonProps
@@ -103,7 +103,7 @@ export interface ButtonProps
 Use CVA for clean variant management:
 
 ```tsx
-import { cva } from "class-variance-authority";
+import { cva } from "@/utils/cva";
 
 export const buttonStyles = cva(
   // Base styles
@@ -139,69 +139,104 @@ export const buttonStyles = cva(
 
 ### Step 3: Implement Component (`Button.tsx`)
 
-Clean, focused implementation:
+Clean, focused implementation using our `useComponent` hook:
 
 ```tsx
 import { forwardRef } from "react";
-import { cn } from "@/utils/cn";
-import { extractStyleProps } from "@/utils/style-props";
+import {
+  useComponent,
+  createPropNormalizer,
+  normalizers,
+} from "@/utils/useComponent";
 import { Spinner } from "@/components/Spinner";
 import type { ButtonProps } from "./Button.types";
 import { buttonStyles } from "./Button.styles";
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (props, ref) => {
-    // Extract style props cleanly
-    const { styleClasses, otherProps } = extractStyleProps(props);
+// Create prop normalizer for common patterns
+const normalizeButtonProps = createPropNormalizer([
+  normalizers.fullWidth, // Handles fullWidth/fw
+  normalizers.fullHeight, // Handles fullHeight/fh
+  normalizers.icons, // Handles leftIcon/startIcon, rightIcon/endIcon
+]);
 
-    // Destructure component props
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (incomingProps, ref) => {
+    // Extract component-specific props
     const {
-      variant,
-      size,
-      tone,
+      variant = "primary",
+      size = "md",
       loading,
       disabled,
-      leftIcon,
-      rightIcon,
-      as: Component = "button",
-      className,
       children,
-      ...htmlProps
-    } = otherProps;
+      ...restProps
+    } = incomingProps;
 
+    // Use the unified hook - handles EVERYTHING
+    const { classes, props, cx } = useComponent({
+      props: restProps,
+      name: "Button", // Generates 'atomiton-button' class
+      variants: buttonStyles({ variant, size }),
+      normalizeProps: normalizeButtonProps,
+    });
+
+    // Extract normalized props
+    const { leftIcon, rightIcon } = props;
     const isDisabled = disabled || loading;
 
     return (
-      <Component
+      <button
         ref={ref}
-        className={cn(
-          "atomiton-button",
-          buttonStyles({ variant, size }),
-          tone && buttonStyles({ tone }),
-          styleClasses,
-          className,
-        )}
+        className={classes}
         disabled={isDisabled}
-        // Data attributes for state (not classes!)
+        // Data attributes for state
         data-variant={variant}
         data-size={size}
-        data-tone={tone}
         data-state={loading ? "loading" : "idle"}
         data-disabled={isDisabled || undefined}
         aria-busy={loading}
-        {...htmlProps}
+        {...props}
       >
-        {loading && <Spinner size={size} className="mr-2" />}
-        {leftIcon && <span className="button-icon-left">{leftIcon}</span>}
-        <span className="button-label">{children}</span>
-        {rightIcon && <span className="button-icon-right">{rightIcon}</span>}
-      </Component>
+        {loading && <Spinner size={size} />}
+        {leftIcon && <span>{leftIcon}</span>}
+        <span>{children}</span>
+        {rightIcon && <span>{rightIcon}</span>}
+      </button>
     );
   },
 );
 
 Button.displayName = "Button";
 ```
+
+#### The `useComponent` Hook Pattern
+
+The `useComponent` hook is our unified solution for component setup:
+
+```tsx
+const { classes, props, cx } = useComponent({
+  props: incomingProps,
+  name: "Button", // Component name for namespacing
+  variants: buttonVariants(), // CVA variants
+  normalizeProps: normalizer, // Optional prop normalization
+});
+```
+
+What it does:
+
+1. **Extracts style props** - Removes mb, px, etc. and converts to classes
+2. **Handles prop normalization** - Manages shorthands and aliases
+3. **Composes className** - Merges base, variants, style props, and user className
+4. **Namespaces component** - Adds `atomiton-{name}` class
+5. **Returns clean props** - Props without style/className pollution
+
+Benefits:
+
+- ✅ **Single hook at the top** - Clean Material UI-style pattern
+- ✅ **All styling logic unified** - No scattered cn() calls
+- ✅ **Prop normalization built-in** - Handle shorthands cleanly
+- ✅ **Consistent across components** - Same pattern everywhere
+- ✅ **TypeScript friendly** - Full type inference
+- ✅ **cx utility included** - For conditional classes when needed
 
 ### Step 4: Export (`index.ts`)
 
@@ -411,7 +446,7 @@ Here's a complete Button component following all our patterns:
 
 ```tsx
 import type { StyleProps } from "@/types/style-props";
-import type { VariantProps } from "class-variance-authority";
+import type { VariantProps } from "@/utils/cva";
 import type { buttonStyles } from "./Button.styles";
 
 export interface ButtonProps
@@ -432,7 +467,7 @@ export interface ButtonProps
 ### `Button.styles.ts`
 
 ```tsx
-import { cva } from "class-variance-authority";
+import { cva } from "@/utils/cva";
 
 export const buttonStyles = cva(
   "inline-flex items-center justify-center font-medium transition-colors",
@@ -540,7 +575,105 @@ Before marking a component complete:
 - **Organization questions?** → [Component Organization](./COMPONENT_ORGANIZATION.md)
 - **What to build?** → [Roadmap](../ROADMAP.md)
 
+## TypeScript Best Practices
+
+### No `any` Types - Ever
+
+We enforce strict typing throughout the codebase:
+
+```tsx
+// ❌ BAD - Never use any
+const handleClick = (event: any) => {
+  /* ... */
+};
+const data: any = fetchData();
+ref: React.Ref<any>;
+
+// ✅ GOOD - Use proper types
+const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  /* ... */
+};
+const data: UserData = fetchData();
+ref: React.ComponentPropsWithRef < E > ["ref"];
+```
+
+### Use Type Inference Where Possible
+
+Let TypeScript infer types when obvious:
+
+```tsx
+// ❌ Unnecessary type annotation
+const isDisabled: boolean = loading || disabled;
+const variant: string = "primary";
+
+// ✅ Let TypeScript infer
+const isDisabled = loading || disabled;
+const variant = "primary";
+```
+
+### Prefer `type` over `interface` for Component Props
+
+```tsx
+// ✅ GOOD - Use type for props
+export type ButtonProps = {
+  variant?: "primary" | "secondary";
+  size?: "sm" | "md" | "lg";
+} & StyleProps;
+
+// Also fine for complex types
+export interface ComplexFormState {
+  fields: Record<string, FieldState>;
+  errors: ValidationError[];
+}
+```
+
+### Always Type Event Handlers
+
+```tsx
+// ✅ Properly typed events
+onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+```
+
 ## React Best Practices (Dan Abramov Style)
+
+### Extract Logic from Hooks for Testability
+
+Hooks are difficult to test. Extract all business logic into pure functions:
+
+```tsx
+// ❌ BAD - Logic trapped in a hook, hard to test
+function useUserValidation(user) {
+  return useMemo(() => {
+    if (!user.email) return { valid: false, error: "Email required" };
+    if (!user.email.includes("@"))
+      return { valid: false, error: "Invalid email" };
+    if (user.age < 18) return { valid: false, error: "Must be 18+" };
+    return { valid: true };
+  }, [user]);
+}
+
+// ✅ GOOD - Logic in pure function, easy to test
+export function validateUser(user) {
+  if (!user.email) return { valid: false, error: "Email required" };
+  if (!user.email.includes("@"))
+    return { valid: false, error: "Invalid email" };
+  if (user.age < 18) return { valid: false, error: "Must be 18+" };
+  return { valid: true };
+}
+
+function useUserValidation(user) {
+  return useMemo(() => validateUser(user), [user]);
+}
+```
+
+Benefits:
+
+- ✅ Pure functions are trivial to unit test
+- ✅ No need for React testing utilities
+- ✅ Logic can be reused outside of React
+- ✅ Easier to reason about and debug
 
 ### Simplicity Over Complexity
 
@@ -676,10 +809,14 @@ Button/
 #### Essential Imports
 
 ```tsx
-import { cn } from "@/utils/cn";
-import { cva } from "class-variance-authority";
-import { extractStyleProps } from "@/utils/style-props";
-import type { StyleProps } from "@/types/style-props";
+import {
+  useComponent,
+  createPropNormalizer,
+  normalizers,
+} from "@/utils/useComponent";
+import { cva } from "@/utils/cva";
+import type { VariantProps } from "@/utils/cva";
+import type { ComponentProps } from "@/utils/useComponent";
 ```
 
 #### T-Shirt Sizes Always
