@@ -4,11 +4,18 @@
 
 ## Documentation Structure
 
-### 📁 Core Documentation
+### 📁 Package Documentation
 
-- **[domains/](./domains/)** - Architecture domains (mirrors package structure)
-  - Each domain has its own README and roadmap
-  - This is the primary technical documentation
+Documentation is co-located with code. See each package's README and docs folder:
+
+- **[packages/core/](../packages/core/)** - Foundation abstractions and utilities
+- **[packages/ui/](../packages/ui/)** - UI components and design system
+- **[packages/nodes/](../packages/nodes/)** - Node system and implementations
+- **[packages/theme/](../packages/theme/)** - Framework-agnostic theme system
+- **[packages/di/](../packages/di/)** - Dependency injection system
+
+### 📁 Project Documentation
+
 - **[project/](./project/)** - Project overview
   - [README](./project/README.md) - Project introduction
   - [ROADMAP](./project/ROADMAP.md) - Development roadmap
@@ -21,19 +28,23 @@
 
 ### 📁 Development Documentation
 
-- **[workspace/](./workspace/)** - Active development workspace
-  - [CURRENT.md](./workspace/CURRENT.md) - What's being worked on
-  - [NEXT.md](./workspace/NEXT.md) - Upcoming work
-  - strategies/ - Migration strategies
-  - sessions/ - Development session notes
+- **[guides/](./guides/)** - General development guides
+  - Code style, principles, best practices
+  - Platform-wide conventions
+  - Package integration patterns
+
+- **[workspace/](./workspace/)** - Temporary working area
+  - [BLOCKERS.md](./workspace/BLOCKERS.md) - Current blockers
+  - sessions/ - Daily work logs with Claude
 
 ## Where to Start
 
 ### For Contributors
 
 1. Read [project/README.md](./project/README.md) for overview
-2. Check [domains/README.md](./domains/README.md) for architecture
-3. See [workspace/NEXT.md](./workspace/NEXT.md) for what needs doing
+2. Check package READMEs for architecture details
+3. See root [/NEXT.md](../NEXT.md) for what needs doing
+4. Track progress in root [/CURRENT.md](../CURRENT.md)
 
 ### For Users
 

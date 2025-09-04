@@ -1,19 +1,19 @@
-import { ComponentPropsWithoutRef, ElementType, ReactElement } from 'react';
+import { ComponentPropsWithoutRef, ElementType, ReactElement } from "react";
 
 /**
  * T-shirt sizes used consistently across all components
  */
-export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+export type Size = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
 /**
  * Common variant types (maximum 3-5 variants per component)
  */
-export type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
+export type Variant = "primary" | "secondary" | "ghost" | "danger" | "success";
 
 /**
  * Common status for components
  */
-export type Status = 'idle' | 'loading' | 'success' | 'error' | 'disabled';
+export type Status = "idle" | "loading" | "success" | "error" | "disabled";
 
 /**
  * Polymorphic component props using Material UI's "as" prop pattern
@@ -27,7 +27,7 @@ export type PolymorphicProps<E extends ElementType = ElementType> = {
  */
 export type PolymorphicComponentProps<
   E extends ElementType,
-  Props = {}
+  Props = {},
 > = PolymorphicProps<E> &
   Props &
   Omit<ComponentPropsWithoutRef<E>, keyof (PolymorphicProps<E> & Props)>;
@@ -35,7 +35,8 @@ export type PolymorphicComponentProps<
 /**
  * Extract the ref type for a polymorphic component
  */
-export type PolymorphicRef<E extends ElementType> = ComponentPropsWithoutRef<E>['ref'];
+export type PolymorphicRef<E extends ElementType> =
+  ComponentPropsWithoutRef<E>["ref"];
 
 /**
  * Common props for components that can have icons
@@ -64,14 +65,20 @@ export interface WithDisabled {
  * Data attribute props for component state
  */
 export interface DataAttributes {
-  'data-state'?: 'open' | 'closed' | 'active' | 'inactive' | 'loading' | 'error';
-  'data-selected'?: boolean;
-  'data-disabled'?: boolean;
-  'data-focused'?: boolean;
-  'data-pressed'?: boolean;
-  'data-hovered'?: boolean;
-  'data-checked'?: boolean;
-  'data-indeterminate'?: boolean;
+  "data-state"?:
+    | "open"
+    | "closed"
+    | "active"
+    | "inactive"
+    | "loading"
+    | "error";
+  "data-selected"?: boolean;
+  "data-disabled"?: boolean;
+  "data-focused"?: boolean;
+  "data-pressed"?: boolean;
+  "data-hovered"?: boolean;
+  "data-checked"?: boolean;
+  "data-indeterminate"?: boolean;
 }
 
 /**
@@ -85,4 +92,4 @@ export interface CompoundComponentContext<T = any> {
 /**
  * Re-export StyleProps from extractStyleProps
  */
-export type { StyleProps } from '../utils/extractStyleProps';
+export type { StyleProps } from "../utils/extractStyleProps";

@@ -1,0 +1,48 @@
+{
+  "name": "@atomiton/di",
+  "version": "0.1.0",
+  "description": "Dependency injection system for the Atomiton platform",
+  "keywords": ["dependency-injection", "DI", "IoC", "decorators", "typescript"],
+  "author": "Atomiton",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@atomiton/eslint-config": "workspace:*",
+    "@atomiton/typescript-config": "workspace:*",
+    "@types/node": "^20.11.5",
+    "eslint": "^9.10.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

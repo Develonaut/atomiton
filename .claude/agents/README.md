@@ -45,7 +45,7 @@ agents/
 ### Agent Coordination
 
 - **[Execution Plan](./coordination/AGENT_EXECUTION_PLAN.md)** - MVP implementation workflow
-- **[Guidelines](../../docs/guidelines/README.md)** - Common restrictions and standards
+- **[Guidelines](../../docs/guides/README.md)** - Development guides and standards
 
 ### Agent Personas
 
@@ -84,19 +84,19 @@ All work must follow the mandatory workflow including:
 
 ### 🏗️ Michael (blueprint-system-architect)
 
-- **MUST** read `/docs/ui/design/EDITOR_VISION.md` for system requirements
-- Ensure API follows `/api/v1/` pattern
+- **MUST** review system requirements in UI package documentation
+- Ensure API follows RESTful patterns
 - Design scalable, maintainable system architecture
 - Build things the right way from the start
 
 ### 🎯 Ryan (ui-component-architect)
 
 - **MUST** review ALL visual references BEFORE any UI work:
-  1. `/docs/ui/design/DESIGN_GUIDELINES.md` - Extract modern patterns
-  2. `/docs/domains/ui/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
+  1. `/packages/ui/docs/COMPONENT_PHILOSOPHY.md` - Component patterns
+  2. `/packages/ui/docs/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
   3. `/packages/theme/src/colors/brainwave.ts` - Use exact colors
-  4. `/docs/architecture/INTEGRATION.md` - Follow integration patterns
-  5. `/docs/ui/design/EDITOR_VISION.md` - Blueprint editor requirements
+  4. `/docs/strategies/PACKAGE_INTEGRATION.md` - Integration patterns
+  5. `/packages/ui/docs/README.md` - UI framework documentation
 - Handles ALL UI components including nodes and Blueprint editor
 - Focus on React Flow integration with Brainwave 2.0 aesthetic
 - Use Mantine UI v7 components

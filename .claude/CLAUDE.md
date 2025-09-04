@@ -62,10 +62,12 @@ atomiton/                       # Project root
 - [Node System Integration](../docs/architecture/archive/INTEGRATION.md)
 - [Blueprint Guide](../docs/architecture/archive/BLUEPRINT_GUIDE.md)
 
-### Migration Strategies
+### Migration Documentation
 
-- [Next.js to Vite Migration](../docs/strategies/nextjs-to-vite-migration.md)
-- [Tailwind to Mantine Migration](../docs/strategies/tailwind-to-mantine-migration.md)
+Migration plans are documented in package-specific ROADMAP files:
+
+- UI Migration: `/packages/ui/ROADMAP.md`
+- Core Migration: `/packages/core/ROADMAP.md`
 
 ## ✅ Permissions
 

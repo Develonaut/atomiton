@@ -42,12 +42,20 @@ I could have kept this private until it was "ready," but:
 
 **Simple Over Complex**: 20-50 excellent nodes instead of 500+ mediocre ones.
 
-## Tech Stack (Planned)
+## Tech Stack (Active Development)
 
-- **Frontend**: React + Vite + Mantine UI
+- **Frontend**: React + Vite + Custom UI Framework
 - **Desktop**: Electron (eventually)
 - **Theme**: Brainwave 2.0 aesthetic (by [UI8](https://ui8.net))
 - **Architecture**: Monorepo with pnpm
+
+## 📊 Project Progress
+
+Track our development progress:
+
+- **[Current Work](./CURRENT.md)** - What we're building right now
+- **[Upcoming Work](./NEXT.md)** - What's coming next
+- **[Completed Work](./COMPLETED.md)** - What we've shipped
 - **Language**: TypeScript everywhere
 
 ## Project Structure

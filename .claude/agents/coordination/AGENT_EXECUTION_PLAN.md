@@ -1,6 +1,6 @@
 # Agent Execution Plan - Workflow Source of Truth
 
-**CRITICAL**: This document defines the WORKFLOW for all agent work. For technical standards, see the [Guidelines](../../../docs/guidelines/README.md).
+**CRITICAL**: This document defines the WORKFLOW for all agent work. For technical standards, see the [Guidelines](../../../docs/guides/README.md).
 
 ## Table of Contents
 
@@ -37,10 +37,9 @@
 
 **BEFORE STARTING ANY WORK**, ALL agents MUST review:
 
-- **[Guidelines README](../../../docs/guidelines/README.md)** - READ THIS FIRST - Index to all technical standards and requirements
-- **[Development Process](../../../docs/development/archive/PROCESS.md)** - MANDATORY code quality checks and validation pipeline
-- **[Core Values](../../../docs/development/archive/CORE_VALUES.md)** - Core development principles
-- **[Environment Guidelines](../../../docs/guidelines/README.md)** - Environment and repository configuration authority
+- **[Guidelines README](../../../docs/guides/README.md)** - READ THIS FIRST - Index to all technical standards and requirements
+- **[Development Principles](../../../docs/guides/DEVELOPMENT_PRINCIPLES.md)** - Core development principles
+- **[Code Style](../../../docs/guides/CODE_STYLE.md)** - Code style and quality standards
 
 ## File Access Permissions
 
@@ -210,11 +209,11 @@ END (Work is officially complete)
 
 ## Referenced Guidelines
 
-This workflow references technical requirements from the **[Guidelines README](../../../docs/guidelines/README.md)** which indexes all standards and requirements across:
+This workflow references technical requirements from the **[Guidelines README](../../../docs/guides/README.md)** which indexes all standards and requirements across:
 
-- Development standards in `/docs/development/`
-- UI standards in `/docs/ui/`
-- Architecture standards in `/docs/architecture/`
+- Development standards in `/docs/guides/`
+- UI standards in `/packages/ui/docs/`
+- Package integration patterns in `/docs/guides/PACKAGE_INTEGRATION.md`
 
 ## Important Note on Archived Documents
 
@@ -222,9 +221,10 @@ This workflow references technical requirements from the **[Guidelines README](.
 
 ## For MVP Implementation
 
-For specific MVP prototype implementation details, see:
+For specific MVP prototype implementation details, see package-specific ROADMAP files:
 
-- [Next.js to Vite Migration](../../../docs/strategies/nextjs-to-vite-migration.md)
+- UI Migration: `/packages/ui/ROADMAP.md`
+- Core Migration: `/packages/core/ROADMAP.md`
 
 ---
 

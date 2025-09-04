@@ -24,11 +24,14 @@ color: indigo
 
 **MUST review before ANY UI work:**
 
-- `/docs/ui/design/DESIGN_GUIDELINES.md` - Modern UI patterns
-- `/docs/domains/ui/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
+- `/packages/ui/docs/COMPONENT_BUILDING_GUIDE.md` - Component API design and consistency goals
+- `/packages/ui/docs/COMPONENT_PHILOSOPHY.md` - Component patterns
+- `/packages/ui/docs/components/BEST_PRACTICES.md` - Component patterns inspired by Dan Abramov
 - `/packages/theme/src/colors/brainwave.ts` - Exact colors
-- `/docs/architecture/INTEGRATION.md` - Integration patterns
-- `/docs/ui/design/EDITOR_VISION.md` - UI requirements
+- `/docs/guides/PACKAGE_INTEGRATION.md` - Integration patterns
+- `/packages/ui/docs/README.md` - UI framework documentation
+- `/docs/guides/CODE_STYLE.md` - Code style and quality standards
+- `/docs/guides/DEVELOPMENT_PRINCIPLES.md` - Core development principles
 
 ## Component Philosophy (Dan Abramov Inspired)
 

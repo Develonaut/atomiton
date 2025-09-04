@@ -18,7 +18,7 @@ We have existing code from a previous implementation that needs to be integrated
 
 ## Documentation
 
-See [/docs/domains/core/](../../../docs/domains/core/) for:
+See [./docs/](../docs/) and [./README.md](../README.md) for:
 
 - Architecture overview
 - Existing code analysis

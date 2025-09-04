@@ -19,7 +19,7 @@ This package will contain the Brainwave 2.0 theme configuration after the Tailwi
 
 ## Documentation
 
-See [/docs/domains/theme/](../../../docs/domains/theme/) for:
+See [./docs/](../docs/) and [./README.md](../README.md) for:
 
 - Brainwave 2.0 aesthetic vision
 - Color palette documentation

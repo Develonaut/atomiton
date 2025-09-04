@@ -1,29 +1,29 @@
-import React, { ElementType, forwardRef } from 'react';
-import { buttonVariants, spinnerClasses, iconClasses } from './Button.styles';
-import { ButtonProps } from './Button.types';
-import { cn } from '@/utils/cn';
-import { extractStyleProps } from '@/utils/extractStyleProps';
-import Link from '@/components/Link';
+import React, { ElementType, forwardRef } from "react";
+import { buttonVariants, spinnerClasses, iconClasses } from "./Button.styles";
+import { ButtonProps } from "./Button.types";
+import { cn } from "@/utils/cn";
+import { extractStyleProps } from "@/utils/extractStyleProps";
+import Link from "@/components/Link";
 
 /**
  * Button component with style props, variants, and polymorphic support
- * 
+ *
  * @example
  * // Primary button
  * <Button>Click me</Button>
- * 
+ *
  * @example
  * // Secondary with icon
  * <Button variant="secondary" leftIcon={<Icon />}>
  *   Save
  * </Button>
- * 
+ *
  * @example
  * // As a link
  * <Button as="a" href="/about">
  *   Learn more
  * </Button>
- * 
+ *
  * @example
  * // With style props
  * <Button mb={4} fullWidth variant="danger">
@@ -31,11 +31,11 @@ import Link from '@/components/Link';
  * </Button>
  */
 const Button = forwardRef(
-  <E extends ElementType = 'button'>(
+  <E extends ElementType = "button">(
     {
       as,
-      variant = 'primary',
-      size = 'md',
+      variant = "primary",
+      size = "md",
       fullWidth,
       fw,
       fh,
@@ -51,43 +51,43 @@ const Button = forwardRef(
       children,
       ...props
     }: ButtonProps<E>,
-    ref: React.Ref<any>
+    ref: React.Ref<any>,
   ) => {
     // Extract style props
     const { styleClasses, restProps } = extractStyleProps(props);
-    
+
     // Handle icon aliases
     const _leftIcon = leftIcon || startIcon;
     const _rightIcon = rightIcon || endIcon;
-    
+
     // Handle fullWidth/fullHeight and their shortcuts
     const _fullWidth = fullWidth || fw;
     const _fullHeight = fullHeight || fh;
-    
+
     // Determine the component to render
-    const Component = as || 'button';
-    const isLink = Component === 'a' || Component === Link;
-    
+    const Component = as || "button";
+    const isLink = Component === "a" || Component === Link;
+
     // Build class names
     const classes = cn(
-      buttonVariants({ 
-        variant, 
-        size, 
-        fullWidth: _fullWidth 
+      buttonVariants({
+        variant,
+        size,
+        fullWidth: _fullWidth,
       }),
-      _fullHeight && 'h-full',
+      _fullHeight && "h-full",
       styleClasses,
-      className
+      className,
     );
-    
+
     // Build data attributes for styling hooks
     const dataAttributes = {
-      'data-state': loading ? 'loading' : disabled ? 'disabled' : undefined,
-      'data-variant': variant,
-      'data-size': size,
-      ...restProps['data-state'] && { 'data-state': restProps['data-state'] }
+      "data-state": loading ? "loading" : disabled ? "disabled" : undefined,
+      "data-variant": variant,
+      "data-size": size,
+      ...(restProps["data-state"] && { "data-state": restProps["data-state"] }),
     };
-    
+
     return (
       <Component
         ref={ref}
@@ -119,26 +119,26 @@ const Button = forwardRef(
             />
           </svg>
         )}
-        
+
         {/* Left icon */}
         {!loading && _leftIcon && (
           <span className={iconClasses}>{_leftIcon}</span>
         )}
-        
+
         {/* Button content */}
         <span className="relative z-10">
           {loading && loadingText ? loadingText : children}
         </span>
-        
+
         {/* Right icon */}
         {!loading && _rightIcon && (
           <span className={iconClasses}>{_rightIcon}</span>
         )}
       </Component>
     );
-  }
+  },
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";
 
 export default Button;

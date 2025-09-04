@@ -2,9 +2,15 @@
 
 The main desktop application for Atomiton Blueprint automation platform.
 
+## 📊 Progress Tracking
+
+- **[Current Work](./CURRENT.md)** - Active development tasks
+- **[Upcoming Features](./NEXT.md)** - Planned features
+- **[Release History](./COMPLETED.md)** - Completed work
+
 ## Status
 
-⚠️ **Currently migrating from Next.js to Vite** - See [migration strategy](../../docs/strategies/nextjs-to-vite-migration.md)
+✅ **Successfully migrated to Vite** - Waiting for UI framework integration
 
 ## Getting Started
 
@@ -45,5 +51,5 @@ See the main [development documentation](../../docs/development/README.md) for:
 ## Documentation
 
 - [Architecture Overview](../../docs/architecture/README.md)
-- [UI Components](../../docs/domains/ui/README.md)
-- [Migration Strategy](../../docs/strategies/)
+- [UI Components](../../packages/ui/docs/README.md)
+- [Migration Strategy](../../packages/ui/ROADMAP.md)

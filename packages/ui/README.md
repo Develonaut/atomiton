@@ -2,6 +2,12 @@
 
 A comprehensive UI component library and design system for the Atomiton platform. This package contains reusable components implementing the Atomiton design system, built for desktop-first experiences.
 
+## 📊 Progress Tracking
+
+- **[Current Work](./CURRENT.md)** - What we're actively building
+- **[Upcoming Features](./NEXT.md)** - Planned components and features
+- **[Release History](./COMPLETED.md)** - What's been shipped
+
 ## Overview
 
 The Atomiton UI package serves as both a component library and a visual development environment where components are showcased, tested, and validated. It's designed specifically for the Atomiton Blueprint automation platform and will be packaged as a desktop application.

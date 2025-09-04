@@ -18,7 +18,7 @@ We have the node architecture from a previous implementation. Currently only CSV
 
 ## Documentation
 
-See [/docs/domains/nodes/](../../../docs/domains/nodes/) for:
+See [./docs/](../docs/) and [./README.md](../README.md) for:
 
 - Node system architecture
 - Developer guide for creating nodes

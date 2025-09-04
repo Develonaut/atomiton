@@ -17,7 +17,7 @@ We have Electron configuration from a previous implementation that will be integ
 
 ## Documentation
 
-See [/docs/domains/desktop/](../../../docs/domains/desktop/) for desktop integration plans (if it exists).
+Desktop-specific documentation will be added to this package when active development begins.
 
 ## Current Priority
 

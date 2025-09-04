@@ -1,0 +1,52 @@
+{
+  "name": "@atomiton/desktop",
+  "version": "0.1.0",
+  "description": "Desktop application for Atomiton Blueprint automation platform",
+  "private": true,
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "electron-builder",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.7"
+  },
+  "devDependencies": {
+    "@atomiton/eslint-config": "workspace:*",
+    "@atomiton/typescript-config": "workspace:*",
+    "electron": "^28.1.3",
+    "electron-builder": "^24.9.1",
+    "electron-vite": "^2.0.0",
+    "eslint": "^9.10.0",
+    "typescript": "^5.3.3"
+  },
+  "build": {
+    "appId": "com.atomiton.blueprint",
+    "productName": "Atomiton",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "resources/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "resources/icon.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.ico"
+    },
+    "linux": {
+      "target": ["AppImage", "snap", "deb"],
+      "category": "Development",
+      "icon": "resources/icon.png"
+    }
+  }
+}

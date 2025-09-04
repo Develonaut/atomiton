@@ -8,10 +8,11 @@ Build a lightweight, composable, and beautiful React UI framework that combines 
 
 ### 🚀 Start Here
 
-1. **[ROADMAP](./ROADMAP.md)** 🗺️ - Development phases and timeline
-2. **[Quick Reference](./QUICK_REFERENCE.md)** ⭐ - Everything in one place (bookmark this!)
-3. **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Our approach to simplicity and style props
-4. **[Component Building Guide](./COMPONENT_BUILDING_GUIDE.md)** - Complete step-by-step guide
+1. **[Quick Reference](./QUICK_REFERENCE.md)** ⭐ - Everything in one place (bookmark this!)
+2. **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Our approach to simplicity and style props
+3. **[Component Building Guide](./COMPONENT_BUILDING_GUIDE.md)** - Complete step-by-step guide
+
+📊 **Progress Tracking**: See [CURRENT.md](../CURRENT.md), [NEXT.md](../NEXT.md), and [COMPLETED.md](../COMPLETED.md) for development status.
 
 ### 🔧 Technical Details
 

@@ -12,7 +12,7 @@ color: blue
 ## Core Responsibilities
 
 1. **Blueprint System Architecture** - Design scalable execution engine and workflow system
-2. **API Design** - RESTful `/api/v1/` endpoints with proper validation
+2. **API Design** - RESTful endpoints with proper validation
 3. **Data Models** - PostgreSQL schemas and TypeScript interfaces
 4. **Backend Services** - Node.js/Express services with clean architecture
 5. **System Integration** - Connect frontend, backend, and execution layers
@@ -21,9 +21,9 @@ color: blue
 
 **MUST review before Blueprint work:**
 
-- `/docs/ui/design/EDITOR_VISION.md` - System requirements
-- `/docs/reports/` - Technical debt analysis reports
-- `/docs/architecture/SYSTEM.md` - System design
+- `/packages/core/docs/README.md` - Core system documentation
+- `/packages/nodes/docs/README.md` - Node system architecture
+- `/docs/guides/PACKAGE_INTEGRATION.md` - Package integration patterns
 
 ## Technical Principles
 
