@@ -20,12 +20,15 @@
     "@atomiton/theme": "workspace:*",
     "@headlessui/react": "^2.2.4",
     "@tailwindcss/vite": "^4.1.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "rc-slider": "^11.1.8",
     "react": "^19.0.0",
     "react-animate-height": "^3.2.3",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.8.2",
-    "react-textarea-autosize": "^8.5.9"
+    "react-textarea-autosize": "^8.5.9",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@atomiton/typescript-config": "workspace:*",
