@@ -5,16 +5,20 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["NODE_ENV", "HOME", "USERPROFILE", "APPDATA", "JEST_WORKER_ID"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "env": ["NODE_ENV", "HOME", "USERPROFILE", "APPDATA", "JEST_WORKER_ID"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^check-types"],
+      "env": ["NODE_ENV", "HOME", "USERPROFILE", "APPDATA", "JEST_WORKER_ID"]
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^typecheck"],
+      "env": ["NODE_ENV", "HOME", "USERPROFILE", "APPDATA", "JEST_WORKER_ID"]
     },
     "dev": {
       "cache": false,

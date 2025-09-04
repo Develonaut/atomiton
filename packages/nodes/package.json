@@ -1,0 +1,52 @@
+{
+  "name": "@atomiton/nodes",
+  "version": "0.1.0",
+  "description": "Atomiton Blueprint node implementations",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "nodes",
+    "blueprint",
+    "automation",
+    "workflow"
+  ],
+  "author": "Atomiton",
+  "license": "MIT",
+  "dependencies": {
+    "@atomiton/theme": "workspace:*",
+    "@mantine/core": "^7.0.0",
+    "@tabler/icons-react": "^3.0.0",
+    "@xyflow/react": "^12.0.0",
+    "chokidar": "^4.0.0",
+    "eventemitter3": "^5.0.0",
+    "glob": "^10.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vitest": "^2.0.0",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "@atomiton/typescript-config": "workspace:*",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "typescript": "^5",
+    "vite": "^6.0.0"
+  },
+  "peerDependencies": {
+    "@mantine/core": "^7.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
