@@ -1,15 +1,25 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import Tabs from "@/components/Tabs";
 import Button from "@/components/Button";
 import Line from "../Line";
 
 import { formats, cameraOptions, materialOptions } from "./content";
 
+type TabItem = {
+  id: number;
+  name: string;
+  onClick?: () => void;
+};
+
 const Object3D = () => {
-  const [format, setFormat] = useState(formats[0]);
-  const [camera, setCamera] = useState(cameraOptions[0]);
-  const [material, setMaterial] = useState(materialOptions[0]);
+  const [format, setFormat] = useState<SelectOption | null>(formats[0] ?? null);
+  const [camera, setCamera] = useState<SelectOption | null>(
+    cameraOptions[0] ?? null,
+  );
+  const [material, setMaterial] = useState<TabItem>(
+    materialOptions[0] ?? { id: 0, name: "Default" },
+  );
 
   return (
     <div className="flex flex-col grow p-4">

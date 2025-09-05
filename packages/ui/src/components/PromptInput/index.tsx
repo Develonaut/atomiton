@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import SubmitButton from "@/components/SubmitButton";
 import ViewController from "@/components/ViewController";
 import AddFiles from "./AddFiles";
@@ -26,7 +26,9 @@ const PromptInput = ({
   isViewController,
 }: Props) => {
   const [message, setMessage] = useState("");
-  const [setting, setSetting] = useState(settings[0]);
+  const [setting, setSetting] = useState<SelectOption | null>(
+    settings[0] ?? null,
+  );
   const [visibleAudio, setVisibleAudio] = useState(false);
 
   return (

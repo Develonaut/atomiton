@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Switch from "@/components/Switch";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import NewField from "@/components/NewField";
 import Title from "../Title";
 import Option from "../Option";
@@ -25,7 +25,9 @@ const General = () => {
       name: "Spanish",
     },
   ];
-  const [language, setLanguage] = useState(languages[0]);
+  const [language, setLanguage] = useState<SelectOption | null>(
+    languages[0] ?? null,
+  );
 
   return (
     <>

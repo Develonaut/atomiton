@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Switch from "@/components/Switch";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import Title from "../Title";
 import Option from "../Option";
 
@@ -20,7 +20,9 @@ const Notifications = () => {
     },
   ];
 
-  const [display, setDisplay] = useState(displays[0]);
+  const [display, setDisplay] = useState<SelectOption | null>(
+    displays[0] ?? null,
+  );
   const [videoGenerated, setVideoGenerated] = useState(true);
   const [objectGenerated, setObjectGenerated] = useState(false);
   const [someoneMentioned, setSomeoneMentioned] = useState(true);

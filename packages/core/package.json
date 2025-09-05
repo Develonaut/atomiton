@@ -29,6 +29,7 @@
     "zustand": "^4.0.0"
   },
   "devDependencies": {
+    "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:*",
     "@faker-js/faker": "^8.0.0",
     "@types/node": "^20.0.0",

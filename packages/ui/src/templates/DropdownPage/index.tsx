@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import Group from "@/components/Group";
 import RowCards from "@/components/RowCards";
 import Card from "@/components/Card";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 
 const values = [
   { id: 0, name: "Value" },
@@ -12,12 +12,12 @@ const values = [
 ];
 
 const DropdownPage = () => {
-  const [value, setValue] = useState(values[0]);
-  const [value1, setValue1] = useState(values[0]);
-  const [value2, setValue2] = useState(values[0]);
-  const [value4, setValue4] = useState(values[0]);
-  const [value5, setValue5] = useState(values[0]);
-  const [value6, setValue6] = useState(values[0]);
+  const [value, setValue] = useState<SelectOption | null>(values[0] ?? null);
+  const [value1, setValue1] = useState<SelectOption | null>(values[0] ?? null);
+  const [value2, setValue2] = useState<SelectOption | null>(values[0] ?? null);
+  const [value4, setValue4] = useState<SelectOption | null>(values[0] ?? null);
+  const [value5, setValue5] = useState<SelectOption | null>(values[0] ?? null);
+  const [value6, setValue6] = useState<SelectOption | null>(values[0] ?? null);
 
   return (
     <Layout title="Dropdown">

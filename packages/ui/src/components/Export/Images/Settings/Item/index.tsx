@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import Tabs from "@/components/Tabs";
 
 import { sizes, formatsColor, formats } from "./content";
@@ -8,10 +8,22 @@ type Props = {
   defaultSize: number;
 };
 
+type TabItem = {
+  id: number;
+  name: string;
+  onClick?: () => void;
+};
+
 const Item = ({ defaultSize }: Props) => {
-  const [size, setSize] = useState(sizes[defaultSize]);
-  const [formatColor, setFormatColor] = useState(formatsColor[0]);
-  const [format, setFormat] = useState(formats[0]);
+  const [size, setSize] = useState<SelectOption | null>(
+    sizes[defaultSize] ?? null,
+  );
+  const [formatColor, setFormatColor] = useState<SelectOption | null>(
+    formatsColor[0] ?? null,
+  );
+  const [format, setFormat] = useState<TabItem>(
+    formats[0] ?? { id: 0, name: "Default" },
+  );
 
   return (
     <div className="flex items-center gap-1.5">

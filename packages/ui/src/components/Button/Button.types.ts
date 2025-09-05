@@ -1,57 +1,42 @@
-import { ElementType, ReactElement } from "react";
-import {
-  PolymorphicComponentProps,
-  Size,
-  StyleProps,
-  WithIcons,
-  WithLoading,
-  WithDisabled,
-} from "@/types";
+import type { VariantProps } from "class-variance-authority";
+import type { buttonStyles } from "./Button.styles";
+import type { LinkProps } from "@/components/Link";
+import type { SystemProps } from "@/system";
 
-/**
- * Button variants - maximum 3-5 as per our philosophy
- */
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
-
-/**
- * Base Button props
- */
 export interface ButtonBaseProps
-  extends StyleProps,
-    WithIcons,
-    WithLoading,
-    WithDisabled {
-  /**
-   * The visual variant of the button
-   * @default 'primary'
-   */
-  variant?: ButtonVariant;
+  extends VariantProps<typeof buttonStyles>,
+    SystemProps {
+  children?: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+  loading?: boolean;
 
-  /**
-   * Size of the button using t-shirt sizing
-   * @default 'md'
-   */
-  size?: Size;
-
-  /**
-   * Whether the button should take full width of its container
-   * @default false
-   */
-  fullWidth?: boolean;
-
-  /**
-   * Icon to display on the left side (alias for leftIcon)
-   */
-  startIcon?: ReactElement;
-
-  /**
-   * Icon to display on the right side (alias for rightIcon)
-   */
-  endIcon?: ReactElement;
+  // Legacy props for backward compatibility
+  isPrimary?: boolean;
+  isSecondary?: boolean;
+  isOrange?: boolean;
+  isSmall?: boolean;
 }
 
-/**
- * Polymorphic Button props
- */
-export type ButtonProps<E extends ElementType = "button"> =
-  PolymorphicComponentProps<E, ButtonBaseProps>;
+// Button as a regular button element
+export type ButtonAsButton = {
+  as?: "button";
+} & ButtonBaseProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+// Button as an anchor element
+export type ButtonAsAnchor = {
+  as: "a";
+} & ButtonBaseProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>;
+
+// Button as a Link component
+export type ButtonAsLink = {
+  as: "link";
+  href?: string;
+  to?: string;
+} & ButtonBaseProps &
+  Omit<LinkProps, "href" | "to">;
+
+// Combined Button props type
+export type ButtonProps = ButtonAsButton | ButtonAsAnchor | ButtonAsLink;

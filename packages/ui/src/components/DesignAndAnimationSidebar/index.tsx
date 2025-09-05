@@ -17,7 +17,7 @@ const RightSidebar = () => {
     { id: 1, name: "Animation" },
   ];
 
-  const [tab, setTab] = useState<TabItem>(tabs[0]);
+  const [tab, setTab] = useState<TabItem>(tabs[0] ?? { id: 0, name: "Design" });
 
   return (
     <div className="flex flex-col w-60 min-h-219 bg-[#FCFCFC] border border-[#ECECEC] rounded-[1.25rem]">

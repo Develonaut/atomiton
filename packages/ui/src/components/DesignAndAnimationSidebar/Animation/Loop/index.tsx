@@ -5,13 +5,19 @@ import Tabs from "@/components/Tabs";
 import Group from "../../Group";
 import "rc-slider/assets/index.css";
 
-const tabs = [
+type TabItem = {
+  id: number;
+  name: string;
+  onClick?: () => void;
+};
+
+const tabs: TabItem[] = [
   { id: 0, name: "Short" },
   { id: 1, name: "Long" },
 ];
 
 const Loop = () => {
-  const [tab, setTab] = useState(tabs[0]);
+  const [tab, setTab] = useState<TabItem>(tabs[0] ?? { id: 0, name: "Short" });
   const [values, setValues] = useState([6, 14]);
 
   return (
@@ -83,7 +89,7 @@ const Loop = () => {
           >
             <path d="M10 1.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 1 1 0-17zm0 1.843A6.66 6.66 0 0 0 3.343 10 6.66 6.66 0 0 0 10 16.657 6.66 6.66 0 0 0 16.657 10 6.66 6.66 0 0 0 10 3.343zm0 2.253a.92.92 0 0 1 .922.922l-.001 3.099 1.984 1.984a.92.92 0 0 1 .089 1.2l-.089.103a.92.92 0 0 1-1.303 0l-2.253-2.253a.92.92 0 0 1-.27-.652V6.518A.92.92 0 0 1 10 5.596z" />
           </svg>
-          {values[1] - values[0]}s
+          {(values[1] ?? 0) - (values[0] ?? 0)}s
         </div>
       </div>
     </Group>

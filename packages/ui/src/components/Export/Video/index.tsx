@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import Tabs from "@/components/Tabs";
 import Button from "@/components/Button";
 import Line from "../Line";
@@ -11,11 +11,25 @@ import {
   resolutionOptions,
 } from "./content";
 
+type TabItem = {
+  id: number;
+  name: string;
+  onClick?: () => void;
+};
+
 const Video = () => {
-  const [camera, setCamera] = useState(cameraOptions[0]);
-  const [format, setFormat] = useState(formats[0]);
-  const [frameRate, setFrameRate] = useState(frameRateOptions[0]);
-  const [resolution, setResolution] = useState(resolutionOptions[1]);
+  const [camera, setCamera] = useState<SelectOption | null>(
+    cameraOptions[0] ?? null,
+  );
+  const [format, setFormat] = useState<TabItem>(
+    formats[0] ?? { id: 0, name: "Default" },
+  );
+  const [frameRate, setFrameRate] = useState<SelectOption | null>(
+    frameRateOptions[0] ?? null,
+  );
+  const [resolution, setResolution] = useState<TabItem>(
+    resolutionOptions[1] ?? { id: 0, name: "Default" },
+  );
 
   return (
     <div className="flex flex-col grow p-4">

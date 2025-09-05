@@ -1,13 +1,17 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import Group from "../../Group";
 
 import { lensFormats, zoomLevels, rotates } from "./content";
 
 const Lens = () => {
-  const [lensFormat, setLensFormat] = useState(lensFormats[0]);
-  const [zoomLevel, setZoomLevel] = useState(zoomLevels[0]);
-  const [rotate, setRotate] = useState(rotates[0]);
+  const [lensFormat, setLensFormat] = useState<SelectOption | null>(
+    lensFormats[0] ?? null,
+  );
+  const [zoomLevel, setZoomLevel] = useState<SelectOption | null>(
+    zoomLevels[0] ?? null,
+  );
+  const [rotate, setRotate] = useState<SelectOption | null>(rotates[0] ?? null);
 
   return (
     <Group title="Lens">

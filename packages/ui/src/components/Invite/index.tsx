@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Field from "@/components/Field";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 
 const viewOptions = [
   { id: 0, name: "can view" },
@@ -13,7 +13,7 @@ type Props = {
 
 const Invite = ({ className }: Props) => {
   const [value, setValue] = useState("");
-  const [view, setView] = useState(viewOptions[0]);
+  const [view, setView] = useState<SelectOption | null>(viewOptions[0] ?? null);
 
   return (
     <div className={`relative ${className || ""}`}>

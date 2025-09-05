@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 import Group from "../../Group";
 
 const Artboard = () => {
@@ -11,7 +11,9 @@ const Artboard = () => {
     { id: 4, name: "1920x1080" },
   ];
 
-  const [xPost, setXPost] = useState(xPostOptions[0]);
+  const [xPost, setXPost] = useState<SelectOption | null>(
+    xPostOptions[0] ?? null,
+  );
 
   const [width, setWidth] = useState(800);
   const [height, setHeight] = useState(600);

@@ -31,7 +31,7 @@ const Tabs = ({
         <div
           className={`absolute top-0 left-0 bottom-0 rounded-lg bg-[#fcfcfc] shadow-[0_1.25px_3px_0px_rgba(50,50,50,0.10)),inset_0px_1.25px_1px_0px_#FFF] transition-transform ${
             items.length === 3 ? "w-1/3" : "w-1/2"
-          } ${value.id === items[1].id ? "translate-x-full" : ""}`}
+          } ${value.id === items[1]?.id ? "translate-x-full" : ""}`}
         ></div>
         {items.map((item) => (
           <button

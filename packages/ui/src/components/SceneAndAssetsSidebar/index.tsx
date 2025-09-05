@@ -5,13 +5,19 @@ import Scene from "./Scene";
 import Assets from "./Assets";
 import Search from "./Search";
 
-const tabs = [
+type TabItem = {
+  id: number;
+  name: string;
+  onClick?: () => void;
+};
+
+const tabs: TabItem[] = [
   { id: 0, name: "Scene" },
   { id: 1, name: "Assets" },
 ];
 
 const LeftSidebar = ({}) => {
-  const [tab, setTab] = useState(tabs[0]);
+  const [tab, setTab] = useState<TabItem>(tabs[0] ?? { id: 0, name: "Scene" });
 
   return (
     <div className="flex flex-col w-60 min-h-219 bg-[#FCFCFC] border border-[#ECECEC] rounded-[1.25rem]">

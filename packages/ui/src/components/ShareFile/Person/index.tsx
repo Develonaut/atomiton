@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Image from "@/components/Image";
-import Select from "@/components/Select";
+import Select, { SelectOption } from "@/components/Select";
 
 type Props = {
   name: string;
@@ -22,8 +22,8 @@ const Person = ({
   accessPerson,
   isRemoveButton,
 }: Props) => {
-  const [access, setAccess] = useState(
-    accesses[accessPerson === "view" ? 0 : 1],
+  const [access, setAccess] = useState<SelectOption | null>(
+    accesses[accessPerson === "view" ? 0 : 1] ?? null,
   );
 
   return (

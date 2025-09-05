@@ -8,12 +8,20 @@ import {
 
 import { options } from "./options";
 
+type AiOption = {
+  id: number;
+  title: string;
+  description: string;
+};
+
 type Props = {
   className?: string;
 };
 
 const SelectAi = ({ className }: Props) => {
-  const [value, setValue] = useState(options[0]);
+  const [value, setValue] = useState<AiOption>(
+    options[0] ?? { id: 0, title: "Default", description: "Default AI" },
+  );
 
   return (
     <Listbox
