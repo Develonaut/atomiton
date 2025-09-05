@@ -10,7 +10,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
-      "@atomiton/theme": resolve(__dirname, "../theme/src/index.ts"),
     },
   },
   server: {
@@ -21,15 +20,10 @@ export default defineConfig({
     },
     watch: {
       // Watch the theme package source files for changes
-      ignored: [
-        "!**/node_modules/@atomiton/theme/**",
-        "!**/packages/theme/src/**",
-      ],
+      ignored: ["!**/packages/theme/src/**"],
     },
   },
   optimizeDeps: {
-    // Force Vite to re-optimize when theme changes
-    exclude: ["@atomiton/theme"],
     include: ["react", "react-dom", "react-router-dom"],
   },
   build: {
@@ -41,7 +35,8 @@ export default defineConfig({
       output: {
         // Asset file naming
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name!.split(".");
+          const fileName = assetInfo.names?.[0] || assetInfo.name || "asset";
+          const info = fileName.split(".");
           const extType = info[info.length - 1];
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             return `images/[name]-[hash][extname]`;

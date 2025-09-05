@@ -1,1 +1,3 @@
-export { config as default } from "@atomiton/eslint-config/react-internal";
+import config from "@atomiton/eslint-config/react-internal";
+
+export default config;

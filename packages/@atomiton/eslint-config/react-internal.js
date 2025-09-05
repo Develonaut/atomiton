@@ -10,7 +10,7 @@ import baseConfig from "./base.js";
  * A custom ESLint configuration for libraries that use React.
  *
  * @type {import("eslint").Linter.Config[]} */
-export const config = [
+const config = [
   ...baseConfig,
   js.configs.recommended,
   eslintConfigPrettier,
@@ -37,3 +37,5 @@ export const config = [
     },
   },
 ];
+
+export default config;

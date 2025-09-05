@@ -1,55 +1,36 @@
-# Next Work Queue - @atomiton/theme
+# Next Steps - Theme Package
 
-## Priority 1 - Critical
+## Phase 2: shadcn/ui Integration
 
-### Framework-Agnostic Refactor
+- [ ] Install and configure shadcn/ui CLI
+- [ ] Map Atomiton colors to shadcn semantic tokens
+- [ ] Create theme variants (light, dark, brainwave)
+- [ ] Test with shadcn component library
 
-- [ ] Define TypeScript interfaces for theme structure
-- [ ] Create ThemeManager class with subscription system
-- [ ] Extract Brainwave 2.0 tokens to pure data format
-- [ ] Implement theme validation and type guards
+## Phase 3: Runtime Theme Switching
 
-### Format Generators
+- [ ] Implement ThemeProvider component
+- [ ] Add theme persistence (localStorage)
+- [ ] Create theme switcher UI component
+- [ ] Support system preference detection
 
-- [ ] CSS variables generator
-- [ ] Tailwind config generator
-- [ ] JSON serialization
-- [ ] TypeScript types generator
+## Phase 4: Advanced Features
 
-## Priority 2 - Important
+- [ ] Color palette generation from brand colors
+- [ ] Contrast ratio validation
+- [ ] Theme preview/editor tool
+- [ ] A11y compliance checking
 
-### Integration Adapters
+## Component Migration
 
-- [ ] React ThemeProvider component
-- [ ] Node editor style adapter
-- [ ] Tailwind plugin
-- [ ] Vite plugin
+- [ ] Audit existing components for theme usage
+- [ ] Create migration guide for each component
+- [ ] Update component library to use new tokens
+- [ ] Remove legacy style dependencies
 
-### Theme Variants
+## Documentation & Tools
 
-- [ ] Dark mode variant
-- [ ] High contrast mode
-- [ ] Compact density variant
-- [ ] Print-optimized variant
-
-## Priority 3 - Nice to Have
-
-### Developer Tools
-
-- [ ] VS Code extension for theme
-- [ ] Theme preview playground
-- [ ] Chrome DevTools integration
-- [ ] Figma token sync
-
-## Ideas Backlog
-
-- Theme builder UI
-- Community theme marketplace
-- AI-powered theme generation
-- Accessibility analyzer
-- Theme migration tools from other frameworks
-
----
-
-**Last Updated**: 2025-09-04
-**Next Review**: 2025-09-11
+- [ ] Build interactive theme documentation
+- [ ] Create Figma token sync plugin
+- [ ] Develop VS Code theme preview extension
+- [ ] Add Storybook theme addon

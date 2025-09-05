@@ -1,26 +1,30 @@
-# Current Work - @atomiton/theme
+# Current Work - Theme Package
 
-## Sprint: September 4-11, 2025
+## Active: Theme System Architecture
 
-### 🚀 Active Tasks
+Implementing the three-layer theme architecture as outlined in THEME_ARCHITECTURE.md:
 
-- [ ] Refactor from Mantine-specific to framework-agnostic format
-- [ ] Extract Brainwave 2.0 tokens to pure data structure
-- [ ] Implement ThemeManager class
+### Layer 1: Token Layer (In Progress)
 
-### 🔄 In Review
+- [ ] Complete shadcn-compatible variable mapping
+- [ ] Add runtime theme switching support
+- [ ] Create TypeScript type definitions for theme values
 
-None
+### Layer 2: Component Layer Preparation
 
-### ⚠️ Blocked
+- [ ] Define component token mapping strategy
+- [ ] Establish CVA (class-variance-authority) patterns
+- [ ] Create component theming guidelines
 
-None
+## Immediate Tasks
 
-## Notes
+- [ ] Create `src/shadcn.css` with shadcn-compatible variables
+- [ ] Add theme provider component for runtime switching
+- [ ] Generate TypeScript types from CSS variables
+- [ ] Set up theme documentation site
 
-Theme package currently contains Brainwave 2.0 design tokens in Mantine-specific format. Needs refactoring to become framework-agnostic with multiple output formats.
+## Migration Support
 
----
-
-**Last Updated**: 2025-09-04
-**Status**: 🟡 Active Refactoring
+- [ ] Document migration path from current system
+- [ ] Create compatibility layer for existing components
+- [ ] Provide migration scripts for automated updates

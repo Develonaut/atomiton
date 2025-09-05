@@ -1,232 +1,212 @@
 # @atomiton/theme
 
-Framework-agnostic theme system providing the Atomiton design language as a single source of truth for visual decisions.
+Unified theme system for the Atomiton monorepo. Single source of truth for design tokens, colors, spacing, typography, and Tailwind configuration. Built for seamless shadcn/ui integration.
 
-## 📊 Progress Tracking
+## Architecture
 
-- **[Current Work](./CURRENT.md)** - Active development tasks
-- **[Upcoming Features](./NEXT.md)** - Planned improvements
-- **[Release History](./COMPLETED.md)** - Completed features
+This package implements a three-layer theme architecture:
 
-## Overview
-
-The theme package is a framework-agnostic system that provides design tokens, color palettes, typography, spacing, and other visual constants. It exports the theme in multiple formats to support different UI frameworks while maintaining a single source of truth.
-
-## Features
-
-### Core Capabilities
-
-- **Framework-agnostic design tokens** - Works with any UI framework
-- **Multiple output formats** - CSS variables, Tailwind config, JSON, TypeScript
-- **Dark mode support** - Built-in light/dark theme variants
-- **Semantic color system** - Contextual colors for consistent UX
-- **Typography scale** - Harmonious type system based on Inter font
-
-### Export Formats
-
-```typescript
-import { AtomitonTheme } from "@atomiton/theme";
-
-// Get theme in different formats
-const cssVars = theme.toCSSVariables(); // For vanilla CSS
-const tailwindConfig = theme.toTailwind(); // For Tailwind CSS
-const tokens = theme.toJSON(); // For custom systems
-const jsObject = theme.toObject(); // For JS frameworks
+```
+Token Layer (this package) → Component Layer (@atomiton/ui) → Application Layer (apps/*)
 ```
 
 ## Installation
 
 ```bash
-pnpm add @atomiton/theme
+pnpm add @atomiton/theme@workspace:*
 ```
 
 ## Usage
 
-### With Tailwind CSS
+### Tailwind v4 with CSS Variables
 
-```javascript
-// tailwind.config.js
-import { createTailwindConfig } from "@atomiton/theme";
+```css
+/* apps/client/tailwind.css */
+@import "tailwindcss";
+@import "@atomiton/theme/css";
 
-export default createTailwindConfig({
-  // Your custom extensions
-});
+/* Scan your source files */
+@source "./src/**/*.{js,ts,jsx,tsx,css}";
 ```
 
-### With CSS Variables
+### Import in Your App
 
-```typescript
-import { ThemeManager } from "@atomiton/theme";
-
-const manager = new ThemeManager();
-manager.applyTheme("light"); // Injects CSS variables
+```css
+/* apps/client/src/index.css */
+@import "../tailwind.css";
 ```
 
-### With React
+### Access CSS Variables Directly
 
-```tsx
-import { ThemeProvider } from "@atomiton/theme/react";
-
-function App() {
-  return <ThemeProvider theme="light">{/* Your app */}</ThemeProvider>;
-}
+```css
+/* Import just the variables */
+@import "@atomiton/theme/variables";
 ```
 
-### With Custom Framework
+## Design Tokens
 
-```typescript
-import { theme } from "@atomiton/theme";
+### Core Shade System
 
-// Access raw theme values
-const primaryColor = theme.colors.primary[500];
-const spacing = theme.spacing[4];
+Our grayscale system using 9 carefully selected shades:
+
+```css
+/* CSS Variables */
+--shade-01: #fcfcfc;  /* Primary backgrounds */
+--shade-02: #f8f7f7;  /* Secondary backgrounds */
+--shade-03: #f1f1f1;  /* Tertiary backgrounds */
+--shade-04: #ececec;  /* Borders */
+--shade-05: #e2e2e2;  /* Dividers */
+--shade-06: #7b7b7b;  /* Secondary text */
+--shade-07: #323232;  /* Dark accents */
+--shade-08: #222222;  /* Dark backgrounds */
+--shade-09: #121212;  /* Primary text */
+
+/* Tailwind Classes */
+bg-shade-01 through bg-shade-09
+text-shade-01 through text-shade-09
+border-shade-01 through border-shade-09
 ```
 
-## Theme Structure
+### Brand Colors
 
-```typescript
-interface AtomitonTheme {
-  colors: {
-    // Grayscale shades
-    shade: { "01": string; /* ... */ "09": string };
-    // Semantic colors
-    primary: ColorScale;
-    success: ColorScale;
-    warning: ColorScale;
-    error: ColorScale;
-    info: ColorScale;
-  };
-  typography: {
-    fonts: { sans: string; mono: string };
-    sizes: { xs: string; /* ... */ "6xl": string };
-    weights: {
-      /* ... */
-    };
-    lineHeights: {
-      /* ... */
-    };
-  };
-  spacing: { 0: string; /* ... */ 96: string };
-  shadows: {
-    toolbar: string;
-    "prompt-input": string;
-    "depth-01": string;
-    popover: string;
-  };
-  borderRadius: {
-    /* ... */
-  };
-  animation: {
-    /* ... */
-  };
-}
+```css
+/* Primary brand palette */
+--color-green: #55b93e;
+--color-orange: #e36323;
+--color-red: #fe5938;
+--color-blue: #3582ff;
+--color-yellow: #ffb73a;
+--color-purple: #8755e9;
+
+/* Tailwind Classes */
+bg-green, text-green, border-green
+bg-orange, text-orange, border-orange
+/* ... etc */
 ```
 
-## Architecture
+### Semantic Colors (shadcn/ui Compatible)
+
+```css
+/* Surface colors */
+--color-primary: var(--shade-09);
+--color-secondary: var(--shade-06);
+--color-surface-01: var(--shade-01);
+--color-surface-02: var(--shade-02);
+--color-surface-03: var(--shade-03);
+
+/* Tailwind Classes */
+bg-primary, bg-secondary
+bg-surface-01, bg-surface-02, bg-surface-03
+```
+
+## Typography System
+
+Custom typography scale with line heights and letter spacing:
+
+```css
+/* Headings */
+.text-h1 through .text-h6
+
+/* Body text */
+.text-body-sm  /* 0.6875rem */
+.text-body-md  /* 0.75rem */
+.text-body-lg  /* 0.8125rem */
+
+/* Specialized text */
+.text-heading    /* 0.875rem */
+.text-title      /* 0.9375rem */
+.text-title-lg   /* 1.125rem */
+
+/* Paragraphs */
+.text-p-sm  /* 0.8125rem */
+.text-p-md  /* 0.9375rem */
+```
+
+## Spacing System
+
+Comprehensive spacing using calc-based system:
+
+```css
+/* Base unit */
+--spacing: 0.25rem;
+
+/* Calculated values */
+--spacing-12: calc(var(--spacing) * 12);  /* 3rem */
+--spacing-66: calc(var(--spacing) * 66);  /* 16.5rem */
+/* ... and many more */
+
+/* Tailwind Classes */
+p-12, m-66, gap-2.75, space-x-1.25
+```
+
+## Shadows
+
+Pre-defined shadow styles:
+
+```css
+--shadow-toolbar
+--shadow-prompt-input
+--shadow-depth-01
+--shadow-popover
+
+/* Tailwind Classes */
+shadow-toolbar, shadow-prompt-input, shadow-depth-01, shadow-popover
+```
+
+## Package Structure
 
 ```
-packages/theme/
+@atomiton/theme/
 ├── src/
-│   ├── core/           # Core theme definitions
-│   ├── tokens/         # Design tokens
-│   ├── colors/         # Color system
-│   ├── typography/     # Type system
-│   ├── generators/     # Output generators
-│   │   ├── css/       # CSS variables
-│   │   ├── tailwind/  # Tailwind config
-│   │   └── json/      # JSON tokens
-│   ├── manager/        # Theme management
-│   └── providers/      # Framework providers
-├── docs/               # Additional documentation
-│   ├── ARCHITECTURE.md # System design
-│   ├── COLOR_PALETTE.md # Color specifications
-│   └── INTEGRATION.md  # Framework guides
-└── tests/             # Test suites
+│   ├── index.css      # Main theme configuration with @theme
+│   └── variables.css  # Raw CSS variables
+├── docs/
+│   ├── THEME_ARCHITECTURE.md
+│   └── UI_PACKAGE_MIGRATION.md
+├── COMPLETED.md       # What's been done
+├── CURRENT.md         # Active work
+├── NEXT.md           # Upcoming features
+├── ROADMAP.md        # Long-term vision
+└── README.md         # This file
 ```
 
-## Design System
+## Current Status
 
-### Color Philosophy
+✅ **Phase 1: Foundation** - Complete
 
-- **Grayscale-first** - Nine shades for UI hierarchy
-- **Semantic colors** - Contextual meaning through color
-- **Accessible contrasts** - WCAG AA compliance
-- **Dark mode native** - Equal treatment of themes
+- Centralized 170+ CSS variables
+- Migrated to Tailwind v4 with @theme directive
+- Pure CSS configuration (no JavaScript build required)
 
-### Typography
+🚧 **Phase 2: shadcn/ui Integration** - In Progress
 
-- **Inter font family** - Clean, readable, modern
-- **Fluid scale** - Responsive type sizes
-- **Consistent rhythm** - Harmonious line heights
+- Mapping Atomiton colors to shadcn semantic tokens
+- Creating theme variants (light, dark, brainwave)
 
-### Spacing
+## Upcoming Features
 
-- **4px base unit** - All spacing multiples of 4
-- **Fibonacci progression** - Natural feeling gaps
-- **Component-specific** - Contextual spacing tokens
+- Runtime theme switching
+- TypeScript type definitions for all tokens
+- Theme preview/editor tool
+- Figma token sync
+- Dark mode support
+- A11y compliance checking
 
-## Development
+## Migration from tailwind-config
 
-```bash
-# Install dependencies
-pnpm install
+This package was renamed from `@atomiton/tailwind-config` to `@atomiton/theme` to better reflect its expanded role as the central theme system. Update your imports:
 
-# Build package
-pnpm build
-
-# Run tests
-pnpm test
-
-# Type checking
-pnpm typecheck
-
-# Generate theme outputs
-pnpm generate
+```diff
+- import "@atomiton/tailwind-config/css"
++ import "@atomiton/theme/css"
 ```
-
-## Roadmap
-
-See [ROADMAP.md](./docs/ROADMAP.md) for detailed plans including:
-
-- Framework-agnostic refactor
-- Theme builder tool
-- Runtime theming
-- A11y enhancements
 
 ## Documentation
 
-- [Architecture](./docs/ARCHITECTURE.md) - System design
-- [Color Palette](./docs/COLOR_PALETTE.md) - Color specifications
-- [Integration Guide](./docs/INTEGRATION.md) - Framework setup
-- [N8N Comparison](./docs/N8N_COMPARISON.md) - How we differ
-
-## Migration from Mantine
-
-If migrating from the Mantine-specific version:
-
-```typescript
-// Before (Mantine-specific)
-import { brainwaveTheme } from '@atomiton/theme';
-<MantineProvider theme={brainwaveTheme}>
-
-// After (Framework-agnostic)
-import { ThemeProvider } from '@atomiton/theme/react';
-<ThemeProvider theme="light">
-```
-
-## Contributing
-
-1. Maintain framework independence
-2. Document all tokens
-3. Include visual examples
-4. Test across frameworks
+- [Theme Architecture](./docs/THEME_ARCHITECTURE.md) - Detailed architecture guide
+- [UI Migration Guide](./docs/UI_PACKAGE_MIGRATION.md) - Component migration strategy
+- [Roadmap](./ROADMAP.md) - Long-term vision and milestones
 
 ## License
 
-MIT - See [LICENSE](../../LICENSE) for details
-
----
-
-**Package Status**: 🟡 Refactoring
-**Version**: 0.2.0
-**Stability**: Beta
+MIT

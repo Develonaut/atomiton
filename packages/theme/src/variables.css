@@ -1,0 +1,177 @@
+/**
+ * CSS Variables for Atomiton Design System
+ * This file defines ALL variables needed by the apps
+ */
+
+:root {
+  /* Core shade colors */
+  --shade-01: #fcfcfc;
+  --shade-02: #f8f7f7;
+  --shade-03: #f1f1f1;
+  --shade-04: #ececec;
+  --shade-05: #e2e2e2;
+  --shade-06: #7b7b7b;
+  --shade-07: #323232;
+  --shade-08: #222222;
+  --shade-09: #121212;
+  
+  /* RGB values for alpha support */
+  --shade-01-rgb: 252, 252, 252;
+  --shade-02-rgb: 248, 247, 247;
+  --shade-03-rgb: 241, 241, 241;
+  --shade-04-rgb: 236, 236, 236;
+  --shade-05-rgb: 226, 226, 226;
+  --shade-06-rgb: 123, 123, 123;
+  --shade-07-rgb: 50, 50, 50;
+  --shade-08-rgb: 34, 34, 34;
+  --shade-09-rgb: 18, 18, 18;
+  
+  /* Alpha variations - commonly used opacity variants */
+  --shade-01_95: rgba(252, 252, 252, 0.95);
+  --shade-06_30: rgba(123, 123, 123, 0.3);
+  --shade-06_50: rgba(123, 123, 123, 0.5);
+  --shade-07_05: rgba(50, 50, 50, 0.05);
+  --shade-07_10: rgba(50, 50, 50, 0.1);
+  --shade-08_05: rgba(34, 34, 34, 0.05);
+  --shade-08_10: rgba(34, 34, 34, 0.1);
+  --shade-09_05: rgba(18, 18, 18, 0.05);
+  --shade-09_10: rgba(18, 18, 18, 0.1);
+  --shade-09_35: rgba(18, 18, 18, 0.35);
+  
+  /* Brand colors - hex values */
+  --color-green: #55b93e;
+  --color-orange: #e36323;
+  --color-red: #fe5938;
+  --color-blue: #3582ff;
+  --color-yellow: #ffb73a;
+  --color-purple: #8755e9;
+  --color-tertiary: #a8a8a8;
+  --color-gray-light: #c4c4c4;
+  
+  /* Brand colors - RGB values for alpha support */
+  --color-green-rgb: 85, 185, 62;
+  --color-orange-rgb: 227, 99, 35;
+  --color-red-rgb: 254, 89, 56;
+  --color-blue-rgb: 53, 130, 255;
+  --color-yellow-rgb: 255, 183, 58;
+  --color-purple-rgb: 135, 85, 233;
+  --color-tertiary-rgb: 168, 168, 168;
+  --color-gray-light-rgb: 196, 196, 196;
+  
+  /* Semantic color mappings */
+  --color-primary: var(--shade-09);
+  --color-secondary: var(--shade-06);
+  --color-surface-01: var(--shade-01);
+  --color-surface-02: var(--shade-02);
+  --color-surface-03: var(--shade-03);
+  --color-s-01: var(--shade-04);
+  --color-s-02: var(--shade-05);
+  
+  /* Typography scale */
+  --text-h1: 3rem;
+  --text-h1--line-height: 3.45rem;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h1--font-weight: 400;
+  
+  --text-h2: 2.5rem;
+  --text-h2--line-height: 3rem;
+  --text-h2--letter-spacing: -0.03em;
+  --text-h2--font-weight: 400;
+  
+  --text-h3: 2rem;
+  --text-h3--line-height: 2.5rem;
+  --text-h3--letter-spacing: -0.03em;
+  --text-h3--font-weight: 400;
+  
+  --text-h4: 1.75rem;
+  --text-h4--line-height: 2.25rem;
+  --text-h4--letter-spacing: -0.03em;
+  --text-h4--font-weight: 400;
+  
+  --text-h5: 1.5rem;
+  --text-h5--line-height: 2rem;
+  --text-h5--letter-spacing: -0.03em;
+  --text-h5--font-weight: 500;
+  
+  --text-h6: 1.25rem;
+  --text-h6--line-height: 1.75rem;
+  --text-h6--letter-spacing: -0.03em;
+  --text-h6--font-weight: 500;
+  
+  --text-body-sm: 0.6875rem;
+  --text-body-sm--line-height: 1rem;
+  --text-body-sm--letter-spacing: -0.01em;
+  --text-body-sm--font-weight: 500;
+  
+  --text-body-md: 0.75rem;
+  --text-body-md--line-height: 1rem;
+  --text-body-md--letter-spacing: -0.01em;
+  --text-body-md--font-weight: 500;
+  
+  --text-body-md-str: 0.75rem;
+  --text-body-md-str--line-height: 1rem;
+  --text-body-md-str--letter-spacing: -0.01em;
+  --text-body-md-str--font-weight: 600;
+  
+  --text-body-lg: 0.8125rem;
+  --text-body-lg--line-height: 1rem;
+  --text-body-lg--letter-spacing: -0.01em;
+  --text-body-lg--font-weight: 400;
+  
+  --text-body-lg-str: 0.8125rem;
+  --text-body-lg-str--line-height: 1rem;
+  --text-body-lg-str--letter-spacing: -0.01em;
+  --text-body-lg-str--font-weight: 600;
+  
+  --text-heading: 0.875rem;
+  --text-heading--line-height: 1.25rem;
+  --text-heading--letter-spacing: -0.01em;
+  --text-heading--font-weight: 500;
+  
+  --text-heading-str: 0.875rem;
+  --text-heading-str--line-height: 1.25rem;
+  --text-heading-str--letter-spacing: -0.02em;
+  --text-heading-str--font-weight: 600;
+  
+  --text-title: 0.9375rem;
+  --text-title--line-height: 1.5rem;
+  --text-title--letter-spacing: -0.02em;
+  --text-title--font-weight: 400;
+  
+  --text-title-str: 0.9375rem;
+  --text-title-str--line-height: 1.5rem;
+  --text-title-str--letter-spacing: -0.02em;
+  --text-title-str--font-weight: 600;
+  
+  --text-title-lg: 1.125rem;
+  --text-title-lg--line-height: 1.6875rem;
+  --text-title-lg--letter-spacing: -0.02em;
+  --text-title-lg--font-weight: 400;
+  
+  --text-p-sm: 0.8125rem;
+  --text-p-sm--line-height: 1.2188rem;
+  --text-p-sm--letter-spacing: -0.01em;
+  --text-p-sm--font-weight: 400;
+  
+  --text-p-md: 0.9375rem;
+  --text-p-md--line-height: 1.406rem;
+  --text-p-md--letter-spacing: -0.015em;
+  --text-p-md--font-weight: 400;
+  
+  /* Shadows */
+  --shadow-toolbar: 0px 1px 4px -4px rgba(0, 0, 0, 0.08), 0px 8px 16px -12px rgba(0, 0, 0, 0.13);
+  --shadow-prompt-input: inset 0 2px 0 0 #fff, 0px 18px 24px -20px rgba(0, 0, 0, 0.13), 0px 8px 16px -12px rgba(0, 0, 0, 0.08);
+  --shadow-depth-01: 0 6px 3px 0 rgba(0, 0, 0, 0.01), 0 3px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 1px 0 rgba(0, 0, 0, 0.02);
+  --shadow-popover: 0 153px 61px 0 rgba(0, 0, 0, 0.01), 0 86px 52px 0 rgba(0, 0, 0, 0.04), 0 38px 38px 0 rgba(0, 0, 0, 0.06), 0 10px 21px 0 rgba(0, 0, 0, 0.07);
+  
+  /* Legacy shadow aliases (for backward compatibility) */
+  --box-shadow-toolbar: var(--shadow-toolbar);
+  --box-shadow-prompt-input: var(--shadow-prompt-input);
+  --box-shadow-depth-01: var(--shadow-depth-01);
+  --box-shadow-popover: var(--shadow-popover);
+  
+  /* Other variables */
+  --default-transition-duration: 0.2s;
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --text-0: 0;
+}

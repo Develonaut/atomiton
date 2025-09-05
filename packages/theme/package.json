@@ -1,35 +1,22 @@
 {
   "name": "@atomiton/theme",
   "version": "0.1.0",
-  "description": "Brainwave 2.0 theme for Atomiton - Clean Mantine theme translation",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    "./css": "./src/index.css",
+    "./variables": "./src/variables.css"
+  },
   "files": [
-    "dist"
+    "src",
+    "docs",
+    "README.md",
+    "ROADMAP.md"
   ],
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
-    "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit"
+    "lint": "echo 'No linting needed for CSS-only package'",
+    "typecheck": "echo 'No TypeScript files to check yet'"
   },
-  "keywords": [
-    "theme",
-    "mantine",
-    "brainwave",
-    "clean",
-    "light-theme"
-  ],
-  "author": "Atomiton",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "vite": "^5.0.0",
-    "vite-plugin-dts": "^3.0.0"
-  },
-  "peerDependencies": {
-    "@mantine/core": "^7.0.0"
+  "dependencies": {
+    "tailwindcss": "^4.0.0"
   }
 }

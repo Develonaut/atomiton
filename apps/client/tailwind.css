@@ -1,0 +1,15 @@
+/**
+ * Tailwind CSS Configuration for apps/client
+ * Pure v4 approach using @theme from tailwind-config
+ */
+
+/* Import base Tailwind */
+@import "tailwindcss";
+
+/* Import shared theme configuration (includes @theme block) */
+@import "@atomiton/theme/css";
+
+/* Tell Tailwind to scan these directories for classes */
+@source "./src/**/*.{js,ts,jsx,tsx,css}";
+@source "../../packages/ui/src/**/*.{js,ts,jsx,tsx,css}";
+@source "../../packages/theme/src/**/*.css";

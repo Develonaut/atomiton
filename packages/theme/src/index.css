@@ -1,0 +1,425 @@
+/**
+ * Shared Tailwind CSS Configuration for v4
+ * Uses @theme for modern, themeable configuration
+ */
+
+@import "tailwindcss";
+@import "./variables.css";
+
+/* 
+ * Tailwind v4 @theme configuration
+ * This approach is better for theme switching and shadcn compatibility
+ */
+@theme {
+  /* Screen breakpoints */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 767px;
+  --breakpoint-lg: 1023px;
+  --breakpoint-xl: 1259px;
+  --breakpoint-2xl: 1419px;
+  --breakpoint-3xl: 1719px;
+  --breakpoint-4xl: 1899px;
+  
+  /* Colors - direct hex values for Tailwind v4 */
+  --color-shade-01: #fcfcfc;
+  --color-shade-02: #f8f7f7;
+  --color-shade-03: #f1f1f1;
+  --color-shade-04: #ececec;
+  --color-shade-05: #e2e2e2;
+  --color-shade-06: #7b7b7b;
+  --color-shade-07: #323232;
+  --color-shade-08: #222222;
+  --color-shade-09: #121212;
+  
+  /* Brand colors */
+  --color-green: #55b93e;
+  --color-orange: #e36323;
+  --color-red: #fe5938;
+  --color-blue: #3582ff;
+  --color-yellow: #ffb73a;
+  --color-purple: #8755e9;
+  --color-tertiary: #a8a8a8;
+  
+  /* Semantic colors */
+  --color-primary: #121212;
+  --color-secondary: #7b7b7b;
+  
+  /* Surface colors */
+  --color-surface-01: #fcfcfc;
+  --color-surface-02: #f8f7f7;
+  --color-surface-03: #f1f1f1;
+  
+  /* Border colors */
+  --color-s-01: #ececec;
+  --color-s-02: #e2e2e2;
+  
+  /* Base spacing unit */
+  --spacing: 0.25rem;
+  
+  /* Spacing scale - using calc() for consistency with published app */
+  --spacing-0: calc(var(--spacing) * 0);
+  --spacing-0.25: calc(var(--spacing) * 0.25);
+  --spacing-0.5: calc(var(--spacing) * 0.5);
+  --spacing-0.75: calc(var(--spacing) * 0.75);
+  --spacing-1: calc(var(--spacing) * 1);
+  --spacing-1.25: calc(var(--spacing) * 1.25);
+  --spacing-1.5: calc(var(--spacing) * 1.5);
+  --spacing-2: calc(var(--spacing) * 2);
+  --spacing-2.25: calc(var(--spacing) * 2.25);
+  --spacing-2.5: calc(var(--spacing) * 2.5);
+  --spacing-2.75: calc(var(--spacing) * 2.75);
+  --spacing-3: calc(var(--spacing) * 3);
+  --spacing-3.5: calc(var(--spacing) * 3.5);
+  --spacing-4: calc(var(--spacing) * 4);
+  --spacing-4.5: calc(var(--spacing) * 4.5);
+  --spacing-5: calc(var(--spacing) * 5);
+  --spacing-6: calc(var(--spacing) * 6);
+  --spacing-7: calc(var(--spacing) * 7);
+  --spacing-8: calc(var(--spacing) * 8);
+  --spacing-9: calc(var(--spacing) * 9);
+  --spacing-10: calc(var(--spacing) * 10);
+  --spacing-11: calc(var(--spacing) * 11);
+  --spacing-12: calc(var(--spacing) * 12);
+  --spacing-14: calc(var(--spacing) * 14);
+  --spacing-16: calc(var(--spacing) * 16);
+  --spacing-20: calc(var(--spacing) * 20);
+  --spacing-24: calc(var(--spacing) * 24);
+  --spacing-28: calc(var(--spacing) * 28);
+  --spacing-32: calc(var(--spacing) * 32);
+  --spacing-36: calc(var(--spacing) * 36);
+  --spacing-40: calc(var(--spacing) * 40);
+  --spacing-44: calc(var(--spacing) * 44);
+  --spacing-48: calc(var(--spacing) * 48);
+  --spacing-52: calc(var(--spacing) * 52);
+  --spacing-56: calc(var(--spacing) * 56);
+  --spacing-60: calc(var(--spacing) * 60);
+  --spacing-64: calc(var(--spacing) * 64);
+  --spacing-72: calc(var(--spacing) * 72);
+  --spacing-80: calc(var(--spacing) * 80);
+  --spacing-96: calc(var(--spacing) * 96);
+  
+  /* Custom spacing for Atomiton - using calc() */
+  --spacing-4.75: calc(var(--spacing) * 4.75);
+  --spacing-5.5: calc(var(--spacing) * 5.5);
+  --spacing-7.5: calc(var(--spacing) * 7.5);
+  --spacing-8.5: calc(var(--spacing) * 8.5);
+  --spacing-9.5: calc(var(--spacing) * 9.5);
+  --spacing-11.5: calc(var(--spacing) * 11.5);
+  --spacing-12.5: calc(var(--spacing) * 12.5);
+  --spacing-15: calc(var(--spacing) * 15);
+  --spacing-15.5: calc(var(--spacing) * 15.5);
+  --spacing-18: calc(var(--spacing) * 18);
+  --spacing-19.5: calc(var(--spacing) * 19.5);
+  --spacing-22: calc(var(--spacing) * 22);
+  --spacing-23: calc(var(--spacing) * 23);
+  --spacing-25.5: calc(var(--spacing) * 25.5);
+  --spacing-30: calc(var(--spacing) * 30);
+  --spacing-33: calc(var(--spacing) * 33);
+  --spacing-34.5: calc(var(--spacing) * 34.5);
+  --spacing-37: calc(var(--spacing) * 37);
+  --spacing-38: calc(var(--spacing) * 38);
+  --spacing-38.5: calc(var(--spacing) * 38.5);
+  --spacing-39: calc(var(--spacing) * 39);
+  --spacing-43: calc(var(--spacing) * 43);
+  --spacing-44.5: calc(var(--spacing) * 44.5);
+  --spacing-45: calc(var(--spacing) * 45);
+  --spacing-51: calc(var(--spacing) * 51);
+  --spacing-54: calc(var(--spacing) * 54);
+  --spacing-55: calc(var(--spacing) * 55);
+  --spacing-59: calc(var(--spacing) * 59);
+  --spacing-62: calc(var(--spacing) * 62);
+  --spacing-63: calc(var(--spacing) * 63);
+  --spacing-65: calc(var(--spacing) * 65);
+  --spacing-66: calc(var(--spacing) * 66);
+  --spacing-68: calc(var(--spacing) * 68);
+  --spacing-69: calc(var(--spacing) * 69);
+  --spacing-70: calc(var(--spacing) * 70);
+  --spacing-79: calc(var(--spacing) * 79);
+  --spacing-79.5: calc(var(--spacing) * 79.5);
+  --spacing-82: calc(var(--spacing) * 82);
+  --spacing-85: calc(var(--spacing) * 85);
+  --spacing-87: calc(var(--spacing) * 87);
+  --spacing-89: calc(var(--spacing) * 89);
+  --spacing-91: calc(var(--spacing) * 91);
+  --spacing-92: calc(var(--spacing) * 92);
+  --spacing-99: calc(var(--spacing) * 99);
+  --spacing-100: calc(var(--spacing) * 100);
+  --spacing-105: calc(var(--spacing) * 105);
+  --spacing-112: calc(var(--spacing) * 112);
+  --spacing-115: calc(var(--spacing) * 115);
+  --spacing-120: calc(var(--spacing) * 120);
+  --spacing-124: calc(var(--spacing) * 124);
+  --spacing-132: calc(var(--spacing) * 132);
+  --spacing-135.5: calc(var(--spacing) * 135.5);
+  --spacing-137: calc(var(--spacing) * 137);
+  --spacing-137.5: calc(var(--spacing) * 137.5);
+  --spacing-148.5: calc(var(--spacing) * 148.5);
+  --spacing-160: calc(var(--spacing) * 160);
+  --spacing-161.5: calc(var(--spacing) * 161.5);
+  --spacing-183: calc(var(--spacing) * 183);
+  --spacing-280: calc(var(--spacing) * 280);
+  --spacing-300: calc(var(--spacing) * 300);
+  
+  /* Typography scale */
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-family-inter: 'Inter', sans-serif;
+  
+  /* Font sizes - these create text-* utilities */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-9xl: 8rem;
+  
+  /* Custom font sizes for Atomiton design system - direct values for Tailwind v4 */
+  --font-size-h1: 3rem;
+  --font-size-h2: 2.5rem;
+  --font-size-h3: 2rem;
+  --font-size-h4: 1.75rem;
+  --font-size-h5: 1.5rem;
+  --font-size-h6: 1.25rem;
+  --font-size-body-sm: 0.6875rem;
+  --font-size-body-md: 0.75rem;
+  --font-size-body-md-str: 0.75rem;
+  --font-size-body-lg: 0.8125rem;
+  --font-size-body-lg-str: 0.8125rem;
+  --font-size-heading: 0.875rem;
+  --font-size-heading-str: 0.875rem;
+  --font-size-title: 0.9375rem;
+  --font-size-title-str: 0.9375rem;
+  --font-size-title-lg: 1.125rem;
+  --font-size-p-sm: 0.8125rem;
+  --font-size-p-md: 0.9375rem;
+  
+  /* Border radius */
+  --radius-sm: 0.125rem;
+  --radius: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-2.5: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-1.25: 1.25rem;
+  --radius-2xl: 1rem;
+  --radius-1.75: 1.75rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+  
+  /* Shadows - using box-shadow naming for compatibility */
+  --shadow-sm: var(--box-shadow-depth-01);
+  --shadow: var(--box-shadow-toolbar);
+  --shadow-md: var(--box-shadow-prompt-input);
+  --shadow-lg: var(--box-shadow-popover);
+  
+  /* Additional shadow variants for direct use */
+  --shadow-toolbar: var(--box-shadow-toolbar);
+  --shadow-prompt-input: var(--box-shadow-prompt-input);
+  --shadow-depth-01: var(--box-shadow-depth-01);
+  --shadow-popover: var(--box-shadow-popover);
+  
+  /* Z-index scale */
+  --z-1: 1;
+  --z-2: 2;
+  --z-3: 3;
+  --z-10: 10;
+  --z-15: 15;
+  --z-19: 19;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-100: 100;
+  
+  /* Transition duration */
+  --duration-0: 0ms;
+  --duration-100: 100ms;
+  --duration-200: 200ms;
+  --duration-300: 300ms;
+  --duration-default: var(--default-transition-duration, 200ms);
+}
+
+/* Utility classes for migration period */
+@layer utilities {
+  /* Background utilities with alpha support */
+  .bg-shade-01-95 { background-color: rgba(252, 252, 252, 0.95); }
+  .bg-shade-06-30 { background-color: rgba(123, 123, 123, 0.3); }
+  .bg-shade-06-50 { background-color: rgba(123, 123, 123, 0.5); }
+  .bg-shade-07-05 { background-color: rgba(50, 50, 50, 0.05); }
+  .bg-shade-07-10 { background-color: rgba(50, 50, 50, 0.1); }
+  .bg-shade-08-05 { background-color: rgba(34, 34, 34, 0.05); }
+  .bg-shade-08-10 { background-color: rgba(34, 34, 34, 0.1); }
+  .bg-shade-09-05 { background-color: rgba(18, 18, 18, 0.05); }
+  .bg-shade-09-10 { background-color: rgba(18, 18, 18, 0.1); }
+  .bg-shade-09-35 { background-color: rgba(18, 18, 18, 0.35); }
+  
+  /* Typography utilities for Atomiton design system */
+  .text-h1 { 
+    font-size: 3rem;
+    line-height: 3.45rem;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+  }
+  .text-h2 {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+  }
+  .text-h3 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+  }
+  .text-h4 {
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+  }
+  .text-h5 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+  .text-h6 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+  .text-body-sm {
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .text-body-md {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .text-body-md-str {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .text-body-lg {
+    font-size: 0.8125rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .text-body-lg-str {
+    font-size: 0.8125rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+  }
+  .text-heading {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+  .text-heading-str {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .text-title {
+    font-size: 0.9375rem;
+    line-height: 1.5rem;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .text-title-str {
+    font-size: 0.9375rem;
+    line-height: 1.5rem;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .text-title-lg {
+    font-size: 1.125rem;
+    line-height: 1.6875rem;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+  .text-p-sm {
+    font-size: 0.8125rem;
+    line-height: 1.2188rem;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+  .text-p-md {
+    font-size: 0.9375rem;
+    line-height: 1.406rem;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+  }
+  
+  /* Scrollbar utilities - defined as Tailwind utilities */
+  .scrollbar-none {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;  /* Chrome, Safari and Opera */
+    }
+  }
+  
+  /* Data attribute selectors for HeadlessUI v2 */
+  [data-open] { --tw-data-open: true; }
+  [data-closed] { --tw-data-closed: true; }
+  [data-focus] { --tw-data-focus: true; }
+  [data-hover] { --tw-data-hover: true; }
+  [data-selected] { --tw-data-selected: true; }
+  [data-active] { --tw-data-active: true; }
+  [data-disabled] { --tw-data-disabled: true; }
+  [data-checked] { --tw-data-checked: true; }
+}
+
+/* Component-specific utilities that apps commonly need */
+@layer components {
+  .surface-primary {
+    background-color: var(--color-surface-01);
+    color: var(--color-shade-07);
+  }
+  
+  .surface-secondary {
+    background-color: var(--color-surface-02);
+    color: var(--color-shade-07);
+  }
+  
+  .surface-tertiary {
+    background-color: var(--color-surface-03);
+    color: var(--color-shade-07);
+  }
+  
+  .border-default {
+    border-color: var(--color-s-01);
+  }
+  
+  .border-strong {
+    border-color: var(--color-s-02);
+  }
+  
+  .text-primary {
+    color: var(--color-shade-09);
+  }
+  
+  .text-secondary {
+    color: var(--color-shade-06);
+  }
+}
