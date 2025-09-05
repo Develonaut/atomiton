@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = (props) => {
             </span>
           </>
         ) : (
-          props.children
+          "Hello"
         )}
       </span>
     </ButtonRoot>
