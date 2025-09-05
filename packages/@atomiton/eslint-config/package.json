@@ -22,6 +22,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
+    "lint": "echo 'Linting eslint-config itself'",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

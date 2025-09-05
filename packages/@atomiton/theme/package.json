@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     "./css": "./src/index.css",
+    "./src/index.css": "./src/index.css",
     "./variables": "./src/variables.css"
   },
   "files": [

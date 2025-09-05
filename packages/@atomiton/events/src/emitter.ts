@@ -261,9 +261,9 @@ function matchesPattern(
   return false;
 }
 
-function trackListener(
+function trackListener<T = unknown>(
   channel: string,
-  listener: SystemEventListener<unknown>,
+  listener: SystemEventListener<T>,
 ): void {
   if (!listenerMap.has(channel)) {
     listenerMap.set(channel, new Set());
@@ -271,9 +271,9 @@ function trackListener(
   listenerMap.get(channel)!.add(listener);
 }
 
-function untrackListener(
+function untrackListener<T = unknown>(
   channel: string,
-  listener: SystemEventListener<unknown>,
+  listener: SystemEventListener<T>,
 ): void {
   const listeners = listenerMap.get(channel);
   if (listeners) {

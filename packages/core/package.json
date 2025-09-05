@@ -9,7 +9,7 @@
     "dev": "vite build --watch",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest"

@@ -4,7 +4,7 @@ import Link from "@/router/Link";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Notifications from "@/components/Notifications";
-import Button from "@/components/Button";
+import { Button } from "@atomiton/ui";
 import User from "@/components/User";
 import Filters from "@/components/Filters";
 import Search from "@/components/Search";

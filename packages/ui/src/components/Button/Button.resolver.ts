@@ -6,6 +6,7 @@ export function resolveButtonProps<T extends Record<string, any>>(props: T): T {
 
   return {
     ...props,
+    as: anyProps.as === "link" ? "a" : anyProps.as || "button",
     // Handle legacy Brainwave variant props
     variant: anyProps.isPrimary
       ? "primary"

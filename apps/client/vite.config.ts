@@ -2,6 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,6 +13,17 @@ export default defineConfig({
   server: {
     port: 3001,
     host: true,
+    fs: {
+      // Allow serving files from workspace packages
+      allow: [
+        // Search up for workspace root
+        path.resolve(__dirname, "../.."),
+      ],
+    },
+  },
+  // Optimize deps to exclude workspace packages for better HMR
+  optimizeDeps: {
+    exclude: ["@atomiton/ui", "@atomiton/theme"],
   },
   build: {
     outDir: "dist",
@@ -19,7 +34,8 @@ export default defineConfig({
       output: {
         // Asset file naming
         assetFileNames: (assetInfo) => {
-          const info = assetInfo.name!.split(".");
+          const fileName = assetInfo.names?.[0] || assetInfo.name || "asset";
+          const info = fileName.split(".");
           const extType = info[info.length - 1];
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             return `images/[name]-[hash][extname]`;
