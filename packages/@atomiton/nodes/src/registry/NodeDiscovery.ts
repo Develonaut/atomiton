@@ -136,7 +136,7 @@ export class NodePackageDiscovery extends EventEmitter<DiscoveryEvents> {
       if (result.status === "fulfilled" && result.value) {
         successCount++;
       } else if (result.status === "rejected") {
-        this.emit("package:load-error", result.reason, filePaths[index]);
+        this.emit("package:load-error", result.reason, filePaths[index]!);
       }
     });
 

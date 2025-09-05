@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
+    "@atomiton/theme": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "^19",

@@ -2,7 +2,10 @@
   "name": "@atomiton/theme",
   "version": "0.1.0",
   "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
+    ".": "./src/index.ts",
     "./css": "./src/index.css",
     "./src/index.css": "./src/index.css",
     "./variables": "./src/variables.css"

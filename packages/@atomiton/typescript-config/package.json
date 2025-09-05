@@ -15,6 +15,8 @@
     "base.json",
     "node.json",
     "react-library.json",
-    "electron.json"
+    "electron.json",
+    "vite-lib.json",
+    "vite-app.json"
   ]
 }

@@ -3,7 +3,10 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/ui\"",
+    "dev:all": "turbo run dev",
+    "dev:libs": "turbo run dev --filter=\"@atomiton/core\" --filter=\"@atomiton/di\" --filter=\"@atomiton/nodes\"",
+    "watch": "turbo run watch",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
@@ -12,10 +15,14 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^9.34.0",
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "turbo": "^2.5.6",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vite": "^7.1.4",
+    "vitest": "^2.0.0"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

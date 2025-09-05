@@ -244,12 +244,15 @@ export class CSVParserLogic extends BaseNodeLogic<CSVParserConfig> {
     if (customHeaders) {
       headers = [...customHeaders];
       dataStartIndex = config.hasHeaders ? 1 : 0;
-    } else if (config.hasHeaders) {
+    } else if (config.hasHeaders && lines[0]) {
       headers = this.parseCSVLine(lines[0], config);
       dataStartIndex = 1;
-    } else {
+    } else if (lines[0]) {
       const firstLine = this.parseCSVLine(lines[0], config);
       headers = firstLine.map((_, index) => `Column_${index + 1}`);
+      dataStartIndex = 0;
+    } else {
+      headers = [];
       dataStartIndex = 0;
     }
 
@@ -290,7 +293,7 @@ export class CSVParserLogic extends BaseNodeLogic<CSVParserConfig> {
       }
 
       try {
-        const fields = this.parseCSVLine(line, config);
+        const fields = this.parseCSVLine(line!, config);
         totalFields += fields.length;
 
         if (config.trimFields) {
@@ -420,7 +423,7 @@ export class CSVParserLogic extends BaseNodeLogic<CSVParserConfig> {
 
       for (let i = 1; i < Math.min(records.length, 100); i++) {
         // Check first 100 records
-        const currentKeys = Object.keys(records[i]).sort();
+        const currentKeys = Object.keys(records[i]!).sort();
         if (JSON.stringify(currentKeys) !== JSON.stringify(firstKeys)) {
           warnings.push(
             `Inconsistent record structure detected at row ${i + 1}`,

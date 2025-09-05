@@ -136,7 +136,7 @@ export function selectAdapterForNode(
     const bestMatch = candidates[0];
     // Debug: Selected adapter for node ${definition.id}
 
-    return bestMatch.factory(nodeDefinition);
+    return bestMatch!.factory(nodeDefinition);
   }
 
   return null;
