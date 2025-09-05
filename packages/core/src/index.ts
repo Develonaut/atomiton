@@ -1,79 +1,40 @@
 // @atomiton/core - Main Package Export
-// Comprehensive node system for the Atomiton Blueprint platform
+// Public API for the Atomiton Blueprint platform
 
-// Export visualization adapters system
-export * from "./visualization";
+// ============================================================================
+// Re-export from @atomiton/store - Module-based API
+// ============================================================================
 
-// Export theme system
-export * from "./theme";
-
-// Export other core systems (excluding StoreClient to avoid duplicate exports)
 export {
-  ClientFactory,
-  BaseStorageClient,
-  FileSystemClient,
-  MemoryClient,
-  IndexedDBClient,
-  MonitoredStorageClient,
-  withMonitoring,
-  BaseExecutionClient,
-  WebWorkerClient,
-  NodeProcessClient,
-  EventClient,
-  eventClient,
-} from "./clients";
-export type {
-  IStorageClient,
-  StorageEvent,
-  IExecutionClient,
-  ProcessHandle,
-  SpawnOptions,
-  ProcessResult,
-  SystemEvent,
-} from "./clients";
+  // Core functions
+  initialize as initializeStore,
+  isInitialized as isStoreInitialized,
+  cleanup as cleanupStore,
 
-// Export platforms with renamed types to avoid conflicts
-export {
-  detectPlatform,
-  getPlatformInfo,
-  type PlatformInfo,
-  type PlatformFeatures,
-  type Platform as RuntimePlatform, // Rename to avoid conflict with node Platform type
-} from "./platforms";
+  // Domain methods
+  setTheme,
+  showNotification,
+  dismissNotification,
+  selectBlueprint,
+  addBlueprint,
+  executeBlueprint,
+  getStateSnapshot,
 
-// Export store system with renamed types to avoid conflicts
-export {
-  StoreClient,
-  storeClient,
-  StoreService,
-  storeService,
-  createUIStore,
-  UIStore,
-  UIActions,
-  UISelectors,
-  createSessionStore,
-  SessionStore,
-  SessionActions,
-  SessionSelectors,
-  createBlueprintStore,
-  BlueprintStore,
-  BlueprintActions,
-  BlueprintSelectors,
-  createExecutionStore,
-  ExecutionStore,
-  ExecutionActions,
-  ExecutionSelectors,
-} from "./store";
+  // Store access (advanced use)
+  getStores,
+
+  // Subscriptions
+  subscribeToUI,
+  subscribeToSession,
+  subscribeToBlueprint,
+  subscribeToExecution,
+} from "@atomiton/store";
 
 export type {
-  StoreConfig,
-  ZustandStore,
-  StateUpdater,
   StoreSubscription,
-  PersistedData,
   UIState,
   UIPreferences,
-  UITheme, // Renamed in store module to avoid conflict with theme module Theme type
+  UITheme,
   ColorScheme,
   LayoutMode,
   Notification,
@@ -91,4 +52,53 @@ export type {
   JobStatus,
   JobProgress,
   JobResult,
-} from "./store";
+} from "@atomiton/store";
+
+// ============================================================================
+// Re-export from @atomiton/events - Functional event system
+// ============================================================================
+
+export * from "@atomiton/events";
+
+// ============================================================================
+// Re-export from @atomiton/nodes
+// ============================================================================
+
+export * from "@atomiton/nodes";
+
+// ============================================================================
+// Export core systems
+// ============================================================================
+
+export * from "./visualization";
+export * from "./theme";
+
+export {
+  ClientFactory,
+  BaseStorageClient,
+  FileSystemClient,
+  MemoryClient,
+  IndexedDBClient,
+  MonitoredStorageClient,
+  withMonitoring,
+  BaseExecutionClient,
+  WebWorkerClient,
+  NodeProcessClient,
+} from "./clients";
+
+export type {
+  IStorageClient,
+  StorageEvent,
+  IExecutionClient,
+  ProcessHandle,
+  SpawnOptions,
+  ProcessResult,
+} from "./clients";
+
+export {
+  detectPlatform,
+  getPlatformInfo,
+  type PlatformInfo,
+  type PlatformFeatures,
+  type Platform as RuntimePlatform,
+} from "./platforms";

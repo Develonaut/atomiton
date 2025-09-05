@@ -2,7 +2,13 @@
   "name": "@atomiton/di",
   "version": "0.1.0",
   "description": "Dependency injection system for the Atomiton platform",
-  "keywords": ["dependency-injection", "DI", "IoC", "decorators", "typescript"],
+  "keywords": [
+    "dependency-injection",
+    "DI",
+    "IoC",
+    "decorators",
+    "typescript"
+  ],
   "author": "Atomiton",
   "license": "MIT",
   "type": "module",

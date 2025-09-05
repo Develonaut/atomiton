@@ -3,12 +3,31 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./base": "./base.js",
-    "./react-internal": "./react-internal.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./base": {
+      "types": "./dist/base.d.ts",
+      "default": "./dist/base.js"
+    },
+    "./react-internal": {
+      "types": "./dist/react-internal.d.ts",
+      "default": "./dist/react-internal.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@atomiton/typescript-config": "workspace:*",
     "@eslint/js": "^9.34.0",
+    "@types/node": "^24.3.1",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-only-warn": "^1.1.0",

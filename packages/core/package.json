@@ -24,9 +24,10 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
-    "@atomiton/theme": "workspace:*",
-    "immer": "^10.0.0",
-    "zustand": "^4.0.0"
+    "@atomiton/store": "workspace:*",
+    "@atomiton/events": "workspace:*",
+    "@atomiton/nodes": "workspace:*",
+    "@atomiton/theme": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",

@@ -4,6 +4,8 @@
   "description": "Atomiton Blueprint node implementations",
   "type": "module",
   "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
@@ -36,6 +38,7 @@
     "zod": "^3.0.0"
   },
   "devDependencies": {
+    "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "^19",

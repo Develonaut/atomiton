@@ -3,7 +3,7 @@ import { resolve } from "path";
 
 export default defineConfig({
   build: {
-    target: "node18",
+    target: "es2020",
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "AtomitonCore",
@@ -12,15 +12,37 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
+        // External packages
         "@atomiton/theme",
+        "@atomiton/store",
+        "@atomiton/events",
+        "@atomiton/nodes",
         "immer",
         "zustand",
-        "events",
+
+        // Node.js built-in modules
         "child_process",
         "crypto",
+        "events",
         "fs",
         "fs/promises",
         "path",
+        "stream",
+        "util",
+        "os",
+        "node:events",
+        "node:stream",
+        "node:child_process",
+        "node:fs",
+        "node:fs/promises",
+        "node:path",
+        "node:crypto",
+        "node:util",
+        "node:os",
+
+        // Other potential Node.js dependencies
+        "minipass",
+        /^node:/,
       ],
     },
     sourcemap: true,

@@ -52,11 +52,15 @@ const instances = new Map<ServiceIdentifier, Metadata>();
  * }
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types
-export function Service<T = unknown>(): Function;
-// eslint-disable-next-line @typescript-eslint/no-restricted-types
-export function Service<T = unknown>(options: Options<T>): Function;
-export function Service<T>({ factory }: Options<T> = {}) {
+export function Service<T = unknown>(): (
+  target: Constructable<T>,
+) => Constructable<T>;
+export function Service<T = unknown>(
+  options: Options<T>,
+): (target: Constructable<T>) => Constructable<T>;
+export function Service<T>({ factory }: Options<T> = {}): (
+  target: Constructable<T>,
+) => Constructable<T> {
   return function (target: Constructable<T>) {
     instances.set(target, { factory });
     return target;
