@@ -13,10 +13,6 @@
   },
   "files": [
     "base.json",
-    "node.json",
-    "react-library.json",
-    "electron.json",
-    "vite-lib.json",
-    "vite-app.json"
+    "react-library.json"
   ]
 }
