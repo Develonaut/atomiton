@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check-types": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
@@ -44,6 +44,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:^",
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.55.0",

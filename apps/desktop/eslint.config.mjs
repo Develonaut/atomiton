@@ -1,3 +1,3 @@
-export default {
-  ignores: ["dist", "node_modules"],
-};
+import config from "@atomiton/eslint-config/base";
+
+export default config;

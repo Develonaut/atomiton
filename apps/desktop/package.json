@@ -7,10 +7,11 @@
     "dev": "sleep .25 && electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false"
   },
   "devDependencies": {
+    "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:^",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
