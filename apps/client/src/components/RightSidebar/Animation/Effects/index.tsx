@@ -4,7 +4,7 @@ import Group from "../../Group";
 
 import { content } from "./content";
 
-const Effects = () => {
+function Effects() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -30,6 +30,6 @@ const Effects = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Effects;

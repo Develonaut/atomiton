@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { systemPropsMap } from "../systemPropsMap";
-import type { SystemProps } from "../../types";
 
 describe("systemPropsMap", () => {
   describe("fullWidth and fullHeight props", () => {
@@ -26,7 +25,9 @@ describe("systemPropsMap", () => {
 
     it("should convert fullWidth undefined to empty string", () => {
       const resolver = systemPropsMap.fullWidth;
-      expect(resolver(undefined as any)).toBe("");
+      expect(resolver(undefined as unknown as string | number | boolean)).toBe(
+        "",
+      );
     });
 
     it("should convert fullHeight boolean true to h-full class", () => {
@@ -51,7 +52,9 @@ describe("systemPropsMap", () => {
 
     it("should convert fullHeight undefined to empty string", () => {
       const resolver = systemPropsMap.fullHeight;
-      expect(resolver(undefined as any)).toBe("");
+      expect(resolver(undefined as unknown as string | number | boolean)).toBe(
+        "",
+      );
     });
   });
 
@@ -136,7 +139,9 @@ describe("systemPropsMap", () => {
     });
 
     it("should return empty string for invalid display values", () => {
-      expect(systemPropsMap.display("invalid" as any)).toBe("");
+      expect(
+        systemPropsMap.display("invalid" as string | number | boolean),
+      ).toBe("");
     });
   });
 
@@ -150,7 +155,9 @@ describe("systemPropsMap", () => {
     });
 
     it("should return empty string for invalid position values", () => {
-      expect(systemPropsMap.position("invalid" as any)).toBe("");
+      expect(
+        systemPropsMap.position("invalid" as string | number | boolean),
+      ).toBe("");
     });
 
     it("should handle position offset props", () => {
@@ -175,14 +182,18 @@ describe("systemPropsMap", () => {
       expect(systemPropsMap.flexDirection("column-reverse")).toBe(
         "flex-col-reverse",
       );
-      expect(systemPropsMap.flexDirection("invalid" as any)).toBe("");
+      expect(
+        systemPropsMap.flexDirection("invalid" as string | number | boolean),
+      ).toBe("");
     });
 
     it("should handle flexWrap values", () => {
       expect(systemPropsMap.flexWrap("nowrap")).toBe("flex-nowrap");
       expect(systemPropsMap.flexWrap("wrap")).toBe("flex-wrap");
       expect(systemPropsMap.flexWrap("wrap-reverse")).toBe("flex-wrap-reverse");
-      expect(systemPropsMap.flexWrap("invalid" as any)).toBe("");
+      expect(
+        systemPropsMap.flexWrap("invalid" as string | number | boolean),
+      ).toBe("");
     });
 
     it("should handle justifyContent values", () => {
@@ -198,7 +209,9 @@ describe("systemPropsMap", () => {
       expect(systemPropsMap.justifyContent("space-evenly")).toBe(
         "justify-evenly",
       );
-      expect(systemPropsMap.justifyContent("invalid" as any)).toBe("");
+      expect(
+        systemPropsMap.justifyContent("invalid" as string | number | boolean),
+      ).toBe("");
     });
 
     it("should handle alignItems values", () => {
@@ -207,7 +220,9 @@ describe("systemPropsMap", () => {
       expect(systemPropsMap.alignItems("center")).toBe("items-center");
       expect(systemPropsMap.alignItems("baseline")).toBe("items-baseline");
       expect(systemPropsMap.alignItems("stretch")).toBe("items-stretch");
-      expect(systemPropsMap.alignItems("invalid" as any)).toBe("");
+      expect(
+        systemPropsMap.alignItems("invalid" as string | number | boolean),
+      ).toBe("");
     });
 
     it("should handle flex grow/shrink/basis", () => {

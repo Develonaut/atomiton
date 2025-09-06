@@ -1,4 +1,4 @@
-import { Page, Locator } from "@playwright/test";
+import type { Page, Locator } from "@playwright/test";
 import { BasePage } from "./base-page";
 import { waitFor3DContent } from "../utils/test-helpers";
 

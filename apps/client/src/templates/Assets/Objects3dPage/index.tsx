@@ -6,7 +6,7 @@ import Assets from "@/components/Assets";
 
 import { content } from "./content";
 
-const Objects3dPage = () => {
+function Objects3dPage() {
   const [tab, setTab] = useState("all-objects");
 
   const tabs = [
@@ -39,6 +39,6 @@ const Objects3dPage = () => {
       />
     </Layout>
   );
-};
+}
 
 export default Objects3dPage;

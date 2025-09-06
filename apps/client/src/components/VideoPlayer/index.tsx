@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-const VideoPlayer = ({ className }: Props) => {
+function VideoPlayer({ className }: Props) {
   return (
     <div
       className={`absolute left-1/2 -translate-x-1/2 flex items-center h-11 px-3.5 border border-s-01 bg-surface-01 rounded-3xl shadow-depth-01 ${
@@ -29,6 +29,6 @@ const VideoPlayer = ({ className }: Props) => {
       </button>
     </div>
   );
-};
+}
 
 export default VideoPlayer;

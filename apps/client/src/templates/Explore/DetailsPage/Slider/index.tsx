@@ -6,7 +6,7 @@ import { useRef } from "react";
 
 import { content } from "./content";
 
-const Slider = () => {
+function Slider() {
   const swiperRef = useRef<SwiperType>(null);
 
   const handleClick = () => {
@@ -56,6 +56,6 @@ const Slider = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Slider;

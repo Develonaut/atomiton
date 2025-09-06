@@ -9,7 +9,7 @@ import Slider from "@/templates/Explore/DetailsPage/Slider";
 import Details from "@/templates/Explore/DetailsPage/Details";
 import Report from "@/templates/Explore/DetailsPage/Report";
 
-const DetailsPageAdapter = () => {
+function DetailsPageAdapter() {
   const navigate = useNavigate();
 
   return (
@@ -39,6 +39,6 @@ const DetailsPageAdapter = () => {
       </div>
     </LayoutOnlyHeader>
   );
-};
+}
 
 export default DetailsPageAdapter;

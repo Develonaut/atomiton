@@ -12,7 +12,9 @@
         "USERPROFILE",
         "APPDATA",
         "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL"
+        "ELECTRON_RENDERER_URL",
+        "CI",
+        "PLAYWRIGHT_BASE_URL"
       ]
     },
     "lint": {
@@ -23,7 +25,22 @@
         "USERPROFILE",
         "APPDATA",
         "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL"
+        "ELECTRON_RENDERER_URL",
+        "CI",
+        "PLAYWRIGHT_BASE_URL"
+      ]
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"],
+      "env": [
+        "NODE_ENV",
+        "HOME",
+        "USERPROFILE",
+        "APPDATA",
+        "JEST_WORKER_ID",
+        "ELECTRON_RENDERER_URL",
+        "CI",
+        "PLAYWRIGHT_BASE_URL"
       ]
     },
     "check-types": {
@@ -34,7 +51,9 @@
         "USERPROFILE",
         "APPDATA",
         "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL"
+        "ELECTRON_RENDERER_URL",
+        "CI",
+        "PLAYWRIGHT_BASE_URL"
       ]
     },
     "typecheck": {
@@ -45,7 +64,9 @@
         "USERPROFILE",
         "APPDATA",
         "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL"
+        "ELECTRON_RENDERER_URL",
+        "CI",
+        "PLAYWRIGHT_BASE_URL"
       ]
     },
     "dev": {

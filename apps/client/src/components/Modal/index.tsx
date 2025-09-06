@@ -15,14 +15,14 @@ type ModalProps = {
   hideCloseButton?: boolean;
 };
 
-const Modal = ({
+function Modal({
   className,
   classWrapper,
   open,
   onClose,
   children,
   hideCloseButton,
-}: ModalProps) => {
+}: ModalProps) {
   return (
     <Dialog className="relative z-50" open={open} onClose={onClose}>
       <DialogBackdrop
@@ -48,6 +48,6 @@ const Modal = ({
       </div>
     </Dialog>
   );
-};
+}
 
 export default Modal;

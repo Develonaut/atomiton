@@ -27,7 +27,7 @@ type ButtonAsLink = {
 type ButtonProps = CommonProps &
   (ButtonAsButton | ButtonAsAnchor | ButtonAsLink);
 
-const ButtonAdapter: React.FC<ButtonProps> = ({
+function ButtonAdapter({
   className,
   icon,
   children,
@@ -36,7 +36,7 @@ const ButtonAdapter: React.FC<ButtonProps> = ({
   isRed,
   as = "button",
   ...props
-}) => {
+}: ButtonProps) {
   const isLink = as === "link";
 
   // For React Router Link, we need to map href to 'to'
@@ -96,6 +96,6 @@ const ButtonAdapter: React.FC<ButtonProps> = ({
       </a>
     );
   }
-};
+}
 
 export default ButtonAdapter;

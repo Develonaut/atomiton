@@ -27,7 +27,7 @@ type ButtonAsLink = {
 type ButtonProps = CommonProps &
   (ButtonAsButton | ButtonAsAnchor | ButtonAsLink);
 
-const Button: React.FC<ButtonProps> = ({
+function Button({
   className,
   icon,
   children,
@@ -36,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({
   isRed,
   as = "button",
   ...props
-}) => {
+}: ButtonProps) {
   const isLink = as === "link";
   const Component: React.ElementType = isLink ? Link : as;
 
@@ -61,6 +61,6 @@ const Button: React.FC<ButtonProps> = ({
       <div className="relative z-2 flex items-center gap-2">{children}</div>
     </Component>
   );
-};
+}
 
 export default Button;

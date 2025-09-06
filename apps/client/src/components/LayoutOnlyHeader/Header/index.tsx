@@ -12,7 +12,7 @@ type Props = {
   className?: string;
 };
 
-const Header = ({ className }: Props) => {
+function Header({ className }: Props) {
   const [visibleSearch, setVisibleSearch] = useState(false);
   const [search, setSearch] = useState("");
   const pathname = usePathname();
@@ -64,6 +64,6 @@ const Header = ({ className }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Header;

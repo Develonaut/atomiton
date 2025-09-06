@@ -13,7 +13,7 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   blurDataURL?: string;
 }
 
-const Image: React.FC<ImageProps> = ({
+function Image({
   src,
   alt,
   width,
@@ -27,7 +27,7 @@ const Image: React.FC<ImageProps> = ({
   className,
   style,
   ...rest
-}) => {
+}: ImageProps) {
   const imgStyle: React.CSSProperties = {
     ...style,
   };
@@ -58,6 +58,6 @@ const Image: React.FC<ImageProps> = ({
       {...rest}
     />
   );
-};
+}
 
 export default Image;

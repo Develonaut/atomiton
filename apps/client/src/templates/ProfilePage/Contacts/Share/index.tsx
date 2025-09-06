@@ -28,7 +28,7 @@ type Props = {
     image: string;
   }[];
 };
-const Share = ({ images }: Props) => {
+function Share({ images }: Props) {
   const [open, setOpen] = useState(false);
   const { copy, isCopied } = useClipboard();
 
@@ -105,6 +105,6 @@ const Share = ({ images }: Props) => {
       </Modal>
     </>
   );
-};
+}
 
 export default Share;

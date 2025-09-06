@@ -31,7 +31,7 @@ export type PolymorphicProps<E extends ElementType = ElementType> = {
  */
 export type PolymorphicComponentProps<
   E extends ElementType,
-  Props = {},
+  Props = object,
 > = PolymorphicProps<E> &
   Props &
   Omit<ComponentPropsWithoutRef<E>, keyof (PolymorphicProps<E> & Props)>;
@@ -88,7 +88,7 @@ export interface DataAttributes {
 /**
  * Props for compound components that share context
  */
-export interface CompoundComponentContext<T = any> {
+export interface CompoundComponentContext<T = unknown> {
   value?: T;
   onChange?: (value: T) => void;
 }

@@ -1,8 +1,10 @@
 /**
  * Button Props Resolver to convert Brainwave 2.0 Props to Atomoton UI Props.
  */
-export function resolveButtonProps<T extends Record<string, any>>(props: T): T {
-  const anyProps = props as any;
+export function resolveButtonProps<T extends Record<string, unknown>>(
+  props: T,
+): T {
+  const anyProps = props as Record<string, unknown>;
 
   return {
     ...props,

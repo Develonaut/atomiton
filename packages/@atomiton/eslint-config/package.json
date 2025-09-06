@@ -23,6 +23,7 @@
     "build": "tsc",
     "clean": "rm -rf dist",
     "lint": "echo 'Linting eslint-config itself'",
+    "lint:fix": "echo 'Linting eslint-config itself with fix'",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
@@ -31,7 +32,6 @@
     "@types/node": "^24.3.1",
     "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-only-warn": "^1.1.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-turbo": "^2.5.0",

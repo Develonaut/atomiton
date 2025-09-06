@@ -1,7 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Icon from "@/components/Icon";
 
-const Report = () => {
+function Report() {
   const buttons = [
     {
       title: "Nudity & Sexual Content",
@@ -45,6 +45,6 @@ const Report = () => {
       </MenuItems>
     </Menu>
   );
-};
+}
 
 export default Report;

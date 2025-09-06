@@ -3,9 +3,9 @@
  * Pure function that takes props and returns data attributes object
  */
 export function generateDataAttributes(
-  props: Record<string, any>,
-): Record<string, any> {
-  const dataAttributes: Record<string, any> = {};
+  props: Record<string, unknown>,
+): Record<string, unknown> {
+  const dataAttributes: Record<string, unknown> = {};
 
   // Add common data attributes
   if (props.variant) dataAttributes["data-variant"] = props.variant;

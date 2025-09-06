@@ -8,7 +8,7 @@ import Slider from "./Slider";
 import Details from "./Details";
 import Report from "./Report";
 
-const DetailsPage = () => {
+function DetailsPage() {
   const router = useRouter();
 
   return (
@@ -38,6 +38,6 @@ const DetailsPage = () => {
       </div>
     </LayoutOnlyHeader>
   );
-};
+}
 
 export default DetailsPage;

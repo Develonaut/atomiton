@@ -8,7 +8,7 @@ import Gallery from "@/components/Gallery";
 
 import { gallery } from "./content";
 
-const ProfilePage = () => {
+function ProfilePage() {
   return (
     <LayoutOnlyHeader>
       <div className="py-11 max-md:py-8">
@@ -62,6 +62,6 @@ const ProfilePage = () => {
       </div>
     </LayoutOnlyHeader>
   );
-};
+}
 
 export default ProfilePage;

@@ -5,7 +5,7 @@ import Title from "../Title";
 import Option from "../Option";
 import Field from "../Field";
 
-const General = () => {
+function General() {
   const [username, setUsername] = useState("sophie");
   const [autoPrompt, setAutoPrompt] = useState(true);
   const [autoPlay, setAutoPlay] = useState(true);
@@ -63,6 +63,6 @@ const General = () => {
       </Option>
     </>
   );
-};
+}
 
 export default General;

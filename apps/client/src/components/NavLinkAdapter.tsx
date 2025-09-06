@@ -10,7 +10,7 @@ type NavLinkProps = {
   onClick?: () => void;
 };
 
-const NavLinkAdapter = ({ value, onClick }: NavLinkProps) => {
+function NavLinkAdapter({ value, onClick }: NavLinkProps) {
   const location = useLocation();
   const pathname = location.pathname;
   const isActive = (href: string) => pathname === href;
@@ -42,6 +42,6 @@ const NavLinkAdapter = ({ value, onClick }: NavLinkProps) => {
       {value.title}
     </Link>
   );
-};
+}
 
 export default NavLinkAdapter;

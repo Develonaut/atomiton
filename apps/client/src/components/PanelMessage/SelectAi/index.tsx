@@ -13,7 +13,7 @@ type Props = {
   className?: string;
 };
 
-const SelectAi = ({ className }: Props) => {
+function SelectAi({ className }: Props) {
   const [value, setValue] = useState(options[0]);
 
   return (
@@ -51,6 +51,6 @@ const SelectAi = ({ className }: Props) => {
       </ListboxOptions>
     </Listbox>
   );
-};
+}
 
 export default SelectAi;

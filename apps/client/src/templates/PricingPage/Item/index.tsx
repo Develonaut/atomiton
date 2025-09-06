@@ -14,7 +14,7 @@ type Props = {
   price: number;
 };
 
-const Item = ({ item, price }: Props) => {
+function Item({ item, price }: Props) {
   const planFree = item.title === "Free";
   const planCreator = item.title === "Creator";
   const planStudio = item.title === "Studio";
@@ -77,6 +77,6 @@ const Item = ({ item, price }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Item;

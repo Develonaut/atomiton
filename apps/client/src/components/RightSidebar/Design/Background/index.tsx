@@ -1,6 +1,6 @@
 import Group from "../../Group";
 
-const Background = () => {
+function Background() {
   return (
     <Group title="Background">
       <div className="flex items-center p-1 bg-surface-03 rounded-[0.625rem]">
@@ -13,6 +13,6 @@ const Background = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Background;

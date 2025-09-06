@@ -24,7 +24,7 @@ type Props = {
   items: ItemProps[];
   activeId: number;
 };
-const ZoomIn = ({ open, onClose, items, activeId }: Props) => {
+function ZoomIn({ open, onClose, items, activeId }: Props) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(activeId);
 
@@ -114,6 +114,6 @@ const ZoomIn = ({ open, onClose, items, activeId }: Props) => {
       </div>
     </Dialog>
   );
-};
+}
 
 export default ZoomIn;

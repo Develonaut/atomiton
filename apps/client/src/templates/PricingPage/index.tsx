@@ -12,7 +12,7 @@ const tabs = [
   { id: 1, name: "Pay yearly" },
 ];
 
-const ProfilePage = () => {
+function ProfilePage() {
   const [tab, setTab] = useState(tabs[0]);
 
   return (
@@ -38,6 +38,6 @@ const ProfilePage = () => {
       </div>
     </LayoutOnlyHeader>
   );
-};
+}
 
 export default ProfilePage;

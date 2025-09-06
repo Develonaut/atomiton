@@ -4,7 +4,7 @@ import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import Button from "@/components/Button";
 
-const Comment = () => {
+function Comment() {
   const [message, setMessage] = useState("");
   const isMessage = message !== "";
 
@@ -103,6 +103,6 @@ const Comment = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Comment;

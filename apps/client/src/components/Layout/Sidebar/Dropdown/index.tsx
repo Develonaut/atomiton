@@ -17,7 +17,7 @@ type DropdownProps = {
   };
 };
 
-const Dropdown = ({ value }: DropdownProps) => {
+function Dropdown({ value }: DropdownProps) {
   const pathname = usePathname();
   const isActive = value.href && pathname.includes(value.href);
   const isActiveLink = value.list?.some((item) => pathname.includes(item.href));
@@ -85,6 +85,6 @@ const Dropdown = ({ value }: DropdownProps) => {
       </AnimateHeight>
     </div>
   );
-};
+}
 
 export default Dropdown;

@@ -6,7 +6,7 @@ import Assets from "@/components/Assets";
 
 import { content } from "./content";
 
-const MaterialsPage = () => {
+function MaterialsPage() {
   const [tab, setTab] = useState("all-objects");
 
   const tabs = [
@@ -39,6 +39,6 @@ const MaterialsPage = () => {
       />
     </Layout>
   );
-};
+}
 
 export default MaterialsPage;

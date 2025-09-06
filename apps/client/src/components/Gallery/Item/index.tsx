@@ -12,7 +12,7 @@ type Props = {
   };
 };
 
-const Item = ({ value }: Props) => {
+function Item({ value }: Props) {
   const [loaded, setLoaded] = useState(false);
   const idTooltip = useId();
 
@@ -71,6 +71,6 @@ const Item = ({ value }: Props) => {
       <Tooltip id={idTooltip} />
     </div>
   );
-};
+}
 
 export default Item;

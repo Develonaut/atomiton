@@ -5,9 +5,9 @@ import Head from "./Head";
 import Design from "./Design";
 import Animation from "./Animation";
 import useStore from "@/store";
-import { TabItem } from "@/types";
+import type { TabItem } from "@/types";
 
-const RightSidebar = () => {
+function RightSidebar() {
   const { isAnimationSettings, openAnimationSettings, closeAnimationSettings } =
     useStore((state) => state);
 
@@ -35,6 +35,6 @@ const RightSidebar = () => {
       {!isAnimationSettings && <ViewController vertical />}
     </div>
   );
-};
+}
 
 export default RightSidebar;

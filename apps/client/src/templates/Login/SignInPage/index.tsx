@@ -7,7 +7,7 @@ import Login from "@/components/Login";
 import Image from "@/components/Image";
 import Field from "@/components/Field";
 
-const SignInPage = () => {
+function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -58,6 +58,6 @@ const SignInPage = () => {
       </div>
     </Login>
   );
-};
+}
 
 export default SignInPage;

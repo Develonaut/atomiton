@@ -28,7 +28,6 @@ function createWindow(): void {
     ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
     : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
 
-  console.log(`Loading app from: ${appUrl}`);
   mainWindow.loadURL(appUrl);
 }
 
@@ -39,7 +38,9 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  ipcMain.on("ping", () => console.log("pong"));
+  ipcMain.on("ping", () => {
+    // Ping handler for testing IPC communication
+  });
 
   createWindow();
 

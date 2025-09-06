@@ -7,7 +7,7 @@ const accesses = [
   { id: 1, name: "can edit" },
 ];
 
-const Head = () => {
+function Head() {
   const [search, setSearch] = useState("");
   const [access, setAccess] = useState(accesses[0]);
 
@@ -39,6 +39,6 @@ const Head = () => {
       <Button isSecondary>Invite</Button>
     </div>
   );
-};
+}
 
 export default Head;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import NewComment from "./NewComment";
 import Comment from "./Comment";
 
-const Comments = () => {
+function Comments() {
   const [newComment, setNewComment] = useState<{
     top: number;
     left: number;
@@ -79,6 +79,6 @@ const Comments = () => {
       </div>
     </>
   );
-};
+}
 
 export default Comments;

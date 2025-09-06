@@ -3,7 +3,7 @@ import Item from "./Item";
 
 import { content } from "./content";
 
-const Scene = () => {
+function Scene() {
   const [selected, setSelected] = useState(4);
 
   return (
@@ -18,6 +18,6 @@ const Scene = () => {
       ))}
     </div>
   );
-};
+}
 
 export default Scene;

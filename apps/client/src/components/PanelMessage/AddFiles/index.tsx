@@ -5,7 +5,7 @@ type Props = {
   className?: string;
 };
 
-const AddFiles = ({ className }: Props) => {
+function AddFiles({ className }: Props) {
   const items = [
     {
       title: "Add photos or videos",
@@ -55,6 +55,6 @@ const AddFiles = ({ className }: Props) => {
       </MenuItems>
     </Menu>
   );
-};
+}
 
 export default AddFiles;

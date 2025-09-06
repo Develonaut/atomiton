@@ -5,7 +5,7 @@ import Search from "./Search";
 
 import { folders } from "./folders";
 
-const Folders = () => {
+function Folders() {
   const [search, setSearch] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,6 +28,6 @@ const Folders = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Folders;

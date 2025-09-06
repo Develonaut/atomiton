@@ -168,15 +168,17 @@ type IconProps = {
   fill?: string;
 };
 
-const Icon = ({ className, name, fill }: IconProps) => (
-  <svg
-    className={`inline-flex size-5 ${className || ""}`}
-    width={20}
-    height={20}
-    viewBox="0 0 20 20"
-  >
-    <path fill={fill} d={icons[name]}></path>
-  </svg>
-);
+function Icon({ className, name, fill }: IconProps) {
+  return (
+    <svg
+      className={`inline-flex size-5 ${className || ""}`}
+      width={20}
+      height={20}
+      viewBox="0 0 20 20"
+    >
+      <path fill={fill} d={icons[name]}></path>
+    </svg>
+  );
+}
 
 export default Icon;

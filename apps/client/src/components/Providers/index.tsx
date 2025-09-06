@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Providers = ({ children }: Props) => {
+function Providers({ children }: Props) {
   const styles =
     "!p-2 !pr-4 !bg-shade-09 !rounded-full !text-[0.75rem] !font-medium !text-shade-01 !shadow-[0_-4px_12px_0px_rgba(0,0,0,0.15)_inset,0px_0px_4px_1px_rgba(255,255,255,0.25)_inset,0px_29px_12px_0px_rgba(0,0,0,0.02),0px_16px_10px_0px_rgba(0,0,0,0.08),0px_7px_7px_0px_rgba(0,0,0,0.13),0px_2px_4px_0px_rgba(0,0,0,0.15)]";
   return (
@@ -46,6 +46,6 @@ const Providers = ({ children }: Props) => {
       </Toaster>
     </>
   );
-};
+}
 
 export default Providers;

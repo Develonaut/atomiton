@@ -12,7 +12,7 @@ type FieldProps = {
   forgotPassword?: boolean;
 };
 
-const Field = ({
+function Field({
   className,
   classInput,
   label,
@@ -24,7 +24,7 @@ const Field = ({
   ...inputProps
 }: FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> &
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <div className={`${className || ""}`}>
       {label && (
@@ -70,6 +70,6 @@ const Field = ({
             </div> */}
     </div>
   );
-};
+}
 
 export default Field;

@@ -5,7 +5,7 @@ import Icon from "@/components/Icon";
 
 import { images } from "./content";
 
-const Images = () => {
+function Images() {
   const idTooltip = useId();
 
   return (
@@ -38,6 +38,6 @@ const Images = () => {
       <Tooltip id={idTooltip} />
     </div>
   );
-};
+}
 
 export default Images;

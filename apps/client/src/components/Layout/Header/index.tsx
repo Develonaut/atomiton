@@ -14,7 +14,7 @@ type Props = {
   onOpen: () => void;
 };
 
-const Header = ({ onOpen }: Props) => {
+function Header({ onOpen }: Props) {
   const [search, setSearch] = useState("");
   const disabled = true;
   const pathname = usePathname();
@@ -84,6 +84,6 @@ const Header = ({ onOpen }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Header;

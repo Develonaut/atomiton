@@ -17,7 +17,7 @@ type ItemProps = {
   onClick: () => void;
 };
 
-const Item = ({ title, active, onClick }: ItemProps) => {
+function Item({ title, active, onClick }: ItemProps) {
   return (
     <MenuItem
       className="flex items-center w-full h-9 px-2.5 rounded-[0.625rem] cursor-pointer transition-colors data-focus:bg-surface-03"
@@ -33,13 +33,13 @@ const Item = ({ title, active, onClick }: ItemProps) => {
       {title}
     </MenuItem>
   );
-};
+}
 
 type Props = {
   onlyBtnIcon?: boolean;
 };
 
-const Filters = ({ onlyBtnIcon }: Props) => {
+function Filters({ onlyBtnIcon }: Props) {
   const [type, setType] = useState(0);
   const [sort, setSort] = useState(0);
 
@@ -102,6 +102,6 @@ const Filters = ({ onlyBtnIcon }: Props) => {
       </MenuItems>
     </Menu>
   );
-};
+}
 
 export default Filters;

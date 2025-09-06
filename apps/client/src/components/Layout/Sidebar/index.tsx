@@ -12,7 +12,7 @@ type Props = {
   onClose: () => void;
 };
 
-const Sidebar = ({ visible, onClose }: Props) => {
+function Sidebar({ visible, onClose }: Props) {
   return (
     <div
       className={`fixed top-0 left-0 bottom-0 z-10 w-55 border-r bg-surface-01 border-s-01 max-lg:z-50 max-lg:shadow-popover max-lg:w-62 max-lg:transition-transform max-lg:duration-300 max-md:w-full ${
@@ -60,6 +60,6 @@ const Sidebar = ({ visible, onClose }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Sidebar;

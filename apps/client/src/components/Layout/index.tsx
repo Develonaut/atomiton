@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const Layout = ({ children }: Props) => {
+function Layout({ children }: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -22,6 +22,6 @@ const Layout = ({ children }: Props) => {
       {children}
     </div>
   );
-};
+}
 
 export default Layout;

@@ -1,9 +1,6 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import EmojiPicker, {
-  EmojiClickData,
-  Theme,
-  Categories,
-} from "emoji-picker-react";
+import type { EmojiClickData } from "emoji-picker-react";
+import EmojiPicker, { Theme, Categories } from "emoji-picker-react";
 import Icon from "@/components/Icon";
 
 type EmojiType = {
@@ -12,7 +9,7 @@ type EmojiType = {
   onEmojiClick: (emoji: EmojiClickData) => void;
 };
 
-const Emoji = ({ classButton, classMenuItems, onEmojiClick }: EmojiType) => {
+function Emoji({ classButton, classMenuItems, onEmojiClick }: EmojiType) {
   return (
     <Popover>
       <PopoverButton className={`text-0 outline-0 ${classButton || ""}`}>
@@ -45,6 +42,6 @@ const Emoji = ({ classButton, classMenuItems, onEmojiClick }: EmojiType) => {
       </PopoverPanel>
     </Popover>
   );
-};
+}
 
 export default Emoji;

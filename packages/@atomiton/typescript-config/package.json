@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "echo 'No linting needed for config-only package'",
+    "lint:fix": "echo 'No linting fixes needed for config-only package'",
     "typecheck": "echo 'No TypeScript to check for config-only package'"
   },
   "publishConfig": {

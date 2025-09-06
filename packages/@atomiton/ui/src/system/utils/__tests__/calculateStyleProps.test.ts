@@ -282,7 +282,7 @@ describe("calculateStyleProps", () => {
         },
       ];
 
-      testCases.forEach(({ input, expected, description }) => {
+      testCases.forEach(({ input, expected }) => {
         const result = calculateStyleProps(input);
         expect(result.disabled).toBe(expected.disabled);
         expect(result.loading).toBe(expected.loading);
@@ -292,7 +292,7 @@ describe("calculateStyleProps", () => {
 
   describe("performance considerations", () => {
     it("should handle large props objects efficiently", () => {
-      const largeProps: Record<string, any> = {
+      const largeProps: Record<string, unknown> = {
         disabled: false,
         loading: true,
       };
@@ -355,7 +355,9 @@ describe("calculateStyleProps", () => {
         customProp: "test-value",
       };
 
-      const result = calculateStyleProps(props);
+      const result = calculateStyleProps(
+        props as unknown as Record<string, unknown>,
+      );
 
       // Should preserve input types and add calculated fields
       expect(result.variant).toBe("primary");

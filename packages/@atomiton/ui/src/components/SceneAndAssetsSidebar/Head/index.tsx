@@ -1,7 +1,7 @@
 import Link from "@/components/Link";
 import Image from "@/components/Image";
 
-function Head({}) {
+function Head() {
   return (
     <div className="p-4 pb-3 border-b border-[#ECECEC]">
       <div className="flex justify-between items-center mb-3">

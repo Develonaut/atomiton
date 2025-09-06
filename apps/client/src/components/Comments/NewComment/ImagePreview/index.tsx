@@ -6,7 +6,7 @@ type Props = {
   onRemove: (index: number) => void;
 };
 
-const ImagePreview = ({ images, onRemove }: Props) => {
+function ImagePreview({ images, onRemove }: Props) {
   if (images.length === 0) return null;
 
   return (
@@ -34,6 +34,6 @@ const ImagePreview = ({ images, onRemove }: Props) => {
       ))}
     </div>
   );
-};
+}
 
 export default ImagePreview;

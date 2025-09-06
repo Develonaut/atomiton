@@ -37,7 +37,7 @@ vi.mock("../utils/extractSystemProps", () => ({
 
 vi.mock("../utils/generateDataAttributes", () => ({
   generateDataAttributes: vi.fn((props) => {
-    const dataAttributes: Record<string, any> = {};
+    const dataAttributes: Record<string, unknown> = {};
     if (props.variant) dataAttributes["data-variant"] = props.variant;
     if (props.size) dataAttributes["data-size"] = props.size;
     if (props.loading) {
@@ -83,25 +83,50 @@ vi.mock("../utils/calculateStyleProps", () => ({
 }));
 
 // Test components
-const BaseButton = forwardRef<HTMLButtonElement, any>(
+interface BaseButtonProps
+  extends React.PropsWithChildren<Record<string, unknown>> {
+  className?: string;
+}
+
+const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
   ({ className, children, ...props }, ref) => (
-    <button ref={ref} className={className} {...props}>
+    <button
+      ref={ref}
+      className={className}
+      {...props}
+    >
       {children}
     </button>
   ),
 );
 BaseButton.displayName = "BaseButton";
 
-const BaseDiv = forwardRef<HTMLDivElement, any>(
+interface BaseDivProps
+  extends React.PropsWithChildren<Record<string, unknown>> {
+  className?: string;
+}
+
+const BaseDiv = forwardRef<HTMLDivElement, BaseDivProps>(
   ({ className, children, ...props }, ref) => (
-    <div ref={ref} className={className} {...props}>
+    <div
+      ref={ref}
+      className={className}
+      {...props}
+    >
       {children}
     </div>
   ),
 );
 BaseDiv.displayName = "BaseDiv";
 
-const CustomComponent = forwardRef<HTMLDivElement, any>(
+interface CustomComponentProps
+  extends React.PropsWithChildren<Record<string, unknown>> {
+  className?: string;
+  variant?: string;
+  customProp?: string;
+}
+
+const CustomComponent = forwardRef<HTMLDivElement, CustomComponentProps>(
   ({ className, variant, customProp, children, ...props }, ref) => (
     <div
       ref={ref}
@@ -365,9 +390,12 @@ describe("styled component wrapper", () => {
 
   describe("DOM prop filtering", () => {
     it("should filter out invalid DOM props for HTML elements", () => {
-      const StyledButton = styled("button" as any, {
-        name: "html-button",
-      });
+      const StyledButton = styled(
+        "button" as unknown as React.ComponentType<Record<string, unknown>>,
+        {
+          name: "html-button",
+        },
+      );
 
       render(
         <StyledButton

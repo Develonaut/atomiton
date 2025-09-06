@@ -11,7 +11,7 @@ interface PropsLine {
   active?: boolean;
 }
 
-const Line = ({ title, keyName, onClick, active }: PropsLine) => {
+function Line({ title, keyName, onClick, active }: PropsLine) {
   return (
     <button
       className="flex items-center w-full h-9 px-1.5 rounded-[0.625rem] transition-colors hover:bg-surface-03"
@@ -28,9 +28,9 @@ const Line = ({ title, keyName, onClick, active }: PropsLine) => {
       <div className="key min-w-8.5 ml-auto text-center">{keyName}</div>
     </button>
   );
-};
+}
 
-const Zoom = () => {
+function Zoom() {
   const [percentage, setPercentage] = useState(100);
   const inputRef = useRef<HTMLInputElement>(null);
   const [activeId, setActiveId] = useState(2);
@@ -118,6 +118,6 @@ const Zoom = () => {
       </PopoverPanel>
     </Popover>
   );
-};
+}
 
 export default Zoom;

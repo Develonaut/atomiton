@@ -5,12 +5,12 @@ import Catalog from "@/components/Catalog";
 
 import { content } from "./content";
 
-const LikesPage = () => {
+function LikesPage() {
   return (
     <Layout>
       <Catalog title="Likes" content={content} />
     </Layout>
   );
-};
+}
 
 export default LikesPage;

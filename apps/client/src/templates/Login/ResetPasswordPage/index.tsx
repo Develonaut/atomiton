@@ -6,7 +6,7 @@ import Button from "@/components/Button";
 import Login from "@/components/Login";
 import Field from "@/components/Field";
 
-const ForgotPasswordPage = () => {
+function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
 
   return (
@@ -33,6 +33,6 @@ const ForgotPasswordPage = () => {
       </div>
     </Login>
   );
-};
+}
 
 export default ForgotPasswordPage;

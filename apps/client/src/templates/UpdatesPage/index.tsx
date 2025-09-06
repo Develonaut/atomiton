@@ -5,7 +5,7 @@ import Image from "@/components/Image";
 
 import { content } from "./content";
 
-const UpdatesPage = () => {
+function UpdatesPage() {
   return (
     <LayoutOnlyHeader>
       <div className="py-12 max-md:py-8">
@@ -42,6 +42,6 @@ const UpdatesPage = () => {
       </div>
     </LayoutOnlyHeader>
   );
-};
+}
 
 export default UpdatesPage;

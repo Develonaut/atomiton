@@ -15,7 +15,7 @@ type Props = {
   };
 };
 
-const Gallery = ({ className, gallery, config }: Props) => {
+function Gallery({ className, gallery, config }: Props) {
   return (
     <div className={className || ""}>
       <Masonry
@@ -26,6 +26,6 @@ const Gallery = ({ className, gallery, config }: Props) => {
       />
     </div>
   );
-};
+}
 
 export default Gallery;

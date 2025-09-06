@@ -3,7 +3,7 @@ import Select from "@/components/Select";
 import Icon from "@/components/Icon";
 import Group from "../../Group";
 
-const Artboard = () => {
+function Artboard() {
   const xPostOptions = [
     { id: 0, name: "800x600" },
     { id: 1, name: "1024x768" },
@@ -65,6 +65,6 @@ const Artboard = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Artboard;

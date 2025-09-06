@@ -8,7 +8,7 @@ type Props = {
   type?: string;
 };
 
-const Field = ({ value, onChange, placeholder, type }: Props) => {
+function Field({ value, onChange, placeholder, type }: Props) {
   const [edit, setEdit] = useState(false);
   const [previousValue, setPreviousValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -65,6 +65,6 @@ const Field = ({ value, onChange, placeholder, type }: Props) => {
       </button>
     </div>
   );
-};
+}
 
 export default Field;

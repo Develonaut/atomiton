@@ -14,7 +14,7 @@ type Props = {
   }[];
 };
 
-const Catalog = ({ title, content }: Props) => {
+function Catalog({ title, content }: Props) {
   const scrollRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
   const { y } = useWindowScroll();
@@ -47,6 +47,6 @@ const Catalog = ({ title, content }: Props) => {
       </div>
     </>
   );
-};
+}
 
 export default Catalog;

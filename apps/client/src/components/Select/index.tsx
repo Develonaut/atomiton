@@ -26,7 +26,7 @@ type SelectProps = {
   icon?: string;
 };
 
-const Select = ({
+function Select({
   className,
   classButton,
   classIcon,
@@ -39,7 +39,7 @@ const Select = ({
   isMedium,
   isWhite,
   icon,
-}: SelectProps) => {
+}: SelectProps) {
   return (
     <Listbox
       className={`${className || ""}`}
@@ -100,6 +100,6 @@ const Select = ({
       </ListboxOptions>
     </Listbox>
   );
-};
+}
 
 export default Select;

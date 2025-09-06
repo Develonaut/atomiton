@@ -4,7 +4,7 @@ import SubmitButton from "@/components/SubmitButton";
 import CommentCursor from "@/components/CommentCursor";
 import ImagePreview from "./ImagePreview";
 
-function NewComment({}) {
+function NewComment() {
   const [message, setMessage] = useState("");
   const isMessage = message.trim() !== "";
 

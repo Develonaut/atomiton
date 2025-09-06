@@ -3,8 +3,8 @@
  * Pure function that prepares props for CVA styles
  */
 export function calculateStyleProps(
-  props: Record<string, any>,
-): Record<string, any> {
+  props: Record<string, unknown>,
+): Record<string, unknown> {
   return {
     ...props,
     // Common state calculations for CVA

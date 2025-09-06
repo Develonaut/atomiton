@@ -14,7 +14,7 @@ type Props = {
   onClick: () => void;
 };
 
-const Variations = ({ onClick }: Props) => {
+function Variations({ onClick }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -64,6 +64,6 @@ const Variations = ({ onClick }: Props) => {
       </PopoverPanel>
     </Popover>
   );
-};
+}
 
 export default Variations;

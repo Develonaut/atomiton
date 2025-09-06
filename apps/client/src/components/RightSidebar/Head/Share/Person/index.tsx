@@ -17,13 +17,7 @@ const accesses = [
   { id: 1, name: "can edit" },
 ];
 
-const Person = ({
-  name,
-  email,
-  avatar,
-  accessPerson,
-  isRemoveButton,
-}: Props) => {
+function Person({ name, email, avatar, accessPerson, isRemoveButton }: Props) {
   const idTooltip = useId();
   const [access, setAccess] = useState(
     accesses[accessPerson === "view" ? 0 : 1] || accesses[0] || null,
@@ -72,6 +66,6 @@ const Person = ({
       <Tooltip id={idTooltip} />
     </div>
   );
-};
+}
 
 export default Person;

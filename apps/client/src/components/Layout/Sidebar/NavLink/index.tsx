@@ -11,7 +11,7 @@ type NavLinkProps = {
   onClick?: () => void;
 };
 
-const NavLink = ({ value, onClick }: NavLinkProps) => {
+function NavLink({ value, onClick }: NavLinkProps) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
 
@@ -42,6 +42,6 @@ const NavLink = ({ value, onClick }: NavLinkProps) => {
       {value.title}
     </Link>
   );
-};
+}
 
 export default NavLink;

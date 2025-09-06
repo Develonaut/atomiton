@@ -10,7 +10,6 @@ function Folders() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
   };
 
   return (

@@ -422,10 +422,13 @@ describe("filterDOMProps", () => {
         onClick: () => {},
       };
 
-      const result = filterDOMProps(props, false);
+      const result = filterDOMProps(
+        props as unknown as Record<string, unknown>,
+        false,
+      );
 
       // Type assertion to verify type safety
-      const typedResult: TestProps = result;
+      const typedResult = result as unknown as TestProps;
       expect(typedResult.variant).toBe("primary");
       expect(typedResult.customProp).toBe("test");
       expect(typedResult.onClick).toBe(props.onClick);
@@ -481,7 +484,7 @@ describe("filterDOMProps", () => {
         lineHeight: "relaxed",
       };
 
-      const validProps: Record<string, any> = {};
+      const validProps: Record<string, unknown> = {};
       Array.from({ length: 50 }, (_, i) => {
         validProps[`valid-prop-${i}`] = `value-${i}`;
       });

@@ -4,7 +4,7 @@ import Image from "@/components/Image";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 
-const NewMessage = () => {
+function NewMessage() {
   const [message, setMessage] = useState("");
 
   return (
@@ -34,6 +34,6 @@ const NewMessage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default NewMessage;

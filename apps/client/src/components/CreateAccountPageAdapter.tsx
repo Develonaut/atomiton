@@ -7,7 +7,7 @@ import Login from "@/components/Login";
 import Image from "@/components/Image";
 import Field from "@/components/Field";
 
-const CreateAccountPageAdapter = () => {
+function CreateAccountPageAdapter() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -57,6 +57,6 @@ const CreateAccountPageAdapter = () => {
       </div>
     </Login>
   );
-};
+}
 
 export default CreateAccountPageAdapter;

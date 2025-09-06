@@ -24,23 +24,25 @@ type Props = {
   }[];
 };
 
-const Contacts = ({ gallery }: Props) => (
-  <div className="flex gap-2 pt-2.5 max-md:mt-2 max-md:pl-24">
-    <div className="flex gap-2">
-      {socials.map((social, index) => (
-        <a
-          className="social"
-          key={index}
-          href={social.href}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Icon className="fill-primary" name={social.icon} />
-        </a>
-      ))}
+function Contacts({ gallery }: Props) {
+  return (
+    <div className="flex gap-2 pt-2.5 max-md:mt-2 max-md:pl-24">
+      <div className="flex gap-2">
+        {socials.map((social, index) => (
+          <a
+            className="social"
+            key={index}
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon className="fill-primary" name={social.icon} />
+          </a>
+        ))}
+      </div>
+      <Share images={gallery.slice(0, 3)} />
     </div>
-    <Share images={gallery.slice(0, 3)} />
-  </div>
-);
+  );
+}
 
 export default Contacts;

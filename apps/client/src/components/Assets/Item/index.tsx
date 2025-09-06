@@ -14,7 +14,7 @@ type Props = {
   items: ItemProps[];
 };
 
-const Item = ({ item, items }: Props) => {
+function Item({ item, items }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -49,6 +49,6 @@ const Item = ({ item, items }: Props) => {
       </div>
     </>
   );
-};
+}
 
 export default Item;

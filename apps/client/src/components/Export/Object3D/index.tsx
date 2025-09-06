@@ -6,7 +6,7 @@ import Line from "../Line";
 
 import { formats, cameraOptions, materialOptions } from "./content";
 
-const Object3D = () => {
+function Object3D() {
   const [format, setFormat] = useState(formats[0]);
   const [camera, setCamera] = useState(cameraOptions[0]);
   const [material, setMaterial] = useState(materialOptions[0]);
@@ -48,6 +48,6 @@ const Object3D = () => {
       </Button>
     </div>
   );
-};
+}
 
 export default Object3D;

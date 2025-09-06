@@ -8,7 +8,7 @@ import Foot from "./Foot";
 
 import { people } from "./people";
 
-const Share = () => {
+function Share() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -51,6 +51,6 @@ const Share = () => {
       </Modal>
     </>
   );
-};
+}
 
 export default Share;

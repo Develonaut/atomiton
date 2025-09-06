@@ -12,7 +12,7 @@ import Details from "./Details";
 
 import { content } from "./content";
 
-const Notifications = () => {
+function Notifications() {
   const [visible, setVisible] = useState(false);
   const isNewNotification = true;
   const [tab, setTab] = useState("all");
@@ -92,6 +92,6 @@ const Notifications = () => {
       </PopoverPanel>
     </Popover>
   );
-};
+}
 
 export default Notifications;

@@ -10,7 +10,7 @@ import Modal from "@/components/Modal";
 import Folders from "../Folders";
 import DeleteFile from "../DeleteFile";
 
-const Menu = () => {
+function Menu() {
   const [openModalFolders, setOpenModalFolders] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
 
@@ -92,6 +92,6 @@ const Menu = () => {
       </Modal>
     </>
   );
-};
+}
 
 export default Menu;

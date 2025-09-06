@@ -4,7 +4,7 @@ import Export from "@/components/Export";
 import Zoom from "@/components/Zoom";
 import useStore from "@/store";
 
-const Toolbar = () => {
+function Toolbar() {
   const { openComments, closeComments, openResizeImage, closeResizeImage } =
     useStore((state) => state);
   const [active, setActive] = useState<number | null>(0);
@@ -84,6 +84,6 @@ const Toolbar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Toolbar;

@@ -2,22 +2,20 @@
 // Provides the same API as Next.js Link component
 
 import React from "react";
-import {
-  Link as RouterLink,
-  LinkProps as RouterLinkProps,
-} from "react-router-dom";
+import type { LinkProps as RouterLinkProps } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 interface LinkProps extends Omit<RouterLinkProps, "to"> {
   href: string;
   children: React.ReactNode;
 }
 
-const Link: React.FC<LinkProps> = ({ href, children, ...props }) => {
+function Link({ href, children, ...props }: LinkProps) {
   return (
     <RouterLink to={href} {...props}>
       {children}
     </RouterLink>
   );
-};
+}
 
 export default Link;

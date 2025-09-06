@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/Icon";
 
-const Isometric = () => {
+function Isometric() {
   const [range, setRange] = useState(0.283);
 
   return (
@@ -31,6 +31,6 @@ const Isometric = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Isometric;

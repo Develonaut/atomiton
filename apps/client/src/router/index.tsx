@@ -2,11 +2,13 @@ import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 // Loading component for lazy loaded routes
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="text-lg">Loading...</div>
-  </div>
-);
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-lg">Loading...</div>
+    </div>
+  );
+}
 
 // Lazy load all route components for code splitting
 const HomePage = lazy(() => import("../templates/HomePage"));
@@ -38,9 +40,9 @@ const AssetsMaterialsPage = lazy(
 );
 
 // Wrapper component to handle suspense
-const SuspenseWrapper: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => <Suspense fallback={<LoadingFallback />}>{children}</Suspense>;
+function SuspenseWrapper({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<LoadingFallback />}>{children}</Suspense>;
+}
 
 export const router = createBrowserRouter([
   {

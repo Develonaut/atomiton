@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
-import { Rnd, RndResizeCallback } from "react-rnd";
+import type { RndResizeCallback } from "react-rnd";
+import { Rnd } from "react-rnd";
 import Image from "@/components/Image";
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 const DEFAULT_WIDTH = 640;
 const DEFAULT_HEIGHT = 480;
 
-const ResizeImage = ({ image }: Props) => {
+function ResizeImage({ image }: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [ready, setReady] = useState(false);
@@ -82,6 +83,6 @@ const ResizeImage = ({ image }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default ResizeImage;

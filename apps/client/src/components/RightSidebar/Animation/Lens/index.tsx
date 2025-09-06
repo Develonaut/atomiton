@@ -5,7 +5,7 @@ import Group from "../../Group";
 
 import { lensFormats, zoomLevels, rotates } from "./content";
 
-const Lens = () => {
+function Lens() {
   const [lensFormat, setLensFormat] = useState(lensFormats[0]);
   const [zoomLevel, setZoomLevel] = useState(zoomLevels[0]);
   const [rotate, setRotate] = useState(rotates[0]);
@@ -55,6 +55,6 @@ const Lens = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Lens;

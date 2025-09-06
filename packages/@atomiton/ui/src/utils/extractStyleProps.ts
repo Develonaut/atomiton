@@ -267,7 +267,7 @@ export function extractStyleProps<T extends StyleProps>(
   restProps: Omit<T, keyof StyleProps>;
 } {
   const styleClasses: string[] = [];
-  const restProps: any = {};
+  const restProps: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(props)) {
     if (key in STYLE_PROP_KEYS) {
@@ -282,7 +282,7 @@ export function extractStyleProps<T extends StyleProps>(
 
   return {
     styleClasses: cn(...styleClasses),
-    restProps,
+    restProps: restProps as Omit<T, keyof StyleProps>,
   };
 }
 

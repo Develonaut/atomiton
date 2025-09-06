@@ -247,7 +247,7 @@ describe("extractSystemProps", () => {
         title: "test",
       };
 
-      const result = extractSystemProps(props as any);
+      const result = extractSystemProps(props as Record<string, unknown>);
 
       expect(result.systemClasses).toEqual(["m-null", "p-4"]);
       expect(result.restProps).toEqual({
@@ -265,7 +265,7 @@ describe("extractSystemProps", () => {
         id: "test",
       };
 
-      const result = extractSystemProps(props as any);
+      const result = extractSystemProps(props as Record<string, unknown>);
 
       expect(result.systemClasses).toEqual(["m-4"]);
       expect(result.restProps).toEqual({
@@ -339,7 +339,7 @@ describe("extractSystemProps", () => {
       const props = {
         m: 4,
         customConfig: complexObject,
-        onCustomEvent: (data: any) => data,
+        onCustomEvent: (data: unknown) => data,
         ref: { current: null },
       };
 
@@ -386,7 +386,7 @@ describe("extractSystemProps", () => {
         fullWidth?: boolean;
         customProp: string;
         onClick: () => void;
-        [key: string]: any; // Add index signature
+        [key: string]: unknown; // Add index signature
       }
 
       const props: TestProps = {
@@ -428,7 +428,7 @@ describe("extractSystemProps", () => {
 
   describe("performance considerations", () => {
     it("should handle large props objects efficiently", () => {
-      const props: Record<string, any> = {
+      const props: Record<string, unknown> = {
         // System props
         m: 1,
         mt: 2,
@@ -453,7 +453,7 @@ describe("extractSystemProps", () => {
         opacity: 90,
       };
 
-      // Add many non-system props
+      // Add munknown non-system props
       Array.from({ length: 50 }, (_, i) => {
         props[`nonSystem${i}`] = `value${i}`;
       });

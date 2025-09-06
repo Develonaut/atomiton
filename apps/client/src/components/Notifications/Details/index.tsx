@@ -6,7 +6,7 @@ type Props = {
   onClose: () => void;
 };
 
-const Details = ({ onClose }: Props) => {
+function Details({ onClose }: Props) {
   return (
     <div className="absolute top-1/2 right-full w-92 mr-2 p-1 -translate-y-1/2 bg-surface-01 rounded-[1.25rem] shadow-popover max-lg:w-85 max-md:hidden">
       <div className="flex items-center gap-3 mb-2 p-3">
@@ -32,6 +32,6 @@ const Details = ({ onClose }: Props) => {
       <Comment />
     </div>
   );
-};
+}
 
 export default Details;

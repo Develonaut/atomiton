@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import { useClipboard } from "@/utils/clipboard";
 
-const Foot = () => {
+function Foot() {
   const link = "https://brainwave.co/file/k373nH";
   const { copy, isCopied } = useClipboard();
 
@@ -29,6 +29,6 @@ const Foot = () => {
       </Button>
     </div>
   );
-};
+}
 
 export default Foot;

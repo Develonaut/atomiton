@@ -14,7 +14,7 @@ type Props = {
   }[];
 };
 
-const Assets = ({ title, tabs, sort, setSort, items }: Props) => {
+function Assets({ title, tabs, sort, setSort, items }: Props) {
   return (
     <div className="pt-5 px-12 pb-8 max-2xl:px-5">
       <div className="flex justify-between items-center mb-5 max-md:block">
@@ -44,6 +44,6 @@ const Assets = ({ title, tabs, sort, setSort, items }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Assets;

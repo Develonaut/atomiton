@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
 const api = {
@@ -13,6 +13,8 @@ if (process.contextIsolated) {
     console.error(error);
   }
 } else {
-  (window as any).electron = electronAPI;
-  (window as any).api = api;
+  // @ts-expect-error - window augmentation for non-isolated context
+  window.electron = electronAPI;
+  // @ts-expect-error - window augmentation for non-isolated context
+  window.api = api;
 }

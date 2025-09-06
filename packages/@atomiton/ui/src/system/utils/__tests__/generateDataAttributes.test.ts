@@ -162,7 +162,7 @@ describe("generateDataAttributes", () => {
         },
       ];
 
-      testCases.forEach(({ props, expected, description }) => {
+      testCases.forEach(({ props, expected }) => {
         const result = generateDataAttributes(props);
         expect(result).toEqual(expected);
       });
@@ -350,7 +350,7 @@ describe("generateDataAttributes", () => {
 
   describe("performance considerations", () => {
     it("should handle large props objects efficiently", () => {
-      const props: Record<string, any> = {
+      const props: Record<string, unknown> = {
         // Relevant props
         variant: "primary",
         size: "lg",
@@ -359,7 +359,7 @@ describe("generateDataAttributes", () => {
         active: true,
       };
 
-      // Add many irrelevant props
+      // Add munknown irrelevant props
       Array.from({ length: 100 }, (_, i) => {
         props[`prop${i}`] = `value${i}`;
       });

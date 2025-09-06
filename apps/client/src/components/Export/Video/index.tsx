@@ -11,7 +11,7 @@ import {
   resolutionOptions,
 } from "./content";
 
-const Video = () => {
+function Video() {
   const [camera, setCamera] = useState(cameraOptions[0]);
   const [format, setFormat] = useState(formats[0]);
   const [frameRate, setFrameRate] = useState(frameRateOptions[0]);
@@ -64,6 +64,6 @@ const Video = () => {
       </Button>
     </div>
   );
-};
+}
 
 export default Video;

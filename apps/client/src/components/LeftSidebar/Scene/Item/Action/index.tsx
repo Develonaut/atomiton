@@ -7,7 +7,7 @@ type Props = {
   onClick: () => void;
 };
 
-const Action = ({ icon, iconActive, active, onClick }: Props) => {
+function Action({ icon, iconActive, active, onClick }: Props) {
   return (
     <button
       className={`group transition-opacity group-hover/item:opacity-100 ${
@@ -23,6 +23,6 @@ const Action = ({ icon, iconActive, active, onClick }: Props) => {
       />
     </button>
   );
-};
+}
 
 export default Action;

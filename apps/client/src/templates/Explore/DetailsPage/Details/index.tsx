@@ -5,7 +5,7 @@ import Icon from "@/components/Icon";
 import Button from "@/components/Button";
 import Images from "./Images";
 
-const Details = () => {
+function Details() {
   const idTooltip = useId();
 
   const actions = [
@@ -93,6 +93,6 @@ const Details = () => {
       <Tooltip id={idTooltip} />
     </div>
   );
-};
+}
 
 export default Details;

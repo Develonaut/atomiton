@@ -7,7 +7,7 @@ import PanelMessage from "@/components/PanelMessage";
 
 import { projects, gallery } from "./content";
 
-const ExplorePage = () => {
+function ExplorePage() {
   return (
     <Layout>
       <Projects projects={projects} />
@@ -23,6 +23,6 @@ const ExplorePage = () => {
       <PanelMessage className="!bottom-5 left-[calc(50%+6.875rem)] max-md:hidden" />
     </Layout>
   );
-};
+}
 
 export default ExplorePage;

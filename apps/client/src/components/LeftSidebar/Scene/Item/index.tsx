@@ -13,7 +13,7 @@ type Props = {
   onClick: () => void;
 };
 
-const Item = ({ item, selected, onClick }: Props) => {
+function Item({ item, selected, onClick }: Props) {
   const [lock, setLock] = useState(false);
   const [view, setView] = useState(false);
   const [sparkle, setSparkle] = useState(false);
@@ -73,6 +73,6 @@ const Item = ({ item, selected, onClick }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Item;

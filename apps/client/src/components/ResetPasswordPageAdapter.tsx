@@ -6,7 +6,7 @@ import ButtonAdapter from "./ButtonAdapter";
 import Login from "@/components/Login";
 import Field from "@/components/Field";
 
-const ResetPasswordPageAdapter = () => {
+function ResetPasswordPageAdapter() {
   const [email, setEmail] = useState("");
 
   return (
@@ -33,6 +33,6 @@ const ResetPasswordPageAdapter = () => {
       </div>
     </Login>
   );
-};
+}
 
 export default ResetPasswordPageAdapter;

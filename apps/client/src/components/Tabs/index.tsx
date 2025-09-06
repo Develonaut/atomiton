@@ -1,4 +1,4 @@
-import { TabItem } from "@/types";
+import type { TabItem } from "@/types";
 
 type Props = {
   className?: string;
@@ -9,14 +9,14 @@ type Props = {
   isMedium?: boolean;
 };
 
-const Tabs = ({
+function Tabs({
   className,
   classButton,
   items,
   value,
   setValue,
   isMedium,
-}: Props) => {
+}: Props) {
   return (
     <div
       className={`p-0.75 border border-s-02 bg-surface-03 rounded-xl ${
@@ -48,6 +48,6 @@ const Tabs = ({
       </div>
     </div>
   );
-};
+}
 
 export default Tabs;

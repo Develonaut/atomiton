@@ -25,10 +25,8 @@ function Card({
 
   const handleCopy = async () => {
     const success = await copy(copyText || "");
-    if (success) {
-      console.log("Link copied to clipboard!");
-    } else {
-      console.log("Failed to copy to clipboard");
+    if (!success) {
+      console.error("Failed to copy to clipboard");
     }
   };
   return (

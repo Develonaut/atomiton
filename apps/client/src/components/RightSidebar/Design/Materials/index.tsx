@@ -4,7 +4,7 @@ import Group from "../../Group";
 
 import { content } from "./content";
 
-const Materials = () => {
+function Materials() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -26,6 +26,6 @@ const Materials = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Materials;

@@ -7,7 +7,7 @@ import Login from "@/components/Login";
 import Image from "@/components/Image";
 import Field from "@/components/Field";
 
-const SignInPageAdapter = () => {
+function SignInPageAdapter() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -58,6 +58,6 @@ const SignInPageAdapter = () => {
       </div>
     </Login>
   );
-};
+}
 
 export default SignInPageAdapter;

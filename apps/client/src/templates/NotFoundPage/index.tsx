@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 
 import { items } from "./items";
 
-const NotFoundPage = () => {
+function NotFoundPage() {
   const idTooltip = useId();
 
   return (
@@ -57,6 +57,6 @@ const NotFoundPage = () => {
       <Tooltip id={idTooltip} />
     </LayoutOnlyHeader>
   );
-};
+}
 
 export default NotFoundPage;

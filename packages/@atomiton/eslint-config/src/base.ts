@@ -2,7 +2,6 @@ import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
-import onlyWarn from "eslint-plugin-only-warn";
 import type { Linter } from "eslint";
 
 /**
@@ -29,18 +28,12 @@ const baseConfig: Linter.Config[] = [
     },
   } satisfies Linter.Config,
 
-  // Only warn plugin (optional - converts errors to warnings)
-  {
-    plugins: {
-      onlyWarn: onlyWarn as any,
-    },
-  } satisfies Linter.Config,
-
   // Global ignores
   {
     ignores: [
       "dist/**",
       "build/**",
+      "out/**",
       "*.min.js",
       "*.d.ts",
       "node_modules/**",
@@ -54,7 +47,7 @@ const baseConfig: Linter.Config[] = [
   {
     rules: {
       // TypeScript rules
-      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

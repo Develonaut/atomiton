@@ -8,7 +8,7 @@ const tabs = [
   { id: 1, name: "Perspective" },
 ];
 
-const Camera = () => {
+function Camera() {
   const [tab, setTab] = useState(tabs[0]);
 
   return (
@@ -17,6 +17,6 @@ const Camera = () => {
       <div className="pt-3">{tab.id === 0 && <Isometric />}</div>
     </Group>
   );
-};
+}
 
 export default Camera;

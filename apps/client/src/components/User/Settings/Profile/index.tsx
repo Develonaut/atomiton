@@ -6,7 +6,7 @@ import Title from "../Title";
 import Option from "../Option";
 import Field from "../Field";
 
-const Profile = () => {
+function Profile() {
   const [privateProfile, setPrivateProfile] = useState(false);
   const [link, setLink] = useState("brainwave.app/@username");
   const [preview, setPreview] = useState<string | null>(
@@ -62,6 +62,6 @@ const Profile = () => {
       <Option title="Display name">Sophie Bennett ®</Option>
     </>
   );
-};
+}
 
 export default Profile;

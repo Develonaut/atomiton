@@ -22,7 +22,7 @@ const svg = (color: string) => (
   </svg>
 );
 
-const Folder = ({ item }: Props) => {
+function Folder({ item }: Props) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
 
@@ -52,6 +52,6 @@ const Folder = ({ item }: Props) => {
       {item.title}
     </button>
   );
-};
+}
 
 export default Folder;

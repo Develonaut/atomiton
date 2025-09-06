@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/Icon";
 
-const Compression = () => {
+function Compression() {
   const [range, setRange] = useState(80);
 
   return (
@@ -31,6 +31,6 @@ const Compression = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Compression;

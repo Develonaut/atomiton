@@ -11,7 +11,7 @@ const tabs = [
   { id: 1, name: "Long" },
 ];
 
-const Loop = () => {
+function Loop() {
   const [tab, setTab] = useState(tabs[0]);
   const [values, setValues] = useState([6, 14]);
 
@@ -80,6 +80,6 @@ const Loop = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Loop;

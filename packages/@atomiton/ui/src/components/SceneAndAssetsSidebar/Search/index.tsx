@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-function Search({}) {
+function Search() {
   const [search, setSearch] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
   };
 
   return (

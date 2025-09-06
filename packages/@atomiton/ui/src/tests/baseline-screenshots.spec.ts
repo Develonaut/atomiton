@@ -31,7 +31,7 @@ test.describe("Baseline Screenshots - Full Page Capture", () => {
       // Wait for the page to be fully loaded
       await browserPage.waitForLoadState("networkidle");
 
-      // Wait a bit more for any animations to complete
+      // Wait a bit more for unknown animations to complete
       await browserPage.waitForTimeout(1000);
 
       // Get the full page dimensions
@@ -58,16 +58,10 @@ test.describe("Baseline Screenshots - Full Page Capture", () => {
         },
       );
 
-      console.log(
-        `✅ Captured full page screenshot for ${page.name} (${dimensions.width}x${dimensions.height}px)`,
-      );
-
       // For tall pages (>2500px), also capture viewport sections
       if (page.splitSections && dimensions.height > 2500) {
         const viewportHeight = 1200;
         const sections = Math.ceil(dimensions.height / viewportHeight);
-
-        console.log(`📸 Capturing ${sections} sections for ${page.name}`);
 
         for (let i = 0; i < sections; i++) {
           const yPosition = i * viewportHeight;
@@ -89,8 +83,6 @@ test.describe("Baseline Screenshots - Full Page Capture", () => {
               maxDiffPixels: 100,
             },
           );
-
-          console.log(`  ✅ Section ${i + 1}/${sections} captured`);
         }
       }
     });

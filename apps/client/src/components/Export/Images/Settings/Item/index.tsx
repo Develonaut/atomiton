@@ -9,7 +9,7 @@ type Props = {
   defaultSize: number;
 };
 
-const Item = ({ defaultSize }: Props) => {
+function Item({ defaultSize }: Props) {
   const [size, setSize] = useState(sizes[defaultSize]);
   const [formatColor, setFormatColor] = useState(formatsColor[0]);
   const [format, setFormat] = useState(formats[0]);
@@ -47,6 +47,6 @@ const Item = ({ defaultSize }: Props) => {
       </button>
     </div>
   );
-};
+}
 
 export default Item;

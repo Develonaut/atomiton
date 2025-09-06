@@ -7,7 +7,7 @@ type Props = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-const Search = ({ className, search, onChange, handleSubmit }: Props) => {
+function Search({ className, search, onChange, handleSubmit }: Props) {
   return (
     <form
       className={`relative w-65 ml-4 ${className || ""}`}
@@ -27,6 +27,6 @@ const Search = ({ className, search, onChange, handleSubmit }: Props) => {
       <div className="key absolute top-1/2 right-2.5 -translate-y-1/2">⌘ K</div>
     </form>
   );
-};
+}
 
 export default Search;

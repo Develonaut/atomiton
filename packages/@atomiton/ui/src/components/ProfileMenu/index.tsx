@@ -1,4 +1,4 @@
-function ProfileMenu({}) {
+function ProfileMenu() {
   const navigation = [
     {
       title: "Profile",

@@ -110,7 +110,7 @@ const INVALID_DOM_PROPS = new Set([
  * Filter out non-DOM props when rendering as HTML element
  * Pure function that returns props safe to pass to DOM elements
  */
-export function filterDOMProps<T extends Record<string, any>>(
+export function filterDOMProps<T extends Record<string, unknown>>(
   props: T,
   isHTMLElement: boolean,
 ): T {
@@ -120,7 +120,7 @@ export function filterDOMProps<T extends Record<string, any>>(
   }
 
   // For HTML elements, filter out invalid props
-  const filtered: Record<string, any> = {};
+  const filtered: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(props)) {
     if (!INVALID_DOM_PROPS.has(key)) {

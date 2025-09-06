@@ -16,7 +16,7 @@ type Props = {
   reserve?: boolean;
 };
 
-const NewComment = ({ top, left, onClose, onSubmit, reserve }: Props) => {
+function NewComment({ top, left, onClose, onSubmit, reserve }: Props) {
   const [message, setMessage] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -135,6 +135,6 @@ const NewComment = ({ top, left, onClose, onSubmit, reserve }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default NewComment;

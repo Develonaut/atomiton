@@ -2,8 +2,8 @@
 
 import LayoutEditor from "@/components/LayoutEditor";
 
-const EditorPage = () => {
+function EditorPage() {
   return <LayoutEditor />;
-};
+}
 
 export default EditorPage;

@@ -12,7 +12,8 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
   },
   "dependencies": {
     "immer": "^10.0.0",

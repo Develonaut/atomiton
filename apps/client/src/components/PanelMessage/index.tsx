@@ -19,7 +19,7 @@ type Props = {
   isViewController?: boolean;
 };
 
-const PanelMessage = ({ className, isViewController }: Props) => {
+function PanelMessage({ className, isViewController }: Props) {
   const { isAnimationSettings } = useStore((state) => state);
   const [message, setMessage] = useState("");
   const [setting, setSetting] = useState(settings[0]);
@@ -93,6 +93,6 @@ const PanelMessage = ({ className, isViewController }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default PanelMessage;

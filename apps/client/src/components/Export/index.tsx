@@ -25,7 +25,7 @@ const menu = [
   },
 ];
 
-const Export = () => {
+function Export() {
   const [active, setActive] = useState(0);
 
   return (
@@ -54,6 +54,6 @@ const Export = () => {
       </Popover>
     </>
   );
-};
+}
 
 export default Export;
