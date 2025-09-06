@@ -35,6 +35,8 @@
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit",
     },
     "files.exclude": {
       "**/node_modules": true,
@@ -53,10 +55,6 @@
       "apps/brainwave-reference": true,
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit",
-      "source.fixAll": "explicit",
-    },
     "[typescript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
     },

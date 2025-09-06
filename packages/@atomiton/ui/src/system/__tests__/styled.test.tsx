@@ -90,11 +90,7 @@ interface BaseButtonProps
 
 const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
   ({ className, children, ...props }, ref) => (
-    <button
-      ref={ref}
-      className={className}
-      {...props}
-    >
+    <button ref={ref} className={className} {...props}>
       {children}
     </button>
   ),
@@ -108,11 +104,7 @@ interface BaseDivProps
 
 const BaseDiv = forwardRef<HTMLDivElement, BaseDivProps>(
   ({ className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={className}
-      {...props}
-    >
+    <div ref={ref} className={className} {...props}>
       {children}
     </div>
   ),

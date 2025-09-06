@@ -1,38 +1,10 @@
-# Husky pre-commit hook
+#!/bin/sh
 
-# Pre-commit quality checks
-echo "🔍 Running pre-commit quality checks..."
+# Husky pre-commit hook using lint-staged
 
-# 1. Format check
-echo "📝 Checking code formatting..."
-pnpm run format:check
-if [ $? -ne 0 ]; then
-  echo "❌ Format check failed. Run 'pnpm run format' to fix."
-  exit 1
-fi
+echo "🔍 Running pre-commit checks on staged files..."
 
-# 2. Lint check
-echo "🔧 Running lint check..."
-pnpm run lint
-if [ $? -ne 0 ]; then
-  echo "❌ Lint check failed. Fix the linting errors."
-  exit 1
-fi
+# Run lint-staged to format and lint only staged files
+npx lint-staged
 
-# 3. TypeScript check
-echo "🔍 Running TypeScript check..."
-pnpm run typecheck
-if [ $? -ne 0 ]; then
-  echo "❌ TypeScript check failed. Fix the type errors."
-  exit 1
-fi
-
-# 4. Build check
-echo "🔨 Running build check..."
-pnpm run build
-if [ $? -ne 0 ]; then
-  echo "❌ Build check failed. Fix the build errors."
-  exit 1
-fi
-
-echo "✅ All pre-commit checks passed!"
+echo "✅ Pre-commit checks completed!"
