@@ -9,7 +9,7 @@
     "sourceMap": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "types": ["node", "vitest/globals"],
-    "noImplicitAny": false,
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["./src/*"]
     },
