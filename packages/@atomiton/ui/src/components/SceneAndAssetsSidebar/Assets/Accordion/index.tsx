@@ -14,7 +14,7 @@ type Props = {
   largeImage?: boolean;
 };
 
-const Accordion = ({ className, title, items, largeImage }: Props) => {
+function Accordion({ className, title, items, largeImage }: Props) {
   const [active, setActive] = useState(true);
 
   return (
@@ -65,6 +65,6 @@ const Accordion = ({ className, title, items, largeImage }: Props) => {
       </AnimateHeight>
     </div>
   );
-};
+}
 
 export default Accordion;

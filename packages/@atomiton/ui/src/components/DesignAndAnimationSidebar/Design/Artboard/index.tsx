@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 import Group from "../../Group";
 
-const Artboard = () => {
+function Artboard() {
   const xPostOptions = [
     { id: 0, name: "800x600" },
     { id: 1, name: "1024x768" },
@@ -73,6 +74,6 @@ const Artboard = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Artboard;

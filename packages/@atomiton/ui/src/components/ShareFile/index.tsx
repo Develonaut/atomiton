@@ -6,7 +6,7 @@ import Foot from "./Foot";
 
 import { people } from "./people";
 
-const ShareFile = () => {
+function ShareFile() {
   return (
     <div className="w-105 rounded-[2rem] border border-[#ECECEC] bg-[#FCFCFC] shadow-2xl">
       <div className="flex gap-1.5 p-4">
@@ -40,6 +40,6 @@ const ShareFile = () => {
       <Foot />
     </div>
   );
-};
+}
 
 export default ShareFile;

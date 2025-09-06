@@ -1,7 +1,7 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import Zoom from "@/components/Zoom";
 
-const ZoomControl = () => {
+function ZoomControl() {
   return (
     <Popover className="relative group">
       <PopoverButton className="flex justify-between items-center gap-2 min-w-22 h-10 px-3 rounded-xl border border-[#ececec] bg-[#f1f1f1] text-[0.875rem] font-medium transition outline-0 cursor-pointer hover:bg-[#FCFCFC] hover:border-[#E2E2E2] data-open:border-[#121212]/10 data-open:shadow-[0_0px_2px_2px_#FFF_inset]">
@@ -24,6 +24,6 @@ const ZoomControl = () => {
       </PopoverPanel>
     </Popover>
   );
-};
+}
 
 export default ZoomControl;

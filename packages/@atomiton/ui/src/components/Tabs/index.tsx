@@ -13,14 +13,14 @@ type Props = {
   isMedium?: boolean;
 };
 
-const Tabs = ({
+function Tabs({
   className,
   classButton,
   items,
   value,
   setValue,
   isMedium,
-}: Props) => {
+}: Props) {
   return (
     <div
       className={`p-0.75 border border-[#e2e2e2] bg-[#f1f1f1] rounded-xl ${
@@ -52,6 +52,6 @@ const Tabs = ({
       </div>
     </div>
   );
-};
+}
 
 export default Tabs;

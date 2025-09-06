@@ -18,7 +18,7 @@ type Props = {
   className?: string;
 };
 
-const SelectAi = ({ className }: Props) => {
+function SelectAi({ className }: Props) {
   const [value, setValue] = useState<AiOption>(
     options[0] ?? { id: 0, title: "Default", description: "Default AI" },
   );
@@ -64,6 +64,6 @@ const SelectAi = ({ className }: Props) => {
       </ListboxOptions>
     </Listbox>
   );
-};
+}
 
 export default SelectAi;

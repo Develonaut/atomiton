@@ -26,7 +26,7 @@ const Person = ({
 }: Props) => {
   const idTooltip = useId();
   const [access, setAccess] = useState(
-    accesses[accessPerson === "view" ? 0 : 1],
+    accesses[accessPerson === "view" ? 0 : 1] || accesses[0] || null,
   );
 
   return (

@@ -16,7 +16,7 @@ const tabs: TabItem[] = [
   { id: 1, name: "Assets" },
 ];
 
-const LeftSidebar = ({}) => {
+function LeftSidebar({}) {
   const [tab, setTab] = useState<TabItem>(tabs[0] ?? { id: 0, name: "Scene" });
 
   return (
@@ -32,6 +32,6 @@ const LeftSidebar = ({}) => {
       <Search />
     </div>
   );
-};
+}
 
 export default LeftSidebar;

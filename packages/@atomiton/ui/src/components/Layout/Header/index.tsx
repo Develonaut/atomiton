@@ -8,7 +8,7 @@ type Props = {
   onOpen: () => void;
 };
 
-const HeaderSimple = ({ onOpen }: Props) => {
+function HeaderSimple({ onOpen }: Props) {
   const { hasOverflowHidden } = useScrollbarWidth();
   return (
     <div
@@ -36,6 +36,6 @@ const HeaderSimple = ({ onOpen }: Props) => {
       <UserDropdown />
     </div>
   );
-};
+}
 
 export default HeaderSimple;

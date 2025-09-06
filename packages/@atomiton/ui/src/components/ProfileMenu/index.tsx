@@ -1,4 +1,4 @@
-const ProfileMenu = ({}) => {
+function ProfileMenu({}) {
   const navigation = [
     {
       title: "Profile",
@@ -46,6 +46,6 @@ const ProfileMenu = ({}) => {
       ))}
     </div>
   );
-};
+}
 
 export default ProfileMenu;

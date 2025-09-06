@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Compression = () => {
+function Compression() {
   const [range, setRange] = useState(80);
 
   return (
@@ -42,6 +42,6 @@ const Compression = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Compression;

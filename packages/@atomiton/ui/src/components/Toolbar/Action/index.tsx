@@ -9,14 +9,14 @@ type Props = {
   disabled?: boolean;
 };
 
-const Action = ({
+function Action({
   classIcon,
   active,
   onClick,
   iconPath,
   tooltip,
   disabled,
-}: Props) => {
+}: Props) {
   return (
     <button
       className={`relative group/button flex items-center justify-center size-10 border rounded-xl transition-all cursor-pointer hover:bg-[#f1f1f1] ${
@@ -39,6 +39,6 @@ const Action = ({
       </Tooltip>
     </button>
   );
-};
+}
 
 export default Action;

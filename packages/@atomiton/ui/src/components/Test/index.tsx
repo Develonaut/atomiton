@@ -1,3 +1,5 @@
-const Test = () => <div className=""></div>;
+function Test() {
+  return <div className=""></div>;
+}
 
 export default Test;

@@ -27,7 +27,7 @@ type Props = {
   className?: string;
 };
 
-const Export = ({ className }: Props) => {
+function Export({ className }: Props) {
   const [active, setActive] = useState(0);
 
   return (
@@ -43,6 +43,6 @@ const Export = ({ className }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Export;

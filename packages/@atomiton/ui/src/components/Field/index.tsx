@@ -13,7 +13,7 @@ type FieldProps = {
   icon?: React.ReactNode;
 };
 
-const Field = ({
+function Field({
   className,
   classInput,
   label,
@@ -26,7 +26,7 @@ const Field = ({
   ...inputProps
 }: FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> &
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
   return (
@@ -118,6 +118,6 @@ const Field = ({
             </div> */}
     </div>
   );
-};
+}
 
 export default Field;

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-const NewFolder = () => {
+function NewFolder() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -54,6 +54,6 @@ const NewFolder = () => {
       )}
     </div>
   );
-};
+}
 
 export default NewFolder;

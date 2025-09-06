@@ -10,7 +10,7 @@ type Props = {
   isShowSearch?: boolean;
 };
 
-const HeaderSimple = ({ className, isFilters, isShowSearch }: Props) => {
+function HeaderSimple({ className, isFilters, isShowSearch }: Props) {
   const disabled = true;
   const isNewNotification = true;
   const [search, setSearch] = useState("");
@@ -104,6 +104,6 @@ const HeaderSimple = ({ className, isFilters, isShowSearch }: Props) => {
       </button>
     </div>
   );
-};
+}
 
 export default HeaderSimple;

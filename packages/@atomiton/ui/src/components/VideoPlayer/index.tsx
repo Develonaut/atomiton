@@ -6,7 +6,7 @@ type Props = {
   transparent?: boolean;
 };
 
-const VideoPlayer = ({ className, repeat, transparent }: Props) => {
+function VideoPlayer({ className, repeat, transparent }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const handlePlay = () => {
@@ -85,6 +85,6 @@ const VideoPlayer = ({ className, repeat, transparent }: Props) => {
       )}
     </div>
   );
-};
+}
 
 export default VideoPlayer;

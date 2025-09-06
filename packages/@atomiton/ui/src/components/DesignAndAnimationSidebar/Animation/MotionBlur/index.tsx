@@ -2,7 +2,7 @@ import { useState } from "react";
 import Switch from "@/components/Switch";
 import Group from "../../Group";
 
-const MotionBlur = () => {
+function MotionBlur() {
   const [blur, setBlur] = useState(true);
 
   return (
@@ -11,6 +11,6 @@ const MotionBlur = () => {
       rightContent={<Switch checked={blur} onChange={() => setBlur(!blur)} />}
     />
   );
-};
+}
 
 export default MotionBlur;

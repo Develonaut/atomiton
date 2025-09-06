@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   Listbox,
   ListboxButton,
@@ -28,7 +28,7 @@ type SelectProps = {
   icon?: ReactNode;
 };
 
-const Select = ({
+function Select({
   className,
   classButton,
   classOptions,
@@ -43,7 +43,7 @@ const Select = ({
   isWhite,
   isMinimal,
   icon,
-}: SelectProps) => {
+}: SelectProps) {
   return (
     <Listbox
       className={`${className || ""}`}
@@ -105,6 +105,6 @@ const Select = ({
       </ListboxOptions>
     </Listbox>
   );
-};
+}
 
 export default Select;

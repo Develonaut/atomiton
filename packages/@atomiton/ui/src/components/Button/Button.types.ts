@@ -1,11 +1,7 @@
 import type { VariantProps } from "class-variance-authority";
 import type { buttonStyles } from "./Button.styles";
-import type { LinkProps } from "@/components/Link";
-import type { SystemProps } from "@/system";
 
-export interface ButtonBaseProps
-  extends VariantProps<typeof buttonStyles>,
-    SystemProps {
+export interface ButtonBaseProps extends VariantProps<typeof buttonStyles> {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
@@ -35,8 +31,7 @@ export type ButtonAsLink = {
   as: "link";
   href?: string;
   to?: string;
-} & ButtonBaseProps &
-  Omit<LinkProps, "href" | "to">;
+} & ButtonBaseProps;
 
 // Combined Button props type
 export type ButtonProps = ButtonAsButton | ButtonAsAnchor | ButtonAsLink;

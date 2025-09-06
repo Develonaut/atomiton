@@ -56,12 +56,24 @@ const baseConfig: Linter.Config[] = [
       // TypeScript rules
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": [
-        "warn",
+        "error",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
         },
       ],
+      // Enforce consistent type imports
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "separate-type-imports",
+          disallowTypeAnnotations: true,
+        },
+      ],
+      // Remove unused imports automatically
+      "@typescript-eslint/no-unused-expressions": "error",
+      "no-unused-vars": "off", // Use TypeScript's version instead
 
       // General rules
       "no-console": ["warn", { allow: ["warn", "error"] }],

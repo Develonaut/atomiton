@@ -4,7 +4,7 @@ import RowCards from "@/components/RowCards";
 import Card from "@/components/Card";
 import Logo from "@/components/Logo";
 
-const HomePage = () => {
+function HomePage() {
   return (
     <Layout title="Branding">
       <Group>
@@ -37,6 +37,6 @@ const HomePage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default HomePage;

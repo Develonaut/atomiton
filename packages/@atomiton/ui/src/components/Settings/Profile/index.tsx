@@ -5,7 +5,7 @@ import NewField from "@/components/NewField";
 import Title from "../Title";
 import Option from "../Option";
 
-const Profile = () => {
+function Profile() {
   const [privateProfile, setPrivateProfile] = useState(false);
   const [link, setLink] = useState("atomiton.app/@username");
 
@@ -33,6 +33,6 @@ const Profile = () => {
       </Option>
     </>
   );
-};
+}
 
 export default Profile;

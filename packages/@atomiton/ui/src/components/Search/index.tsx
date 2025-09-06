@@ -6,13 +6,13 @@ type Props = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-const Search = ({
+function Search({
   className,
   classInput,
   search,
   onChange,
   handleSubmit,
-}: Props) => {
+}: Props) {
   return (
     <form
       className={`group relative ${className || ""}`}
@@ -43,6 +43,6 @@ const Search = ({
       </div>
     </form>
   );
-};
+}
 
 export default Search;

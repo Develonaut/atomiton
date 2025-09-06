@@ -16,75 +16,77 @@ const socials = [
   },
 ];
 
-const SharePost = () => (
-  <div className="w-99 p-2 rounded-[2rem] bg-[#FCFCFC] shadow-2xl">
-    <div className="p-5 rounded-3xl bg-[#F8F7F7] border border-[#ECECEC]">
-      <Image
-        className="w-full"
-        src="/images/3d-objects/17.png"
-        width={332}
-        height={332}
-        alt=""
-      />
-    </div>
-    <div className="p-4">
-      <div className="mb-3 text-[1.125rem] leading-[1.6875rem]">
-        Cute Monster
+function SharePost() {
+  return (
+    <div className="w-99 p-2 rounded-[2rem] bg-[#FCFCFC] shadow-2xl">
+      <div className="p-5 rounded-3xl bg-[#F8F7F7] border border-[#ECECEC]">
+        <Image
+          className="w-full"
+          src="/images/3d-objects/17.png"
+          width={332}
+          height={332}
+          alt=""
+        />
       </div>
-      <div className="flex gap-5 mb-6">
-        <div className="flex items-center gap-2">
-          <div className="">
-            <Image
-              className="size-5 rounded-full opacity-100"
-              src="/images/avatars/2.png"
-              width={20}
-              height={20}
-              alt=""
-            />
-          </div>
-          <div className="text-[0.75rem] leading-[1rem] font-semibold">
-            randomdash
-          </div>
+      <div className="p-4">
+        <div className="mb-3 text-[1.125rem] leading-[1.6875rem]">
+          Cute Monster
         </div>
-        <div className="flex items-center gap-1.5 text-[0.75rem] leading-[1rem] font-medium text-[#7B7B7B]">
-          <svg
-            className="size-4 fill-[#7B7B7B]/70"
-            width={16}
-            height={16}
-            viewBox="0 0 16 16"
-          >
-            <path d="M7.987 1.07a6.92 6.92 0 0 1 6.917 6.917 6.92 6.92 0 0 1-6.917 6.917A6.92 6.92 0 0 1 1.07 7.987 6.92 6.92 0 0 1 7.987 1.07zm0 1.5A5.42 5.42 0 0 0 2.57 7.987a5.42 5.42 0 0 0 5.417 5.417 5.42 5.42 0 0 0 5.417-5.417A5.42 5.42 0 0 0 7.987 2.57zm0 1.833a.75.75 0 0 1 .75.75l-.001 2.523L10.35 9.29a.75.75 0 0 1 .073.977l-.073.084a.75.75 0 0 1-1.061 0L7.456 8.517a.75.75 0 0 1-.22-.53V5.153a.75.75 0 0 1 .75-.75z" />
-          </svg>
-          3 Jun, 2025
-        </div>
-      </div>
-      <div className="flex gap-2">
-        <div className="flex gap-2">
-          {socials.map((social, index) => (
-            <a
-              className="flex items-center justify-center size-10 border border-[#e2e2e2] rounded-xl cursor-pointer transition-colors hover:bg-[#f1f1f1]"
-              key={index}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg
-                className="size-5"
+        <div className="flex gap-5 mb-6">
+          <div className="flex items-center gap-2">
+            <div className="">
+              <Image
+                className="size-5 rounded-full opacity-100"
+                src="/images/avatars/2.png"
                 width={20}
                 height={20}
-                viewBox="0 0 20 20"
-              >
-                <path d={social.path} />
-              </svg>
-            </a>
-          ))}
+                alt=""
+              />
+            </div>
+            <div className="text-[0.75rem] leading-[1rem] font-semibold">
+              randomdash
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 text-[0.75rem] leading-[1rem] font-medium text-[#7B7B7B]">
+            <svg
+              className="size-4 fill-[#7B7B7B]/70"
+              width={16}
+              height={16}
+              viewBox="0 0 16 16"
+            >
+              <path d="M7.987 1.07a6.92 6.92 0 0 1 6.917 6.917 6.92 6.92 0 0 1-6.917 6.917A6.92 6.92 0 0 1 1.07 7.987 6.92 6.92 0 0 1 7.987 1.07zm0 1.5A5.42 5.42 0 0 0 2.57 7.987a5.42 5.42 0 0 0 5.417 5.417 5.42 5.42 0 0 0 5.417-5.417A5.42 5.42 0 0 0 7.987 2.57zm0 1.833a.75.75 0 0 1 .75.75l-.001 2.523L10.35 9.29a.75.75 0 0 1 .073.977l-.073.084a.75.75 0 0 1-1.061 0L7.456 8.517a.75.75 0 0 1-.22-.53V5.153a.75.75 0 0 1 .75-.75z" />
+            </svg>
+            3 Jun, 2025
+          </div>
         </div>
-        <Button className="grow" isPrimary>
-          Copy link
-        </Button>
+        <div className="flex gap-2">
+          <div className="flex gap-2">
+            {socials.map((social, index) => (
+              <a
+                className="flex items-center justify-center size-10 border border-[#e2e2e2] rounded-xl cursor-pointer transition-colors hover:bg-[#f1f1f1]"
+                key={index}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg
+                  className="size-5"
+                  width={20}
+                  height={20}
+                  viewBox="0 0 20 20"
+                >
+                  <path d={social.path} />
+                </svg>
+              </a>
+            ))}
+          </div>
+          <Button className="grow" isPrimary>
+            Copy link
+          </Button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
 export default SharePost;

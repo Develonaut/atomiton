@@ -11,31 +11,38 @@ const items = [
   },
 ];
 
-const GeneralAccess = () => (
-  <div className="px-4 py-2.5 border-t border-[#ECECEC]">
-    <div className="py-2 text-[0.6875rem] leading-[1rem] font-medium text-[#7B7B7B]/70">
-      General access
-    </div>
-    <div className="">
-      {items.map((item, index) => (
-        <div className="flex items-center gap-3 py-2.5" key={index}>
-          <div className="flex justify-center items-center size-8 border border-[#E2E2E2] rounded-lg bg-[#F8F7F7] shadow-[0px_0px_4px_0px_rgba(18,18,18,0.10)]">
-            <svg className="size-4" width={20} height={20} viewBox="0 0 20 20">
-              <path d={item.path} />
-            </svg>
-          </div>
-          <div className="grow">
-            <div className="text-[0.75rem] leading-[1rem] font-medium text-[#121212]">
-              {item.title}
+function GeneralAccess() {
+  return (
+    <div className="px-4 py-2.5 border-t border-[#ECECEC]">
+      <div className="py-2 text-[0.6875rem] leading-[1rem] font-medium text-[#7B7B7B]/70">
+        General access
+      </div>
+      <div className="">
+        {items.map((item, index) => (
+          <div className="flex items-center gap-3 py-2.5" key={index}>
+            <div className="flex justify-center items-center size-8 border border-[#E2E2E2] rounded-lg bg-[#F8F7F7] shadow-[0px_0px_4px_0px_rgba(18,18,18,0.10)]">
+              <svg
+                className="size-4"
+                width={20}
+                height={20}
+                viewBox="0 0 20 20"
+              >
+                <path d={item.path} />
+              </svg>
             </div>
-            <div className="text-[0.6875rem] leading-[1rem] text-[#7B7B7B]">
-              {item.description}
+            <div className="grow">
+              <div className="text-[0.75rem] leading-[1rem] font-medium text-[#121212]">
+                {item.title}
+              </div>
+              <div className="text-[0.6875rem] leading-[1rem] text-[#7B7B7B]">
+                {item.description}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 export default GeneralAccess;

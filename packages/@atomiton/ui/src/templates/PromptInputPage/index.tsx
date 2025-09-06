@@ -4,7 +4,7 @@ import RowCards from "@/components/RowCards";
 import Card from "@/components/Card";
 import PromptInput from "@/components/PromptInput";
 
-const PromptInputPage = () => {
+function PromptInputPage() {
   return (
     <Layout title="Prompt Input">
       <Group>
@@ -30,6 +30,6 @@ const PromptInputPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default PromptInputPage;

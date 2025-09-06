@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 
-const Foot = () => {
+function Foot() {
   const link = "https://atomiton.com/file/k373nH";
 
   return (
@@ -21,6 +21,6 @@ const Foot = () => {
       </Button>
     </div>
   );
-};
+}
 
 export default Foot;

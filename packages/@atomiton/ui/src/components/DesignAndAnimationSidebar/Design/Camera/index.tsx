@@ -14,7 +14,7 @@ const tabs: TabItem[] = [
   { id: 1, name: "Perspective" },
 ];
 
-const Camera = () => {
+function Camera() {
   const [tab, setTab] = useState<TabItem>(
     tabs[0] ?? { id: 0, name: "Isometric" },
   );
@@ -25,6 +25,6 @@ const Camera = () => {
       <div className="pt-3">{tab.id === 0 && <Isometric />}</div>
     </Group>
   );
-};
+}
 
 export default Camera;

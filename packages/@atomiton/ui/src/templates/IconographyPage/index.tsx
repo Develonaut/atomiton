@@ -3,7 +3,7 @@ import Group from "@/components/Group";
 import RowCards from "@/components/RowCards";
 import Card from "@/components/Card";
 
-const IconographyPage = () => {
+function IconographyPage() {
   return (
     <Layout title="Iconography">
       <Group title="Icon 16">
@@ -1990,6 +1990,6 @@ const IconographyPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default IconographyPage;

@@ -4,7 +4,7 @@ type Props = {
   image: string;
 };
 
-const AssetCard = ({ image }: Props) => {
+function AssetCard({ image }: Props) {
   return (
     <>
       <div className="group relative w-65.5 aspect-square p-6 bg-[#F8F7F7] border border-[#ECECEC] rounded-[1.25rem] overflow-hidden transition-colors hover:bg-[#F1F1F1]">
@@ -47,6 +47,6 @@ const AssetCard = ({ image }: Props) => {
       </div>
     </>
   );
-};
+}
 
 export default AssetCard;

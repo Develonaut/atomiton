@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 import Tabs from "@/components/Tabs";
 
 import { sizes, formatsColor, formats } from "./content";
@@ -14,7 +15,7 @@ type TabItem = {
   onClick?: () => void;
 };
 
-const Item = ({ defaultSize }: Props) => {
+function Item({ defaultSize }: Props) {
   const [size, setSize] = useState<SelectOption | null>(
     sizes[defaultSize] ?? null,
   );
@@ -71,6 +72,6 @@ const Item = ({ defaultSize }: Props) => {
       </button>
     </div>
   );
-};
+}
 
 export default Item;

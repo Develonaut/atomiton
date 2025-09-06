@@ -10,7 +10,7 @@ import Invite from "@/components/Invite";
 import ColorPicker from "@/components/ColorPicker";
 import Search from "@/components/Search";
 
-const InputsPage = () => {
+function InputsPage() {
   const [value, setValue] = useState("");
   const [username, setUsername] = useState("sophie");
   const [search, setSearch] = useState("");
@@ -163,6 +163,6 @@ const InputsPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default InputsPage;

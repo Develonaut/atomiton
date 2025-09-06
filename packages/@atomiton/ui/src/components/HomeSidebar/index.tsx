@@ -6,7 +6,7 @@ import Folders from "./Folders";
 
 import { navigation, folders } from "./navigation";
 
-const Sidebar = () => {
+function Sidebar() {
   return (
     <div className="flex flex-col w-60 min-h-219 bg-[#FCFCFC] border-r border-[#ECECEC]">
       <div className="p-6">
@@ -47,6 +47,6 @@ const Sidebar = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Sidebar;

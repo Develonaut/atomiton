@@ -3,7 +3,7 @@ import Group from "@/components/Group";
 
 import { colors } from "./content";
 
-const ColorsPage = () => {
+function ColorsPage() {
   return (
     <Layout title="Colors">
       {colors.map((group, index) => (
@@ -33,6 +33,6 @@ const ColorsPage = () => {
       ))}
     </Layout>
   );
-};
+}
 
 export default ColorsPage;

@@ -1,7 +1,7 @@
 import Image from "@/components/Image";
 import Button from "@/components/Button";
 
-const HeaderAsset = () => {
+function HeaderAsset() {
   return (
     <div className="flex items-center gap-3 w-full h-20 px-5 bg-[#FCFCFC]">
       <button className="flex justify-center items-center size-10 mr-auto border border-[#e2e2e2] bg-[#fcfcfc] rounded-xl transition-colors cursor-pointer hover:bg-[#f1f1f1]">
@@ -59,6 +59,6 @@ const HeaderAsset = () => {
       <Button isPrimary>Add to Asset</Button>
     </div>
   );
-};
+}
 
 export default HeaderAsset;

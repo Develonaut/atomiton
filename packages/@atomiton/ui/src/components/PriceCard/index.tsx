@@ -10,7 +10,7 @@ type Props = {
   };
 };
 
-const PriceCard = ({ item }: Props) => {
+function PriceCard({ item }: Props) {
   const planFree = item.title === "Free";
   const planCreator = item.title === "Creator";
   const planStudio = item.title === "Studio";
@@ -86,6 +86,6 @@ const PriceCard = ({ item }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default PriceCard;

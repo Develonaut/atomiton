@@ -9,7 +9,7 @@ import GuidelineSidebar from "@/components/GuidelineSidebar";
 
 import { content } from "./content";
 
-const SidebarPage = () => {
+function SidebarPage() {
   return (
     <Layout title="Sidebar">
       <Group title="Canvas Sidebar">
@@ -52,6 +52,6 @@ const SidebarPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default SidebarPage;

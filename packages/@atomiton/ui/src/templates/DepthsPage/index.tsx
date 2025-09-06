@@ -3,7 +3,7 @@ import Group from "@/components/Group";
 import RowCards from "@/components/RowCards";
 import Card from "@/components/Card";
 
-const DepthsPage = () => {
+function DepthsPage() {
   const style = "size-32 rounded-3xl bg-[#FCFCFC] border border-[#ECECEC]";
   return (
     <Layout title="Depths">
@@ -54,6 +54,6 @@ const DepthsPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default DepthsPage;

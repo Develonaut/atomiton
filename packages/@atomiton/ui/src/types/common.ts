@@ -1,4 +1,8 @@
-import { ComponentPropsWithoutRef, ElementType, ReactElement } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  ElementType,
+  ReactElement,
+} from "react";
 
 /**
  * T-shirt sizes used consistently across all components

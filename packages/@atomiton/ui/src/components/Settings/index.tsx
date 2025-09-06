@@ -7,7 +7,7 @@ import Subscription from "./Subscription";
 
 import { menu } from "./menu";
 
-const Settings = () => {
+function Settings() {
   const [activeId, setActiveId] = useState(0);
 
   return (
@@ -52,6 +52,6 @@ const Settings = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Settings;

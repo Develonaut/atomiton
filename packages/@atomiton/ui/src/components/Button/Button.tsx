@@ -11,7 +11,7 @@ const ButtonRoot = styled(ButtonPrimitive, {
   styles: buttonStyles,
 });
 
-const Button: React.FC<ButtonProps> = (props) => {
+function Button(props: ButtonProps) {
   return (
     <ButtonRoot {...props} disabled={props.disabled || props.loading}>
       <span className="relative z-2 flex items-center gap-2">
@@ -28,6 +28,6 @@ const Button: React.FC<ButtonProps> = (props) => {
       </span>
     </ButtonRoot>
   );
-};
+}
 
 export default Button;

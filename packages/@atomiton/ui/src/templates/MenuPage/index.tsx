@@ -10,7 +10,7 @@ import Upload from "@/components/Upload";
 import FiltersMenu from "@/components/FiltersMenu";
 import ProfileMenu from "@/components/ProfileMenu";
 
-const MenuPage = () => {
+function MenuPage() {
   return (
     <Layout title="Menu">
       <Group>
@@ -75,6 +75,6 @@ const MenuPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default MenuPage;

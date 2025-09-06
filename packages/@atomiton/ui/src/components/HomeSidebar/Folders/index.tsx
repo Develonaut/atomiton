@@ -8,7 +8,7 @@ type Props = {
   }[];
 };
 
-const Folders = ({ folders }: Props) => {
+function Folders({ folders }: Props) {
   return (
     <div className="mt-0.5">
       <NewFolder />
@@ -19,6 +19,6 @@ const Folders = ({ folders }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Folders;

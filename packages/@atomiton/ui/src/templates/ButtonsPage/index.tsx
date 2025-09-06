@@ -7,7 +7,7 @@ import Button from "@/components/Button";
 import SubmitButton from "@/components/SubmitButton";
 import Tooltip from "@/components/Tooltip";
 
-const ButtonsPage = () => {
+function ButtonsPage() {
   return (
     <Layout title="Button">
       <Group title="Button, medium">
@@ -396,6 +396,6 @@ const ButtonsPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default ButtonsPage;

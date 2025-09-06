@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Search = ({}) => {
+function Search({}) {
   const [search, setSearch] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,6 +35,6 @@ const Search = ({}) => {
       </form>
     </div>
   );
-};
+}
 
 export default Search;

@@ -7,7 +7,7 @@ type Props = {
   };
 };
 
-const AssetItem = ({ value }: Props) => {
+function AssetItem({ value }: Props) {
   return (
     <div className="group relative flex justify-center items-center size-15 rounded-[0.625rem] bg-[#F1F1F1] border border-[#ECECEC] overflow-hidden transition-colors cursor-pointer hover:border-[#C4C4C4] hover:bg-[#fcfcfc]">
       <Image
@@ -29,6 +29,6 @@ const AssetItem = ({ value }: Props) => {
       </button>
     </div>
   );
-};
+}
 
 export default AssetItem;

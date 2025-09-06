@@ -1,4 +1,4 @@
-const FileMenu = () => {
+function FileMenu() {
   const items = [
     {
       title: "Export...",
@@ -47,6 +47,6 @@ const FileMenu = () => {
       ))}
     </div>
   );
-};
+}
 
 export default FileMenu;

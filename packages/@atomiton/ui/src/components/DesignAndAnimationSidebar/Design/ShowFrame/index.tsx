@@ -2,7 +2,7 @@ import { useState } from "react";
 import Switch from "@/components/Switch";
 import Group from "../../Group";
 
-const ShowFrame = () => {
+function ShowFrame() {
   const [showFrame, setShowFrame] = useState(true);
 
   return (
@@ -13,6 +13,6 @@ const ShowFrame = () => {
       }
     />
   );
-};
+}
 
 export default ShowFrame;

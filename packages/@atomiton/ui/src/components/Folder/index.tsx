@@ -18,7 +18,7 @@ const svg = (color: string) => (
   </svg>
 );
 
-const Folder = ({ item }: Props) => {
+function Folder({ item }: Props) {
   return (
     <button className="flex items-center p-0.75 rounded-xl text-[0.75rem] font-semibold border border-transparent cursor-pointer transition-colors hover:bg-[#f1f1f1]">
       <div className="flex justify-center items-center size-8 mr-3">
@@ -27,6 +27,6 @@ const Folder = ({ item }: Props) => {
       {item.title}
     </button>
   );
-};
+}
 
 export default Folder;

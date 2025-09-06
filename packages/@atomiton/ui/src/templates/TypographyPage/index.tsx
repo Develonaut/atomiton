@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import Group from "@/components/Group";
 
-const TypographyPage = () => {
+function TypographyPage() {
   const styles =
     "w-full table-fixed border border-[#ECECEC] text-[0.6875rem] leading-[1rem] font-medium text-[#7B7B7B] [&_th,&_td]:p-5 [&_th]:text-left [&_th]:font-medium [&_th]:opacity-50 [&_td]:border-t [&_td]:border-[#ECECEC] [&_td]:first:text-[#121212]";
 
@@ -264,6 +264,6 @@ const TypographyPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default TypographyPage;

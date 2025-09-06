@@ -14,7 +14,7 @@ type DropdownProps = {
   };
 };
 
-const Dropdown = ({ value }: DropdownProps) => {
+function Dropdown({ value }: DropdownProps) {
   const [height, setHeight] = useState<number | "auto">(
     value.active ? "auto" : 0,
   );
@@ -91,6 +91,6 @@ const Dropdown = ({ value }: DropdownProps) => {
       </AnimateHeight>
     </div>
   );
-};
+}
 
 export default Dropdown;

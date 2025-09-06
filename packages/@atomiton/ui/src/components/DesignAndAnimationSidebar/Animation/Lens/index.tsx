@@ -1,10 +1,11 @@
 import { useState } from "react";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 import Group from "../../Group";
 
 import { lensFormats, zoomLevels, rotates } from "./content";
 
-const Lens = () => {
+function Lens() {
   const [lensFormat, setLensFormat] = useState<SelectOption | null>(
     lensFormats[0] ?? null,
   );
@@ -84,6 +85,6 @@ const Lens = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Lens;

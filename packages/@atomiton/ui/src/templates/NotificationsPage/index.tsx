@@ -5,7 +5,7 @@ import Card from "@/components/Card";
 import Notification from "@/components/Notification";
 import Notifications from "@/components/Notifications";
 
-const MenuPage = () => {
+function MenuPage() {
   return (
     <Layout title="Notifications">
       <Group title="Variations">
@@ -104,6 +104,6 @@ const MenuPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default MenuPage;

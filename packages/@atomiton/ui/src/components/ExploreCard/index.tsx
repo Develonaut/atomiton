@@ -7,7 +7,7 @@ type Props = {
   };
 };
 
-const ExploreCard = ({ value }: Props) => {
+function ExploreCard({ value }: Props) {
   return (
     <div className="group relative overflow-hidden rounded-3xl">
       <div className="cursor-pointer">
@@ -59,6 +59,6 @@ const ExploreCard = ({ value }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default ExploreCard;

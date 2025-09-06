@@ -28,7 +28,7 @@ const navigation = [
   },
 ];
 
-const UserDropdown = ({}) => {
+function UserDropdown({}) {
   return (
     <Menu className="relative" as="div">
       <MenuButton className="flex justify-center items-center size-10 p-0.75 border border-transparent rounded-full overflow-hidden cursor-pointer transition-colors data-[hover]:border-[#121212]/10 data-[active]:border-[#121212]/10">
@@ -67,6 +67,6 @@ const UserDropdown = ({}) => {
       </MenuItems>
     </Menu>
   );
-};
+}
 
 export default UserDropdown;

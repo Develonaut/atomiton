@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Field from "@/components/Field";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 
 const viewOptions = [
   { id: 0, name: "can view" },
@@ -11,7 +12,7 @@ type Props = {
   className?: string;
 };
 
-const Invite = ({ className }: Props) => {
+function Invite({ className }: Props) {
   const [value, setValue] = useState("");
   const [view, setView] = useState<SelectOption | null>(viewOptions[0] ?? null);
 
@@ -35,6 +36,6 @@ const Invite = ({ className }: Props) => {
       />
     </div>
   );
-};
+}
 
 export default Invite;

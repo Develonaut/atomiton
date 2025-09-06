@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "@/components/Image";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 
 type Props = {
   name: string;
@@ -15,13 +16,7 @@ const accesses = [
   { id: 1, name: "can edit" },
 ];
 
-const Person = ({
-  name,
-  email,
-  avatar,
-  accessPerson,
-  isRemoveButton,
-}: Props) => {
+function Person({ name, email, avatar, accessPerson, isRemoveButton }: Props) {
   const [access, setAccess] = useState<SelectOption | null>(
     accesses[accessPerson === "view" ? 0 : 1] ?? null,
   );
@@ -85,6 +80,6 @@ const Person = ({
       )}
     </div>
   );
-};
+}
 
 export default Person;

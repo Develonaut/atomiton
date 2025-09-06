@@ -9,7 +9,7 @@ type Props = {
 
 import { content } from "./content";
 
-const Layout = ({ title, children }: Props) => {
+function Layout({ title, children }: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -44,6 +44,6 @@ const Layout = ({ title, children }: Props) => {
       </div>
     </>
   );
-};
+}
 
 export default Layout;

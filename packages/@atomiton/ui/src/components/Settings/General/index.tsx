@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Switch from "@/components/Switch";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 import NewField from "@/components/NewField";
 import Title from "../Title";
 import Option from "../Option";
 
-const General = () => {
+function General() {
   const [username, setUsername] = useState("sophie");
   const [autoPrompt, setAutoPrompt] = useState(true);
   const [autoPlay, setAutoPlay] = useState(true);
@@ -66,6 +67,6 @@ const General = () => {
       </Option>
     </>
   );
-};
+}
 
 export default General;

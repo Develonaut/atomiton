@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import Notifications from "@/components/Notifications";
 
-const NotificationsDropdown = () => {
+function NotificationsDropdown() {
   const isNewNotification = true;
 
   return (
@@ -41,6 +41,6 @@ const NotificationsDropdown = () => {
       </PopoverPanel>
     </Popover>
   );
-};
+}
 
 export default NotificationsDropdown;

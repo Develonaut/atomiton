@@ -9,7 +9,7 @@ type PropsLine = {
   active?: boolean;
 };
 
-const Line = ({ title, keyName, onClick, active }: PropsLine) => {
+function Line({ title, keyName, onClick, active }: PropsLine) {
   return (
     <button
       className="flex items-center w-full h-9 px-2 rounded-[0.625rem] cursor-pointer transition-colors hover:bg-[#F1F1F1]"
@@ -37,13 +37,13 @@ const Line = ({ title, keyName, onClick, active }: PropsLine) => {
       </div>
     </button>
   );
-};
+}
 
 type Props = {
   className?: string;
 };
 
-const Zoom = ({ className }: Props) => {
+function Zoom({ className }: Props) {
   const [percentage, setPercentage] = useState("100%");
   const [activeId, setActiveId] = useState(2);
   const [comments, setComments] = useState(true);
@@ -96,6 +96,6 @@ const Zoom = ({ className }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Zoom;

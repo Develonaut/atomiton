@@ -11,7 +11,7 @@ type Props = {
   copyText?: string;
 };
 
-const Card = ({
+function Card({
   className,
   title,
   span = 1,
@@ -20,7 +20,7 @@ const Card = ({
   children,
   isGray,
   copyText,
-}: Props) => {
+}: Props) {
   const { copy, isCopied } = useClipboard();
 
   const handleCopy = async () => {
@@ -81,6 +81,6 @@ const Card = ({
       {children}
     </div>
   );
-};
+}
 
 export default Card;

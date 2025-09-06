@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-const ColorPicker = ({ className }: Props) => {
+function ColorPicker({ className }: Props) {
   const [color, setColor] = useState("F4F4F4");
   const [percentage, setPercentage] = useState("100");
 
@@ -32,6 +32,6 @@ const ColorPicker = ({ className }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default ColorPicker;

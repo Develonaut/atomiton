@@ -6,7 +6,7 @@ import HeaderSimple from "@/components/HeaderSimple";
 import HeaderAsset from "@/components/HeaderAsset";
 import HeaderMinimal from "@/components/HeaderMinimal";
 
-const TopbarPage = () => {
+function TopbarPage() {
   return (
     <Layout title="Topbar">
       <Group>
@@ -35,6 +35,6 @@ const TopbarPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default TopbarPage;

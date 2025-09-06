@@ -9,7 +9,7 @@ const features = [
   "Multiple AI models",
 ];
 
-const Subscription = () => {
+function Subscription() {
   return (
     <>
       <Title value="Subscription" />
@@ -69,6 +69,6 @@ const Subscription = () => {
       </div>
     </>
   );
-};
+}
 
 export default Subscription;

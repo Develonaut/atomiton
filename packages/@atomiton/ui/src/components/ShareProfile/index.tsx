@@ -16,7 +16,7 @@ const socials = [
   },
 ];
 
-const ShareProfile = () => {
+function ShareProfile() {
   return (
     <div className="w-105 p-2 rounded-[2rem] bg-[#FCFCFC] shadow-2xl">
       <div className="flex gap-1">
@@ -83,6 +83,6 @@ const ShareProfile = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ShareProfile;

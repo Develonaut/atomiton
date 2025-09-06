@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Isometric = () => {
+function Isometric() {
   const [range, setRange] = useState(0.283);
 
   return (
@@ -35,6 +35,6 @@ const Isometric = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Isometric;

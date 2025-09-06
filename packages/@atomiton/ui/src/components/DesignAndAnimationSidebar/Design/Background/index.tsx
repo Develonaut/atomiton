@@ -1,12 +1,12 @@
 import ColorPicker from "@/components/ColorPicker";
 import Group from "../../Group";
 
-const Background = () => {
+function Background() {
   return (
     <Group title="Background">
       <ColorPicker />
     </Group>
   );
-};
+}
 
 export default Background;

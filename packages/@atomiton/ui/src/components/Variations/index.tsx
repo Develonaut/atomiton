@@ -3,7 +3,7 @@ import Image from "@/components/Image";
 
 import { content } from "./content";
 
-const Variations = () => {
+function Variations() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -47,6 +47,6 @@ const Variations = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Variations;

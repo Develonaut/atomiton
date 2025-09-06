@@ -7,7 +7,7 @@ import CommentPin from "@/components/CommentPin";
 import NewComment from "@/components/NewComment";
 import Comment from "@/components/Comment";
 
-const HomePage = () => {
+function HomePage() {
   return (
     <Layout title="Comment">
       <Group title="Comment cursor, pin">
@@ -93,6 +93,6 @@ const HomePage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default HomePage;

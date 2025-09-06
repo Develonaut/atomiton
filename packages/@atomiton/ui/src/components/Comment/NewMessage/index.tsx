@@ -3,7 +3,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import Image from "@/components/Image";
 import SubmitButton from "@/components/SubmitButton";
 
-const NewMessage = () => {
+function NewMessage() {
   const [message, setMessage] = useState("");
 
   return (
@@ -31,6 +31,6 @@ const NewMessage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default NewMessage;

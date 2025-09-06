@@ -7,7 +7,7 @@ type Props = {
   playmode?: boolean;
 };
 
-const Toolbar = ({ playmode }: Props) => {
+function Toolbar({ playmode }: Props) {
   const [active, setActive] = useState<number | null>(0);
 
   const actions = [
@@ -142,6 +142,6 @@ const Toolbar = ({ playmode }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Toolbar;

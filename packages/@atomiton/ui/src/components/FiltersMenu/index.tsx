@@ -9,7 +9,7 @@ type ItemProps = {
   onClick: () => void;
 };
 
-const Item = ({ title, active, onClick }: ItemProps) => {
+function Item({ title, active, onClick }: ItemProps) {
   return (
     <button
       className="flex items-center w-full h-9 px-2.5 rounded-[0.625rem] text-[0.75rem] font-medium cursor-pointer transition-colors hover:bg-[#f1f1f1]"
@@ -28,9 +28,9 @@ const Item = ({ title, active, onClick }: ItemProps) => {
       {title}
     </button>
   );
-};
+}
 
-const FiltersMenu = () => {
+function FiltersMenu() {
   const [type, setType] = useState(0);
   const [sort, setSort] = useState(0);
 
@@ -55,6 +55,6 @@ const FiltersMenu = () => {
       ))}
     </div>
   );
-};
+}
 
 export default FiltersMenu;

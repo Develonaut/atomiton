@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 import Tabs from "@/components/Tabs";
 import Button from "@/components/Button";
 import Line from "../Line";
@@ -17,7 +18,7 @@ type TabItem = {
   onClick?: () => void;
 };
 
-const Video = () => {
+function Video() {
   const [camera, setCamera] = useState<SelectOption | null>(
     cameraOptions[0] ?? null,
   );
@@ -84,6 +85,6 @@ const Video = () => {
       </Button>
     </div>
   );
-};
+}
 
 export default Video;

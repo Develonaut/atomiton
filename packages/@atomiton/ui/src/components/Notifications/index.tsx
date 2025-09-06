@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-const Notifications = ({ className }: Props) => {
+function Notifications({ className }: Props) {
   const [tab, setTab] = useState("all");
 
   const tabs = [
@@ -50,6 +50,6 @@ const Notifications = ({ className }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Notifications;

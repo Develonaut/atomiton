@@ -7,7 +7,7 @@ type NavLinkProps = {
   onClick?: () => void;
 };
 
-const NavLink = ({ value }: NavLinkProps) => {
+function NavLink({ value }: NavLinkProps) {
   return (
     <button
       className={`group relative flex items-center w-full p-0.75 rounded-xl text-[0.75rem] font-semibold border transition-colors cursor-pointer hover:bg-[#f1f1f1] ${
@@ -35,6 +35,6 @@ const NavLink = ({ value }: NavLinkProps) => {
       {value.title}
     </button>
   );
-};
+}
 
 export default NavLink;

@@ -11,7 +11,7 @@ import ExploreCardSm from "@/components/ExploreCardSm";
 import ExploreCard from "@/components/ExploreCard";
 import AssetItem from "@/components/AssetItem";
 
-const CardsPage = () => {
+function CardsPage() {
   return (
     <Layout title="Cards">
       <Group title="Pricing card">
@@ -183,6 +183,6 @@ const CardsPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default CardsPage;

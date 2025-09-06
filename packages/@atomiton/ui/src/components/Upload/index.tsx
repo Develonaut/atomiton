@@ -1,4 +1,4 @@
-const Upload = () => {
+function Upload() {
   const items = [
     {
       title: "Add photos or videos",
@@ -40,6 +40,6 @@ const Upload = () => {
       ))}
     </div>
   );
-};
+}
 
 export default Upload;

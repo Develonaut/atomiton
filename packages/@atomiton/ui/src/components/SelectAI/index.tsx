@@ -1,6 +1,6 @@
 import { options } from "./options";
 
-const SelectAI = () => {
+function SelectAI() {
   return (
     <div className="w-51 p-2 bg-[#FCFCFC] border border-[#E2E2E2] rounded-[1.25rem] shadow-2xl">
       {options.map((option) => (
@@ -16,6 +16,6 @@ const SelectAI = () => {
       ))}
     </div>
   );
-};
+}
 
 export default SelectAI;

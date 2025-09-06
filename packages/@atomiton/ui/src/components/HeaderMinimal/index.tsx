@@ -1,7 +1,7 @@
 import Image from "@/components/Image";
 import Logo from "@/components/Logo";
 
-const HeaderMinimal = () => {
+function HeaderMinimal() {
   const isNewNotification = true;
 
   return (
@@ -46,6 +46,6 @@ const HeaderMinimal = () => {
       </button>
     </div>
   );
-};
+}
 
 export default HeaderMinimal;

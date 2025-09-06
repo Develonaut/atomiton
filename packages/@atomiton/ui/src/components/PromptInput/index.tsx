@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import Select, { SelectOption } from "@/components/Select";
+import type { SelectOption } from "@/components/Select";
+import Select from "@/components/Select";
 import SubmitButton from "@/components/SubmitButton";
 import ViewController from "@/components/ViewController";
 import AddFiles from "./AddFiles";
@@ -19,12 +20,12 @@ type Props = {
   premadePrompt?: boolean;
 };
 
-const PromptInput = ({
+function PromptInput({
   className,
   collapsed,
   premadePrompt,
   isViewController,
-}: Props) => {
+}: Props) {
   const [message, setMessage] = useState("");
   const [setting, setSetting] = useState<SelectOption | null>(
     settings[0] ?? null,
@@ -103,6 +104,6 @@ const PromptInput = ({
       {premadePrompt && !visibleAudio && <PremadePrompt />}
     </div>
   );
-};
+}
 
 export default PromptInput;

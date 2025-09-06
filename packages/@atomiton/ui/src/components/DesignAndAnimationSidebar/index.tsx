@@ -11,7 +11,7 @@ type TabItem = {
   onClick?: () => void;
 };
 
-const RightSidebar = () => {
+function RightSidebar() {
   const tabs: TabItem[] = [
     { id: 0, name: "Design" },
     { id: 1, name: "Animation" },
@@ -32,6 +32,6 @@ const RightSidebar = () => {
       {/* {tab.id === 1 && <ViewController vertical />} */}
     </div>
   );
-};
+}
 
 export default RightSidebar;

@@ -8,7 +8,7 @@ type Props = {
   isActive: number;
 };
 
-const Menu = ({ items, onClick, isActive }: Props) => {
+function Menu({ items, onClick, isActive }: Props) {
   return (
     <div className="flex flex-col gap-1 mb-auto">
       {items.map((item) => (
@@ -54,6 +54,6 @@ const Menu = ({ items, onClick, isActive }: Props) => {
       ))}
     </div>
   );
-};
+}
 
 export default Menu;

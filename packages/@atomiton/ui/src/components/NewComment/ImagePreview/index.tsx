@@ -4,7 +4,7 @@ type Props = {
   images: string[];
 };
 
-const ImagePreview = ({ images }: Props) => {
+function ImagePreview({ images }: Props) {
   return (
     <div className="flex flex-wrap gap-2 px-4 pb-2">
       {images.map((image, index) => (
@@ -31,6 +31,6 @@ const ImagePreview = ({ images }: Props) => {
       ))}
     </div>
   );
-};
+}
 
 export default ImagePreview;

@@ -1,7 +1,7 @@
 import Image from "@/components/Image";
 import Comment from "./Comment";
 
-const QuickComment = () => {
+function QuickComment() {
   return (
     <div className="w-92 p-1 bg-[#FCFCFC] rounded-[1.25rem] shadow-2xl">
       <div className="flex items-center gap-3 mb-2 p-3">
@@ -30,6 +30,6 @@ const QuickComment = () => {
       <Comment />
     </div>
   );
-};
+}
 
 export default QuickComment;

@@ -4,7 +4,7 @@ type Props = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-const Search = ({ search, onChange, handleSubmit }: Props) => {
+function Search({ search, onChange, handleSubmit }: Props) {
   return (
     <form className="relative mb-2" onSubmit={handleSubmit}>
       <button className="absolute top-1 left-1 bottom-1 z-2 flex items-center justify-center w-8 rounded-lg fill-[#7B7B7B] cursor-pointer transition-all hover:bg-[#FCFCFC] hover:shadow-[0px_0px_4px_0px_rgba(18,18,18,0.10)] hover:fill-[#000]">
@@ -27,6 +27,6 @@ const Search = ({ search, onChange, handleSubmit }: Props) => {
       />
     </form>
   );
-};
+}
 
 export default Search;

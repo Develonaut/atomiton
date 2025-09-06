@@ -11,7 +11,7 @@ import DeleteFile from "@/components/DeleteFile";
 import Export from "@/components/Export";
 import Settings from "@/components/Settings";
 
-const ModalPage = () => {
+function ModalPage() {
   return (
     <Layout title="Modal, dialogs">
       <Group title="Variations">
@@ -87,6 +87,6 @@ const ModalPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default ModalPage;

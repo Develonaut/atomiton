@@ -2,7 +2,7 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import Button from "@/components/Button";
 import Export from "@/components/Export";
 
-const ExportFiles = () => {
+function ExportFiles() {
   return (
     <>
       <Popover className="relative">
@@ -21,6 +21,6 @@ const ExportFiles = () => {
       </Popover>
     </>
   );
-};
+}
 
 export default ExportFiles;

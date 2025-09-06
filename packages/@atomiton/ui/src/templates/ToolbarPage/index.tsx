@@ -7,7 +7,7 @@ import Toolbar from "@/components/Toolbar";
 import VideoPlayer from "@/components/VideoPlayer";
 import ViewController from "@/components/ViewController";
 
-const ToolbarPage = () => {
+function ToolbarPage() {
   return (
     <Layout title="Toolbar">
       <Group>
@@ -47,6 +47,6 @@ const ToolbarPage = () => {
       </Group>
     </Layout>
   );
-};
+}
 
 export default ToolbarPage;

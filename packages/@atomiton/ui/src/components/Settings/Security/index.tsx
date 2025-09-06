@@ -5,7 +5,7 @@ import NewField from "@/components/NewField";
 import Title from "../Title";
 import Option from "../Option";
 
-const Security = () => {
+function Security() {
   const [username, setUsername] = useState("••••••••••••••");
   const [authentication, setAuthentication] = useState(false);
 
@@ -34,6 +34,6 @@ const Security = () => {
       </Option>
     </>
   );
-};
+}
 
 export default Security;

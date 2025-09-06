@@ -17,7 +17,7 @@ type Props = {
   onClose?: () => void;
 };
 
-const Sidebar = ({ className, content, onClose }: Props) => {
+function Sidebar({ className, content, onClose }: Props) {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
 
@@ -95,6 +95,6 @@ const Sidebar = ({ className, content, onClose }: Props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Sidebar;

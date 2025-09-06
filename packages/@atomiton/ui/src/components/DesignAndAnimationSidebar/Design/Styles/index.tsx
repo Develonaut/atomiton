@@ -4,7 +4,7 @@ import Group from "../../Group";
 
 import { content } from "./content";
 
-const Styles = () => {
+function Styles() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
@@ -30,6 +30,6 @@ const Styles = () => {
       </div>
     </Group>
   );
-};
+}
 
 export default Styles;

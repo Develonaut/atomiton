@@ -1,8 +1,6 @@
 import React from "react";
-import {
-  Link as RouterLink,
-  LinkProps as RouterLinkProps,
-} from "react-router-dom";
+import type { LinkProps as RouterLinkProps } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 export interface LinkProps extends Omit<RouterLinkProps, "to" | "children"> {
   href?: string;

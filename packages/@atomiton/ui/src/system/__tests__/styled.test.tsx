@@ -474,7 +474,9 @@ describe("styled component wrapper", () => {
     });
 
     it("should handle components without displayName", () => {
-      const AnonymousComponent = () => <div>Anonymous</div>;
+      function AnonymousComponent() {
+        return <div>Anonymous</div>;
+      }
       const StyledComponent = styled(AnonymousComponent);
 
       expect(StyledComponent.displayName).toBe("Styled(AnonymousComponent)");
