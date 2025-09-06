@@ -30,6 +30,7 @@ packages/
 ## Package Types
 
 ### Core Functionality
+
 - **`@atomiton/core`** - Service aggregator providing unified API access
   - Blueprint management
   - Execution engine
@@ -37,29 +38,33 @@ packages/
   - Platform detection
 
 ### UI & Visual
+
 - **`@atomiton/ui`** - Reusable UI components
 - **`@atomiton/theme`** - Brainwave 2.0 design tokens
 - **`@atomiton/editor`** - Blueprint visual editor
 
 ### Infrastructure
+
 - **`@atomiton/store`** - Centralized state management
 - **`@atomiton/events`** - Event bus for cross-package communication
 - **`@atomiton/di`** - Dependency injection container
 - **`@atomiton/nodes`** - Node system and definitions
 
 ### Configuration
+
 - **`@atomiton/typescript-config`** - Shared TypeScript configurations
 - **`@atomiton/eslint-config`** - Shared ESLint rules
 - **`@atomiton/vite-config`** - Shared Vite configurations
 
 ## Import Patterns
 
-### For Internal Apps (apps/*)
+### For Internal Apps (apps/\*)
+
 ```typescript
 // Apps can import from any @atomiton package
-import { Button, Card } from '@atomiton/ui';
-import { BlueprintEditor } from '@atomiton/editor';
-import { Core } from '@atomiton/core';
+import { Button, Card } from "@atomiton/ui";
+import { BlueprintEditor } from "@atomiton/editor";
+import { Core } from "@atomiton/core";
 
 // Use Core as service aggregator
 const blueprint = await Core.Blueprint.create();
@@ -67,11 +72,12 @@ const result = await Core.Execution.run(blueprint);
 ```
 
 ### For Internal Packages
+
 ```typescript
 // Packages can import from other internal packages
-import { BaseNode } from '@atomiton/nodes';
-import { useStore } from '@atomiton/store';
-import { Button } from '@atomiton/ui';
+import { BaseNode } from "@atomiton/nodes";
+import { useStore } from "@atomiton/store";
+import { Button } from "@atomiton/ui";
 ```
 
 ## Development Workflow
@@ -99,6 +105,7 @@ Start Internal → Mature → Evaluate → (Maybe) Promote to Public
 #### How to Promote to Public
 
 **Option A: Move (if no internal dependencies)**
+
 ```bash
 # Move the package
 mv packages/@atomiton/feature packages/feature
@@ -108,13 +115,14 @@ mv packages/@atomiton/feature packages/feature
 ```
 
 **Option B: Create Facade (if other internals depend on it)**
+
 ```typescript
 // packages/feature/src/index.ts (new public package)
-export { 
+export {
   // Curated public API only
   Feature,
-  FeatureConfig 
-} from '@atomiton/feature';
+  FeatureConfig,
+} from "@atomiton/feature";
 
 // Don't export internal utilities
 // Don't export experimental features
@@ -123,11 +131,13 @@ export {
 ## Dependency Rules
 
 ### ✅ Allowed
+
 - Apps can import from any package
 - Internal packages can import from other internal packages
 - Public packages can import from internal packages
 
 ### ❌ Not Allowed
+
 - Internal packages importing from public packages (avoid circular deps)
 - Direct file imports (always use package exports)
 

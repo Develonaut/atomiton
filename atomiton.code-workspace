@@ -2,40 +2,24 @@
   "folders": [
     {
       "name": "🏠 Root",
-      "path": "."
+      "path": ".",
     },
     {
       "name": "🎨 Client App",
-      "path": "./apps/client"
+      "path": "./apps/client",
     },
     {
       "name": "🖥️ Desktop App",
-      "path": "./apps/desktop"
+      "path": "./apps/desktop",
     },
     {
-      "name": "🧠 Core Package",
-      "path": "./packages/core"
-    },
-    {
-      "name": "🔌 Nodes Package",
-      "path": "./packages/nodes"
-    },
-    {
-      "name": "🎨 Theme Package",
-      "path": "./packages/theme"
-    },
-    {
-      "name": "💎 UI Components",
-      "path": "./packages/ui"
+      "name": "📦 Packages",
+      "path": "./packages/@atomiton",
     },
     {
       "name": "📚 Documentation",
-      "path": "./docs"
+      "path": "./docs",
     },
-    {
-      "name": "🚀 Workspace",
-      "path": "./docs/workspace"
-    }
   ],
   "settings": {
     "typescript.preferences.includePackageJsonAutoImports": "on",
@@ -46,18 +30,18 @@
       "packages/core",
       "packages/nodes",
       "packages/theme",
-      "packages/ui"
+      "packages/ui",
     ],
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit"
+      "source.fixAll.eslint": "explicit",
     },
     "files.exclude": {
       "**/node_modules": true,
       "**/.turbo": true,
       "**/dist": true,
       "**/.next": true,
-      "**/out": true
+      "**/out": true,
     },
     "search.exclude": {
       "**/node_modules": true,
@@ -66,41 +50,41 @@
       "**/.next": true,
       "**/out": true,
       "**/pnpm-lock.yaml": true,
-      "apps/brainwave-reference": true
+      "apps/brainwave-reference": true,
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[typescriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[javascript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[javascriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[markdown]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "files.associations": {
       "*.css": "css",
-      ".env*": "dotenv"
+      ".env*": "dotenv",
     },
     "emmet.includeLanguages": {
       "javascript": "javascriptreact",
-      "typescript": "typescriptreact"
+      "typescript": "typescriptreact",
     },
     "tailwindCSS.experimental.classRegex": [
       ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-      ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-    ]
+      ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ],
   },
   "extensions": {
     "recommendations": [
@@ -116,8 +100,8 @@
       "formulahendry.auto-rename-tag",
       "steoates.autoimport",
       "mikestead.dotenv",
-      "gruntfuggly.todo-tree"
-    ]
+      "gruntfuggly.todo-tree",
+    ],
   },
   "launch": {
     "version": "0.2.0",
@@ -130,8 +114,8 @@
         "runtimeArgs": ["--filter", "@atomiton/client", "dev"],
         "console": "integratedTerminal",
         "env": {
-          "NODE_ENV": "development"
-        }
+          "NODE_ENV": "development",
+        },
       },
       {
         "name": "🖥️ Desktop Dev",
@@ -141,8 +125,8 @@
         "runtimeArgs": ["--filter", "@atomiton/desktop", "dev"],
         "console": "integratedTerminal",
         "env": {
-          "NODE_ENV": "development"
-        }
+          "NODE_ENV": "development",
+        },
       },
       {
         "name": "🧪 Test All",
@@ -150,8 +134,8 @@
         "request": "launch",
         "runtimeExecutable": "pnpm",
         "runtimeArgs": ["test"],
-        "console": "integratedTerminal"
-      }
-    ]
-  }
+        "console": "integratedTerminal",
+      },
+    ],
+  },
 }
