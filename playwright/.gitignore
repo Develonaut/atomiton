@@ -1,0 +1,10 @@
+# Playwright test artifacts
+test-results/
+playwright-report/
+screenshots/
+videos/
+traces/
+
+# Temporary files
+*.tmp
+.DS_Store
