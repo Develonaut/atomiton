@@ -37,9 +37,6 @@
     "vite": "^7.1.4",
     "vitest": "^2.0.0"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,md}": "prettier --write"
-  },
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
