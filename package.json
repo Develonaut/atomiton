@@ -14,6 +14,7 @@
     "test:e2e": "playwright test -c playwright/playwright.config.ts",
     "test:e2e:ui": "playwright test -c playwright/playwright.config.ts --ui",
     "test:e2e:debug": "playwright test -c playwright/playwright.config.ts --debug",
+    "test:e2e:smoke": "playwright test -c playwright/playwright.config.ts tests/smoke.spec.ts",
     "test:install": "playwright install chromium",
     "prepare": "husky",
     "kill-ports": "lsof -ti :5173 -ti :5174 -ti :5175 -ti :3000 -ti :8080 | xargs kill -9 2>/dev/null; echo '✅ All ports freed!'",

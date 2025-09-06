@@ -63,6 +63,57 @@
         "reveal": "always",
         "panel": "shared"
       }
+    },
+    {
+      "label": "🚨 E2E: Smoke Tests",
+      "detail": "Quick smoke tests (2.6s) - Check all apps work",
+      "type": "shell",
+      "command": "pnpm test:e2e:smoke",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🎭 E2E: Interactive UI",
+      "detail": "Open Playwright UI for interactive test debugging",
+      "type": "shell",
+      "command": "pnpm test:e2e:ui",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🐛 E2E: Debug Mode",
+      "detail": "Run tests in debug mode with breakpoints",
+      "type": "shell",
+      "command": "pnpm test:e2e:debug",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "📦 Install Playwright",
+      "detail": "Install Playwright browsers for E2E testing",
+      "type": "shell",
+      "command": "pnpm test:install",
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     }
   ]
 }

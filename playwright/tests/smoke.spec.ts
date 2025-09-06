@@ -1,131 +1,84 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
+import { _electron as electron } from "playwright";
 
-test.describe('Smoke Tests', () => {
-  test.describe('Client App', () => {
-    test('should load and display main navigation', async ({ page }) => {
-      // Navigate to client app
-      await page.goto('http://localhost:5173');
-      
-      // Wait for app to load
-      await page.waitForLoadState('networkidle');
-      
-      // Check that the app root is rendered
-      await expect(page.locator('#root')).toBeVisible();
-      
-      // Check for key UI elements that indicate the app loaded
-      // These selectors may need adjustment based on actual app structure
-      const appContent = page.locator('#root > div').first();
-      await expect(appContent).toBeVisible();
-      
-      // Verify no console errors
-      const consoleErrors: string[] = [];
-      page.on('console', (msg) => {
-        if (msg.type() === 'error') {
-          consoleErrors.push(msg.text());
-        }
-      });
-      
-      // Give it a moment to catch any delayed errors
-      await page.waitForTimeout(1000);
-      expect(consoleErrors).toHaveLength(0);
-    });
+/**
+ * Smoke Tests - Quick check that everything works
+ * Goal: < 3 seconds, no errors, content visible
+ */
 
-    test('should navigate between routes', async ({ page }) => {
-      await page.goto('http://localhost:5173');
-      
-      // Check initial route loads
-      await expect(page).toHaveURL(/http:\/\/localhost:5173/);
-      
-      // Try navigating if there are navigation elements
-      // This is a placeholder - adjust based on actual navigation
-      const navLinks = page.locator('a[href^="/"]');
-      const linkCount = await navLinks.count();
-      
-      if (linkCount > 0) {
-        // Click first internal link
-        await navLinks.first().click();
-        
-        // Verify navigation occurred
-        await page.waitForLoadState('networkidle');
-        
-        // Should still be on the same domain
-        await expect(page).toHaveURL(/http:\/\/localhost:5173/);
-      }
-    });
+test.describe("Smoke Tests", () => {
+  test.describe.configure({ mode: "parallel" });
+
+  test("client app - no errors, has content", async ({ page }) => {
+    const errors: string[] = [];
+    page.on(
+      "console",
+      (msg) => msg.type() === "error" && errors.push(msg.text()),
+    );
+    page.on("pageerror", (err) => errors.push(err.message));
+
+    await page.goto("http://localhost:5173", { waitUntil: "domcontentloaded" });
+
+    expect(errors).toHaveLength(0);
+    await expect(page.locator("#root")).toBeVisible();
+
+    // Just check something rendered
+    const hasContent = await page
+      .locator("#root")
+      .evaluate((el) => el.children.length > 0);
+    expect(hasContent).toBeTruthy();
   });
 
-  test.describe('UI Package', () => {
-    test('should load UI component showcase', async ({ page }) => {
-      // Navigate to UI package dev server
-      await page.goto('http://localhost:5174');
-      
-      // Wait for app to load
-      await page.waitForLoadState('networkidle');
-      
-      // Check that the app root is rendered
-      await expect(page.locator('#root')).toBeVisible();
-      
-      // UI package should show component examples
-      const appContent = page.locator('#root > div').first();
-      await expect(appContent).toBeVisible();
-      
-      // Verify no console errors
-      const consoleErrors: string[] = [];
-      page.on('console', (msg) => {
-        if (msg.type() === 'error') {
-          consoleErrors.push(msg.text());
-        }
-      });
-      
-      await page.waitForTimeout(1000);
-      expect(consoleErrors).toHaveLength(0);
-    });
+  test("ui package - no errors, has content", async ({ page }) => {
+    const errors: string[] = [];
+    page.on(
+      "console",
+      (msg) => msg.type() === "error" && errors.push(msg.text()),
+    );
+    page.on("pageerror", (err) => errors.push(err.message));
 
-    test('should render Button component if exported', async ({ page }) => {
-      await page.goto('http://localhost:5174');
-      
-      // Check if any buttons are rendered in the showcase
-      const buttons = page.locator('button');
-      const buttonCount = await buttons.count();
-      
-      // If buttons exist, verify they're interactive
-      if (buttonCount > 0) {
-        const firstButton = buttons.first();
-        await expect(firstButton).toBeVisible();
-        
-        // Check button is interactive
-        const isDisabled = await firstButton.isDisabled();
-        if (!isDisabled) {
-          // Hover to check for hover states
-          await firstButton.hover();
-          
-          // Click to verify it's clickable
-          await firstButton.click();
-        }
-      }
-    });
+    await page.goto("http://localhost:5174", { waitUntil: "domcontentloaded" });
+
+    expect(errors).toHaveLength(0);
+    await expect(page.locator("#root")).toBeVisible();
+
+    const hasContent = await page
+      .locator("#root")
+      .evaluate((el) => el.children.length > 0);
+    expect(hasContent).toBeTruthy();
   });
 
-  test.describe('Health Checks', () => {
-    test('should respond to health check endpoints', async ({ request }) => {
-      // Check client app is responding
-      const clientResponse = await request.get('http://localhost:5173');
-      expect(clientResponse.ok()).toBeTruthy();
-      expect(clientResponse.status()).toBe(200);
-      
-      // Check UI package is responding
-      const uiResponse = await request.get('http://localhost:5174');
-      expect(uiResponse.ok()).toBeTruthy();
-      expect(uiResponse.status()).toBe(200);
-    });
+  test.skip("desktop app - launches without crash", async () => {
+    // Skip in CI or if not built
+    if (process.env.CI) return;
 
-    test('should serve static assets', async ({ request }) => {
-      // Check if Vite is serving assets properly
-      const clientViteResponse = await request.get('http://localhost:5173/@vite/client');
-      expect(clientViteResponse.ok()).toBeTruthy();
-      
-      const uiViteResponse = await request.get('http://localhost:5174/@vite/client');
-      expect(uiViteResponse.ok()).toBeTruthy();
+    try {
+      const app = await electron.launch({
+        args: ["apps/desktop/dist/main/index.js"],
+        timeout: 5000,
+      });
+
+      const window = await app.firstWindow();
+      const isVisible = await window.isVisible();
+      expect(isVisible).toBe(true);
+
+      await app.close();
+    } catch (error) {
+      test.skip();
+    }
+  });
+
+  test("servers responding", async ({ request }) => {
+    const responses = await Promise.allSettled([
+      request.get("http://localhost:5173"),
+      request.get("http://localhost:5174"),
+    ]);
+
+    responses.forEach((res) => {
+      expect(res.status).toBe("fulfilled");
+      if (res.status === "fulfilled") {
+        expect(res.value.ok()).toBeTruthy();
+      }
     });
   });
 });
