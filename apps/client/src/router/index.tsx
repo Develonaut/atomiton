@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
+import { RouteErrorBoundary } from "../components/RouteErrorBoundary";
 
 // Loading component for lazy loaded routes
 function LoadingFallback() {
@@ -44,9 +45,22 @@ function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<LoadingFallback />}>{children}</Suspense>;
 }
 
+// Root layout for error boundary
+const RootLayout = lazy(() => import("../layouts/RootLayout"));
+
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: (
+      <SuspenseWrapper>
+        <RootLayout />
+      </SuspenseWrapper>
+    ),
+    errorElement: <RouteErrorBoundary />,
+    children: [],
+  },
+  {
+    index: true,
     element: (
       <SuspenseWrapper>
         <HomePage />
@@ -54,7 +68,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/create",
+    path: "create",
     element: (
       <SuspenseWrapper>
         <CreatePage />
@@ -62,7 +76,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/explore",
+    path: "explore",
     element: (
       <SuspenseWrapper>
         <ExplorePage />
@@ -70,7 +84,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/explore/details",
+    path: "explore/details",
     element: (
       <SuspenseWrapper>
         <DetailsPageAdapter />
@@ -78,7 +92,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/explore/designs",
+    path: "explore/designs",
     element: (
       <SuspenseWrapper>
         <DesignsPage />
@@ -86,7 +100,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/explore/animations",
+    path: "explore/animations",
     element: (
       <SuspenseWrapper>
         <AnimationsPage />
@@ -94,7 +108,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/profile",
+    path: "profile",
     element: (
       <SuspenseWrapper>
         <ProfilePage />
@@ -102,7 +116,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/pricing",
+    path: "pricing",
     element: (
       <SuspenseWrapper>
         <PricingPage />
@@ -110,7 +124,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/likes",
+    path: "likes",
     element: (
       <SuspenseWrapper>
         <LikesPage />
@@ -118,7 +132,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/updates",
+    path: "updates",
     element: (
       <SuspenseWrapper>
         <UpdatesPage />
@@ -126,7 +140,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/sign-in",
+    path: "sign-in",
     element: (
       <SuspenseWrapper>
         <SignInPageAdapter />
@@ -134,7 +148,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/create-account",
+    path: "create-account",
     element: (
       <SuspenseWrapper>
         <CreateAccountPageAdapter />
@@ -142,7 +156,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/reset-password",
+    path: "reset-password",
     element: (
       <SuspenseWrapper>
         <ResetPasswordPageAdapter />
@@ -150,7 +164,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/assets/3d-objects",
+    path: "assets/3d-objects",
     element: (
       <SuspenseWrapper>
         <AssetsObjects3dPage />
@@ -158,7 +172,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/assets/materials",
+    path: "assets/materials",
     element: (
       <SuspenseWrapper>
         <AssetsMaterialsPage />
