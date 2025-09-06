@@ -13,7 +13,6 @@ export default defineConfig({
     rollupOptions: {
       external: [
         // External packages
-        "@atomiton/theme",
         "@atomiton/store",
         "@atomiton/events",
         "@atomiton/nodes",

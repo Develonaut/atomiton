@@ -18,10 +18,8 @@ packages/
 └── @atomiton/          # Internal packages namespace
     ├── core/           # Core engine & service aggregator
     ├── ui/             # UI components & design system
-    ├── editor/         # Blueprint editor (React Flow)
     ├── nodes/          # Node definitions & logic
     ├── store/          # State management (Zustand)
-    ├── theme/          # Brainwave 2.0 theme
     ├── events/         # Event system
     ├── di/             # Dependency injection
     └── [configs...]    # Various configuration packages
@@ -39,9 +37,7 @@ packages/
 
 ### UI & Visual
 
-- **`@atomiton/ui`** - Reusable UI components
-- **`@atomiton/theme`** - Brainwave 2.0 design tokens
-- **`@atomiton/editor`** - Blueprint visual editor
+- **`@atomiton/ui`** - Reusable UI components and design system
 
 ### Infrastructure
 
@@ -62,7 +58,6 @@ packages/
 ```typescript
 // Apps can import from any @atomiton package
 import { Button, Card } from "@atomiton/ui";
-import { BlueprintEditor } from "@atomiton/editor";
 import { Core } from "@atomiton/core";
 
 // Use Core as service aggregator
@@ -153,7 +148,6 @@ export {
 As the platform matures, some packages may be published to npm:
 
 - `@atomiton/ui` → Could become a public design system
-- `@atomiton/editor` → Could be offered as standalone editor
 - `@atomiton/nodes` → Could allow community node contributions
 
 But for now, keeping everything internal gives us maximum flexibility to build the best possible platform.

@@ -17,7 +17,6 @@ export default defineConfig({
         "@mantine/core",
         "@tabler/icons-react",
         "@xyflow/react",
-        "@atomiton/theme",
         "chokidar",
         "eventemitter3",
         "glob",

@@ -18,7 +18,7 @@ The Atomiton UI package serves as both a component library and a visual developm
 - **Desktop-First**: Optimized for desktop application experiences
 - **Component Showcase**: Interactive pages for testing and validating components
 - **Visual Regression Testing**: Automated screenshot testing with Playwright
-- **Theme Integration**: Seamless integration with `@atomiton/theme` package
+- **Theme Integration**: Built-in design system and theming
 - **Hot Reloading**: Real-time development with theme changes
 
 ## Technology Stack
@@ -59,7 +59,7 @@ packages/ui/
 ### Prerequisites
 
 - Node.js 18+ and pnpm (managed via Turborepo)
-- This package requires the `@atomiton/theme` package to be built first
+- This package contains a built-in design system
 
 ### Installation
 
@@ -69,8 +69,8 @@ From the project root:
 # Install all dependencies
 pnpm install
 
-# Build theme dependency (required)
-pnpm --filter @atomiton/theme build
+# Build dependencies
+pnpm build
 ```
 
 ### Development
@@ -79,26 +79,25 @@ pnpm --filter @atomiton/theme build
 # Start development server
 pnpm dev
 
-# Start with theme hot-reloading (recommended)
-pnpm dev:with-theme
+# Start with hot-reloading (recommended)
+pnpm dev
 ```
 
 Open [http://localhost:3002](http://localhost:3002) to view the component showcase.
 
 ### Available Scripts
 
-| Command               | Description                               |
-| --------------------- | ----------------------------------------- |
-| `pnpm dev`            | Start Vite development server             |
-| `pnpm dev:with-theme` | Start dev server with theme hot-reloading |
-| `pnpm build`          | Build for production                      |
-| `pnpm preview`        | Preview production build                  |
-| `pnpm lint`           | Run ESLint with zero warnings policy      |
-| `pnpm lint:fix`       | Fix linting issues automatically          |
-| `pnpm typecheck`      | Run TypeScript type checking              |
-| `pnpm test`           | Run Playwright visual regression tests    |
-| `pnpm test:ui`        | Run tests with Playwright UI              |
-| `pnpm test:headed`    | Run tests in headed browser mode          |
+| Command            | Description                            |
+| ------------------ | -------------------------------------- |
+| `pnpm dev`         | Start Vite development server          |
+| `pnpm build`       | Build for production                   |
+| `pnpm preview`     | Preview production build               |
+| `pnpm lint`        | Run ESLint with zero warnings policy   |
+| `pnpm lint:fix`    | Fix linting issues automatically       |
+| `pnpm typecheck`   | Run TypeScript type checking           |
+| `pnpm test`        | Run Playwright visual regression tests |
+| `pnpm test:ui`     | Run tests with Playwright UI           |
+| `pnpm test:headed` | Run tests in headed browser mode       |
 
 ## Component Development
 
@@ -115,7 +114,7 @@ Open [http://localhost:3002](http://localhost:3002) to view the component showca
 Components automatically inherit from the Atomiton theme via:
 
 - **Theme Provider**: `components/ThemeProvider` wraps the entire app
-- **Tailwind Config**: Uses `@atomiton/theme` for consistent design tokens
+- **Tailwind Config**: Built-in design tokens for consistent theming
 - **CSS Variables**: Theme-aware custom properties for colors, spacing, typography
 
 ### Component Guidelines
@@ -158,7 +157,7 @@ Each component page has corresponding Playwright tests that:
 
 This UI package integrates with the larger Atomiton ecosystem:
 
-- **Theme Package**: `@atomiton/theme` provides design tokens and Tailwind configuration
+- **Design System**: Built-in design tokens and Tailwind configuration
 - **Core Package**: Components will be consumed by `@atomiton/core` Blueprint engine
 - **Client App**: Final application in `apps/client` uses these components
 - **Desktop App**: `packages/electron` packages everything as a desktop application
@@ -206,4 +205,4 @@ The components implement the complete Atomiton design system including:
 - **Interactions**: Smooth animations and micro-interactions
 - **Icons**: Comprehensive icon system integrated with components
 
-For detailed design specifications, see the `@atomiton/theme` package documentation.
+For detailed design specifications, see the built-in theme configuration in this package.

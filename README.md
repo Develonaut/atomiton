@@ -5,9 +5,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Code of Conduct](https://img.shields.io/badge/Code%20of-Conduct-ff69b4.svg)](CODE_OF_CONDUCT.md)
 
-> **⚠️ VERY EARLY STAGE - HOPES & DREAMS PROJECT ⚠️**
+> **⚠️ EARLY STAGE - ACTIVE DEVELOPMENT ⚠️**
 >
-> This project is so new that nothing works yet. It's literally just hopes and dreams at this point. I'm sharing it publicly because I'm excited about what it could become, not because it's ready to use. Think of this as watching a house being built from the foundation up - right now we're still drawing the blueprints!
+> This project is in active development. While the core architecture is in place and the build system works, we're still implementing features and refining the user experience. Think of this as watching a house being built - the foundation and framework are solid, and we're now working on the rooms!
 
 ## What Atomiton Will Be (Eventually)
 
@@ -15,12 +15,13 @@ A beautiful, desktop-first automation platform that makes visual workflow creati
 
 ## Current Reality Check
 
-- ✅ We have some code structure
-- ✅ We have big dreams
-- ✅ We have documentation (for things that don't exist yet)
-- ❌ Nothing actually works
-- ❌ No features are implemented
-- ❌ It's not usable at all
+- ✅ Monorepo structure with 8 working packages
+- ✅ Build system fully operational (TypeScript, Vite, Turbo)
+- ✅ Core architecture implemented
+- ✅ UI components library with Mantine v7
+- 🚧 Blueprint editor in development
+- 🚧 Node system being integrated
+- ⏳ Desktop app wrapper ready for integration
 
 ## Why Share So Early?
 
@@ -42,12 +43,13 @@ I could have kept this private until it was "ready," but:
 
 **Simple Over Complex**: 20-50 excellent nodes instead of 500+ mediocre ones.
 
-## Tech Stack (Active Development)
+## Tech Stack
 
-- **Frontend**: React + Vite + Custom UI Framework
-- **Desktop**: Electron (eventually)
-- **Theme**: Brainwave 2.0 aesthetic (by [UI8](https://ui8.net))
-- **Architecture**: Monorepo with pnpm
+- **Frontend**: React + Vite + Mantine v7
+- **Desktop**: Electron (wrapper ready)
+- **UI Design**: Brainwave 2.0 aesthetic (by [UI8](https://ui8.net))
+- **Architecture**: Monorepo with pnpm + Turbo
+- **Language**: TypeScript everywhere
 
 ## 📊 Project Progress
 
@@ -56,20 +58,25 @@ Track our development progress:
 - **[Current Work](./CURRENT.md)** - What we're building right now
 - **[Upcoming Work](./NEXT.md)** - What's coming next
 - **[Completed Work](./COMPLETED.md)** - What we've shipped
-- **Language**: TypeScript everywhere
 
 ## Project Structure
 
 ```
 atomiton/
-├── apps/           # Applications
-│   ├── client/    # React app (Next.js → Vite migration planned)
-│   └── desktop/   # Electron wrapper for full desktop experience
-├── packages/       # Shared packages
-│   ├── core/      # Core logic (exists but not wired)
-│   ├── nodes/     # Node library (exists but not wired)
-│   └── theme/     # Theme system (empty, waiting for migration)
-└── docs/          # Extensive docs for things that don't exist
+├── apps/              # Applications
+│   ├── client/       # React + Vite web application
+│   └── desktop/      # Electron wrapper for desktop experience
+├── packages/
+│   └── @atomiton/    # Scoped packages
+│       ├── core/     # Core Blueprint engine
+│       ├── nodes/    # Node implementations
+│       ├── ui/       # UI components & design system
+│       ├── store/    # State management
+│       ├── events/   # Event system
+│       ├── di/       # Dependency injection
+│       └── ...       # Config packages
+├── playwright/       # E2E testing suite
+└── docs/            # Project documentation
 ```
 
 **Note**: The client app will have limited functionality on the web. Desktop app provides full file system access and native features.
@@ -83,16 +90,14 @@ This is a solo learning project, but if you're interested:
 - 💬 Open issues with ideas or feedback
 - 🚫 Don't expect anything to work for months
 
-## Installation (Don't Bother Yet)
-
-Seriously, it doesn't do anything. But if you're curious:
+## Installation
 
 ```bash
 git clone https://github.com/Develonaut/atomiton.git
 cd atomiton
 pnpm install
-pnpm dev
-# You'll see... something. Maybe. Probably errors.
+pnpm build  # All packages build successfully
+pnpm dev    # Start development servers
 ```
 
 ## Contributing
@@ -127,4 +132,4 @@ Building in public from commit #1. Follow along as this transforms from hopes an
 
 **Remember**: This is a journey, not a destination. Nothing works yet, but that's part of the fun.
 
-_Last Updated: January 2025 - Still just dreams_
+_Last Updated: September 2025 - Foundation complete, building features_

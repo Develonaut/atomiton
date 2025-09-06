@@ -159,7 +159,7 @@ See [Development Process](../../../docs/development/archive/PROCESS.md) for comp
 
 **STATUS UPDATES BELONG IN:**
 
-- `/docs/status/CURRENT_STATUS.md` - Primary project status document
+- `/CURRENT.md` - Primary project status document (root level)
 - `/docs/TODO.md` - Task-specific status tracking
 - Dedicated status files, NOT process documentation
 

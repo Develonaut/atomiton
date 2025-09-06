@@ -84,7 +84,9 @@ vi.mock("../utils/calculateStyleProps", () => ({
 
 // Test components
 interface BaseButtonProps
-  extends React.PropsWithChildren<Record<string, unknown>> {
+  extends React.PropsWithChildren<
+    React.ButtonHTMLAttributes<HTMLButtonElement>
+  > {
   className?: string;
 }
 
@@ -98,7 +100,7 @@ const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
 BaseButton.displayName = "BaseButton";
 
 interface BaseDivProps
-  extends React.PropsWithChildren<Record<string, unknown>> {
+  extends React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
   className?: string;
 }
 
@@ -112,7 +114,7 @@ const BaseDiv = forwardRef<HTMLDivElement, BaseDivProps>(
 BaseDiv.displayName = "BaseDiv";
 
 interface CustomComponentProps
-  extends React.PropsWithChildren<Record<string, unknown>> {
+  extends React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
   className?: string;
   variant?: string;
   customProp?: string;
