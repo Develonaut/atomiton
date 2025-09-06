@@ -15,9 +15,9 @@ import type { AdapterTheme, DataType } from "../base/IVisualizationAdapter";
 const addAlpha = (color: string, alpha: number): string => {
   if (color.startsWith("#")) {
     const hex = color.slice(1);
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
   if (color.startsWith("rgb(")) {
@@ -69,11 +69,7 @@ interface AtomitonNodeData extends Record<string, unknown> {
 /**
  * Default Atomiton Node Component with theme injection
  */
-export const DefaultAtomitonNode: React.FC<NodeProps> = ({
-  data,
-  selected,
-  dragging,
-}) => {
+export function DefaultAtomitonNode({ data, selected, dragging }: NodeProps) {
   if (!data || typeof data !== "object") {
     return <div>Invalid node data</div>;
   }
@@ -340,12 +336,12 @@ export const DefaultAtomitonNode: React.FC<NodeProps> = ({
       )}
     </div>
   );
-};
+}
 
 /**
  * Input Node Component - specialized for data input nodes
  */
-export const InputAtomitonNode: React.FC<NodeProps> = (props) => {
+export function InputAtomitonNode(props: NodeProps) {
   const { data } = props;
   const nodeData = data as AtomitonNodeData;
 
@@ -359,12 +355,12 @@ export const InputAtomitonNode: React.FC<NodeProps> = (props) => {
       <DefaultAtomitonNode {...props} />
     </div>
   );
-};
+}
 
 /**
  * Output Node Component - specialized for data output nodes
  */
-export const OutputAtomitonNode: React.FC<NodeProps> = (props) => {
+export function OutputAtomitonNode(props: NodeProps) {
   const { data } = props;
   const nodeData = data as AtomitonNodeData;
 
@@ -381,12 +377,12 @@ export const OutputAtomitonNode: React.FC<NodeProps> = (props) => {
       <DefaultAtomitonNode {...props} />
     </div>
   );
-};
+}
 
 /**
  * Group Node Component - for grouping related nodes
  */
-export const GroupAtomitonNode: React.FC<NodeProps> = (props) => {
+export function GroupAtomitonNode(props: NodeProps) {
   const { data, selected } = props;
   const nodeData = data as AtomitonNodeData;
 
@@ -429,7 +425,7 @@ export const GroupAtomitonNode: React.FC<NodeProps> = (props) => {
       )}
     </div>
   );
-};
+}
 
 /**
  * Node type registry for React Flow

@@ -231,7 +231,7 @@ function createAdapterTheme(uiTheme: UITheme): AdapterTheme {
 /**
  * Example React component showing proper adapter usage
  */
-export const BlueprintEditor: React.FC = () => {
+export function BlueprintEditor() {
   // Convert UI theme to adapter theme
   const adapterTheme = useMemo(() => createAdapterTheme(exampleUITheme), []);
 
@@ -363,34 +363,33 @@ export const BlueprintEditor: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 /**
  * Color swatch component for demonstration
  */
-const ColorSwatch: React.FC<{ color: string; label: string }> = ({
-  color,
-  label,
-}) => (
-  <div style={{ textAlign: "center" }}>
-    <div
-      style={{
-        width: "24px",
-        height: "24px",
-        backgroundColor: color,
-        borderRadius: "4px",
-        margin: "0 auto 4px",
-        border: "1px solid rgba(255,255,255,0.2)",
-      }}
-    />
-    <div style={{ fontSize: "10px", color: "#888" }}>{label}</div>
-  </div>
-);
+function ColorSwatch({ color, label }: { color: string; label: string }) {
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div
+        style={{
+          width: "24px",
+          height: "24px",
+          backgroundColor: color,
+          borderRadius: "4px",
+          margin: "0 auto 4px",
+          border: "1px solid rgba(255,255,255,0.2)",
+        }}
+      />
+      <div style={{ fontSize: "10px", color: "#888" }}>{label}</div>
+    </div>
+  );
+}
 
 /**
  * Example: Dynamic theme switching
  */
-export const ThemeExample: React.FC = () => {
+export function ThemeExample() {
   const [isDark, setIsDark] = React.useState(true);
 
   // Create different themes
@@ -461,12 +460,12 @@ export const ThemeExample: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 /**
  * Example: Using multiple adapters with same theme
  */
-export const MultiAdapterExample: React.FC = () => {
+export function MultiAdapterExample() {
   const adapterTheme = useMemo(() => createAdapterTheme(exampleUITheme), []);
 
   // Create multiple adapters with same theme
@@ -543,6 +542,6 @@ export const MultiAdapterExample: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default { BlueprintEditor, ThemeExample, MultiAdapterExample };
