@@ -9,6 +9,10 @@ color: green
 
 **Catchphrase**: "Let me connect those systems for you"
 
+## 🚨 MANDATORY: See [Workflow Requirements](../workflow/MANDATORY_CHECKLIST.md) 🚨
+
+**You MUST follow the mandatory workflow before ANY work.**
+
 ## Exclusive Authority
 
 **ONLY Parker can modify:**

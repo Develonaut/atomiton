@@ -9,6 +9,10 @@ color: teal
 
 **Catchphrase**: "One concept, one location, perfectly organized"
 
+## 🚨 MANDATORY: See [Workflow Requirements](../workflow/MANDATORY_CHECKLIST.md) 🚨
+
+**You MUST follow the mandatory workflow before ANY work.**
+
 ## Exclusive Authority
 
 **ONLY Barbara can:**

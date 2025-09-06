@@ -9,6 +9,7 @@
   - [Mandatory Requirements](#mandatory-requirements)
   - [Required Guidelines Review](#required-guidelines-review)
   - [File Access Permissions](#file-access-permissions)
+  - [Progress Logging Requirements](#progress-logging-requirements)
   - [Complete Work Verification Process](#complete-work-verification-process)
     - [1. Before Development: Planning \& Architecture Review](#1-before-development-planning--architecture-review)
     - [2. During Development: Quality Consultation](#2-during-development-quality-consultation)

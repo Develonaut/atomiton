@@ -1,5 +1,9 @@
 # Agents Directory
 
+## 🚨 CRITICAL: See [Workflow Documentation](../workflow/README.md) 🚨
+
+**ALL agents and Claude must follow the mandatory workflow defined in the workflow directory.**
+
 This directory contains all agent-related documentation including individual agent personas, coordination protocols, and team collaboration guidelines.
 
 ## 📁 Directory Structure
@@ -152,18 +156,46 @@ All work must follow the mandatory workflow including:
 
 ## 🔄 Agent Workflows
 
+### 🌳 Worktree Isolation for New Features
+
+**IMPORTANT**: The FIRST agent/Claude starting a new feature or body of work creates the worktree:
+
+```bash
+# FIRST agent on new feature creates worktree
+wtnew <feature-name>  # Creates ../atomiton-<feature-name> on feature/<feature-name> branch
+
+# Subsequent agents work in the SAME worktree
+cd ../atomiton-<feature-name>
+```
+
+**Key Points:**
+
+- ONE worktree per feature/body of work
+- FIRST agent creates it
+- ALL other agents work in that same worktree
+- Don't create multiple worktrees for the same feature
+
+This ensures:
+
+- Multiple agents can work in parallel without conflicts
+- Clean separation of features
+- Easy testing of isolated changes
+- Simple PR creation from feature branches
+
 ### UI Development
 
-1. **Ryan** - Component implementation, visual design, React Flow integration, and reusability
-2. **Brian** - Cross-browser and responsive testing
-3. **Karen** - Feature completion validation
+1. Create worktree: `wtnew ui-feature-name`
+2. **Ryan** - Component implementation, visual design, React Flow integration, and reusability
+3. **Brian** - Cross-browser and responsive testing
+4. **Karen** - Feature completion validation
 
 ### Backend Development
 
-1. **Michael** - Architecture design and API implementation
-2. **Parker** - Platform integration and environment setup
-3. **Megamind** - Complex debugging and optimization
-4. **Voorhees** - Code simplification and maintainability
+1. Create worktree: `wtnew backend-feature-name`
+2. **Michael** - Architecture design and API implementation
+3. **Parker** - Platform integration and environment setup
+4. **Megamind** - Complex debugging and optimization
+5. **Voorhees** - Code simplification and maintainability
 
 ### Quality Assurance
 

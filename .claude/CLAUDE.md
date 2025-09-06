@@ -1,6 +1,31 @@
-# Claude Agent Instructions - Atomiton Project
+# Claude and Claude Agent Instructions - Atomiton Project
 
-Always instruct agents to review the AGENT_EXECUTION_PLAN.md before starting a task. An agent should verbally confirm they have reviewed the AGENT_EXECUTION_PLAN.md before they are allowed to start.
+## 🚨 MANDATORY WORKFLOW - READ FIRST 🚨
+
+**See [Workflow Documentation](./workflow/README.md) for ALL requirements.**
+
+**Key Requirements:**
+
+1. Follow [MANDATORY_CHECKLIST.md](./workflow/MANDATORY_CHECKLIST.md) before ANY work
+2. Complete ALL steps in [EXECUTION_PLAN.md](./workflow/EXECUTION_PLAN.md)
+3. ONLY create worktrees for NEW features/efforts (not when assisting)
+4. Use TodoWrite to track workflow progress
+
+**YOU CANNOT PROCEED WITHOUT FOLLOWING THE WORKFLOW.**
+
+### When Invoking Agents
+
+See [AGENT_INVOCATION.md](./workflow/AGENT_INVOCATION.md) for how to properly invoke agents with workflow compliance.
+
+### Workflow Enforcement
+
+The execution plan is NOT optional. It applies to:
+
+- Claude (you) directly
+- ALL agents invoked via Task tool
+- ANY code changes or implementations
+
+Work that doesn't follow this workflow will be rejected. No exceptions.
 
 ## 🎯 Project Overview
 
@@ -79,15 +104,16 @@ This project has comprehensive permissions configured in `.claude/settings.local
 
 ## 📦 Workspace Structure
 
-Each package/app has its own `.claude/CLAUDE.md` that references this root configuration:
+Packages are organized under `packages/@atomiton/`:
 
-- `packages/ui/.claude/CLAUDE.md` - UI components and Blueprint editor
-- `packages/core/.claude/CLAUDE.md` - Core Blueprint engine
-- `packages/nodes/.claude/CLAUDE.md` - Node implementations
-- `packages/theme/.claude/CLAUDE.md` - Brainwave 2.0 theme
-- `packages/electron/.claude/CLAUDE.md` - Desktop app
-- `packages/playwright/.claude/CLAUDE.md` - E2E tests
-- `apps/client/.claude/CLAUDE.md` - Main Vite application
+- `packages/@atomiton/ui` - UI components and design system
+- `packages/@atomiton/core` - Core Blueprint engine
+- `packages/@atomiton/nodes` - Node implementations
+- `packages/@atomiton/store` - State management
+- `packages/@atomiton/events` - Event system
+- `packages/@atomiton/di` - Dependency injection
+- `apps/client` - Main Vite React application
+- `apps/desktop` - Electron desktop wrapper
 
 ## 🔄 Important Notes
 
@@ -107,5 +133,5 @@ Each package/app has its own `.claude/CLAUDE.md` that references this root confi
 
 ---
 
-**Last Updated**: 2025-08-31
+**Last Updated**: 2025-09-06
 **Documentation Root**: `./docs/` (relative to project root)
