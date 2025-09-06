@@ -54,7 +54,6 @@ packages/
 
 - **`@atomiton/typescript-config`** - Shared TypeScript configurations
 - **`@atomiton/eslint-config`** - Shared ESLint rules
-- **`@atomiton/vite-config`** - Shared Vite configurations
 
 ## Import Patterns
 
