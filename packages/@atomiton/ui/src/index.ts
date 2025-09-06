@@ -1,7 +1,6 @@
 // Button components
-// TODO: Fix path aliases before exporting Button component
-// export { default as Button } from "./components/Button";
-// export type { ButtonProps } from "./components/Button/Button.types";
+export { default as Button } from "./components/Button";
+export type { ButtonProps } from "./components/Button/Button.types";
 
 // Theme exports
 export {
