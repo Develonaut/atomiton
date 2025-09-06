@@ -8,15 +8,13 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "eslint . --max-warnings 0",
-    "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false && tsc --noEmit -p tsconfig.web.json --composite false"
+    "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false"
   },
   "devDependencies": {
     "@atomiton/typescript-config": "workspace:^",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@types/node": "^20.0.0",
-    "concurrently": "^8.2.0",
-    "dotenv": "^17.2.2",
     "electron": "^38.0.0",
     "electron-builder": "^26.0.0",
     "electron-vite": "^4.0.0",

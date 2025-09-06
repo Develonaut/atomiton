@@ -1,11 +1,6 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import * as dotenv from "dotenv";
-import { resolve } from "path";
-
-// Load environment variables from root .env file
-dotenv.config({ path: resolve(__dirname, "../../../../.env") });
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -28,15 +23,13 @@ function createWindow(): void {
     return { action: "deny" };
   });
 
-  if (is.dev) {
-    // Always load the client app in development, not the electron-vite renderer
-    const clientUrl =
-      process.env.ELECTRON_RENDERER_URL || "http://localhost:5173";
-    console.log("Loading client app from:", clientUrl);
-    mainWindow.loadURL(clientUrl);
-  } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-  }
+  // Always load from a URL - localhost in dev, CDN in production
+  const appUrl = is.dev
+    ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
+    : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
+
+  console.log(`Loading app from: ${appUrl}`);
+  mainWindow.loadURL(appUrl);
 }
 
 app.whenReady().then(() => {
