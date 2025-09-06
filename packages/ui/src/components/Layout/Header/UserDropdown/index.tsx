@@ -37,7 +37,6 @@ const UserDropdown = ({}) => {
           src="/images/avatars/1.png"
           width={32}
           height={32}
-          priority={true}
           quality={100}
           alt="Avatar"
         />

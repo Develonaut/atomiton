@@ -2,17 +2,18 @@
   "name": "@atomiton/root",
   "private": true,
   "scripts": {
+    "dev": "pnpm kill-electron && pnpm kill-ports && turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/desktop\"",
+    "dev:client": "turbo run dev --filter=\"@atomiton/client\"",
+    "dev:ui": "turbo run dev --filter=\"@atomiton/ui\"",
+    "dev:desktop": "turbo run dev --filter=\"@atomiton/desktop\"",
     "build": "turbo run build",
-    "dev": "turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/ui\"",
-    "dev:all": "turbo run dev",
-    "dev:libs": "turbo run dev --filter=\"@atomiton/core\" --filter=\"@atomiton/di\" --filter=\"@atomiton/nodes\"",
-    "watch": "turbo run watch",
     "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
-    "typecheck": "turbo run typecheck",
-    "prepare": "husky"
+    "prepare": "husky",
+    "kill-ports": "lsof -ti :5173 -ti :5174 -ti :5175 -ti :3000 -ti :8080 | xargs kill -9 2>/dev/null; echo '✅ All ports freed!'",
+    "kill-electron": "pkill -f 'electron|Electron' 2>/dev/null; echo '✅ Electron processes terminated!'"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

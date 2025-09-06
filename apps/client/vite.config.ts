@@ -11,7 +11,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), tailwindcss()],
   server: {
-    port: 3001,
+    port: parseInt(process.env.VITE_CLIENT_PORT || "5173"),
+    strictPort: true, // Fail if port is already in use instead of auto-incrementing
     host: true,
     fs: {
       // Allow serving files from workspace packages

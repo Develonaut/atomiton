@@ -5,15 +5,15 @@ echo "🔍 Running pre-commit quality checks..."
 
 # 1. Format check
 echo "📝 Checking code formatting..."
-npm run format:check
+pnpm run format:check
 if [ $? -ne 0 ]; then
-  echo "❌ Format check failed. Run 'npm run format' to fix."
+  echo "❌ Format check failed. Run 'pnpm run format' to fix."
   exit 1
 fi
 
 # 2. Lint check
 echo "🔧 Running lint check..."
-npm run lint
+pnpm run lint
 if [ $? -ne 0 ]; then
   echo "❌ Lint check failed. Fix the linting errors."
   exit 1
@@ -21,7 +21,7 @@ fi
 
 # 3. TypeScript check
 echo "🔍 Running TypeScript check..."
-npm run typecheck
+pnpm run typecheck
 if [ $? -ne 0 ]; then
   echo "❌ TypeScript check failed. Fix the type errors."
   exit 1
@@ -29,7 +29,7 @@ fi
 
 # 4. Build check
 echo "🔨 Running build check..."
-npm run build
+pnpm run build
 if [ $? -ne 0 ]; then
   echo "❌ Build check failed. Fix the build errors."
   exit 1

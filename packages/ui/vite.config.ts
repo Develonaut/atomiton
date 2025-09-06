@@ -13,6 +13,8 @@ export default defineConfig({
     },
   },
   server: {
+    port: parseInt(process.env.VITE_UI_PORT || "5174"),
+    strictPort: true, // Fail if port is already in use instead of auto-incrementing
     host: true,
     fs: {
       // Allow serving files from the theme package

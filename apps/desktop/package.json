@@ -1,58 +1,26 @@
 {
   "name": "@atomiton/desktop",
   "version": "0.1.0",
-  "description": "Desktop application for Atomiton Blueprint automation platform",
-  "private": true,
   "type": "module",
-  "main": "dist/main/index.js",
+  "main": "./out/main/index.js",
   "scripts": {
-    "dev": "echo 'Skipping desktop dev due to electron-vite version incompatibility'",
-    "build": "echo 'Skipping desktop build due to electron-vite version incompatibility'",
+    "dev": "sleep .25 && electron-vite dev",
+    "build": "electron-vite build",
     "preview": "electron-vite preview",
-    "package": "electron-builder",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "electron-updater": "^6.1.7"
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false && tsc --noEmit -p tsconfig.web.json --composite false"
   },
   "devDependencies": {
-    "@atomiton/eslint-config": "workspace:*",
-    "@atomiton/typescript-config": "workspace:*",
-    "@types/node": "^24.3.1",
-    "electron": "^28.1.3",
-    "electron-builder": "^24.9.1",
-    "electron-vite": "^2.0.0",
-    "eslint": "^9.10.0",
-    "typescript": "^5.3.3"
-  },
-  "build": {
-    "appId": "com.atomiton.blueprint",
-    "productName": "Atomiton",
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "resources/**/*"
-    ],
-    "mac": {
-      "category": "public.app-category.developer-tools",
-      "icon": "resources/icon.icns"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "resources/icon.ico"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "snap",
-        "deb"
-      ],
-      "category": "Development",
-      "icon": "resources/icon.png"
-    }
+    "@atomiton/typescript-config": "workspace:^",
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
+    "@types/node": "^20.0.0",
+    "concurrently": "^8.2.0",
+    "dotenv": "^17.2.2",
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.0",
+    "electron-vite": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^7.0.0"
   }
 }
