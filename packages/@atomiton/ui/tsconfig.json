@@ -6,8 +6,7 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@atomiton/theme": ["../theme/src/index.ts"]
+      "@/*": ["./src/*"]
     },
     "baseUrl": "."
   },

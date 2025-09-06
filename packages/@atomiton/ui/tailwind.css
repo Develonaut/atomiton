@@ -1,6 +1,6 @@
 /**
  * Tailwind CSS Configuration for packages/ui
- * Imports the shared theme configuration
+ * Imports the local theme configuration
  */
 
-@import "@atomiton/theme/css";
+@import "./src/theme/index.css";

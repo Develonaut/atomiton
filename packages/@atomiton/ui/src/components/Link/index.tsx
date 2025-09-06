@@ -4,7 +4,7 @@ import {
   LinkProps as RouterLinkProps,
 } from "react-router-dom";
 
-export interface LinkProps extends Omit<RouterLinkProps, "to"> {
+export interface LinkProps extends Omit<RouterLinkProps, "to" | "children"> {
   href?: string;
   to?: string;
   children: React.ReactNode;
@@ -15,7 +15,7 @@ const Link: React.FC<LinkProps> = ({ href, to, children, ...props }) => {
 
   return (
     <RouterLink to={destination} {...props}>
-      {children}
+      {children as any}
     </RouterLink>
   );
 };

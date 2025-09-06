@@ -24,7 +24,7 @@ export default defineConfig({
   },
   // Optimize deps to exclude workspace packages for better HMR
   optimizeDeps: {
-    exclude: ["@atomiton/ui", "@atomiton/theme"],
+    exclude: ["@atomiton/ui"],
   },
   build: {
     outDir: "dist",

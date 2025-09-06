@@ -7,9 +7,8 @@
 @import "tailwindcss";
 
 /* Import shared theme configuration (includes @theme block) */
-@import "@atomiton/theme/src/index.css";
+@import "@atomiton/ui/src/theme/index.css";
 
 /* Tell Tailwind to scan these directories for classes */
 @source "./src/**/*.{js,ts,jsx,tsx,css}";
-@source "../../packages/ui/src/**/*.{js,ts,jsx,tsx,css}";
-@source "../../packages/theme/src/**/*.css";
+@source "../../packages/@atomiton/ui/src/**/*.{js,ts,jsx,tsx,css}";

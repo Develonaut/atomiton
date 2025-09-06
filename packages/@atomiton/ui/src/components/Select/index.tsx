@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   Listbox,
   ListboxButton,
@@ -24,7 +25,7 @@ type SelectProps = {
   isSmall?: boolean;
   isWhite?: boolean;
   isMinimal?: boolean;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
 };
 
 const Select = ({
@@ -63,7 +64,7 @@ const Select = ({
             : ""
         } ${label ? "text-[#7B7B7B]/50" : ""} ${classButton || ""}`}
       >
-        {icon && icon}
+        {icon && (icon as any)}
         {label && <div className="shrink-0 text-[#000]">{label}</div>}
         {value?.name ? (
           <div className="truncate">{value.name}</div>

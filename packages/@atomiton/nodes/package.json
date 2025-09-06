@@ -25,7 +25,7 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
-    "@atomiton/theme": "workspace:*",
+    "@atomiton/ui": "workspace:*",
     "@mantine/core": "^7.0.0",
     "@tabler/icons-react": "^3.0.0",
     "@xyflow/react": "^12.0.0",
@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
-    "@atomiton/theme": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "^19",

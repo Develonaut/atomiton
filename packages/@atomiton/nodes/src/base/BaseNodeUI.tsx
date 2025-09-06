@@ -18,7 +18,7 @@ import { IconChevronDown, IconChevronRight } from "@tabler/icons-react";
 import { Handle, Position } from "@xyflow/react";
 import React, { memo, useCallback, useState } from "react";
 
-import { CATEGORY_COLORS, COLORS, STATUS_COLORS } from "@atomiton/theme";
+import { CATEGORY_COLORS, COLORS, STATUS_COLORS } from "@atomiton/ui";
 
 import type { PortDefinition } from "../types";
 import type { NodeUIProps } from "./NodePackage";

@@ -12,7 +12,7 @@
  * - Enable proper separation of concerns between packages
  */
 
-import { CATEGORY_COLORS, COLORS, STATUS_COLORS } from "@atomiton/theme";
+import { CATEGORY_COLORS, COLORS, STATUS_COLORS } from "@atomiton/ui";
 
 import type { NodeExecutionContext } from "../../types";
 import type {

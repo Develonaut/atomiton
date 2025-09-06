@@ -35,9 +35,6 @@ importers:
 
   apps/client:
     dependencies:
-      '@atomiton/theme':
-        specifier: workspace:*
-        version: link:../../packages/@atomiton/theme
       '@atomiton/ui':
         specifier: workspace:*
         version: link:../../packages/@atomiton/ui
@@ -189,9 +186,9 @@ importers:
       '@atomiton/store':
         specifier: workspace:*
         version: link:../store
-      '@atomiton/theme':
+      '@atomiton/ui':
         specifier: workspace:*
-        version: link:../theme
+        version: link:../ui
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:^
@@ -312,9 +309,9 @@ importers:
 
   packages/@atomiton/nodes:
     dependencies:
-      '@atomiton/theme':
+      '@atomiton/ui':
         specifier: workspace:*
-        version: link:../theme
+        version: link:../ui
       '@mantine/core':
         specifier: ^7.0.0
         version: 7.17.8(@mantine/hooks@8.2.8(react@19.1.1))(@types/react@19.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -402,19 +399,10 @@ importers:
         specifier: ^2.1.8
         version: 2.1.9(@types/node@20.19.11)(jsdom@24.1.3)(lightningcss@1.30.1)
 
-  packages/@atomiton/theme:
-    dependencies:
-      tailwindcss:
-        specifier: ^4.0.0
-        version: 4.1.12
-
   packages/@atomiton/typescript-config: {}
 
   packages/@atomiton/ui:
     dependencies:
-      '@atomiton/theme':
-        specifier: workspace:*
-        version: link:../theme
       '@headlessui/react':
         specifier: ^2.2.4
         version: 2.2.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)

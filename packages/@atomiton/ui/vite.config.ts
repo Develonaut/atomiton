@@ -17,12 +17,8 @@ export default defineConfig({
     strictPort: true, // Fail if port is already in use instead of auto-incrementing
     host: true,
     fs: {
-      // Allow serving files from the theme package
-      allow: ["..", "../../packages/theme"],
-    },
-    watch: {
-      // Watch the theme package source files for changes
-      ignored: ["!**/packages/theme/src/**"],
+      // Allow serving files from parent directories
+      allow: [".."],
     },
   },
   optimizeDeps: {

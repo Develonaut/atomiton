@@ -27,7 +27,7 @@
     "@atomiton/store": "workspace:*",
     "@atomiton/events": "workspace:*",
     "@atomiton/nodes": "workspace:*",
-    "@atomiton/theme": "workspace:*"
+    "@atomiton/ui": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",

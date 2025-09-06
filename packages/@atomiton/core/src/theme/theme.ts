@@ -10,12 +10,7 @@
  * - Provides type-safe color access
  */
 
-import {
-  COLORS,
-  STATUS_COLORS,
-  UI_COLORS,
-  CATEGORY_COLORS,
-} from "@atomiton/theme";
+import { COLORS, STATUS_COLORS, CATEGORY_COLORS } from "@atomiton/ui";
 
 /**
  * Theme Colors - Re-exported from centralized theme
