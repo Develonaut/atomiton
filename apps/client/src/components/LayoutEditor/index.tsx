@@ -3,14 +3,15 @@ import RightSidebar from "@/components/RightSidebar";
 import Toolbar from "@/components/Toolbar";
 // import useStore from "@/store";
 import { Canvas, Editor } from "@atomiton/editor";
+import { Box } from "@atomiton/ui";
 
 function LayoutEditor() {
   return (
-    <div className="relative min-h-screen bg-surface-02">
+    <Box className="relative min-h-screen bg-surface-02">
       <Editor>
         {/* Canvas sits at the bottom layer, full screen */}
-        <div className="absolute inset-0">
-          <div className="relative w-full h-full">
+        <Box className="absolute inset-0">
+          <Box className="relative w-full h-full">
             <Canvas
               nodes={[
                 {
@@ -45,15 +46,15 @@ function LayoutEditor() {
                 className="!right-66 !bottom-3" // Using Tailwind's important to override default positioning
               />
             </Canvas>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Toolbar and Sidebars sit on top with proper z-index */}
         <Toolbar />
         <LeftSidebar />
         <RightSidebar />
       </Editor>
-    </div>
+    </Box>
   );
 }
 
