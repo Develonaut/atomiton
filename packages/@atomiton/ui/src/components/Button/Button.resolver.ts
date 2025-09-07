@@ -1,5 +1,6 @@
 /**
  * Button Props Resolver to convert Brainwave 2.0 Props to Atomoton UI Props.
+ * TODO: Remove once we update all usages of Button to use Atomiton UI Props.
  */
 export function resolveButtonProps<T extends Record<string, unknown>>(
   props: T,
@@ -15,8 +16,8 @@ export function resolveButtonProps<T extends Record<string, unknown>>(
       : anyProps.isSecondary
         ? "secondary"
         : anyProps.isOrange
-          ? "orange"
-          : anyProps.variant || "ghost",
+          ? "destructive"
+          : anyProps.variant || "primary",
     // Handle legacy size props
     size: anyProps.isSmall
       ? "sm"

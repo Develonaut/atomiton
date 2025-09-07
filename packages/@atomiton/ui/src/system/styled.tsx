@@ -1,96 +1,142 @@
+import { cn } from "@/utils/cn";
+import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentType, ElementType } from "react";
 import { forwardRef } from "react";
-import { extractSystemProps } from "./utils/extractSystemProps";
-import { generateDataAttributes } from "./utils/generateDataAttributes";
-import { filterDOMProps } from "./utils/filterDOMProps";
-import { buildClassName } from "./utils/buildClassname";
-import { calculateStyleProps } from "./utils/calculateStyleProps";
 
 /**
- * The "styled" pattern - inspired by Chakra UI but for shadcn components
- *
- * Creates a component that:
- * 1. Accepts system props (m, p, bg, etc.)
- * 2. Applies transformations
- * 3. Merges everything cleanly
+ * Configuration for the styled function
+ */
+export interface StyledConfig<TProps = Record<string, unknown>> {
+  /**
+   * Component display name for debugging
+   */
+  name?: string;
+  /**
+   * Props resolver to transform props before passing to component
+   */
+  props?: (props: TProps) => TProps;
+}
+
+/**
+ * Creates a styled component with CVA variants
+ * Similar to Material-UI's styled API but using CVA for zero-runtime performance
  *
  * @example
  * ```tsx
- * // Define once
- * const StyledButton = styled(ButtonPrimitive, {
- *   name: "button",
+ * // Simple case - single string
+ * const Container = styled("div")("flex items-center gap-4 p-4");
+ *
+ * // Complex case - array for readability
+ * const ButtonRoot = styled(ButtonPrimitive, {
+ *   name: "Button",
  *   props: resolveButtonProps,
- *   styles: buttonStyles
+ * })([
+ *   "relative",
+ *   "inline-flex",
+ *   "justify-center",
+ *   "rounded-xl",
+ * ], {
+ *   variants: {
+ *     variant: {
+ *       primary: "bg-primary text-white hover:bg-primary-dark",
+ *       secondary: ["bg-secondary", "text-black", "hover:bg-secondary-dark"],
+ *     },
+ *     size: {
+ *       sm: "h-8 px-3 text-sm",
+ *       md: "h-10 px-4 text-base",
+ *     }
+ *   },
+ *   defaultVariants: {
+ *     variant: "primary",
+ *     size: "md",
+ *   }
  * });
  *
- * // Use everywhere - super clean!
- * <StyledButton
- *   m={4}
- *   p={2}
- *   variant="primary"
- *   size="lg"
- *   onClick={handleClick}
- * >
- *   Click me
- * </StyledButton>
+ * // With just variants, no base classes
+ * const Text = styled("span")("", {
+ *   variants: {
+ *     size: {
+ *       sm: "text-sm",
+ *       md: "text-base",
+ *       lg: "text-lg",
+ *     }
+ *   }
+ * });
  * ```
  */
+export function styled<
+  T extends ComponentType<Record<string, unknown>> | ElementType,
+  TProps extends Record<string, unknown> = Record<string, unknown>,
+>(Component: T, config: StyledConfig<TProps> = {}) {
+  return function createStyledComponent<
+    V extends Record<string, unknown> = Record<string, unknown>,
+  >(baseClasses: string | string[], variantConfig?: V) {
+    // Normalize baseClasses to always be a string or array
+    // CVA accepts both, so we just pass it through
+    const variants = cva(
+      baseClasses,
+      variantConfig as Parameters<typeof cva>[1],
+    );
 
-export interface StyledConfig {
-  name?: string;
-  props?: (props: Record<string, unknown>) => Record<string, unknown>;
-  styles?: (props: Record<string, unknown>) => string;
-}
+    // Extract variant keys for prop filtering
+    const variantKeys = new Set<string>(
+      variantConfig?.variants ? Object.keys(variantConfig.variants) : [],
+    );
 
-export function styled<T extends ComponentType<Record<string, unknown>>>(
-  Component: T,
-  config: StyledConfig = {},
-) {
-  const StyledComponent = forwardRef<HTMLElement, Record<string, unknown>>(
-    (inProps, ref) => {
-      const { name, props: propsTransform, styles } = config;
+    // Add defaultVariants keys too
+    if (variantConfig?.defaultVariants) {
+      Object.keys(variantConfig.defaultVariants).forEach((key) =>
+        variantKeys.add(key),
+      );
+    }
 
-      // 1. Apply prop transformations
-      const resolvedProps = propsTransform ? propsTransform(inProps) : inProps;
+    // Create the styled component
+    const StyledComponent = forwardRef<
+      HTMLElement,
+      TProps &
+        VariantProps<typeof variants> & { className?: string; as?: ElementType }
+    >((inProps, ref) => {
+      // Apply props resolver if provided (before extracting as prop)
+      const resolvedProps = config.props
+        ? config.props(inProps as TProps)
+        : inProps;
 
-      // 2. Handle polymorphic "as" prop
-      const { as: asProp, ...propsWithoutAs } = resolvedProps;
-      const FinalComponent = (asProp || Component) as ElementType;
-      const isHTMLElement = typeof FinalComponent === "string";
+      // Now extract the as prop and className from resolved props
+      const { as: asProp, className, ...props } = resolvedProps;
 
-      // 3. Extract system props
-      const { systemClasses, restProps } = extractSystemProps(propsWithoutAs);
+      // Separate variant props from other props
+      const variantProps: Record<string, unknown> = {};
+      const restProps: Record<string, unknown> = {};
 
-      // 4. Build className
-      const styleProps = calculateStyleProps(restProps);
-      const styleClasses = styles ? styles(styleProps) : undefined;
-      const className = buildClassName({
-        name,
-        styleClasses,
-        systemClasses,
-        userClassName: restProps.className as string | undefined,
+      Object.entries(props).forEach(([key, value]) => {
+        if (variantKeys.has(key)) {
+          variantProps[key] = value;
+        } else {
+          restProps[key] = value;
+        }
       });
 
-      // 5. Generate data attributes
-      const dataAttributes = generateDataAttributes(restProps);
-
-      // 6. Filter props for DOM elements
-      const finalProps = filterDOMProps(restProps, isHTMLElement);
-
-      // 7. Render component
-      return (
-        <FinalComponent
-          ref={ref}
-          {...finalProps}
-          {...dataAttributes}
-          className={className}
-        />
+      // Generate the final className
+      const finalClassName = cn(
+        variants(variantProps as Parameters<typeof variants>[0]),
+        className as string,
       );
-    },
-  );
 
-  StyledComponent.displayName =
-    config.name || `Styled(${Component.displayName || Component.name})`;
+      // Determine the component to render
+      const FinalComponent = (asProp || Component) as React.ElementType;
 
-  return StyledComponent;
+      return (
+        <FinalComponent ref={ref} className={finalClassName} {...restProps} />
+      );
+    });
+
+    // Set display name for debugging
+    if (config.name) {
+      StyledComponent.displayName = config.name;
+    }
+
+    return StyledComponent;
+  };
 }
+
+export default styled;

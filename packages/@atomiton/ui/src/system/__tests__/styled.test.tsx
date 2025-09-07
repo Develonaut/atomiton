@@ -2,307 +2,271 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { forwardRef } from "react";
 import { styled } from "../styled";
+import { MockButton, MockDiv } from "@/test-utils";
 
-// Mock the utilities
-vi.mock("../utils/extractSystemProps", () => ({
-  extractSystemProps: vi.fn((props) => {
-    const systemClasses = [];
-    const restProps = { ...props };
+// Alias for backward compatibility
+const TestButton = MockButton;
+const TestDiv = MockDiv;
 
-    // Mock system prop extraction
-    if (props.m) {
-      systemClasses.push(`m-${props.m}`);
-      delete restProps.m;
-    }
-    if (props.p) {
-      systemClasses.push(`p-${props.p}`);
-      delete restProps.p;
-    }
-    if (props.bg) {
-      systemClasses.push(`bg-${props.bg}`);
-      delete restProps.bg;
-    }
-    if (props.fullWidth) {
-      systemClasses.push("w-full");
-      delete restProps.fullWidth;
-    }
-    if (props.fullHeight) {
-      systemClasses.push("h-full");
-      delete restProps.fullHeight;
-    }
+// Mock the cn utility
+vi.mock("@/utils/cn", () => ({
+  cn: vi.fn((...classes) => classes.filter(Boolean).join(" ")),
+}));
 
-    return { systemClasses, restProps };
+// Mock CVA
+vi.mock("class-variance-authority", () => ({
+  cva: vi.fn((base: string | string[], config?: Record<string, unknown>) => {
+    return vi.fn((variants?: Record<string, unknown>) => {
+      // Handle base classes - join array to string if needed
+      const baseClasses = Array.isArray(base) ? base.join(" ") : base;
+
+      if (!config?.variants) return baseClasses;
+
+      // Merge with default variants first
+      const mergedVariants = {
+        ...((config.defaultVariants as Record<string, unknown>) || {}),
+        ...(variants || {}),
+      };
+
+      const variantClasses = Object.entries(mergedVariants)
+        .map(([key, value]) => {
+          const variantConfig = (
+            config.variants as Record<string, Record<string, unknown>>
+          )[key];
+          if (variantConfig && value && variantConfig[value as string]) {
+            const variantValue = variantConfig[value as string];
+            return Array.isArray(variantValue)
+              ? variantValue.join(" ")
+              : variantValue;
+          }
+          return "";
+        })
+        .filter(Boolean)
+        .join(" ");
+
+      return [baseClasses, variantClasses].filter(Boolean).join(" ");
+    });
   }),
 }));
 
-vi.mock("../utils/generateDataAttributes", () => ({
-  generateDataAttributes: vi.fn((props) => {
-    const dataAttributes: Record<string, unknown> = {};
-    if (props.variant) dataAttributes["data-variant"] = props.variant;
-    if (props.size) dataAttributes["data-size"] = props.size;
-    if (props.loading) {
-      dataAttributes["data-loading"] = true;
-      dataAttributes["data-disabled"] = true;
-    }
-    if (props.disabled) dataAttributes["data-disabled"] = true;
-    return dataAttributes;
-  }),
-}));
+// Use centralized mock components
+type TestDivProps = React.ComponentProps<typeof MockDiv> & {
+  variant?: "card" | "panel";
+};
 
-vi.mock("../utils/filterDOMProps", () => ({
-  filterDOMProps: vi.fn((props, isHTMLElement) => {
-    if (!isHTMLElement) return props;
-
-    const filtered = { ...props };
-    // Mock filtering of system and component props
-    delete filtered.variant;
-    delete filtered.size;
-    delete filtered.loading;
-    return filtered;
-  }),
-}));
-
-vi.mock("../utils/buildClassName", () => ({
-  buildClassName: vi.fn((config) => {
-    const parts = [];
-    if (config.name) parts.push(`atomiton-${config.name.toLowerCase()}`);
-    if (config.styleClasses) parts.push(config.styleClasses);
-    if (config.systemClasses?.length)
-      parts.push(config.systemClasses.join(" "));
-    if (config.userClassName) parts.push(config.userClassName);
-    return parts.join(" ");
-  }),
-}));
-
-vi.mock("../utils/calculateStyleProps", () => ({
-  calculateStyleProps: vi.fn((props) => ({
-    ...props,
-    disabled: props.disabled || props.loading,
-    loading: props.loading,
-  })),
-}));
-
-// Test components
-interface BaseButtonProps
-  extends React.PropsWithChildren<
-    React.ButtonHTMLAttributes<HTMLButtonElement>
-  > {
-  className?: string;
-}
-
-const BaseButton = forwardRef<HTMLButtonElement, BaseButtonProps>(
-  ({ className, children, ...props }, ref) => (
-    <button ref={ref} className={className} {...props}>
-      {children}
-    </button>
-  ),
-);
-BaseButton.displayName = "BaseButton";
-
-interface BaseDivProps
-  extends React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
-  className?: string;
-}
-
-const BaseDiv = forwardRef<HTMLDivElement, BaseDivProps>(
-  ({ className, children, ...props }, ref) => (
-    <div ref={ref} className={className} {...props}>
-      {children}
-    </div>
-  ),
-);
-BaseDiv.displayName = "BaseDiv";
-
-interface CustomComponentProps
-  extends React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
-  className?: string;
-  variant?: string;
-  customProp?: string;
-}
-
-const CustomComponent = forwardRef<HTMLDivElement, CustomComponentProps>(
-  ({ className, variant, customProp, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={className}
-      data-variant={variant}
-      data-custom={customProp}
-      {...props}
-    >
-      {children}
-    </div>
-  ),
-);
-CustomComponent.displayName = "CustomComponent";
-
-describe("styled component wrapper", () => {
-  describe("basic styling functionality", () => {
-    it("should render a basic styled component", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "button",
-      });
+describe("styled function", () => {
+  describe("basic styled component creation", () => {
+    it("should create a basic styled component with base classes", () => {
+      const StyledButton = styled(MockButton)("btn rounded-md");
 
       render(<StyledButton>Click me</StyledButton>);
 
       const button = screen.getByRole("button");
       expect(button).toBeInTheDocument();
       expect(button).toHaveTextContent("Click me");
-      expect(button).toHaveClass("atomiton-button");
+      expect(button).toHaveClass("btn rounded-md");
     });
 
-    it("should apply system props as classes", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "container",
-      });
+    it("should create styled component with array of base classes", () => {
+      const StyledDiv = styled(MockDiv)(["flex", "items-center", "gap-4"]);
 
-      render(
-        <StyledDiv m={4} p={2} bg="blue-500" fullWidth>
-          Content
-        </StyledDiv>,
-      );
+      render(<StyledDiv>Content</StyledDiv>);
 
       const div = screen.getByText("Content");
-      expect(div).toHaveClass(
-        "atomiton-container",
-        "m-4",
-        "p-2",
-        "bg-blue-500",
-        "w-full",
+      expect(div).toHaveClass("flex items-center gap-4");
+    });
+
+    it("should create styled component without base classes", () => {
+      const StyledDiv = styled(MockDiv)("");
+
+      render(<StyledDiv>Empty base</StyledDiv>);
+
+      const div = screen.getByText("Empty base");
+      expect(div).toBeInTheDocument();
+    });
+  });
+
+  describe("variant application", () => {
+    it("should apply variants correctly", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500 text-white",
+            secondary: "bg-gray-200 text-gray-800",
+          },
+          size: {
+            sm: "px-2 py-1 text-sm",
+            md: "px-4 py-2",
+            lg: "px-6 py-3 text-lg",
+          },
+        },
+      });
+
+      render(
+        <StyledButton variant="primary" size="lg">
+          Button
+        </StyledButton>,
+      );
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass(
+        "btn bg-blue-500 text-white px-6 py-3 text-lg",
       );
     });
 
-    it("should combine user className with generated classes", () => {
-      const StyledDiv = styled(BaseDiv);
+    it("should apply default variants when no props provided", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+            secondary: "bg-gray-200",
+          },
+        },
+        defaultVariants: {
+          variant: "primary",
+        },
+      });
+
+      render(<StyledButton>Default</StyledButton>);
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("btn bg-blue-500");
+    });
+
+    it("should handle array variant values", () => {
+      const StyledDiv = styled(MockDiv)("base", {
+        variants: {
+          variant: {
+            card: ["bg-white", "shadow-lg", "rounded-lg"],
+            panel: ["bg-gray-50", "border", "border-gray-200"],
+          },
+        },
+      });
+
+      render(<StyledDiv variant="card">Card content</StyledDiv>);
+
+      const div = screen.getByText("Card content");
+      expect(div).toHaveClass("base bg-white shadow-lg rounded-lg");
+    });
+
+    it("should separate variant props from other props", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+          },
+        },
+      });
 
       render(
-        <StyledDiv className="user-class" m={4} p={2}>
-          Content
-        </StyledDiv>,
+        <StyledButton variant="primary" onClick={() => {}} disabled>
+          Button with props
+        </StyledButton>,
       );
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("btn bg-blue-500");
+      expect(button).toHaveAttribute("disabled");
+      expect(button).not.toHaveAttribute("variant");
+    });
+  });
+
+  describe("className merging", () => {
+    it("should merge className with variant classes", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+          },
+        },
+      });
+
+      render(
+        <StyledButton variant="primary" className="custom-class">
+          Button
+        </StyledButton>,
+      );
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("btn bg-blue-500 custom-class");
+    });
+
+    it("should handle className when no variants are provided", () => {
+      const StyledDiv = styled(MockDiv)("base-class");
+
+      render(<StyledDiv className="user-class">Content</StyledDiv>);
 
       const div = screen.getByText("Content");
-      expect(div).toHaveClass("m-4", "p-2", "user-class");
+      expect(div).toHaveClass("base-class user-class");
     });
   });
 
-  describe("fullWidth and fullHeight props", () => {
-    it("should apply fullWidth prop as w-full class", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "layout",
-      });
-
-      render(
-        <StyledDiv fullWidth data-testid="full-width">
-          Full width content
-        </StyledDiv>,
-      );
-
-      const div = screen.getByTestId("full-width");
-      expect(div).toHaveClass("atomiton-layout", "w-full");
-    });
-
-    it("should apply fullHeight prop as h-full class", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "layout",
-      });
-
-      render(
-        <StyledDiv fullHeight data-testid="full-height">
-          Full height content
-        </StyledDiv>,
-      );
-
-      const div = screen.getByTestId("full-height");
-      expect(div).toHaveClass("atomiton-layout", "h-full");
-    });
-
-    it("should apply both fullWidth and fullHeight together", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "fullscreen",
-      });
-
-      render(
-        <StyledDiv fullWidth fullHeight data-testid="fullscreen">
-          Fullscreen content
-        </StyledDiv>,
-      );
-
-      const div = screen.getByTestId("fullscreen");
-      expect(div).toHaveClass("atomiton-fullscreen", "w-full", "h-full");
-    });
-
-    it("should not apply fullWidth/fullHeight classes when false", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "container",
-      });
-
-      render(
-        <StyledDiv fullWidth={false} fullHeight={false} data-testid="no-full">
-          Normal content
-        </StyledDiv>,
-      );
-
-      const div = screen.getByTestId("no-full");
-      expect(div).toHaveClass("atomiton-container");
-      expect(div).not.toHaveClass("w-full", "h-full");
-    });
-  });
-
-  describe("configuration options", () => {
-    it("should apply prop transformations", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "button",
+  describe("props resolver functionality", () => {
+    it("should apply props resolver transformations", () => {
+      const StyledButton = styled(TestButton, {
         props: (props) => ({
           ...props,
-          variant: props.variant || "default",
-          size: props.size || "md",
+          variant: props.variant || "primary",
+          "data-resolved": "true",
         }),
+      })("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+            secondary: "bg-gray-200",
+          },
+        },
       });
 
-      render(<StyledButton>Button</StyledButton>);
+      render(<StyledButton>Resolved</StyledButton>);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("data-variant", "default");
-      expect(button).toHaveAttribute("data-size", "md");
+      expect(button).toHaveClass("btn bg-blue-500");
+      expect(button).toHaveAttribute("data-resolved", "true");
     });
 
-    it("should apply style functions", () => {
-      const mockStyles = vi.fn(() => "btn btn-primary");
-      const StyledButton = styled(BaseButton, {
-        name: "button",
-        styles: mockStyles,
-      });
+    it("should run props resolver before extracting as prop (critical bug fix)", () => {
+      const propsResolver = vi.fn((props) => ({
+        ...props,
+        as: props.as === "link" ? "a" : props.as,
+      }));
 
-      render(<StyledButton variant="primary">Button</StyledButton>);
+      const StyledComponent = styled(TestDiv, {
+        props: propsResolver,
+      })("component");
 
-      const button = screen.getByRole("button");
-      expect(button).toHaveClass("atomiton-button", "btn", "btn-primary");
-      expect(mockStyles).toHaveBeenCalled();
+      render(<StyledComponent as="link">Link component</StyledComponent>);
+
+      expect(propsResolver).toHaveBeenCalledWith(
+        expect.objectContaining({ as: "link" }),
+      );
+
+      const element = screen.getByText("Link component");
+      expect(element.tagName).toBe("A");
     });
 
-    it("should combine prop transformation and styles", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "button",
+    it("should handle props resolver returning modified as prop", () => {
+      const StyledComponent = styled("div", {
         props: (props) => ({
           ...props,
-          variant: props.variant || "default",
+          as: props.variant === "link" ? "a" : props.as,
+          href: props.variant === "link" ? "#" : undefined,
         }),
-        styles: (props) => `btn btn-${props.variant}`,
-      });
+      })("styled-component");
 
-      render(<StyledButton variant="primary">Button</StyledButton>);
+      render(
+        <StyledComponent variant="link">Transformed to link</StyledComponent>,
+      );
 
-      const button = screen.getByRole("button");
-      expect(button).toHaveClass("atomiton-button", "btn", "btn-primary");
-      expect(button).toHaveAttribute("data-variant", "primary");
+      const element = screen.getByText("Transformed to link");
+      expect(element.tagName).toBe("A");
+      expect(element).toHaveAttribute("href", "#");
     });
   });
 
-  describe("polymorphic 'as' prop", () => {
-    it("should render as different element when 'as' prop is provided", () => {
-      const StyledComponent = styled(BaseDiv, {
-        name: "polymorphic",
-      });
+  describe("polymorphic as prop", () => {
+    it("should render as different element when as prop is provided", () => {
+      const StyledComponent = styled(TestDiv)("component");
 
       render(
         <StyledComponent as="span" data-testid="as-span">
@@ -310,15 +274,23 @@ describe("styled component wrapper", () => {
         </StyledComponent>,
       );
 
-      const span = screen.getByTestId("as-span");
-      expect(span.tagName).toBe("SPAN");
-      expect(span).toHaveClass("atomiton-polymorphic");
+      const element = screen.getByTestId("as-span");
+      expect(element.tagName).toBe("SPAN");
+      expect(element).toHaveClass("component");
     });
 
-    it("should render as custom component when 'as' prop is component", () => {
-      const StyledComponent = styled(BaseDiv, {
-        name: "custom",
-      });
+    it("should render as custom component with as prop", () => {
+      const CustomComponent = forwardRef<
+        HTMLDivElement,
+        { customProp?: string; children?: React.ReactNode }
+      >(({ customProp, children, ...props }, ref) => (
+        <div ref={ref} data-custom={customProp} {...props}>
+          {children}
+        </div>
+      ));
+      CustomComponent.displayName = "CustomComponent";
+
+      const StyledComponent = styled(TestDiv)("component");
 
       render(
         <StyledComponent
@@ -332,110 +304,23 @@ describe("styled component wrapper", () => {
 
       const element = screen.getByTestId("custom");
       expect(element).toHaveAttribute("data-custom", "test");
-      expect(element).toHaveClass("atomiton-custom");
+      expect(element).toHaveClass("component");
+    });
+
+    it("should use original component when no as prop provided", () => {
+      const StyledButton = styled(TestButton)("styled-btn");
+
+      render(<StyledButton>Original component</StyledButton>);
+
+      const button = screen.getByRole("button");
+      expect(button.tagName).toBe("BUTTON");
+      expect(button).toHaveClass("styled-btn");
     });
   });
 
-  describe("data attributes generation", () => {
-    it("should generate data attributes for component state", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "button",
-      });
-
-      render(
-        <StyledButton
-          variant="primary"
-          size="lg"
-          loading
-          disabled
-          data-testid="button"
-        >
-          Button
-        </StyledButton>,
-      );
-
-      const button = screen.getByTestId("button");
-      expect(button).toHaveAttribute("data-variant", "primary");
-      expect(button).toHaveAttribute("data-size", "lg");
-      expect(button).toHaveAttribute("data-loading", "true");
-      expect(button).toHaveAttribute("data-disabled", "true");
-    });
-
-    it("should merge generated data attributes with existing ones", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "button",
-      });
-
-      render(
-        <StyledButton
-          variant="secondary"
-          data-custom="custom-value"
-          data-testid="button"
-        >
-          Button
-        </StyledButton>,
-      );
-
-      const button = screen.getByTestId("button");
-      expect(button).toHaveAttribute("data-variant", "secondary");
-      expect(button).toHaveAttribute("data-custom", "custom-value");
-    });
-  });
-
-  describe("DOM prop filtering", () => {
-    it("should filter out invalid DOM props for HTML elements", () => {
-      const StyledButton = styled(
-        "button" as unknown as React.ComponentType<Record<string, unknown>>,
-        {
-          name: "html-button",
-        },
-      );
-
-      render(
-        <StyledButton
-          variant="primary"
-          size="lg"
-          loading={false}
-          onClick={() => {}}
-          data-testid="html-button"
-        >
-          HTML Button
-        </StyledButton>,
-      );
-
-      const button = screen.getByTestId("html-button");
-      expect(button).not.toHaveAttribute("variant");
-      expect(button).not.toHaveAttribute("size");
-      expect(button).not.toHaveAttribute("loading");
-      expect(button).toHaveAttribute("data-testid", "html-button");
-    });
-
-    it("should pass all props to React components", () => {
-      const StyledComponent = styled(CustomComponent, {
-        name: "react-component",
-      });
-
-      render(
-        <StyledComponent
-          variant="primary"
-          customProp="test-value"
-          data-testid="react-component"
-        >
-          React Component
-        </StyledComponent>,
-      );
-
-      const component = screen.getByTestId("react-component");
-      expect(component).toHaveAttribute("data-variant", "primary");
-      expect(component).toHaveAttribute("data-custom", "test-value");
-    });
-  });
-
-  describe("ref forwarding", () => {
-    it("should forward ref to the underlying component", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "button",
-      });
+  describe("forward ref functionality", () => {
+    it("should forward ref to the rendered component", () => {
+      const StyledButton = styled(TestButton)("styled-btn");
 
       let buttonRef: HTMLButtonElement | null = null;
       render(
@@ -449,195 +334,263 @@ describe("styled component wrapper", () => {
       );
 
       expect(buttonRef).toBeInstanceOf(HTMLButtonElement);
-      expect(
-        buttonRef && (buttonRef as unknown as HTMLButtonElement).textContent,
-      ).toBe("Button with ref");
+      expect((buttonRef as unknown as HTMLButtonElement)?.textContent).toBe(
+        "Button with ref",
+      );
     });
 
-    it("should work with forwardRef components", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "div",
-      });
+    it("should forward ref when using as prop", () => {
+      const StyledComponent = styled(TestDiv)("component");
 
-      let divRef: HTMLDivElement | null = null;
+      let spanRef: HTMLSpanElement | null = null;
       render(
-        <StyledDiv
-          ref={(el: HTMLDivElement | null) => {
-            divRef = el;
+        <StyledComponent
+          as="span"
+          ref={(el: HTMLSpanElement | null) => {
+            spanRef = el;
           }}
         >
-          Div with ref
-        </StyledDiv>,
+          Span with ref
+        </StyledComponent>,
       );
 
-      expect(divRef).toBeInstanceOf(HTMLDivElement);
-      expect(divRef && (divRef as unknown as HTMLDivElement).textContent).toBe(
-        "Div with ref",
+      expect(spanRef).toBeInstanceOf(HTMLSpanElement);
+      expect((spanRef as unknown as HTMLSpanElement)?.textContent).toBe(
+        "Span with ref",
       );
     });
   });
 
-  describe("display names", () => {
-    it("should set display name with component name when provided", () => {
-      // Let me check what the actual implementation returns
-      const StyledButton = styled(BaseButton, {
+  describe("display name configuration", () => {
+    it("should set display name when provided in config", () => {
+      const StyledButton = styled(TestButton, {
         name: "CustomButton",
-      });
+      })("btn");
 
-      // The actual implementation should use name || fallback
-      // If name is "CustomButton", displayName should be "CustomButton"
-      expect(StyledButton.displayName).toBe("CustomButton"); // The name should be used when provided
+      expect(StyledButton.displayName).toBe("CustomButton");
     });
 
-    it("should set display name with Styled prefix when no name provided", () => {
-      const StyledButton = styled(BaseButton);
+    it("should not have display name when not provided", () => {
+      const StyledButton = styled(TestButton)("btn");
 
-      expect(StyledButton.displayName).toBe("Styled(BaseButton)");
-    });
-
-    it("should handle components without displayName", () => {
-      function AnonymousComponent() {
-        return <div>Anonymous</div>;
-      }
-      const StyledComponent = styled(AnonymousComponent);
-
-      expect(StyledComponent.displayName).toBe("Styled(AnonymousComponent)");
+      expect(StyledButton.displayName).toBeUndefined();
     });
   });
 
-  describe("integration scenarios", () => {
-    it("should handle complex real-world component with all features", () => {
-      const StyledCard = styled(BaseDiv, {
-        name: "Card",
-        props: (props) => ({
-          ...props,
-          variant: props.variant || "default",
-          elevated: props.elevated || false,
-        }),
-        styles: (props) =>
-          `card card-${props.variant} ${props.elevated ? "elevated" : ""}`,
+  describe("edge cases and error handling", () => {
+    it("should handle undefined/null props", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+          },
+        },
       });
 
       render(
-        <StyledCard
-          variant="primary"
-          elevated
-          fullWidth
-          m={4}
-          p={6}
-          className="custom-card-class"
-          data-testid="complex-card"
-        >
-          Card Content
-        </StyledCard>,
-      );
-
-      const card = screen.getByTestId("complex-card");
-      expect(card).toHaveClass(
-        "atomiton-card",
-        "card",
-        "card-primary",
-        "elevated",
-        "w-full",
-        "m-4",
-        "p-6",
-        "custom-card-class",
-      );
-      expect(card).toHaveAttribute("data-variant", "primary");
-    });
-
-    it("should handle system props with styled props correctly", () => {
-      const StyledButton = styled(BaseButton, {
-        name: "ActionButton",
-        props: (props) => ({
-          ...props,
-          size: props.size || "md",
-          intent: props.intent || "primary",
-        }),
-        styles: (props) => `btn btn-${props.intent} btn-${props.size}`,
-      });
-
-      render(
-        <StyledButton
-          intent="destructive"
-          size="lg"
-          fullWidth
-          m={2}
-          p={3}
-          bg="red-500"
-          loading
-          data-testid="action-button"
-        >
-          Delete Item
+        <StyledButton variant={undefined} className={undefined}>
+          Undefined props
         </StyledButton>,
       );
 
-      const button = screen.getByTestId("action-button");
-      expect(button).toHaveClass(
-        "atomiton-actionbutton",
-        "btn",
-        "btn-destructive",
-        "btn-lg",
-        "w-full",
-        "m-2",
-        "p-3",
-        "bg-red-500",
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("btn");
+      expect(button).not.toHaveClass("bg-blue-500");
+    });
+
+    it("should handle empty variant configuration", () => {
+      const StyledDiv = styled(MockDiv)("base", {});
+
+      render(<StyledDiv>Empty config</StyledDiv>);
+
+      const div = screen.getByText("Empty config");
+      expect(div).toHaveClass("base");
+    });
+
+    it("should handle variant prop that doesn't exist in config", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+          },
+        },
+      });
+
+      render(
+        <StyledButton variant={"nonexistent" as "primary" | "secondary"}>
+          Invalid variant
+        </StyledButton>,
       );
-      expect(button).toHaveAttribute("data-size", "lg");
-      expect(button).toHaveAttribute("data-loading", "true");
-      expect(button).toHaveAttribute("data-disabled", "true");
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("btn");
+      expect(button).not.toHaveClass("bg-blue-500");
+    });
+
+    it("should handle props resolver returning empty object", () => {
+      const StyledDiv = styled(TestDiv, {
+        props: (props) => ({ ...props }),
+      })("base");
+
+      expect(() => {
+        render(<StyledDiv>Empty resolver</StyledDiv>);
+      }).not.toThrow();
+    });
+
+    it("should handle props resolver throwing error", () => {
+      const StyledDiv = styled(TestDiv, {
+        props: (_props): TestDivProps & Record<string, unknown> => {
+          throw new Error("Props resolver error");
+        },
+      })("base");
+
+      expect(() => {
+        render(<StyledDiv>Error resolver</StyledDiv>);
+      }).toThrow("Props resolver error");
+    });
+
+    it("should handle complex nested variant objects", () => {
+      const StyledButton = styled(TestButton)("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+            secondary: "bg-gray-200",
+          },
+          size: {
+            sm: "text-sm px-2 py-1",
+            md: "text-base px-4 py-2",
+          },
+          disabled: {
+            true: "opacity-50 cursor-not-allowed",
+            false: "opacity-100",
+          },
+        },
+        defaultVariants: {
+          variant: "primary",
+          size: "md",
+          disabled: false,
+        },
+      });
+
+      render(
+        <StyledButton variant="secondary" size="sm" disabled={true}>
+          Complex variants
+        </StyledButton>,
+      );
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass(
+        "btn",
+        "bg-gray-200",
+        "text-sm",
+        "px-2",
+        "py-1",
+        "opacity-50",
+        "cursor-not-allowed",
+      );
     });
   });
 
-  describe("edge cases", () => {
-    it("should handle component with no props", () => {
-      const StyledDiv = styled(BaseDiv);
-
-      render(<StyledDiv>No props</StyledDiv>);
-
-      const div = screen.getByText("No props");
-      expect(div).toBeInTheDocument();
-    });
-
-    it("should handle empty configuration object", () => {
-      const StyledDiv = styled(BaseDiv, {});
-
-      render(<StyledDiv m={4}>Empty config</StyledDiv>);
-
-      const div = screen.getByText("Empty config");
-      expect(div).toHaveClass("m-4");
-    });
-
-    it("should handle undefined system props", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "test",
+  describe("real-world usage scenarios", () => {
+    it("should handle button component with all features", () => {
+      const Button = styled(TestButton, {
+        name: "Button",
+        props: (props) => ({
+          ...props,
+          variant: props.variant || "primary",
+          disabled: props.disabled || props.loading,
+        }),
+      })(["inline-flex", "items-center", "justify-center", "rounded-md"], {
+        variants: {
+          variant: {
+            primary: "bg-blue-600 text-white hover:bg-blue-700",
+            secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
+            destructive: "bg-red-600 text-white hover:bg-red-700",
+          },
+          size: {
+            sm: "h-8 px-3 text-sm",
+            md: "h-10 px-4",
+            lg: "h-12 px-6 text-lg",
+          },
+        },
+        defaultVariants: {
+          variant: "primary",
+          size: "md",
+        },
       });
 
       render(
-        <StyledDiv m={undefined} p={undefined} fullWidth={undefined}>
-          Undefined props
-        </StyledDiv>,
+        <Button
+          variant="destructive"
+          size="lg"
+          loading={true}
+          className="custom-button"
+        >
+          Delete Item
+        </Button>,
       );
 
-      const div = screen.getByText("Undefined props");
-      expect(div).toHaveClass("atomiton-test");
-      expect(div).not.toHaveClass("m-undefined", "p-undefined", "w-full");
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass(
+        "inline-flex",
+        "items-center",
+        "justify-center",
+        "rounded-md",
+        "bg-red-600",
+        "text-white",
+        "hover:bg-red-700",
+        "h-12",
+        "px-6",
+        "text-lg",
+        "custom-button",
+      );
+      expect(button).toHaveAttribute("disabled");
+      expect(Button.displayName).toBe("Button");
     });
 
-    it("should handle system props that resolve to empty strings", () => {
-      const StyledDiv = styled(BaseDiv, {
-        name: "test",
+    it("should handle card component with polymorphic rendering", () => {
+      const Card = styled("div", {
+        name: "Card",
+        props: (props) => ({
+          ...props,
+          as: props.href ? "a" : props.as,
+        }),
+      })("rounded-lg border bg-card text-card-foreground shadow-sm", {
+        variants: {
+          variant: {
+            default: "",
+            destructive: "border-destructive",
+            outline: "border-2",
+          },
+        },
+        defaultVariants: {
+          variant: "default",
+        },
       });
 
       render(
-        <StyledDiv fullWidth={false} fullHeight={false}>
-          False boolean props
-        </StyledDiv>,
+        <Card
+          href="/link"
+          variant="outline"
+          className="hover:shadow-md"
+          data-testid="polymorphic-card"
+        >
+          Card content
+        </Card>,
       );
 
-      const div = screen.getByText("False boolean props");
-      expect(div).toHaveClass("atomiton-test");
-      expect(div).not.toHaveClass("w-full", "h-full");
+      const card = screen.getByTestId("polymorphic-card");
+      expect(card.tagName).toBe("A");
+      expect(card).toHaveClass(
+        "rounded-lg",
+        "border",
+        "bg-card",
+        "text-card-foreground",
+        "shadow-sm",
+        "border-2",
+        "hover:shadow-md",
+      );
+      expect(card).toHaveAttribute("href", "/link");
     });
   });
 });
