@@ -436,6 +436,36 @@ Components can render as different HTML elements or custom components.
 <Button as="div" role="button">Div Button</Button>
 ```
 
+### Event Handler Naming Conventions
+
+Always prefix event handlers with `handle` followed by the event name:
+
+```tsx
+// ✅ Correct event handler naming
+const handleOnClick = (event: React.MouseEvent) => {
+  // handler logic
+};
+
+const handleOnDoubleClick = (event: React.MouseEvent) => {
+  // handler logic
+};
+
+const handleOnChange = (value: string) => {
+  // handler logic
+};
+
+// ❌ Avoid these patterns
+const onClick = () => {}; // Missing 'handle' prefix
+const handleClick = () => {}; // Missing 'On' in event name
+const onClickHandler = () => {}; // Redundant 'Handler' suffix
+```
+
+This convention ensures:
+
+- **Consistency**: All handlers follow the same pattern
+- **Clarity**: Immediately identifiable as event handlers
+- **Searchability**: Easy to find all handlers with `handle*` search
+
 ### Data Attributes for State
 
 Use data attributes instead of conditional classes for state visualization. This is a powerful pattern that solves multiple problems elegantly.
@@ -1109,6 +1139,45 @@ By using CVA, we get a powerful, type-safe system for managing component variant
 - **Event handlers**: `on*` (onClick, onChange, onClose)
 - **Render props**: `render*` (renderHeader, renderItem)
 - **Component refs**: `*Ref` (buttonRef, inputRef)
+
+### Standard Prop Conventions
+
+#### Positioning
+
+- **Prop name**: Always use `side` for positioning components
+- **Values**: `"top"` | `"right"` | `"bottom"` | `"left"`
+- **Extended values** (when needed): `"top-left"` | `"top-right"` | `"bottom-left"` | `"bottom-right"`
+- **Applies to**: Panel, Sheet, Tooltip, Popover, Drawer, Toast, and any floating/positioned elements
+
+```tsx
+// ✅ Consistent across all components
+<Panel side="left" />
+<Tooltip side="top" />
+<Sheet side="right" />
+<Toast side="bottom-right" />
+```
+
+#### Sizing
+
+- **Prop name**: Always use `size` for component sizing
+- **Values**: `"sm"` | `"md"` | `"lg"` (t-shirt sizes)
+- **Extended values** (rarely needed): `"xs"` | `"xl"` | `"2xl"`
+- **Default**: Always `"md"` unless context demands otherwise
+
+```tsx
+// ✅ Consistent t-shirt sizing
+<Button size="sm" />
+<Input size="md" />
+<Card size="lg" />
+```
+
+#### Why These Conventions?
+
+1. **Consistency**: Same prop names across all components
+2. **Predictability**: Developers know what to expect
+3. **Type Safety**: Shared types can be reused
+4. **Documentation**: One concept to learn
+5. **shadcn Alignment**: Follows established patterns in the ecosystem
 
 ## Design Tokens System
 

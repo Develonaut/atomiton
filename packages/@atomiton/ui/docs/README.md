@@ -11,6 +11,7 @@ Build a lightweight, composable, and beautiful React UI framework that combines 
 1. **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Our approach to simplicity, style props, and API design
 2. **[Component Building Guide](./COMPONENT_BUILDING_GUIDE.md)** - Complete step-by-step guide with all patterns
 3. **[Component Organization](./COMPONENT_ORGANIZATION.md)** - The "bento box" principle for file structure
+4. **[Primitive Integration Guide](./PRIMITIVE_INTEGRATION_GUIDE.md)** - How to integrate shadcn/ui primitives and maintain separation of concerns
 
 ### Progress Tracking
 
