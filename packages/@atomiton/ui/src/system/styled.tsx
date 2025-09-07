@@ -70,7 +70,7 @@ export function styled<
 >(Component: T, config: StyledConfig<TProps> = {}) {
   return function createStyledComponent<
     V extends Record<string, unknown> = Record<string, unknown>,
-  >(baseClasses: string | string[], variantConfig?: V) {
+  >(baseClasses?: string | string[], variantConfig?: V) {
     // Generate automatic class name from config.name
     const autoClassName = config.name
       ? `atomiton-${config.name
