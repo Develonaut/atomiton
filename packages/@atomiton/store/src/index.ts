@@ -1,19 +1,29 @@
 /**
- * @atomiton/store - Centralized state management
- * Pure functional API with controlled exports
+ * @atomiton/store - Pure state management infrastructure
+ *
+ * Provides low-level store creation utilities for building
+ * domain-specific stores in other packages.
+ *
+ * Usage:
+ *   import { core } from '@atomiton/core';
+ *
+ *   const myStore = core.store.createStore({
+ *     initialState: { ... }
+ *   });
  */
 
 // ============================================================================
-// Public API - All functions from api.ts
+// Core Store Infrastructure
 // ============================================================================
 
-export * from "./api";
-
-// ============================================================================
-// Type exports from stores (for consumers who need types)
-// ============================================================================
-
-export type * from "./stores/blueprint/types";
-export type * from "./stores/ui/types";
-export type * from "./stores/session/types";
-export type * from "./stores/execution/types";
+export {
+  combineStores,
+  createAction,
+  createActions,
+  createSelector,
+  createSelectors,
+  createStore,
+  type StateUpdater,
+  type Store,
+  type StoreConfig,
+} from "./base";
