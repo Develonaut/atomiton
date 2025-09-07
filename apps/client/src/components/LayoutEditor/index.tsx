@@ -6,12 +6,11 @@ import { Canvas, Editor } from "@atomiton/editor";
 
 function LayoutEditor() {
   return (
-    <div className="min-h-screen bg-surface-02">
+    <div className="relative min-h-screen bg-surface-02">
       <Editor>
-        <LeftSidebar />
-        <div className="flex flex-col flex-1">
-          <Toolbar />
-          <div className="relative flex-1 ml-63 mr-63">
+        {/* Canvas sits at the bottom layer, full screen */}
+        <div className="absolute inset-0">
+          <div className="relative w-full h-full">
             <Canvas
               nodes={[
                 {
@@ -36,11 +35,22 @@ function LayoutEditor() {
               ]}
             >
               <Canvas.Grid variant="dots" gap={12} size={1} />
-              <Canvas.Controls />
-              <Canvas.Minimap />
+              {/* Controls positioned with padding to avoid clipping */}
+              <Canvas.Controls
+                placement="bottom-left"
+                style={{ left: "264px", bottom: "12px" }} // 264px = 252px sidebar + 12px padding
+              />
+              <Canvas.Minimap
+                placement="bottom-right"
+                className="!right-66 !bottom-3" // Using Tailwind's important to override default positioning
+              />
             </Canvas>
           </div>
         </div>
+
+        {/* Toolbar and Sidebars sit on top with proper z-index */}
+        <Toolbar />
+        <LeftSidebar />
         <RightSidebar />
       </Editor>
     </div>
