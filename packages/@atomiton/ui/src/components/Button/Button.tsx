@@ -85,7 +85,7 @@ const ButtonRoot = styled(ButtonPrimitive, {
       },
     },
     defaultVariants: {
-      variant: "ghost",
+      variant: "primary",
       size: "md",
     },
     compoundVariants: [],

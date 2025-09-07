@@ -71,10 +71,27 @@ export function styled<
   return function createStyledComponent<
     V extends Record<string, unknown> = Record<string, unknown>,
   >(baseClasses: string | string[], variantConfig?: V) {
+    // Generate automatic class name from config.name
+    const autoClassName = config.name
+      ? `atomiton-${config.name
+          .replace(/([A-Z])/g, "-$1")
+          .toLowerCase()
+          .replace(/^-/, "")}`
+      : null;
+
+    // Combine auto class name with base classes
+    const finalBaseClasses = autoClassName
+      ? Array.isArray(baseClasses)
+        ? [autoClassName, ...baseClasses]
+        : baseClasses
+          ? [autoClassName, baseClasses]
+          : autoClassName
+      : baseClasses;
+
     // Normalize baseClasses to always be a string or array
     // CVA accepts both, so we just pass it through
     const variants = cva(
-      baseClasses,
+      finalBaseClasses,
       variantConfig as Parameters<typeof cva>[1],
     );
 

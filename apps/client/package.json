@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@atomiton/ui": "workspace:*",
+    "@atomiton/editor": "workspace:*",
     "@headlessui/react": "^2.2.4",
     "emoji-picker-react": "^4.12.2",
     "framer-motion": "^12.17.0",

@@ -1,12 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
+import { MockButton, MockDiv } from "@/test-utils";
 import { render, screen } from "@testing-library/react";
 import { forwardRef } from "react";
+import { describe, expect, it, vi } from "vitest";
 import { styled } from "../styled";
-import { MockButton, MockDiv } from "@/test-utils";
-
-// Alias for backward compatibility
-const TestButton = MockButton;
-const TestDiv = MockDiv;
 
 // Mock the cn utility
 vi.mock("@/utils/cn", () => ({
@@ -50,7 +46,7 @@ vi.mock("class-variance-authority", () => ({
 }));
 
 // Use centralized mock components
-type TestDivProps = React.ComponentProps<typeof MockDiv> & {
+type MockDivProps = React.ComponentProps<typeof MockDiv> & {
   variant?: "card" | "panel";
 };
 
@@ -88,7 +84,7 @@ describe("styled function", () => {
 
   describe("variant application", () => {
     it("should apply variants correctly", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500 text-white",
@@ -115,7 +111,7 @@ describe("styled function", () => {
     });
 
     it("should apply default variants when no props provided", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500",
@@ -150,7 +146,7 @@ describe("styled function", () => {
     });
 
     it("should separate variant props from other props", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500",
@@ -173,7 +169,7 @@ describe("styled function", () => {
 
   describe("className merging", () => {
     it("should merge className with variant classes", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500",
@@ -203,7 +199,7 @@ describe("styled function", () => {
 
   describe("props resolver functionality", () => {
     it("should apply props resolver transformations", () => {
-      const StyledButton = styled(TestButton, {
+      const StyledButton = styled(MockButton, {
         props: (props) => ({
           ...props,
           variant: props.variant || "primary",
@@ -231,7 +227,7 @@ describe("styled function", () => {
         as: props.as === "link" ? "a" : props.as,
       }));
 
-      const StyledComponent = styled(TestDiv, {
+      const StyledComponent = styled(MockDiv, {
         props: propsResolver,
       })("component");
 
@@ -266,7 +262,7 @@ describe("styled function", () => {
 
   describe("polymorphic as prop", () => {
     it("should render as different element when as prop is provided", () => {
-      const StyledComponent = styled(TestDiv)("component");
+      const StyledComponent = styled(MockDiv)("component");
 
       render(
         <StyledComponent as="span" data-testid="as-span">
@@ -290,7 +286,7 @@ describe("styled function", () => {
       ));
       CustomComponent.displayName = "CustomComponent";
 
-      const StyledComponent = styled(TestDiv)("component");
+      const StyledComponent = styled(MockDiv)("component");
 
       render(
         <StyledComponent
@@ -308,7 +304,7 @@ describe("styled function", () => {
     });
 
     it("should use original component when no as prop provided", () => {
-      const StyledButton = styled(TestButton)("styled-btn");
+      const StyledButton = styled(MockButton)("styled-btn");
 
       render(<StyledButton>Original component</StyledButton>);
 
@@ -320,7 +316,7 @@ describe("styled function", () => {
 
   describe("forward ref functionality", () => {
     it("should forward ref to the rendered component", () => {
-      const StyledButton = styled(TestButton)("styled-btn");
+      const StyledButton = styled(MockButton)("styled-btn");
 
       let buttonRef: HTMLButtonElement | null = null;
       render(
@@ -340,7 +336,7 @@ describe("styled function", () => {
     });
 
     it("should forward ref when using as prop", () => {
-      const StyledComponent = styled(TestDiv)("component");
+      const StyledComponent = styled(MockDiv)("component");
 
       let spanRef: HTMLSpanElement | null = null;
       render(
@@ -363,7 +359,7 @@ describe("styled function", () => {
 
   describe("display name configuration", () => {
     it("should set display name when provided in config", () => {
-      const StyledButton = styled(TestButton, {
+      const StyledButton = styled(MockButton, {
         name: "CustomButton",
       })("btn");
 
@@ -371,7 +367,7 @@ describe("styled function", () => {
     });
 
     it("should not have display name when not provided", () => {
-      const StyledButton = styled(TestButton)("btn");
+      const StyledButton = styled(MockButton)("btn");
 
       expect(StyledButton.displayName).toBeUndefined();
     });
@@ -379,7 +375,7 @@ describe("styled function", () => {
 
   describe("edge cases and error handling", () => {
     it("should handle undefined/null props", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500",
@@ -408,7 +404,7 @@ describe("styled function", () => {
     });
 
     it("should handle variant prop that doesn't exist in config", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500",
@@ -428,7 +424,7 @@ describe("styled function", () => {
     });
 
     it("should handle props resolver returning empty object", () => {
-      const StyledDiv = styled(TestDiv, {
+      const StyledDiv = styled(MockDiv, {
         props: (props) => ({ ...props }),
       })("base");
 
@@ -438,8 +434,8 @@ describe("styled function", () => {
     });
 
     it("should handle props resolver throwing error", () => {
-      const StyledDiv = styled(TestDiv, {
-        props: (_props): TestDivProps & Record<string, unknown> => {
+      const StyledDiv = styled(MockDiv, {
+        props: (_props): MockDivProps & Record<string, unknown> => {
           throw new Error("Props resolver error");
         },
       })("base");
@@ -450,7 +446,7 @@ describe("styled function", () => {
     });
 
     it("should handle complex nested variant objects", () => {
-      const StyledButton = styled(TestButton)("btn", {
+      const StyledButton = styled(MockButton)("btn", {
         variants: {
           variant: {
             primary: "bg-blue-500",
@@ -491,9 +487,192 @@ describe("styled function", () => {
     });
   });
 
+  describe("automatic class name generation", () => {
+    it("should generate automatic class name from config.name", () => {
+      const StyledButton = styled(MockButton, {
+        name: "Button",
+      })("btn");
+
+      render(<StyledButton>Auto class</StyledButton>);
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("atomiton-button btn");
+    });
+
+    it("should convert PascalCase to kebab-case correctly", () => {
+      // Test various PascalCase patterns
+      const testCases = [
+        { name: "Button", expected: "atomiton-button" },
+        { name: "ToolbarButton", expected: "atomiton-toolbar-button" },
+        { name: "InspectorField", expected: "atomiton-inspector-field" },
+        {
+          name: "MyComplexComponent",
+          expected: "atomiton-my-complex-component",
+        },
+        { name: "HTMLElement", expected: "atomiton-h-t-m-l-element" },
+        { name: "SimpleDiv", expected: "atomiton-simple-div" },
+      ];
+
+      testCases.forEach(({ name, expected }) => {
+        const StyledComponent = styled(MockDiv, { name })("base");
+        render(<StyledComponent data-testid={name}>{name}</StyledComponent>);
+
+        const element = screen.getByTestId(name);
+        expect(element).toHaveClass(expected);
+      });
+    });
+
+    it("should handle names with numbers correctly", () => {
+      const testCases = [
+        { name: "Button2", expected: "atomiton-button2" },
+        { name: "H1Title", expected: "atomiton-h1-title" },
+        { name: "Grid3Column", expected: "atomiton-grid3-column" },
+      ];
+
+      testCases.forEach(({ name, expected }) => {
+        const StyledComponent = styled(MockDiv, { name })("base");
+        render(<StyledComponent data-testid={name}>{name}</StyledComponent>);
+
+        const element = screen.getByTestId(name);
+        expect(element).toHaveClass(expected);
+      });
+    });
+
+    it("should place auto-generated class first when using string base classes", () => {
+      const StyledButton = styled(MockButton, {
+        name: "ToolbarButton",
+      })("btn rounded-md px-4");
+
+      render(<StyledButton>First class test</StyledButton>);
+
+      const button = screen.getByRole("button");
+      // The auto class should be first
+      expect(button.className).toMatch(/^atomiton-toolbar-button\s/);
+      expect(button).toHaveClass("atomiton-toolbar-button btn rounded-md px-4");
+    });
+
+    it("should place auto-generated class first when using array base classes", () => {
+      const StyledDiv = styled(MockDiv, {
+        name: "InspectorField",
+      })(["flex", "items-center", "gap-2"]);
+
+      render(<StyledDiv>Array base test</StyledDiv>);
+
+      const div = screen.getByText("Array base test");
+      // The auto class should be first
+      expect(div.className).toMatch(/^atomiton-inspector-field\s/);
+      expect(div).toHaveClass(
+        "atomiton-inspector-field flex items-center gap-2",
+      );
+    });
+
+    it("should work with variants and preserve class order", () => {
+      const StyledButton = styled(MockButton, {
+        name: "ActionButton",
+      })("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500 text-white",
+            secondary: "bg-gray-200 text-gray-800",
+          },
+        },
+      });
+
+      render(<StyledButton variant="primary">Variant test</StyledButton>);
+
+      const button = screen.getByRole("button");
+      expect(button.className).toMatch(/^atomiton-action-button\s/);
+      expect(button).toHaveClass(
+        "atomiton-action-button btn bg-blue-500 text-white",
+      );
+    });
+
+    it("should work when no base classes are provided", () => {
+      const StyledDiv = styled(MockDiv, {
+        name: "EmptyBase",
+      })("");
+
+      render(<StyledDiv>No base classes</StyledDiv>);
+
+      const div = screen.getByText("No base classes");
+      expect(div).toHaveClass("atomiton-empty-base");
+      expect(div.className.trim()).toBe("atomiton-empty-base");
+    });
+
+    it("should work with only variants, no base classes", () => {
+      const StyledSpan = styled("span", {
+        name: "StatusBadge",
+      })("", {
+        variants: {
+          status: {
+            success: "text-green-600 bg-green-100",
+            error: "text-red-600 bg-red-100",
+          },
+        },
+      });
+
+      render(<StyledSpan status="success">Success</StyledSpan>);
+
+      const span = screen.getByText("Success");
+      expect(span).toHaveClass(
+        "atomiton-status-badge text-green-600 bg-green-100",
+      );
+    });
+
+    it("should not generate class when name is not provided", () => {
+      const StyledButton = styled(MockButton)("btn rounded");
+
+      render(<StyledButton>No auto class</StyledButton>);
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("btn rounded");
+      expect(button.className).not.toMatch(/atomiton-/);
+    });
+
+    it("should work with custom className and preserve order", () => {
+      const StyledDiv = styled(MockDiv, {
+        name: "CustomDiv",
+      })("base-class");
+
+      render(
+        <StyledDiv className="user-custom-class">Custom className</StyledDiv>,
+      );
+
+      const div = screen.getByText("Custom className");
+      // Auto class first, then base classes, then custom className
+      expect(div).toHaveClass(
+        "atomiton-custom-div base-class user-custom-class",
+      );
+    });
+
+    it("should work with props resolver and auto class generation", () => {
+      const StyledButton = styled(MockButton, {
+        name: "ResolvedButton",
+        props: (props) => ({
+          ...props,
+          variant: props.variant || "primary",
+          "data-resolved": "true",
+        }),
+      })("btn", {
+        variants: {
+          variant: {
+            primary: "bg-blue-500",
+            secondary: "bg-gray-200",
+          },
+        },
+      });
+
+      render(<StyledButton>Resolved with auto class</StyledButton>);
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveClass("atomiton-resolved-button btn bg-blue-500");
+      expect(button).toHaveAttribute("data-resolved", "true");
+    });
+  });
+
   describe("real-world usage scenarios", () => {
-    it("should handle button component with all features", () => {
-      const Button = styled(TestButton, {
+    it("should handle button component with all features including auto class", () => {
+      const Button = styled(MockButton, {
         name: "Button",
         props: (props) => ({
           ...props,
@@ -531,7 +710,10 @@ describe("styled function", () => {
       );
 
       const button = screen.getByRole("button");
+      // Auto-generated class should be first
+      expect(button.className).toMatch(/^atomiton-button\s/);
       expect(button).toHaveClass(
+        "atomiton-button",
         "inline-flex",
         "items-center",
         "justify-center",
@@ -548,7 +730,7 @@ describe("styled function", () => {
       expect(Button.displayName).toBe("Button");
     });
 
-    it("should handle card component with polymorphic rendering", () => {
+    it("should handle card component with polymorphic rendering and auto class", () => {
       const Card = styled("div", {
         name: "Card",
         props: (props) => ({
@@ -581,7 +763,10 @@ describe("styled function", () => {
 
       const card = screen.getByTestId("polymorphic-card");
       expect(card.tagName).toBe("A");
+      // Auto-generated class should be first
+      expect(card.className).toMatch(/^atomiton-card\s/);
       expect(card).toHaveClass(
+        "atomiton-card",
         "rounded-lg",
         "border",
         "bg-card",
