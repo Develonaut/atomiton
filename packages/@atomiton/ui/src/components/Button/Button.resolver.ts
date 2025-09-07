@@ -7,24 +7,32 @@ export function resolveButtonProps<T extends Record<string, unknown>>(
 ): T {
   const anyProps = props as Record<string, unknown>;
 
-  return {
+  const result = {
     ...props,
     as: anyProps.as === "link" ? "a" : anyProps.as || "button",
-    // Handle legacy Brainwave variant props
-    variant: anyProps.isPrimary
-      ? "primary"
-      : anyProps.isSecondary
-        ? "secondary"
-        : anyProps.isOrange
-          ? "destructive"
-          : anyProps.variant || "primary",
-    // Handle legacy size props
-    size: anyProps.isSmall
-      ? "sm"
-      : anyProps.isLarge
-        ? "lg"
-        : anyProps.size || "md",
-  };
+  } as T;
+
+  // Map legacy variant props to shadcn variants
+  if (anyProps.isPrimary) {
+    result.variant = "default";
+  } else if (anyProps.isSecondary) {
+    result.variant = "secondary";
+  } else if (anyProps.isOrange) {
+    result.variant = "destructive";
+  } else if (anyProps.variant) {
+    result.variant = anyProps.variant;
+  }
+
+  // Map legacy size props
+  if (anyProps.isSmall) {
+    result.size = "sm";
+  } else if (anyProps.isLarge) {
+    result.size = "lg";
+  } else if (anyProps.size) {
+    result.size = anyProps.size;
+  }
+
+  return result as T;
 }
 
 export default resolveButtonProps;

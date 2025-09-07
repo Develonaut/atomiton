@@ -3,8 +3,17 @@ export interface ButtonBaseProps {
   className?: string;
   disabled?: boolean;
   loading?: boolean;
-  variant?: "primary" | "secondary" | "destructive";
-  size?: "sm" | "md" | "lg";
+  // Align with shadcn API
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link"
+    | "embossed";
+  size?: "default" | "sm" | "lg" | "icon";
+  asChild?: boolean;
 
   // Legacy props for backward compatibility
   isPrimary?: boolean;

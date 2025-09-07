@@ -248,6 +248,11 @@
 
 /* Utility classes for migration period */
 @layer utilities {
+  /* Global outline color for consistent focus styles across all elements */
+  * {
+    outline-color: var(--color-blue);
+  }
+  
   /* Background utilities with alpha support */
   .bg-shade-01-95 { background-color: rgba(252, 252, 252, 0.95); }
   .bg-shade-06-30 { background-color: rgba(123, 123, 123, 0.3); }
@@ -388,6 +393,19 @@
   [data-active] { --tw-data-active: true; }
   [data-disabled] { --tw-data-disabled: true; }
   [data-checked] { --tw-data-checked: true; }
+  
+  /* 
+   * Embossed effect utility class
+   * Creates a pressed/inset 3D appearance used for active states
+   * Commonly used in toolbar buttons, pills, tags, and selected items
+   * Combines background, border, and inset shadow for depth effect
+   */
+  .embossed {
+    background-color: var(--color-surface-03);
+    border-width: 1px;
+    border-color: var(--color-s-02);
+    box-shadow: 0 -1px 3px 0px rgba(18, 18, 18, 0.15) inset, 0px 1.25px 1px 0px #FFF inset;
+  }
 }
 
 /* Component-specific utilities that apps commonly need */

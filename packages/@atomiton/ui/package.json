@@ -16,6 +16,7 @@
   },
   "scripts": {
     "dev": "pnpm build:watch",
+    "dev:ui": "vite",
     "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "build:vite": "vite build",
     "build:watch": "concurrently \"tsc -p tsconfig.build.json --watch\" \"tsc-alias -p tsconfig.build.json --watch\"",
