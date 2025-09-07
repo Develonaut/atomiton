@@ -4,6 +4,16 @@
       "mode": "auto"
     }
   ],
+  "eslint.run": "onSave",
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.surveys.enabled": false,
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.git/objects/**": true,
@@ -15,7 +25,10 @@
     "**/.turbo/**": true,
     "**/.pnpm-store/**": true,
     "**/packages/*/node_modules/**": true,
-    "**/apps/*/node_modules/**": true
+    "**/apps/*/node_modules/**": true,
+    "**/.git/**": true,
+    "**/logs/**": true,
+    "**/*.log": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -25,7 +38,5 @@
     "**/coverage": true,
     "**/.turbo": true,
     "**/.pnpm-store": true
-  },
-  "typescript.tsserver.maxTsServerMemory": 4096,
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  }
 }
