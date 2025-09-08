@@ -1,4 +1,5 @@
-import { Component, ErrorInfo, ReactNode } from "react";
+import { Component } from "react";
+import type { ErrorInfo, ReactNode } from "react";
 import { Box, Button } from "@atomiton/ui";
 import Icon from "@/components/Icon";
 
@@ -39,8 +40,8 @@ function ErrorDisplay({
               Something went wrong
             </h1>
             <p className="text-body-md text-secondary">
-              We've encountered an unexpected error. Don't worry - your work
-              hasn't been lost.
+              We&apos;ve encountered an unexpected error. Don&apos;t worry -
+              your work hasn&apos;t been lost.
             </p>
           </Box>
         </Box>
@@ -100,6 +101,7 @@ export class ErrorBoundary extends Component<
     if (!error || !errorInfo) return;
 
     // Use the centralized error reporting system
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { errorReporter } = require("../../utils/errorReporting");
     errorReporter.generateDownloadableReport(error, errorInfo);
   };

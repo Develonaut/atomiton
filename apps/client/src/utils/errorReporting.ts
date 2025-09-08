@@ -1,4 +1,4 @@
-import { ErrorInfo } from "react";
+import type { ErrorInfo } from "react";
 
 export type ErrorReport = {
   timestamp: string;
@@ -74,7 +74,7 @@ export class ErrorReporter {
         stack: error.stack,
       },
       errorInfo: {
-        componentStack: errorInfo.componentStack,
+        componentStack: errorInfo.componentStack || "",
       },
       context: {
         ...this.context,
