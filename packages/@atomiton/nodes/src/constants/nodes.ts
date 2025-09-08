@@ -22,7 +22,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "CSV/Spreadsheet",
     category: "io",
     description: "Read CSV files and spreadsheet data",
-    icon: "table",
+    icon: "table-2",
     tags: ["csv", "spreadsheet", "excel", "data", "table", "import"],
   },
   {
@@ -31,7 +31,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "File System",
     category: "io",
     description: "Read, write files and manage directories",
-    icon: "folder",
+    icon: "folder-open",
     tags: ["file", "folder", "directory", "read", "write", "create"],
   },
 
@@ -42,7 +42,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "HTTP/API Request",
     category: "io",
     description: "Call APIs (Figma, webhooks, REST)",
-    icon: "globe",
+    icon: "globe-2",
     tags: ["http", "api", "figma", "webhook", "rest", "post", "get"],
   },
   {
@@ -60,7 +60,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "Image Processor",
     category: "media",
     description: "Composite and manipulate images",
-    icon: "image",
+    icon: "image-plus",
     tags: ["image", "composite", "overlay", "merge", "process", "render"],
   },
 
@@ -71,7 +71,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "Transform",
     category: "data",
     description: "Transform data, arrays, JSON, templates",
-    icon: "code",
+    icon: "code-2",
     tags: ["json", "transform", "data", "array", "text", "template", "map"],
   },
   {
@@ -80,7 +80,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "JavaScript Code",
     category: "data",
     description: "Custom JavaScript for complex logic",
-    icon: "brackets",
+    icon: "braces",
     tags: ["javascript", "code", "custom", "script", "function"],
   },
 
@@ -100,7 +100,7 @@ export const MVP_NODES: NodeDefinition[] = [
     name: "Parallel",
     category: "logic",
     description: "Run multiple operations simultaneously",
-    icon: "git-branch",
+    icon: "workflow",
     tags: ["parallel", "concurrent", "async", "batch", "speed"],
   },
 ];
