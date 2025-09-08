@@ -4,6 +4,25 @@
 
 Build 20-50 exceptional nodes that cover 80% of automation use cases, emphasizing quality over quantity and leveraging desktop-first capabilities.
 
+## MVP Strategy: Workflow-Driven Development
+
+### Core Principle
+
+Start with real workflows to identify essential nodes. Each node should enable multiple use cases rather than serving a single purpose.
+
+### MVP Target Workflow: Product Image Automation
+
+**Workflow**: CSV → Blender Renders → Figma Overlays → Composite Images → Output Directory
+
+This workflow validates our core nodes by requiring:
+
+- Data ingestion (CSV/Spreadsheet)
+- File system operations (directories, read/write)
+- External tool integration (Blender, Figma API)
+- Image processing (compositing)
+- Batch processing (loop through products)
+- Parallel execution (speed optimization)
+
 ## Implementation Phases
 
 ### Phase 1: Core Infrastructure ✅ (Complete)
@@ -14,9 +33,76 @@ Build 20-50 exceptional nodes that cover 80% of automation use cases, emphasizin
 - ✅ Registry system with validation
 - ✅ Adapter pattern for visualization
 - ✅ Type-safe configuration with Zod
-- ✅ CSV Parser as reference implementation
+- ✅ Node constants and definitions
 
-### Phase 2: Essential I/O Nodes (Week 1-2)
+### Phase 2: MVP Essential Nodes (Week 1-2)
+
+**Priority**: Critical - These 9 nodes enable the MVP workflow
+**Goal**: Ship working product image automation
+
+#### Data Input/Output (2 nodes)
+
+1. **CSV/Spreadsheet Node**
+   - Read CSV files and Excel spreadsheets
+   - Column mapping and data types
+   - Header detection
+   - Use cases: Product data, batch operations, data import
+
+2. **File System Node**
+   - Create/read/write files and directories
+   - Path operations and patterns
+   - Watch for changes
+   - Use cases: Organize outputs, manage assets, file operations
+
+#### External Integration (3 nodes)
+
+3. **HTTP/API Request Node**
+   - REST API calls (GET, POST, etc.)
+   - Authentication support
+   - Response handling
+   - Use cases: Figma API, webhooks, external services
+
+4. **Shell Command Node**
+   - Execute system commands
+   - Working directory control
+   - Environment variables
+   - Use cases: Blender CLI, ImageMagick, git, any CLI tool
+
+5. **Image Processor Node**
+   - Composite/overlay images
+   - Resize, crop, format conversion
+   - Batch processing
+   - Use cases: Product images, watermarks, thumbnails
+
+#### Data Processing (2 nodes)
+
+6. **Transform Node**
+   - JSON/array/object manipulation
+   - Text templates and formatting
+   - Data mapping and conversion
+   - Use cases: API responses, data shaping, text generation
+
+7. **JavaScript Code Node**
+   - Custom logic execution
+   - Complex calculations
+   - Data validation
+   - Use cases: Custom business logic, complex transformations
+
+#### Control Flow (2 nodes)
+
+8. **Loop/Iterate Node**
+   - Process arrays and collections
+   - Row-by-row operations
+   - Batch control
+   - Use cases: Process each product, batch operations
+
+9. **Parallel Node**
+   - Concurrent execution
+   - Speed optimization
+   - Resource management
+   - Use cases: Multiple renders, API calls, file operations
+
+### Phase 3: Extended Essential Nodes (Week 2-3)
 
 **Priority**: Critical
 **Goal**: Enable basic data input/output operations
