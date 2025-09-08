@@ -128,3 +128,4 @@ export { useNodes } from "./hooks/useNodes";
 export { useEdges } from "./hooks/useEdges";
 export { useAnimationSettings } from "./hooks/useAnimationSettings";
 export { useZoom } from "./hooks/useZoom";
+export { useElements } from "./hooks/useElements";
