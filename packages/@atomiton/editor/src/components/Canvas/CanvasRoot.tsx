@@ -1,14 +1,9 @@
-import { useCallback, useRef } from "react";
-import type { Connection } from "@xyflow/react";
-import {
-  ReactFlow,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
 import { styled } from "@atomiton/ui";
+import { ReactFlow } from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import { useRef } from "react";
 import type { CanvasProps } from "./Canvas.types";
+import { useReactFlow } from "./hooks/useReactFlow";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",
@@ -37,33 +32,17 @@ export function CanvasRoot({
   ...props
 }: CanvasProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const [nodes, , handleNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges);
 
-  const handleOnConnect = useCallback(
-    (params: Connection) => {
-      setEdges((eds) => addEdge(params, eds));
-      onConnect?.(params);
-    },
-    [setEdges, onConnect],
-  );
-
-  const handleOnDrop = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault();
-      onDrop?.(event);
-    },
-    [onDrop],
-  );
-
-  const handleOnDragOver = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
-      onDragOver?.(event);
-    },
-    [onDragOver],
-  );
+  // Single hook that handles everything - our complete ReactFlow adapter
+  const reactFlow = useReactFlow({
+    nodes: initialNodes,
+    edges: initialEdges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    onDrop,
+    onDragOver,
+  });
 
   return (
     <CanvasStyled
@@ -73,15 +52,15 @@ export function CanvasRoot({
       {...props}
     >
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange || handleNodesChange}
-        onEdgesChange={onEdgesChange || handleEdgesChange}
-        onConnect={handleOnConnect}
+        nodes={reactFlow.nodes}
+        edges={reactFlow.edges}
+        onNodesChange={reactFlow.onNodesChange}
+        onEdgesChange={reactFlow.onEdgesChange}
+        onConnect={reactFlow.onConnect}
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
-        onDrop={handleOnDrop}
-        onDragOver={handleOnDragOver}
+        onDrop={reactFlow.onDrop}
+        onDragOver={reactFlow.onDragOver}
         onInit={onInit}
         fitView={fitView}
         fitViewOptions={fitViewOptions}

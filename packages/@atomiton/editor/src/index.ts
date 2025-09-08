@@ -117,3 +117,14 @@ export type { Side, Size } from "./components/Panel";
 // Core Types
 export type { EditorConfig } from "./types";
 export type { EditorState } from "./store";
+
+// Store
+export { editorStore, editorStore as store } from "./store";
+
+// Hooks
+export { useUndoRedo } from "./hooks/useUndoRedo";
+export { useCanvas } from "./hooks/useCanvas";
+export { useNodes } from "./hooks/useNodes";
+export { useEdges } from "./hooks/useEdges";
+export { useAnimationSettings } from "./hooks/useAnimationSettings";
+export { useZoom } from "./hooks/useZoom";
