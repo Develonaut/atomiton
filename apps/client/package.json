@@ -24,8 +24,9 @@
     "dev:all": "./scripts/kill-dev-servers.sh && npm run dev & wait"
   },
   "dependencies": {
-    "@atomiton/ui": "workspace:*",
     "@atomiton/editor": "workspace:*",
+    "@atomiton/hooks": "workspace:^",
+    "@atomiton/ui": "workspace:*",
     "@headlessui/react": "^2.2.4",
     "emoji-picker-react": "^4.12.2",
     "framer-motion": "^12.17.0",
