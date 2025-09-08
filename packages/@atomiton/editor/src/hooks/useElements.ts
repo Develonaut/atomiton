@@ -30,13 +30,7 @@ export function useElements() {
   };
 
   const addElement = (nodeType: string) => {
-    const node = {
-      id: `node-${Date.now()}`,
-      type: nodeType,
-      position: { x: 100, y: 100 },
-      data: { label: nodeType },
-    };
-    editorStore.addNode(node);
+    editorStore.addNodeWithConnection(nodeType);
   };
 
   return {

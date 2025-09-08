@@ -29,6 +29,7 @@ export function CanvasRoot({
   onInit,
   fitView = true,
   fitViewOptions,
+  nodeTypes,
   ...props
 }: CanvasProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -64,6 +65,7 @@ export function CanvasRoot({
         onInit={onInit}
         fitView={fitView}
         fitViewOptions={fitViewOptions}
+        nodeTypes={nodeTypes}
         className="atomiton-canvas-flow"
       >
         {children}

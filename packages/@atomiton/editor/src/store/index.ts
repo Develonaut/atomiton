@@ -59,6 +59,51 @@ export const editorStore = {
   selectNode: (id: string | null) => elementActions.selectElement(id),
   getNodes: () => getters.getElements(),
   getEdges: () => getters.getConnections(),
+
+  // High-level actions
+  addNodeWithConnection: (nodeType: string) => {
+    const existingNodes = getters.getElements();
+
+    // Calculate position based on existing nodes
+    let position = { x: 100, y: 100 };
+    if (existingNodes.length > 0) {
+      // Find the rightmost node and position new node to the right
+      const rightmostNode = existingNodes.reduce((prev, current) =>
+        prev.position.x > current.position.x ? prev : current,
+      );
+      position = {
+        x: rightmostNode.position.x + 200, // Add some spacing
+        y: rightmostNode.position.y,
+      };
+    }
+
+    const nodeId = `node-${Date.now()}`;
+    const node = {
+      id: nodeId,
+      type: "default", // Use default type to render with our custom square node
+      position,
+      data: {
+        label: nodeType,
+        nodeType,
+        icon: nodeType.replace(/-/g, "_"), // Convert kebab-case to snake_case for icon lookup
+      },
+    };
+
+    // Add the node
+    elementActions.addElement(node);
+
+    // Auto-connect to the last node if there are existing nodes
+    if (existingNodes.length > 0) {
+      const lastNode = existingNodes[existingNodes.length - 1];
+      const edge = {
+        id: `edge-${lastNode.id}-${nodeId}`,
+        source: lastNode.id,
+        target: nodeId,
+        type: "default",
+      };
+      connectionActions.addConnection(edge);
+    }
+  },
 };
 
 export type EditorStore = typeof editorStore;

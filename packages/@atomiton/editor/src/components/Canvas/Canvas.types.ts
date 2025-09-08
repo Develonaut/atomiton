@@ -66,6 +66,10 @@ export interface CanvasProps extends StyleProps {
    * Called when flow is initialized
    */
   onInit?: (instance: ReactFlowInstance) => void;
+  /**
+   * Custom node types to use in the canvas
+   */
+  nodeTypes?: Record<string, React.ComponentType<any>>;
 }
 
 /**

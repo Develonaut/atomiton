@@ -1,6 +1,7 @@
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import Toolbar from "@/components/Toolbar";
+import { nodeTypes } from "@/components/Nodes";
 import { useCanvas } from "@atomiton/editor";
 import { Canvas, Editor } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
@@ -16,6 +17,7 @@ function LayoutEditor() {
               onInit={onCanvasInit}
               nodes={defaultNodes}
               edges={defaultEdges}
+              nodeTypes={nodeTypes}
             >
               <Canvas.Grid variant="dots" gap={12} size={1} />
               <Canvas.Minimap
