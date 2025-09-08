@@ -1,145 +1,129 @@
-import type { ErrorInfo, ReactNode } from "react";
-import { Component } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
+import { Box, Button } from "@atomiton/ui";
+import Icon from "@/components/Icon";
 
-interface Props {
-  children: ReactNode;
-  fallback?: (error: Error, resetError: () => void) => ReactNode;
-}
-
-interface State {
+type ErrorBoundaryState = {
   hasError: boolean;
   error: Error | null;
   errorInfo: ErrorInfo | null;
+};
+
+type ErrorBoundaryProps = {
+  children: ReactNode;
+  fallback?: (error: Error, errorInfo: ErrorInfo) => ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+};
+
+type ErrorDisplayProps = {
+  error: Error;
+  errorInfo: ErrorInfo;
+  onRetry: () => void;
+  onDownloadReport: () => void;
+};
+
+function ErrorDisplay({
+  error,
+  errorInfo,
+  onRetry,
+  onDownloadReport,
+}: ErrorDisplayProps) {
+  return (
+    <Box className="min-h-screen flex items-center justify-center bg-surface-02 p-8">
+      <Box className="max-w-2xl w-full bg-surface-01 rounded-2xl border border-s-01 shadow-popover p-8">
+        <Box className="flex items-center gap-4 mb-6">
+          <Box className="flex items-center justify-center size-12 bg-red-50 rounded-xl">
+            <Icon className="!size-6 fill-red-500" name="alert-triangle" />
+          </Box>
+          <Box>
+            <h1 className="text-title-lg text-primary font-semibold">
+              Something went wrong
+            </h1>
+            <p className="text-body-md text-secondary">
+              We've encountered an unexpected error. Don't worry - your work
+              hasn't been lost.
+            </p>
+          </Box>
+        </Box>
+
+        <Box className="bg-surface-03 rounded-xl p-4 mb-6">
+          <h2 className="text-heading text-primary font-medium mb-2">
+            Error Details
+          </h2>
+          <p className="text-body-sm text-secondary font-mono break-all">
+            {error.message}
+          </p>
+        </Box>
+
+        <Box className="flex gap-3">
+          <Button onClick={onRetry} variant="default" className="flex-1">
+            Try Again
+          </Button>
+          <Button onClick={onDownloadReport} variant="ghost">
+            <Icon className="!size-4 fill-inherit mr-2" name="download" />
+            Download Report
+          </Button>
+        </Box>
+      </Box>
+    </Box>
+  );
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error: Error): State {
-    return {
-      hasError: true,
-      error,
-      errorInfo: null,
-    };
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Error caught by boundary:", error, errorInfo);
-    this.setState({
-      error,
-      errorInfo,
-    });
+    this.setState({ errorInfo });
 
-    if (typeof window !== "undefined" && window.console) {
-      console.group("Error Boundary Caught an Error");
-      console.error("Error:", error);
-      console.error("Error Info:", errorInfo);
-      console.error("Component Stack:", errorInfo.componentStack);
-      console.groupEnd();
-    }
+    // Log error to console for development
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+
+    // Call optional error handler
+    this.props.onError?.(error, errorInfo);
   }
 
-  resetError = () => {
-    this.setState({
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    });
+  handleRetry = () => {
+    this.setState({ hasError: false, error: null, errorInfo: null });
+  };
+
+  handleDownloadReport = () => {
+    const { error, errorInfo } = this.state;
+    if (!error || !errorInfo) return;
+
+    // Use the centralized error reporting system
+    const { errorReporter } = require("../../utils/errorReporting");
+    errorReporter.generateDownloadableReport(error, errorInfo);
   };
 
   render() {
-    if (this.state.hasError && this.state.error) {
+    if (this.state.hasError && this.state.error && this.state.errorInfo) {
+      // Use custom fallback if provided
       if (this.props.fallback) {
-        return this.props.fallback(this.state.error, this.resetError);
+        return this.props.fallback(this.state.error, this.state.errorInfo);
       }
 
+      // Default error display
       return (
-        <DefaultErrorFallback
+        <ErrorDisplay
           error={this.state.error}
-          resetError={this.resetError}
+          errorInfo={this.state.errorInfo}
+          onRetry={this.handleRetry}
+          onDownloadReport={this.handleDownloadReport}
         />
       );
     }
 
     return this.props.children;
   }
-}
-
-interface ErrorFallbackProps {
-  error: Error;
-  resetError: () => void;
-}
-
-function DefaultErrorFallback({ error, resetError }: ErrorFallbackProps) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-4xl w-full bg-white shadow-xl rounded-lg p-10">
-        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
-          <svg
-            className="w-6 h-6 text-red-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
-        </div>
-
-        <h2 className="mt-4 text-xl font-semibold text-center text-gray-900">
-          Something went wrong
-        </h2>
-
-        <p className="mt-2 text-sm text-center text-gray-600">
-          We encountered an unexpected error. The error has been logged and
-          we&apos;ll look into it.
-        </p>
-
-        {process.env.NODE_ENV === "development" && (
-          <details className="mt-6 p-6 bg-gray-100 rounded-lg" open>
-            <summary className="cursor-pointer font-semibold text-gray-800 text-sm">
-              Error Details (Development Only)
-            </summary>
-            <pre className="mt-4 whitespace-pre-wrap text-red-600 overflow-auto text-sm font-mono p-4 bg-white rounded border border-red-200">
-              {error.toString()}
-              {error.stack && (
-                <>
-                  {"\n\nStack trace:\n"}
-                  {error.stack}
-                </>
-              )}
-            </pre>
-          </details>
-        )}
-
-        <div className="mt-6 flex gap-3">
-          <button
-            onClick={resetError}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Try Again
-          </button>
-          <button
-            onClick={() => (window.location.href = "/")}
-            className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-          >
-            Go Home
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 export default ErrorBoundary;

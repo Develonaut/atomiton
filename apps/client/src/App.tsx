@@ -2,6 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Providers from "./components/Providers";
 import { router } from "./router";
+import { errorReporter } from "./utils/errorReporting";
 
 function AppContent() {
   return (
@@ -15,7 +16,7 @@ function AppContent() {
 
 function App() {
   return (
-    <ErrorBoundary>
+    <ErrorBoundary onError={errorReporter.handleError.bind(errorReporter)}>
       <AppContent />
     </ErrorBoundary>
   );
