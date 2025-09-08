@@ -1,5 +1,3 @@
-"use client";
-
 import { ToastBar, Toaster } from "react-hot-toast";
 import Icon from "@/components/Icon";
 

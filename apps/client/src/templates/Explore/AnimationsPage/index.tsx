@@ -1,5 +1,3 @@
-"use client";
-
 import Layout from "@/components/Layout";
 import Projects from "@/components/Projects";
 import Gallery from "@/components/Gallery";

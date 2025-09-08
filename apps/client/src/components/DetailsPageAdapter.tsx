@@ -1,5 +1,4 @@
 // Vite-compatible adapter for DetailsPage
-"use client";
 
 import { useNavigate } from "react-router-dom";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";

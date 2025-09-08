@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "@/router/hooks";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Icon from "@/components/Icon";

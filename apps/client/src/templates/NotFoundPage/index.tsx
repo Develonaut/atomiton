@@ -1,5 +1,3 @@
-"use client";
-
 import { useId } from "react";
 import { Tooltip } from "react-tooltip";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";

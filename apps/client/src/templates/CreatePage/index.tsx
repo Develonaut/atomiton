@@ -1,5 +1,3 @@
-"use client";
-
 import LayoutEditor from "@/components/LayoutEditor";
 
 function EditorPage() {

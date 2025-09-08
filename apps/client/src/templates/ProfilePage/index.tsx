@@ -1,5 +1,3 @@
-"use client";
-
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";

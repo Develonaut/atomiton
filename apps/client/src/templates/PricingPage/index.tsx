@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Tabs from "@/components/Tabs";
