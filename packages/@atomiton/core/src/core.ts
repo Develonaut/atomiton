@@ -17,14 +17,14 @@
  *   core.nodes.registerPackage(...)
  */
 
-import * as Store from "@atomiton/store";
 import * as Events from "@atomiton/events";
-import * as Nodes from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
+import * as Store from "@atomiton/store";
 
-import corePackage from "../package.json";
-import storePackage from "@atomiton/store/package.json";
 import eventsPackage from "@atomiton/events/package.json";
 import nodesPackage from "@atomiton/nodes/package.json";
+import storePackage from "@atomiton/store/package.json";
+import corePackage from "../package.json";
 
 class CoreAPI {
   private static instance: CoreAPI;
@@ -47,7 +47,7 @@ class CoreAPI {
   }
 
   get nodes() {
-    return Nodes;
+    return nodes;
   }
 
   get version() {

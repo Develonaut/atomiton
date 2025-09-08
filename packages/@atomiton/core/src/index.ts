@@ -14,3 +14,4 @@
 
 export { default } from "./core";
 export { core, type CoreAPI } from "./core";
+export type { NodeCategory, NodeItem } from "@atomiton/nodes";
