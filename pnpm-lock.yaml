@@ -44,6 +44,9 @@ importers:
 
   apps/client:
     dependencies:
+      '@atomiton/core':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/core
       '@atomiton/editor':
         specifier: workspace:*
         version: link:../../packages/@atomiton/editor
@@ -545,6 +548,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      lucide-react:
+        specifier: ^0.542.0
+        version: 0.542.0(react@19.1.1)
       rc-slider:
         specifier: ^11.1.8
         version: 11.1.8(react-dom@19.1.1)(react@19.1.1)
@@ -5818,6 +5824,14 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
     dev: true
+
+  /lucide-react@0.542.0(react@19.1.1):
+    resolution: {integrity: sha512-w3hD8/SQB7+lzU2r4VdFyzzOzKnUjTZIF/MQJGSSvni7Llewni4vuViRppfRAa2guOsY5k4jZyxw/i9DQHv+dw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      react: 19.1.1
+    dev: false
 
   /lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}

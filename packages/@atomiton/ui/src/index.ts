@@ -15,6 +15,9 @@ export type { ColumnProps } from "./components/Column/Column.types";
 
 export { default as Card } from "./components/Card";
 
+export { Icon, getNodeIcon, NODE_ICON_MAP } from "./components/Icon";
+export type { IconProps } from "./components/Icon";
+
 export {
   BRAINWAVE_THEME,
   CATEGORY_COLORS,
