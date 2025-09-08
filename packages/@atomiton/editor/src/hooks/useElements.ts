@@ -25,9 +25,25 @@ export function useElements() {
     editorStore.selectNode(id);
   };
 
+  const deleteElement = (id: string) => {
+    editorStore.deleteNode(id);
+  };
+
+  const addElement = (nodeType: string) => {
+    const node = {
+      id: `node-${Date.now()}`,
+      type: nodeType,
+      position: { x: 100, y: 100 },
+      data: { label: nodeType },
+    };
+    editorStore.addNode(node);
+  };
+
   return {
     elements,
     selectedId,
     selectElement,
+    deleteElement,
+    addElement,
   };
 }

@@ -18,6 +18,7 @@ type Props = {
     description?: string;
   }[];
   largeImage?: boolean;
+  onAddNode?: (nodeType: string) => void;
 };
 
 function Accordion({
@@ -26,6 +27,7 @@ function Accordion({
   titleButton,
   items,
   largeImage,
+  onAddNode,
 }: Props) {
   const [active, setActive] = useState(true);
 
@@ -104,8 +106,8 @@ function Accordion({
                       className="w-full !h-9"
                       isPrimary
                       onClick={() => {
-                        if (item.nodeType) {
-                          console.log("Adding node:", item.nodeType);
+                        if (item.nodeType && onAddNode) {
+                          onAddNode(item.nodeType);
                         }
                       }}
                     >

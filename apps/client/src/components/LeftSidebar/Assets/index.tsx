@@ -1,9 +1,11 @@
 import { useAvailableNodes } from "@/hooks/useAvailableNodes";
+import { useElements } from "@atomiton/editor";
 import Accordion from "./Accordion";
 import type { NodeItem } from "@atomiton/core";
 
 function Assets() {
   const { nodeCategories, loading, error } = useAvailableNodes();
+  const { addElement } = useElements();
 
   if (loading) {
     return (
@@ -39,6 +41,7 @@ function Assets() {
             id: index * 100 + itemIndex, // Generate unique numeric id for compatibility
             icon: item.icon || "circle", // Use icon name directly
           }))}
+          onAddNode={addElement}
         />
       ))}
     </>
