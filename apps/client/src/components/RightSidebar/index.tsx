@@ -1,15 +1,16 @@
-import { useState } from "react";
 import Tabs from "@/components/Tabs";
 import ViewController from "@/components/ViewController";
-import Head from "./Head";
-import Design from "./Design";
-import Animation from "./Animation";
-import useStore from "@/store";
 import type { TabItem } from "@/types";
+import { useAnimationSettings } from "@atomiton/editor";
+import { Box } from "@atomiton/ui";
+import { useState } from "react";
+import Animation from "./Animation";
+import Design from "./Design";
+import Head from "./Head";
 
 function RightSidebar() {
   const { isAnimationSettings, openAnimationSettings, closeAnimationSettings } =
-    useStore((state) => state);
+    useAnimationSettings();
 
   const tabs: TabItem[] = [
     { id: 0, name: "Design", onClick: closeAnimationSettings },
@@ -23,17 +24,17 @@ function RightSidebar() {
   };
 
   return (
-    <div className="sidebar right-3 flex flex-col">
+    <Box className="sidebar right-3 flex flex-col">
       <Head />
-      <div className="px-4 py-3 border-b border-s-01">
+      <Box className="px-4 py-3 border-b border-s-01">
         <Tabs items={tabs} value={tab} setValue={handleTabChange} />
-      </div>
-      <div className="grow overflow-y-auto scrollbar-none rounded-b-[1.25rem]">
+      </Box>
+      <Box className="grow overflow-y-auto scrollbar-none rounded-b-[1.25rem]">
         {tab.id === 0 && <Design />}
         {tab.id === 1 && <Animation />}
-      </div>
+      </Box>
       {!isAnimationSettings && <ViewController vertical />}
-    </div>
+    </Box>
   );
 }
 

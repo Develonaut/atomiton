@@ -1,61 +1,45 @@
 import Export from "@/components/Export";
 import Icon from "@/components/Icon";
 import Zoom from "@/components/Zoom";
-import useStore from "@/store";
-import { Button } from "@atomiton/ui";
+import { useUndoRedo } from "@atomiton/editor";
+import { Box, Button } from "@atomiton/ui";
 import { useState } from "react";
 
 function Toolbar() {
-  const { openComments, closeComments, openResizeImage, closeResizeImage } =
-    useStore((state) => state);
+  const { canUndo, canRedo, undo, redo } = useUndoRedo();
   const [active, setActive] = useState<number | null>(0);
 
   const actions = [
     {
       id: 0,
       icon: "cursor",
-      onClick: () => {
-        closeResizeImage();
-        closeComments();
-      },
+      onClick: () => {},
     },
     {
       id: 1,
       icon: "pinch",
-      onClick: () => {
-        closeResizeImage();
-        closeComments();
-      },
+      onClick: () => {},
     },
     {
       id: 2,
       icon: "message",
-      onClick: () => {
-        closeResizeImage();
-        openComments();
-      },
+      onClick: () => {},
     },
     {
       id: 3,
       icon: "crop",
-      onClick: () => {
-        openResizeImage();
-        closeComments();
-      },
+      onClick: () => {},
     },
     {
       id: 4,
       icon: "play",
-      onClick: () => {
-        closeResizeImage();
-        closeComments();
-      },
+      onClick: () => {},
     },
   ];
 
   return (
-    <div className="fixed top-3 left-1/2 z-20 -translate-x-1/2 flex shadow-toolbar border border-s-01 bg-surface-01 rounded-[1.25rem]">
-      <div className="flex gap-2 p-2">
+    <Box className="fixed top-3 left-1/2 z-20 -translate-x-1/2 flex shadow-toolbar border border-s-01 bg-surface-01 rounded-[1.25rem]">
+      <Box className="flex gap-2 p-2">
         {actions.map((action) => (
           <Button
             size="icon"
@@ -70,17 +54,29 @@ function Toolbar() {
           </Button>
         ))}
         <Zoom />
-        <Button size="icon" variant="ghost">
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={undo}
+          disabled={!canUndo}
+          title="Undo (⌘Z)"
+        >
           <Icon className="fill-primary rotate-180" name="arrow" />
         </Button>
-        <Button size="icon" variant="ghost">
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={redo}
+          disabled={!canRedo}
+          title="Redo (⌘⇧Z)"
+        >
           <Icon className="fill-primary" name="arrow" />
         </Button>
-      </div>
-      <div className="p-2">
-        <Export />
-      </div>
-    </div>
+      </Box>
+      <Box className="p-2">
+        <Export disabled />
+      </Box>
+    </Box>
   );
 }
 

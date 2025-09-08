@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { Box, Button } from "@atomiton/ui";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import Button from "@/components/Button";
-import Menu from "./Menu";
-import Preview from "./Preview";
+import { useState } from "react";
 import Images from "./Images";
-import Video from "./Video";
+import Menu from "./Menu";
 import Object3D from "./Object3D";
+import Preview from "./Preview";
+import Video from "./Video";
 
 const menu = [
   {
@@ -25,34 +25,49 @@ const menu = [
   },
 ];
 
-function Export() {
+type ExportProps = {
+  disabled?: boolean;
+};
+
+function Export({ disabled = false }: ExportProps) {
   const [active, setActive] = useState(0);
 
+  if (disabled) {
+    return (
+      <Button
+        className="w-23"
+        variant="default"
+        disabled
+        title="Export feature coming soon"
+      >
+        Export
+      </Button>
+    );
+  }
+
   return (
-    <>
-      <Popover className="relative">
-        <PopoverButton as="div">
-          <Button className="w-23" isPrimary>
-            Export
-          </Button>
-        </PopoverButton>
-        <PopoverPanel
-          className="z-20 flex [--anchor-gap:0.75rem] [--anchor-offset:0.5rem] min-w-137.5 min-h-79.5 bg-shade-01 shadow-popover border border-s-01 rounded-[1.25rem] transition duration-200 data-closed:opacity-0"
-          anchor="bottom end"
-          transition
-        >
-          <div className="flex flex-col shrink-0 w-38 p-2 border-r border-s-01">
+    <Popover className="relative">
+      <PopoverButton as={Button} className="w-23" variant="default">
+        Export
+      </PopoverButton>
+      <PopoverPanel
+        className="z-20 [--anchor-gap:0.75rem] [--anchor-offset:0.5rem] min-w-137.5 min-h-79.5 bg-surface-01 shadow-popover border border-s-01 rounded-[1.25rem] transition duration-200 data-closed:opacity-0"
+        anchor="bottom end"
+        transition
+      >
+        <Box className="flex">
+          <Box className="flex flex-col shrink-0 w-38 p-2 border-r border-s-01">
             <Menu items={menu} onClick={setActive} isActive={active} />
             <Preview video={active === 1} />
-          </div>
-          <div className="flex flex-col grow">
+          </Box>
+          <Box className="flex flex-col grow">
             {active === 0 && <Images />}
             {active === 1 && <Video />}
             {active === 2 && <Object3D />}
-          </div>
-        </PopoverPanel>
-      </Popover>
-    </>
+          </Box>
+        </Box>
+      </PopoverPanel>
+    </Popover>
   );
 }
 

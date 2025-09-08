@@ -7,28 +7,121 @@ import VideoPlayer from "@/components/VideoPlayer";
 import ViewController from "@/components/ViewController";
 import AddFiles from "./AddFiles";
 import SelectAi from "./SelectAi";
-import useStore from "@/store";
+import { useAnimationSettings } from "@atomiton/editor";
+import { Box } from "@atomiton/ui";
 
 const settings = [
   { id: 0, name: "Inspiration" },
   { id: 1, name: "Describe" },
 ];
 
-type Props = {
+type AudioIndicatorProps = {
+  isRecording: boolean;
+};
+
+function AudioIndicator({ isRecording }: AudioIndicatorProps) {
+  if (!isRecording) return null;
+
+  return (
+    <Box className="absolute top-6 right-6 size-4 border border-orange/10 rounded-full before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:size-2 before:bg-gradient-to-b before:from-[#FF732D] before:to-[#E24D03] before:rounded-full before:animate-pulse" />
+  );
+}
+
+type MessageInputProps = {
+  message: string;
+  onMessageChange: (message: string) => void;
+  isRecording: boolean;
+};
+
+function MessageInput({
+  message,
+  onMessageChange,
+  isRecording,
+}: MessageInputProps) {
+  return (
+    <TextareaAutosize
+      className={`w-full bg-transparent !h-6 mb-8 pl-2 text-title text-primary outline-none resize-none placeholder:text-secondary ${
+        isRecording ? "pr-10 pointer-events-none" : ""
+      }`}
+      maxRows={5}
+      value={message}
+      onChange={(e) => onMessageChange(e.target.value)}
+      placeholder={
+        isRecording
+          ? "Ask me anything..."
+          : "Describe your 3D object or scene..."
+      }
+      autoFocus
+    />
+  );
+}
+
+type ControlsProps = {
+  isRecording: boolean;
+  onRecordingToggle: () => void;
+  hasMessage: boolean;
+  setting: { id: number; name: string };
+  onSettingChange: (setting: { id: number; name: string }) => void;
+};
+
+function Controls({
+  isRecording,
+  onRecordingToggle,
+  hasMessage,
+  setting,
+  onSettingChange,
+}: ControlsProps) {
+  const disabledClass = isRecording ? "opacity-30 pointer-events-none" : "";
+
+  return (
+    <Box className="flex gap-2">
+      <AddFiles className={disabledClass} />
+      <Select
+        className={`min-w-38.5 mr-auto ${disabledClass}`}
+        classButton="!rounded-xl !text-heading"
+        classIcon="!mr-3 !fill-green"
+        icon="flash"
+        value={setting}
+        onChange={onSettingChange}
+        options={settings}
+        isWhite
+      />
+      <SelectAi className={disabledClass} />
+      <button
+        className="group size-10 rounded-xl transition-colors hover:bg-surface-03"
+        onClick={onRecordingToggle}
+      >
+        <Icon
+          className="fill-secondary transition-colors group-hover:fill-primary"
+          name={isRecording ? "close-think" : "microphone"}
+        />
+      </button>
+      <Button
+        className="w-10 !p-0"
+        isPrimary={!hasMessage}
+        isSecondary={hasMessage}
+      >
+        <Icon className="-rotate-90 fill-inherit" name="arrow" />
+      </Button>
+    </Box>
+  );
+}
+
+type PanelMessageProps = {
   className?: string;
   isViewController?: boolean;
 };
 
-function PanelMessage({ className, isViewController }: Props) {
-  const { isAnimationSettings } = useStore((state) => state);
+function PanelMessage({ className, isViewController }: PanelMessageProps) {
+  const { isAnimationSettings } = useAnimationSettings();
   const [message, setMessage] = useState("");
   const [setting, setSetting] = useState(settings[0]);
-  const [visibleAudio, setVisibleAudio] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
-  const isMessage = message !== "";
+  const hasMessage = message !== "";
 
   return (
-    <div
+    <Box
       className={`fixed left-1/2 bottom-3 z-10 -translate-x-1/2 w-135.5 pt-5 p-3 shadow-prompt-input border border-s-01 bg-surface-01 rounded-3xl ${
         className || ""
       }`}
@@ -38,60 +131,23 @@ function PanelMessage({ className, isViewController }: Props) {
       ) : (
         isViewController && <ViewController />
       )}
-      {visibleAudio && (
-        <div className="absolute top-6 right-6 size-4 border border-orange/10 rounded-full before:absolute before:top-1/2 before:left-1/2 before:-translate-1/2 before:size-2 before:bg-gradient-to-b before:from-[#FF732D] before:to-[#E24D03] before:rounded-full before:animate-pulse"></div>
-      )}
-      <TextareaAutosize
-        className={`w-full bg-transparent !h-6 mb-8 pl-2 text-title text-primary outline-none resize-none placeholder:text-secondary ${
-          visibleAudio ? "pr-10 pointer-events-none" : ""
-        }`}
-        maxRows={5}
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder={
-          visibleAudio
-            ? "Ask me anything..."
-            : "Describe your 3D object or scene..."
-        }
-        autoFocus
+
+      <AudioIndicator isRecording={isRecording} />
+
+      <MessageInput
+        message={message}
+        onMessageChange={setMessage}
+        isRecording={isRecording}
       />
-      <div className="flex gap-2">
-        <AddFiles
-          className={visibleAudio ? "opacity-30 pointer-events-none" : ""}
-        />
-        <Select
-          className={`min-w-38.5 mr-auto ${
-            visibleAudio ? "opacity-30 pointer-events-none" : ""
-          }`}
-          classButton="!rounded-xl !text-heading"
-          classIcon="!mr-3 !fill-green"
-          icon="flash"
-          value={setting}
-          onChange={setSetting}
-          options={settings}
-          isWhite
-        />
-        <SelectAi
-          className={`${visibleAudio ? "opacity-30 pointer-events-none" : ""}`}
-        />
-        <button
-          className="group size-10 rounded-xl transition-colors hover:bg-surface-03"
-          onClick={() => setVisibleAudio(!visibleAudio)}
-        >
-          <Icon
-            className="fill-secondary transition-colors group-hover:fill-primary"
-            name={visibleAudio ? "close-think" : "microphone"}
-          />
-        </button>
-        <Button
-          className="w-10 !p-0"
-          isPrimary={!isMessage}
-          isSecondary={isMessage}
-        >
-          <Icon className="-rotate-90 fill-inherit" name="arrow" />
-        </Button>
-      </div>
-    </div>
+
+      <Controls
+        isRecording={isRecording}
+        onRecordingToggle={() => setIsRecording(!isRecording)}
+        hasMessage={hasMessage}
+        setting={setting}
+        onSettingChange={setSetting}
+      />
+    </Box>
   );
 }
 
