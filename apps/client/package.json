@@ -24,6 +24,7 @@
     "dev:all": "./scripts/kill-dev-servers.sh && npm run dev & wait"
   },
   "dependencies": {
+    "@atomiton/core": "workspace:^",
     "@atomiton/editor": "workspace:*",
     "@atomiton/hooks": "workspace:^",
     "@atomiton/ui": "workspace:*",
