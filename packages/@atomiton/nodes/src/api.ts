@@ -15,12 +15,15 @@
  *
  *   // Get a specific node
  *   const node = nodes.getNode('csv-reader');
+ *
+ *   // Get node UI components for the editor
+ *   const nodeComponents = nodes.getNodeComponents();
  */
 
 import type { INodeMetadata } from "./base/INodeMetadata";
 import type { Node } from "./base/Node";
-import type { NodeType } from "./types";
 import { NODES } from "./nodes";
+import type { NodeType } from "./types";
 
 class NodesAPI {
   private static instance: NodesAPI;
@@ -208,6 +211,24 @@ class NodesAPI {
    */
   isInitialized(): boolean {
     return this.initialized;
+  }
+
+  /**
+   * Get all node UI components for the editor
+   * Returns a mapping of node type to React component
+   * These components can be used with any flow editor library
+   */
+  getNodeComponents(): Record<string, React.ComponentType> {
+    const components: Record<string, React.ComponentType> = {};
+
+    // Add components from all registered nodes
+    for (const node of this.nodes) {
+      if (node.component) {
+        components[node.metadata.type] = node.component;
+      }
+    }
+
+    return components;
   }
 }
 

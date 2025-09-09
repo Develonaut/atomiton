@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   defaultParallelConfig,
@@ -17,6 +18,8 @@ import { ParallelLogic } from "./ParallelNodeLogic";
  * Parallel Node Class
  */
 class ParallelNode extends Node<ParallelConfig> {
+  readonly component = createNodeComponent("zap", "Parallel");
+
   readonly metadata = new NodeMetadata({
     id: "parallel",
     name: "Parallel",

@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   defaultTransformConfig,
@@ -17,6 +18,8 @@ import { TransformLogic } from "./TransformNodeLogic";
  * Transform Node Class
  */
 class TransformNode extends Node<TransformConfig> {
+  readonly component = createNodeComponent("wand-2", "Transform");
+
   readonly metadata = new NodeMetadata({
     id: "transform",
     name: "Transform",

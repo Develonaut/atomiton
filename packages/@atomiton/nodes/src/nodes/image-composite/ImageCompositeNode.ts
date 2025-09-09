@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   defaultImageCompositeConfig,
@@ -17,6 +18,8 @@ import { ImageCompositeLogic } from "./ImageCompositeNodeLogic";
  * Image Composite Node Class
  */
 class ImageCompositeNode extends Node<ImageCompositeConfig> {
+  readonly component = createNodeComponent("image-plus", "Image Processor");
+
   readonly metadata = new NodeMetadata({
     id: "image-composite",
     name: "Image Processor",

@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   codeConfig,
@@ -17,6 +18,9 @@ import { CodeLogic } from "./CodeNodeLogic";
  * Code Node Class
  */
 class CodeNode extends Node<CodeConfig> {
+  // Create a component with the Code icon baked in
+  readonly component = createNodeComponent("code-2", "Code");
+
   readonly metadata = new NodeMetadata({
     id: "code",
     name: "Code",

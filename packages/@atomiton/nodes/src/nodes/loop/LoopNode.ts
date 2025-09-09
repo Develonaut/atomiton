@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   defaultLoopConfig,
@@ -17,6 +18,8 @@ import { LoopLogic } from "./LoopNodeLogic";
  * Loop Node Class
  */
 class LoopNode extends Node<LoopConfig> {
+  readonly component = createNodeComponent("repeat", "Loop");
+
   readonly metadata = new NodeMetadata({
     id: "loop",
     name: "Loop",

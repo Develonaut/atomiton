@@ -1,24 +1,18 @@
 import { styled } from "@atomiton/ui";
 import { useCallback, useRef } from "react";
 import {
-  ReactFlowProvider,
   ReactFlowCanvas,
-  type NodeTypes,
+  ReactFlowProvider,
   type ReactFlowInstance,
 } from "../../primitives/ReactFlow";
 import { editorStore } from "../../store";
-import { Element } from "../Element";
+import { useNodeTypes } from "../../hooks/useNodeTypes";
 import type { CanvasProps } from "./Canvas.types";
 import { useReactFlow } from "./hooks/useReactFlow";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",
 })("atomiton-canvas relative w-full h-full overflow-hidden bg-background");
-
-const DEFAULT_NODE_TYPES: NodeTypes = {
-  default: Element,
-  square: Element,
-};
 
 /**
  * Canvas component - main wrapper for the visual editor workspace
@@ -39,11 +33,11 @@ export function CanvasRoot({
   onInit,
   fitView = true,
   fitViewOptions,
-  nodeTypes: customNodeTypes,
+  nodeTypes: nodeTypesProp,
   ...props
 }: CanvasProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const nodeTypes = (customNodeTypes || DEFAULT_NODE_TYPES) as NodeTypes;
+  const nodeTypes = useNodeTypes(nodeTypesProp as any);
 
   const reactFlow = useReactFlow({
     defaultNodes,
@@ -85,7 +79,7 @@ export function CanvasRoot({
       (event.key === "Delete" || event.key === "Backspace") &&
       !event.metaKey
     ) {
-      editorStore.deleteSelectedElements();
+      editorStore.deleteSelectedNodes();
     }
   }, []);
 

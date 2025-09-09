@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import { csvReaderConfig, type CSVReaderConfig } from "./CSVReaderNodeConfig";
 import { CSVReaderLogic } from "./CSVReaderNodeLogic";
@@ -13,6 +14,9 @@ import { CSVReaderLogic } from "./CSVReaderNodeLogic";
  * CSV Reader Node Class
  */
 class CSVReaderNode extends Node<CSVReaderConfig> {
+  // Create a component with the CSV Reader icon baked in
+  readonly component = createNodeComponent("table-2", "CSVReader");
+
   readonly metadata = new NodeMetadata({
     id: "csv-reader",
     name: "CSV Reader",

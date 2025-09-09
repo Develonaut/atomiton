@@ -1,4 +1,4 @@
-import type { Node, Edge, ReactFlowInstance, Viewport } from "@xyflow/react";
+import type { Edge, Node, ReactFlowInstance, Viewport } from "@xyflow/react";
 
 // Core flow data structure for persistence
 export interface FlowSnapshot {
@@ -14,13 +14,13 @@ export type Connection = Edge;
 export interface HistoryEntry {
   elements: Element[];
   connections: Connection[];
-  selectedElementId: string | null;
+  selectedNodeId: string | null;
 }
 
 // Main editor state interface
 export interface EditorState {
   // UI State
-  selectedElementId: string | null;
+  selectedNodeId: string | null;
   isLoading: boolean;
   isDirty: boolean;
   zoom: number;

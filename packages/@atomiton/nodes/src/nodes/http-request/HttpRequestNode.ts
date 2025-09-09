@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   defaultHttpRequestConfig,
@@ -17,6 +18,9 @@ import { HttpRequestLogic } from "./HttpRequestNodeLogic";
  * HTTP Request Node Class
  */
 class HttpRequestNode extends Node<HttpRequestConfig> {
+  // Create a component with the HTTP Request icon baked in
+  readonly component = createNodeComponent("globe-2", "HTTPRequest");
+
   readonly metadata = new NodeMetadata({
     id: "http-request",
     name: "HTTP Request",

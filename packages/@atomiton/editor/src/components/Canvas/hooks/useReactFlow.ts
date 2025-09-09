@@ -97,7 +97,7 @@ export function useReactFlow({
 
     // Store actions (exposed for convenience)
     addNode: editorStore.addNode,
-    deleteSelectedElements: editorStore.deleteSelectedElements,
+    deleteSelectedNodes: editorStore.deleteSelectedNodes,
     handleDrop: editorStore.handleDrop,
   };
 }

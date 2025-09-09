@@ -1,37 +1,39 @@
-import { useElements } from "@atomiton/editor";
+import core from "@atomiton/core";
+import { useNodes } from "@atomiton/editor";
 import Item from "./Item";
 
 function Scene() {
-  const { elements, selectedId, selectElement, deleteElement } = useElements();
+  const { nodes, selectedId, selectNode, deleteNode } = useNodes();
 
-  // Transform elements into the format expected by Item component
-  const sceneItems = elements.map((element) => ({
-    id: element.id,
-    title:
-      element.data?.label || element.data?.title || `Element ${element.id}`,
-    type: element.type || "default",
-    icon: element.data?.icon || element.icon || "circle",
-  }));
-
-  const handleDelete = (elementId: string) => {
-    if (deleteElement) {
-      deleteElement(elementId);
+  const handleDelete = (nodeId: string) => {
+    if (deleteNode) {
+      deleteNode(nodeId);
     } else {
-      console.log("Delete element:", elementId);
+      console.log("Delete node:", nodeId);
     }
   };
 
   return (
     <div className="flex flex-col gap-1 p-3">
-      {sceneItems.map((item) => (
-        <Item
-          item={item}
-          key={item.id}
-          selected={selectedId === item.id}
-          onClick={() => selectElement(item.id)}
-          onDelete={handleDelete}
-        />
-      ))}
+      {nodes.map((node) => {
+        // Get node metadata dynamically for display information
+        const nodeMetadata = core.nodes.getNode(node.type);
+
+        return (
+          <Item
+            key={node.id}
+            item={{
+              id: node.id,
+              title: nodeMetadata?.name || `Node ${node.id}`,
+              type: node.type,
+              icon: nodeMetadata?.icon || "circle",
+            }}
+            selected={selectedId === node.id}
+            onClick={() => selectNode(node.id)}
+            onDelete={handleDelete}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -1,4 +1,3 @@
-export { Element } from "../Element";
 export { default as Canvas, default } from "./Canvas";
 export type {
   CanvasConnectionsProps,

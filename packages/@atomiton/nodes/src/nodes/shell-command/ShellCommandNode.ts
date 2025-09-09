@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   defaultShellCommandConfig,
@@ -17,6 +18,8 @@ import { ShellCommandLogic } from "./ShellCommandNodeLogic";
  * Shell Command Node Class
  */
 class ShellCommandNode extends Node<ShellCommandConfig> {
+  readonly component = createNodeComponent("terminal", "Shell Command");
+
   readonly metadata = new NodeMetadata({
     id: "shell-command",
     name: "Shell Command",

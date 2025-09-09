@@ -52,6 +52,12 @@ export abstract class Node<TConfig = Record<string, unknown>>
   abstract readonly definition: NodeDefinition;
 
   /**
+   * Optional React component for visual representation
+   * If not provided, the editor will use BaseNodeComponent
+   */
+  readonly component?: React.ComponentType;
+
+  /**
    * Execute the node with the given context
    */
   async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {

@@ -20,8 +20,8 @@ const getDraggedNodeType = (event: React.DragEvent): string | null => {
 
 export interface NodeActions {
   addNode: (nodeType: string, position?: { x: number; y: number }) => void;
-  deleteElement: (id: string) => void;
-  deleteSelectedElements: () => void;
+  deleteNode: (id: string) => void;
+  deleteSelectedNodes: () => void;
   handleConnect: (connection: Connection) => void;
   handleDrop: (event: React.DragEvent, reactFlowBounds: DOMRect | null) => void;
 }
@@ -55,12 +55,9 @@ export const createNodeModule = (
 
       const newNode: Node = {
         id: nodeId,
-        type: "square",
+        type: nodeType,
         position: nodePosition,
-        data: {
-          label: nodeType,
-          nodeType,
-        },
+        data: {},
       };
 
       const updatedNodes = [...nodes, newNode];
@@ -93,7 +90,7 @@ export const createNodeModule = (
       debouncedUpdateFlowSnapshot();
     },
 
-    deleteElement: (id: string) => {
+    deleteNode: (id: string) => {
       const instance = store.getState().flowInstance;
       if (!instance) return;
 
@@ -118,7 +115,7 @@ export const createNodeModule = (
       debouncedUpdateFlowSnapshot();
     },
 
-    deleteSelectedElements: () => {
+    deleteSelectedNodes: () => {
       const instance = store.getState().flowInstance;
       if (!instance) return;
 

@@ -1,5 +1,5 @@
 // Component Exports
-export { default as Canvas, Element } from "./components/Canvas";
+export { default as Canvas } from "./components/Canvas";
 export { default as Editor } from "./components/Editor";
 
 // Primitives
@@ -18,18 +18,15 @@ export type {
   CanvasViewportProps,
 } from "./components/Canvas";
 
-// Type Exports - Canvas Element
-export type { ElementData } from "./components/Element";
-
 // Core Types
 export type { EditorState } from "./store";
 export type { EditorConfig } from "./types";
 
 // Store
-export { editorStore, editorStore as store, onDragStart } from "./store";
+export { editorStore, onDragStart, editorStore as store } from "./store";
 
 // Hooks
+export { useNodes } from "./hooks/useNodes";
 export { useStore } from "./hooks/useStore";
-export { useElements } from "./hooks/useElements";
 export { useUndoRedo } from "./hooks/useUndoRedo";
 export { useZoom } from "./hooks/useZoom";

@@ -28,7 +28,9 @@ export function Icon({
     .join("");
 
   // Get the icon component from Lucide
-  const LucideIcon = (LucideIcons as any)[iconName] as LucideIcon | undefined;
+  const LucideIcon = (LucideIcons as unknown as Record<string, LucideIcon>)[
+    iconName
+  ] as LucideIcon | undefined;
 
   if (!LucideIcon) {
     console.warn(`Icon "${name}" not found in Lucide icons`);

@@ -1,9 +1,9 @@
 import core from "@atomiton/core";
-import { useElements } from "@atomiton/editor";
+import { useNodes } from "@atomiton/editor";
 import Accordion from "./Accordion";
 
 function Assets() {
-  const { addElement } = useElements();
+  const { addNode } = useNodes();
   const categories = core.nodes.getCategories();
 
   return (
@@ -20,7 +20,7 @@ function Assets() {
             title: item.name, // Map name to title for display
             icon: item.icon || "circle", // Use icon name directly
           }))}
-          onAddNode={addElement}
+          onAddNode={addNode}
         />
       ))}
     </>

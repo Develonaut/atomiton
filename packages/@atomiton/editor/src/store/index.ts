@@ -13,7 +13,7 @@ export const onDragStart = (nodeType: string) => (event: React.DragEvent) => {
 export type { BaseStore, EditorState, FlowSnapshot };
 
 const initialState: EditorState = {
-  selectedElementId: null,
+  selectedNodeId: null,
   isLoading: false,
   isDirty: false,
   zoom: 100,

@@ -5,6 +5,7 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
+import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
   fileSystemConfig,
@@ -16,6 +17,8 @@ import { FileSystemLogic } from "./FileSystemNodeLogic";
  * File System Node Class
  */
 class FileSystemNode extends Node<FileSystemConfig> {
+  readonly component = createNodeComponent("folder", "File System");
+
   readonly metadata = new NodeMetadata({
     id: "file-system",
     name: "File System",
