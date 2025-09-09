@@ -1,37 +1,15 @@
-import { useAvailableNodes } from "@/hooks/useAvailableNodes";
+import type { NodeItem } from "@atomiton/core";
+import core from "@atomiton/core";
 import { useElements } from "@atomiton/editor";
 import Accordion from "./Accordion";
-import type { NodeItem } from "@atomiton/core";
 
 function Assets() {
-  const { nodeCategories, loading, error } = useAvailableNodes();
   const { addElement } = useElements();
-
-  if (loading) {
-    return (
-      <div className="p-4 text-center text-secondary">
-        Loading available nodes...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 text-center text-error">
-        Failed to load nodes: {error.message}
-      </div>
-    );
-  }
-
-  if (nodeCategories.length === 0) {
-    return (
-      <div className="p-4 text-center text-secondary">No nodes available</div>
-    );
-  }
+  const categories = core.nodes.getCategories();
 
   return (
     <>
-      {nodeCategories.map((category, index) => (
+      {categories.map((category, index) => (
         <Accordion
           key={category.name}
           title={category.displayName}

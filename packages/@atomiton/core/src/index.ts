@@ -12,6 +12,9 @@
  *   core.nodes.registerPackage(package);
  */
 
-export { default } from "./core";
-export { core, type CoreAPI } from "./core";
-export type { NodeCategory, NodeItem } from "@atomiton/nodes";
+import core from "./api";
+
+export { core, type CoreAPI } from "./api";
+export type { NodeItem, NodeType } from "@atomiton/nodes";
+
+export default core;

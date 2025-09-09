@@ -1,260 +1,137 @@
 /**
- * Events API - High-level functional API for event system
- * Domain-specific event functions
+ * Events API - Centralized API for the Events Package
+ *
+ * Provides a unified interface to all event functionality,
+ * following the same pattern as @atomiton/nodes but using api.ts naming.
+ *
+ * Usage:
+ *   import events from '@atomiton/events';
+ *
+ *   // Initialize the event system
+ *   await events.initialize();
+ *
+ *   // Emit state change
+ *   events.emitStateChange('blueprint', newState, oldState);
+ *
+ *   // Subscribe to UI actions
+ *   const subscription = events.onUIAction((action, payload) => {
+ *     console.log('UI Action:', action, payload);
+ *   });
  */
 
-import { subscribeFiltered, broadcast } from "./emitter";
-import type { EventSubscription } from "./types";
+import {
+  emit,
+  subscribe,
+  subscribeFiltered,
+  once,
+  broadcast,
+  createEvent,
+  clearAllListeners,
+  getListenerCount,
+  getActiveChannels,
+  configure,
+  getConfig,
+} from "./emitter";
+import type { EventSubscription, EventEmitterOptions } from "./types";
 
-// ============================================================================
-// Application Events
-// ============================================================================
+class EventsAPI {
+  private static instance: EventsAPI;
+  private initialized = false;
 
-/**
- * Emit a state change event
- */
-export function emitStateChange(
-  storeName: string,
-  state: unknown,
-  previousState?: unknown,
-): void {
-  broadcast("state:change", storeName, {
-    current: state,
-    previous: previousState,
-  });
-}
+  private constructor() {}
 
-/**
- * Subscribe to state changes
- */
-export function onStateChange(
-  callback: (
-    storeName: string,
-    state: unknown,
-    previousState?: unknown,
-  ) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: "state:change" }, (event) => {
-    const data = event.data as { current: unknown; previous?: unknown };
-    callback(event.source, data.current, data.previous);
-  });
-}
+  static getInstance(): EventsAPI {
+    if (!EventsAPI.instance) {
+      EventsAPI.instance = new EventsAPI();
+    }
+    return EventsAPI.instance;
+  }
 
-// ============================================================================
-// UI Events
-// ============================================================================
+  /**
+   * Initialize the events system
+   */
+  async initialize(): Promise<void> {
+    if (this.initialized) {
+      return;
+    }
 
-/**
- * Emit a UI action event
- */
-export function emitUIAction(action: string, payload?: unknown): void {
-  broadcast("ui:action", "ui", { action, payload });
-}
+    // Events are automatically available
+    this.initialized = true;
+  }
 
-/**
- * Subscribe to UI actions
- */
-export function onUIAction(
-  callback: (action: string, payload?: unknown) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: "ui:action" }, (event) => {
-    const data = event.data as { action: string; payload?: unknown };
-    callback(data.action, data.payload);
-  });
-}
+  /**
+   * Check if events system is initialized
+   */
+  isInitialized(): boolean {
+    return this.initialized;
+  }
 
-// ============================================================================
-// Blueprint Events
-// ============================================================================
+  /**
+   * Configure the event emitter
+   */
+  configure(options: EventEmitterOptions): void {
+    configure(options);
+  }
 
-/**
- * Emit a blueprint execution event
- */
-export function emitBlueprintExecution(
-  blueprintId: string,
-  status: "started" | "completed" | "failed",
-  details?: unknown,
-): void {
-  broadcast("blueprint:execution", blueprintId, {
-    status,
-    details,
-    timestamp: Date.now(),
-  });
-}
+  /**
+   * Get current configuration
+   */
+  getConfig() {
+    return getConfig();
+  }
 
-/**
- * Subscribe to blueprint execution events
- */
-export function onBlueprintExecution(
-  callback: (
-    blueprintId: string,
-    status: "started" | "completed" | "failed",
-    details?: unknown,
-  ) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: "blueprint:execution" }, (event) => {
-    const data = event.data as {
-      status: "started" | "completed" | "failed";
-      details?: unknown;
+  /**
+   * Core event functions
+   */
+  emit = emit;
+  subscribe = subscribe;
+  subscribeFiltered = subscribeFiltered;
+  once = once;
+  broadcast = broadcast;
+  createEvent = createEvent;
+  clearAllListeners = clearAllListeners;
+  getListenerCount = getListenerCount;
+  getActiveChannels = getActiveChannels;
+
+  /**
+   * Create a typed event bus for a specific domain
+   */
+  createEventBus<T extends Record<string, unknown>>(domain: string) {
+    return {
+      emit: <K extends keyof T>(eventType: K, data: T[K]) => {
+        broadcast(`${domain}:${String(eventType)}`, domain, data);
+      },
+
+      on: <K extends keyof T>(
+        eventType: K,
+        callback: (data: T[K]) => void,
+      ): EventSubscription => {
+        return subscribeFiltered(
+          { type: `${domain}:${String(eventType)}` },
+          (event) => callback(event.data as T[K]),
+        );
+      },
+
+      once: <K extends keyof T>(
+        eventType: K,
+        callback: (data: T[K]) => void,
+      ): EventSubscription => {
+        const subscription = subscribeFiltered(
+          { type: `${domain}:${String(eventType)}` },
+          (event) => {
+            callback(event.data as T[K]);
+            subscription.unsubscribe();
+          },
+        );
+        return subscription;
+      },
     };
-    callback(event.source, data.status, data.details);
-  });
-}
-
-// ============================================================================
-// Node Events
-// ============================================================================
-
-/**
- * Emit a node event
- */
-export function emitNodeEvent(
-  nodeId: string,
-  eventType: "executed" | "error" | "warning" | "info",
-  message?: string,
-  data?: unknown,
-): void {
-  broadcast(`node:${eventType}`, nodeId, { message, data });
-}
-
-/**
- * Subscribe to node events
- */
-export function onNodeEvent(
-  eventType: "executed" | "error" | "warning" | "info",
-  callback: (nodeId: string, message?: string, data?: unknown) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: `node:${eventType}` }, (event) => {
-    const data = event.data as { message?: string; data?: unknown };
-    callback(event.source, data.message, data.data);
-  });
-}
-
-// ============================================================================
-// System Events
-// ============================================================================
-
-/**
- * Emit a system event
- */
-export function emitSystemEvent(
-  eventType: "ready" | "shutdown" | "error" | "warning",
-  details?: unknown,
-): void {
-  broadcast(`system:${eventType}`, "system", details);
-}
-
-/**
- * Subscribe to system events
- */
-export function onSystemEvent(
-  eventType: "ready" | "shutdown" | "error" | "warning",
-  callback: (details?: unknown) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: `system:${eventType}` }, (event) =>
-    callback(event.data),
-  );
-}
-
-// ============================================================================
-// Performance Events
-// ============================================================================
-
-/**
- * Emit a performance metric
- */
-export function emitMetric(
-  metric: string,
-  value: number,
-  unit?: string,
-  tags?: Record<string, string>,
-): void {
-  broadcast("metric", metric, { value, unit, tags });
-}
-
-/**
- * Subscribe to performance metrics
- */
-export function onMetric(
-  callback: (
-    metric: string,
-    value: number,
-    unit?: string,
-    tags?: Record<string, string>,
-  ) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: "metric" }, (event) => {
-    const data = event.data as {
-      value: number;
-      unit?: string;
-      tags?: Record<string, string>;
-    };
-    callback(event.source, data.value, data.unit, data.tags);
-  });
-}
-
-// ============================================================================
-// Debug Events
-// ============================================================================
-
-/**
- * Emit a debug event
- */
-export function debug(source: string, message: string, data?: unknown): void {
-  if (process.env.NODE_ENV === "development") {
-    broadcast("debug", source, { message, data });
   }
 }
 
-/**
- * Subscribe to debug events
- */
-export function onDebug(
-  callback: (source: string, message: string, data?: unknown) => void,
-): EventSubscription {
-  return subscribeFiltered({ type: "debug" }, (event) => {
-    const data = event.data as { message: string; data?: unknown };
-    callback(event.source, data.message, data.data);
-  });
-}
+// Export singleton instance
+const events = EventsAPI.getInstance();
 
-// ============================================================================
-// Event Bus Pattern
-// ============================================================================
-
-/**
- * Create a typed event bus for a specific domain
- */
-export function createEventBus<T extends Record<string, unknown>>(
-  domain: string,
-) {
-  return {
-    emit: <K extends keyof T>(eventType: K, data: T[K]) => {
-      broadcast(`${domain}:${String(eventType)}`, domain, data);
-    },
-
-    on: <K extends keyof T>(
-      eventType: K,
-      callback: (data: T[K]) => void,
-    ): EventSubscription => {
-      return subscribeFiltered(
-        { type: `${domain}:${String(eventType)}` },
-        (event) => callback(event.data as T[K]),
-      );
-    },
-
-    once: <K extends keyof T>(
-      eventType: K,
-      callback: (data: T[K]) => void,
-    ): EventSubscription => {
-      const subscription = subscribeFiltered(
-        { type: `${domain}:${String(eventType)}` },
-        (event) => {
-          callback(event.data as T[K]);
-          subscription.unsubscribe();
-        },
-      );
-      return subscription;
-    },
-  };
-}
+export default events;
+export { events };
+export type { EventsAPI };

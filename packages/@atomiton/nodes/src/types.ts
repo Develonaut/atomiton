@@ -3,18 +3,181 @@
  * Central location for all node-related types
  */
 
-// Core node definition from constants
-export interface NodeDefinition {
-  id: string;
-  type: string;
-  name: string;
-  category: string;
-  description?: string;
-  icon?: string;
-  tags?: string[];
+// ==========================
+// Execution Types
+// ==========================
+
+export interface NodeExecutionContext {
+  /** Node instance ID */
+  nodeId: string;
+
+  /** Node instance ID (alias for compatibility) */
+  instanceId?: string;
+
+  /** Blueprint ID for context */
+  blueprintId?: string;
+
+  /** Input data from connected ports */
+  inputs: Record<string, unknown>;
+
+  /** Node configuration */
+  config?: Record<string, unknown>;
+
+  /** Workspace root directory */
+  workspaceRoot?: string;
+
+  /** Temporary directory for execution */
+  tempDirectory?: string;
+
+  /** Execution start time */
+  startTime: Date;
+
+  /** Execution limits and constraints */
+  limits: {
+    /** Maximum execution time in milliseconds */
+    maxExecutionTimeMs: number;
+    /** Maximum memory usage in MB */
+    maxMemoryMB?: number;
+    /** Maximum disk space in MB */
+    maxDiskSpaceMB?: number;
+  };
+
+  /** Progress reporting function */
+  reportProgress: (progress: number, message?: string) => void;
+
+  /** Log message functions */
+  log: {
+    debug?: (message: string, data?: Record<string, unknown>) => void;
+    info?: (message: string, data?: Record<string, unknown>) => void;
+    warn?: (message: string, data?: Record<string, unknown>) => void;
+    error?: (message: string, data?: Record<string, unknown>) => void;
+  };
+
+  /** Abort signal for cancellation */
+  abortSignal?: AbortSignal;
+
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
 }
 
-// Node item as returned by the API
+export interface NodeExecutionResult {
+  /** Whether execution succeeded */
+  success: boolean;
+
+  /** Output data for connected ports */
+  outputs?: Record<string, unknown>;
+
+  /** Error message if execution failed */
+  error?: string;
+
+  /** Additional metadata about the execution */
+  metadata?: Record<string, unknown>;
+
+  /** Performance metrics */
+  metrics?: {
+    executionTime: number;
+    memoryUsed?: number;
+  };
+}
+
+// ==========================
+// Port and Node Definition Types
+// ==========================
+
+export interface NodePortDefinition {
+  /** Unique port identifier */
+  id: string;
+
+  /** Display name for the port */
+  name: string;
+
+  /** Port type (input/output) */
+  type: string;
+
+  /** Data type for this port */
+  dataType: string;
+
+  /** Whether this port is required */
+  required?: boolean;
+
+  /** Whether this port accepts multiple connections */
+  multiple?: boolean;
+
+  /** Description of what this port does */
+  description?: string;
+
+  /** Default value for this port */
+  defaultValue?: unknown;
+}
+
+export interface NodeDefinition {
+  /** Unique node type identifier */
+  id: string;
+
+  /** Display name for the node */
+  name: string;
+
+  /** Node description */
+  description?: string;
+
+  /** Node category for organization */
+  category: string;
+
+  /** Node type for runtime identification */
+  type: string;
+
+  /** Version of this node definition */
+  version?: string;
+
+  /** Input port definitions */
+  inputPorts?: NodePortDefinition[];
+
+  /** Output port definitions */
+  outputPorts?: NodePortDefinition[];
+
+  /** Legacy input definitions (for compatibility) */
+  inputs?: NodePortDefinition[];
+
+  /** Legacy output definitions (for compatibility) */
+  outputs?: NodePortDefinition[];
+
+  /** Icon identifier for UI */
+  icon?: string;
+
+  /** Default configuration for this node */
+  defaultConfig?: Record<string, unknown>;
+
+  /** Configuration schema for UI form generation */
+  configSchema?: Record<string, unknown>;
+
+  /** Execute function for the node */
+  execute?: (
+    context: NodeExecutionContext,
+    config?: Record<string, unknown>,
+  ) => Promise<NodeExecutionResult>;
+
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
+}
+
+// ==========================
+// Node Type Definitions
+// ==========================
+
+// Available node types for TypeScript intellisense
+export type NodeType =
+  | "csv-reader"
+  | "file-system"
+  | "http-request"
+  | "shell-command"
+  | "image-composite"
+  | "transform"
+  | "code"
+  | "loop"
+  | "parallel";
+
+// Node item interface - kept for backwards compatibility
+// New code should use INodeMetadata directly
 export interface NodeItem {
   id: string;
   nodeType: string;
@@ -24,37 +187,3 @@ export interface NodeItem {
   icon?: string;
   tags?: string[];
 }
-
-// Node category grouping
-export interface NodeCategory {
-  name: string;
-  displayName: string;
-  items: NodeItem[];
-}
-
-// Re-export base types from other modules
-export type {
-  NodeLogic,
-  NodePackage,
-  NodePackageRegistryEntry,
-  NodeTestSuite,
-  NodeUIComponent,
-  NodeUIProps,
-} from "./base/NodePackage";
-
-export type {
-  NodeDefinition as CoreNodeDefinition,
-  NodeExecutionContext,
-  NodeExecutionResult,
-  PortDefinition,
-} from "./types/index";
-
-export type { BaseNodeUIProps } from "./base/BaseNodeUI";
-
-export type { DiscoveryConfig, RegistryConfig } from "./registry";
-
-// Available node types map (will be populated as nodes are added)
-export type AvailableNodeTypes = {
-  // Node type mappings will be added here as nodes are created
-  // Example: "json-parser": import("./nodes/json-parser").JsonParserNodePackageType;
-};

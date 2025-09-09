@@ -2,32 +2,22 @@
  * Base Node Package Exports
  *
  * Provides the foundational types and classes for creating node packages
- * that maintain clean separation between logic and UI.
+ * with clean separation between logic and configuration.
  */
 
-// Core interfaces and types
-export type {
-  NodeLogic,
-  NodeUIComponent,
-  NodeUIProps,
-  NodeTestSuite,
-  NodePackage,
-  NodePackageRegistryEntry,
-} from "./NodePackage";
+// Main Node base class and types
+export { Node } from "./Node";
+export type { INode } from "./INode";
 
-// Base implementation classes
-export { BaseNodePackage } from "./NodePackage";
-export { BaseNodeLogic } from "./BaseNodeLogic";
+// Logic base class and types
+export { NodeLogic } from "./NodeLogic";
+export type { INodeLogic } from "./INodeLogic";
 
-// UI components and utilities
-export {
-  createBaseNodeComponent,
-  useNodeUIState,
-  renderNodeHandles,
-  renderStatusBadge,
-  renderRunningAnimation,
-  DRACULA_COLORS,
-  CATEGORY_COLORS,
-} from "./BaseNodeUI";
+// Configuration class and types
+export { NodeConfig } from "./NodeConfig";
+export type { NodeConfigBase } from "./NodeConfig";
+export type { INodeConfig } from "./INodeConfig";
 
-export type { BaseNodeUIProps, BaseNodeUIConfig } from "./BaseNodeUI";
+// Metadata class and types
+export { NodeMetadata } from "./NodeMetadata";
+export type { INodeMetadata } from "./INodeMetadata";

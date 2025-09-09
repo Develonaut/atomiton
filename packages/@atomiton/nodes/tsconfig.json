@@ -9,6 +9,13 @@
     "sourceMap": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "types": ["node", "vitest/globals"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/base/*": ["src/base/*"],
+      "@/types": ["src/types"],
+      "@/registry": ["src/registry"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

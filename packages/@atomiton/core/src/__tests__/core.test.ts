@@ -5,8 +5,8 @@
  * through a unified API. Actual functionality is tested in the respective packages.
  */
 
-import { describe, it, expect } from "vitest";
-import { core } from "../core";
+import { describe, expect, it } from "vitest";
+import { core } from "../api";
 
 describe("core API Contract", () => {
   it("should be a singleton", () => {
