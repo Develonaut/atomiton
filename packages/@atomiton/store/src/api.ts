@@ -28,6 +28,7 @@ import {
   createSelector,
   createSelectors,
 } from "./base";
+import { shallow } from "zustand/shallow";
 
 // ============================================================================
 // Types
@@ -180,6 +181,13 @@ class StoreAPI {
    */
   clearRegisteredStores(): void {
     this.registeredStores.clear();
+  }
+
+  /**
+   * Shallow equality function for comparing arrays and objects
+   */
+  get shallow() {
+    return shallow;
   }
 }
 

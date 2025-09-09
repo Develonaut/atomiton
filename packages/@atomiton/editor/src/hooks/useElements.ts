@@ -1,43 +1,18 @@
-import { useState, useEffect } from "react";
 import { editorStore } from "../store";
-import type { EditorState } from "../store/types";
+import { useStore, shallow } from "./useStore";
 
+/**
+ * Thin wrapper hook that exposes element-related store state and actions
+ */
 export function useElements() {
-  const [elements, setElements] = useState<any[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const updateState = () => {
-      setElements(editorStore.getSortedElements());
-      setSelectedId(editorStore.getSelectedElementId());
-    };
-
-    updateState();
-
-    const unsubscribe = editorStore.subscribe((state: EditorState) => {
-      updateState();
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const selectElement = (id: string | null) => {
-    editorStore.selectNode(id);
-  };
-
-  const deleteElement = (id: string) => {
-    editorStore.deleteNode(id);
-  };
-
-  const addElement = (nodeType: string) => {
-    editorStore.addNodeWithConnection(nodeType);
-  };
+  const selectedId = useStore((state) => state.selectedElementId);
+  const elements = useStore((state) => state.flowSnapshot.nodes, shallow);
 
   return {
     elements,
     selectedId,
-    selectElement,
-    deleteElement,
-    addElement,
+    selectElement: editorStore.selectElement,
+    deleteElement: editorStore.deleteElement,
+    addElement: editorStore.addNode,
   };
 }

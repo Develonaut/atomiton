@@ -69,7 +69,7 @@ export interface CanvasProps extends StyleProps {
   /**
    * Custom node types to use in the canvas
    */
-  nodeTypes?: Record<string, React.ComponentType<any>>;
+  nodeTypes?: Record<string, React.ComponentType<unknown>>;
 }
 
 /**

@@ -4,6 +4,7 @@ import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import Icon from "@/components/Icon";
 import { Icon as UIIcon } from "@atomiton/ui";
 import Button from "@/components/Button";
+import { onDragStart } from "@atomiton/editor";
 
 type Props = {
   className?: string;
@@ -59,27 +60,23 @@ function Accordion({
                 className="w-[calc(33.333%-0.5rem)] mx-1 mt-2"
                 key={item.id}
               >
-                <PopoverButton
-                  className="relative w-full aspect-square p-1.5 bg-surface-03 rounded-2xl cursor-pointer outline-0 after:absolute after:inset-0 after:shadow-[0_0_0_1.5px_rgba(123,123,123,0.5)_inset,0px_0px_0px_4px_var(--color-surface-01)_inset] after:opacity-0 after:transition-opacity after:rounded-2xl hover:after:opacity-100 data-open:after:opacity-100"
+                <div
+                  className="relative"
                   draggable={!!item.nodeType}
-                  onDragStart={(e) => {
-                    if (item.nodeType) {
-                      e.dataTransfer.setData(
-                        "application/node-type",
-                        item.nodeType,
-                      );
-                      e.dataTransfer.effectAllowed = "copy";
-                    }
-                  }}
+                  onDragStart={
+                    item.nodeType ? onDragStart(item.nodeType) : undefined
+                  }
                 >
-                  <div className="flex items-center justify-center w-full h-full">
-                    <UIIcon
-                      name={item.icon || "circle"}
-                      size={28}
-                      className="text-secondary"
-                    />
-                  </div>
-                </PopoverButton>
+                  <PopoverButton className="relative w-full aspect-square p-1.5 bg-surface-03 rounded-2xl cursor-pointer outline-0 after:absolute after:inset-0 after:shadow-[0_0_0_1.5px_rgba(123,123,123,0.5)_inset,0px_0px_0px_4px_var(--color-surface-01)_inset] after:opacity-0 after:transition-opacity after:rounded-2xl hover:after:opacity-100 data-open:after:opacity-100">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <UIIcon
+                        name={item.icon || "circle"}
+                        size={28}
+                        className="text-secondary"
+                      />
+                    </div>
+                  </PopoverButton>
+                </div>
                 <PopoverPanel
                   className="absolute !top-1/2 !left-65 -translate-y-1/2 z-20 flex origin-top flex-col w-68 p-2 shadow-popover rounded-3xl bg-surface-01 transition duration-200 ease-out data-closed:opacity-0"
                   anchor="right start"

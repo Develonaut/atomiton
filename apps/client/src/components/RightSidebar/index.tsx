@@ -1,7 +1,6 @@
 import Tabs from "@/components/Tabs";
 import ViewController from "@/components/ViewController";
 import type { TabItem } from "@/types";
-import { useAnimationSettings } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
 import { useState } from "react";
 import Animation from "./Animation";
@@ -9,12 +8,9 @@ import Design from "./Design";
 import Head from "./Head";
 
 function RightSidebar() {
-  const { isAnimationSettings, openAnimationSettings, closeAnimationSettings } =
-    useAnimationSettings();
-
   const tabs: TabItem[] = [
-    { id: 0, name: "Design", onClick: closeAnimationSettings },
-    { id: 1, name: "Animation", onClick: openAnimationSettings },
+    { id: 0, name: "Design" },
+    { id: 1, name: "Animation" },
   ];
 
   const [tab, setTab] = useState<TabItem>(tabs[0]);
@@ -33,7 +29,7 @@ function RightSidebar() {
         {tab.id === 0 && <Design />}
         {tab.id === 1 && <Animation />}
       </Box>
-      {!isAnimationSettings && <ViewController vertical />}
+      <ViewController vertical />
     </Box>
   );
 }

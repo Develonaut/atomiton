@@ -1,8 +1,11 @@
 import { styled } from "@atomiton/ui";
-import type { ReactFlowInstance } from "@xyflow/react";
-import { ReactFlow } from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
 import { useCallback, useRef } from "react";
+import {
+  ReactFlowProvider,
+  ReactFlowCanvas,
+  type NodeTypes,
+  type ReactFlowInstance,
+} from "../../primitives/ReactFlow";
 import { editorStore } from "../../store";
 import { Element } from "../Element";
 import type { CanvasProps } from "./Canvas.types";
@@ -12,20 +15,20 @@ const CanvasStyled = styled("div", {
   name: "Canvas",
 })("atomiton-canvas relative w-full h-full overflow-hidden bg-background");
 
-// Default node types - static definition outside component
-const DEFAULT_NODE_TYPES = {
+const DEFAULT_NODE_TYPES: NodeTypes = {
   default: Element,
+  square: Element,
 };
 
 /**
  * Canvas component - main wrapper for the visual editor workspace
- * Built on top of React Flow with composable sub-components
+ * All business logic is in the store, this is just the view layer
  */
 export function CanvasRoot({
   children,
   className,
-  nodes: initialNodes = [],
-  edges: initialEdges = [],
+  nodes: defaultNodes = [],
+  edges: defaultEdges = [],
   onNodesChange,
   onEdgesChange,
   onConnect,
@@ -33,78 +36,89 @@ export function CanvasRoot({
   onPaneClick,
   onDrop,
   onDragOver,
-  flowInstance,
-  onInit: externalOnInit,
+  onInit,
   fitView = true,
   fitViewOptions,
   nodeTypes: customNodeTypes,
   ...props
 }: CanvasProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const nodeTypes = (customNodeTypes || DEFAULT_NODE_TYPES) as NodeTypes;
 
-  // Use custom node types if provided, otherwise use defaults
-  const nodeTypes = customNodeTypes || DEFAULT_NODE_TYPES;
-
-  // Handle canvas initialization
-  const handleInit = useCallback(
-    (instance: ReactFlowInstance) => {
-      // Store the flow instance in our editor store
-      editorStore.setFlowInstance(instance);
-
-      // Initialize with default content if needed
-      const currentNodes = editorStore.getNodes();
-      const currentEdges = editorStore.getEdges();
-
-      if (currentNodes.length === 0 && initialNodes.length > 0) {
-        editorStore.setNodes(initialNodes);
-      }
-
-      if (currentEdges.length === 0 && initialEdges.length > 0) {
-        editorStore.setEdges(initialEdges);
-      }
-
-      // Call external onInit if provided
-      externalOnInit?.(instance);
-    },
-    [initialNodes, initialEdges, externalOnInit],
-  );
-
-  // Single hook that handles everything - our complete ReactFlow adapter
   const reactFlow = useReactFlow({
-    nodes: initialNodes,
-    edges: initialEdges,
+    defaultNodes,
+    defaultEdges,
     onNodesChange,
     onEdgesChange,
     onConnect,
-    onDrop,
-    onDragOver,
   });
+
+  const handleInit = useCallback(
+    (instance: ReactFlowInstance) => {
+      reactFlow.onInit(instance);
+      onInit?.(instance);
+    },
+    [reactFlow, onInit],
+  );
+
+  const handleDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      const bounds = reactFlowWrapper.current?.getBoundingClientRect() || null;
+      editorStore.handleDrop(event, bounds);
+      onDrop?.(event);
+    },
+    [onDrop],
+  );
+
+  const handleDragOver = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      onDragOver?.(event);
+    },
+    [onDragOver],
+  );
+
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (
+      (event.key === "Delete" || event.key === "Backspace") &&
+      !event.metaKey
+    ) {
+      editorStore.deleteSelectedElements();
+    }
+  }, []);
 
   return (
     <CanvasStyled
       ref={reactFlowWrapper}
       className={className}
       data-canvas-root
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
       {...props}
     >
-      <ReactFlow
-        nodes={reactFlow.nodes}
-        edges={reactFlow.edges}
-        onNodesChange={reactFlow.onNodesChange}
-        onEdgesChange={reactFlow.onEdgesChange}
-        onConnect={reactFlow.onConnect}
-        onNodeClick={onNodeClick}
-        onPaneClick={onPaneClick}
-        onDrop={reactFlow.onDrop}
-        onDragOver={reactFlow.onDragOver}
-        onInit={handleInit}
-        fitView={fitView}
-        fitViewOptions={fitViewOptions}
-        nodeTypes={nodeTypes}
-        className="atomiton-canvas-flow"
-      >
-        {children}
-      </ReactFlow>
+      <ReactFlowProvider>
+        <ReactFlowCanvas
+          nodes={reactFlow.nodes}
+          edges={reactFlow.edges}
+          onNodesChange={reactFlow.onNodesChange}
+          onEdgesChange={reactFlow.onEdgesChange}
+          onConnect={reactFlow.onConnect}
+          onNodeClick={onNodeClick}
+          onPaneClick={onPaneClick}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onInit={handleInit}
+          fitView={fitView}
+          fitViewOptions={fitViewOptions}
+          nodeTypes={nodeTypes}
+          className="atomiton-canvas-flow"
+          deleteKeyCode={["Delete", "Backspace"]}
+        >
+          {children}
+        </ReactFlowCanvas>
+      </ReactFlowProvider>
     </CanvasStyled>
   );
 }

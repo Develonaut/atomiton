@@ -7,7 +7,6 @@ import VideoPlayer from "@/components/VideoPlayer";
 import ViewController from "@/components/ViewController";
 import AddFiles from "./AddFiles";
 import SelectAi from "./SelectAi";
-import { useAnimationSettings } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
 
 const settings = [
@@ -113,7 +112,6 @@ type PanelMessageProps = {
 };
 
 function PanelMessage({ className, isViewController }: PanelMessageProps) {
-  const { isAnimationSettings } = useAnimationSettings();
   const [message, setMessage] = useState("");
   const [setting, setSetting] = useState(settings[0]);
   const [isRecording, setIsRecording] = useState(false);
@@ -126,11 +124,7 @@ function PanelMessage({ className, isViewController }: PanelMessageProps) {
         className || ""
       }`}
     >
-      {isAnimationSettings ? (
-        <VideoPlayer className="bottom-full mb-4" />
-      ) : (
-        isViewController && <ViewController />
-      )}
+      {isViewController && <ViewController />}
 
       <AudioIndicator isRecording={isRecording} />
 
