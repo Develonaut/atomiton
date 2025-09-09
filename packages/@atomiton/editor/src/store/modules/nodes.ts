@@ -11,7 +11,7 @@
  * - Auto-connect new nodes to create logical flow sequences
  */
 
-import type { Node, Edge, Connection } from "@xyflow/react";
+import type { Connection, Edge, Node } from "@xyflow/react";
 import type { BaseStore } from "../types";
 
 const getDraggedNodeType = (event: React.DragEvent): string | null => {
@@ -172,10 +172,14 @@ export const createNodeModule = (
 
     handleDrop: (event: React.DragEvent, reactFlowBounds: DOMRect | null) => {
       const instance = store.getState().flowInstance;
-      if (!instance || !reactFlowBounds) return;
+      if (!instance || !reactFlowBounds) {
+        return;
+      }
 
       const nodeType = getDraggedNodeType(event);
-      if (!nodeType) return;
+      if (!nodeType) {
+        return;
+      }
 
       const position = instance.screenToFlowPosition({
         x: event.clientX - reactFlowBounds.left,

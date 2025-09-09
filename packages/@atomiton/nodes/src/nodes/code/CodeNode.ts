@@ -19,10 +19,10 @@ import { CodeLogic } from "./CodeNodeLogic";
 class CodeNode extends Node<CodeConfig> {
   readonly metadata = new NodeMetadata({
     id: "code",
-    name: "JavaScript Code",
+    name: "Code",
     version: "1.0.0",
     author: "Atomiton Core Team",
-    description: "Execute custom JavaScript code",
+    description: "Execute custom code",
     category: "data",
     type: "code",
     keywords: ["code", "javascript", "custom", "logic", "function"],
@@ -37,8 +37,8 @@ class CodeNode extends Node<CodeConfig> {
 
   readonly definition: NodeDefinition = {
     id: "code",
-    name: "JavaScript Code",
-    description: "Execute custom JavaScript code",
+    name: "Code",
+    description: "Execute custom code",
     category: "logic",
     type: "code",
     version: "1.0.0",

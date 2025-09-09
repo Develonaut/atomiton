@@ -19,7 +19,7 @@ import { ParallelLogic } from "./ParallelNodeLogic";
 class ParallelNode extends Node<ParallelConfig> {
   readonly metadata = new NodeMetadata({
     id: "parallel",
-    name: "Parallel Execution",
+    name: "Parallel",
     version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Run multiple operations simultaneously",
@@ -37,7 +37,7 @@ class ParallelNode extends Node<ParallelConfig> {
 
   readonly definition: NodeDefinition = {
     id: "parallel",
-    name: "Parallel Execution",
+    name: "Parallel",
     description: "Run multiple operations simultaneously",
     category: "flow",
     type: "parallel",

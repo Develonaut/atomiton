@@ -15,10 +15,10 @@ import { CSVReaderLogic } from "./CSVReaderNodeLogic";
 class CSVReaderNode extends Node<CSVReaderConfig> {
   readonly metadata = new NodeMetadata({
     id: "csv-reader",
-    name: "CSV/Spreadsheet Reader",
+    name: "CSV Reader",
     version: "1.0.0",
     author: "Atomiton Core Team",
-    description: "Read CSV files and spreadsheet data",
+    description: "Read CSV files",
     category: "io",
     type: "csv-reader",
     keywords: ["csv", "data", "import", "spreadsheet", "table"],
@@ -34,8 +34,8 @@ class CSVReaderNode extends Node<CSVReaderConfig> {
 
   readonly definition: NodeDefinition = {
     id: "csv-reader",
-    name: "CSV/Spreadsheet Reader",
-    description: "Read CSV files and spreadsheet data",
+    name: "CSV Reader",
+    description: "Read CSV files",
     category: "io",
     type: "csv-reader",
     version: "1.0.0",

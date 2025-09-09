@@ -19,10 +19,10 @@ import { HttpRequestLogic } from "./HttpRequestNodeLogic";
 class HttpRequestNode extends Node<HttpRequestConfig> {
   readonly metadata = new NodeMetadata({
     id: "http-request",
-    name: "HTTP/API Request",
+    name: "HTTP Request",
     version: "1.0.0",
     author: "Atomiton Core Team",
-    description: "Call APIs (Figma, webhooks, REST)",
+    description: "Call APIs and webhooks",
     category: "io",
     type: "http-request",
     keywords: ["http", "api", "figma", "webhook", "rest", "post", "get"],
@@ -37,8 +37,8 @@ class HttpRequestNode extends Node<HttpRequestConfig> {
 
   readonly definition: NodeDefinition = {
     id: "http-request",
-    name: "HTTP/API Request",
-    description: "Call APIs (Figma, webhooks, REST)",
+    name: "HTTP Request",
+    description: "Call APIs and webhooks",
     category: "io",
     type: "http-request",
     version: "1.0.0",

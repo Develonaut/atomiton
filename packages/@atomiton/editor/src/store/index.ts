@@ -1,16 +1,16 @@
 import { core } from "@atomiton/core";
 import { createFlowModule, type FlowActions } from "./modules/flow";
-import { createNodeModule, type NodeActions } from "./modules/nodes";
 import { createHistoryModule, type HistoryActions } from "./modules/history";
+import { createNodeModule, type NodeActions } from "./modules/nodes";
 import { createUIModule, type UIActions } from "./modules/ui";
 import { createViewportModule, type ViewportActions } from "./modules/viewport";
-import type { EditorState, FlowSnapshot, BaseStore } from "./types";
+import type { BaseStore, EditorState, FlowSnapshot } from "./types";
 
 export const onDragStart = (nodeType: string) => (event: React.DragEvent) => {
   event.dataTransfer?.setData("application/atomiton-node", nodeType);
 };
 
-export type { EditorState, FlowSnapshot, BaseStore };
+export type { BaseStore, EditorState, FlowSnapshot };
 
 const initialState: EditorState = {
   selectedElementId: null,
