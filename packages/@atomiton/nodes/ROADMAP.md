@@ -4,6 +4,28 @@
 
 Build 20-50 exceptional nodes that cover 80% of automation use cases, emphasizing quality over quantity and leveraging desktop-first capabilities.
 
+## Competitive Analysis Insights
+
+Based on our [competitive analysis](../../../docs/nodes/analysis/), we've identified key market requirements and opportunities:
+
+### Market Standards (MVP Table Stakes)
+
+- **Canvas navigation**: Pan, zoom, multi-select with keyboard shortcuts
+- **Real-time data preview**: Instant feedback at each node
+- **Visual connections**: Drag-to-connect with auto-routing
+- **Execution control**: Run, stop, partial execution, debugging
+- **Node discovery**: Searchable library with categories
+- **Error handling**: Clear error states and debugging information
+
+### Competitive Advantages (Our Differentiators)
+
+- **Superior undo/redo**: Full action history including deleted nodes with code
+- **Advanced debugging**: Breakpoints, step-through execution, data inspection
+- **Enhanced visualization**: Beyond JSON/table - charts, graphs, data profiling
+- **Performance at scale**: Optimized for 100+ node workflows
+- **Collaborative features**: Real-time multi-user editing from day one
+- **Progressive complexity**: Simple mode for beginners, advanced for pros
+
 ## MVP Strategy: Workflow-Driven Development
 
 ### Core Principle
@@ -22,6 +44,100 @@ This workflow validates our core nodes by requiring:
 - Image processing (compositing)
 - Batch processing (loop through products)
 - Parallel execution (speed optimization)
+
+## Editor MVP Requirements
+
+### Critical Canvas Features (Week 1)
+
+Based on competitive analysis, these are non-negotiable for market acceptance:
+
+1. **Canvas Navigation**
+   - Pan (mouse drag, middle button, touchpad)
+   - Zoom (mouse wheel, keyboard shortcuts, UI controls)
+   - Grid snap and alignment guides
+   - Minimap for large workflows
+   - Canvas bounds indicators
+
+2. **Node Interaction**
+   - Drag-drop from library to canvas
+   - Multi-select (Ctrl+click, drag rectangle)
+   - Copy/paste/duplicate nodes
+   - Group selection movement
+   - Context menus on right-click
+
+3. **Connection System**
+   - Visual drag-to-connect
+   - Auto-routing with bezier curves
+   - Connection validation (type checking)
+   - Multi-output support
+   - Connection deletion/rerouting
+
+4. **Data Flow Visualization**
+   - Real-time data preview panels
+   - Execution flow animation
+   - Node status indicators (idle, running, success, error)
+   - Data type badges on ports
+   - Progress indicators for long operations
+
+5. **Execution Control**
+   - Run entire workflow
+   - Run from selected node
+   - Step-through debugging
+   - Pause/resume/stop controls
+   - Execution history
+
+6. **Error Handling**
+   - Clear error overlays on nodes
+   - Error details panel
+   - Stack traces for debugging
+   - Retry failed nodes
+   - Error recovery suggestions
+
+### Post-MVP Differentiators (Month 2-3)
+
+Features that set us apart from competitors:
+
+1. **Advanced Undo/Redo System**
+   - Unlimited history depth
+   - Persist deleted node code
+   - Visual history timeline
+   - Branch history for experimentation
+   - Undo/redo preview
+
+2. **Superior Debugging Tools**
+   - Breakpoints on nodes
+   - Step into/over/out controls
+   - Watch expressions
+   - Data inspection at any point
+   - Execution replay
+
+3. **Enhanced Data Visualization**
+   - Inline charts and graphs
+   - Data profiling statistics
+   - Schema visualization
+   - Large dataset sampling
+   - Custom visualization plugins
+
+4. **Performance Optimization**
+   - Lazy loading for large workflows
+   - Virtual scrolling for node library
+   - Incremental execution
+   - Caching strategies
+   - Background processing
+
+5. **Collaboration Features**
+   - Real-time cursor tracking
+   - Collaborative editing
+   - Comments and annotations
+   - Version control integration
+   - Change notifications
+
+6. **AI-Assisted Building**
+   - Natural language to workflow
+   - Auto-suggest next nodes
+   - Smart connection recommendations
+   - Error fix suggestions
+   - Workflow optimization tips
 
 ## Implementation Phases
 
@@ -470,26 +586,53 @@ This workflow validates our core nodes by requiring:
 
 ## Success Criteria
 
+### MVP Launch (Month 1)
+
+**Editor must match market standards:**
+
+- Canvas navigation on par with n8n/Make
+- 9 essential nodes fully functional
+- Real-time data preview working
+- Basic debugging capabilities
+- Error handling and recovery
+- Keyboard shortcuts implemented
+- Performance: <100ms node operations
+
 ### Short Term (3 months)
 
+**Establish competitive advantages:**
+
 - 20 production-ready nodes
+- Superior undo/redo system (better than n8n)
+- Advanced debugging tools (breakpoints, step-through)
+- Enhanced data visualization (charts, profiling)
 - 100% test coverage
-- Complete documentation
+- Performance at 100+ nodes
 - 5 example blueprints
 
 ### Medium Term (6 months)
 
+**Market differentiation achieved:**
+
 - 35 nodes covering common use cases
+- Collaborative editing functional
+- AI-assisted workflow building
 - Community node contributions
-- Performance optimizations
-- Advanced debugging tools
+- Mobile-responsive editor
+- Performance optimizations (200+ nodes)
+- Version control UI
 
 ### Long Term (1 year)
 
+**Market leadership position:**
+
 - 50 exceptional nodes
-- Node marketplace
-- AI-assisted node creation
-- Visual node builder
+- Node marketplace launched
+- Natural language workflow creation
+- Visual node builder for customs
+- Enterprise features (SSO, audit)
+- 500+ node workflow support
+- Industry-specific templates
 
 ## Risk Mitigation
 
@@ -513,6 +656,30 @@ This workflow validates our core nodes by requiring:
 4. **Week 4**: Control flow nodes (13-17)
 5. **Review**: Assess progress, adjust priorities
 
+## Competitive Positioning Strategy
+
+### Against n8n
+
+**We win on**: UX polish, debugging tools, collaboration, performance at scale
+**We match on**: Flexibility, self-hosting, code integration
+**We acknowledge**: Their larger integration library (400+ vs our focused 50)
+
+### Against Zapier
+
+**We win on**: Developer experience, pricing, self-hosting option
+**We match on**: Ease of use (with our progressive complexity)
+**We acknowledge**: Their market presence and non-technical user base
+
+### Against Make
+
+**We win on**: Performance, debugging, modern architecture
+**We match on**: Visual canvas approach
+**We acknowledge**: Their template ecosystem
+
+### Our Unique Position
+
+"The developer-first automation platform that doesn't sacrifice ease of use. Professional debugging tools meet intuitive visual design, with collaboration built-in from day one."
+
 ## Conclusion
 
-This roadmap provides a structured approach to building a comprehensive node library that balances ambition with pragmatism. By focusing on quality and essential functionality first, we can deliver value quickly while maintaining the flexibility to evolve based on user needs.
+This roadmap incorporates competitive analysis insights to ensure Atomiton not only meets market standards but establishes clear differentiation. By focusing on superior UX, debugging capabilities, and performance at scale, we can capture the underserved market of technical teams who need both power and polish in their automation platform.
