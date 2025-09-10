@@ -44,47 +44,176 @@ packages/nodes/src/nodes/text-transform/
 └── TextTransform.test.ts    # Unit tests
 ```
 
-## Step 2: Define Configuration Schema
+## Step 2: Define Configuration Schema with UI Metadata
 
-Start with the configuration schema using Zod:
+Start with the configuration schema using Zod and the new NodeConfig class with UI metadata:
 
 ```typescript
 // TextTransform.config.ts
 import { z } from "zod";
+import { NodeConfig } from "../../base/NodeConfig";
 
-export const textTransformConfigSchema = z.object({
-  operation: z
-    .enum(["uppercase", "lowercase", "capitalize", "reverse", "trim"])
-    .default("uppercase")
-    .describe("The transformation to apply"),
+export class TextTransformNodeConfig extends NodeConfig {
+  static readonly schema = z.object({
+    operation: z
+      .enum(["uppercase", "lowercase", "capitalize", "reverse", "trim"])
+      .default("uppercase")
+      .describe("The transformation to apply"),
 
-  trimWhitespace: z
-    .boolean()
-    .default(true)
-    .describe("Remove leading/trailing whitespace"),
+    trimWhitespace: z
+      .boolean()
+      .default(true)
+      .describe("Remove leading/trailing whitespace"),
 
-  removeExtraSpaces: z
-    .boolean()
-    .default(false)
-    .describe("Replace multiple spaces with single space"),
+    removeExtraSpaces: z
+      .boolean()
+      .default(false)
+      .describe("Replace multiple spaces with single space"),
 
-  customReplace: z
-    .object({
-      enabled: z.boolean().default(false),
-      search: z.string().default(""),
-      replace: z.string().default(""),
-      useRegex: z.boolean().default(false),
-    })
-    .optional(),
-});
+    maxLength: z
+      .number()
+      .min(1)
+      .max(10000)
+      .default(1000)
+      .describe("Maximum output length"),
 
-export type TextTransformConfig = z.infer<typeof textTransformConfigSchema>;
+    customReplace: z
+      .object({
+        enabled: z.boolean().default(false),
+        search: z.string().default(""),
+        replace: z.string().default(""),
+        useRegex: z.boolean().default(false),
+      })
+      .optional(),
+  });
 
-export const defaultConfig: TextTransformConfig = {
-  operation: "uppercase",
-  trimWhitespace: true,
-  removeExtraSpaces: false,
-};
+  static readonly defaults = {
+    operation: "uppercase",
+    trimWhitespace: true,
+    removeExtraSpaces: false,
+    maxLength: 1000,
+  };
+
+  // UI metadata defines how each field appears in the property panel
+  static readonly uiMetadata = {
+    operation: {
+      label: "Transform Operation",
+      type: "select",
+      options: [
+        { value: "uppercase", label: "UPPERCASE" },
+        { value: "lowercase", label: "lowercase" },
+        { value: "capitalize", label: "Capitalize Words" },
+        { value: "reverse", label: "Reverse Text" },
+        { value: "trim", label: "Trim Whitespace" },
+      ],
+      description: "Choose the text transformation to apply",
+    },
+
+    trimWhitespace: {
+      label: "Trim Whitespace",
+      type: "boolean",
+      description: "Remove leading and trailing whitespace",
+    },
+
+    removeExtraSpaces: {
+      label: "Remove Extra Spaces",
+      type: "boolean",
+      description: "Replace multiple consecutive spaces with single space",
+    },
+
+    maxLength: {
+      label: "Maximum Length",
+      type: "number",
+      min: 1,
+      max: 10000,
+      step: 100,
+      description: "Maximum allowed output length",
+    },
+  };
+
+  constructor() {
+    super(
+      TextTransformNodeConfig.schema,
+      TextTransformNodeConfig.defaults,
+      TextTransformNodeConfig.uiMetadata,
+    );
+  }
+}
+
+export type TextTransformConfig = z.infer<
+  typeof TextTransformNodeConfig.schema
+>;
+```
+
+### UI Metadata System
+
+The new UI metadata system allows you to specify exactly how each configuration field appears in the property panel. This system supports 13 different control types with intelligent fallbacks.
+
+#### Supported Control Types
+
+1. **text** - Basic text input (default for z.string())
+2. **number** - Numeric input with validation (default for z.number())
+3. **boolean** - Checkbox control (default for z.boolean())
+4. **select** - Dropdown with predefined options (default for z.enum())
+5. **textarea** - Multi-line text input
+6. **file** - File input with validation
+7. **password** - Masked text input
+8. **email** - Email validation input
+9. **url** - URL validation input
+10. **date** - Date picker
+11. **time** - Time picker
+12. **datetime-local** - Date and time picker
+13. **color** - Color picker
+
+#### Field Metadata Properties
+
+```typescript
+interface FieldMetadata {
+  label?: string; // Display label (defaults to field name)
+  type?: ControlType; // Control type (inferred from Zod if not specified)
+  description?: string; // Help text
+  placeholder?: string; // Input placeholder
+  disabled?: boolean; // Whether field is disabled
+
+  // For select controls
+  options?: Array<{
+    value: string | number;
+    label: string;
+  }>;
+
+  // For number controls
+  min?: number;
+  max?: number;
+  step?: number;
+
+  // For text controls
+  maxLength?: number;
+  pattern?: string; // Regex pattern
+
+  // For file controls
+  accept?: string; // File type filter
+  multiple?: boolean; // Allow multiple files
+}
+```
+
+#### Intelligent Type Inference
+
+The system automatically infers control types from Zod schemas:
+
+```typescript
+// These Zod types automatically get the right controls:
+z.string()           → text input
+z.string().email()   → email input
+z.string().url()     → url input
+z.number()           → number input
+z.boolean()          → checkbox
+z.enum(["a", "b"])   → select dropdown
+z.date()             → date picker
+
+// You can override with explicit metadata:
+someField: {
+  type: "textarea"     // Forces multi-line input for string
+}
 ```
 
 ## Step 3: Implement Business Logic
@@ -96,7 +225,7 @@ Create the node logic extending `BaseNodeLogic`:
 import { BaseNodeLogic } from "../../base/BaseNodeLogic";
 import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
 import {
-  textTransformConfigSchema,
+  TextTransformNodeConfig,
   type TextTransformConfig,
 } from "./TextTransform.config";
 
@@ -189,11 +318,11 @@ export class TextTransformLogic extends BaseNodeLogic<TextTransformConfig> {
   }
 
   validateConfig(config: unknown): config is TextTransformConfig {
-    return textTransformConfigSchema.safeParse(config).success;
+    return TextTransformNodeConfig.schema.safeParse(config).success;
   }
 
   getDefaultConfig(): Partial<TextTransformConfig> {
-    return defaultConfig;
+    return TextTransformNodeConfig.defaults;
   }
 }
 ```
@@ -327,7 +456,7 @@ import type { NodePackage, NodeDefinition } from "../../base/NodePackage";
 import { TextTransformLogic } from "./TextTransform.logic";
 import { TextTransformUI } from "./TextTransform.ui";
 import {
-  textTransformConfigSchema,
+  TextTransformNodeConfig,
   type TextTransformConfig,
 } from "./TextTransform.config";
 
@@ -379,7 +508,7 @@ export const TextTransformNode: NodePackage<TextTransformConfig> = {
   definition,
   logic: new TextTransformLogic(),
   ui: TextTransformUI,
-  configSchema: textTransformConfigSchema,
+  config: new TextTransformNodeConfig(),
 
   metadata: {
     version: "1.0.0",

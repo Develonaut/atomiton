@@ -15,3 +15,10 @@ export type {
   NodePortDefinition,
   NodeType,
 } from "./types";
+
+// Configuration system types
+export type {
+  UIFieldMetadata,
+  UIMetadata,
+  UIControlType,
+} from "./base/NodeConfig";

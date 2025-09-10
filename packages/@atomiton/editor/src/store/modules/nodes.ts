@@ -11,8 +11,14 @@
  * - Auto-connect new nodes to create logical flow sequences
  */
 
-import type { Connection, Edge, Node } from "@xyflow/react";
+import type { Connection, Edge } from "@xyflow/react";
 import type { BaseStore } from "../types";
+import {
+  focusOnNode,
+  updateFlowInstance,
+  updateStoreState,
+} from "./node-effects";
+import { prepareNodeAddition, type NodeCreationOptions } from "./node-utils";
 
 const getDraggedNodeType = (event: React.DragEvent): string | null => {
   return event.dataTransfer?.getData("application/atomiton-node") || null;
@@ -35,73 +41,19 @@ export const createNodeModule = (
       const instance = store.getState().flowInstance;
       if (!instance) return;
 
-      const nodes = instance.getNodes();
-      const nodeId = `node-${Date.now()}`;
+      const existingNodes = instance.getNodes();
+      const existingEdges = instance.getEdges();
 
-      let nodePosition = position;
-      if (!nodePosition) {
-        if (nodes.length > 0) {
-          const rightmostNode = nodes.reduce((prev, current) =>
-            prev.position.x > current.position.x ? prev : current,
-          );
-          nodePosition = {
-            x: rightmostNode.position.x + 200,
-            y: rightmostNode.position.y,
-          };
-        } else {
-          nodePosition = { x: 100, y: 100 };
-        }
-      }
+      const options: NodeCreationOptions = { nodeType, position };
+      const { newNode, updatedNodes, updatedEdges } = prepareNodeAddition(
+        options,
+        existingNodes,
+        existingEdges,
+      );
 
-      const newNode: Node = {
-        id: nodeId,
-        type: nodeType,
-        position: nodePosition,
-        data: {},
-        selected: true,
-      };
-
-      // Deselect all other nodes
-      const updatedNodes = [
-        ...nodes.map((node) => ({ ...node, selected: false })),
-        newNode,
-      ];
-      instance.setNodes(updatedNodes);
-
-      // Auto-connect to previous node if exists
-      let updatedEdges = instance.getEdges();
-      if (nodes.length > 0) {
-        const lastNode = nodes[nodes.length - 1];
-        const edge: Edge = {
-          id: `edge-${lastNode.id}-${nodeId}`,
-          source: lastNode.id,
-          target: nodeId,
-          type: "default",
-        };
-        updatedEdges = [...updatedEdges, edge];
-        instance.setEdges(updatedEdges);
-      }
-
-      // Update snapshot immediately for UI consistency
-      store.setState((state) => ({
-        ...state,
-        selectedNodeId: nodeId,
-        flowSnapshot: {
-          nodes: updatedNodes,
-          edges: updatedEdges,
-          viewport: state.flowSnapshot.viewport,
-        },
-      }));
-
-      // Focus on the new node
-      setTimeout(() => {
-        instance.fitView({
-          nodes: [{ id: nodeId }],
-          duration: 200,
-          padding: 0.2,
-        });
-      }, 50);
-
+      updateFlowInstance(instance, updatedNodes, updatedEdges);
+      updateStoreState(store.setState, updatedNodes, updatedEdges, newNode.id);
+      focusOnNode(instance, newNode.id);
       debouncedUpdateFlowSnapshot();
     },
 
@@ -117,7 +69,6 @@ export const createNodeModule = (
       instance.setNodes(nodes);
       instance.setEdges(edges);
 
-      // Update snapshot immediately for UI consistency
       store.setState((state) => ({
         ...state,
         flowSnapshot: {
@@ -140,7 +91,6 @@ export const createNodeModule = (
       instance.setNodes(nodes);
       instance.setEdges(edges);
 
-      // Update snapshot immediately for UI consistency
       store.setState((state) => ({
         ...state,
         flowSnapshot: {
@@ -169,7 +119,6 @@ export const createNodeModule = (
       const updatedEdges = [...edges, newEdge];
       instance.setEdges(updatedEdges);
 
-      // Update snapshot immediately for UI consistency
       store.setState((state) => ({
         ...state,
         flowSnapshot: {

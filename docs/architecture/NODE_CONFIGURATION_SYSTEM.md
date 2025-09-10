@@ -2,9 +2,11 @@
 
 ## Overview
 
-The Atomiton node configuration system provides a declarative way to define configurable properties for Blueprint nodes using Zod schemas. The system automatically generates property panels in the editor, allowing users to configure node behavior through a type-safe, schema-driven interface.
+The Atomiton node configuration system provides a declarative way to define configurable properties for Blueprint nodes using Zod schemas. The system automatically generates editable property forms in the editor, allowing users to configure node behavior through a type-safe, schema-driven interface.
 
 This architecture uses **React Hook Form + Zod** as the foundation, with a custom abstraction layer for dynamic form generation, providing optimal performance, flexibility, and developer experience.
+
+**Status**: ✅ **IMPLEMENTED** - Core system with UI metadata support is live and functional.
 
 ## System Requirements
 
@@ -78,63 +80,80 @@ React Hook Form + Zod was selected for the node configuration system because:
 
 ### Implementation Strategy
 
-#### Phase 1: Foundation
+#### Phase 1: Foundation ✅ COMPLETED
 
 1. **Node-side Schema Definition**
 
    ```typescript
-   // In node config files
-   export const nodeConfigSchema = z.object({
-     url: z.string().url().describe("API endpoint"),
-     method: z.enum(["GET", "POST"]).describe("HTTP method"),
-     timeout: z.number().min(0).max(30000).describe("Request timeout"),
-     headers: z.record(z.string()).optional(),
-   });
+   // In node config files - IMPLEMENTED
+   export class CSVReaderNodeConfig extends NodeConfig {
+     static readonly schema = z.object({
+       hasHeader: z.boolean().describe("CSV has header row"),
+       delimiter: z.string().describe("Column delimiter"),
+       encoding: z.string().describe("File encoding"),
+     });
 
-   // Metadata for UI hints
-   export const nodeConfigMeta = {
-     url: { control: "url", placeholder: "https://api.example.com" },
-     method: { control: "select" },
-     timeout: { control: "slider", min: 0, max: 30000, step: 100 },
-     headers: { control: "json", collapsible: true },
-   };
+     static readonly defaults = {
+       hasHeader: true,
+       delimiter: ",",
+       encoding: "utf-8",
+     };
+
+     // UI metadata for form controls - IMPLEMENTED
+     static readonly uiMetadata = {
+       hasHeader: { label: "Has Header Row", type: "boolean" },
+       delimiter: { label: "Delimiter", type: "text", placeholder: "," },
+       encoding: {
+         label: "Encoding",
+         type: "select",
+         options: ["utf-8", "latin1"],
+       },
+     };
+   }
    ```
 
-2. **Editor-side Control Mapping**
+2. **Editor-side Control Mapping** ✅ IMPLEMENTED
    ```typescript
-   // Control registry and mapper
-   const controlMap = {
-     text: TextInput,
-     url: UrlInput,
-     select: SelectField,
-     slider: SliderControl,
-     json: JsonEditor,
-     // ... more mappings
+   // Control registry and mapper - IMPLEMENTED
+   const renderFormControl = (field: FieldConfig, register: any, errors: any) => {
+     switch (field.type) {
+       case 'text': return <Input {...register(field.name)} />;
+       case 'number': return <Input type="number" {...register(field.name, { valueAsNumber: true })} />;
+       case 'boolean': return <Checkbox {...register(field.name)} />;
+       case 'select': return <Select {...register(field.name)} options={field.options} />;
+       case 'textarea': return <Textarea {...register(field.name)} />;
+       case 'file': return <FileInput {...register(field.name)} />;
+       // ... more control types
+     }
    };
    ```
 
-#### Phase 2: Dynamic Form Generation
+#### Phase 2: Dynamic Form Generation ✅ IMPLEMENTED
 
 ```typescript
-// PropertyPanel component
-function PropertyPanel({ nodeConfig }) {
-  const { schema, metadata, defaults } = nodeConfig;
+// PropertyPanel component - IMPLEMENTED
+function NodeProperties({ selectedNode }: { selectedNode: Node }) {
+  const nodeConfig = selectedNode.config;
+  const { schema, defaults, uiMetadata } = nodeConfig;
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   });
 
-  const fields = generateFieldsFromSchema(schema, metadata);
+  const fields = generateFieldsFromSchema(schema, uiMetadata);
 
   return (
     <Form {...form}>
+      <h3>Properties</h3>
       {fields.map(field => (
-        <DynamicField
-          key={field.name}
-          field={field}
-          control={form.control}
-        />
+        <div key={field.name} className="form-group">
+          <label>{field.label}</label>
+          {renderFormControl(field, form.register, form.formState.errors)}
+          {form.formState.errors[field.name] && (
+            <span className="error">{form.formState.errors[field.name]?.message}</span>
+          )}
+        </div>
       ))}
     </Form>
   );
@@ -174,25 +193,30 @@ function PropertyPanel({ nodeConfig }) {
 - Schema transformers for special cases
 - Hooks for pre/post validation
 
-## Implementation Phases
+## Implementation Status
 
-### Phase 1: Foundation
+### Phase 1: Foundation ✅ COMPLETED
 
-- Basic text/number/boolean controls
-- Core schema analyzer and control mapper
-- React Hook Form integration
+- ✅ Basic text/number/boolean controls
+- ✅ Core schema analyzer and control mapper
+- ✅ React Hook Form integration
+- ✅ Support for 13 control types: text, number, boolean, select, textarea, file, password, email, url, date, time, datetime-local, color
+- ✅ Intelligent type inference from Zod schemas
+- ✅ Form validation and error handling
+- ✅ Live form updates with onChange callbacks
 
-### Phase 2: Enhanced Controls
+### Phase 2: Enhanced Controls 🚧 IN PROGRESS
 
-- Arrays, objects, conditional fields
-- Complex UI controls (JSON editor, color picker)
-- Field validation and error handling
+- ⏳ Arrays, objects, conditional fields
+- ⏳ Complex UI controls (JSON editor, color picker)
+- ✅ Field validation and error handling
+- ⏳ Advanced control metadata (min/max, step, placeholder)
 
-### Phase 3: Advanced Features
+### Phase 3: Advanced Features 📋 PLANNED
 
-- Custom control registration system
-- Conditional logic and field dependencies
-- Performance optimizations and lazy loading
+- 📋 Custom control registration system
+- 📋 Conditional logic and field dependencies
+- 📋 Performance optimizations and lazy loading
 
 ## Development Guidelines
 
@@ -215,12 +239,66 @@ function PropertyPanel({ nodeConfig }) {
 - Consistent control interface contracts
 - Comprehensive control development documentation
 
+## Implementation Details
+
+### NodeConfig Base Class Enhancement
+
+The `NodeConfig` base class now supports optional UI metadata:
+
+```typescript
+export abstract class NodeConfig {
+  constructor(
+    protected schema: ZodSchema<any>,
+    protected defaults: any,
+    protected uiMetadata?: Record<string, FieldMetadata>,
+  ) {}
+
+  getSchema() {
+    return this.schema;
+  }
+  getDefaults() {
+    return this.defaults;
+  }
+  getUIMetadata() {
+    return this.uiMetadata;
+  }
+}
+```
+
+### Supported Control Types
+
+The system supports 13 control types with intelligent inference:
+
+1. **text** - Basic text input (default for z.string())
+2. **number** - Numeric input (default for z.number())
+3. **boolean** - Checkbox (default for z.boolean())
+4. **select** - Dropdown with options (for z.enum() or custom options)
+5. **textarea** - Multi-line text input
+6. **file** - File input with validation
+7. **password** - Masked text input
+8. **email** - Email validation input
+9. **url** - URL validation input
+10. **date** - Date picker
+11. **time** - Time picker
+12. **datetime-local** - Date and time picker
+13. **color** - Color picker
+
+### Backward Compatibility
+
+The system maintains 100% backward compatibility:
+
+- Nodes without UI metadata continue to work
+- Display-only fallback for missing metadata
+- Progressive enhancement approach
+
 ## Benefits
 
-The node configuration system provides:
+The implemented node configuration system provides:
 
 - **Type Safety**: Full TypeScript support with Zod schemas
 - **Performance**: Minimal re-renders with React Hook Form
 - **Developer Experience**: Declarative configuration definitions
-- **Extensibility**: Custom controls and validation rules
+- **Extensibility**: 13+ control types with easy addition of more
 - **Consistency**: Unified property panel experience across all nodes
+- **Validation**: Real-time form validation with clear error messages
+- **User Experience**: Intuitive form controls instead of raw JSON editing

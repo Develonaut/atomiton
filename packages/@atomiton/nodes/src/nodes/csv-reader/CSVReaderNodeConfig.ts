@@ -27,10 +27,45 @@ const csvReaderSchema = {
  */
 class CSVReaderConfigClass extends NodeConfig<typeof csvReaderSchema> {
   constructor() {
-    super(csvReaderSchema, {
-      hasHeaders: true,
-      delimiter: ",",
-    });
+    super(
+      csvReaderSchema,
+      {
+        hasHeaders: true,
+        delimiter: ",",
+      },
+      {
+        fields: {
+          filePath: {
+            controlType: "file",
+            label: "CSV File Path",
+            placeholder: "Select or enter path to CSV file",
+            helpText: "The path to the CSV file you want to read",
+          },
+          hasHeaders: {
+            controlType: "boolean",
+            label: "Has Header Row",
+            helpText: "Check if the first row contains column headers",
+          },
+          delimiter: {
+            controlType: "select",
+            label: "Field Delimiter",
+            helpText: "Character used to separate fields in the CSV",
+            options: [
+              { value: ",", label: "Comma (,)" },
+              { value: ";", label: "Semicolon (;)" },
+              { value: "\t", label: "Tab" },
+              { value: "|", label: "Pipe (|)" },
+            ],
+          },
+        },
+        layout: {
+          groups: {
+            file: { label: "File Settings", order: 1 },
+            format: { label: "Format Settings", order: 2 },
+          },
+        },
+      },
+    );
   }
 }
 

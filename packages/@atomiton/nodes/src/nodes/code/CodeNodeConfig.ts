@@ -44,13 +44,67 @@ const codeSchema = {
  */
 class CodeConfigClass extends NodeConfig<typeof codeSchema> {
   constructor() {
-    super(codeSchema, {
-      code: "// Write your JavaScript code here\nreturn data;",
-      inputParams: ["data"],
-      returnType: "any" as const,
-      async: false,
-      timeout: 5000,
-    });
+    super(
+      codeSchema,
+      {
+        code: "// Write your JavaScript code here\nreturn data;",
+        inputParams: ["data"],
+        returnType: "any" as const,
+        async: false,
+        timeout: 5000,
+      },
+      {
+        fields: {
+          code: {
+            controlType: "textarea",
+            label: "JavaScript Code",
+            placeholder: "// Write your JavaScript code here\nreturn data;",
+            helpText:
+              "JavaScript code to execute. The 'data' parameter contains input from previous nodes.",
+            rows: 10,
+          },
+          inputParams: {
+            controlType: "text",
+            label: "Input Parameters",
+            placeholder: "data",
+            helpText:
+              "Comma-separated list of parameter names available in your code (e.g., data, context, utils)",
+          },
+          returnType: {
+            controlType: "select",
+            label: "Return Type",
+            helpText: "Expected type of the value returned by your code",
+            options: [
+              { value: "any", label: "Any" },
+              { value: "string", label: "String" },
+              { value: "number", label: "Number" },
+              { value: "boolean", label: "Boolean" },
+              { value: "object", label: "Object" },
+              { value: "array", label: "Array" },
+            ],
+          },
+          async: {
+            controlType: "boolean",
+            label: "Enable Async/Await",
+            helpText: "Enable async/await support for asynchronous operations",
+          },
+          timeout: {
+            controlType: "number",
+            label: "Timeout (ms)",
+            helpText: "Maximum execution time in milliseconds",
+            min: 100,
+            max: 30000,
+            step: 100,
+          },
+        },
+        layout: {
+          groups: {
+            code: { label: "Code Settings", order: 1 },
+            execution: { label: "Execution Settings", order: 2 },
+          },
+        },
+      },
+    );
   }
 }
 

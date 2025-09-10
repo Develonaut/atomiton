@@ -9,6 +9,74 @@ import { z } from "zod";
 import type { INodeConfig } from "./INodeConfig";
 
 /**
+ * UI Control Types for form rendering
+ */
+export type UIControlType =
+  | "text" // Text input
+  | "number" // Number input
+  | "boolean" // Checkbox/toggle
+  | "select" // Dropdown selection
+  | "textarea" // Multi-line text
+  | "file" // File picker
+  | "password" // Password input
+  | "email" // Email input
+  | "url" // URL input
+  | "date" // Date picker
+  | "datetime" // Date and time picker
+  | "color" // Color picker
+  | "range" // Range slider
+  | "json"; // JSON editor
+
+/**
+ * UI metadata for individual fields
+ */
+export interface UIFieldMetadata {
+  /** Type of form control to render */
+  controlType?: UIControlType;
+  /** Display label (defaults to field name) */
+  label?: string;
+  /** Placeholder text for inputs */
+  placeholder?: string;
+  /** Help text to display */
+  helpText?: string;
+  /** Options for select controls */
+  options?: Array<{ value: string | number | boolean; label: string }>;
+  /** Minimum value for number/range controls */
+  min?: number;
+  /** Maximum value for number/range controls */
+  max?: number;
+  /** Step increment for number/range controls */
+  step?: number;
+  /** Number of rows for textarea */
+  rows?: number;
+  /** Whether field is disabled */
+  disabled?: boolean;
+  /** Whether field is read-only */
+  readOnly?: boolean;
+  /** Custom CSS classes */
+  className?: string;
+  /** Field grouping for layout */
+  group?: string;
+  /** Sort order within group */
+  order?: number;
+}
+
+/**
+ * Complete UI metadata for the node configuration
+ */
+export interface UIMetadata {
+  /** Metadata for individual fields */
+  fields?: Record<string, UIFieldMetadata>;
+  /** Overall form layout preferences */
+  layout?: {
+    /** Group fields by category */
+    groups?: Record<string, { label: string; order: number }>;
+    /** Form layout style */
+    style?: "standard" | "compact" | "grid";
+  };
+}
+
+/**
  * Base schema for common node configuration options
  */
 const baseSchema = z.object({
@@ -71,11 +139,21 @@ export class NodeConfig<T extends z.ZodRawShape = {}>
   public readonly defaults: InferredType<T>;
 
   /**
+   * UI metadata for form rendering
+   */
+  public readonly uiMetadata?: UIMetadata;
+
+  /**
    * Constructor
    * @param nodeSchema - Node-specific schema to extend the base schema
    * @param nodeDefaults - Node-specific default values
+   * @param uiMetadata - Optional UI metadata for form rendering
    */
-  constructor(nodeSchema: T, nodeDefaults?: Partial<z.infer<z.ZodObject<T>>>) {
+  constructor(
+    nodeSchema: T,
+    nodeDefaults?: Partial<z.infer<z.ZodObject<T>>>,
+    uiMetadata?: UIMetadata,
+  ) {
     // Extend base schema with node-specific schema
     this._schemaObject = baseSchema.extend(nodeSchema) as ExtendedSchema<T>;
     this.schema = this._schemaObject as z.ZodType<InferredType<T>>;
@@ -87,6 +165,9 @@ export class NodeConfig<T extends z.ZodRawShape = {}>
       retries: 1,
       ...nodeDefaults,
     } as InferredType<T>;
+
+    // Store UI metadata if provided
+    this.uiMetadata = uiMetadata;
   }
 
   /**

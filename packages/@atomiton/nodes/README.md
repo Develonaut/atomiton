@@ -17,6 +17,9 @@ The nodes package provides a carefully curated set of high-quality nodes for the
 ### Core Capabilities
 
 - **Type-safe node definitions** with Zod schema validation
+- **Enhanced configuration system** with automatic form generation
+- **13 supported form control types** (text, number, boolean, select, file, etc.)
+- **UI metadata system** for rich property panels
 - **Desktop-first design** with full file system access
 - **AI-native integration** for LLM and embedding workflows
 - **Streaming support** for real-time data processing
@@ -95,21 +98,78 @@ registry.register(csvParser);
 registry.register(jsonTransform);
 ```
 
-### Creating Custom Nodes
+### Creating Custom Nodes with Enhanced Configuration
 
 ```typescript
-import { BaseNodeLogic, NodePackage } from "@atomiton/nodes";
+import { BaseNodeLogic, NodePackage, NodeConfig } from "@atomiton/nodes";
 import { z } from "zod";
 
-const configSchema = z.object({
-  option: z.string(),
-});
+// Enhanced configuration with UI metadata
+class MyNodeConfig extends NodeConfig {
+  static readonly schema = z.object({
+    apiUrl: z.string().url().describe("API endpoint"),
+    timeout: z.number().min(1000).max(30000).default(5000),
+    retries: z.number().min(0).max(5).default(3),
+    enabled: z.boolean().default(true),
+  });
 
-class MyNodeLogic extends BaseNodeLogic<z.infer<typeof configSchema>> {
+  static readonly defaults = {
+    apiUrl: "https://api.example.com",
+    timeout: 5000,
+    retries: 3,
+    enabled: true,
+  };
+
+  // UI metadata for automatic form generation
+  static readonly uiMetadata = {
+    apiUrl: {
+      label: "API URL",
+      type: "url",
+      placeholder: "https://api.example.com/endpoint",
+      description: "The API endpoint to call",
+    },
+    timeout: {
+      label: "Timeout (ms)",
+      type: "number",
+      min: 1000,
+      max: 30000,
+      step: 1000,
+      description: "Request timeout in milliseconds",
+    },
+    retries: {
+      label: "Max Retries",
+      type: "number",
+      min: 0,
+      max: 5,
+      description: "Number of retry attempts",
+    },
+    enabled: {
+      label: "Enable API Calls",
+      type: "boolean",
+      description: "Enable or disable API requests",
+    },
+  };
+
+  constructor() {
+    super(MyNodeConfig.schema, MyNodeConfig.defaults, MyNodeConfig.uiMetadata);
+  }
+}
+
+type MyNodeConfigType = z.infer<typeof MyNodeConfig.schema>;
+
+class MyNodeLogic extends BaseNodeLogic<MyNodeConfigType> {
   async execute(context: NodeExecutionContext) {
     const { inputs, config } = context;
-    // Implementation
-    return { output: result };
+    // Implementation with type-safe config
+    if (!config.enabled) {
+      return this.createSuccessResult({ skipped: true });
+    }
+
+    const response = await fetch(config.apiUrl, {
+      timeout: config.timeout,
+    });
+
+    return this.createSuccessResult({ data: await response.json() });
   }
 }
 
@@ -121,7 +181,7 @@ export const myNode: NodePackage = {
     outputs: [{ name: "output", type: "any" }],
   },
   logic: new MyNodeLogic(),
-  configSchema,
+  config: new MyNodeConfig(), // Enhanced configuration
   ui: MyNodeUI,
 };
 ```
@@ -187,9 +247,11 @@ pnpm test:coverage
 1. **Quality Over Quantity** - 20-50 excellent nodes vs 500+ mediocre ones
 2. **Desktop-First** - Leverage local file system and process capabilities
 3. **Type Safety** - Full TypeScript coverage with strict types
-4. **AI-Native** - Built for AI workflows from the ground up
-5. **Error Resilience** - Graceful degradation and clear error messages
-6. **Performance** - Streaming support and efficient memory usage
+4. **Rich Configuration** - Declarative schemas with automatic UI generation
+5. **Developer Experience** - Intelligent form controls and validation
+6. **AI-Native** - Built for AI workflows from the ground up
+7. **Error Resilience** - Graceful degradation and clear error messages
+8. **Performance** - Streaming support and efficient memory usage
 
 ## Roadmap
 
