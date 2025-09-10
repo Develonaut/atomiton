@@ -24,6 +24,7 @@
     "test:install": "playwright install chromium",
     "test:smoke": "playwright test -c playwright/playwright.config.ts tests/smoke/",
     "test:e2e:smoke": "playwright test -c playwright/playwright.config.ts tests/smoke/ --reporter=list",
+    "test:editor": "playwright test -c playwright/playwright.config.ts playwright/tests/smoke/editor-core-flows.spec.ts --project=client --reporter=list",
     "test:smoke:headed": "playwright test -c playwright/playwright.config.ts tests/smoke/ --headed",
     "test:smoke:debug": "playwright test -c playwright/playwright.config.ts tests/smoke/ --debug",
     "typecheck": "turbo run typecheck"

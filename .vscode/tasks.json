@@ -83,7 +83,7 @@
       "label": "✨ E2E: Editor Core Flows",
       "detail": "Test editor functionality - add nodes, select, delete",
       "type": "shell",
-      "command": "npx playwright test playwright/tests/smoke/editor-core-flows.spec.ts --project=client --reporter=list",
+      "command": "pnpm test:editor",
       "group": "test",
       "problemMatcher": [],
       "presentation": {
