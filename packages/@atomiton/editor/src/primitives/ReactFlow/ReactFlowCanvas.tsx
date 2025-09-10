@@ -13,6 +13,7 @@ import type {
 interface ReactFlowCanvasProps {
   children?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   nodes: Node[];
   edges: Edge[];
   nodeTypes: NodeTypes;
@@ -37,6 +38,7 @@ interface ReactFlowCanvasProps {
 export function ReactFlowCanvas({
   children,
   className,
+  style,
   nodes,
   edges,
   nodeTypes,
@@ -68,6 +70,7 @@ export function ReactFlowCanvas({
       fitViewOptions={fitViewOptions}
       nodeTypes={nodeTypes}
       className={className}
+      style={style}
       deleteKeyCode={deleteKeyCode}
     >
       {children}

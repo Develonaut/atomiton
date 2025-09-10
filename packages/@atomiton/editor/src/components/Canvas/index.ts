@@ -1,9 +1,10 @@
-export { default as Canvas, default } from "./Canvas";
+export { default as Canvas } from "./Canvas";
+export { default } from "./Canvas";
 export type {
   CanvasConnectionsProps,
   CanvasControlActionProps,
   CanvasControlsProps,
-  CanvasElementsProps,
+  CanvasNodesProps,
   CanvasGridProps,
   CanvasMinimapProps,
   CanvasProps,
@@ -15,7 +16,7 @@ export { CanvasControlPan } from "./CanvasControlPan";
 export { CanvasControlReset } from "./CanvasControlReset";
 export { CanvasControls } from "./CanvasControls";
 export { CanvasControlZoom } from "./CanvasControlZoom";
-export { CanvasElements } from "./CanvasElements";
+export { CanvasNodes } from "./CanvasNodes";
 export { CanvasGrid } from "./CanvasGrid";
 export { CanvasMinimap } from "./CanvasMinimap";
 export { CanvasRoot } from "./CanvasRoot";

@@ -1,20 +1,33 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { editorStore } from "../index";
-import type { Connection, Element } from "../types";
+import type { Node, Edge } from "@xyflow/react";
+
+// Legacy type for backward compatibility
+type Element = Node;
+type Connection = Edge;
 
 vi.mock("@atomiton/core", () => ({
   core: {
     store: {
       createStore: vi.fn((config) => {
         let state = { ...config.initialState };
-        const subscribers: (() => void)[] = [];
+        const subscribers: ((state: unknown, prevState: unknown) => void)[] =
+          [];
 
         return {
           getState: () => state,
-          setState: (newState: any) => {
-            state = { ...state, ...newState };
+          setState: (updater: (state: unknown) => unknown) => {
+            if (typeof updater === "function") {
+              const prevState = { ...state };
+              state = { ...state, ...updater(state) };
+              subscribers.forEach((callback) => callback(state, prevState));
+            } else {
+              state = { ...state, ...updater };
+            }
           },
-          subscribe: (callback: () => void) => {
+          subscribe: (
+            callback: (state: unknown, prevState: unknown) => void,
+          ) => {
             subscribers.push(callback);
             return () => {
               const index = subscribers.indexOf(callback);
@@ -26,41 +39,181 @@ vi.mock("@atomiton/core", () => ({
         };
       }),
       createAction: vi.fn((_store, actionFn) => {
-        return (...args: any[]) => {
-          const store = _store as any;
+        return (...args: unknown[]) => {
+          const store = _store as {
+            getState: () => unknown;
+            setState: (updater: (state: unknown) => unknown) => void;
+          };
           const state = store.getState();
-          actionFn(state, ...args);
-          store._triggerSubscribers?.();
+          const result = actionFn(state, ...args);
+          if (result !== undefined) {
+            store.setState(() => result);
+          }
+          return result;
         };
       }),
     },
   },
 }));
 
+// Mock the editorStore with all legacy methods
+vi.mock("../index", () => {
+  let mockState = {
+    selectedNodeId: null,
+    isLoading: false,
+    isDirty: false,
+    zoom: 100,
+    flowInstance: null,
+    flowSnapshot: { nodes: [], edges: [] },
+    history: { past: [], future: [] },
+  };
+
+  let mockElements: Element[] = [];
+  let mockConnections: Connection[] = [];
+
+  return {
+    editorStore: {
+      // Base store methods
+      getState: vi.fn(() => mockState),
+      setState: vi.fn((updater: (state: unknown) => unknown) => {
+        mockState = { ...mockState, ...updater(mockState) };
+      }),
+      subscribe: vi.fn((callback) => () => {}),
+
+      // Legacy Element methods
+      addElement: vi.fn((element: Element) => {
+        mockElements.push(element);
+        mockState.isDirty = true;
+      }),
+      getElements: vi.fn(() => [...mockElements]),
+      setElements: vi.fn((elements: Element[]) => {
+        mockElements = [...elements];
+      }),
+      updateElement: vi.fn((id: string, updates: Partial<Element>) => {
+        const index = mockElements.findIndex((e) => e.id === id);
+        if (index !== -1) {
+          mockElements[index] = { ...mockElements[index], ...updates };
+        }
+      }),
+      deleteElement: vi.fn((id: string) => {
+        mockElements = mockElements.filter((e) => e.id !== id);
+        mockConnections = mockConnections.filter(
+          (c) => c.source !== id && c.target !== id,
+        );
+        if (mockState.selectedNodeId === id) {
+          mockState.selectedNodeId = null;
+        }
+      }),
+      selectElement: vi.fn((id: string) => {
+        mockState.selectedNodeId = id;
+      }),
+      getSelectedElement: vi.fn(() => {
+        return mockElements.find((e) => e.id === mockState.selectedNodeId);
+      }),
+      getSelectedElementId: vi.fn(() => mockState.selectedNodeId),
+
+      // Connection methods
+      addConnection: vi.fn((connection: Connection) => {
+        mockConnections.push(connection);
+      }),
+      getConnections: vi.fn(() => [...mockConnections]),
+      setConnections: vi.fn((connections: Connection[]) => {
+        mockConnections = [...connections];
+      }),
+
+      // Node methods (aliases for compatibility)
+      addNode: vi.fn((node: Node) => {
+        mockElements.push(node);
+      }),
+      getNodes: vi.fn(() => [...mockElements]),
+      setNodes: vi.fn((nodes: Node[]) => {
+        mockElements = [...nodes];
+      }),
+      updateNode: vi.fn((id: string, updates: Partial<Node>) => {
+        const index = mockElements.findIndex((e) => e.id === id);
+        if (index !== -1) {
+          mockElements[index] = { ...mockElements[index], ...updates };
+        }
+      }),
+      deleteNode: vi.fn((id: string) => {
+        mockElements = mockElements.filter((e) => e.id !== id);
+        if (mockState.selectedNodeId === id) {
+          mockState.selectedNodeId = null;
+        }
+      }),
+      selectNode: vi.fn((id: string) => {
+        mockState.selectedNodeId = id;
+      }),
+
+      // Edge methods
+      addEdge: vi.fn((edge: Edge) => {
+        mockConnections.push(edge);
+      }),
+      getEdges: vi.fn(() => [...mockConnections]),
+      setEdges: vi.fn((edges: Edge[]) => {
+        mockConnections = [...edges];
+      }),
+      deleteEdge: vi.fn((id: string) => {
+        mockConnections = mockConnections.filter((e) => e.id !== id);
+      }),
+
+      // History methods
+      canUndo: vi.fn(() => mockState.history.past.length > 0),
+      canRedo: vi.fn(() => mockState.history.future.length > 0),
+      undo: vi.fn(() => {
+        if (mockState.history.past.length > 0) {
+          const previousState = mockState.history.past.pop()!;
+          mockState.history.future.push({
+            nodes: [...mockElements],
+            edges: [...mockConnections],
+          });
+          mockElements = [...previousState.nodes];
+          mockConnections = [...previousState.edges];
+        }
+      }),
+      redo: vi.fn(() => {
+        if (mockState.history.future.length > 0) {
+          const nextState = mockState.history.future.pop()!;
+          mockState.history.past.push({
+            nodes: [...mockElements],
+            edges: [...mockConnections],
+          });
+          mockElements = [...nextState.nodes];
+          mockConnections = [...nextState.edges];
+        }
+      }),
+
+      // UI methods
+      isDirty: vi.fn(() => mockState.isDirty),
+
+      // Internal method for test cleanup
+      _resetMockState: () => {
+        mockState = {
+          selectedNodeId: null,
+          isLoading: false,
+          isDirty: false,
+          zoom: 100,
+          flowInstance: null,
+          flowSnapshot: { nodes: [], edges: [] },
+          history: { past: [], future: [] },
+        };
+        mockElements = [];
+        mockConnections = [];
+      },
+    },
+  };
+});
+
 describe("Store Integration Tests", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Reset store state
-    const initialState = {
-      elements: [],
-      connections: [],
-      selectedElementId: null,
-      isLoading: false,
-      isDirty: false,
-      isAnimationSettings: false,
-      flowInstance: null,
-      zoom: 100,
-      history: {
-        past: [],
-        future: [],
-      },
+    // Reset the mock store state
+    const mockStore = editorStore as unknown as {
+      _resetMockState: () => void;
     };
-
-    // Reset the mock store to initial state
-    const mockStore = editorStore as any;
-    if (mockStore.setState) {
-      mockStore.setState(initialState);
+    if (mockStore._resetMockState) {
+      mockStore._resetMockState();
     }
   });
 

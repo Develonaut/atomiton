@@ -48,7 +48,7 @@ describe("Nodes Package - Core Functionality", () => {
     });
 
     it("should find nodes by type", () => {
-      const csvNode = nodes.getNode("csv-reader");
+      const csvNode = nodes.getNodeMetadata("csv-reader");
       expect(csvNode).not.toBeNull();
 
       if (csvNode) {
@@ -57,7 +57,9 @@ describe("Nodes Package - Core Functionality", () => {
     });
 
     it("should return null for non-existent nodes", () => {
-      const nonExistent = nodes.getNode("non-existent-type" as NodeType);
+      const nonExistent = nodes.getNodeMetadata(
+        "non-existent-type" as NodeType,
+      );
       expect(nonExistent).toBeNull();
     });
   });
@@ -182,7 +184,9 @@ describe("Nodes Package - Core Functionality", () => {
       // Test with strings that might cause issues but are still valid inputs
       expect(() => nodes.searchNodes("")).not.toThrow();
       expect(() => nodes.searchNodes("🚀")).not.toThrow();
-      expect(() => nodes.getNode("invalid-type" as NodeType)).not.toThrow();
+      expect(() =>
+        nodes.getNodeMetadata("invalid-type" as NodeType),
+      ).not.toThrow();
       expect(() => nodes.getNodesByCategory("invalid-category")).not.toThrow();
     });
 
@@ -191,7 +195,7 @@ describe("Nodes Package - Core Functionality", () => {
 
       // Try operations that might fail but use valid string inputs
       try {
-        nodes.getNode("invalid" as NodeType);
+        nodes.getNodeMetadata("invalid" as NodeType);
         nodes.searchNodes("invalid-search");
         nodes.getNodesByCategory("invalid-category");
       } catch {
@@ -252,7 +256,7 @@ describe("Nodes Package - Core Functionality", () => {
       ];
 
       validTypes.forEach((type) => {
-        const node = nodes.getNode(type as NodeType);
+        const node = nodes.getNodeMetadata(type as NodeType);
         // Should either find the node or return null (if not implemented)
         expect(node === null || typeof node === "object").toBe(true);
       });

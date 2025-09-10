@@ -1,12 +1,13 @@
 import { styled } from "@atomiton/ui";
 import { useCallback, useRef } from "react";
+import { useNodeTypes } from "../../hooks/useNodeTypes";
 import {
   ReactFlowCanvas,
   ReactFlowProvider,
   type ReactFlowInstance,
 } from "../../primitives/ReactFlow";
 import { editorStore } from "../../store";
-import { useNodeTypes } from "../../hooks/useNodeTypes";
+import "./Canvas.css";
 import type { CanvasProps } from "./Canvas.types";
 import { useReactFlow } from "./hooks/useReactFlow";
 
@@ -37,7 +38,7 @@ export function CanvasRoot({
   ...props
 }: CanvasProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const nodeTypes = useNodeTypes(nodeTypesProp as any);
+  const nodeTypes = useNodeTypes(nodeTypesProp);
 
   const reactFlow = useReactFlow({
     defaultNodes,

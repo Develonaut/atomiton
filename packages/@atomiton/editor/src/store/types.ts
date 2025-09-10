@@ -8,11 +8,10 @@ export interface FlowSnapshot {
 }
 
 // Legacy types for backward compatibility with existing test files
-export type Element = Node;
 export type Connection = Edge;
 
 export interface HistoryEntry {
-  elements: Element[];
+  nodes: Node[];
   connections: Connection[];
   selectedNodeId: string | null;
 }

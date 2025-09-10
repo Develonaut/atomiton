@@ -8,9 +8,6 @@ import type {
 } from "@xyflow/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useCanvas } from "../useCanvas";
-import { useReactFlow } from "../useReactFlow";
-import { useStoreSync } from "../useStoreSync";
-import { useDragHandlers } from "../useDragHandlers";
 
 // Mock @xyflow/react
 vi.mock("@xyflow/react", () => ({
@@ -22,9 +19,12 @@ vi.mock("@xyflow/react", () => ({
 vi.mock("../../../../store", () => ({
   editorStore: {
     subscribe: vi.fn(() => vi.fn()),
-    setElements: vi.fn(),
-    setConnections: vi.fn(),
+    updateFlowSnapshot: vi.fn(),
     pushToHistory: vi.fn(),
+    getState: vi.fn(() => ({
+      flowSnapshot: { nodes: [], edges: [] },
+      selectedNodeId: null,
+    })),
   },
 }));
 
@@ -224,13 +224,16 @@ describe("Canvas Hooks Integration", () => {
 
   describe("Store Integration", () => {
     it("should sync initial data with store and maintain reactivity", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
       });
 
-      const { result, rerender } = renderHook(() =>
+      renderHook(() =>
         useCanvas({
           nodes: testNodes,
           edges: testEdges,
@@ -257,8 +260,7 @@ describe("Canvas Hooks Integration", () => {
       expect(mockSetNodes).toHaveBeenCalledWith(newNodes);
       expect(mockSetEdges).toHaveBeenCalledWith(newEdges);
 
-      // Test that rerenders maintain subscription
-      rerender();
+      // Test that store changes are handled
 
       act(() => {
         storeCallback({
@@ -272,7 +274,10 @@ describe("Canvas Hooks Integration", () => {
     });
 
     it("should handle store updates while processing local changes", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
@@ -556,14 +561,17 @@ describe("Canvas Hooks Integration", () => {
 
   describe("Real-World Scenarios", () => {
     it("should handle complete canvas workflow: load -> edit -> save", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
       });
 
       // 1. Load canvas
-      const { result, rerender } = renderHook(() =>
+      const { result } = renderHook(() =>
         useCanvas({
           nodes: [],
           edges: [],
@@ -621,7 +629,10 @@ describe("Canvas Hooks Integration", () => {
     });
 
     it("should handle collaborative editing scenario", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();

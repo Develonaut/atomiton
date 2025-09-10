@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import type { Edge, Node } from "@xyflow/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useStoreSync } from "./useStoreSync";
 
 // Mock the store
@@ -94,7 +94,10 @@ describe("useStoreSync", () => {
 
     it("should call setNodes and setEdges when store state changes", () => {
       const mockUnsubscribe = vi.fn();
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
 
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
@@ -129,7 +132,10 @@ describe("useStoreSync", () => {
 
     it("should handle multiple state updates", () => {
       const mockUnsubscribe = vi.fn();
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
 
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
@@ -220,7 +226,10 @@ describe("useStoreSync", () => {
       const mockUnsubscribe1 = vi.fn();
       const mockUnsubscribe2 = vi.fn();
       let subscribeCallCount = 0;
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
 
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
@@ -300,7 +309,10 @@ describe("useStoreSync", () => {
 
     it("should handle store state with missing properties", () => {
       const mockUnsubscribe = vi.fn();
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
 
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
@@ -361,7 +373,10 @@ describe("useStoreSync", () => {
 
     it("should handle rapid store state changes", () => {
       const mockUnsubscribe = vi.fn();
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
 
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
@@ -447,7 +462,10 @@ describe("useStoreSync", () => {
   describe("Store Integration", () => {
     it("should maintain referential integrity with store updates", () => {
       const mockUnsubscribe = vi.fn();
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
 
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;

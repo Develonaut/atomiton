@@ -16,8 +16,7 @@ function Scene() {
   return (
     <div className="flex flex-col gap-1 p-3">
       {nodes.map((node) => {
-        // Get node metadata dynamically for display information
-        const nodeMetadata = core.nodes.getNode(node.type);
+        const nodeMetadata = core.nodes.getNodeMetadata(node.type);
 
         return (
           <Item

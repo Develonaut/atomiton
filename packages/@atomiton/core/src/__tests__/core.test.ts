@@ -45,8 +45,8 @@ describe("core API Contract", () => {
     it("should expose store methods", () => {
       // Just verify the shape, actual functionality tested in @atomiton/store
       expect(core.store.initialize).toBeDefined();
-      expect(core.store.getStores).toBeDefined();
-      expect(core.store.subscribe).toBeDefined();
+      expect(core.store.createStore).toBeDefined();
+      expect(core.store.registerStore).toBeDefined();
     });
   });
 
@@ -61,8 +61,8 @@ describe("core API Contract", () => {
   describe("nodes API surface", () => {
     it("should expose node system methods", () => {
       // Just verify the shape, actual functionality tested in @atomiton/nodes
-      expect(core.nodes.NodePackageRegistry).toBeDefined();
-      expect(core.nodes.BaseNodeLogic).toBeDefined();
+      expect(core.nodes.getAllNodes).toBeDefined();
+      expect(core.nodes.getNodeMetadata).toBeDefined();
     });
   });
 });

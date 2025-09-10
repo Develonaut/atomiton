@@ -6,9 +6,8 @@ import type {
   Node,
   NodeChange,
 } from "@xyflow/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useCanvas } from "../useCanvas";
-import { useReactFlow } from "../useReactFlow";
 
 // Mock @xyflow/react
 vi.mock("@xyflow/react", () => ({
@@ -26,7 +25,7 @@ vi.mock("../../../../store", () => ({
   },
 }));
 
-import { useNodesState, useEdgesState } from "@xyflow/react";
+import { useEdgesState, useNodesState } from "@xyflow/react";
 import { editorStore } from "../../../../store";
 
 const mockUseNodesState = vi.mocked(useNodesState);
@@ -371,7 +370,9 @@ describe("Canvas Hooks Performance", () => {
     it("should not accumulate memory with repeated operations", () => {
       const { result } = renderHook(() => useCanvas({}));
 
-      const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const initialMemory =
+        (performance as unknown as { memory?: { usedJSHeapSize: number } })
+          .memory?.usedJSHeapSize || 0;
 
       // Perform many operations
       for (let i = 0; i < 1000; i++) {
@@ -391,7 +392,9 @@ describe("Canvas Hooks Performance", () => {
         });
       }
 
-      const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const finalMemory =
+        (performance as unknown as { memory?: { usedJSHeapSize: number } })
+          .memory?.usedJSHeapSize || 0;
 
       // Memory growth should be reasonable (less than 10MB)
       if (initialMemory && finalMemory) {
@@ -429,7 +432,10 @@ describe("Canvas Hooks Performance", () => {
 
   describe("Store Performance", () => {
     it("should handle store updates efficiently", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
@@ -461,7 +467,10 @@ describe("Canvas Hooks Performance", () => {
     });
 
     it("should handle rapid store updates efficiently", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
@@ -494,7 +503,10 @@ describe("Canvas Hooks Performance", () => {
 
   describe("Concurrent Operations Performance", () => {
     it("should handle concurrent operations efficiently", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
@@ -540,7 +552,10 @@ describe("Canvas Hooks Performance", () => {
 
   describe("Real-World Performance Scenarios", () => {
     it("should handle complex workflow performance", () => {
-      let storeCallback: (state: any) => void = () => {};
+      let storeCallback: (state: {
+        elements: Node[];
+        connections: Edge[];
+      }) => void = () => {};
       mockStore.subscribe.mockImplementation((callback) => {
         storeCallback = callback;
         return vi.fn();
@@ -700,9 +715,8 @@ describe("Canvas Hooks Performance", () => {
         const initTime = initEnd - start;
         const operationTime = operationEnd - initEnd;
 
-        console.log(
-          `${name} - Init: ${initTime.toFixed(2)}ms, Operation: ${operationTime.toFixed(2)}ms`,
-        );
+        // Performance metrics logged for debugging if needed
+        // console.warn(`${name} - Init: ${initTime.toFixed(2)}ms, Operation: ${operationTime.toFixed(2)}ms`);
 
         // Benchmarks should complete within reasonable time limits
         expect(initTime).toBeLessThan(

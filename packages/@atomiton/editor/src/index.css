@@ -1,0 +1,9 @@
+/**
+ * Editor Package - Public CSS Exports
+ * 
+ * This file serves as the main CSS entry point for the @atomiton/editor package.
+ * It imports and re-exports all the CSS that consumers might need.
+ */
+
+/* Canvas Component Styles */
+@import "./components/Canvas/Canvas.css";

@@ -10,7 +10,7 @@ export type {
   CanvasConnectionsProps,
   CanvasControlActionProps,
   CanvasControlsProps,
-  CanvasElementsProps,
+  CanvasNodesProps,
   CanvasGridProps,
   CanvasMinimapProps,
   CanvasProps,
@@ -27,6 +27,7 @@ export { editorStore, onDragStart, editorStore as store } from "./store";
 
 // Hooks
 export { useNodes } from "./hooks/useNodes";
+export { useNodeTypes } from "./hooks/useNodeTypes";
 export { useStore } from "./hooks/useStore";
 export { useUndoRedo } from "./hooks/useUndoRedo";
 export { useZoom } from "./hooks/useZoom";

@@ -144,20 +144,20 @@ export interface CanvasGridProps extends StyleProps {
 }
 
 /**
- * Props for Canvas.Elements sub-component
+ * Props for Canvas.Nodes sub-component
  */
-export interface CanvasElementsProps extends StyleProps {
+export interface CanvasNodesProps extends StyleProps {
   className?: string;
   /**
-   * Custom element renderer
+   * Custom node renderer
    */
-  renderElement?: (node: Node) => React.ReactNode;
+  renderNode?: (node: Node) => React.ReactNode;
   /**
-   * Whether elements are selectable
+   * Whether nodes are selectable
    */
   selectable?: boolean;
   /**
-   * Whether elements are draggable
+   * Whether nodes are draggable
    */
   draggable?: boolean;
 }

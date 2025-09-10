@@ -120,7 +120,7 @@ class NodesAPI {
   /**
    * Get a specific node metadata by its type
    */
-  getNode(nodeType: NodeType): INodeMetadata | null {
+  getNodeMetadata(nodeType: NodeType): INodeMetadata | null {
     const nodes = this.getAllNodes();
     return nodes.find((node) => node.type === nodeType) || null;
   }

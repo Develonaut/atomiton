@@ -17,12 +17,8 @@ vi.mock("./useDragHandlers", () => ({
 }));
 
 import { useReactFlow } from "./useReactFlow";
-import { useStoreSync } from "./useStoreSync";
-import { useDragHandlers } from "./useDragHandlers";
 
 const mockUseReactFlow = vi.mocked(useReactFlow);
-const mockUseStoreSync = vi.mocked(useStoreSync);
-const mockUseDragHandlers = vi.mocked(useDragHandlers);
 
 describe("useCanvas", () => {
   const mockSetNodes = vi.fn();

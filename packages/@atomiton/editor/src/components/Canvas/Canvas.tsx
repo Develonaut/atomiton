@@ -1,7 +1,7 @@
 import { CanvasRoot } from "./CanvasRoot";
 import { CanvasViewport } from "./CanvasViewport";
 import { CanvasGrid } from "./CanvasGrid";
-import { CanvasElements } from "./CanvasElements";
+import { CanvasNodes } from "./CanvasNodes";
 import { CanvasConnections } from "./CanvasConnections";
 import { CanvasControls } from "./CanvasControls";
 import { CanvasMinimap } from "./CanvasMinimap";
@@ -14,7 +14,7 @@ import { CanvasControlReset } from "./CanvasControlReset";
 const Canvas = Object.assign(CanvasRoot, {
   Viewport: CanvasViewport,
   Grid: CanvasGrid,
-  Elements: CanvasElements,
+  Nodes: CanvasNodes,
   Connections: CanvasConnections,
   Controls: Object.assign(CanvasControls, {
     Zoom: CanvasControlZoom,
