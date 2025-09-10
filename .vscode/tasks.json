@@ -66,13 +66,25 @@
     },
     {
       "label": "🚨 E2E: Smoke Tests",
-      "detail": "Quick smoke tests (2.6s) - Check all apps work",
+      "detail": "Quick smoke tests - Check all apps work",
       "type": "shell",
       "command": "pnpm test:e2e:smoke",
       "group": {
         "kind": "test",
         "isDefault": true
       },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "✨ E2E: Editor Core Flows",
+      "detail": "Test editor functionality - add nodes, select, delete",
+      "type": "shell",
+      "command": "npx playwright test playwright/tests/smoke/editor-core-flows.spec.ts --project=client --reporter=list",
+      "group": "test",
       "problemMatcher": [],
       "presentation": {
         "reveal": "always",

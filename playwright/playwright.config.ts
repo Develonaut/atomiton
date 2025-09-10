@@ -49,18 +49,20 @@ export default defineConfig({
     // Will be added in a future iteration
   ],
 
-  webServer: [
-    {
-      command: "pnpm --filter @atomiton/client dev",
-      url: "http://localhost:5173",
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
-    },
-    {
-      command: "pnpm --filter @atomiton/ui dev",
-      url: "http://localhost:5174",
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
-    },
-  ],
+  // Commented out webServer config - we'll run servers manually for now
+  // This avoids the hanging issue with Playwright trying to manage servers
+  // webServer: [
+  //   {
+  //     command: "pnpm --filter @atomiton/client dev",
+  //     url: "http://localhost:5173",
+  //     reuseExistingServer: !process.env.CI,
+  //     timeout: 120 * 1000,
+  //   },
+  //   {
+  //     command: "pnpm --filter @atomiton/ui dev",
+  //     url: "http://localhost:5174",
+  //     reuseExistingServer: !process.env.CI,
+  //     timeout: 120 * 1000,
+  //   },
+  // ],
 });
