@@ -101,3 +101,5 @@ export function useReactFlow({
     handleDrop: editorStore.handleDrop,
   };
 }
+
+export type UseReactFlowReturn = ReturnType<typeof useReactFlow>;

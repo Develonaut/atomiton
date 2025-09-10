@@ -1,15 +1,11 @@
 import { styled } from "@atomiton/ui";
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 import { useNodeTypes } from "../../hooks/useNodeTypes";
-import {
-  ReactFlowCanvas,
-  ReactFlowProvider,
-  type ReactFlowInstance,
-} from "../../primitives/ReactFlow";
-import { editorStore } from "../../store";
+import { ReactFlowCanvas, ReactFlowProvider } from "../../primitives/ReactFlow";
 import "./Canvas.css";
 import type { CanvasProps } from "./Canvas.types";
 import { useReactFlow } from "./hooks/useReactFlow";
+import { useCanvasHandlers } from "./hooks/useCanvasHandlers";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",
@@ -48,48 +44,22 @@ export function CanvasRoot({
     onConnect,
   });
 
-  const handleInit = useCallback(
-    (instance: ReactFlowInstance) => {
-      reactFlow.onInit(instance);
-      onInit?.(instance);
-    },
-    [reactFlow, onInit],
-  );
-
-  const handleDrop = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault();
-      const bounds = reactFlowWrapper.current?.getBoundingClientRect() || null;
-      editorStore.handleDrop(event, bounds);
-      onDrop?.(event);
-    },
-    [onDrop],
-  );
-
-  const handleDragOver = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
-      onDragOver?.(event);
-    },
-    [onDragOver],
-  );
-
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (
-      (event.key === "Delete" || event.key === "Backspace") &&
-      !event.metaKey
-    ) {
-      editorStore.deleteSelectedNodes();
-    }
-  }, []);
+  const handlers = useCanvasHandlers({
+    reactFlow,
+    reactFlowWrapper,
+    onInit,
+    onDrop,
+    onDragOver,
+    onNodeClick,
+    onPaneClick,
+  });
 
   return (
     <CanvasStyled
       ref={reactFlowWrapper}
       className={className}
       data-canvas-root
-      onKeyDown={handleKeyDown}
+      onKeyDown={handlers.handleOnKeyDown}
       tabIndex={0}
       {...props}
     >
@@ -100,11 +70,11 @@ export function CanvasRoot({
           onNodesChange={reactFlow.onNodesChange}
           onEdgesChange={reactFlow.onEdgesChange}
           onConnect={reactFlow.onConnect}
-          onNodeClick={onNodeClick}
-          onPaneClick={onPaneClick}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onInit={handleInit}
+          onNodeClick={handlers.handleOnNodeClick}
+          onPaneClick={handlers.handleOnPaneClick}
+          onDrop={handlers.handleOnDrop}
+          onDragOver={handlers.handleOnDragOver}
+          onInit={handlers.handleOnInit}
           fitView={fitView}
           fitViewOptions={fitViewOptions}
           nodeTypes={nodeTypes}
