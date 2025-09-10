@@ -6,31 +6,35 @@ Upcoming work for the @atomiton/editor package, prioritized by user impact and t
 
 ## Priority Queue
 
-### 1. 🔴 Node Inspector (Critical - Current Sprint)
+### 1. 🔴 Node Configuration System (Critical - Current Sprint)
 
-**Why Critical**: Users can add nodes but cannot configure them, making the editor non-functional for creating actual workflows.
+**Why Critical**: Users can add nodes but cannot fully configure them, limiting workflow creation capabilities.
+
+**Progress**: Architecture designed, basic display working, editable controls needed
 
 **Tasks**:
 
-- [ ] Create `NodeInspector` component for right sidebar
-- [ ] Connect selection state to inspector display
-- [ ] Build property field components:
-  - [ ] `TextField` for string inputs
-  - [ ] `NumberField` with validation
-  - [ ] `SelectField` for dropdown options
-  - [ ] `CheckboxField` for boolean values
-  - [ ] `CodeEditor` for script fields
-- [ ] Implement form state management
+- [x] Connect selection state to inspector display
+- [x] Design configuration system architecture
+- [ ] Build editable property field components (following [architecture](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)):
+  - [ ] `TextField` for string inputs with validation
+  - [ ] `NumberField` with min/max validation
+  - [ ] `SelectField` for enum dropdowns
+  - [ ] `SwitchField` for boolean values
+  - [ ] `SliderField` for numeric ranges
+  - [ ] `JsonEditor` for object configuration
+  - [ ] `ArrayField` for list management
+- [ ] Implement React Hook Form integration
+- [ ] Create Zod schema-to-UI mapper
 - [ ] Add real-time property updates to store
-- [ ] Support validation and error display
-- [ ] Add property grouping/sections
+- [ ] Support comprehensive validation and error display
 
 **Acceptance Criteria**:
 
-- Selecting a node shows its properties in right sidebar
-- Changes to properties update immediately
-- Validation prevents invalid configurations
-- UI clearly indicates required vs optional fields
+- All node property types can be edited through appropriate controls
+- Schema-driven form generation works automatically
+- Changes update store and validate in real-time
+- Property panels support conditional fields and complex data types
 
 ---
 

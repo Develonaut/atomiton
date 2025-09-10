@@ -36,17 +36,26 @@ Based on our [Architecture Documentation](./src/docs/README.md):
 - ✅ Node palette showing available nodes from @atomiton/core
 - ✅ Basic node addition to canvas
 - ✅ Selection state tracking
+- ✅ Node selection synchronization between canvas and scene list
 
 #### UI Components
 
 - ✅ Left sidebar with Scene/Assets tabs
-- ✅ Right sidebar with Design/Animation tabs (placeholder content)
+- ✅ Right sidebar with Design/Animation tabs
+- ✅ Basic NodeProperties component for selected nodes
 - ✅ Toolbar with basic controls
 - ✅ Canvas viewport management
 
+#### Node Configuration System
+
+- ✅ Node configuration architecture designed ([docs](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md))
+- ✅ Property panel control mapping system specified
+- ✅ React Hook Form + Zod foundation established
+- ✅ Basic property display for selected nodes
+
 ### 🔧 Current Limitations
 
-1. **No Node Configuration** - Can add nodes but can't configure them
+1. **Limited Node Configuration** - Can display properties but can't edit them yet
 2. **No Data Connections** - Can't connect nodes for data flow
 3. **No Execution** - Can't run workflows
 4. **No Persistence** - Can't save/load Blueprints
@@ -54,41 +63,46 @@ Based on our [Architecture Documentation](./src/docs/README.md):
 
 ## Active Development
 
-### Node Inspector (In Progress)
+### Node Configuration System (In Progress)
 
-**Goal**: Display and edit properties when a node is selected
+**Goal**: Enable full configuration of nodes through property panels
 
-**Tasks**:
+**Completed**:
 
-- [ ] Connect selection state to right sidebar
-- [ ] Create property field components
-- [ ] Implement form validation
+- ✅ Connect selection state to right sidebar
+- ✅ Display basic node properties
+- ✅ Architecture and control mapping design
+
+**Next Tasks**:
+
+- [ ] Implement editable property field components
+- [ ] Build React Hook Form integration
+- [ ] Create control mapper for Zod schemas
 - [ ] Handle property updates to store
-- [ ] Support different field types (text, number, select, etc.)
+- [ ] Support all field types (text, number, select, boolean, arrays, objects)
 
 ### Implementation Plan
 
-1. **Selection Integration**
+**Next Phase**: Build out the property field components and React Hook Form integration
 
-   ```typescript
-   // When node selected, show its config in right sidebar
-   const selectedNode = useNodes().selectedNode;
-   if (selectedNode) {
-     <NodeInspector node={selectedNode} />
-   }
-   ```
-
-2. **Property Components**
+1. **Control Components** (following [architecture](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md))
    - TextField for strings
    - NumberField for numbers
    - SelectField for enums
-   - CheckboxField for booleans
-   - CodeEditor for scripts
+   - SwitchField for booleans
+   - SliderField for ranges
+   - JsonEditor for objects
+   - ArrayField for lists
 
-3. **Form Management**
-   - Real-time updates to store
-   - Validation feedback
-   - Undo/redo support
+2. **Schema-to-UI Mapping**
+   - Zod schema analyzer
+   - Control type detection
+   - Dynamic form generation
+
+3. **Form Integration**
+   - React Hook Form setup
+   - Real-time validation
+   - Store synchronization
 
 ## Dependencies
 
