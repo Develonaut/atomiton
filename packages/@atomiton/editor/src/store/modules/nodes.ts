@@ -58,9 +58,14 @@ export const createNodeModule = (
         type: nodeType,
         position: nodePosition,
         data: {},
+        selected: true,
       };
 
-      const updatedNodes = [...nodes, newNode];
+      // Deselect all other nodes
+      const updatedNodes = [
+        ...nodes.map((node) => ({ ...node, selected: false })),
+        newNode,
+      ];
       instance.setNodes(updatedNodes);
 
       // Auto-connect to previous node if exists
@@ -80,12 +85,22 @@ export const createNodeModule = (
       // Update snapshot immediately for UI consistency
       store.setState((state) => ({
         ...state,
+        selectedNodeId: nodeId,
         flowSnapshot: {
           nodes: updatedNodes,
           edges: updatedEdges,
           viewport: state.flowSnapshot.viewport,
         },
       }));
+
+      // Focus on the new node
+      setTimeout(() => {
+        instance.fitView({
+          nodes: [{ id: nodeId }],
+          duration: 200,
+          padding: 0.2,
+        });
+      }, 50);
 
       debouncedUpdateFlowSnapshot();
     },
