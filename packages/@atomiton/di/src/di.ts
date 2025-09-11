@@ -27,14 +27,14 @@ type ServiceIdentifier<T = unknown> =
 
 type Factory<T = unknown> = (...args: unknown[]) => T;
 
-interface Metadata<T = unknown> {
+type Metadata<T = unknown> = {
   instance?: T;
   factory?: Factory<T>;
-}
+};
 
-interface Options<T> {
+type Options<T> = {
   factory?: Factory<T>;
-}
+};
 
 const instances = new Map<ServiceIdentifier, Metadata>();
 

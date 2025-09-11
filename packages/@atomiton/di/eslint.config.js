@@ -1,5 +1,3 @@
-import baseConfig from "@atomiton/eslint-config/base";
+import config from "@atomiton/eslint-config/base";
 
-export default [
-  ...baseConfig,
-];
+export default config;
