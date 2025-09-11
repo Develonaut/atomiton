@@ -25,13 +25,18 @@
     "test:e2e:debug": "playwright test -c playwright/playwright.config.ts --debug",
     "test:e2e:ui": "playwright test -c playwright/playwright.config.ts --ui",
     "test:install": "playwright install chromium",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "knip:production": "knip --production",
+    "knip:dependencies": "knip --dependencies"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/node": "^20.0.0",
     "eslint": "^9.34.0",
     "husky": "^9.1.7",
+    "knip": "^5.63.1",
     "lint-staged": "^16.1.6",
     "playwright": "^1.55.0",
     "prettier": "^3.6.2",

@@ -5,10 +5,8 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
-  defaultShellCommandConfig,
   shellCommandConfig,
   type ShellCommandConfig,
 } from "./ShellCommandNodeConfig";
@@ -18,8 +16,6 @@ import { ShellCommandLogic } from "./ShellCommandNodeLogic";
  * Shell Command Node Class
  */
 class ShellCommandNode extends Node<ShellCommandConfig> {
-  readonly component = createNodeComponent("terminal", "Shell Command");
-
   readonly metadata = new NodeMetadata({
     id: "shell-command",
     name: "Shell Command",
@@ -119,7 +115,7 @@ class ShellCommandNode extends Node<ShellCommandConfig> {
       string,
       unknown
     >,
-    defaultConfig: defaultShellCommandConfig,
+    defaultConfig: shellCommandConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -139,14 +135,8 @@ class ShellCommandNode extends Node<ShellCommandConfig> {
   };
 }
 
-// Export singleton instance
 export const shellCommand = new ShellCommandNode();
 export default shellCommand;
 
-// Export types and schemas for external use
-export {
-  defaultShellCommandConfig,
-  shellCommandConfigSchema,
-} from "./ShellCommandNodeConfig";
 export type { ShellCommandConfig } from "./ShellCommandNodeConfig";
 export { ShellCommandLogic } from "./ShellCommandNodeLogic";

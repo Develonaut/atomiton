@@ -271,7 +271,7 @@ function NodeProperties() {
               nodeConfig.data[fieldName] ?? nodeConfig.defaults[fieldName];
             const description = fieldSchema._def?.description || "";
             const fieldType = fieldSchema._def?.typeName || "unknown";
-            const fieldMetadata = nodeConfig.uiMetadata?.fields?.[fieldName];
+            const fieldMetadata = nodeConfig.uiMetadata.fields?.[fieldName];
             const label = fieldMetadata?.label || fieldName;
 
             return (

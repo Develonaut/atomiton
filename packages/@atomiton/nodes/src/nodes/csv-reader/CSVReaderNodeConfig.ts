@@ -69,10 +69,6 @@ class CSVReaderConfigClass extends NodeConfig<typeof csvReaderSchema> {
   }
 }
 
-// Create singleton instance
 export const csvReaderConfig = new CSVReaderConfigClass();
 
-// Export for backward compatibility
-export const csvReaderConfigSchema = csvReaderConfig.schema;
-export const defaultCSVReaderConfig = csvReaderConfig.defaults;
 export type CSVReaderConfig = z.infer<typeof csvReaderConfig.schema>;

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    "packages/*": {
+      "entry": ["src/index.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/*": {
+      "entry": ["src/index.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/client": {
+      "entry": ["src/main.tsx"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/desktop": {
+      "entry": ["src/main.ts", "src/preload.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    }
+  },
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "**/*.spec.{ts,tsx}",
+    "**/test/**",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.turbo/**",
+    "playwright/**"
+  ],
+  "ignoreDependencies": [
+    "@atomiton/*",
+    "husky",
+    "lint-staged"
+  ]
+}

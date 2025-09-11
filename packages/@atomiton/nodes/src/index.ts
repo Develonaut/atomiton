@@ -19,6 +19,6 @@ export type {
 // Configuration system types
 export type {
   UIFieldMetadata,
-  UIMetadata,
   UIControlType,
+  FormConfig,
 } from "./base/NodeConfig";

@@ -37,19 +37,58 @@ const transformSchema = {
  */
 class TransformConfigClass extends NodeConfig<typeof transformSchema> {
   constructor() {
-    super(transformSchema, {
-      operation: "map" as const,
-      expression: "",
-    });
+    super(
+      transformSchema,
+      {
+        operation: "map" as const,
+        expression: "",
+      },
+      {
+        fields: {
+          operation: {
+            controlType: "select",
+            label: "Transform Operation",
+            helpText: "Select the type of transformation to perform",
+            options: [
+              { value: "map", label: "Map - Transform each item" },
+              { value: "filter", label: "Filter - Select items by condition" },
+              { value: "template", label: "Template - Apply template string" },
+              {
+                value: "jsonPath",
+                label: "JSONPath - Extract data using path",
+              },
+              { value: "custom", label: "Custom - Custom JavaScript function" },
+            ],
+          },
+          expression: {
+            controlType: "textarea",
+            label: "Expression/Template",
+            placeholder: "item => item.value * 2",
+            helpText:
+              "JavaScript expression, template string, or JSONPath depending on operation type",
+            rows: 4,
+          },
+          templateVars: {
+            controlType: "json",
+            label: "Template Variables",
+            placeholder: '{"key": "value"}',
+            helpText: "Variables available in template context (JSON format)",
+          },
+          jsonPath: {
+            controlType: "text",
+            label: "JSONPath Expression",
+            placeholder: "$.data[*].items",
+            helpText:
+              "JSONPath expression for extracting data (e.g., $.data[*].items)",
+          },
+        },
+      },
+    );
   }
 }
 
-// Create singleton instance
 export const transformConfig = new TransformConfigClass();
 
-// Export for backward compatibility and external use
-export const transformConfigSchema = transformConfig.schema;
-export const defaultTransformConfig = transformConfig.defaults;
 export type TransformConfig = z.infer<typeof transformConfig.schema>;
 
 // Input/Output schemas for external use

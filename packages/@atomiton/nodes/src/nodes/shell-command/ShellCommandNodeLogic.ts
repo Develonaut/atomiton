@@ -5,11 +5,11 @@ import type {
   ShellCommandInput,
   ShellCommandOutput,
 } from "./ShellCommandNodeConfig";
-import { shellCommandConfigSchema } from "./ShellCommandNodeConfig";
+import { shellCommandConfig } from "./ShellCommandNodeConfig";
 
 export class ShellCommandLogic extends NodeLogic<ShellCommandConfig> {
   getConfigSchema() {
-    return shellCommandConfigSchema;
+    return shellCommandConfig.schema;
   }
 
   async execute(

@@ -5,21 +5,14 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
-import {
-  defaultTransformConfig,
-  transformConfig,
-  type TransformConfig,
-} from "./TransformNodeConfig";
+import { transformConfig, type TransformConfig } from "./TransformNodeConfig";
 import { TransformLogic } from "./TransformNodeLogic";
 
 /**
  * Transform Node Class
  */
 class TransformNode extends Node<TransformConfig> {
-  readonly component = createNodeComponent("wand-2", "Transform");
-
   readonly metadata = new NodeMetadata({
     id: "transform",
     name: "Transform",
@@ -101,7 +94,7 @@ class TransformNode extends Node<TransformConfig> {
       string,
       unknown
     >,
-    defaultConfig: defaultTransformConfig,
+    defaultConfig: transformConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -122,14 +115,8 @@ class TransformNode extends Node<TransformConfig> {
   };
 }
 
-// Export singleton instance
 export const transform = new TransformNode();
 export default transform;
 
-// Export types and schemas for external use
-export {
-  defaultTransformConfig,
-  transformConfigSchema,
-} from "./TransformNodeConfig";
 export type { TransformConfig } from "./TransformNodeConfig";
 export { TransformLogic } from "./TransformNodeLogic";

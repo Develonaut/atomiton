@@ -71,6 +71,16 @@ const baseConfig: Linter.Config[] = [
       // General rules
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "prefer-const": "warn",
+
+      // Dead code detection rules
+      "no-unreachable": "error",
+      "no-unreachable-loop": "error",
+      "no-unused-expressions": "off", // Using TypeScript version above
+      "no-useless-return": "error",
+      "no-lone-blocks": "error",
+      "no-empty": ["error", { allowEmptyCatch: true }],
+      "no-useless-catch": "error",
+      "no-constant-condition": ["error", { checkLoops: false }],
     },
   } satisfies Linter.Config,
 ];

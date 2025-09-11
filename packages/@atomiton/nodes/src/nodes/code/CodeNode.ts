@@ -5,22 +5,14 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
-import {
-  codeConfig,
-  type CodeConfig,
-  defaultCodeConfig,
-} from "./CodeNodeConfig";
+import { codeConfig, type CodeConfig } from "./CodeNodeConfig";
 import { CodeLogic } from "./CodeNodeLogic";
 
 /**
  * Code Node Class
  */
 class CodeNode extends Node<CodeConfig> {
-  // Create a component with the Code icon baked in
-  readonly component = createNodeComponent("code-2", "Code");
-
   readonly metadata = new NodeMetadata({
     id: "code",
     name: "Code",
@@ -90,7 +82,7 @@ class CodeNode extends Node<CodeConfig> {
     ] as NodePortDefinition[],
 
     configSchema: codeConfig.getShape() as unknown as Record<string, unknown>,
-    defaultConfig: defaultCodeConfig,
+    defaultConfig: codeConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -110,11 +102,8 @@ class CodeNode extends Node<CodeConfig> {
   };
 }
 
-// Export singleton instance
 export const code = new CodeNode();
 export default code;
 
-// Export types and schemas for external use
-export { codeConfigSchema, defaultCodeConfig } from "./CodeNodeConfig";
 export type { CodeConfig } from "./CodeNodeConfig";
 export { CodeLogic } from "./CodeNodeLogic";

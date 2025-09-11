@@ -38,22 +38,68 @@ const httpRequestSchema = {
  */
 class HttpRequestConfigClass extends NodeConfig<typeof httpRequestSchema> {
   constructor() {
-    super(httpRequestSchema, {
-      method: "GET" as const,
-      url: "https://api.example.com",
-      headers: {},
-      followRedirects: true,
-      validateSSL: true,
-    });
+    super(
+      httpRequestSchema,
+      {
+        method: "GET" as const,
+        url: "https://api.example.com",
+        headers: {},
+        followRedirects: true,
+        validateSSL: true,
+      },
+      {
+        fields: {
+          method: {
+            controlType: "select",
+            label: "HTTP Method",
+            options: [
+              { value: "GET", label: "GET" },
+              { value: "POST", label: "POST" },
+              { value: "PUT", label: "PUT" },
+              { value: "DELETE", label: "DELETE" },
+              { value: "PATCH", label: "PATCH" },
+            ],
+          },
+          url: {
+            controlType: "url",
+            label: "Request URL",
+            placeholder: "https://api.example.com/endpoint",
+          },
+          headers: {
+            controlType: "json",
+            label: "Headers",
+            placeholder: '{"Content-Type": "application/json"}',
+            helpText: "HTTP headers as JSON object",
+          },
+          body: {
+            controlType: "textarea",
+            label: "Request Body",
+            placeholder: '{"key": "value"}',
+            rows: 5,
+            helpText: "Request body content (for POST, PUT, PATCH)",
+          },
+          followRedirects: {
+            controlType: "boolean",
+            label: "Follow Redirects",
+          },
+          validateSSL: {
+            controlType: "boolean",
+            label: "Validate SSL",
+          },
+        },
+        layout: {
+          groups: {
+            request: { label: "Request Settings", order: 1 },
+            security: { label: "Security Settings", order: 2 },
+          },
+        },
+      },
+    );
   }
 }
 
-// Create singleton instance
 export const httpRequestConfig = new HttpRequestConfigClass();
 
-// Export for backward compatibility and external use
-export const httpRequestConfigSchema = httpRequestConfig.schema;
-export const defaultHttpRequestConfig = httpRequestConfig.defaults;
 export type HttpRequestConfig = z.infer<typeof httpRequestConfig.schema>;
 
 // Input/Output schemas for external use

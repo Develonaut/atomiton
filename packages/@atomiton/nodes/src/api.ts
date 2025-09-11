@@ -212,27 +212,8 @@ class NodesAPI {
   isInitialized(): boolean {
     return this.initialized;
   }
-
-  /**
-   * Get all node UI components for the editor
-   * Returns a mapping of node type to React component
-   * These components can be used with any flow editor library
-   */
-  getNodeComponents(): Record<string, React.ComponentType> {
-    const components: Record<string, React.ComponentType> = {};
-
-    // Add components from all registered nodes
-    for (const node of this.nodes) {
-      if (node.component) {
-        components[node.metadata.type] = node.component;
-      }
-    }
-
-    return components;
-  }
 }
 
-// Export singleton instance
 const nodes = NodesAPI.getInstance();
 
 export default nodes;

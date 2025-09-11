@@ -108,12 +108,8 @@ class CodeConfigClass extends NodeConfig<typeof codeSchema> {
   }
 }
 
-// Create singleton instance
 export const codeConfig = new CodeConfigClass();
 
-// Export for backward compatibility and external use
-export const codeConfigSchema = codeConfig.schema;
-export const defaultCodeConfig = codeConfig.defaults;
 export type CodeConfig = z.infer<typeof codeConfig.schema>;
 
 // Input/Output schemas for external use

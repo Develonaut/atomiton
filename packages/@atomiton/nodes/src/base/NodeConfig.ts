@@ -62,11 +62,19 @@ export interface UIFieldMetadata {
 }
 
 /**
- * Complete UI metadata for the node configuration
+ * Fields configuration for the node
  */
-export interface UIMetadata {
-  /** Metadata for individual fields */
-  fields?: Record<string, UIFieldMetadata>;
+export interface FieldsConfig {
+  /** Configuration for individual fields */
+  [fieldName: string]: UIFieldMetadata;
+}
+
+/**
+ * Complete form configuration
+ */
+export interface FormConfig {
+  /** Fields configuration */
+  fields: FieldsConfig;
   /** Overall form layout preferences */
   layout?: {
     /** Group fields by category */
@@ -139,20 +147,25 @@ export class NodeConfig<T extends z.ZodRawShape = {}>
   public readonly defaults: InferredType<T>;
 
   /**
-   * UI metadata for form rendering
+   * Fields configuration for form rendering
    */
-  public readonly uiMetadata?: UIMetadata;
+  public readonly fields: FieldsConfig;
+
+  /**
+   * Layout configuration for form rendering
+   */
+  public readonly layout?: FormConfig["layout"];
 
   /**
    * Constructor
    * @param nodeSchema - Node-specific schema to extend the base schema
    * @param nodeDefaults - Node-specific default values
-   * @param uiMetadata - Optional UI metadata for form rendering
+   * @param formConfig - Form configuration including fields and optional layout
    */
   constructor(
     nodeSchema: T,
-    nodeDefaults?: Partial<z.infer<z.ZodObject<T>>>,
-    uiMetadata?: UIMetadata,
+    nodeDefaults: Partial<z.infer<z.ZodObject<T>>>,
+    formConfig: FormConfig,
   ) {
     // Extend base schema with node-specific schema
     this._schemaObject = baseSchema.extend(nodeSchema) as ExtendedSchema<T>;
@@ -166,8 +179,9 @@ export class NodeConfig<T extends z.ZodRawShape = {}>
       ...nodeDefaults,
     } as InferredType<T>;
 
-    // Store UI metadata if provided
-    this.uiMetadata = uiMetadata;
+    // Store fields and layout configuration
+    this.fields = formConfig.fields;
+    this.layout = formConfig.layout;
   }
 
   /**
@@ -209,5 +223,4 @@ export class NodeConfig<T extends z.ZodRawShape = {}>
   }
 }
 
-// Export type for the base config shape
 export type NodeConfigBase = z.infer<typeof baseSchema>;

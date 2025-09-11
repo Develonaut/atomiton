@@ -5,10 +5,8 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
-  defaultHttpRequestConfig,
   httpRequestConfig,
   type HttpRequestConfig,
 } from "./HttpRequestNodeConfig";
@@ -18,9 +16,6 @@ import { HttpRequestLogic } from "./HttpRequestNodeLogic";
  * HTTP Request Node Class
  */
 class HttpRequestNode extends Node<HttpRequestConfig> {
-  // Create a component with the HTTP Request icon baked in
-  readonly component = createNodeComponent("globe-2", "HTTPRequest");
-
   readonly metadata = new NodeMetadata({
     id: "http-request",
     name: "HTTP Request",
@@ -129,7 +124,7 @@ class HttpRequestNode extends Node<HttpRequestConfig> {
       string,
       unknown
     >,
-    defaultConfig: defaultHttpRequestConfig,
+    defaultConfig: httpRequestConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -149,14 +144,7 @@ class HttpRequestNode extends Node<HttpRequestConfig> {
   };
 }
 
-// Export singleton instance
 export const httpRequest = new HttpRequestNode();
 export default httpRequest;
-
-// Export types and schemas for external use
-export {
-  defaultHttpRequestConfig,
-  httpRequestConfigSchema,
-} from "./HttpRequestNodeConfig";
 export type { HttpRequestConfig } from "./HttpRequestNodeConfig";
 export { HttpRequestLogic } from "./HttpRequestNodeLogic";

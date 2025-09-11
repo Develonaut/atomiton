@@ -5,21 +5,14 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
-import {
-  defaultLoopConfig,
-  loopConfig,
-  type LoopConfig,
-} from "./LoopNodeConfig";
+import { loopConfig, type LoopConfig } from "./LoopNodeConfig";
 import { LoopLogic } from "./LoopNodeLogic";
 
 /**
  * Loop Node Class
  */
 class LoopNode extends Node<LoopConfig> {
-  readonly component = createNodeComponent("repeat", "Loop");
-
   readonly metadata = new NodeMetadata({
     id: "loop",
     name: "Loop",
@@ -89,7 +82,7 @@ class LoopNode extends Node<LoopConfig> {
     ] as NodePortDefinition[],
 
     configSchema: loopConfig.getShape() as unknown as Record<string, unknown>,
-    defaultConfig: defaultLoopConfig,
+    defaultConfig: loopConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -109,11 +102,7 @@ class LoopNode extends Node<LoopConfig> {
   };
 }
 
-// Export singleton instance
 export const loop = new LoopNode();
 export default loop;
-
-// Export types and schemas for external use
-export { defaultLoopConfig, loopConfigSchema } from "./LoopNodeConfig";
 export type { LoopConfig } from "./LoopNodeConfig";
 export { LoopLogic } from "./LoopNodeLogic";

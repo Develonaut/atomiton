@@ -5,11 +5,11 @@ import type {
   ImageCompositeOutput,
 } from "./ImageCompositeNodeConfig";
 // import type { ImageCompositeInput } from "./ImageCompositeNodeConfig";
-import { imageCompositeConfigSchema } from "./ImageCompositeNodeConfig";
+import { imageCompositeConfig } from "./ImageCompositeNodeConfig";
 
 export class ImageCompositeLogic extends NodeLogic<ImageCompositeConfig> {
   getConfigSchema() {
-    return imageCompositeConfigSchema;
+    return imageCompositeConfig.schema;
   }
 
   async execute(

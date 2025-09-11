@@ -5,21 +5,14 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
-import {
-  defaultParallelConfig,
-  parallelConfig,
-  type ParallelConfig,
-} from "./ParallelNodeConfig";
+import { parallelConfig, type ParallelConfig } from "./ParallelNodeConfig";
 import { ParallelLogic } from "./ParallelNodeLogic";
 
 /**
  * Parallel Node Class
  */
 class ParallelNode extends Node<ParallelConfig> {
-  readonly component = createNodeComponent("zap", "Parallel");
-
   readonly metadata = new NodeMetadata({
     id: "parallel",
     name: "Parallel",
@@ -92,7 +85,7 @@ class ParallelNode extends Node<ParallelConfig> {
       string,
       unknown
     >,
-    defaultConfig: defaultParallelConfig,
+    defaultConfig: parallelConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -112,14 +105,7 @@ class ParallelNode extends Node<ParallelConfig> {
   };
 }
 
-// Export singleton instance
 export const parallel = new ParallelNode();
 export default parallel;
-
-// Export types and schemas for external use
-export {
-  defaultParallelConfig,
-  parallelConfigSchema,
-} from "./ParallelNodeConfig";
 export type { ParallelConfig } from "./ParallelNodeConfig";
 export { ParallelLogic } from "./ParallelNodeLogic";

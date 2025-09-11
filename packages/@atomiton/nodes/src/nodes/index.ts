@@ -5,7 +5,6 @@
  * The registry consumes this to tell consumers what nodes are available.
  */
 
-// Import all implemented node packages
 import codeNode from "./code";
 import csvReaderNode from "./csv-reader";
 import fileSystemNode from "./file-system";

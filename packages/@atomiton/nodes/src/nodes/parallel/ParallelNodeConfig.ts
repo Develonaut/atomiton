@@ -67,25 +67,94 @@ const parallelSchema = {
  */
 class ParallelConfigClass extends NodeConfig<typeof parallelSchema> {
   constructor() {
-    super(parallelSchema, {
-      concurrency: 5,
-      strategy: "allSettled" as const,
-      operationTimeout: 30000,
-      globalTimeout: 120000,
-      failFast: false,
-      maintainOrder: true,
-      retryCount: 0,
-      retryDelay: 1000,
-    });
+    super(
+      parallelSchema,
+      {
+        concurrency: 5,
+        strategy: "allSettled" as const,
+        operationTimeout: 30000,
+        globalTimeout: 120000,
+        failFast: false,
+        maintainOrder: true,
+        retryCount: 0,
+        retryDelay: 1000,
+      },
+      {
+        fields: {
+          concurrency: {
+            controlType: "number",
+            label: "Concurrency Limit",
+            placeholder: "5",
+            helpText: "Maximum number of concurrent operations (1-50)",
+            min: 1,
+            max: 50,
+          },
+          strategy: {
+            controlType: "select",
+            label: "Execution Strategy",
+            helpText: "Strategy for handling parallel operations",
+            options: [
+              { value: "all", label: "All - Wait for all to succeed" },
+              { value: "race", label: "Race - Return first completed" },
+              {
+                value: "allSettled",
+                label: "All Settled - Wait for all to finish",
+              },
+            ],
+          },
+          operationTimeout: {
+            controlType: "number",
+            label: "Operation Timeout (ms)",
+            placeholder: "30000",
+            helpText:
+              "Timeout for each individual operation in milliseconds (1000-300000)",
+            min: 1000,
+            max: 300000,
+          },
+          globalTimeout: {
+            controlType: "number",
+            label: "Global Timeout (ms)",
+            placeholder: "120000",
+            helpText:
+              "Global timeout for all parallel operations in milliseconds (5000-600000)",
+            min: 5000,
+            max: 600000,
+          },
+          failFast: {
+            controlType: "boolean",
+            label: "Fail Fast",
+            helpText: "Stop all operations on first error",
+          },
+          maintainOrder: {
+            controlType: "boolean",
+            label: "Maintain Order",
+            helpText: "Maintain input order in results",
+          },
+          retryCount: {
+            controlType: "number",
+            label: "Retry Count",
+            placeholder: "0",
+            helpText: "Number of retry attempts for failed operations (0-5)",
+            min: 0,
+            max: 5,
+          },
+          retryDelay: {
+            controlType: "number",
+            label: "Retry Delay (ms)",
+            placeholder: "1000",
+            helpText:
+              "Delay between retry attempts in milliseconds (100-10000)",
+            min: 100,
+            max: 10000,
+          },
+        },
+      },
+    );
   }
 }
 
-// Create singleton instance
 export const parallelConfig = new ParallelConfigClass();
 
-// Export for backward compatibility and external use
-export const parallelConfigSchema = parallelConfig.schema;
-export const defaultParallelConfig = parallelConfig.defaults;
 export type ParallelConfig = z.infer<typeof parallelConfig.schema>;
 
 // Input/Output schemas for external use

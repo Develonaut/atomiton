@@ -53,23 +53,74 @@ const shellCommandSchema = {
  */
 class ShellCommandConfigClass extends NodeConfig<typeof shellCommandSchema> {
   constructor() {
-    super(shellCommandSchema, {
-      command: "echo",
-      args: ["Hello World"],
-      timeout: 30000,
-      environment: {},
-      captureOutput: true,
-      inheritEnv: true,
-    });
+    super(
+      shellCommandSchema,
+      {
+        command: "echo",
+        args: ["Hello World"],
+        timeout: 30000,
+        environment: {},
+        captureOutput: true,
+        inheritEnv: true,
+      },
+      {
+        fields: {
+          command: {
+            controlType: "text",
+            label: "Command",
+            placeholder: "echo",
+            helpText: "Shell command to execute (required)",
+          },
+          args: {
+            controlType: "json",
+            label: "Arguments",
+            placeholder: '["Hello", "World"]',
+            helpText: "Command line arguments as JSON array",
+          },
+          workingDirectory: {
+            controlType: "file",
+            label: "Working Directory",
+            placeholder: "/path/to/directory",
+            helpText: "Working directory for command execution",
+          },
+          timeout: {
+            controlType: "number",
+            label: "Timeout (ms)",
+            placeholder: "30000",
+            helpText: "Command timeout in milliseconds (1000-300000)",
+            min: 1000,
+            max: 300000,
+          },
+          shell: {
+            controlType: "text",
+            label: "Shell",
+            placeholder: "/bin/bash",
+            helpText: "Shell to use for command execution (optional)",
+          },
+          environment: {
+            controlType: "json",
+            label: "Environment Variables",
+            placeholder: '{"PATH": "/usr/bin"}',
+            helpText: "Environment variables as JSON object",
+          },
+          captureOutput: {
+            controlType: "boolean",
+            label: "Capture Output",
+            helpText: "Whether to capture stdout and stderr",
+          },
+          inheritEnv: {
+            controlType: "boolean",
+            label: "Inherit Environment",
+            helpText: "Whether to inherit parent process environment",
+          },
+        },
+      },
+    );
   }
 }
 
-// Create singleton instance
 export const shellCommandConfig = new ShellCommandConfigClass();
 
-// Export for backward compatibility and external use
-export const shellCommandConfigSchema = shellCommandConfig.schema;
-export const defaultShellCommandConfig = shellCommandConfig.defaults;
 export type ShellCommandConfig = z.infer<typeof shellCommandConfig.schema>;
 
 // Input/Output schemas for external use

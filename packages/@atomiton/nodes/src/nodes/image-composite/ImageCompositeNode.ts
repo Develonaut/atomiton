@@ -5,10 +5,8 @@
  */
 
 import { Node, NodeMetadata } from "../../base";
-import { createNodeComponent } from "../../base/components";
 import type { NodeDefinition, NodePortDefinition } from "../../types";
 import {
-  defaultImageCompositeConfig,
   imageCompositeConfig,
   type ImageCompositeConfig,
 } from "./ImageCompositeNodeConfig";
@@ -18,8 +16,6 @@ import { ImageCompositeLogic } from "./ImageCompositeNodeLogic";
  * Image Composite Node Class
  */
 class ImageCompositeNode extends Node<ImageCompositeConfig> {
-  readonly component = createNodeComponent("image-plus", "Image Processor");
-
   readonly metadata = new NodeMetadata({
     id: "image-composite",
     name: "Image Processor",
@@ -110,7 +106,7 @@ class ImageCompositeNode extends Node<ImageCompositeConfig> {
       string,
       unknown
     >,
-    defaultConfig: defaultImageCompositeConfig,
+    defaultConfig: imageCompositeConfig.defaults,
 
     metadata: {
       executionSettings: {
@@ -130,14 +126,8 @@ class ImageCompositeNode extends Node<ImageCompositeConfig> {
   };
 }
 
-// Export singleton instance
 export const imageComposite = new ImageCompositeNode();
 export default imageComposite;
 
-// Export types and schemas for external use
-export {
-  defaultImageCompositeConfig,
-  imageCompositeConfigSchema,
-} from "./ImageCompositeNodeConfig";
 export type { ImageCompositeConfig } from "./ImageCompositeNodeConfig";
 export { ImageCompositeLogic } from "./ImageCompositeNodeLogic";

@@ -5,11 +5,11 @@ import type {
   HttpRequestInput,
   HttpRequestOutput,
 } from "./HttpRequestNodeConfig";
-import { httpRequestConfigSchema } from "./HttpRequestNodeConfig";
+import { httpRequestConfig } from "./HttpRequestNodeConfig";
 
 export class HttpRequestLogic extends NodeLogic<HttpRequestConfig> {
   getConfigSchema() {
-    return httpRequestConfigSchema;
+    return httpRequestConfig.schema;
   }
 
   async execute(
