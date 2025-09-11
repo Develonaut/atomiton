@@ -6,7 +6,7 @@ import type { UseReactFlowReturn } from "./useReactFlow";
 
 export type CanvasHandlersOptions = {
   reactFlow: UseReactFlowReturn;
-  reactFlowWrapper: React.RefObject<HTMLDivElement>;
+  reactFlowWrapper: React.RefObject<HTMLDivElement | null>;
   onInit?: (instance: ReactFlowInstance) => void;
   onDrop?: (event: React.DragEvent) => void;
   onDragOver?: (event: React.DragEvent) => void;
