@@ -34,9 +34,9 @@ import { shallow } from "zustand/shallow";
 // Types
 // ============================================================================
 
-export interface StoreSubscription {
+export type StoreSubscription = {
   unsubscribe: () => void;
-}
+};
 
 class StoreAPI {
   private static instance: StoreAPI;

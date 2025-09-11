@@ -24,16 +24,16 @@ export type StateUpdater<T> = (state: T) => T | void;
 /**
  * Store interface - Minimal API surface
  */
-export interface Store<T> {
+export type Store<T> = {
   getState: () => T;
   setState: (updater: StateUpdater<T> | Partial<T>) => void;
   subscribe: (callback: (state: T, prevState: T) => void) => () => void;
-}
+};
 
 /**
  * Store configuration
  */
-export interface StoreConfig<T> {
+export type StoreConfig<T> = {
   initialState: T;
   name?: string; // Store name for DevTools
   persist?: {
@@ -42,7 +42,7 @@ export interface StoreConfig<T> {
     partialize?: (state: T) => Partial<T>;
     hydrate?: (persisted: unknown) => T;
   };
-}
+};
 
 // ============================================================================
 // Store Creation
