@@ -16,7 +16,7 @@ import type { INodeMetadata } from "./INodeMetadata";
 /**
  * Complete Node interface
  */
-export interface INode<TConfig = Record<string, unknown>> {
+export type INode<TConfig = Record<string, unknown>> = {
   /**
    * Node metadata
    */
@@ -71,4 +71,4 @@ export interface INode<TConfig = Record<string, unknown>> {
    * Validate the node structure
    */
   validate(): { valid: boolean; errors: string[] };
-}
+};

@@ -10,7 +10,7 @@ import type { NodeExecutionContext, NodeExecutionResult } from "../types";
  * Node Logic Interface - Pure business logic, no UI concerns
  * This contains all the execution logic for a node
  */
-export interface INodeLogic<TConfig = Record<string, unknown>> {
+export type INodeLogic<TConfig = Record<string, unknown>> = {
   /** Execute the node's business logic */
   execute(
     context: NodeExecutionContext,
@@ -25,4 +25,4 @@ export interface INodeLogic<TConfig = Record<string, unknown>> {
 
   /** Custom validation logic for inputs */
   validateInputs?(inputs: Record<string, unknown>): boolean;
-}
+};

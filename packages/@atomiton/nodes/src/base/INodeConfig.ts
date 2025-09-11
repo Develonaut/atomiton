@@ -9,7 +9,7 @@ import type { z } from "zod";
 /**
  * Node configuration structure
  */
-export interface INodeConfig<T = Record<string, unknown>> {
+export type INodeConfig<T = Record<string, unknown>> = {
   /**
    * The Zod schema for configuration validation
    */
@@ -39,4 +39,4 @@ export interface INodeConfig<T = Record<string, unknown>> {
    * Merge partial config with defaults
    */
   withDefaults(partialConfig?: Partial<T>): T;
-}
+};

@@ -7,7 +7,7 @@
 // Execution Types
 // ==========================
 
-export interface NodeExecutionContext {
+export type NodeExecutionContext = {
   /** Node instance ID */
   nodeId: string;
 
@@ -58,9 +58,9 @@ export interface NodeExecutionContext {
 
   /** Additional metadata */
   metadata?: Record<string, unknown>;
-}
+};
 
-export interface NodeExecutionResult {
+export type NodeExecutionResult = {
   /** Whether execution succeeded */
   success: boolean;
 
@@ -78,13 +78,13 @@ export interface NodeExecutionResult {
     executionTime: number;
     memoryUsed?: number;
   };
-}
+};
 
 // ==========================
 // Port and Node Definition Types
 // ==========================
 
-export interface NodePortDefinition {
+export type NodePortDefinition = {
   /** Unique port identifier */
   id: string;
 
@@ -108,9 +108,9 @@ export interface NodePortDefinition {
 
   /** Default value for this port */
   defaultValue?: unknown;
-}
+};
 
-export interface NodeDefinition {
+export type NodeDefinition = {
   /** Unique node type identifier */
   id: string;
 
@@ -158,7 +158,7 @@ export interface NodeDefinition {
 
   /** Additional metadata */
   metadata?: Record<string, unknown>;
-}
+};
 
 // ==========================
 // Node Type Definitions
@@ -178,7 +178,7 @@ export type NodeType =
 
 // Node item interface - kept for backwards compatibility
 // New code should use INodeMetadata directly
-export interface NodeItem {
+export type NodeItem = {
   id: string;
   nodeType: string;
   title: string;
@@ -186,4 +186,4 @@ export interface NodeItem {
   description?: string;
   icon?: string;
   tags?: string[];
-}
+};

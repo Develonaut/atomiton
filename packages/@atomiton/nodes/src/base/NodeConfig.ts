@@ -30,7 +30,7 @@ export type UIControlType =
 /**
  * UI metadata for individual fields
  */
-export interface UIFieldMetadata {
+export type UIFieldMetadata = {
   /** Type of form control to render */
   controlType?: UIControlType;
   /** Display label (defaults to field name) */
@@ -59,20 +59,20 @@ export interface UIFieldMetadata {
   group?: string;
   /** Sort order within group */
   order?: number;
-}
+};
 
 /**
  * Fields configuration for the node
  */
-export interface FieldsConfig {
+export type FieldsConfig = {
   /** Configuration for individual fields */
   [fieldName: string]: UIFieldMetadata;
-}
+};
 
 /**
  * Complete form configuration
  */
-export interface FormConfig {
+export type FormConfig = {
   /** Fields configuration */
   fields: FieldsConfig;
   /** Overall form layout preferences */
@@ -82,7 +82,7 @@ export interface FormConfig {
     /** Form layout style */
     style?: "standard" | "compact" | "grid";
   };
-}
+};
 
 /**
  * Base schema for common node configuration options
@@ -126,7 +126,7 @@ type InferredType<T extends z.ZodRawShape> = z.infer<ExtendedSchema<T>>;
  * All node configurations should extend this class to inherit
  * common configuration options and behavior.
  */
-export class NodeConfig<T extends z.ZodRawShape = {}>
+export class NodeConfig<T extends z.ZodRawShape = Record<string, never>>
   implements INodeConfig<InferredType<T>>
 {
   /**

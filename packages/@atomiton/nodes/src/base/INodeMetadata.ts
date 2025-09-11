@@ -13,7 +13,7 @@
  * - Community node registration
  * - Documentation and help
  */
-export interface INodeMetadata {
+export type INodeMetadata = {
   /** Unique identifier for the node */
   id: string;
 
@@ -68,4 +68,4 @@ export interface INodeMetadata {
 
   /** Check if node matches search query */
   matchesSearch(query: string): boolean;
-}
+};
