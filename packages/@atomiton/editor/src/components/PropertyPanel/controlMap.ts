@@ -6,12 +6,12 @@
  */
 
 import type { ComponentType } from "react";
-import type { ZodType, ZodTypeAny } from "zod";
+import type { ZodTypeAny } from "zod";
 
 /**
  * Base props that all control components will receive
  */
-export type ControlProps<T = any> = {
+export type ControlProps<T = unknown> = {
   value: T;
   onChange: (value: T) => void;
   label?: string;
@@ -66,7 +66,7 @@ export type FileControlProps = {
   multiple?: boolean;
 } & ControlProps<string | File>;
 
-export type ArrayControlProps<T = any> = {
+export type ArrayControlProps<T = unknown> = {
   itemComponent?: ComponentType<ControlProps<T>>;
   addLabel?: string;
   removeLabel?: string;
@@ -78,7 +78,7 @@ export type ObjectControlProps = {
   fields?: Record<string, ComponentType<ControlProps>>;
   collapsible?: boolean;
   defaultExpanded?: boolean;
-} & ControlProps<Record<string, any>>;
+} & ControlProps<Record<string, unknown>>;
 
 /**
  * Control type definitions
@@ -113,11 +113,11 @@ export type ControlType =
  */
 export type ControlConfig = {
   type: ControlType;
-  component?: ComponentType<any>;
-  props?: Record<string, any>;
-  validator?: (value: any) => boolean | string;
-  formatter?: (value: any) => any;
-  parser?: (value: any) => any;
+  component?: ComponentType<ControlProps>;
+  props?: Record<string, unknown>;
+  validator?: (value: unknown) => boolean | string;
+  formatter?: (value: unknown) => unknown;
+  parser?: (value: unknown) => unknown;
 };
 
 /**
@@ -125,43 +125,43 @@ export type ControlConfig = {
  */
 export const SchemaDetectors = {
   isString: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodString";
+    return (schema._def as { typeName: string }).typeName === "ZodString";
   },
 
   isNumber: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodNumber";
+    return (schema._def as { typeName: string }).typeName === "ZodNumber";
   },
 
   isBoolean: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodBoolean";
+    return (schema._def as { typeName: string }).typeName === "ZodBoolean";
   },
 
   isEnum: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodEnum";
+    return (schema._def as { typeName: string }).typeName === "ZodEnum";
   },
 
   isArray: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodArray";
+    return (schema._def as { typeName: string }).typeName === "ZodArray";
   },
 
   isObject: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodObject";
+    return (schema._def as { typeName: string }).typeName === "ZodObject";
   },
 
   isOptional: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodOptional";
+    return (schema._def as { typeName: string }).typeName === "ZodOptional";
   },
 
   isNullable: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodNullable";
+    return (schema._def as { typeName: string }).typeName === "ZodNullable";
   },
 
   isUnion: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodUnion";
+    return (schema._def as { typeName: string }).typeName === "ZodUnion";
   },
 
   isRecord: (schema: ZodTypeAny): boolean => {
-    return schema._def.typeName === "ZodRecord";
+    return (schema._def as { typeName: string }).typeName === "ZodRecord";
   },
 };
 
@@ -404,7 +404,8 @@ export function getControlForSchema(
 ): ControlConfig {
   // Check property name hints first
   if (propertyName && PROPERTY_HINTS[propertyName]) {
-    return { ...PROPERTY_HINTS[propertyName], ...hints };
+    const baseControl = PROPERTY_HINTS[propertyName];
+    return { type: "text", ...baseControl, ...hints } as ControlConfig;
   }
 
   // Check for custom hints
@@ -415,7 +416,8 @@ export function getControlForSchema(
   // Detect schema type and return appropriate control
   if (SchemaDetectors.isString(schema)) {
     // Check for specific string validations
-    const checks = (schema as any)._def.checks || [];
+    const checks =
+      (schema as { _def: { checks?: { kind: string }[] } })._def.checks || [];
     for (const check of checks) {
       if (check.kind === "url") return CONTROL_MAP["string.url"];
       if (check.kind === "email") return CONTROL_MAP["string.email"];
@@ -425,9 +427,10 @@ export function getControlForSchema(
 
   if (SchemaDetectors.isNumber(schema)) {
     // Check for min/max to suggest slider
-    const checks = (schema as any)._def.checks || [];
-    const hasMin = checks.some((c: any) => c.kind === "min");
-    const hasMax = checks.some((c: any) => c.kind === "max");
+    const checks =
+      (schema as { _def: { checks?: { kind: string }[] } })._def.checks || [];
+    const hasMin = checks.some((c) => c.kind === "min");
+    const hasMax = checks.some((c) => c.kind === "max");
     if (hasMin && hasMax) {
       return CONTROL_MAP["number.slider"];
     }
@@ -439,7 +442,7 @@ export function getControlForSchema(
   }
 
   if (SchemaDetectors.isEnum(schema)) {
-    const values = (schema as any)._def.values;
+    const values = (schema as { _def: { values: unknown[] } })._def.values;
     if (values.length <= 3) {
       return CONTROL_MAP["enum.radio"];
     }
@@ -466,13 +469,13 @@ export function getControlForSchema(
  * Registry for custom control components
  */
 export class ControlRegistry {
-  private controls: Map<ControlType, ComponentType<any>> = new Map();
+  private controls: Map<ControlType, ComponentType<ControlProps>> = new Map();
 
-  register(type: ControlType, component: ComponentType<any>) {
+  register(type: ControlType, component: ComponentType<ControlProps>) {
     this.controls.set(type, component);
   }
 
-  get(type: ControlType): ComponentType<any> | undefined {
+  get(type: ControlType): ComponentType<ControlProps> | undefined {
     return this.controls.get(type);
   }
 

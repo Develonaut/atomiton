@@ -40,7 +40,7 @@ export type EditorState = {
 // Type for the base store methods
 export type BaseStore = {
   getState: () => EditorState;
-  setState: (updater: (state: EditorState) => EditorState) => void;
+  setState: (updater: (state: EditorState) => EditorState | void) => void;
   subscribe: (
     callback: (state: EditorState, prevState: EditorState) => void,
   ) => () => void;

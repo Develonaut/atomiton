@@ -48,7 +48,7 @@ export const focusOnNode = (
 };
 
 export const updateStoreState = (
-  setState: (updater: (state: EditorState) => void) => void,
+  setState: (updater: (state: EditorState) => EditorState | void) => void,
   nodes: Node[],
   edges: Edge[],
   selectedNodeId: string,

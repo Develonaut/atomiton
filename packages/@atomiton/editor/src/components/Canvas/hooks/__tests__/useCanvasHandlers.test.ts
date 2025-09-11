@@ -76,6 +76,7 @@ describe("useCanvasHandlers", () => {
         }),
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const mockInstance = { id: "test-instance" } as any;
 
       act(() => {
@@ -94,6 +95,7 @@ describe("useCanvasHandlers", () => {
         }),
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const mockInstance = { id: "test-instance" } as any;
 
       act(() => {

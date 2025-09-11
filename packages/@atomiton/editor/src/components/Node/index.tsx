@@ -12,7 +12,7 @@ import { memo } from "react";
  * Visual styling (borders, hover, selection) is handled at the canvas level
  */
 function Node(props: ReactFlowNodeProps) {
-  const nodeMetadata = core.nodes.getNodeMetadata(props.type as any);
+  const nodeMetadata = core.nodes.getNodeMetadata(props.type as string);
   const icon = nodeMetadata?.icon || "circle";
 
   return (

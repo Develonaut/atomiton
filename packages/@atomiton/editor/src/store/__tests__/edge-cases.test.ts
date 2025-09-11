@@ -108,9 +108,13 @@ describe("Edge Cases and Error Handling", () => {
     });
 
     it("should handle null/undefined parameters gracefully", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(() => editorStore.selectNode(null as any)).not.toThrow();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(() => editorStore.selectNode(undefined as any)).not.toThrow();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(() => editorStore.deleteNode(null as any)).not.toThrow();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(() => editorStore.deleteNode(undefined as any)).not.toThrow();
     });
 
@@ -155,6 +159,7 @@ describe("Edge Cases and Error Handling", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       extremePositions.forEach((position) => {
@@ -178,6 +183,7 @@ describe("Edge Cases and Error Handling", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       // Rapid operations should not throw
@@ -246,6 +252,7 @@ describe("Edge Cases and Error Handling", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       const invalidConnections = [
@@ -258,6 +265,7 @@ describe("Edge Cases and Error Handling", () => {
 
       invalidConnections.forEach((connection) => {
         expect(() =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           editorStore.handleConnect(connection as any),
         ).not.toThrow();
       });
@@ -274,6 +282,7 @@ describe("Edge Cases and Error Handling", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       const mockEvent = {
@@ -283,6 +292,7 @@ describe("Edge Cases and Error Handling", () => {
         clientX: 100,
         clientY: 100,
         preventDefault: vi.fn(),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any;
 
       // Should handle gracefully when bounds is null
@@ -304,6 +314,7 @@ describe("Edge Cases and Error Handling", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       // Add node

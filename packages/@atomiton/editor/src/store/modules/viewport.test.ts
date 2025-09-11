@@ -37,6 +37,7 @@ describe("ViewportModule", () => {
       state: { zoom: 100 },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     viewportActions = createViewportModule(mockStore as any);
   });
 

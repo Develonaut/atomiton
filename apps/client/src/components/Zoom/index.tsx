@@ -5,12 +5,12 @@ import { useZoom } from "@atomiton/editor";
 
 import { zoomOptions } from "./items";
 
-interface PropsLine {
+type PropsLine = {
   title: string;
   keyName: string;
   onClick: () => void;
   active?: boolean;
-}
+};
 
 function Line({ title, keyName, onClick, active }: PropsLine) {
   return (

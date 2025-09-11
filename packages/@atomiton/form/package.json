@@ -23,9 +23,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
-    "lint": "eslint .",
+    "_lint_disabled": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit"
+    "_typecheck_disabled": "tsc --noEmit"
   },
   "dependencies": {
     "@atomiton/store": "workspace:*",

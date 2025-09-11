@@ -58,7 +58,9 @@ describe("node-effects", () => {
     it("should call both methods in correct order", () => {
       updateFlowInstance(mockInstance, testNodes, testEdges);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const setNodesCalls = (mockInstance.setNodes as any).mock.calls;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const setEdgesCalls = (mockInstance.setEdges as any).mock.calls;
 
       expect(setNodesCalls[0][0]).toBe(testNodes);
@@ -75,8 +77,10 @@ describe("node-effects", () => {
       } as unknown as ReactFlowInstance;
 
       // Mock setTimeout to execute immediately in tests
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       vi.spyOn(global, "setTimeout").mockImplementation((fn: any) => {
         fn();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return 0 as any;
       });
     });

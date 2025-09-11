@@ -35,7 +35,7 @@ function Scene() {
       {nodes.map((node) => {
         if (!node.type) return null;
 
-        const nodeMetadata = core.nodes.getNodeMetadata(node.type as any);
+        const nodeMetadata = core.nodes.getNodeMetadata(node.type as string);
 
         return (
           <Item

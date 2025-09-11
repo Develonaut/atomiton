@@ -53,9 +53,6 @@ importers:
       '@atomiton/editor':
         specifier: workspace:*
         version: link:../../packages/@atomiton/editor
-      '@atomiton/form':
-        specifier: workspace:*
-        version: link:../../packages/@atomiton/form
       '@atomiton/hooks':
         specifier: workspace:^
         version: link:../../packages/@atomiton/hooks
@@ -107,9 +104,6 @@ importers:
       swiper:
         specifier: ^11.2.8
         version: 11.2.10
-      zod:
-        specifier: ^3.25.3
-        version: 3.25.76
       zustand:
         specifier: ^5.0.5
         version: 5.0.8(@types/react@19.1.12)(react@19.1.1)
@@ -314,6 +308,9 @@ importers:
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
+      zod:
+        specifier: ^4.1.8
+        version: 4.1.8
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:^
@@ -9556,6 +9553,10 @@ packages:
 
   /zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
+  /zod@4.1.8:
+    resolution: {integrity: sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ==}
+    dev: false
 
   /zustand@4.5.7(@types/react@19.1.12)(react@19.1.1):
     resolution: {integrity: sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==}

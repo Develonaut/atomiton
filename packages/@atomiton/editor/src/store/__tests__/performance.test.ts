@@ -105,6 +105,7 @@ describe("Performance Tests", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       const start = performance.now();
@@ -144,6 +145,7 @@ describe("Performance Tests", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       const start = performance.now();
@@ -254,11 +256,11 @@ describe("Performance Tests", () => {
       for (let i = 0; i < readCount; i++) {
         const state = editorStore.getState();
         // Access various state properties
-        const _ = state.selectedNodeId;
-        const _2 = state.flowSnapshot.nodes;
-        const _3 = state.flowSnapshot.edges;
-        const _4 = state.history.past;
-        const _5 = state.isDirty;
+        void state.selectedNodeId;
+        void state.flowSnapshot.nodes;
+        void state.flowSnapshot.edges;
+        void state.history.past;
+        void state.isDirty;
       }
 
       const end = performance.now();
@@ -338,9 +340,9 @@ describe("Performance Tests", () => {
       for (let i = 0; i < readCount; i++) {
         const snapshot = editorStore.getFlowSnapshot();
         // Access snapshot properties
-        const _ = snapshot.nodes.length;
-        const _2 = snapshot.edges.length;
-        const _3 = snapshot.viewport;
+        void snapshot.nodes.length;
+        void snapshot.edges.length;
+        void snapshot.viewport;
       }
 
       const end = performance.now();
@@ -363,6 +365,7 @@ describe("Performance Tests", () => {
         screenToFlowPosition: vi.fn((pos) => pos),
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       editorStore.setFlowInstance(mockFlowInstance as any);
 
       // Simulate a typical workflow multiple times
@@ -385,6 +388,7 @@ describe("Performance Tests", () => {
         }
 
         // Clear state
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         editorStore.setFlowInstance(mockFlowInstance as any);
         editorStore.clearHistory();
       }

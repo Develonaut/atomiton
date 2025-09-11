@@ -34,7 +34,7 @@ export function CanvasRoot({
   nodeTypes: nodeTypesProp,
   ...props
 }: CanvasProps) {
-  const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null!);
   const nodeTypes = useNodeTypes(nodeTypesProp);
 
   const reactFlow = useReactFlow({

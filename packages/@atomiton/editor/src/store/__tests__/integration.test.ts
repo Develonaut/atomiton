@@ -78,7 +78,7 @@ vi.mock("../index", () => {
       setState: vi.fn((updater: (state: unknown) => unknown) => {
         mockState = { ...mockState, ...updater(mockState) };
       }),
-      subscribe: vi.fn((callback) => () => {}),
+      subscribe: vi.fn((_callback) => () => {}),
 
       // Legacy Element methods
       addElement: vi.fn((element: Element) => {

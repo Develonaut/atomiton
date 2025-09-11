@@ -1,6 +1,6 @@
 import type { ImgHTMLAttributes } from "react";
 
-interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
+type ImageProps = {
   src: string;
   alt: string;
   width?: number;
@@ -9,7 +9,7 @@ interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, "src"> {
   className?: string;
   priority?: boolean; // Next.js Image prop - ignored in Vite
   quality?: number; // Next.js Image prop - ignored in Vite
-}
+} & Omit<ImgHTMLAttributes<HTMLImageElement>, "src">;
 
 function Image({ className, fill, width, height, ...props }: ImageProps) {
   // If fill is true, use absolute positioning like Next.js Image
