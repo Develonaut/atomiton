@@ -1,0 +1,27 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "extends": "./knip.json",
+  "rules": {
+    "files": "error",
+    "dependencies": "error",
+    "devDependencies": "off",
+    "exports": "error",
+    "types": "off",
+    "nsExports": "error"
+  },
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "**/*.spec.{ts,tsx}",
+    "**/*.stories.tsx",
+    "**/test/**",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/templates/**",
+    "**/demos/**",
+    "**/examples/**",
+    "**/mocks/**",
+    "**/fixtures/**",
+    "**/Comments/**",
+    "**/Test/**"
+  ]
+}

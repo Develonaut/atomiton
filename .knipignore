@@ -1,0 +1,11 @@
+# Knip ignore patterns
+# Files that are intentionally kept for future use or reference
+
+# Template/demo pages that may not be actively used
+**/templates/**
+**/demos/**
+**/examples/**
+
+# Components that might be used dynamically or conditionally
+**/Scene/**
+**/Variations/**

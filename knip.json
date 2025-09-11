@@ -1,20 +1,64 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "workspaces": {
-    "packages/*": {
-      "entry": ["src/index.{ts,tsx}"],
+    "packages/@atomiton/ui": {
+      "entry": [
+        "src/index.tsx",
+        "src/**/*.stories.tsx",
+        "src/templates/**/index.tsx",
+        "src/App.tsx"
+      ],
       "project": ["src/**/*.{ts,tsx}"]
     },
-    "packages/@atomiton/*": {
-      "entry": ["src/index.{ts,tsx}"],
+    "packages/@atomiton/editor": {
+      "entry": ["src/index.tsx"],
       "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/nodes": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/core": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/store": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/events": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/di": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/hooks": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/eslint-config": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/typescript-config": {
+      "entry": ["base.json", "node.json", "react.json"],
+      "project": []
     },
     "apps/client": {
-      "entry": ["src/main.tsx"],
-      "project": ["src/**/*.{ts,tsx}"]
+      "entry": [
+        "src/main.tsx",
+        "src/routes.tsx"
+      ],
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignoreBinaries": ["kill-dev-servers.sh"]
     },
     "apps/desktop": {
-      "entry": ["src/main.ts", "src/preload.ts"],
+      "entry": [
+        "src/main/index.ts",
+        "src/preload/index.ts"
+      ],
       "project": ["src/**/*.{ts,tsx}"]
     }
   },
@@ -28,11 +72,40 @@
     "**/dist/**",
     "**/build/**",
     "**/.turbo/**",
-    "playwright/**"
+    "playwright/**",
+    "**/*.stories.tsx",
+    "**/mocks/**",
+    "**/fixtures/**",
+    "**/templates/**",
+    "**/demos/**",
+    "**/examples/**"
   ],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true,
+    "enum": true
+  },
   "ignoreDependencies": [
     "@atomiton/*",
     "husky",
-    "lint-staged"
+    "lint-staged",
+    "@types/node"
+  ],
+  "ignoreWorkspaces": [],
+  "rules": {
+    "files": "error",
+    "dependencies": "warn",
+    "devDependencies": "warn",
+    "optionalPeerDependencies": "off",
+    "unlisted": "warn",
+    "binaries": "warn",
+    "unresolved": "off",
+    "exports": "warn",
+    "types": "off",
+    "nsExports": "warn",
+    "duplicates": "warn"
+  },
+  "exclude": [
+    "unresolved"
   ]
 }

@@ -28,8 +28,10 @@
     "typecheck": "turbo run typecheck",
     "knip": "knip",
     "knip:fix": "knip --fix",
-    "knip:production": "knip --production",
-    "knip:dependencies": "knip --dependencies"
+    "knip:production": "knip --config knip.production.json",
+    "knip:dependencies": "knip --dependencies",
+    "knip:unused-exports": "knip --exports",
+    "knip:unused-types": "knip --types"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
