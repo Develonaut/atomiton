@@ -12,6 +12,11 @@ export default defineConfig({
       exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
     }),
   ],
+  server: {
+    port: parseInt(process.env.VITE_EDITOR_PORT || "5175"),
+    strictPort: true,
+    host: true,
+  },
   build: {
     target: "es2020",
     lib: {

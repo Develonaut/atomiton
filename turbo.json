@@ -1,75 +1,80 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  "concurrency": "15",
+  "globalEnv": [
+    "NODE_ENV",
+    "HOME",
+    "USERPROFILE",
+    "APPDATA",
+    "JEST_WORKER_ID",
+    "ELECTRON_RENDERER_URL",
+    "CI",
+    "PLAYWRIGHT_BASE_URL"
+  ],
+  "globalDependencies": [
+    ".eslintrc.*",
+    "eslint.config.*",
+    "tsconfig*.json",
+    "prettier.config.*",
+    ".prettierrc*",
+    "tailwind.config.*",
+    "vite.config.*"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL",
-        "CI",
-        "PLAYWRIGHT_BASE_URL"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "*.tsbuildinfo"]
     },
     "lint": {
       "dependsOn": ["^lint"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL",
-        "CI",
-        "PLAYWRIGHT_BASE_URL"
-      ]
+      "outputs": [".eslintcache"]
     },
     "lint:fix": {
       "dependsOn": ["^lint:fix"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL",
-        "CI",
-        "PLAYWRIGHT_BASE_URL"
-      ]
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL",
-        "CI",
-        "PLAYWRIGHT_BASE_URL"
-      ]
+      "outputs": [".eslintcache"]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL",
-        "CI",
-        "PLAYWRIGHT_BASE_URL"
-      ]
+      "outputs": ["*.tsbuildinfo"]
+    },
+    "format": {
+      "outputs": []
+    },
+    "format:check": {
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**", ".nyc_output/**", "test-results/**"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**", ".nyc_output/**", "test-results/**"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**", ".nyc_output/**", "test-results/**"]
+    },
+    "knip": {
+      "outputs": []
+    },
+    "knip:fix": {
+      "outputs": []
+    },
+    "clean": {
+      "outputs": [],
+      "cache": false
     },
     "dev": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
+    "dev:build": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^build"]
