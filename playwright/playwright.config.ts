@@ -38,31 +38,15 @@ export default defineConfig({
         baseURL: "http://localhost:5173",
       },
     },
-    {
-      name: "ui",
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: "http://localhost:5174",
-      },
-    },
-    // Desktop app testing requires special setup with Electron
-    // Will be added in a future iteration
+    // Note: We only test against the client app since Electron loads the same client
+    // No need to duplicate tests for UI package
   ],
 
-  // Commented out webServer config - we'll run servers manually for now
-  // This avoids the hanging issue with Playwright trying to manage servers
-  // webServer: [
-  //   {
-  //     command: "pnpm --filter @atomiton/client dev",
-  //     url: "http://localhost:5173",
-  //     reuseExistingServer: !process.env.CI,
-  //     timeout: 120 * 1000,
-  //   },
-  //   {
-  //     command: "pnpm --filter @atomiton/ui dev",
-  //     url: "http://localhost:5174",
-  //     reuseExistingServer: !process.env.CI,
-  //     timeout: 120 * 1000,
-  //   },
-  // ],
+  // Start dev server for tests
+  webServer: {
+    command: "pnpm --filter @atomiton/client dev",
+    url: "http://localhost:5173",
+    reuseExistingServer: true, // Always reuse if already running
+    timeout: 120 * 1000,
+  },
 });
