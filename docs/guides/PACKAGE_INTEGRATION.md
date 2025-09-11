@@ -24,30 +24,32 @@ This guide outlines how to integrate and structure packages in the Atomiton mono
 
 ## Package Organization
 
-### Scoped vs Top-Level Packages
+### Package Structure
 
 ```
 packages/
-├── @atomiton/          # Internal shared modules (scoped)
-│   ├── di/             # Dependency injection
-│   ├── eslint-config/  # Shared ESLint configuration
-│   └── typescript-config/ # Shared TypeScript configuration
-├── ui/                 # Application packages (top-level)
-├── core/
-├── nodes/
-├── theme/
-└── electron/
+└── @atomiton/          # All packages are scoped under @atomiton/
+    ├── core/           # Core Blueprint engine
+    ├── nodes/          # Node implementations
+    ├── ui/             # UI components and design system
+    ├── editor/         # Editor implementation
+    ├── store/          # State management
+    ├── events/         # Event system
+    ├── di/             # Dependency injection
+    ├── eslint-config/  # Shared ESLint configuration
+    └── typescript-config/ # Shared TypeScript configuration
 ```
 
-- **Scoped packages** (`@atomiton/*`) - Internal shared modules and configurations
-- **Top-level packages** - Application-specific packages and features
+- **All packages** are scoped under `@atomiton/` for consistency and namespace management
+- **Configuration packages** like eslint-config and typescript-config provide shared standards
+- **Feature packages** implement specific functionality for the platform
 
 ## Creating a New Package
 
 ### 1. Package Structure
 
 ```
-packages/[package-name]/
+packages/@atomiton/[package-name]/
 ├── src/                 # Source code
 ├── docs/                # Package-specific documentation
 ├── package.json         # Package configuration
@@ -135,7 +137,7 @@ Use workspace protocol for internal dependencies:
 {
   "dependencies": {
     "@atomiton/core": "workspace:*",
-    "@atomiton/theme": "workspace:*"
+    "@atomiton/ui": "workspace:*"
   }
 }
 ```
@@ -188,7 +190,7 @@ Each package maintains its own documentation:
 Packages should include appropriate testing:
 
 ```
-packages/[package-name]/
+packages/@atomiton/[package-name]/
 ├── src/
 │   ├── __tests__/       # Unit tests
 │   └── __e2e__/         # E2E tests (if applicable)
@@ -197,18 +199,19 @@ packages/[package-name]/
 
 ## Publishing
 
-### Scoped Packages
+### Package Publishing Policy
 
-Internal packages are not published to npm and use `"private": true`.
+Currently, all `@atomiton/*` packages are internal to the monorepo and use `"private": true`.
 
-### Public Packages
+### Future Publishing Considerations
 
-If a package needs to be published:
+If any package becomes suitable for external use:
 
-1. Remove `"private": true`
-2. Configure proper exports in package.json
-3. Add publish script to pipeline
+1. Remove `"private": true` from package.json
+2. Configure proper exports and entry points
+3. Add publish script to Turborepo pipeline
 4. Document public API thoroughly
+5. Add appropriate licensing and usage documentation
 
 ## Migration Guide
 
@@ -253,6 +256,6 @@ import { util } from "@/utils";
 
 ```typescript
 // Import from other workspace packages
-import { Theme } from "@atomiton/theme";
-import { Core } from "@atomiton/core";
+import { Button } from "@atomiton/ui";
+import { Blueprint } from "@atomiton/core";
 ```

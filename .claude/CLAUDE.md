@@ -91,8 +91,8 @@ atomiton/                       # Project root
 
 Migration plans are documented in package-specific ROADMAP files:
 
-- UI Migration: `/packages/ui/ROADMAP.md`
-- Core Migration: `/packages/core/ROADMAP.md`
+- UI Migration: `/packages/@atomiton/ui/ROADMAP.md`
+- Core Migration: `/packages/@atomiton/core/ROADMAP.md`
 
 ## ✅ Permissions
 
@@ -136,5 +136,5 @@ Packages are organized under `packages/@atomiton/`:
 
 ---
 
-**Last Updated**: 2025-09-06
+**Last Updated**: 2025-09-11
 **Documentation Root**: `./docs/` (relative to project root)

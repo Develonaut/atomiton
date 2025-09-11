@@ -30,4 +30,4 @@ Package-specific implementation details should go in the respective package's do
 
 ---
 
-**Note**: These are permanent reference documents. For temporary work-in-progress documentation, use `/docs/workspace/`.
+**Note**: These are permanent reference documents.

@@ -167,17 +167,17 @@ See [Development Process](../../../docs/development/archive/PROCESS.md) for comp
 
 ### Technical Standards
 
-**ALL technical requirements are referenced from the [Guidelines README](../../../docs/guidelines/README.md)** which indexes standards in:
+**ALL technical requirements are referenced from the [Guidelines README](../../../docs/guides/README.md)** which indexes standards in:
 
-- [Development Process](../../../docs/development/archive/PROCESS.md) - Code quality and validation
-- [TypeScript Standards](../../../docs/development/archive/TYPESCRIPT.md) - TypeScript requirements
-- [Core Values](../../../docs/development/archive/CORE_VALUES.md) - Development principles
+- [Development Principles](../../../docs/guides/DEVELOPMENT_PRINCIPLES.md) - Core development principles and practices
+- [Code Style](../../../docs/guides/CODE_STYLE.md) - Code style guidelines and conventions
+- [Testing Philosophy](../../../docs/testing/TESTING_PHILOSOPHY.md) - Testing approach and standards
 
 ### Definition of "Complete"
 
 ALL agents MUST follow this workflow. Work is ONLY complete when:
 
-1. **Guidelines have been reviewed** ([Guidelines README](../../../docs/guidelines/README.md) and all referenced standards)
+1. **Guidelines have been reviewed** ([Guidelines README](../../../docs/guides/README.md) and all referenced standards)
 2. Voorhees has approved the approach
 3. Michael has validated architecture (if applicable)
 4. Brian has confirmed testing approach
@@ -213,22 +213,18 @@ END (Work is officially complete)
 This workflow references technical requirements from the **[Guidelines README](../../../docs/guides/README.md)** which indexes all standards and requirements across:
 
 - Development standards in `/docs/guides/`
-- UI standards in `/packages/ui/docs/`
+- UI standards in `/packages/@atomiton/ui/docs/`
 - Package integration patterns in `/docs/guides/PACKAGE_INTEGRATION.md`
-
-## Important Note on Archived Documents
-
-**CRITICAL**: Any documents in `archived/` folders contain outdated information and should NEVER be used for current work. They are kept solely for historical reference. Always use the current, non-archived versions of documents.
 
 ## For MVP Implementation
 
 For specific MVP prototype implementation details, see package-specific ROADMAP files:
 
-- UI Migration: `/packages/ui/ROADMAP.md`
-- Core Migration: `/packages/core/ROADMAP.md`
+- UI Migration: `/packages/@atomiton/ui/ROADMAP.md`
+- Core Migration: `/packages/@atomiton/core/ROADMAP.md`
 
 ---
 
 **Remember**: No shortcuts. Every step is mandatory. Work is not done until Karen says it's done.
 
-Last Updated: 2025-08-31
+Last Updated: 2025-09-11

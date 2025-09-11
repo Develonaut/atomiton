@@ -8,11 +8,13 @@
 
 Documentation is co-located with code. See each package's README and docs folder:
 
-- **[packages/core/](../packages/core/)** - Foundation abstractions and utilities
-- **[packages/ui/](../packages/ui/)** - UI components and design system
-- **[packages/nodes/](../packages/nodes/)** - Node system and implementations
-- **[packages/theme/](../packages/theme/)** - Framework-agnostic theme system
-- **[packages/di/](../packages/di/)** - Dependency injection system
+- **[packages/@atomiton/core/](../packages/@atomiton/core/)** - Foundation abstractions and utilities
+- **[packages/@atomiton/ui/](../packages/@atomiton/ui/)** - UI components and design system
+- **[packages/@atomiton/nodes/](../packages/@atomiton/nodes/)** - Node system and implementations
+- **[packages/@atomiton/editor/](../packages/@atomiton/editor/)** - Blueprint editor implementation
+- **[packages/@atomiton/store/](../packages/@atomiton/store/)** - State management
+- **[packages/@atomiton/events/](../packages/@atomiton/events/)** - Event system
+- **[packages/@atomiton/di/](../packages/@atomiton/di/)** - Dependency injection system
 
 ### 📁 Project Documentation
 
@@ -23,8 +25,8 @@ Documentation is co-located with code. See each package's README and docs folder
   - [MISSION](./project/MISSION.md) - Project mission
 
 - **[research/](./research/)** - Analysis and research
-  - [n8n Analysis](./research/n8n-analysis.md) - Learning from n8n
-  - [Competitor Analysis](./research/competitor-analysis.md) - Market research
+  - [n8n Analysis](./research/N8N_ANALYSIS.md) - Learning from n8n
+  - [Competitor Analysis](./research/COMPETITOR_ANALYSIS.md) - Market research
 
 ### 📁 Development Documentation
 
@@ -32,10 +34,6 @@ Documentation is co-located with code. See each package's README and docs folder
   - Code style, principles, best practices
   - Platform-wide conventions
   - Package integration patterns
-
-- **[workspace/](./workspace/)** - Temporary working area
-  - [BLOCKERS.md](./workspace/BLOCKERS.md) - Current blockers
-  - sessions/ - Daily work logs with Claude
 
 ## Where to Start
 

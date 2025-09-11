@@ -70,4 +70,4 @@ The editor is currently **~50% complete**. Users can:
 
 ---
 
-**Last Updated**: 2025-01-10
+**Last Updated**: 2025-09-11

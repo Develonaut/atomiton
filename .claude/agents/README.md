@@ -13,15 +13,15 @@ agents/
 ├── README.md                    # This file - agents directory overview
 ├── coordination/                # Agent coordination and workflow docs
 │   └── AGENT_EXECUTION_PLAN.md  # Step-by-step MVP implementation plan
-├── Barbara.md                   # Individual agent files (to be simplified)
-├── Brian.md
-├── Karen.md
-├── Megamind.md
-├── Michael.md
-├── Jeeves.md
-├── Parker.md
-├── Ryan.md
-└── Voorhees.md
+├── BARBARA.md                   # Individual agent files (to be simplified)
+├── BRIAN.md
+├── KAREN.md
+├── MEGAMIND.md
+├── MICHAEL.md
+├── JEEVES.md
+├── PARKER.md
+├── RYAN.md
+└── VOORHEES.md
 ```
 
 ## 🎭 Agent Team Overview

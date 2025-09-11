@@ -10,7 +10,7 @@ The main desktop application for Atomiton Blueprint automation platform.
 
 ## Status
 
-✅ **Successfully migrated to Vite** - Waiting for UI framework integration
+✅ **Successfully migrated to Vite** - React 19 with Tailwind CSS v4 and component integration
 
 ## Getting Started
 
@@ -26,19 +26,17 @@ The application will be available at http://localhost:3000
 
 ## Architecture
 
-This is the main client application that will be wrapped by Electron for desktop distribution. It provides:
+This is the main client application that will be wrapped by Electron for desktop distribution. 
 
-- Blueprint visual editor (React Flow)
-- Node catalog and management
-- Workflow execution interface
-- Settings and configuration
+**See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed architecture documentation.**
 
 ## Tech Stack
 
-- **Current**: Next.js 15 with App Router
-- **Migrating to**: Vite 6 with React 19
-- **UI Library**: Migrating from Tailwind CSS to Mantine
-- **Theme**: Brainwave 2.0 aesthetic
+- **Framework**: Vite 6 with React 19
+- **UI Library**: Component library from `@atomiton/ui`
+- **Styling**: Tailwind CSS v4 with Atomiton design system
+- **Node Editor**: React Flow
+- **State Management**: `@atomiton/store`
 
 ## Development
 

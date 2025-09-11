@@ -267,6 +267,7 @@ See [ROADMAP.md](./docs/ROADMAP.md) for detailed plans including:
 - [Architecture](./docs/ARCHITECTURE.md) - System design and patterns
 - [Developer Guide](./docs/DEVELOPER_GUIDE.md) - Creating custom nodes
 - [Comparison](./docs/COMPARISON.md) - How we differ from n8n
+- [Competitive Analysis](./docs/analysis/) - Market research and competitor insights
 - [API Reference](./docs/api/) - Complete API documentation
 
 ## Contributing

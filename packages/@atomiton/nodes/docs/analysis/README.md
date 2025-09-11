@@ -16,7 +16,7 @@ This directory contains competitive analysis of node-based editors and workflow 
 
 ### Completed Analyses
 
-1. **[n8n Analysis](./n8n-analysis.md)** - Comprehensive review of n8n's node editor, identifying strengths in code flexibility and self-hosting, with opportunities in UX improvements and debugging tools.
+1. **[n8n Analysis](./N8N_ANALYSIS.md)** - Comprehensive review of n8n's node editor, identifying strengths in code flexibility and self-hosting, with opportunities in UX improvements and debugging tools.
 
 ### Framework
 

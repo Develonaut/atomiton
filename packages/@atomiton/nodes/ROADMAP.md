@@ -6,7 +6,7 @@ Build 20-50 exceptional nodes that cover 80% of automation use cases, emphasizin
 
 ## Competitive Analysis Insights
 
-Based on our [competitive analysis](../../../docs/nodes/analysis/), we've identified key market requirements and opportunities:
+Based on our [competitive analysis](./docs/analysis/), we've identified key market requirements and opportunities:
 
 ### Market Standards (MVP Table Stakes)
 

@@ -6,12 +6,12 @@ This directory contains research and analysis that informed the design and archi
 
 ### Platform Analysis
 
-- **[n8n Analysis](./n8n-analysis.md)** - Deep dive into n8n's architecture and what we can learn
-- **[Competitor Analysis](./competitor-analysis.md)** - Market research on automation platforms
+- **[n8n Analysis](./N8N_ANALYSIS.md)** - Deep dive into n8n's architecture and what we can learn
+- **[Competitor Analysis](./COMPETITOR_ANALYSIS.md)** - Market research on automation platforms
 
 ### Technical Research
 
-- **[UI Framework Analysis](./ui-framework-analysis.md)** - Research on modern UI frameworks (Radix, MUI, Mantine, etc.)
+- **[UI Framework Analysis](./UI_FRAMEWORK_ANALYSIS.md)** - Research on modern UI frameworks (Radix, MUI, Mantine, etc.)
 
 ## 🎯 Purpose
 
@@ -35,10 +35,10 @@ When adding new research:
 
 ## 🔗 Related Documentation
 
-- **[Strategies](../strategies/)** - How research influenced our implementation
+- **[Strategies](../temporary/)** - How research influenced our implementation
 - **[Guides](../guides/)** - Best practices derived from research
 - **[Project](../project/)** - How research shapes our roadmap
 
 ---
 
-**Note**: This is completed research. For active exploration, use `/docs/workspace/`.
+**Note**: This is completed research.
