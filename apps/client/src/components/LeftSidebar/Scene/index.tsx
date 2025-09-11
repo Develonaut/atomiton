@@ -1,15 +1,32 @@
 import core from "@atomiton/core";
-import { useNodes } from "@atomiton/editor";
+import { useNodes, useStore } from "@atomiton/editor";
 import Item from "./Item";
 
 function Scene() {
   const { nodes, selectedId, selectNode, deleteNode } = useNodes();
+  const flowInstance = useStore((state) => state.flowInstance);
 
   const handleDelete = (nodeId: string) => {
     if (deleteNode) {
       deleteNode(nodeId);
     } else {
       console.log("Delete node:", nodeId);
+    }
+  };
+
+  const handleNodeClick = (nodeId: string) => {
+    // Select the node in the state
+    selectNode(nodeId);
+
+    // Focus on the node in the canvas
+    if (flowInstance) {
+      setTimeout(() => {
+        flowInstance.fitView({
+          nodes: [{ id: nodeId }],
+          duration: 200,
+          padding: 0.2,
+        });
+      }, 50);
     }
   };
 
@@ -28,7 +45,7 @@ function Scene() {
               icon: nodeMetadata?.icon || "circle",
             }}
             selected={selectedId === node.id}
-            onClick={() => selectNode(node.id)}
+            onClick={() => handleNodeClick(node.id)}
             onDelete={handleDelete}
           />
         );
