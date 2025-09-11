@@ -48,18 +48,14 @@ export const focusOnNode = (
 };
 
 export const updateStoreState = (
-  setState: (updater: (state: EditorState) => EditorState) => void,
+  setState: (updater: (state: EditorState) => void) => void,
   nodes: Node[],
   edges: Edge[],
   selectedNodeId: string,
 ): void => {
-  setState((state: EditorState) => ({
-    ...state,
-    selectedNodeId,
-    flowSnapshot: {
-      nodes,
-      edges,
-      viewport: state.flowSnapshot.viewport,
-    },
-  }));
+  setState((state: EditorState) => {
+    state.selectedNodeId = selectedNodeId;
+    state.flowSnapshot.nodes = nodes;
+    state.flowSnapshot.edges = edges;
+  });
 };

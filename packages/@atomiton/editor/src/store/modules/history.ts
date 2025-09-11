@@ -27,13 +27,10 @@ export const createHistoryModule = (store: BaseStore): HistoryActions => ({
     const state = store.getState();
     const currentSnapshot = state.flowSnapshot;
 
-    store.setState((state) => ({
-      ...state,
-      history: {
-        past: [...state.history.past, currentSnapshot].slice(-50),
-        future: [],
-      },
-    }));
+    store.setState((state) => {
+      state.history.past = [...state.history.past, currentSnapshot].slice(-50);
+      state.history.future = [];
+    });
   },
 
   canUndo: () => {
@@ -53,14 +50,11 @@ export const createHistoryModule = (store: BaseStore): HistoryActions => ({
     const previousSnapshot = state.history.past[state.history.past.length - 1];
     const currentSnapshot = state.flowSnapshot;
 
-    store.setState((state) => ({
-      ...state,
-      flowSnapshot: previousSnapshot,
-      history: {
-        past: state.history.past.slice(0, -1),
-        future: [currentSnapshot, ...state.history.future],
-      },
-    }));
+    store.setState((state) => {
+      state.flowSnapshot = previousSnapshot;
+      state.history.past = state.history.past.slice(0, -1);
+      state.history.future = [currentSnapshot, ...state.history.future];
+    });
 
     // Apply to ReactFlow instance
     instance.setNodes(previousSnapshot.nodes);
@@ -81,14 +75,11 @@ export const createHistoryModule = (store: BaseStore): HistoryActions => ({
     const nextSnapshot = state.history.future[0];
     const currentSnapshot = state.flowSnapshot;
 
-    store.setState((state) => ({
-      ...state,
-      flowSnapshot: nextSnapshot,
-      history: {
-        past: [...state.history.past, currentSnapshot],
-        future: state.history.future.slice(1),
-      },
-    }));
+    store.setState((state) => {
+      state.flowSnapshot = nextSnapshot;
+      state.history.past = [...state.history.past, currentSnapshot];
+      state.history.future = state.history.future.slice(1);
+    });
 
     // Apply to ReactFlow instance
     instance.setNodes(nextSnapshot.nodes);
@@ -101,13 +92,10 @@ export const createHistoryModule = (store: BaseStore): HistoryActions => ({
   },
 
   clearHistory: () => {
-    store.setState((state) => ({
-      ...state,
-      history: {
-        past: [],
-        future: [],
-      },
-      isDirty: false,
-    }));
+    store.setState((state) => {
+      state.history.past = [];
+      state.history.future = [];
+      state.isDirty = false;
+    });
   },
 });

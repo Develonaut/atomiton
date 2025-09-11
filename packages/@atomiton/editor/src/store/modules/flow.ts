@@ -37,10 +37,9 @@ export interface FlowActions {
 
 export const createFlowModule = (store: BaseStore): FlowActions => ({
   setFlowInstance: (instance: ReactFlowInstance | null) => {
-    store.setState((state) => ({
-      ...state,
-      flowInstance: instance,
-    }));
+    store.setState((state) => {
+      state.flowInstance = instance;
+    });
   },
 
   getFlowInstance: () => {
@@ -48,11 +47,10 @@ export const createFlowModule = (store: BaseStore): FlowActions => ({
   },
 
   updateFlowSnapshot: (nodes: Node[], edges: Edge[], viewport?: Viewport) => {
-    store.setState((state) => ({
-      ...state,
-      flowSnapshot: { nodes, edges, viewport },
-      isDirty: true,
-    }));
+    store.setState((state) => {
+      state.flowSnapshot = { nodes, edges, viewport };
+      state.isDirty = true;
+    });
   },
 
   debouncedUpdateFlowSnapshot: () => {
@@ -66,11 +64,10 @@ export const createFlowModule = (store: BaseStore): FlowActions => ({
         const nodes = instance.getNodes();
         const edges = instance.getEdges();
         const viewport = instance.getViewport();
-        store.setState((state) => ({
-          ...state,
-          flowSnapshot: { nodes, edges, viewport },
-          isDirty: true,
-        }));
+        store.setState((state) => {
+          state.flowSnapshot = { nodes, edges, viewport };
+          state.isDirty = true;
+        });
       }
     }, 1000); // 1 second debounce
   },

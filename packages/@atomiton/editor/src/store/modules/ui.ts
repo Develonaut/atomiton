@@ -20,23 +20,20 @@ export interface UIActions {
 
 export const createUIModule = (store: BaseStore): UIActions => ({
   selectNode: (id: string | null) => {
-    store.setState((state) => ({
-      ...state,
-      selectedNodeId: id,
-    }));
+    store.setState((state) => {
+      state.selectedNodeId = id;
+    });
   },
 
   setLoading: (isLoading: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isLoading,
-    }));
+    store.setState((state) => {
+      state.isLoading = isLoading;
+    });
   },
 
   setDirty: (isDirty: boolean) => {
-    store.setState((state) => ({
-      ...state,
-      isDirty,
-    }));
+    store.setState((state) => {
+      state.isDirty = isDirty;
+    });
   },
 });

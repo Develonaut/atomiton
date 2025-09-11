@@ -69,14 +69,10 @@ export const createNodeModule = (
       instance.setNodes(nodes);
       instance.setEdges(edges);
 
-      store.setState((state) => ({
-        ...state,
-        flowSnapshot: {
-          nodes,
-          edges,
-          viewport: state.flowSnapshot.viewport,
-        },
-      }));
+      store.setState((state) => {
+        state.flowSnapshot.nodes = nodes;
+        state.flowSnapshot.edges = edges;
+      });
 
       debouncedUpdateFlowSnapshot();
     },
@@ -91,14 +87,10 @@ export const createNodeModule = (
       instance.setNodes(nodes);
       instance.setEdges(edges);
 
-      store.setState((state) => ({
-        ...state,
-        flowSnapshot: {
-          nodes,
-          edges,
-          viewport: state.flowSnapshot.viewport,
-        },
-      }));
+      store.setState((state) => {
+        state.flowSnapshot.nodes = nodes;
+        state.flowSnapshot.edges = edges;
+      });
 
       debouncedUpdateFlowSnapshot();
     },
@@ -119,14 +111,9 @@ export const createNodeModule = (
       const updatedEdges = [...edges, newEdge];
       instance.setEdges(updatedEdges);
 
-      store.setState((state) => ({
-        ...state,
-        flowSnapshot: {
-          nodes: state.flowSnapshot.nodes,
-          edges: updatedEdges,
-          viewport: state.flowSnapshot.viewport,
-        },
-      }));
+      store.setState((state) => {
+        state.flowSnapshot.edges = updatedEdges;
+      });
 
       debouncedUpdateFlowSnapshot();
     },
