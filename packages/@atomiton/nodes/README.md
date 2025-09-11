@@ -120,8 +120,8 @@ class MyNodeConfig extends NodeConfig {
     enabled: true,
   };
 
-  // UI metadata for automatic form generation
-  static readonly uiMetadata = {
+  // Fields configuration for automatic form generation
+  static readonly fields = {
     apiUrl: {
       label: "API URL",
       type: "url",
@@ -151,7 +151,7 @@ class MyNodeConfig extends NodeConfig {
   };
 
   constructor() {
-    super(MyNodeConfig.schema, MyNodeConfig.defaults, MyNodeConfig.uiMetadata);
+    super(MyNodeConfig.schema, MyNodeConfig.defaults, MyNodeConfig.fields);
   }
 }
 

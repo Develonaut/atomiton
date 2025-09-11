@@ -94,8 +94,8 @@ export class TextTransformNodeConfig extends NodeConfig {
     maxLength: 1000,
   };
 
-  // UI metadata defines how each field appears in the property panel
-  static readonly uiMetadata = {
+  // Fields configuration defines how each field appears in the property panel
+  static readonly fields = {
     operation: {
       label: "Transform Operation",
       type: "select",
@@ -135,7 +135,7 @@ export class TextTransformNodeConfig extends NodeConfig {
     super(
       TextTransformNodeConfig.schema,
       TextTransformNodeConfig.defaults,
-      TextTransformNodeConfig.uiMetadata,
+      TextTransformNodeConfig.fields,
     );
   }
 }

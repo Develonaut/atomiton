@@ -99,8 +99,8 @@ React Hook Form + Zod was selected for the node configuration system because:
        encoding: "utf-8",
      };
 
-     // UI metadata for form controls - IMPLEMENTED
-     static readonly uiMetadata = {
+     // Fields configuration for form controls - IMPLEMENTED
+     static readonly fields = {
        hasHeader: { label: "Has Header Row", type: "boolean" },
        delimiter: { label: "Delimiter", type: "text", placeholder: "," },
        encoding: {
@@ -134,19 +134,19 @@ React Hook Form + Zod was selected for the node configuration system because:
 // PropertyPanel component - IMPLEMENTED
 function NodeProperties({ selectedNode }: { selectedNode: Node }) {
   const nodeConfig = selectedNode.config;
-  const { schema, defaults, uiMetadata } = nodeConfig;
+  const { schema, defaults, fields } = nodeConfig;
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   });
 
-  const fields = generateFieldsFromSchema(schema, uiMetadata);
+  const fieldsList = generateFieldsFromSchema(schema, fields);
 
   return (
     <Form {...form}>
       <h3>Properties</h3>
-      {fields.map(field => (
+      {fieldsList.map(field => (
         <div key={field.name} className="form-group">
           <label>{field.label}</label>
           {renderFormControl(field, form.register, form.formState.errors)}
@@ -250,7 +250,7 @@ export abstract class NodeConfig {
   constructor(
     protected schema: ZodSchema<any>,
     protected defaults: any,
-    protected uiMetadata?: Record<string, FieldMetadata>,
+    protected fields?: Record<string, FieldMetadata>,
   ) {}
 
   getSchema() {
@@ -259,8 +259,8 @@ export abstract class NodeConfig {
   getDefaults() {
     return this.defaults;
   }
-  getUIMetadata() {
-    return this.uiMetadata;
+  getFields() {
+    return this.fields;
   }
 }
 ```

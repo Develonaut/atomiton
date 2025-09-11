@@ -1,5 +1,5 @@
-import { useNodes, useStore } from "@atomiton/editor";
 import core from "@atomiton/core";
+import { useNodes, useStore } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,7 @@ function renderFormControl(
   fieldSchema: any,
   fieldMetadata: UIFieldMetadata | undefined,
   register: any,
-  currentValue: any,
+  currentValue: any
 ) {
   const fieldType = fieldSchema._def?.typeName || "unknown";
   const controlType =
@@ -141,7 +141,7 @@ function NodeProperties() {
       .map((node) =>
         node.id === selectedId
           ? { ...node, data: { ...node.data, ...formData } }
-          : node,
+          : node
       );
 
     flowInstance.setNodes(updatedNodes);
@@ -198,6 +198,7 @@ function NodeProperties() {
             schema: configSchema,
             data: currentData,
             defaults: defaults,
+            fields: nodePackage.config.fields,
           });
         } catch (error) {
           console.warn(`Error getting config for node type ${type}:`, error);
@@ -271,7 +272,7 @@ function NodeProperties() {
               nodeConfig.data[fieldName] ?? nodeConfig.defaults[fieldName];
             const description = fieldSchema._def?.description || "";
             const fieldType = fieldSchema._def?.typeName || "unknown";
-            const fieldMetadata = nodeConfig.uiMetadata?.fields?.[fieldName];
+            const fieldMetadata = nodeConfig.fields?.[fieldName];
             const label = fieldMetadata?.label || fieldName;
 
             return (
@@ -303,7 +304,7 @@ function NodeProperties() {
                     fieldSchema,
                     fieldMetadata,
                     register,
-                    value,
+                    value
                   )}
                 </div>
 
