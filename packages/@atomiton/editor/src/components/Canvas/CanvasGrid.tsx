@@ -1,13 +1,13 @@
 import { Background, BackgroundVariant } from "@xyflow/react";
 import { styled } from "@atomiton/ui";
 
-export interface CanvasGridProps {
+export type CanvasGridProps = {
   className?: string;
   variant?: "dots" | "lines" | "cross";
   gap?: number;
   size?: number;
   color?: string;
-}
+};
 
 const CanvasGridStyled = styled(Background, {
   name: "CanvasGrid",

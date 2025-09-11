@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 
-export interface EditorRootProps extends HTMLAttributes<HTMLDivElement> {
+export type EditorRootProps = {
   children: React.ReactNode;
   className?: string;
-}
+} & HTMLAttributes<HTMLDivElement>;

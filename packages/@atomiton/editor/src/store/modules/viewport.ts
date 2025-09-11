@@ -13,7 +13,7 @@
 
 import type { BaseStore } from "../types";
 
-export interface ViewportActions {
+export type ViewportActions = {
   setZoom: (zoom: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -24,7 +24,7 @@ export interface ViewportActions {
     y: number;
     zoom: number;
   }) => void;
-}
+};
 
 export const createViewportModule = (store: BaseStore): ViewportActions => ({
   setZoom: (zoom: number) => {

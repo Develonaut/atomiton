@@ -3,7 +3,7 @@ import type { Node, Edge } from "@xyflow/react";
 /**
  * Editor configuration options
  */
-export interface EditorConfig {
+export type EditorConfig = {
   /**
    * Called when the editor state should be saved
    */
@@ -37,4 +37,4 @@ export interface EditorConfig {
    * Maximum history size
    */
   maxHistorySize?: number;
-}
+};

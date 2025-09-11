@@ -14,13 +14,13 @@ import {
 import { useCallback } from "react";
 import { editorStore } from "../../../store";
 
-export interface UseReactFlowOptions {
+export type UseReactFlowOptions = {
   defaultNodes?: Node[];
   defaultEdges?: Edge[];
   onNodesChange?: OnNodesChange;
   onEdgesChange?: OnEdgesChange;
   onConnect?: OnConnect;
-}
+};
 
 /**
  * Thin wrapper hook that connects ReactFlow to our store

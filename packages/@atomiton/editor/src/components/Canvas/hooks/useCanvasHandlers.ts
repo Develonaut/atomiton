@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { editorStore } from "../../../store";
 import type { UseReactFlowReturn } from "./useReactFlow";
 
-export interface CanvasHandlersOptions {
+export type CanvasHandlersOptions = {
   reactFlow: UseReactFlowReturn;
   reactFlowWrapper: React.RefObject<HTMLDivElement>;
   onInit?: (instance: ReactFlowInstance) => void;
@@ -13,7 +13,7 @@ export interface CanvasHandlersOptions {
   onNodeClick?: (event: React.MouseEvent, node: Node) => void;
   onPaneClick?: (event: React.MouseEvent) => void;
   onMove?: (event: MouseEvent | TouchEvent | null, viewport: Viewport) => void;
-}
+};
 
 /**
  * Custom hook that consolidates all Canvas event handlers

@@ -12,11 +12,11 @@
 
 import type { Edge, Node } from "@xyflow/react";
 
-export interface NodeCreationOptions {
+export type NodeCreationOptions = {
   nodeType: string;
   position?: { x: number; y: number };
   selected?: boolean;
-}
+};
 
 export const generateNodeId = (): string => {
   return `node-${Date.now()}`;

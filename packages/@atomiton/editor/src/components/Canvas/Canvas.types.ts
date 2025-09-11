@@ -12,7 +12,7 @@ import type { StyleProps } from "@/types";
 /**
  * Props for the root Canvas component
  */
-export interface CanvasProps extends StyleProps {
+export type CanvasProps = {
   children?: React.ReactNode;
   className?: string;
   /**
@@ -75,12 +75,12 @@ export interface CanvasProps extends StyleProps {
    * Custom node types to use in the canvas
    */
   nodeTypes?: Record<string, React.ComponentType<unknown>>;
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Viewport sub-component
  */
-export interface CanvasViewportProps extends StyleProps {
+export type CanvasViewportProps = {
   children: React.ReactNode;
   className?: string;
   /**
@@ -123,12 +123,12 @@ export interface CanvasViewportProps extends StyleProps {
    * Prevent scrolling behavior
    */
   preventScrolling?: boolean;
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Grid sub-component
  */
-export interface CanvasGridProps extends StyleProps {
+export type CanvasGridProps = {
   className?: string;
   /**
    * Grid variant type
@@ -146,12 +146,12 @@ export interface CanvasGridProps extends StyleProps {
    * Grid color
    */
   color?: string;
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Nodes sub-component
  */
-export interface CanvasNodesProps extends StyleProps {
+export type CanvasNodesProps = {
   className?: string;
   /**
    * Custom node renderer
@@ -165,12 +165,12 @@ export interface CanvasNodesProps extends StyleProps {
    * Whether nodes are draggable
    */
   draggable?: boolean;
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Connections sub-component
  */
-export interface CanvasConnectionsProps extends StyleProps {
+export type CanvasConnectionsProps = {
   className?: string;
   /**
    * Custom connection renderer
@@ -189,12 +189,12 @@ export interface CanvasConnectionsProps extends StyleProps {
    * Whether connections are selectable
    */
   selectable?: boolean;
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Controls sub-component
  */
-export interface CanvasControlsProps extends StyleProps {
+export type CanvasControlsProps = {
   className?: string;
   /**
    * Whether to show zoom in button
@@ -216,12 +216,12 @@ export interface CanvasControlsProps extends StyleProps {
    * Placement of controls in the canvas
    */
   placement?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Minimap sub-component
  */
-export interface CanvasMinimapProps extends StyleProps {
+export type CanvasMinimapProps = {
   className?: string;
   /**
    * Whether to show the minimap
@@ -243,12 +243,12 @@ export interface CanvasMinimapProps extends StyleProps {
    * Node border radius
    */
   nodeBorderRadius?: number;
-}
+} & StyleProps;
 
 /**
  * Props for Canvas.Selection sub-component
  */
-export interface CanvasSelectionProps extends StyleProps {
+export type CanvasSelectionProps = {
   className?: string;
   /**
    * Whether selection is enabled
@@ -258,15 +258,15 @@ export interface CanvasSelectionProps extends StyleProps {
    * Selection mode
    */
   mode?: "partial" | "full";
-}
+} & StyleProps;
 
 /**
  * Props for control action components
  */
-export interface CanvasControlActionProps {
+export type CanvasControlActionProps = {
   /**
    * Called when the action is triggered
    */
   onAction?: () => void;
   onClick?: () => void;
-}
+};

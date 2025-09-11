@@ -1,10 +1,10 @@
 import { styled } from "@atomiton/ui";
 
-export interface CanvasNodesProps {
+export type CanvasNodesProps = {
   children?: React.ReactNode;
   className?: string;
   [key: string]: unknown;
-}
+};
 
 const CanvasNodesStyled = styled("div", {
   name: "CanvasNodes",

@@ -11,7 +11,7 @@ import type { ZodType, ZodTypeAny } from "zod";
 /**
  * Base props that all control components will receive
  */
-export interface ControlProps<T = any> {
+export type ControlProps<T = any> = {
   value: T;
   onChange: (value: T) => void;
   label?: string;
@@ -20,65 +20,65 @@ export interface ControlProps<T = any> {
   error?: string;
   required?: boolean;
   placeholder?: string;
-}
+};
 
 /**
  * Extended control props for specific control types
  */
-export interface TextControlProps extends ControlProps<string> {
+export type TextControlProps = {
   multiline?: boolean;
   maxLength?: number;
   minLength?: number;
-}
+} & ControlProps<string>;
 
-export interface NumberControlProps extends ControlProps<number> {
+export type NumberControlProps = {
   min?: number;
   max?: number;
   step?: number;
   precision?: number;
-}
+} & ControlProps<number>;
 
-export interface SelectControlProps<T = string> extends ControlProps<T> {
+export type SelectControlProps<T = string> = {
   options: Array<{
     label: string;
     value: T;
     disabled?: boolean;
   }>;
   multiple?: boolean;
-}
+} & ControlProps<T>;
 
-export interface SliderControlProps extends ControlProps<number> {
+export type SliderControlProps = {
   min: number;
   max: number;
   step?: number;
   marks?: Array<{ value: number; label?: string }>;
-}
+} & ControlProps<number>;
 
-export interface ColorControlProps extends ControlProps<string> {
+export type ColorControlProps = {
   format?: "hex" | "rgb" | "hsl";
   showAlpha?: boolean;
   presets?: string[];
-}
+} & ControlProps<string>;
 
-export interface FileControlProps extends ControlProps<string | File> {
+export type FileControlProps = {
   accept?: string;
   maxSize?: number;
   multiple?: boolean;
-}
+} & ControlProps<string | File>;
 
-export interface ArrayControlProps<T = any> extends ControlProps<T[]> {
+export type ArrayControlProps<T = any> = {
   itemComponent?: ComponentType<ControlProps<T>>;
   addLabel?: string;
   removeLabel?: string;
   maxItems?: number;
   minItems?: number;
-}
+} & ControlProps<T[]>;
 
-export interface ObjectControlProps extends ControlProps<Record<string, any>> {
+export type ObjectControlProps = {
   fields?: Record<string, ComponentType<ControlProps>>;
   collapsible?: boolean;
   defaultExpanded?: boolean;
-}
+} & ControlProps<Record<string, any>>;
 
 /**
  * Control type definitions
@@ -111,14 +111,14 @@ export type ControlType =
 /**
  * Control configuration
  */
-export interface ControlConfig {
+export type ControlConfig = {
   type: ControlType;
   component?: ComponentType<any>;
   props?: Record<string, any>;
   validator?: (value: any) => boolean | string;
   formatter?: (value: any) => any;
   parser?: (value: any) => any;
-}
+};
 
 /**
  * Schema type detection utilities

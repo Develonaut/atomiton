@@ -24,13 +24,13 @@ const getDraggedNodeType = (event: React.DragEvent): string | null => {
   return event.dataTransfer?.getData("application/atomiton-node") || null;
 };
 
-export interface NodeActions {
+export type NodeActions = {
   addNode: (nodeType: string, position?: { x: number; y: number }) => void;
   deleteNode: (id: string) => void;
   deleteSelectedNodes: () => void;
   handleConnect: (connection: Connection) => void;
   handleDrop: (event: React.DragEvent, reactFlowBounds: DOMRect | null) => void;
-}
+};
 
 export const createNodeModule = (
   store: BaseStore,

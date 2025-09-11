@@ -1,7 +1,7 @@
 import { Controls } from "@xyflow/react";
 import { styled } from "@atomiton/ui";
 
-export interface CanvasControlsProps {
+export type CanvasControlsProps = {
   className?: string;
   showZoomIn?: boolean;
   showZoomOut?: boolean;
@@ -9,7 +9,7 @@ export interface CanvasControlsProps {
   showInteractive?: boolean;
   placement?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
   [key: string]: unknown;
-}
+};
 
 const CanvasControlsStyled = styled(Controls, {
   name: "CanvasControls",

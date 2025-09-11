@@ -33,13 +33,12 @@ const store = core.store.createStore<EditorState>({
   name: "EditorStore",
 });
 
-interface EditorStoreActions
-  extends BaseStore,
-    FlowActions,
-    NodeActions,
-    HistoryActions,
-    UIActions,
-    ViewportActions {}
+type EditorStoreActions = {} & BaseStore &
+  FlowActions &
+  NodeActions &
+  HistoryActions &
+  UIActions &
+  ViewportActions;
 
 const flowModule = createFlowModule(store);
 const historyModule = createHistoryModule(store);

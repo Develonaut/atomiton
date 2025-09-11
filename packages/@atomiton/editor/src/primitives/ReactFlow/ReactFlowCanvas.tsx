@@ -11,7 +11,7 @@ import type {
 import { ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
-interface ReactFlowCanvasProps {
+type ReactFlowCanvasProps = {
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -32,7 +32,7 @@ interface ReactFlowCanvasProps {
   deleteKeyCode?: string[];
   minZoom?: number;
   maxZoom?: number;
-}
+};
 
 /**
  * Pure ReactFlow canvas primitive

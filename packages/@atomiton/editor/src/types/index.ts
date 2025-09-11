@@ -1,10 +1,10 @@
 /**
  * Base props for styled components
  */
-export interface StyleProps {
+export type StyleProps = {
   className?: string;
   style?: React.CSSProperties;
-}
+};
 
 // Export editor types
 export * from "./editor.types";

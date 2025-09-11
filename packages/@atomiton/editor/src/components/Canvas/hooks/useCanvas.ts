@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import type { Node, Edge } from "@xyflow/react";
 
-interface UseCanvasProps {
+type UseCanvasProps = {
   nodes?: Node[];
   edges?: Edge[];
   onNodesChange?: (...args: unknown[]) => void;
@@ -10,7 +10,7 @@ interface UseCanvasProps {
   onDrop?: (...args: unknown[]) => void;
   onDragOver?: (...args: unknown[]) => void;
   onStoreChange?: (...args: unknown[]) => void;
-}
+};
 
 /**
  * Canvas integration hook

@@ -1,23 +1,23 @@
 import type { Edge, Node, ReactFlowInstance, Viewport } from "@xyflow/react";
 
 // Core flow data structure for persistence
-export interface FlowSnapshot {
+export type FlowSnapshot = {
   nodes: Node[];
   edges: Edge[];
   viewport?: Viewport;
-}
+};
 
 // Legacy types for backward compatibility with existing test files
 export type Connection = Edge;
 
-export interface HistoryEntry {
+export type HistoryEntry = {
   nodes: Node[];
   connections: Connection[];
   selectedNodeId: string | null;
-}
+};
 
 // Main editor state interface
-export interface EditorState {
+export type EditorState = {
   // UI State
   selectedNodeId: string | null;
   isLoading: boolean;
@@ -35,7 +35,7 @@ export interface EditorState {
     past: FlowSnapshot[];
     future: FlowSnapshot[];
   };
-}
+};
 
 // Type for the base store methods
 export type BaseStore = {

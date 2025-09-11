@@ -13,14 +13,14 @@
 
 import type { FlowSnapshot, BaseStore } from "../types";
 
-export interface HistoryActions {
+export type HistoryActions = {
   pushToHistory: () => void;
   canUndo: () => boolean;
   canRedo: () => boolean;
   undo: () => FlowSnapshot | null;
   redo: () => FlowSnapshot | null;
   clearHistory: () => void;
-}
+};
 
 export const createHistoryModule = (store: BaseStore): HistoryActions => ({
   pushToHistory: () => {

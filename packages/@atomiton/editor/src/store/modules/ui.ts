@@ -12,11 +12,11 @@
 
 import type { BaseStore } from "../types";
 
-export interface UIActions {
+export type UIActions = {
   selectNode: (id: string | null) => void;
   setLoading: (isLoading: boolean) => void;
   setDirty: (isDirty: boolean) => void;
-}
+};
 
 export const createUIModule = (store: BaseStore): UIActions => ({
   selectNode: (id: string | null) => {

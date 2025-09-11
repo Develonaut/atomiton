@@ -3,7 +3,7 @@ import { styled } from "@atomiton/ui";
 /**
  * Props for Canvas connections component
  */
-export interface CanvasConnectionsProps {
+export type CanvasConnectionsProps = {
   children?: React.ReactNode;
   className?: string;
   connectionLineType?:
@@ -14,7 +14,7 @@ export interface CanvasConnectionsProps {
     | "bezier";
   selectable?: boolean;
   [key: string]: unknown; // Allow additional props to pass through
-}
+};
 
 /**
  * Styled connections container

@@ -15,7 +15,7 @@ import type { FlowSnapshot, BaseStore } from "../types";
 
 let saveTimeoutRef: NodeJS.Timeout | null = null;
 
-export interface FlowActions {
+export type FlowActions = {
   setFlowInstance: (instance: ReactFlowInstance | null) => void;
   getFlowInstance: () => ReactFlowInstance | null;
   updateFlowSnapshot: (
@@ -33,7 +33,7 @@ export interface FlowActions {
     edges: Edge[];
     viewport?: Viewport;
   };
-}
+};
 
 export const createFlowModule = (store: BaseStore): FlowActions => ({
   setFlowInstance: (instance: ReactFlowInstance | null) => {

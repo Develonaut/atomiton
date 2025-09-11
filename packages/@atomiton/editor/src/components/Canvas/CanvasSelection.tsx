@@ -1,11 +1,11 @@
 import { styled } from "@atomiton/ui";
 
-export interface CanvasSelectionProps {
+export type CanvasSelectionProps = {
   className?: string;
   enabled?: boolean;
   mode?: "partial" | "full";
   [key: string]: unknown;
-}
+};
 
 const CanvasSelectionStyled = styled("div", {
   name: "CanvasSelection",

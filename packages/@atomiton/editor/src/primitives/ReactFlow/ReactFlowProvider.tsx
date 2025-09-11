@@ -1,8 +1,8 @@
 import { ReactFlowProvider as XYFlowProvider } from "@xyflow/react";
 
-interface ReactFlowProviderProps {
+type ReactFlowProviderProps = {
   children: React.ReactNode;
-}
+};
 
 /**
  * Pure ReactFlow provider primitive
