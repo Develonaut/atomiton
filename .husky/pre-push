@@ -5,7 +5,7 @@
 echo "🔥 Running smoke tests before push..."
 
 # Run Playwright smoke tests (fast, no snapshots)
-pnpm test:smoke --reporter=dot
+pnpm pnpm test:e2e:smoke --reporter=dot
 
 if [ $? -ne 0 ]; then
   echo "❌ Smoke tests failed! Fix critical issues before pushing."
