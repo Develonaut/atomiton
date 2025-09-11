@@ -5,24 +5,28 @@ This directory contains comprehensive documentation for the @atomiton/form packa
 ## Documentation Structure
 
 ### [API Reference](./api/)
+
 - Component APIs
 - Hook documentation
 - Type definitions
 - Validator functions
 
 ### [Architecture](./architecture/)
+
 - System design
 - Framework agnostic approach
 - State management patterns
 - Performance optimizations
 
 ### [Guides](./guides/)
+
 - Getting started
 - Migration guides
 - Best practices
 - Common patterns
 
 ### [Examples](./examples/)
+
 - Basic forms
 - Advanced patterns
 - Validation strategies

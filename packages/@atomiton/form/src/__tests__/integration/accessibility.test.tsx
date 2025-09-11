@@ -354,9 +354,11 @@ describe("Accessibility Tests", () => {
       const submitButton = screen.getByRole("button");
       await user.click(submitButton);
 
-      expect(screen.getByRole("status")).toHaveTextContent(
-        "Form is being submitted, please wait...",
-      );
+      await waitFor(() => {
+        expect(screen.getByRole("status")).toHaveTextContent(
+          "Form is being submitted, please wait...",
+        );
+      });
     });
   });
 

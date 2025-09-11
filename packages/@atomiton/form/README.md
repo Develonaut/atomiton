@@ -30,6 +30,7 @@ After evaluating existing form libraries in the React ecosystem, we decided to b
 - **Clean separation** between form logic and UI components
 
 By building our own solution, we achieve:
+
 - Perfect integration with our existing architecture
 - Optimized performance using `useSyncExternalStore` for granular updates
 - Flexibility to adapt to future requirements
@@ -141,7 +142,7 @@ import { Form, useFormStore } from '@atomiton/form';
 
 function AdvancedForm() {
   const formId = 'user-form';
-  
+
   return (
     <Form
       config={{
@@ -161,11 +162,11 @@ function AdvancedForm() {
 
 function FormActions({ formId }: { formId: string }) {
   const store = useFormStore(formId);
-  
+
   const handleReset = () => {
     store?.resetForm();
   };
-  
+
   return (
     <div>
       <button type="submit">Submit</button>
@@ -212,7 +213,7 @@ const customValidator = (value: any) => {
 ### Creating a Validation Adapter
 
 ```typescript
-import { createValidator } from '@atomiton/form';
+import { createValidator } from "@atomiton/form";
 
 // Create adapter for any validation library
 const yupValidator = createValidator((schema) => {

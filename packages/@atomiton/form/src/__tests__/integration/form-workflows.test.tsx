@@ -294,7 +294,9 @@ describe("Form Workflow Integration Tests", () => {
       await user.type(nameInput, "John Doe");
       await user.type(emailInput, "john@example.com");
 
-      expect(nextButton).toBeEnabled();
+      await waitFor(() => {
+        expect(nextButton).toBeEnabled();
+      });
       await user.click(nextButton);
 
       expect(screen.getByText("Step 2: Preferences")).toBeInTheDocument();

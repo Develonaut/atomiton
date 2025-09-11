@@ -13,9 +13,5 @@
     "strict": true,
     "types": ["node", "electron"]
   },
-  "include": [
-    "electron.vite.config.*",
-    "src/main/**/*",
-    "src/preload/**/*"
-  ]
+  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*"]
 }

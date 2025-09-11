@@ -15,16 +15,22 @@
     "./style.css": "./dist/style.css"
   },
   "scripts": {
-    "dev": "vite build --watch",
     "build": "vite build",
     "build:tsc": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "build:watch": "vite build --watch",
     "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit",
+    "dev": "vite",
+    "dev:build": "vite build --watch",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "editor",

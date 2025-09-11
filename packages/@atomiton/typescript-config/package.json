@@ -5,8 +5,18 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "build": "echo 'No build needed for config-only package'",
+    "clean": "echo 'No clean needed for config-only package'",
+    "dev": "echo 'No dev mode for config-only package'",
+    "format": "echo 'No formatting needed for config-only package'",
+    "format:check": "echo 'No format check needed for config-only package'",
+    "knip": "echo 'No dead code detection needed for config-only package'",
+    "knip:fix": "echo 'No dead code fixes needed for config-only package'",
     "lint": "echo 'No linting needed for config-only package'",
     "lint:fix": "echo 'No linting fixes needed for config-only package'",
+    "test": "echo 'No tests for config-only package'",
+    "test:watch": "echo 'No test watch for config-only package'",
+    "test:coverage": "echo 'No test coverage for config-only package'",
     "typecheck": "echo 'No TypeScript to check for config-only package'"
   },
   "publishConfig": {

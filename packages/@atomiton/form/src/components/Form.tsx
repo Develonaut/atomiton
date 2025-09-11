@@ -19,7 +19,7 @@ export function Form<T extends FieldValues = FieldValues>(props: FormProps<T>) {
   // Use hook to detect mode and normalize props
   const { config, onSubmit, validators, children } = useFormMode(props);
 
-  const { helpers, store } = useForm<T>(config);
+  const { state, helpers, store } = useForm<T>(config);
 
   useEffect(() => {
     if (validators) {
@@ -42,7 +42,6 @@ export function Form<T extends FieldValues = FieldValues>(props: FormProps<T>) {
   // Clone children and inject formId prop for fields to use store directly
   const enhancedChildren = useMemo(() => {
     if (typeof children === "function") {
-      const state = store.getState();
       return children({ state, helpers });
     }
 
@@ -61,9 +60,15 @@ export function Form<T extends FieldValues = FieldValues>(props: FormProps<T>) {
     });
   }, [children, helpers, store]);
 
+  // For function children, we need to re-render when state changes,
+  // but we don't want to use useMemo as it causes issues with local component state
+  const finalChildren = typeof children === "function" 
+    ? children({ state, helpers })
+    : enhancedChildren;
+
   return (
     <form onSubmit={handleSubmit} noValidate>
-      {enhancedChildren}
+      {finalChildren}
     </form>
   );
 }

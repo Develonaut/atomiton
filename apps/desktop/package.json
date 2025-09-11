@@ -4,11 +4,19 @@
   "type": "module",
   "main": "./out/main/index.js",
   "scripts": {
-    "dev": "sleep 3 && electron-vite dev",
     "build": "electron-vite build",
-    "preview": "electron-vite preview",
+    "clean": "rm -rf dist out",
+    "dev": "sleep 3 && electron-vite dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "preview": "electron-vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false"
   },
   "devDependencies": {

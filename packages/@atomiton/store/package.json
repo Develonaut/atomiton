@@ -8,12 +8,18 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
+    "dev": "echo 'No dev server yet - use dev:build for watch mode'",
+    "dev:build": "tsc --watch",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,json}\"",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "test": "vitest",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "immer": "^10.0.0",

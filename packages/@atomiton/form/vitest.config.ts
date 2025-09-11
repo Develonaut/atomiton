@@ -8,12 +8,7 @@ export default defineConfig({
     setupFiles: ["./src/__tests__/setup.ts"],
     coverage: {
       reporter: ["text", "html"],
-      exclude: [
-        "node_modules/",
-        "dist/",
-        "src/__tests__/",
-        "**/*.d.ts",
-      ],
+      exclude: ["node_modules/", "dist/", "src/__tests__/", "**/*.d.ts"],
     },
     pool: "forks",
     poolOptions: {

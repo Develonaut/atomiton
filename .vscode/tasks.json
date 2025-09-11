@@ -48,7 +48,7 @@
       "label": "🔎 typecheck",
       "detail": "Verify TypeScript types across all packages",
       "type": "shell",
-      "command": "pnpm check-types",
+      "command": "pnpm typecheck",
       "group": "build",
       "problemMatcher": ["$tsc"]
     },
@@ -80,16 +80,20 @@
       }
     },
     {
-      "label": "✨ E2E: Editor Core Flows",
-      "detail": "Test editor functionality - add nodes, select, delete",
+      "label": "🧹 clean",
+      "detail": "Clean build outputs across all packages",
       "type": "shell",
-      "command": "pnpm test:editor",
-      "group": "test",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+      "command": "pnpm turbo run clean",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 knip",
+      "detail": "Detect dead code across all packages",
+      "type": "shell",
+      "command": "pnpm knip",
+      "group": "build",
+      "problemMatcher": []
     },
     {
       "label": "🎭 E2E: Interactive UI",

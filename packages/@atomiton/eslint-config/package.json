@@ -22,8 +22,16 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "format": "echo 'No formatting needed for config-only package'",
+    "format:check": "echo 'No format check needed for config-only package'",
+    "knip": "echo 'No dead code detection needed for config-only package'",
+    "knip:fix": "echo 'No dead code fixes needed for config-only package'",
     "lint": "echo 'Linting eslint-config itself'",
     "lint:fix": "echo 'Linting eslint-config itself with fix'",
+    "test": "echo 'No tests for config-only package'",
+    "test:watch": "echo 'No test watch for config-only package'",
+    "test:coverage": "echo 'No test coverage for config-only package'",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

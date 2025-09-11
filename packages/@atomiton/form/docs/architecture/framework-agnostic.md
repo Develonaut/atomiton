@@ -53,18 +53,18 @@ The core form engine will be a pure JavaScript class:
 class FormEngine<T> {
   private store: FormStore<T>;
   private validators: Map<string, ValidatorFunction[]>;
-  
+
   constructor(config: FormConfig<T>) {
     this.store = createFormStore(config);
     this.validators = new Map();
   }
-  
+
   // Framework-agnostic methods
   setValue(field: keyof T, value: T[keyof T]): void;
   getValue(field: keyof T): T[keyof T];
   validate(): Promise<boolean>;
   submit(handler: (values: T) => void): Promise<void>;
-  
+
   // Subscribe to changes (for framework adapters)
   subscribe(listener: (state: FormState<T>) => void): () => void;
 }
@@ -93,16 +93,15 @@ const joiAdapter = createAdapter(joiSchema);
 // Hooks
 function useFormEngine<T>(config: FormConfig<T>): FormEngine<T> {
   const engineRef = useRef<FormEngine<T>>();
-  
+
   if (!engineRef.current) {
     engineRef.current = new FormEngine(config);
   }
-  
-  const state = useSyncExternalStore(
-    engineRef.current.subscribe,
-    () => engineRef.current.getState()
+
+  const state = useSyncExternalStore(engineRef.current.subscribe, () =>
+    engineRef.current.getState(),
   );
-  
+
   return { engine: engineRef.current, state };
 }
 
@@ -119,11 +118,11 @@ export function Form({ engine, children }) {
 export function useForm<T>(config: FormConfig<T>) {
   const engine = new FormEngine(config);
   const state = reactive(engine.getState());
-  
+
   engine.subscribe((newState) => {
     Object.assign(state, newState);
   });
-  
+
   return { state, engine };
 }
 
@@ -132,7 +131,7 @@ export default {
   setup(props) {
     const { state, engine } = useForm(props.config);
     return { state, engine };
-  }
+  },
 };
 ```
 
@@ -141,11 +140,11 @@ export default {
 ```typescript
 // Direct usage without framework
 const form = new FormEngine({
-  initialValues: { email: '', password: '' }
+  initialValues: { email: "", password: "" },
 });
 
 // Register validators
-form.addValidator('email', emailValidator);
+form.addValidator("email", emailValidator);
 
 // Subscribe to changes
 form.subscribe((state) => {
@@ -153,10 +152,10 @@ form.subscribe((state) => {
 });
 
 // Handle submission
-document.querySelector('form').onsubmit = async (e) => {
+document.querySelector("form").onsubmit = async (e) => {
   e.preventDefault();
   await form.submit((values) => {
-    console.log('Submitted:', values);
+    console.log("Submitted:", values);
   });
 };
 ```
@@ -168,22 +167,23 @@ For universal compatibility:
 ```typescript
 class FormElement extends HTMLElement {
   private engine: FormEngine;
-  
+
   connectedCallback() {
-    const config = JSON.parse(this.getAttribute('config') || '{}');
+    const config = JSON.parse(this.getAttribute("config") || "{}");
     this.engine = new FormEngine(config);
     this.render();
   }
-  
+
   render() {
     // Render form using shadow DOM
   }
 }
 
-customElements.define('atomiton-form', FormElement);
+customElements.define("atomiton-form", FormElement);
 ```
 
 Usage:
+
 ```html
 <atomiton-form config='{"initialValues": {}}'></atomiton-form>
 ```
@@ -191,21 +191,25 @@ Usage:
 ## Migration Strategy
 
 ### Phase 1: Extract Core
+
 1. Move store logic to form-core
 2. Extract validators to form-core
 3. Create FormEngine class
 
 ### Phase 2: React Adapter
+
 1. Create React-specific package
 2. Migrate existing components
 3. Create adapter hooks
 
 ### Phase 3: Other Frameworks
+
 1. Vue adapter and components
 2. Solid adapter and components
 3. Svelte adapter and components
 
 ### Phase 4: Web Components
+
 1. Create web components wrapper
 2. Ensure shadow DOM compatibility
 3. Test cross-framework usage
@@ -213,18 +217,21 @@ Usage:
 ## Benefits
 
 ### For Developers
+
 - Use forms in any framework
 - Smaller bundle sizes (only include what you need)
 - Consistent API across frameworks
 - Better testability
 
 ### For Maintenance
+
 - Single source of truth for logic
 - Framework updates don't affect core
 - Easier to add new framework support
 - Cleaner separation of concerns
 
 ### For Performance
+
 - Optimized for each framework
 - Tree-shaking friendly
 - Lazy loading capabilities
@@ -233,20 +240,25 @@ Usage:
 ## Challenges and Solutions
 
 ### Challenge: Type Safety
+
 **Solution**: Generate TypeScript definitions for each adapter from core types
 
 ### Challenge: Framework-Specific Features
+
 **Solution**: Extend core functionality in adapters while maintaining compatibility
 
 ### Challenge: Testing
+
 **Solution**: Test core logic independently, framework adapters separately
 
 ### Challenge: Documentation
+
 **Solution**: Shared documentation for core, framework-specific guides for adapters
 
 ## Example: Current vs Future
 
 ### Current (React Only)
+
 ```typescript
 import { Form, TextField } from '@atomiton/form';
 
@@ -262,12 +274,14 @@ function MyForm() {
 ### Future (Any Framework)
 
 **React:**
+
 ```typescript
-import { Form, TextField } from '@atomiton/form-react';
+import { Form, TextField } from "@atomiton/form-react";
 // Same API as current
 ```
 
 **Vue:**
+
 ```vue
 <template>
   <Form :config="config" @submit="handleSubmit">
@@ -276,16 +290,17 @@ import { Form, TextField } from '@atomiton/form-react';
 </template>
 
 <script setup>
-import { Form, TextField } from '@atomiton/form-vue';
+import { Form, TextField } from "@atomiton/form-vue";
 </script>
 ```
 
 **Vanilla JS:**
+
 ```javascript
-import { FormEngine } from '@atomiton/form-core';
+import { FormEngine } from "@atomiton/form-core";
 
 const form = new FormEngine({ initialValues: {} });
-form.mount('#form-container');
+form.mount("#form-container");
 ```
 
 ## Timeline

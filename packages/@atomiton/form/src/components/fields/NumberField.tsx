@@ -27,10 +27,11 @@ export function NumberField({
       name={name}
       formId={formId}
       parse={(value) => {
+        if (typeof value === "number") return value;
         const num = parseFloat(value as string);
         return isNaN(num) ? 0 : num;
       }}
-      format={(value) => value?.toString() || ""}
+      format={(value) => value}
     >
       {({ value, error, touched, onChange, onBlur, onFocus }) => (
         <div className="atomiton-form-field atomiton-form-space-y-1">
@@ -46,7 +47,8 @@ export function NumberField({
             value={(value as number) || ""}
             onChange={(e) => {
               const val = e.target.value;
-              onChange(val === "" ? 0 : parseFloat(val));
+              const num = val === "" ? 0 : parseFloat(val);
+              onChange(isNaN(num) ? 0 : num);
             }}
             onBlur={onBlur}
             onFocus={onFocus}

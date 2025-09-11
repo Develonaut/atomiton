@@ -125,9 +125,9 @@ Support for async validation (e.g., checking username availability):
 const checkUsername: ValidatorFunction = async (value) => {
   const response = await fetch(`/api/check-username?name=${value}`);
   const { available } = await response.json();
-  
+
   if (!available) {
-    return { valid: false, error: 'Username already taken' };
+    return { valid: false, error: "Username already taken" };
   }
   return { valid: true };
 };
@@ -169,26 +169,26 @@ const minLength = (min: number): ValidatorFunction => (value) => {
 Create an adapter for any validation library:
 
 ```typescript
-import type { ValidatorFunction } from '@atomiton/form';
+import type { ValidatorFunction } from "@atomiton/form";
 
 function createCustomAdapter(schema: any): ValidatorFunction {
   return async (value: unknown) => {
     try {
       // Your validation logic here
       const result = await schema.validate(value);
-      
+
       if (result.error) {
-        return { 
-          valid: false, 
-          error: result.error.message 
+        return {
+          valid: false,
+          error: result.error.message,
         };
       }
-      
+
       return { valid: true };
     } catch (error) {
-      return { 
-        valid: false, 
-        error: error.message || 'Validation failed' 
+      return {
+        valid: false,
+        error: error.message || "Validation failed",
       };
     }
   };
@@ -203,21 +203,21 @@ For validating entire form objects:
 function createObjectAdapter(schema: any) {
   return async (values: Record<string, unknown>) => {
     try {
-      const result = await schema.validate(values, { 
-        abortEarly: false 
+      const result = await schema.validate(values, {
+        abortEarly: false,
       });
-      
+
       if (result.errors) {
         const errors: Record<string, string> = {};
-        result.errors.forEach(err => {
+        result.errors.forEach((err) => {
           errors[err.field] = err.message;
         });
         return errors;
       }
-      
+
       return {};
     } catch (error) {
-      return { _form: 'Validation failed' };
+      return { _form: "Validation failed" };
     }
   };
 }
@@ -230,15 +230,12 @@ function createObjectAdapter(schema: any) {
 For expensive validations:
 
 ```typescript
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
-const debouncedValidator = debounce(
-  async (value) => {
-    // Expensive validation
-    return checkUsername(value);
-  },
-  500
-);
+const debouncedValidator = debounce(async (value) => {
+  // Expensive validation
+  return checkUsername(value);
+}, 500);
 ```
 
 ### Memoized Validation
@@ -250,11 +247,11 @@ const cache = new Map();
 
 const memoizedValidator: ValidatorFunction = async (value) => {
   const cacheKey = JSON.stringify(value);
-  
+
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey);
   }
-  
+
   const result = await expensiveValidation(value);
   cache.set(cacheKey, result);
   return result;
@@ -319,8 +316,8 @@ Different strategies per field:
 Errors are automatically passed to field components:
 
 ```typescript
-<TextField 
-  name="email" 
+<TextField
+  name="email"
   // Error will be displayed automatically
 />
 ```
@@ -332,7 +329,7 @@ Access errors directly:
 ```typescript
 function CustomField({ name }) {
   const { value, error, touched } = useField(name);
-  
+
   return (
     <div>
       <input value={value} />
