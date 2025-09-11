@@ -27,6 +27,7 @@
     "@atomiton/core": "workspace:^",
     "@atomiton/editor": "workspace:*",
     "@atomiton/hooks": "workspace:^",
+    "@atomiton/nodes": "workspace:*",
     "@atomiton/ui": "workspace:*",
     "@headlessui/react": "^2.2.4",
     "framer-motion": "^12.17.0",

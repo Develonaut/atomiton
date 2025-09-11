@@ -69,6 +69,17 @@
         "PLAYWRIGHT_BASE_URL"
       ]
     },
+    "test": {
+      "dependsOn": ["^test"],
+      "env": [
+        "NODE_ENV",
+        "HOME",
+        "USERPROFILE",
+        "APPDATA",
+        "JEST_WORKER_ID",
+        "CI"
+      ]
+    },
     "dev": {
       "cache": false,
       "persistent": true,
