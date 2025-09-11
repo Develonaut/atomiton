@@ -44,7 +44,7 @@ function Zoom() {
     const numValue = Number(inputValue);
 
     if (!isNaN(numValue)) {
-      zoomTo(numValue);
+      zoomTo(numValue / 100); // Convert percentage to decimal (100% -> 1.0)
     }
   };
 
@@ -58,7 +58,7 @@ function Zoom() {
   return (
     <Popover className="relative group">
       <PopoverButton className="flex justify-between items-center gap-2 min-w-22 h-10 px-3 rounded-xl border border-s-01 bg-surface-03 text-heading outline-0 transition hover:border-shade-09/10 data-open:border-shade-09/10 data-open:shadow-[0_0px_2px_2px_#FFF_inset]">
-        {zoom}%
+        {Math.round(zoom)}%
         <Icon
           className="!size-4 fill-secondary transition-transform group-[[data-open]]:rotate-180"
           name="chevron"
@@ -79,7 +79,7 @@ function Zoom() {
               ref={inputRef}
               className="w-full h-9 pl-8.5 pr-2 border border-s-02 bg-surface-02 rounded-xl text-body-sm text-primary outline-0"
               type="text"
-              value={`${zoom}%`}
+              value={`${Math.round(zoom)}%`}
               onChange={handleChange}
               onFocus={handleFocus}
               min={10}
@@ -98,7 +98,7 @@ function Zoom() {
                   zoomOut();
                   break;
                 case "zoom100":
-                  zoomTo(100);
+                  zoomTo(1); // 100% = 1.0
                   setActiveId(item.id);
                   break;
                 case "fitView":
@@ -106,11 +106,11 @@ function Zoom() {
                   setActiveId(item.id);
                   break;
                 case "zoom50":
-                  zoomTo(50);
+                  zoomTo(0.5); // 50% = 0.5
                   setActiveId(item.id);
                   break;
                 case "zoom25":
-                  zoomTo(25);
+                  zoomTo(0.25); // 25% = 0.25
                   setActiveId(item.id);
                   break;
               }

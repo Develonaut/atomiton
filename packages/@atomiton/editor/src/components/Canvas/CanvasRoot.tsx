@@ -4,8 +4,8 @@ import { useNodeTypes } from "../../hooks/useNodeTypes";
 import { ReactFlowCanvas, ReactFlowProvider } from "../../primitives/ReactFlow";
 import "./Canvas.css";
 import type { CanvasProps } from "./Canvas.types";
-import { useReactFlow } from "./hooks/useReactFlow";
 import { useCanvasHandlers } from "./hooks/useCanvasHandlers";
+import { useReactFlow } from "./hooks/useReactFlow";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",
@@ -28,6 +28,7 @@ export function CanvasRoot({
   onDrop,
   onDragOver,
   onInit,
+  onMove,
   fitView = true,
   fitViewOptions,
   nodeTypes: nodeTypesProp,
@@ -52,6 +53,7 @@ export function CanvasRoot({
     onDragOver,
     onNodeClick,
     onPaneClick,
+    onMove,
   });
 
   return (
@@ -75,11 +77,14 @@ export function CanvasRoot({
           onDrop={handlers.handleOnDrop}
           onDragOver={handlers.handleOnDragOver}
           onInit={handlers.handleOnInit}
+          onMove={handlers.handleOnMove}
           fitView={fitView}
           fitViewOptions={fitViewOptions}
           nodeTypes={nodeTypes}
           className="atomiton-canvas-flow"
           deleteKeyCode={["Delete", "Backspace"]}
+          minZoom={0.25}
+          maxZoom={2}
         >
           {children}
         </ReactFlowCanvas>

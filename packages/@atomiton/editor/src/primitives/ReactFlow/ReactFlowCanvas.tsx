@@ -1,14 +1,15 @@
+import type {
+  Edge,
+  Node,
+  NodeTypes,
+  OnConnect,
+  OnEdgesChange,
+  OnNodesChange,
+  ReactFlowInstance,
+  Viewport,
+} from "@xyflow/react";
 import { ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import type {
-  Node,
-  Edge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-  ReactFlowInstance,
-  NodeTypes,
-} from "@xyflow/react";
 
 interface ReactFlowCanvasProps {
   children?: React.ReactNode;
@@ -25,9 +26,12 @@ interface ReactFlowCanvasProps {
   onDrop?: (event: React.DragEvent) => void;
   onDragOver?: (event: React.DragEvent) => void;
   onInit?: (instance: ReactFlowInstance) => void;
+  onMove?: (event: MouseEvent | TouchEvent | null, viewport: Viewport) => void;
   fitView?: boolean;
   fitViewOptions?: Record<string, unknown>;
   deleteKeyCode?: string[];
+  minZoom?: number;
+  maxZoom?: number;
 }
 
 /**
@@ -50,9 +54,12 @@ export function ReactFlowCanvas({
   onDrop,
   onDragOver,
   onInit,
+  onMove,
   fitView,
   fitViewOptions,
   deleteKeyCode = ["Delete", "Backspace"],
+  minZoom = 0.25,
+  maxZoom = 2,
 }: ReactFlowCanvasProps) {
   return (
     <ReactFlow
@@ -66,12 +73,15 @@ export function ReactFlowCanvas({
       onDrop={onDrop}
       onDragOver={onDragOver}
       onInit={onInit}
+      onMove={onMove}
       fitView={fitView}
       fitViewOptions={fitViewOptions}
       nodeTypes={nodeTypes}
       className={className}
       style={style}
       deleteKeyCode={deleteKeyCode}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
     >
       {children}
     </ReactFlow>

@@ -6,7 +6,7 @@
 import { enableMapSet } from "immer";
 import { create } from "zustand";
 import type { PersistStorage } from "zustand/middleware";
-import { persist } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 // Enable Map/Set support in Immer on module load
@@ -35,6 +35,7 @@ export interface Store<T> {
  */
 export interface StoreConfig<T> {
   initialState: T;
+  name?: string; // Store name for DevTools
   persist?: {
     key: string;
     storage?: PersistStorage<T>;
@@ -48,35 +49,45 @@ export interface StoreConfig<T> {
 // ============================================================================
 
 /**
- * Creates a Zustand store with Immer for immutability
+ * Creates a Zustand store with Immer for immutability and Redux DevTools support
  */
 export function createStore<T extends object>(
   config: StoreConfig<T>,
 ): Store<T> {
-  // Non-persisted store
+  const storeName = config.name || "Store";
+
+  // Non-persisted store with DevTools
   if (!config.persist) {
-    return create<T>()(immer(() => config.initialState)) as Store<T>;
+    return create<T>()(
+      devtools(
+        immer(() => config.initialState),
+        { name: storeName },
+      ),
+    ) as Store<T>;
   }
 
-  // Persisted store
+  // Persisted store with DevTools
   const { key, storage, partialize, hydrate } = config.persist;
 
   return create<T>()(
-    persist(
-      immer(() => config.initialState),
-      {
-        name: `store:${key}`,
-        storage,
-        partialize: partialize as ((state: T) => T) | undefined,
-        onRehydrateStorage: hydrate
-          ? () => (state) => {
-              if (state) {
-                const hydrated = hydrate(state);
-                Object.assign(state, hydrated);
+    devtools(
+      persist(
+        immer(() => config.initialState),
+        {
+          name: `store:${key}`,
+          storage,
+          partialize: partialize as ((state: T) => T) | undefined,
+          onRehydrateStorage: hydrate
+            ? () => (state) => {
+                if (state) {
+                  const hydrated = hydrate(state);
+                  Object.assign(state, hydrated);
+                }
               }
-            }
-          : undefined,
-      },
+            : undefined,
+        },
+      ),
+      { name: `${storeName}:${key}` },
     ),
   ) as Store<T>;
 }

@@ -5,6 +5,7 @@ import type {
   OnNodesChange,
   OnEdgesChange,
   ReactFlowInstance,
+  Viewport,
 } from "@xyflow/react";
 import type { StyleProps } from "@/types";
 
@@ -66,6 +67,10 @@ export interface CanvasProps extends StyleProps {
    * Called when flow is initialized
    */
   onInit?: (instance: ReactFlowInstance) => void;
+  /**
+   * Called when viewport moves or zooms
+   */
+  onMove?: (event: MouseEvent | TouchEvent | null, viewport: Viewport) => void;
   /**
    * Custom node types to use in the canvas
    */

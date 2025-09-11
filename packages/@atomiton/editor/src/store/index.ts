@@ -30,6 +30,7 @@ const initialState: EditorState = {
 
 const store = core.store.createStore<EditorState>({
   initialState,
+  name: "EditorStore",
 });
 
 interface EditorStoreActions

@@ -28,10 +28,9 @@ export interface ViewportActions {
 
 export const createViewportModule = (store: BaseStore): ViewportActions => ({
   setZoom: (zoom: number) => {
-    store.setState((state) => ({
-      ...state,
-      zoom,
-    }));
+    store.setState((state) => {
+      state.zoom = zoom;
+    });
   },
 
   zoomIn: () => {
@@ -63,13 +62,17 @@ export const createViewportModule = (store: BaseStore): ViewportActions => ({
   },
 
   handleViewportChange: (viewport: { x: number; y: number; zoom: number }) => {
+    // Keep one decimal place for smoother zoom updates
     const newZoom = Math.max(
       10,
-      Math.min(100, Math.round(viewport.zoom * 100)),
+      Math.min(200, Math.round(viewport.zoom * 1000) / 10),
     );
-    store.setState((state) => ({
-      ...state,
-      zoom: newZoom,
-    }));
+    // Only update if zoom actually changed to avoid unnecessary re-renders
+    const currentZoom = store.getState().zoom;
+    if (Math.abs(currentZoom - newZoom) >= 0.1) {
+      store.setState((state) => {
+        state.zoom = newZoom;
+      });
+    }
   },
 });
