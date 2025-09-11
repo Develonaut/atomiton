@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import type { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
 
 declare module "vitest" {
-  interface Assertion
-    extends jest.Matchers<void, unknown>,
-      TestingLibraryMatchers<unknown, void> {}
+  interface Assertion<T = any>
+    extends jest.Matchers<void, T>,
+      TestingLibraryMatchers<T, void> {}
 }

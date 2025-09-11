@@ -410,11 +410,11 @@ describe("filterDOMProps", () => {
 
   describe("type safety", () => {
     it("should preserve type information for React components", () => {
-      interface TestProps {
+      type TestProps = {
         variant: "primary" | "secondary";
         customProp: string;
         onClick: () => void;
-      }
+      };
 
       const props: TestProps = {
         variant: "primary",

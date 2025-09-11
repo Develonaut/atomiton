@@ -1,4 +1,4 @@
-export interface SystemProps {
+export type SystemProps = {
   // Margin (industry standard)
   m?: number | string;
   mt?: number | string;
@@ -140,4 +140,4 @@ export interface SystemProps {
   // Layout helpers
   fullWidth?: boolean;
   fullHeight?: boolean;
-}
+};

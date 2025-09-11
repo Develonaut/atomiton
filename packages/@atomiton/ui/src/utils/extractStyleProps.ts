@@ -4,7 +4,7 @@ import { cn } from "./cn";
  * Style props that can be applied to any component
  * These props map to Tailwind utility classes
  */
-export interface StyleProps {
+export type StyleProps = {
   // Margin
   m?: number | string;
   mt?: number | string;
@@ -97,7 +97,7 @@ export interface StyleProps {
   overflow?: "auto" | "hidden" | "visible" | "scroll";
   overflowX?: "auto" | "hidden" | "visible" | "scroll";
   overflowY?: "auto" | "hidden" | "visible" | "scroll";
-}
+};
 
 /**
  * Maps a style prop value to a Tailwind class

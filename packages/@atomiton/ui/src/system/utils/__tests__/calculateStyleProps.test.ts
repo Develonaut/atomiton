@@ -339,13 +339,13 @@ describe("calculateStyleProps", () => {
 
   describe("type safety", () => {
     it("should maintain type information from input props", () => {
-      interface TestProps {
+      type TestProps = {
         variant: "primary" | "secondary";
         size: "sm" | "md" | "lg";
         disabled?: boolean;
         loading?: boolean;
         customProp: string;
-      }
+      };
 
       const props: TestProps = {
         variant: "primary",

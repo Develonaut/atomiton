@@ -6,7 +6,7 @@ import { forwardRef } from "react";
 /**
  * Configuration for the styled function
  */
-export interface StyledConfig<TProps = Record<string, unknown>> {
+export type StyledConfig<TProps = Record<string, unknown>> = {
   /**
    * Component display name for debugging
    */
@@ -15,7 +15,7 @@ export interface StyledConfig<TProps = Record<string, unknown>> {
    * Props resolver to transform props before passing to component
    */
   props?: (props: TProps) => TProps;
-}
+};
 
 /**
  * Creates a styled component with CVA variants

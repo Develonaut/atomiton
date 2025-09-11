@@ -37,11 +37,11 @@ MockSpan.displayName = "MockSpan";
 /**
  * Mock component with custom props for testing
  */
-export interface MockComponentProps extends ComponentProps<"div"> {
+export type MockComponentProps = {
   variant?: string;
   size?: string;
   testProp?: string;
-}
+} & ComponentProps<"div">;
 
 export const MockComponent = forwardRef<HTMLDivElement, MockComponentProps>(
   ({ variant, size, testProp, ...props }, ref) => (

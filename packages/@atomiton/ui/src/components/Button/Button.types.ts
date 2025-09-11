@@ -1,4 +1,4 @@
-export interface ButtonBaseProps {
+export type ButtonBaseProps = {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
@@ -21,7 +21,7 @@ export interface ButtonBaseProps {
   isOrange?: boolean;
   isSmall?: boolean;
   isLarge?: boolean;
-}
+};
 
 // Button as a regular button element
 export type ButtonAsButton = {

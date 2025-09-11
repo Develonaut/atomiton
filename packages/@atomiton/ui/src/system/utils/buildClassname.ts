@@ -1,11 +1,11 @@
 import { cn } from "@/utils/cn";
 
-export interface BuildClassNameConfig {
+export type BuildClassNameConfig = {
   name?: string;
   styleClasses?: string;
   systemClasses: string[];
   userClassName?: string;
-}
+};
 
 /**
  * Build the final className from all sources

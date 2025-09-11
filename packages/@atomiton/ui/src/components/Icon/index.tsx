@@ -2,12 +2,13 @@ import React from "react";
 import * as LucideIcons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export interface IconProps extends React.SVGProps<SVGSVGElement> {
+export type IconProps = {
   name: string;
   size?: number | string;
   color?: string;
   strokeWidth?: number;
-}
+  className?: string;
+} & React.SVGProps<SVGSVGElement>;
 
 /**
  * Icon component using Lucide icons

@@ -381,13 +381,13 @@ describe("extractSystemProps", () => {
 
   describe("type safety", () => {
     it("should maintain type safety for restProps", () => {
-      interface TestProps {
+      type TestProps = {
         m?: number;
         fullWidth?: boolean;
         customProp: string;
         onClick: () => void;
         [key: string]: unknown; // Add index signature
-      }
+      };
 
       const props: TestProps = {
         m: 4,

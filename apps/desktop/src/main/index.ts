@@ -43,7 +43,7 @@ app.whenReady().then(async () => {
   if (is.dev) {
     try {
       await installExtension(REDUX_DEVTOOLS);
-      console.log("Redux DevTools Extension installed successfully");
+      // Redux DevTools Extension installed successfully
     } catch (e) {
       console.error("Failed to install Redux DevTools Extension:", e);
     }

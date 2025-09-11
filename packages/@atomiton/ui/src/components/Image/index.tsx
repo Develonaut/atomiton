@@ -1,6 +1,6 @@
 import React from "react";
 
-interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+type ImageProps = {
   src: string;
   alt: string;
   width?: number | string;
@@ -11,7 +11,9 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   quality?: number;
   placeholder?: "blur" | "empty";
   blurDataURL?: string;
-}
+  className?: string;
+  style?: React.CSSProperties;
+} & React.ImgHTMLAttributes<HTMLImageElement>;
 
 function Image({
   src,

@@ -33,7 +33,9 @@ function Scene() {
   return (
     <div className="flex flex-col gap-1 p-3">
       {nodes.map((node) => {
-        const nodeMetadata = core.nodes.getNodeMetadata(node.type);
+        if (!node.type) return null;
+
+        const nodeMetadata = core.nodes.getNodeMetadata(node.type as any);
 
         return (
           <Item

@@ -5,13 +5,13 @@
 /**
  * System event structure
  */
-export interface SystemEvent<T = unknown> {
+export type SystemEvent<T = unknown> = {
   type: string;
   source: string;
   timestamp: number;
   data?: T;
   metadata?: Record<string, unknown>;
-}
+};
 
 /**
  * Event listener function
@@ -23,23 +23,23 @@ export type SystemEventListener<T = unknown> = (
 /**
  * Event subscription
  */
-export interface EventSubscription {
+export type EventSubscription = {
   unsubscribe: () => void;
-}
+};
 
 /**
  * Event filter for selective listening
  */
-export interface EventFilter {
+export type EventFilter = {
   type?: string | string[] | RegExp;
   source?: string | string[] | RegExp;
-}
+};
 
 /**
  * Event emitter options
  */
-export interface EventEmitterOptions {
+export type EventEmitterOptions = {
   maxListeners?: number;
   errorHandler?: (error: Error, event: SystemEvent) => void;
   async?: boolean;
-}
+};

@@ -1,5 +1,5 @@
 import type { FlexProps } from "../Flex/Flex.types";
 
-export interface ColumnProps extends Omit<FlexProps, "direction"> {
+export type ColumnProps = {
   direction?: never; // Prevent direction prop from being used
-}
+} & Omit<FlexProps, "direction">;

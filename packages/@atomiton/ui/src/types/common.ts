@@ -45,30 +45,30 @@ export type PolymorphicRef<E extends ElementType> =
 /**
  * Common props for components that can have icons
  */
-export interface WithIcons {
+export type WithIcons = {
   leftIcon?: ReactElement;
   rightIcon?: ReactElement;
-}
+};
 
 /**
  * Common props for components that can be loading
  */
-export interface WithLoading {
+export type WithLoading = {
   loading?: boolean;
   loadingText?: string;
-}
+};
 
 /**
  * Common props for components that can be disabled
  */
-export interface WithDisabled {
+export type WithDisabled = {
   disabled?: boolean;
-}
+};
 
 /**
  * Data attribute props for component state
  */
-export interface DataAttributes {
+export type DataAttributes = {
   "data-state"?:
     | "open"
     | "closed"
@@ -83,15 +83,15 @@ export interface DataAttributes {
   "data-hovered"?: boolean;
   "data-checked"?: boolean;
   "data-indeterminate"?: boolean;
-}
+};
 
 /**
  * Props for compound components that share context
  */
-export interface CompoundComponentContext<T = unknown> {
+export type CompoundComponentContext<T = unknown> = {
   value?: T;
   onChange?: (value: T) => void;
-}
+};
 
 /**
  * Re-export StyleProps from extractStyleProps
