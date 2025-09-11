@@ -2,6 +2,8 @@ import { useCallback, useSyncExternalStore } from "react";
 import { getFormStore, getDefaultFormId } from "../store/index.js";
 import type { FieldValue, FormFieldProps } from "../types/index.js";
 
+import { getNestedValue } from "../utils/object.js";
+
 type UseFieldOptions<T = FieldValue> = {
   name: string;
   formId?: string;
@@ -43,10 +45,10 @@ export function useField<T = FieldValue>({
   const value = useSyncExternalStore(
     useCallback(
       (callback: () => void) => {
-        let previousValue = store.getState().values[name];
+        let previousValue = getNestedValue(store.getState().values, name);
 
         return store.subscribe(() => {
-          const currentValue = store.getState().values[name];
+          const currentValue = getNestedValue(store.getState().values, name);
           if (currentValue !== previousValue) {
             previousValue = currentValue;
             callback();
@@ -55,8 +57,8 @@ export function useField<T = FieldValue>({
       },
       [store, name],
     ),
-    () => store.getState().values[name],
-    () => store.getState().values[name],
+    () => getNestedValue(store.getState().values, name),
+    () => getNestedValue(store.getState().values, name),
   ) as T;
 
   const error = useSyncExternalStore(
