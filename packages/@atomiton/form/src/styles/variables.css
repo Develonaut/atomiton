@@ -1,0 +1,300 @@
+:root {
+  /* Colors */
+  --form-bg: #111827;
+  --form-bg-light: #1f2937;
+  --form-border: #374151;
+  --form-border-hover: #4b5563;
+  --form-border-focus: #3b82f6;
+  --form-border-error: #ef4444;
+  --form-text: #ffffff;
+  --form-text-secondary: #d1d5db;
+  --form-text-muted: #9ca3af;
+  --form-text-error: #fca5a5;
+  --form-placeholder: #6b7280;
+  --form-disabled-opacity: 0.5;
+  
+  /* Focus effects */
+  --form-focus-ring: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  --form-focus-ring-error: 0 0 0 2px rgba(239, 68, 68, 0.5);
+  
+  /* Spacing */
+  --form-spacing-xs: 0.25rem;
+  --form-spacing-sm: 0.5rem;
+  --form-spacing-md: 0.75rem;
+  --form-spacing-lg: 1rem;
+  --form-padding-x: 0.75rem;
+  --form-padding-y: 0.5rem;
+  --form-gap: 0.25rem;
+  
+  /* Typography */
+  --form-font-size-xs: 0.75rem;
+  --form-font-size-sm: 0.875rem;
+  --form-font-size-base: 1rem;
+  --form-font-weight-medium: 500;
+  --form-line-height-tight: 1.25;
+  --form-line-height-normal: 1.5;
+  
+  /* Borders & Radius */
+  --form-border-width: 1px;
+  --form-border-radius: 0.375rem;
+  --form-border-radius-sm: 0.25rem;
+  
+  /* Transitions */
+  --form-transition: all 200ms ease;
+  --form-transition-fast: all 150ms ease;
+  
+  /* Checkbox & Radio specific */
+  --form-checkbox-size: 1rem;
+  --form-radio-size: 1rem;
+  --form-checkbox-color: #3b82f6;
+  --form-checkbox-bg: #111827;
+  --form-checkbox-border: #374151;
+  --form-checkbox-border-hover: #4b5563;
+  
+  /* Select specific */
+  --form-select-bg: #111827;
+  --form-select-option-bg: #111827;
+  --form-select-option-text: #ffffff;
+  
+  /* States */
+  --form-state-hover-opacity: 0.8;
+  --form-state-active-opacity: 0.9;
+  
+  /* Shadows */
+  --form-shadow-none: none;
+  --form-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --form-shadow-focus: var(--form-focus-ring);
+  --form-shadow-focus-error: var(--form-focus-ring-error);
+}
+
+/* Dark theme compatibility - these can be overridden for light themes */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --form-bg: #111827;
+    --form-bg-light: #1f2937;
+    --form-border: #374151;
+    --form-border-hover: #4b5563;
+    --form-text: #ffffff;
+    --form-text-secondary: #d1d5db;
+    --form-text-muted: #9ca3af;
+    --form-placeholder: #6b7280;
+  }
+}
+
+/* Light theme overrides (can be customized by consumers) */
+[data-theme="light"] {
+  --form-bg: #ffffff;
+  --form-bg-light: #f9fafb;
+  --form-border: #d1d5db;
+  --form-border-hover: #9ca3af;
+  --form-text: #111827;
+  --form-text-secondary: #374151;
+  --form-text-muted: #6b7280;
+  --form-text-error: #dc2626;
+  --form-placeholder: #9ca3af;
+  --form-checkbox-bg: #ffffff;
+  --form-checkbox-border: #d1d5db;
+  --form-checkbox-border-hover: #9ca3af;
+  --form-select-bg: #ffffff;
+  --form-select-option-bg: #ffffff;
+  --form-select-option-text: #111827;
+}
+
+/* Form component base styles using variables */
+.atomiton-form {
+  font-family: inherit;
+  font-size: var(--form-font-size-base);
+  line-height: var(--form-line-height-normal);
+  color: var(--form-text);
+}
+
+.atomiton-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--form-gap);
+}
+
+.atomiton-form-label {
+  display: block;
+  font-size: var(--form-font-size-sm);
+  font-weight: var(--form-font-weight-medium);
+  color: var(--form-text-secondary);
+  line-height: var(--form-line-height-tight);
+}
+
+.atomiton-form-input,
+.atomiton-form-textarea,
+.atomiton-form-select {
+  width: 100%;
+  padding: var(--form-padding-y) var(--form-padding-x);
+  background-color: var(--form-bg);
+  border: var(--form-border-width) solid var(--form-border);
+  border-radius: var(--form-border-radius);
+  color: var(--form-text);
+  font-size: var(--form-font-size-base);
+  line-height: var(--form-line-height-normal);
+  transition: var(--form-transition);
+  outline: none;
+}
+
+.atomiton-form-input::placeholder,
+.atomiton-form-textarea::placeholder {
+  color: var(--form-placeholder);
+}
+
+.atomiton-form-input:hover,
+.atomiton-form-textarea:hover,
+.atomiton-form-select:hover {
+  border-color: var(--form-border-hover);
+}
+
+.atomiton-form-input:focus,
+.atomiton-form-textarea:focus,
+.atomiton-form-select:focus {
+  border-color: var(--form-border-focus);
+  box-shadow: var(--form-shadow-focus);
+}
+
+.atomiton-form-input:disabled,
+.atomiton-form-textarea:disabled,
+.atomiton-form-select:disabled {
+  opacity: var(--form-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.atomiton-form-input.error,
+.atomiton-form-textarea.error,
+.atomiton-form-select.error {
+  border-color: var(--form-border-error);
+}
+
+.atomiton-form-input.error:focus,
+.atomiton-form-textarea.error:focus,
+.atomiton-form-select.error:focus {
+  border-color: var(--form-border-error);
+  box-shadow: var(--form-shadow-focus-error);
+}
+
+.atomiton-form-checkbox,
+.atomiton-form-radio {
+  width: var(--form-checkbox-size);
+  height: var(--form-checkbox-size);
+  background-color: var(--form-checkbox-bg);
+  border: var(--form-border-width) solid var(--form-checkbox-border);
+  border-radius: var(--form-border-radius-sm);
+  color: var(--form-checkbox-color);
+  transition: var(--form-transition);
+  cursor: pointer;
+}
+
+.atomiton-form-radio {
+  border-radius: 50%;
+}
+
+.atomiton-form-checkbox:hover,
+.atomiton-form-radio:hover {
+  border-color: var(--form-checkbox-border-hover);
+}
+
+.atomiton-form-checkbox:focus,
+.atomiton-form-radio:focus {
+  box-shadow: var(--form-shadow-focus);
+  outline: none;
+}
+
+.atomiton-form-checkbox:disabled,
+.atomiton-form-radio:disabled {
+  opacity: var(--form-disabled-opacity);
+  cursor: not-allowed;
+}
+
+.atomiton-form-checkbox.error,
+.atomiton-form-radio.error {
+  border-color: var(--form-border-error);
+}
+
+.atomiton-form-checkbox.error:focus,
+.atomiton-form-radio.error:focus {
+  border-color: var(--form-border-error);
+  box-shadow: var(--form-shadow-focus-error);
+}
+
+.atomiton-form-helper-text {
+  font-size: var(--form-font-size-xs);
+  color: var(--form-text-muted);
+  line-height: var(--form-line-height-tight);
+}
+
+.atomiton-form-error-text {
+  font-size: var(--form-font-size-xs);
+  color: var(--form-text-error);
+  line-height: var(--form-line-height-tight);
+}
+
+.atomiton-form-select-option {
+  background-color: var(--form-select-option-bg);
+  color: var(--form-select-option-text);
+}
+
+/* Utility classes for spacing */
+.atomiton-form-space-y-1 > * + * {
+  margin-top: var(--form-gap);
+}
+
+.atomiton-form-space-y-2 > * + * {
+  margin-top: var(--form-spacing-sm);
+}
+
+.atomiton-form-space-y-3 > * + * {
+  margin-top: var(--form-spacing-md);
+}
+
+.atomiton-form-space-y-4 > * + * {
+  margin-top: var(--form-spacing-lg);
+}
+
+/* Checkbox and radio label layouts */
+.atomiton-form-checkbox-label,
+.atomiton-form-radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--form-spacing-md);
+  cursor: pointer;
+}
+
+.atomiton-form-checkbox-label span,
+.atomiton-form-radio-label span {
+  font-size: var(--form-font-size-sm);
+  font-weight: var(--form-font-weight-medium);
+  color: var(--form-text-secondary);
+  user-select: none;
+}
+
+/* Radio group layouts */
+.atomiton-form-radio-group-horizontal {
+  display: flex;
+  gap: calc(var(--form-spacing-lg) * 1.5);
+}
+
+.atomiton-form-radio-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--form-spacing-sm);
+}
+
+/* Textarea resize options */
+.atomiton-form-resize-none {
+  resize: none;
+}
+
+.atomiton-form-resize-vertical {
+  resize: vertical;
+}
+
+.atomiton-form-resize-horizontal {
+  resize: horizontal;
+}
+
+.atomiton-form-resize-both {
+  resize: both;
+}

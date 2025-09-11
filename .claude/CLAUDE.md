@@ -127,7 +127,7 @@ Packages are organized under `packages/@atomiton/`:
 
 ## 📝 Core Development Values
 
-- Never add comments unless explicitly requested
+- Never add comments unless explicitly requested (especially no redundant one-line comments that state the obvious)
 - Prefer editing existing files over creating new ones
 - Never create documentation files unless explicitly requested
 - Follow existing code conventions and patterns

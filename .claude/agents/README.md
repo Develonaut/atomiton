@@ -84,6 +84,14 @@ All work must follow the mandatory workflow including:
 - Documentation updates by Barbara
 - Final approval by Karen
 
+## 📋 Code Quality Requirements for ALL Agents
+
+- **NO redundant one-line comments** - Never add obvious comments that state what the code already shows
+- Never add comments unless explicitly requested by the user
+- Follow existing code conventions and patterns
+- Run format/lint/typecheck/build before completing work
+- Keep code clean, readable, and self-documenting
+
 ## 📋 Agent-Specific Requirements
 
 ### 🏗️ Michael (blueprint-system-architect)
