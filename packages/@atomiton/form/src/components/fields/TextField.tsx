@@ -1,8 +1,8 @@
+import { Input } from "@atomiton/ui";
 import React from "react";
-import type { UseFormRegister } from "react-hook-form";
-import { Field } from "@atomiton/ui";
+import { type UseFormRegister } from "react-hook-form";
 
-interface TextFieldProps {
+type TextFieldProps = {
   name: string;
   label?: string;
   placeholder?: string;
@@ -20,8 +20,9 @@ interface TextFieldProps {
     | "date"
     | "datetime-local"
     | "color"
-    | "file";
-}
+    | "file"
+    | "range";
+};
 
 export const TextField = React.memo<TextFieldProps>(
   ({
@@ -36,7 +37,7 @@ export const TextField = React.memo<TextFieldProps>(
     type = "text",
   }) => (
     <div>
-      <Field
+      <Input
         label={label}
         type={type}
         placeholder={placeholder}

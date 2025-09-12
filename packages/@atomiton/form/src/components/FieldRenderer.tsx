@@ -1,29 +1,30 @@
 import React from "react";
 import type {
-  UseFormRegister,
-  FieldErrors,
-  UseFormWatch,
-  UseFormSetValue,
   FieldError,
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
 } from "react-hook-form";
+import { FIELD_PROPERTY_EXTRACTORS } from "../constants.js";
 import type { FieldConfig } from "../types.js";
 import {
-  TextField,
-  SelectField,
   BooleanField,
-  NumberField,
-  TextareaField,
   JsonField,
+  NumberField,
+  SelectField,
+  TextareaField,
+  TextField,
 } from "./fields/index.js";
 
-interface FieldRendererProps {
+type FieldRendererProps = {
   fieldName: string;
   fieldConfig: FieldConfig;
   register: UseFormRegister<any>;
   errors: FieldErrors;
   watch: UseFormWatch<any>;
   setValue: UseFormSetValue<any>;
-}
+};
 
 export const FieldRenderer = React.memo<FieldRendererProps>(
   ({ fieldName, fieldConfig, register, errors, watch, setValue }) => {
@@ -31,119 +32,78 @@ export const FieldRenderer = React.memo<FieldRendererProps>(
     const value = watch(fieldName);
 
     const controlType = fieldConfig.type || "text";
-    const label = fieldConfig.label || fieldName;
-    const placeholder = fieldConfig.placeholder || "";
-    const helpText = fieldConfig.helpText || "";
-    const disabled = Boolean(fieldConfig.disabled);
+    const { label, placeholder, helpText, disabled } =
+      FIELD_PROPERTY_EXTRACTORS.extractBaseProps(fieldName, fieldConfig);
 
+    // Extract common props to reduce repetition
+    const commonProps = {
+      name: fieldName,
+      label,
+      placeholder,
+      helpText,
+      error,
+      register,
+      disabled,
+    };
+
+    const selectProps = {
+      ...commonProps,
+      value,
+      onChange: (newValue: any) => setValue(fieldName, newValue),
+      options: FIELD_PROPERTY_EXTRACTORS.extractOptions(fieldConfig),
+    };
+
+    const numericProps = {
+      ...commonProps,
+      ...FIELD_PROPERTY_EXTRACTORS.extractNumericProps(fieldConfig),
+    };
+
+    // Direct switch with JSX - most readable and performant approach
     switch (controlType) {
       case "select":
-        return (
-          <SelectField
-            name={fieldName}
-            label={label}
-            placeholder={placeholder}
-            helpText={helpText}
-            error={error}
-            value={value}
-            onChange={(newValue) => setValue(fieldName, newValue)}
-            options={
-              ("options" in fieldConfig ? fieldConfig.options : []) as Array<{
-                label: string;
-                value: string | number | boolean;
-              }>
-            }
-            disabled={disabled}
-          />
-        );
+        return <SelectField {...selectProps} />;
 
       case "boolean":
-        return (
-          <BooleanField
-            name={fieldName}
-            label={label}
-            helpText={helpText}
-            error={error}
-            register={register}
-            disabled={disabled}
-          />
-        );
+        return <BooleanField {...commonProps} />;
 
       case "textarea":
-        return (
-          <TextareaField
-            name={fieldName}
-            label={label}
-            placeholder={placeholder}
-            helpText={helpText}
-            error={error}
-            register={register}
-            disabled={disabled}
-          />
-        );
+        return <TextareaField {...commonProps} />;
 
       case "number":
-        return (
-          <NumberField
-            name={fieldName}
-            label={label}
-            placeholder={placeholder}
-            helpText={helpText}
-            error={error}
-            register={register}
-            disabled={disabled}
-            min={"min" in fieldConfig ? fieldConfig.min : undefined}
-            max={"max" in fieldConfig ? fieldConfig.max : undefined}
-            step={"step" in fieldConfig ? fieldConfig.step : undefined}
-          />
-        );
+        return <NumberField {...numericProps} />;
 
       case "json":
-        return (
-          <JsonField
-            name={fieldName}
-            label={label}
-            placeholder={placeholder}
-            helpText={helpText}
-            error={error}
-            register={register}
-            disabled={disabled}
-          />
-        );
+        return <JsonField {...commonProps} />;
+
+      case "email":
+        return <TextField {...commonProps} type="email" />;
+
+      case "password":
+        return <TextField {...commonProps} type="password" />;
+
+      case "url":
+        return <TextField {...commonProps} type="url" />;
+
+      case "tel":
+        return <TextField {...commonProps} type="tel" />;
+
+      case "date":
+        return <TextField {...commonProps} type="date" />;
+
+      case "datetime":
+        return <TextField {...commonProps} type="datetime-local" />;
+
+      case "color":
+        return <TextField {...commonProps} type="color" />;
+
+      case "file":
+        return <TextField {...commonProps} type="file" />;
+
+      case "range":
+        return <TextField {...numericProps} type="range" />;
 
       default:
-        // Map control types to HTML input types
-        const inputType =
-          controlType === "email"
-            ? "email"
-            : controlType === "password"
-              ? "password"
-              : controlType === "url"
-                ? "url"
-                : controlType === "tel"
-                  ? "tel"
-                  : controlType === "date"
-                    ? "date"
-                    : controlType === "datetime"
-                      ? "datetime-local"
-                      : controlType === "color"
-                        ? "color"
-                        : controlType === "file"
-                          ? "file"
-                          : "text";
-
-        return (
-          <TextField
-            name={fieldName}
-            label={label}
-            placeholder={placeholder}
-            helpText={helpText}
-            error={error}
-            register={register}
-            disabled={disabled}
-            type={inputType as any}
-          />
-        );
+        return <TextField {...commonProps} type="text" />;
     }
   },
 );

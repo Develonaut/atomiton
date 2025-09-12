@@ -27,17 +27,24 @@ export function generateFieldsFromSchema(
     const baseField = mapZodTypeToControl(fieldSchema as ZodSchema, fieldName);
     const fieldMetadata = fields[fieldName] || {};
 
+    // Clean property merging - support both 'type' and legacy 'controlType'
     const field: FieldConfig = {
       ...baseField,
-      type: ("type" in fieldMetadata && fieldMetadata.type) || baseField.type,
+      type:
+        ("type" in fieldMetadata && fieldMetadata.type) ||
+        ("controlType" in fieldMetadata &&
+          (fieldMetadata as any).controlType) ||
+        baseField.type,
       label:
         fieldMetadata.label ||
         fieldName.charAt(0).toUpperCase() + fieldName.slice(1),
       placeholder: fieldMetadata.placeholder,
       helpText: fieldMetadata.helpText,
+      // Merge options with metadata taking precedence
       options:
         ("options" in fieldMetadata ? fieldMetadata.options : undefined) ||
         ("options" in baseField ? baseField.options : undefined),
+      // Merge numeric properties with metadata taking precedence
       min:
         ("min" in fieldMetadata ? fieldMetadata.min : undefined) ||
         ("min" in baseField ? baseField.min : undefined),

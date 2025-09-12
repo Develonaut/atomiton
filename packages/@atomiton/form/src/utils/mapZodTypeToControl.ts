@@ -1,4 +1,8 @@
-import type { FieldConfig, ZodSchema, UIControlType } from "../types.js";
+import {
+  STRING_CHECK_TO_CONTROL_MAP,
+  ZOD_TYPE_TO_CONTROL_MAP,
+} from "../constants.js";
+import type { FieldConfig, UIControlType, ZodSchema } from "../types.js";
 
 /**
  * Maps a Zod schema type to a form control configuration
@@ -24,63 +28,65 @@ export function mapZodTypeToControl(
   const typeName = (schema as unknown as { _def?: { typeName?: string } })._def
     ?.typeName;
 
-  if (typeName === "ZodString") {
-    const checks =
-      (schema as unknown as { _def: { checks?: Array<{ kind: string }> } })._def
-        .checks || [];
+  // Use static mapping for basic type conversion
+  const mappedType = typeName ? ZOD_TYPE_TO_CONTROL_MAP[typeName] : undefined;
 
-    if (checks.some((check: { kind: string }) => check.kind === "email")) {
-      return { ...baseField, type: "email" };
-    }
-    if (checks.some((check: { kind: string }) => check.kind === "url")) {
-      return { ...baseField, type: "url" };
-    }
-
-    return baseField;
+  if (mappedType) {
+    baseField.type = mappedType;
   }
 
-  if (typeName === "ZodNumber") {
-    const checks =
-      (
-        schema as unknown as {
-          _def: { checks?: Array<{ kind: string; value?: number }> };
+  // Handle special cases that need additional processing
+  switch (typeName) {
+    case "ZodString": {
+      const checks =
+        (schema as unknown as { _def: { checks?: Array<{ kind: string }> } })
+          ._def.checks || [];
+
+      // Check for special string validation types
+      for (const check of checks) {
+        const mappedControlType = STRING_CHECK_TO_CONTROL_MAP[check.kind];
+        if (mappedControlType) {
+          return { ...baseField, type: mappedControlType };
         }
-      )._def.checks || [];
-    const minCheck = checks.find(
-      (check: { kind: string; value?: number }) => check.kind === "min",
-    );
-    const maxCheck = checks.find(
-      (check: { kind: string; value?: number }) => check.kind === "max",
-    );
+      }
+      return baseField;
+    }
 
-    return {
-      ...baseField,
-      type: "number",
-      min: minCheck?.value,
-      max: maxCheck?.value,
-    };
-  }
+    case "ZodNumber": {
+      const checks =
+        (
+          schema as unknown as {
+            _def: { checks?: Array<{ kind: string; value?: number }> };
+          }
+        )._def.checks || [];
+      const minCheck = checks.find(
+        (check: { kind: string; value?: number }) => check.kind === "min",
+      );
+      const maxCheck = checks.find(
+        (check: { kind: string; value?: number }) => check.kind === "max",
+      );
 
-  if (typeName === "ZodBoolean") {
-    return { ...baseField, type: "boolean" };
-  }
+      return {
+        ...baseField,
+        type: "number",
+        min: minCheck?.value,
+        max: maxCheck?.value,
+      };
+    }
 
-  if (typeName === "ZodEnum") {
-    const values = (
-      schema as unknown as { _def: { values: Array<string | number> } }
-    )._def.values;
-    return {
-      ...baseField,
-      type: "select",
-      options: values.map((value: string | number) => ({
-        label: String(value),
-        value,
-      })),
-    };
-  }
-
-  if (typeName === "ZodDate") {
-    return { ...baseField, type: "date" };
+    case "ZodEnum": {
+      const values = (
+        schema as unknown as { _def: { values: Array<string | number> } }
+      )._def.values;
+      return {
+        ...baseField,
+        type: "select",
+        options: values.map((value: string | number) => ({
+          label: String(value),
+          value,
+        })),
+      };
+    }
   }
 
   if (typeName === "ZodOptional") {
