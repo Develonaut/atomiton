@@ -5,7 +5,7 @@
  */
 
 // Main API export (follows core package pattern with api.ts)
-export { default, events } from "./api";
+export { events } from "./api";
 
 // Types consumers need
 export type { EventsAPI } from "./api";

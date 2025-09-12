@@ -17,9 +17,9 @@
  *   core.nodes.registerPackage(...)
  */
 
-import events from "@atomiton/events";
-import nodes from "@atomiton/nodes";
-import store from "@atomiton/store";
+import { events } from "@atomiton/events";
+import { nodes } from "@atomiton/nodes";
+import { store } from "@atomiton/store";
 
 import eventsPackage from "@atomiton/events/package.json";
 import nodesPackage from "@atomiton/nodes/package.json";

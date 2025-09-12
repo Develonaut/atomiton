@@ -1,7 +1,7 @@
-import { resolve } from "path";
-import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 import dts from "vite-plugin-dts";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [
@@ -12,6 +12,15 @@ export default defineConfig({
       exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
     }),
   ],
+  server: {
+    port: parseInt(process.env.VITE_EDITOR_PORT || "5175"),
+    strictPort: true,
+    host: true,
+    fs: {
+      // Allow serving files from parent directories
+      allow: [".."],
+    },
+  },
   build: {
     target: "es2020",
     lib: {

@@ -5,7 +5,7 @@
  */
 
 // Main API export (follows core package pattern with api.ts)
-export { default, store } from "./api";
+export { store } from "./api";
 
 // Types consumers need
 export type { StoreAPI } from "./api";

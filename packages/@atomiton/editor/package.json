@@ -12,19 +12,18 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./style.css": "./dist/style.css"
+    "./*.css": "./src/*.css"
   },
   "scripts": {
-    "dev": "vite build --watch",
+    "dev": "vite",
     "build": "vite build",
-    "build:tsc": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "build:watch": "vite build --watch",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "kill": "echo 'No processes to kill for Editor package'"
   },
   "keywords": [
     "editor",

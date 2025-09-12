@@ -15,6 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation for IPC integration
 - ROADMAP with 6-week development plan
 
+### Changed
+
+- Migrated Blueprint storage functionality to @atomiton/storage package
+- Updated to use universal storage abstraction instead of direct filesystem access
+- Removed yaml dependency in favor of @atomiton/storage
+
+### Planned
+
+- ExecutionEngine class for Blueprint orchestration
+- NodeExecutor for individual node execution
+- IPC integration with @atomiton/events
+- Sequential and parallel execution strategies
+
 ## [0.0.1] - 2025-01-11
 
 ### Added

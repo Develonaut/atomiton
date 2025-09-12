@@ -8,20 +8,21 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "development": "./src/index.ts",
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./style.css": {
+      "development": "./src/index.css",
+      "default": "./dist/style.css"
     },
     "./theme/index.css": "./src/theme/index.css",
     "./theme/variables.css": "./src/theme/variables.css"
   },
   "scripts": {
-    "dev": "pnpm build:watch",
-    "dev:ui": "vite",
+    "dev": "vite",
     "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "build:vite": "vite build",
-    "build:watch": "concurrently \"tsc -p tsconfig.build.json --watch\" \"tsc-alias -p tsconfig.build.json --watch\"",
     "clean": "rm -rf dist",
-    "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
@@ -31,7 +32,8 @@
     "test:install": "playwright install",
     "test:unit": "vitest",
     "test:unit:watch": "vitest --watch",
-    "test:unit:coverage": "vitest --coverage"
+    "test:unit:coverage": "vitest --coverage",
+    "kill": "echo 'No processes to kill for UI package'"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

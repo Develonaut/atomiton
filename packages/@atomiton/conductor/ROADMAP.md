@@ -8,11 +8,13 @@ Development roadmap for the @atomiton/conductor package - the orchestration engi
 
 ### Week 1: Core Structure
 
-- [ ] Set up package build configuration
+- [x] Set up package build configuration
 - [ ] Define core interfaces (IExecutionEngine, IRuntime)
 - [ ] Create ExecutionEngine class
-- [ ] Implement basic Blueprint loading from YAML
+- [x] ~~**BlueprintSerializer class**~~ - _Migrated to @atomiton/storage_
+- [x] ~~**BlueprintStorage class**~~ - _Migrated to @atomiton/storage_
 - [ ] Set up testing infrastructure
+- [ ] Integration with @atomiton/storage for Blueprint persistence
 
 ### Week 2: Basic Execution
 
@@ -77,7 +79,7 @@ Development roadmap for the @atomiton/conductor package - the orchestration engi
 
 - [ ] Add remote execution capability
 - [ ] Implement distributed execution
-- [ ] Add cloud storage integration
+- [ ] ~~Add cloud storage integration~~ - _Handled by @atomiton/storage package_
 - [ ] Create execution clustering
 
 ## Success Metrics
@@ -106,7 +108,7 @@ Development roadmap for the @atomiton/conductor package - the orchestration engi
 
 - **Language**: Pure TypeScript/Node.js
 - **Queue**: p-queue (in-memory)
-- **Storage**: Local filesystem (YAML)
+- **Storage**: @atomiton/storage package (universal abstraction)
 - **IPC**: @atomiton/events with EventEmitter3
 
 ### Future Options
@@ -121,8 +123,8 @@ Development roadmap for the @atomiton/conductor package - the orchestration engi
 
 - @atomiton/nodes (node definitions)
 - @atomiton/events (IPC communication)
+- @atomiton/storage (Blueprint persistence and storage abstraction)
 - p-queue (task queue)
-- yaml (Blueprint storage)
 
 ### Development
 
@@ -148,6 +150,6 @@ Development roadmap for the @atomiton/conductor package - the orchestration engi
 
 ---
 
-**Last Updated**: 2025-01-11
-**Status**: Ready to implement
-**Next Step**: Set up package build configuration
+**Last Updated**: 2025-01-11  
+**Status**: Foundation Phase - Storage Migration Complete
+**Next Step**: Implement ExecutionEngine class for Blueprint orchestration

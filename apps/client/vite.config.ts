@@ -24,7 +24,26 @@ export default defineConfig({
   },
   // Optimize deps to exclude workspace packages for better HMR
   optimizeDeps: {
-    exclude: ["@atomiton/ui"],
+    exclude: ["@atomiton/ui", "@atomiton/editor"],
+  },
+  resolve: {
+    conditions:
+      process.env.NODE_ENV === "development"
+        ? ["development", "import", "module", "browser", "default"]
+        : undefined,
+    alias: {
+      // Always apply aliases (not just in development)
+      "@atomiton/ui": path.resolve(
+        __dirname,
+        "../..",
+        "packages/@atomiton/ui/src",
+      ),
+      "@atomiton/editor": path.resolve(
+        __dirname,
+        "../..",
+        "packages/@atomiton/editor/src",
+      ),
+    },
   },
   build: {
     outDir: "dist",

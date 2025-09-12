@@ -1,7 +1,7 @@
 {
-  "name": "@atomiton/conductor",
+  "name": "@atomiton/storage",
   "version": "0.0.1",
-  "description": "Blueprint and node execution orchestrator for Atomiton",
+  "description": "Universal storage abstraction for Blueprints and application data across platforms",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,13 +19,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "kill": "echo 'No processes to kill for Conductor package'"
+    "kill": "echo 'No processes to kill for Storage package'"
   },
   "dependencies": {
-    "@atomiton/nodes": "workspace:^",
-    "@atomiton/events": "workspace:^",
-    "@atomiton/storage": "workspace:^",
-    "p-queue": "^8.0.0"
+    "yaml": "^2.0.0"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
@@ -36,11 +33,12 @@
     "vitest": "^2.0.0"
   },
   "keywords": [
-    "conductor",
-    "orchestration",
-    "execution",
-    "workflow",
-    "blueprint"
+    "storage",
+    "abstraction",
+    "filesystem",
+    "cloud",
+    "blueprint",
+    "cross-platform"
   ],
   "license": "MIT"
 }

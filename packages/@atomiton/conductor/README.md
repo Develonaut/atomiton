@@ -70,6 +70,7 @@ See [ROADMAP.md](./ROADMAP.md) for detailed development timeline.
 - [Blueprint Execution](./docs/BLUEPRINT_EXECUTION.md)
 - [Execution Strategy](./docs/EXECUTION_STRATEGY.md)
 - [IPC Integration](./docs/IPC_INTEGRATION.md)
+- [Serialization Architecture](./docs/SERIALIZATION_ARCHITECTURE.md)
 
 ## Development
 

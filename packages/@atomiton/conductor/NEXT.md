@@ -7,7 +7,9 @@
 **Priority Tasks:**
 
 - [ ] **ExecutionEngine class** - Core orchestration implementation
-- [ ] **Blueprint loader** - Load and parse YAML files
+- [x] ~~**BlueprintSerializer**~~ - _Migrated to @atomiton/storage_
+- [x] ~~**BlueprintStorage**~~ - _Migrated to @atomiton/storage_
+- [ ] **Storage integration** - Use @atomiton/storage for Blueprint persistence
 - [ ] **Sequential execution** - Execute nodes in order
 - [ ] **Data flow** - Pass data between connected nodes
 - [ ] **Context management** - Execution context and state
@@ -35,6 +37,7 @@
 ### Required First
 
 - ✅ @atomiton/nodes - Node definitions and interfaces
+- ✅ @atomiton/storage - Blueprint persistence and storage abstraction
 - 🚧 @atomiton/events - IPC support (in progress)
 
 ### Will Enable

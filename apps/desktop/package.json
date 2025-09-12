@@ -4,12 +4,14 @@
   "type": "module",
   "main": "./out/main/index.js",
   "scripts": {
-    "dev": "node -e \"setTimeout(() => process.exit(), 3000)\" && electron-vite dev",
+    "dev": "wait-on http://localhost:5173 && electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false"
+    "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "kill": "pkill -f electron || true",
+    "kill:electron": "pkill -f electron || true"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
@@ -17,11 +19,12 @@
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@types/node": "^20.0.0",
+    "concurrently": "^8.2.0",
     "electron": "^38.0.0",
     "electron-builder": "^26.0.0",
-    "electron-devtools-installer": "^4.0.0",
     "electron-vite": "^4.0.0",
     "typescript": "^5.0.0",
-    "vite": "^7.0.0"
+    "vite": "^7.0.0",
+    "wait-on": "^8.0.4"
   }
 }

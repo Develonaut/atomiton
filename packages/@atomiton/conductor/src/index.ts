@@ -4,7 +4,19 @@
  * Blueprint and node execution orchestrator for Atomiton
  */
 
-// Placeholder exports - to be implemented
+// Re-export storage functionality from @atomiton/storage
+export {
+  FilesystemStorage,
+  BlueprintSerializer,
+  SerializationError,
+  StorageError,
+  type IStorageEngine,
+  type IBlueprintSerializer,
+  type BlueprintDefinition,
+  type StorageItem,
+} from "@atomiton/storage";
+
+// Execution engine types (to be implemented)
 export type IExecutionEngine = {
   execute(blueprintId: string, input?: unknown): Promise<ExecutionResult>;
   pause(executionId: string): Promise<void>;

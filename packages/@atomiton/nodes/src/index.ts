@@ -5,7 +5,7 @@
  */
 
 // Main API export (follows core package pattern with api.ts)
-export { default, nodes } from "./api";
+export { nodes } from "./api";
 
 // Types consumers need
 export type { NodesAPI } from "./api";

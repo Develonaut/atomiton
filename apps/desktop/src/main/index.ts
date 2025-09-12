@@ -1,6 +1,5 @@
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { app, BrowserWindow, ipcMain, shell } from "electron";
-import installExtension, { REDUX_DEVTOOLS } from "electron-devtools-installer";
+import { app, BrowserWindow, ipcMain, shell, session } from "electron";
 import { join } from "path";
 
 function createWindow(): void {
@@ -12,6 +11,9 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
+      contextIsolation: true,
+      nodeIntegration: false,
+      webSecurity: true,
     },
   });
 
@@ -39,15 +41,8 @@ function createWindow(): void {
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId("com.electron");
 
-  // Install Redux DevTools Extension in development mode
-  if (is.dev) {
-    try {
-      await installExtension(REDUX_DEVTOOLS);
-      // Redux DevTools Extension installed successfully
-    } catch (e) {
-      console.error("Failed to install Redux DevTools Extension:", e);
-    }
-  }
+  // DevTools are available via built-in Electron tools
+  // Extensions can be installed manually if needed
 
   app.on("browser-window-created", (_, window) => {
     optimizer.watchWindowShortcuts(window);
