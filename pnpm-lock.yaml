@@ -159,6 +159,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^5.2.0
         version: 5.2.0(eslint@9.35.0)
+      kill-port:
+        specifier: ^2.0.1
+        version: 2.0.1
       tailwindcss:
         specifier: ^4.0.0
         version: 4.1.13
@@ -192,6 +195,9 @@ importers:
       concurrently:
         specifier: ^8.2.0
         version: 8.2.2
+      cross-env:
+        specifier: ^10.0.0
+        version: 10.0.0
       electron:
         specifier: ^38.0.0
         version: 38.0.0
@@ -201,6 +207,9 @@ importers:
       electron-vite:
         specifier: ^4.0.0
         version: 4.0.0(vite@7.1.5)
+      kill-port:
+        specifier: ^2.0.1
+        version: 2.0.1
       typescript:
         specifier: ^5.0.0
         version: 5.9.2
@@ -442,6 +451,9 @@ importers:
 
   packages/@atomiton/events:
     dependencies:
+      eventemitter3:
+        specifier: ^5.0.0
+        version: 5.0.1
       events:
         specifier: ^3.3.0
         version: 3.3.0

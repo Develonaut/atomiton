@@ -16,6 +16,7 @@
     "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix"
   },
   "dependencies": {
+    "eventemitter3": "^5.0.0",
     "events": "^3.3.0"
   },
   "devDependencies": {

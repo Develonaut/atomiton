@@ -42,4 +42,26 @@ export type EventEmitterOptions = {
   maxListeners?: number;
   errorHandler?: (error: Error, event: SystemEvent) => void;
   async?: boolean;
+  enableIPC?: boolean; // Enable IPC bridge for cross-process events
+  ipcChannel?: string; // Custom IPC channel name
+};
+
+/**
+ * IPC-specific event handler
+ */
+export type IPCEventHandler<T = unknown> = (event: SystemEvent<T>) => void;
+
+/**
+ * Event emitter mode
+ */
+export type EmitterMode = "performance" | "ipc" | "auto";
+
+/**
+ * Event bus configuration
+ */
+export type EventBusConfig = {
+  mode?: EmitterMode;
+  enableBatching?: boolean;
+  batchInterval?: number;
+  maxBatchSize?: number;
 };

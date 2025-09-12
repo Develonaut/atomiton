@@ -1,9 +1,14 @@
 /**
  * Event Emitter - Core event broadcasting functionality
  * Pure functional implementation without classes
+ *
+ * Intelligently selects between EventEmitter3 (for performance) and
+ * Node.js EventEmitter (for IPC compatibility) based on context.
  */
 
-import { EventEmitter } from "events";
+import { EventEmitter as NodeEventEmitter } from "events";
+import { EventEmitter as EventEmitter3 } from "eventemitter3";
+import { ipcBridge } from "./ipc";
 import type {
   SystemEvent,
   SystemEventListener,
@@ -16,8 +21,31 @@ import type {
 // Private State
 // ============================================================================
 
-// Core event emitter instance
-const emitter = new EventEmitter();
+// Detect execution context
+function isElectronRenderer(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    typeof process !== "undefined" &&
+    process.type === "renderer"
+  );
+}
+
+function isElectronMain(): boolean {
+  return (
+    typeof window === "undefined" &&
+    typeof process !== "undefined" &&
+    process.type === "browser"
+  );
+}
+
+function requiresIPC(): boolean {
+  return isElectronRenderer() || isElectronMain();
+}
+
+// Core event emitter instance - choose based on context
+// Use Node.js EventEmitter for IPC scenarios, EventEmitter3 for performance
+const EmitterClass = requiresIPC() ? NodeEventEmitter : EventEmitter3;
+const emitter = new EmitterClass();
 
 // Configuration
 let config: Required<EventEmitterOptions> = {
@@ -26,6 +54,8 @@ let config: Required<EventEmitterOptions> = {
     console.error("Event listener error:", error, "Event:", event);
   },
   async: false,
+  enableIPC: false,
+  ipcChannel: "events:system",
 };
 
 // Listener tracking for better debugging
@@ -45,6 +75,16 @@ emitter.setMaxListeners(config.maxListeners);
 export function configure(options: EventEmitterOptions): void {
   config = { ...config, ...options };
   emitter.setMaxListeners(config.maxListeners);
+
+  // Setup IPC bridge if enabled
+  if (config.enableIPC && ipcBridge.isAvailable()) {
+    ipcBridge.on("*", (event) => {
+      // Re-emit IPC events locally
+      emitter.emit("system", event);
+      emitter.emit(`type:${event.type}`, event);
+      emitter.emit(`source:${event.source}`, event);
+    });
+  }
 }
 
 /**
@@ -67,6 +107,11 @@ export function emit<T = unknown>(event: SystemEvent<T>): void {
     ...event,
     timestamp: event.timestamp || Date.now(),
   };
+
+  // Send to IPC if enabled
+  if (config.enableIPC && ipcBridge.isAvailable()) {
+    ipcBridge.sendToOtherProcess(eventWithTimestamp);
+  }
 
   if (config.async) {
     setImmediate(() => emitter.emit("system", eventWithTimestamp));
