@@ -1,6 +1,6 @@
 {
   "name": "@atomiton/conductor",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Blueprint and node execution orchestrator for Atomiton",
   "type": "module",
   "main": "./dist/index.js",
@@ -28,10 +28,12 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@atomiton/nodes": "workspace:^",
     "@atomiton/events": "workspace:^",
+    "@atomiton/nodes": "workspace:^",
     "@atomiton/storage": "workspace:^",
-    "p-queue": "^8.0.0"
+    "@types/uuid": "^10.0.0",
+    "p-queue": "^8.0.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
