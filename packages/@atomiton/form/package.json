@@ -18,21 +18,19 @@
     "dist"
   ],
   "scripts": {
-    "_build_disabled": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest --coverage",
-    "_lint_disabled": "eslint .",
+    "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "_typecheck_disabled": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@atomiton/store": "workspace:*",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "zod": "^3.25.3",
-    "zustand": "^5.0.5"
+    "@hookform/resolvers": "^3.3.4",
+    "react-hook-form": "^7.49.3",
+    "zod": "^3.25.3"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
