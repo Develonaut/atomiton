@@ -3,12 +3,12 @@ import * as yaml from "yaml";
 /**
  * Core interface for Blueprint serialization/deserialization
  */
-export interface IBlueprintSerializer {
+export type IBlueprintSerializer = {
   toYAML(blueprint: BlueprintDefinition): string;
   fromYAML(yamlContent: string): BlueprintDefinition;
   toJSON(blueprint: BlueprintDefinition): string;
   fromJSON(jsonContent: string): BlueprintDefinition;
-}
+};
 
 /**
  * Blueprint serialization implementation
@@ -78,31 +78,33 @@ export class BlueprintSerializer implements IBlueprintSerializer {
    * Validate parsed data matches BlueprintDefinition structure
    * TODO: Implement Zod schema validation when @atomiton/nodes is ready
    */
-  private validateBlueprint(data: any): BlueprintDefinition {
+  private validateBlueprint(data: unknown): BlueprintDefinition {
     if (!data || typeof data !== "object") {
       throw new SerializationError("Invalid Blueprint data: must be an object");
     }
 
-    if (!data.id || typeof data.id !== "string") {
+    const record = data as Record<string, unknown>;
+
+    if (!record.id || typeof record.id !== "string") {
       throw new SerializationError(
         "Invalid Blueprint data: missing or invalid id",
       );
     }
 
-    if (!data.name || typeof data.name !== "string") {
+    if (!record.name || typeof record.name !== "string") {
       throw new SerializationError(
         "Invalid Blueprint data: missing or invalid name",
       );
     }
 
-    if (!data.version || typeof data.version !== "string") {
+    if (!record.version || typeof record.version !== "string") {
       throw new SerializationError(
         "Invalid Blueprint data: missing or invalid version",
       );
     }
 
     // Basic validation - will be enhanced with Zod schema
-    return data as BlueprintDefinition;
+    return record as BlueprintDefinition;
   }
 }
 
@@ -129,7 +131,7 @@ export class SerializationError extends Error {
  * Temporary BlueprintDefinition interface
  * TODO: Import from @atomiton/nodes when available
  */
-export interface BlueprintDefinition {
+export type BlueprintDefinition = {
   id: string;
   name: string;
   version: string;
@@ -165,4 +167,4 @@ export interface BlueprintDefinition {
     updated: string;
     author?: string;
   };
-}
+};

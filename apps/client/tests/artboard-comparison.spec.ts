@@ -35,7 +35,7 @@ test.describe("Artboard Section Comparison", () => {
       // Check if any options are visible
       const listbox = page.locator('[role="listbox"]');
       const optionsCount = await listbox.locator('[role="option"]').count();
-      console.log("LOCAL - Dropdown options found:", optionsCount);
+      console.error("LOCAL - Dropdown options found:", optionsCount);
     }
   });
 
@@ -69,7 +69,7 @@ test.describe("Artboard Section Comparison", () => {
       // Check if any options are visible
       const listbox = page.locator('[role="listbox"]');
       const optionsCount = await listbox.locator('[role="option"]').count();
-      console.log("REFERENCE - Dropdown options found:", optionsCount);
+      console.error("REFERENCE - Dropdown options found:", optionsCount);
     }
   });
 

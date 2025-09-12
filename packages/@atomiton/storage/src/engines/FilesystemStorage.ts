@@ -5,7 +5,6 @@ import {
   BlueprintSerializer,
   type IBlueprintSerializer,
   type BlueprintDefinition,
-  SerializationError,
 } from "../serialization/BlueprintSerializer.js";
 import {
   StorageError,
@@ -31,7 +30,11 @@ export class FilesystemStorage implements IStorageEngine {
   /**
    * Save data to filesystem
    */
-  async save(key: string, data: any, options?: StorageOptions): Promise<void> {
+  async save(
+    key: string,
+    data: unknown,
+    options?: StorageOptions,
+  ): Promise<void> {
     try {
       await this.ensureDirectory(key);
 
@@ -70,7 +73,7 @@ export class FilesystemStorage implements IStorageEngine {
   /**
    * Load data from filesystem
    */
-  async load(key: string): Promise<any> {
+  async load(key: string): Promise<unknown> {
     try {
       // Try YAML first, then JSON
       const yamlPath = this.getFilePath(key, "yaml");
@@ -308,10 +311,13 @@ export class FilesystemStorage implements IStorageEngine {
   /**
    * Check if data looks like Blueprint data
    */
-  private isBlueprintData(data: any): data is BlueprintDefinition {
+  private isBlueprintData(data: unknown): data is BlueprintDefinition {
     return (
       data &&
       typeof data === "object" &&
+      "id" in data &&
+      "name" in data &&
+      "version" in data &&
       typeof data.id === "string" &&
       typeof data.name === "string" &&
       typeof data.version === "string"

@@ -27,16 +27,12 @@ export default defineConfig({
         "util",
         // Third-party libraries
         "chokidar",
-        "eventemitter3",
         "glob",
         "zod",
+        // Internal packages
+        "@atomiton/events",
       ],
     },
     sourcemap: true,
-  },
-  test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: ["./src/test-setup.ts"],
   },
 });

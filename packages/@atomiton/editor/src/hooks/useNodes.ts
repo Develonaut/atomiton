@@ -14,5 +14,6 @@ export function useNodes() {
     selectNode: editorStore.selectNode,
     deleteNode: editorStore.deleteNode,
     addNode: editorStore.addNode,
+    updateNodeData: editorStore.updateNodeData,
   };
 }

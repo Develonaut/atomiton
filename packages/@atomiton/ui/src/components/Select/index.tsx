@@ -9,6 +9,7 @@ import {
 export type SelectOption = {
   id: number;
   name: string;
+  value?: unknown;
 };
 
 type SelectProps = {

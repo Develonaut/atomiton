@@ -57,7 +57,7 @@ test.describe("Dropdown Functionality", () => {
       '[role="listbox"], [data-open], .data-open',
     );
     const count = await dropdownContent.count();
-    console.log(`Found ${count} dropdown elements`);
+    console.error(`Found ${count} dropdown elements`);
   });
 
   test("Check dropdown data attributes", async ({ page }) => {
@@ -77,7 +77,7 @@ test.describe("Dropdown Functionality", () => {
         classList: el.className,
       };
     });
-    console.log("Initial button attributes:", initialAttributes);
+    console.error("Initial button attributes:", initialAttributes);
 
     // Click the dropdown
     await allScenesButton.click();
@@ -93,12 +93,12 @@ test.describe("Dropdown Functionality", () => {
         classList: el.className,
       };
     });
-    console.log("After click attributes:", afterClickAttributes);
+    console.error("After click attributes:", afterClickAttributes);
 
     // Check for dropdown menu
     const dropdownMenu = page.locator('[role="menu"], [role="listbox"]');
     const menuCount = await dropdownMenu.count();
-    console.log(`Found ${menuCount} dropdown menus`);
+    console.error(`Found ${menuCount} dropdown menus`);
 
     if (menuCount > 0) {
       const menuAttributes = await dropdownMenu.first().evaluate((el) => {
@@ -111,7 +111,7 @@ test.describe("Dropdown Functionality", () => {
           isVisible: (el as HTMLElement).offsetParent !== null,
         };
       });
-      console.log("Menu attributes:", menuAttributes);
+      console.error("Menu attributes:", menuAttributes);
     }
   });
 });

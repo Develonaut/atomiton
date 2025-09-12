@@ -2,6 +2,7 @@ import { useState } from "react";
 import Select from "@/components/Select";
 import Icon from "@/components/Icon";
 import Group from "../../Group";
+import { NumberInput } from "@/components/form";
 
 function Artboard() {
   const xPostOptions = [
@@ -37,28 +38,18 @@ function Artboard() {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
-            <div className="relative flex-1">
-              <div className="absolute top-[52%] left-2.5 -translate-y-1/2 text-body-md pointer-events-none text-secondary/50">
-                W
-              </div>
-              <input
-                className="w-full h-9 pl-7.5 pr-2 border border-surface-03 bg-surface-03 rounded-[0.625rem] text-body-md text-primary outline-0 transition-colors focus:border-s-02 focus:bg-surface-02"
-                type="text"
-                value={width}
-                onChange={(e) => setWidth(Number(e.target.value))}
-              />
-            </div>
-            <div className="relative flex-1">
-              <div className="absolute top-[52%] left-2.5 -translate-y-1/2 text-body-md pointer-events-none text-secondary/50">
-                H
-              </div>
-              <input
-                className="w-full h-9 pl-7.5 pr-2 border border-surface-03 bg-surface-03 rounded-[0.625rem] text-body-md text-primary outline-0 transition-colors focus:border-s-02 focus:bg-surface-02"
-                type="text"
-                value={height}
-                onChange={(e) => setHeight(Number(e.target.value))}
-              />
-            </div>
+            <NumberInput
+              className="flex-1"
+              value={width}
+              onChange={setWidth}
+              prefix="W"
+            />
+            <NumberInput
+              className="flex-1"
+              value={height}
+              onChange={setHeight}
+              prefix="H"
+            />
           </div>
           <div className="shrink-0 w-6 text-center text-secondary">px</div>
         </div>

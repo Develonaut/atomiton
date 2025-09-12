@@ -1,4 +1,3 @@
-import { z } from "zod";
 import type { FieldConfig, ZodSchema, UIControlType } from "../types.js";
 
 /**
@@ -15,20 +14,25 @@ export function mapZodTypeToControl(
     name: fieldName,
     type: "text" as UIControlType,
     required: !(
-      (schema as any)._def?.typeName === "ZodOptional" ||
-      (schema as any)._def?.typeName === "ZodNullable"
+      (schema as unknown as { _def?: { typeName?: string } })._def?.typeName ===
+        "ZodOptional" ||
+      (schema as unknown as { _def?: { typeName?: string } })._def?.typeName ===
+        "ZodNullable"
     ),
   };
 
-  const typeName = (schema as any)._def?.typeName;
+  const typeName = (schema as unknown as { _def?: { typeName?: string } })._def
+    ?.typeName;
 
   if (typeName === "ZodString") {
-    const checks = (schema as any)._def.checks || [];
+    const checks =
+      (schema as unknown as { _def: { checks?: Array<{ kind: string }> } })._def
+        .checks || [];
 
-    if (checks.some((check: any) => check.kind === "email")) {
+    if (checks.some((check: { kind: string }) => check.kind === "email")) {
       return { ...baseField, type: "email" };
     }
-    if (checks.some((check: any) => check.kind === "url")) {
+    if (checks.some((check: { kind: string }) => check.kind === "url")) {
       return { ...baseField, type: "url" };
     }
 
@@ -36,9 +40,18 @@ export function mapZodTypeToControl(
   }
 
   if (typeName === "ZodNumber") {
-    const checks = (schema as any)._def.checks || [];
-    const minCheck = checks.find((check: any) => check.kind === "min");
-    const maxCheck = checks.find((check: any) => check.kind === "max");
+    const checks =
+      (
+        schema as unknown as {
+          _def: { checks?: Array<{ kind: string; value?: number }> };
+        }
+      )._def.checks || [];
+    const minCheck = checks.find(
+      (check: { kind: string; value?: number }) => check.kind === "min",
+    );
+    const maxCheck = checks.find(
+      (check: { kind: string; value?: number }) => check.kind === "max",
+    );
 
     return {
       ...baseField,
@@ -53,7 +66,9 @@ export function mapZodTypeToControl(
   }
 
   if (typeName === "ZodEnum") {
-    const values = (schema as any)._def.values;
+    const values = (
+      schema as unknown as { _def: { values: Array<string | number> } }
+    )._def.values;
     return {
       ...baseField,
       type: "select",
@@ -70,7 +85,7 @@ export function mapZodTypeToControl(
 
   if (typeName === "ZodOptional") {
     const result = mapZodTypeToControl(
-      (schema as any)._def.innerType,
+      (schema as unknown as { _def: { innerType: ZodSchema } })._def.innerType,
       fieldName,
     );
     return { ...result, required: false };
@@ -78,7 +93,7 @@ export function mapZodTypeToControl(
 
   if (typeName === "ZodNullable") {
     const result = mapZodTypeToControl(
-      (schema as any)._def.innerType,
+      (schema as unknown as { _def: { innerType: ZodSchema } })._def.innerType,
       fieldName,
     );
     return { ...result, required: false };

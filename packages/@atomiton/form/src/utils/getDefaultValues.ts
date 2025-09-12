@@ -1,16 +1,22 @@
 import type { ZodSchema } from "../types.js";
 
-export function getDefaultValues(schema: ZodSchema): Record<string, any> {
-  if ((schema as any)._def?.typeName !== "ZodObject") {
+export function getDefaultValues(schema: ZodSchema): Record<string, unknown> {
+  if (
+    (schema as unknown as { _def?: { typeName?: string } })._def?.typeName !==
+    "ZodObject"
+  ) {
     return {};
   }
 
-  const shape = (schema as any)._def.shape();
-  const defaults: Record<string, any> = {};
+  const shape = (
+    schema as unknown as { _def: { shape: () => Record<string, unknown> } }
+  )._def.shape();
+  const defaults: Record<string, unknown> = {};
 
   for (const [fieldName, fieldSchema] of Object.entries(shape)) {
     const field = fieldSchema as ZodSchema;
-    const typeName = (field as any)._def?.typeName;
+    const typeName = (field as unknown as { _def?: { typeName?: string } })._def
+      ?.typeName;
 
     if (typeName === "ZodOptional" || typeName === "ZodNullable") {
       defaults[fieldName] = undefined;

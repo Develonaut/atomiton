@@ -73,8 +73,8 @@ test.describe("Dropdown Visual Comparison", () => {
       ? await localListbox.boundingBox()
       : null;
 
-    console.log("LOCAL dropdown visible:", localIsVisible);
-    console.log("LOCAL dropdown position:", localBoundingBox);
+    console.error("LOCAL dropdown visible:", localIsVisible);
+    console.error("LOCAL dropdown position:", localBoundingBox);
 
     // Now capture reference
     await page.goto("https://brainwave2-app.vercel.app/create");
@@ -89,7 +89,7 @@ test.describe("Dropdown Visual Comparison", () => {
     const refIsVisible = await refListbox.isVisible().catch(() => false);
     const refBoundingBox = refIsVisible ? await refListbox.boundingBox() : null;
 
-    console.log("REFERENCE dropdown visible:", refIsVisible);
-    console.log("REFERENCE dropdown position:", refBoundingBox);
+    console.error("REFERENCE dropdown visible:", refIsVisible);
+    console.error("REFERENCE dropdown position:", refBoundingBox);
   });
 });

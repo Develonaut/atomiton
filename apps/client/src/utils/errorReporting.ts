@@ -88,12 +88,11 @@ export class ErrorReporter {
    * Log error details to console with formatting
    */
   private logToConsole(report: ErrorReport): void {
-    console.group("🚨 Application Error Report");
+    console.error("🚨 Application Error Report:");
     console.error("Error:", report.error);
     console.error("Component Stack:", report.errorInfo.componentStack);
     console.error("Context:", report.context);
     console.error("Full Report:", report);
-    console.groupEnd();
   }
 
   /**

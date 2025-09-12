@@ -56,6 +56,7 @@ class EventsAPI {
     }
 
     // Events are automatically available
+    // The emitter will auto-detect the best engine based on context
     this.initialized = true;
   }
 

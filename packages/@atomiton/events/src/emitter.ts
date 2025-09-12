@@ -26,7 +26,7 @@ function isElectronRenderer(): boolean {
   return (
     typeof window !== "undefined" &&
     typeof process !== "undefined" &&
-    process.type === "renderer"
+    (process as unknown as { type: string }).type === "renderer"
   );
 }
 
@@ -34,7 +34,7 @@ function isElectronMain(): boolean {
   return (
     typeof window === "undefined" &&
     typeof process !== "undefined" &&
-    process.type === "browser"
+    (process as unknown as { type: string }).type === "browser"
   );
 }
 
@@ -42,10 +42,68 @@ function requiresIPC(): boolean {
   return isElectronRenderer() || isElectronMain();
 }
 
-// Core event emitter instance - choose based on context
-// Use Node.js EventEmitter for IPC scenarios, EventEmitter3 for performance
-const EmitterClass = requiresIPC() ? NodeEventEmitter : EventEmitter3;
-const emitter = new EmitterClass();
+// Unified emitter interface wrapper
+class UnifiedEmitter {
+  private emitter: NodeEventEmitter | EventEmitter3;
+  private useNodeEmitter: boolean;
+
+  constructor() {
+    this.useNodeEmitter = requiresIPC();
+    this.emitter = this.useNodeEmitter
+      ? new NodeEventEmitter()
+      : new EventEmitter3();
+  }
+
+  on(event: string, listener: (...args: unknown[]) => void): void {
+    if (this.useNodeEmitter) {
+      (this.emitter as NodeEventEmitter).on(event, listener);
+    } else {
+      (this.emitter as EventEmitter3).on(event, listener);
+    }
+  }
+
+  off(event: string, listener: (...args: unknown[]) => void): void {
+    if (this.useNodeEmitter) {
+      (this.emitter as NodeEventEmitter).off(event, listener);
+    } else {
+      (this.emitter as EventEmitter3).off(event, listener);
+    }
+  }
+
+  once(event: string, listener: (...args: unknown[]) => void): void {
+    if (this.useNodeEmitter) {
+      (this.emitter as NodeEventEmitter).once(event, listener);
+    } else {
+      (this.emitter as EventEmitter3).once(event, listener);
+    }
+  }
+
+  emit(event: string, ...args: unknown[]): boolean {
+    if (this.useNodeEmitter) {
+      return (this.emitter as NodeEventEmitter).emit(event, ...args);
+    } else {
+      return (this.emitter as EventEmitter3).emit(event, ...args);
+    }
+  }
+
+  removeAllListeners(): void {
+    this.emitter.removeAllListeners();
+  }
+
+  listenerCount(event: string): number {
+    return this.emitter.listenerCount(event);
+  }
+
+  setMaxListeners(n: number): void {
+    if (this.useNodeEmitter) {
+      (this.emitter as NodeEventEmitter).setMaxListeners(n);
+    }
+    // EventEmitter3 doesn't have setMaxListeners, which is fine
+  }
+}
+
+// Core event emitter instance
+const emitter = new UnifiedEmitter();
 
 // Configuration
 let config: Required<EventEmitterOptions> = {
@@ -54,8 +112,6 @@ let config: Required<EventEmitterOptions> = {
     console.error("Event listener error:", error, "Event:", event);
   },
   async: false,
-  enableIPC: false,
-  ipcChannel: "events:system",
 };
 
 // Listener tracking for better debugging
@@ -74,17 +130,19 @@ emitter.setMaxListeners(config.maxListeners);
  */
 export function configure(options: EventEmitterOptions): void {
   config = { ...config, ...options };
-  emitter.setMaxListeners(config.maxListeners);
-
-  // Setup IPC bridge if enabled
-  if (config.enableIPC && ipcBridge.isAvailable()) {
-    ipcBridge.on("*", (event) => {
-      // Re-emit IPC events locally
-      emitter.emit("system", event);
-      emitter.emit(`type:${event.type}`, event);
-      emitter.emit(`source:${event.source}`, event);
-    });
+  if (config.maxListeners) {
+    emitter.setMaxListeners(config.maxListeners);
   }
+}
+
+// Auto-setup IPC bridge if available
+if (ipcBridge.isAvailable()) {
+  ipcBridge.on("*", (event) => {
+    // Re-emit IPC events locally
+    emitter.emit("system", event);
+    emitter.emit(`type:${event.type}`, event);
+    emitter.emit(`source:${event.source}`, event);
+  });
 }
 
 /**
@@ -108,8 +166,8 @@ export function emit<T = unknown>(event: SystemEvent<T>): void {
     timestamp: event.timestamp || Date.now(),
   };
 
-  // Send to IPC if enabled
-  if (config.enableIPC && ipcBridge.isAvailable()) {
+  // Automatically send to IPC if available (no configuration needed)
+  if (ipcBridge.isAvailable()) {
     ipcBridge.sendToOtherProcess(eventWithTimestamp);
   }
 

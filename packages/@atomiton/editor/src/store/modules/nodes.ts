@@ -30,6 +30,7 @@ export type NodeActions = {
   deleteSelectedNodes: () => void;
   handleConnect: (connection: Connection) => void;
   handleDrop: (event: React.DragEvent, reactFlowBounds: DOMRect | null) => void;
+  updateNodeData: (id: string, data: unknown) => void;
 };
 
 export const createNodeModule = (
@@ -135,6 +136,26 @@ export const createNodeModule = (
       });
 
       actions.addNode(nodeType, position);
+    },
+
+    updateNodeData: (id: string, data: unknown) => {
+      const instance = store.getState().flowInstance;
+      if (!instance) return;
+
+      const nodes = instance.getNodes().map((node) => {
+        if (node.id === id) {
+          return { ...node, data: { ...node.data, ...data } };
+        }
+        return node;
+      });
+
+      instance.setNodes(nodes);
+
+      store.setState((state) => {
+        state.flowSnapshot.nodes = nodes;
+      });
+
+      debouncedUpdateFlowSnapshot();
     },
   };
 

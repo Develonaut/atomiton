@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 
 export type AtomitonFieldValue =
   | string
@@ -26,7 +26,7 @@ export type UIControlType =
   | "range" // Range slider
   | "json"; // JSON editor
 
-export interface UIFieldMetadata {
+export type UIFieldMetadata = {
   /** Type of form control to render */
   controlType?: UIControlType;
   /** Display label (defaults to field name) */
@@ -53,9 +53,9 @@ export interface UIFieldMetadata {
   group?: string;
   /** Sort order within group */
   order?: number;
-}
+};
 
-export interface FieldConfig {
+export type FieldConfig = {
   name: string;
   type: UIControlType;
   label?: string;
@@ -70,10 +70,10 @@ export interface FieldConfig {
   disabled?: boolean;
   group?: string;
   order?: number;
-}
+};
 
-export interface FieldsMetadata {
+export type FieldsMetadata = {
   [fieldName: string]: UIFieldMetadata;
-}
+};
 
 export type ZodSchema = z.ZodTypeAny;

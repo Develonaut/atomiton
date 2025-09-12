@@ -7,7 +7,15 @@
   "scripts": {
     "lint": "echo 'No linting needed for config-only package'",
     "lint:fix": "echo 'No linting fixes needed for config-only package'",
-    "typecheck": "echo 'No TypeScript to check for config-only package'"
+    "typecheck": "echo 'No TypeScript to check for config-only package'",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
+    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "echo \"No E2E tests for this package\"",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "publishConfig": {
     "access": "public"

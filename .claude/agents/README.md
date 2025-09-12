@@ -86,6 +86,22 @@ All work must follow the mandatory workflow including:
 
 ## 📋 Agent-Specific Requirements
 
+### 🚨 ALL AGENTS - Code Review Requirements
+
+**MANDATORY**: Before marking ANY work as complete, ALL agents MUST:
+
+1. Consult [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md)
+2. Run verification commands: `pnpm typecheck && pnpm lint && pnpm test && pnpm build`
+3. Fix all issues found (no `any` types, no redundant comments, files < 500 lines)
+4. Report status in standard format
+5. Only mark complete when ALL checks pass
+
+See also:
+
+- [CODE_REVIEW_GUIDELINES.md](../../docs/CODE_REVIEW_GUIDELINES.md)
+- [BENTO_BOX_PRINCIPLES.md](../../docs/BENTO_BOX_PRINCIPLES.md)
+- [AGENT_INSTRUCTIONS.md](../../docs/AGENT_INSTRUCTIONS.md)
+
 ### 🏗️ Michael (blueprint-system-architect)
 
 - **MUST** review system requirements in UI package documentation
@@ -127,6 +143,7 @@ All work must follow the mandatory workflow including:
 - Cut through BS and verify ACTUAL completion
 - "Is it ACTUALLY working or are you just saying it is?"
 - No mock implementations accepted
+- **CRITICAL**: Must use [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md) before approval
 - **CRITICAL**: Coordinates with Barbara after validation to update documentation
 
 ### 🔌 Parker (platform-integration-orchestrator)

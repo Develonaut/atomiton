@@ -7,12 +7,37 @@
 
 import type { SystemEvent, EventSubscription, IPCEventHandler } from "./types";
 
+// Type definitions for Electron IPC interfaces
+type IpcRenderer = {
+  on: (
+    channel: string,
+    listener: (event: unknown, data: string) => void,
+  ) => void;
+  send: (channel: string, ...args: unknown[]) => void;
+};
+
+type IpcMain = {
+  on: (
+    channel: string,
+    listener: (event: { sender: { id: number } }, data: string) => void,
+  ) => void;
+};
+
+type WebContents = {
+  id: number;
+  send: (channel: string, ...args: unknown[]) => void;
+};
+
+type ElectronWebContents = {
+  getAllWebContents: () => WebContents[];
+};
+
 // Type guards for Electron environment
 export function isElectronRenderer(): boolean {
   return (
     typeof window !== "undefined" &&
     typeof process !== "undefined" &&
-    process.type === "renderer"
+    (process as unknown as { type: string }).type === "renderer"
   );
 }
 
@@ -20,7 +45,7 @@ export function isElectronMain(): boolean {
   return (
     typeof window === "undefined" &&
     typeof process !== "undefined" &&
-    process.type === "browser"
+    (process as unknown as { type: string }).type === "browser"
   );
 }
 
@@ -33,8 +58,8 @@ export function isElectron(): boolean {
  */
 export class IPCBridge {
   private handlers = new Map<string, Set<IPCEventHandler>>();
-  private ipcRenderer?: any;
-  private ipcMain?: any;
+  private ipcRenderer?: IpcRenderer;
+  private ipcMain?: IpcMain;
   private initialized = false;
 
   constructor() {
@@ -47,18 +72,19 @@ export class IPCBridge {
     try {
       if (isElectronRenderer()) {
         // Dynamic import to avoid errors in non-Electron environments
-        const electron = require("electron");
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const electron = require("electron") as { ipcRenderer: IpcRenderer };
         this.ipcRenderer = electron.ipcRenderer;
         this.setupRendererHandlers();
       } else if (isElectronMain()) {
-        const electron = require("electron");
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const electron = require("electron") as { ipcMain: IpcMain };
         this.ipcMain = electron.ipcMain;
         this.setupMainHandlers();
       }
       this.initialized = true;
-    } catch (error) {
+    } catch {
       // Not in Electron environment, IPC features disabled
-      console.debug("IPC features disabled - not in Electron environment");
     }
   }
 
@@ -66,7 +92,7 @@ export class IPCBridge {
     if (!this.ipcRenderer) return;
 
     // Listen for events from main process
-    this.ipcRenderer.on("events:broadcast", (_event: any, data: string) => {
+    this.ipcRenderer.on("events:broadcast", (_event: unknown, data: string) => {
       const systemEvent = this.deserialize(data);
       this.emit(systemEvent);
     });
@@ -76,20 +102,26 @@ export class IPCBridge {
     if (!this.ipcMain) return;
 
     // Listen for events from renderer processes
-    this.ipcMain.on("events:broadcast", (event: any, data: string) => {
-      const systemEvent = this.deserialize(data);
+    this.ipcMain.on(
+      "events:broadcast",
+      (event: { sender: { id: number } }, data: string) => {
+        const systemEvent = this.deserialize(data);
 
-      // Broadcast to all renderer processes
-      const { webContents } = require("electron");
-      webContents.getAllWebContents().forEach((contents: any) => {
-        if (contents.id !== event.sender.id) {
-          contents.send("events:broadcast", data);
-        }
-      });
+        // Broadcast to all renderer processes
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { webContents } = require("electron") as {
+          webContents: ElectronWebContents;
+        };
+        webContents.getAllWebContents().forEach((contents) => {
+          if (contents.id !== event.sender.id) {
+            contents.send("events:broadcast", data);
+          }
+        });
 
-      // Also emit locally in main process
-      this.emit(systemEvent);
-    });
+        // Also emit locally in main process
+        this.emit(systemEvent);
+      },
+    );
   }
 
   /**
@@ -105,8 +137,11 @@ export class IPCBridge {
       this.ipcRenderer.send("events:broadcast", serialized);
     } else if (this.ipcMain) {
       // Send from main to all renderers
-      const { webContents } = require("electron");
-      webContents.getAllWebContents().forEach((contents: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { webContents } = require("electron") as {
+        webContents: ElectronWebContents;
+      };
+      webContents.getAllWebContents().forEach((contents) => {
         contents.send("events:broadcast", serialized);
       });
     }
@@ -206,11 +241,12 @@ export class IPCBridge {
         switch (value.__type) {
           case "Date":
             return new Date(value.value);
-          case "Error":
+          case "Error": {
             const error = new Error(value.message);
             error.stack = value.stack;
             error.name = value.name;
             return error;
+          }
           case "RegExp":
             return new RegExp(value.source, value.flags);
           case "undefined":

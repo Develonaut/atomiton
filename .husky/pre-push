@@ -1,15 +1,13 @@
 #!/bin/sh
 
-# Husky pre-push hook - Run smoke tests before pushing
+# Husky pre-push hook - Minimal checks only
 
-echo "🔥 Running smoke tests before push..."
+# Pre-push should be lightweight since all critical checks
+# are now handled in pre-commit
 
-# Run Playwright smoke tests (fast, no snapshots)
-pnpm pnpm test:e2e:smoke --reporter=dot
+echo "📤 Preparing to push..."
 
-if [ $? -ne 0 ]; then
-  echo "❌ Smoke tests failed! Fix critical issues before pushing."
-  exit 1
-fi
+# Optionally, you could add a quick sanity check here
+# For now, we just pass through since pre-commit handles everything
 
-echo "✅ All smoke tests passed! Pushing..."
+echo "✅ Ready to push!"

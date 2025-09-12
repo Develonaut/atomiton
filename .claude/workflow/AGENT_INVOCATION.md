@@ -23,7 +23,14 @@ Task(
     1. Read and follow the mandatory workflow
     2. Create worktree ONLY if starting NEW feature (not for assisting)
     3. Use TodoWrite to track progress
-    4. Get Karen's approval before calling work complete
+    4. Complete [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md) before marking done
+    5. Get Karen's approval using checklist before calling work complete
+
+    Quality Requirements:
+    - NO `any` types in code
+    - Remove ALL redundant comments
+    - Break up files over 500 lines
+    - Run: pnpm typecheck && pnpm lint && pnpm test && pnpm build
 
     **NOW, your specific task:**
 
@@ -74,7 +81,12 @@ When an agent returns their work, verify:
 - [ ] Did they create a worktree?
 - [ ] Did they use TodoWrite to track workflow steps?
 - [ ] Did they follow ALL workflow steps in order?
-- [ ] Did they get Karen's approval before calling work complete?
+- [ ] Did they complete the REVIEW_CHECKLIST?
+- [ ] Are there NO `any` types in the code?
+- [ ] Were redundant comments removed?
+- [ ] Are all files < 500 lines?
+- [ ] Do all quality checks pass (typecheck/lint/test/build)?
+- [ ] Did they get Karen's approval using the checklist?
 - [ ] Did they log progress to `.claude/LOG.md`?
 
 If ANY of these are missing, the work is NOT complete.

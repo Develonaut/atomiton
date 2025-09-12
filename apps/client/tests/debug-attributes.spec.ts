@@ -34,5 +34,5 @@ test("Debug HeadlessUI attributes", async ({ page }) => {
     };
   });
 
-  console.log("Listbox details:", JSON.stringify(attributes, null, 2));
+  console.error("Listbox details:", JSON.stringify(attributes, null, 2));
 });

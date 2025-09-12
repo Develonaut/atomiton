@@ -16,31 +16,31 @@ export {
 export { FilesystemStorage } from "./engines/FilesystemStorage.js";
 
 // Core interfaces
-export interface IStorageEngine {
-  save(key: string, data: any, options?: StorageOptions): Promise<void>;
-  load(key: string): Promise<any>;
+export type IStorageEngine = {
+  save(key: string, data: unknown, options?: StorageOptions): Promise<void>;
+  load(key: string): Promise<unknown>;
   list(prefix?: string): Promise<StorageItem[]>;
   delete(key: string): Promise<void>;
   exists(key: string): Promise<boolean>;
   getInfo(): StorageInfo;
-}
+};
 
-export interface StorageOptions {
+export type StorageOptions = {
   format?: "json" | "yaml";
   metadata?: Record<string, unknown>;
   encryption?: boolean;
-}
+};
 
-export interface StorageItem {
+export type StorageItem = {
   key: string;
   name: string;
   size: number;
   created: string;
   updated: string;
   metadata?: Record<string, unknown>;
-}
+};
 
-export interface StorageInfo {
+export type StorageInfo = {
   type: StorageType;
   platform: Platform;
   connected: boolean;
@@ -50,7 +50,7 @@ export interface StorageInfo {
     quotaUsed?: number;
     quotaTotal?: number;
   };
-}
+};
 
 export type StorageType =
   | "filesystem" // Local file system (desktop)
@@ -67,12 +67,12 @@ export type Platform = "desktop" | "browser" | "cloud" | "mobile";
 export type StorageTier = "free" | "pro" | "enterprise";
 
 // Factory function for creating storage engines
-export interface StorageConfig {
+export type StorageConfig = {
   type?: StorageType;
   platform?: Platform;
   tier?: StorageTier;
   options?: Record<string, unknown>;
-}
+};
 
 // TODO: Implement storage engine factory
 // export function createStorage(config: StorageConfig): Promise<IStorageEngine>;

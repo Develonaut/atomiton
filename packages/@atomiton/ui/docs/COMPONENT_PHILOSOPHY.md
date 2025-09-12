@@ -1,5 +1,7 @@
 # Component Philosophy
 
+> **Note**: This document extends the [Bento Box Principles](../../../docs/BENTO_BOX_PRINCIPLES.md) specifically for UI components.
+
 ## Table of Contents
 
 - [Core Principle: Simplicity Over Options](#core-principle-simplicity-over-options)

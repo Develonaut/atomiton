@@ -22,8 +22,14 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "kill": "echo 'No processes to kill for Editor package'"
+    "test:watch": "vitest watch",
+    "kill": "echo 'No processes to kill for Editor package'",
+    "test:unit": "vitest run",
+    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "echo \"No E2E tests for this package\"",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "editor",

@@ -80,6 +80,41 @@
         "CI"
       ]
     },
+    "test:unit": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
+      "env": ["NODE_ENV", "CI"]
+    },
+    "test:smoke": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "env": ["NODE_ENV", "CI"]
+    },
+    "test:benchmark": {
+      "dependsOn": ["^build"],
+      "outputs": ["benchmark-results/**"],
+      "env": ["NODE_ENV", "CI"]
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL"]
+    },
+    "test:all": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "env": ["NODE_ENV", "CI"]
+    },
+    "test:watch": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**", ".nyc_output/**"],
+      "env": ["NODE_ENV", "CI"]
+    },
     "dev": {
       "cache": false,
       "persistent": true,

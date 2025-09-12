@@ -58,5 +58,5 @@ test("Debug dropdown CSS classes", async ({ page }) => {
     };
   });
 
-  console.log("Dropdown CSS analysis:", JSON.stringify(styles, null, 2));
+  console.error("Dropdown CSS analysis:", JSON.stringify(styles, null, 2));
 });

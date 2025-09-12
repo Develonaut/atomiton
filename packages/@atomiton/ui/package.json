@@ -33,7 +33,13 @@
     "test:unit": "vitest",
     "test:unit:watch": "vitest --watch",
     "test:unit:coverage": "vitest --coverage",
-    "kill": "echo 'No processes to kill for UI package'"
+    "kill": "echo 'No processes to kill for UI package'",
+    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "playwright test",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

@@ -15,6 +15,11 @@ export type { ColumnProps } from "./components/Column/Column.types";
 
 export { default as Card } from "./components/Card";
 
+export { default as Field } from "./components/Field";
+
+export { default as Select } from "./components/Select";
+export type { SelectOption } from "./components/Select";
+
 export { Icon, getNodeIcon, NODE_ICON_MAP } from "./components/Icon";
 export type { IconProps } from "./components/Icon";
 

@@ -27,6 +27,7 @@
   "dependencies": {
     "@atomiton/core": "workspace:^",
     "@atomiton/editor": "workspace:*",
+    "@atomiton/form": "workspace:*",
     "@atomiton/hooks": "workspace:^",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/ui": "workspace:*",

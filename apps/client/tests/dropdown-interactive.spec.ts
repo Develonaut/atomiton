@@ -35,20 +35,20 @@ test.describe("Interactive Dropdown Test", () => {
       .isVisible()
       .catch(() => false);
 
-    console.log("Describe option visible:", isDescribeVisible);
+    console.error("Describe option visible:", isDescribeVisible);
 
     // Check for any listbox elements
     const listboxes = await page.locator('[role="listbox"]').count();
-    console.log("Listbox elements found:", listboxes);
+    console.error("Listbox elements found:", listboxes);
 
     // Check for elements with data-open attribute
     const openElements = await page.locator("[data-open]").count();
-    console.log("Elements with data-open:", openElements);
+    console.error("Elements with data-open:", openElements);
 
     // Log all visible text content in dropdown area
     const dropdownArea = page.locator(".fixed.bottom-3");
     const textContent = await dropdownArea.textContent();
-    console.log("Dropdown area text:", textContent);
+    console.error("Dropdown area text:", textContent);
   });
 
   test("All scenes dropdown in explore page", async ({ page }) => {
@@ -62,7 +62,7 @@ test.describe("Interactive Dropdown Test", () => {
       .first();
 
     if ((await filterButton.count()) > 0) {
-      console.log("Found filter button");
+      console.error("Found filter button");
       await filterButton.click();
       await page.waitForTimeout(500);
 
@@ -75,9 +75,9 @@ test.describe("Interactive Dropdown Test", () => {
       const menuItems = await page
         .locator('[role="menu"], [role="menuitem"]')
         .count();
-      console.log("Menu items found:", menuItems);
+      console.error("Menu items found:", menuItems);
     } else {
-      console.log("Filter button not found");
+      console.error("Filter button not found");
     }
   });
 });

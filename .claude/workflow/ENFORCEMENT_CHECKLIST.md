@@ -19,7 +19,11 @@ Before starting:
 Cannot complete without:
 
 - [ ] Quality checks pass (exit code 0)
-- [ ] Karen's final approval
+- [ ] Review checklist completed (see [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md))
+- [ ] No `any` types in code
+- [ ] No redundant comments
+- [ ] Files < 500 lines
+- [ ] Karen's final approval using checklist
 
 ## For Agent Invocations
 
@@ -40,6 +44,10 @@ When using Task tool:
 - ❌ Declared "complete" without Karen's approval
 - ❌ Quality checks not run or failing
 - ❌ No progress logged to `.claude/LOG.md`
+- ❌ Any `any` types present in code
+- ❌ Redundant comments not removed
+- ❌ Files over 500 lines not refactored
+- ❌ Review checklist not completed
 
 ## Enforcement Actions
 
@@ -56,6 +64,9 @@ If workflow not followed:
 - **How to Invoke**: `.claude/HOW_TO_INVOKE_AGENTS.md`
 - **Agent Templates**: `.claude/agents/AGENT_SYSTEM_PROMPT.md`
 - **Main Instructions**: `.claude/CLAUDE.md`
+- **Review Checklist**: `docs/REVIEW_CHECKLIST.md`
+- **Code Review Guidelines**: `docs/CODE_REVIEW_GUIDELINES.md`
+- **Agent Instructions**: `docs/AGENT_INSTRUCTIONS.md`
 
 ## Remember
 

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { z } from "zod";
 import { useForm } from "./hooks/index.js";
@@ -113,5 +113,41 @@ describe("useForm", () => {
       { label: "user", value: "user" },
       { label: "admin", value: "admin" },
     ]);
+  });
+
+  it("handles error when generating fields from invalid schema", () => {
+    // Mock console.error to check it was called
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    // Pass a non-ZodObject schema which will throw an error
+    const invalidSchema = z.string() as unknown;
+
+    const { result } = renderHook(() => useForm({ schema: invalidSchema }));
+
+    // Should handle error gracefully and return empty fields array
+    expect(result.current.fields).toEqual([]);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Error generating fields:",
+      expect.any(Error),
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  it("still provides React Hook Form functionality when field generation fails", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    // Pass invalid schema
+    const invalidSchema = z.array(z.string()) as unknown;
+
+    const { result } = renderHook(() => useForm({ schema: invalidSchema }));
+
+    // Should still have all React Hook Form methods
+    expect(result.current.register).toBeDefined();
+    expect(result.current.handleSubmit).toBeDefined();
+    expect(result.current.formState).toBeDefined();
+    expect(result.current.fields).toEqual([]);
+
+    consoleSpy.mockRestore();
   });
 });

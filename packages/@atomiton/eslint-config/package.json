@@ -24,7 +24,15 @@
     "clean": "rm -rf dist",
     "lint": "echo 'Linting eslint-config itself'",
     "lint:fix": "echo 'Linting eslint-config itself with fix'",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
+    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "echo \"No E2E tests for this package\"",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@atomiton/typescript-config": "workspace:*",

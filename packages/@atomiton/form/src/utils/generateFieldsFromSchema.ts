@@ -1,4 +1,3 @@
-import { z } from "zod";
 import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types.js";
 import { mapZodTypeToControl } from "./mapZodTypeToControl.js";
 
@@ -12,11 +11,16 @@ export function generateFieldsFromSchema(
   schema: ZodSchema,
   fields: FieldsMetadata = {},
 ): FieldConfig[] {
-  if ((schema as any)._def?.typeName !== "ZodObject") {
+  if (
+    (schema as unknown as { _def?: { typeName?: string } })._def?.typeName !==
+    "ZodObject"
+  ) {
     throw new Error("Schema must be a ZodObject");
   }
 
-  const shape = (schema as any)._def.shape();
+  const shape = (
+    schema as unknown as { _def: { shape: () => Record<string, unknown> } }
+  )._def.shape();
   const fieldsArray: FieldConfig[] = [];
 
   for (const [fieldName, fieldSchema] of Object.entries(shape)) {

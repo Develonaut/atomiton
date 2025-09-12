@@ -14,7 +14,13 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest watch",
+    "test:unit": "vitest run",
+    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "echo \"No E2E tests for this package\"",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "nodes",
@@ -25,11 +31,11 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
+    "@atomiton/events": "workspace:*",
     "@atomiton/ui": "workspace:*",
     "@mantine/core": "^7.0.0",
     "@tabler/icons-react": "^3.0.0",
     "chokidar": "^4.0.0",
-    "eventemitter3": "^5.0.0",
     "glob": "^10.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -185,11 +185,35 @@ describe("Element Actions", () => {
 
 ## Running Tests
 
+### Standardized Package Scripts
+
+All packages must implement standardized test scripts as defined in [PACKAGE_TEST_SCRIPTS.md](./PACKAGE_TEST_SCRIPTS.md):
+
+- `test:unit` - Unit tests (Vitest)
+- `test:smoke` - Critical path tests (< 5s, pre-commit)
+- `test:benchmark` - Performance benchmarks
+- `test:e2e` - End-to-end tests (Playwright)
+- `test:all` - Complete test suite
+- `test:watch` - Development mode
+- `test:coverage` - Coverage reports
+
 ### Commands
 
 ```bash
-# Run all tests
-pnpm test
+# Run unit tests
+pnpm test:unit
+
+# Run smoke tests (pre-commit)
+pnpm test:smoke
+
+# Run benchmarks
+pnpm test:benchmark
+
+# Run E2E tests
+pnpm test:e2e
+
+# Run all test suites
+pnpm test:all
 
 # Run tests in watch mode
 pnpm test:watch

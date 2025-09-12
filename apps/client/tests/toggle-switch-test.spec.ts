@@ -30,7 +30,7 @@ test("Debug toggle switch attributes", async ({ page }) => {
     };
   });
 
-  console.log("Initial toggle state:", JSON.stringify(initialState, null, 2));
+  console.error("Initial toggle state:", JSON.stringify(initialState, null, 2));
 
   // Click to toggle
   await toggle.click();
@@ -51,7 +51,7 @@ test("Debug toggle switch attributes", async ({ page }) => {
     };
   });
 
-  console.log("After click state:", JSON.stringify(afterClickState, null, 2));
+  console.error("After click state:", JSON.stringify(afterClickState, null, 2));
 
   // Check if the inner span moved
   const innerSpan = toggle.locator("span").first();
@@ -62,7 +62,7 @@ test("Debug toggle switch attributes", async ({ page }) => {
     };
   });
 
-  console.log(
+  console.error(
     "Initial inner span state:",
     JSON.stringify(initialSpanTransform, null, 2),
   );
@@ -78,7 +78,7 @@ test("Debug toggle switch attributes", async ({ page }) => {
     };
   });
 
-  console.log(
+  console.error(
     "Final inner span state:",
     JSON.stringify(finalSpanTransform, null, 2),
   );

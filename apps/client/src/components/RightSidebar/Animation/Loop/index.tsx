@@ -1,10 +1,9 @@
 import { useState } from "react";
-import Slider from "rc-slider";
 import Icon from "@/components/Icon";
 import Tabs from "@/components/Tabs";
 import Image from "@/components/Image";
 import Group from "../../Group";
-import "rc-slider/assets/index.css";
+import { DualRangeSlider } from "@/components/form";
 
 const tabs = [
   { id: 0, name: "Short" },
@@ -32,37 +31,13 @@ function Loop() {
           height={60}
           alt="Loop"
         />
-        <Slider
-          className="range-loop !absolute top-0 left-0 !h-full !p-0 z-2"
-          range
-          value={values}
-          onChange={(value) => setValues(value as number[])}
+        <DualRangeSlider
+          values={values as [number, number]}
+          onChange={setValues}
           min={0}
           max={20}
           step={1}
-          styles={{
-            handle: {
-              width: "2px",
-              height: "100%",
-              backgroundColor: "var(--shade-01)",
-              border: "none",
-              borderRadius: "0",
-              outline: "none",
-              cursor: "pointer",
-              marginTop: "0",
-              boxShadow: "none",
-            },
-            track: {
-              height: "100%",
-              backgroundColor: "var(--shade-09_35)",
-              borderRadius: "0",
-            },
-            rail: {
-              height: "100%",
-              backgroundColor: "transparent",
-              borderRadius: "0",
-            },
-          }}
+          overlayStyle="timeline"
         />
       </div>
       <div className="flex gap-1.5">
