@@ -19,7 +19,7 @@
   --breakpoint-2xl: 1419px;
   --breakpoint-3xl: 1719px;
   --breakpoint-4xl: 1899px;
-  
+
   /* Colors - direct hex values for Tailwind v4 */
   --color-shade-01: #fcfcfc;
   --color-shade-02: #f8f7f7;
@@ -30,7 +30,7 @@
   --color-shade-07: #323232;
   --color-shade-08: #222222;
   --color-shade-09: #121212;
-  
+
   /* Brand colors */
   --color-green: #55b93e;
   --color-orange: #e36323;
@@ -39,23 +39,23 @@
   --color-yellow: #ffb73a;
   --color-purple: #8755e9;
   --color-tertiary: #a8a8a8;
-  
+
   /* Semantic colors */
   --color-primary: #121212;
   --color-secondary: #7b7b7b;
-  
+
   /* Surface colors */
   --color-surface-01: #fcfcfc;
   --color-surface-02: #f8f7f7;
   --color-surface-03: #f1f1f1;
-  
+
   /* Border colors */
   --color-s-01: #ececec;
   --color-s-02: #e2e2e2;
-  
+
   /* Base spacing unit */
   --spacing: 0.25rem;
-  
+
   /* Spacing scale - using calc() for consistency with published app */
   --spacing-0: calc(var(--spacing) * 0);
   --spacing-0.25: calc(var(--spacing) * 0.25);
@@ -97,7 +97,7 @@
   --spacing-72: calc(var(--spacing) * 72);
   --spacing-80: calc(var(--spacing) * 80);
   --spacing-96: calc(var(--spacing) * 96);
-  
+
   /* Custom spacing for Atomiton - using calc() */
   --spacing-4.75: calc(var(--spacing) * 4.75);
   --spacing-5.5: calc(var(--spacing) * 5.5);
@@ -159,12 +159,12 @@
   --spacing-183: calc(var(--spacing) * 183);
   --spacing-280: calc(var(--spacing) * 280);
   --spacing-300: calc(var(--spacing) * 300);
-  
+
   /* Typography scale */
-  --font-family-sans: 'Inter', system-ui, sans-serif;
-  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-family-inter: 'Inter', sans-serif;
-  
+  --font-family-sans: "Inter", system-ui, sans-serif;
+  --font-family-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-family-inter: "Inter", sans-serif;
+
   /* Font sizes - these create text-* utilities */
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -179,7 +179,7 @@
   --font-size-7xl: 4.5rem;
   --font-size-8xl: 6rem;
   --font-size-9xl: 8rem;
-  
+
   /* Custom font sizes for Atomiton design system - direct values for Tailwind v4 */
   --font-size-h1: 3rem;
   --font-size-h2: 2.5rem;
@@ -199,7 +199,7 @@
   --font-size-title-lg: 1.125rem;
   --font-size-p-sm: 0.8125rem;
   --font-size-p-md: 0.9375rem;
-  
+
   /* Border radius */
   --radius-sm: 0.125rem;
   --radius: 0.25rem;
@@ -212,19 +212,19 @@
   --radius-1.75: 1.75rem;
   --radius-3xl: 1.5rem;
   --radius-4xl: 2rem;
-  
+
   /* Shadows - using box-shadow naming for compatibility */
   --shadow-sm: var(--box-shadow-depth-01);
   --shadow: var(--box-shadow-toolbar);
   --shadow-md: var(--box-shadow-prompt-input);
   --shadow-lg: var(--box-shadow-popover);
-  
+
   /* Additional shadow variants for direct use */
   --shadow-toolbar: var(--box-shadow-toolbar);
   --shadow-prompt-input: var(--box-shadow-prompt-input);
   --shadow-depth-01: var(--box-shadow-depth-01);
   --shadow-popover: var(--box-shadow-popover);
-  
+
   /* Z-index scale */
   --z-1: 1;
   --z-2: 2;
@@ -237,13 +237,40 @@
   --z-40: 40;
   --z-50: 50;
   --z-100: 100;
-  
+
   /* Transition duration */
   --duration-0: 0ms;
   --duration-100: 100ms;
   --duration-200: 200ms;
   --duration-300: 300ms;
   --duration-default: var(--default-transition-duration, 200ms);
+
+  /* ShadCN CSS variables mapped to Atomiton colors */
+  /* TODO: Hunt and peck the variables used above and replace their use with these. We will need to of course add ones we need not defined below but our theming should become way simpler. Ultimately these are the variables we want to use and simplify the use up above and remove the the variables used above with the ones below */
+  --background: var(--color-surface-01);
+  --foreground: var(--color-shade-09);
+  --card: var(--color-surface-01);
+  --card-foreground: var(--color-shade-09);
+  --popover: var(--color-surface-01);
+  --popover-foreground: var(--color-shade-09);
+  --primary: var(--color-shade-09);
+  --primary-foreground: var(--color-surface-01);
+  --secondary: var(--color-surface-02);
+  --secondary-foreground: var(--color-shade-09);
+  --muted: var(--color-surface-02);
+  --muted-foreground: var(--color-shade-06);
+  --accent: var(--color-surface-03);
+  --accent-foreground: var(--color-shade-09);
+  --destructive: var(--color-red);
+  --destructive-foreground: var(--color-surface-01);
+  --border: var(--color-s-01);
+  --input: var(--color-s-01);
+  --ring: var(--color-blue);
+  --chart-1: var(--color-blue);
+  --chart-2: var(--color-green);
+  --chart-3: var(--color-yellow);
+  --chart-4: var(--color-purple);
+  --chart-5: var(--color-orange);
 }
 
 /* Utility classes for migration period */
@@ -252,21 +279,41 @@
   * {
     outline-color: var(--color-blue);
   }
-  
+
   /* Background utilities with alpha support */
-  .bg-shade-01-95 { background-color: rgba(252, 252, 252, 0.95); }
-  .bg-shade-06-30 { background-color: rgba(123, 123, 123, 0.3); }
-  .bg-shade-06-50 { background-color: rgba(123, 123, 123, 0.5); }
-  .bg-shade-07-05 { background-color: rgba(50, 50, 50, 0.05); }
-  .bg-shade-07-10 { background-color: rgba(50, 50, 50, 0.1); }
-  .bg-shade-08-05 { background-color: rgba(34, 34, 34, 0.05); }
-  .bg-shade-08-10 { background-color: rgba(34, 34, 34, 0.1); }
-  .bg-shade-09-05 { background-color: rgba(18, 18, 18, 0.05); }
-  .bg-shade-09-10 { background-color: rgba(18, 18, 18, 0.1); }
-  .bg-shade-09-35 { background-color: rgba(18, 18, 18, 0.35); }
-  
+  .bg-shade-01-95 {
+    background-color: rgba(252, 252, 252, 0.95);
+  }
+  .bg-shade-06-30 {
+    background-color: rgba(123, 123, 123, 0.3);
+  }
+  .bg-shade-06-50 {
+    background-color: rgba(123, 123, 123, 0.5);
+  }
+  .bg-shade-07-05 {
+    background-color: rgba(50, 50, 50, 0.05);
+  }
+  .bg-shade-07-10 {
+    background-color: rgba(50, 50, 50, 0.1);
+  }
+  .bg-shade-08-05 {
+    background-color: rgba(34, 34, 34, 0.05);
+  }
+  .bg-shade-08-10 {
+    background-color: rgba(34, 34, 34, 0.1);
+  }
+  .bg-shade-09-05 {
+    background-color: rgba(18, 18, 18, 0.05);
+  }
+  .bg-shade-09-10 {
+    background-color: rgba(18, 18, 18, 0.1);
+  }
+  .bg-shade-09-35 {
+    background-color: rgba(18, 18, 18, 0.35);
+  }
+
   /* Typography utilities for Atomiton design system */
-  .text-h1 { 
+  .text-h1 {
     font-size: 3rem;
     line-height: 3.45rem;
     letter-spacing: -0.03em;
@@ -374,26 +421,42 @@
     letter-spacing: -0.015em;
     font-weight: 400;
   }
-  
+
   /* Scrollbar utilities - defined as Tailwind utilities */
   .scrollbar-none {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
     &::-webkit-scrollbar {
-      display: none;  /* Chrome, Safari and Opera */
+      display: none; /* Chrome, Safari and Opera */
     }
   }
-  
+
   /* Data attribute selectors for HeadlessUI v2 */
-  [data-open] { --tw-data-open: true; }
-  [data-closed] { --tw-data-closed: true; }
-  [data-focus] { --tw-data-focus: true; }
-  [data-hover] { --tw-data-hover: true; }
-  [data-selected] { --tw-data-selected: true; }
-  [data-active] { --tw-data-active: true; }
-  [data-disabled] { --tw-data-disabled: true; }
-  [data-checked] { --tw-data-checked: true; }
-  
+  [data-open] {
+    --tw-data-open: true;
+  }
+  [data-closed] {
+    --tw-data-closed: true;
+  }
+  [data-focus] {
+    --tw-data-focus: true;
+  }
+  [data-hover] {
+    --tw-data-hover: true;
+  }
+  [data-selected] {
+    --tw-data-selected: true;
+  }
+  [data-active] {
+    --tw-data-active: true;
+  }
+  [data-disabled] {
+    --tw-data-disabled: true;
+  }
+  [data-checked] {
+    --tw-data-checked: true;
+  }
+
   /* 
    * Embossed effect utility class
    * Creates a pressed/inset 3D appearance used for active states
@@ -404,7 +467,9 @@
     background-color: var(--color-surface-03);
     border-width: 1px;
     border-color: var(--color-s-02);
-    box-shadow: 0 -1px 3px 0px rgba(18, 18, 18, 0.15) inset, 0px 1.25px 1px 0px #FFF inset;
+    box-shadow:
+      0 -1px 3px 0px rgba(18, 18, 18, 0.15) inset,
+      0px 1.25px 1px 0px #fff inset;
   }
 }
 
@@ -414,30 +479,39 @@
     background-color: var(--color-surface-01);
     color: var(--color-shade-07);
   }
-  
+
   .surface-secondary {
     background-color: var(--color-surface-02);
     color: var(--color-shade-07);
   }
-  
+
   .surface-tertiary {
     background-color: var(--color-surface-03);
     color: var(--color-shade-07);
   }
-  
+
   .border-default {
     border-color: var(--color-s-01);
   }
-  
+
   .border-strong {
     border-color: var(--color-s-02);
   }
-  
+
   .text-primary {
     color: var(--color-shade-09);
   }
-  
+
   .text-secondary {
     color: var(--color-shade-06);
+  }
+
+  /* Key styling - matches client app exactly */
+  .key {
+    @apply px-1.5 py-0.5 bg-surface-03 rounded-md shadow-[0_0px_0px_1px_rgba(0,0,0,0.11),0px_2px_0.8px_0px_rgba(255,255,255,0.27)_inset,0px_-1px_0.6px_0px_rgba(0,0,0,0.20)_inset,0px_1px_4.2px_-1px_rgba(0,0,0,0.25)] text-secondary;
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: -0.01em;
+    font-weight: 500;
   }
 }
