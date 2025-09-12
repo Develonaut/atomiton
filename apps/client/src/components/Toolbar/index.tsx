@@ -74,7 +74,7 @@ function Toolbar() {
         </Button>
       </Box>
       <Box className="p-2">
-        <Export disabled />
+        <Export />
       </Box>
     </Box>
   );

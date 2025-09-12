@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Switch from "@/components/Switch";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 import Title from "../Title";
 import Option from "../Option";
 import Field from "../Field";
@@ -53,13 +53,19 @@ function General() {
         <Switch checked={publish} onChange={() => setPublish(!publish)} />
       </Option>
       <Option title="Language">
-        <Select
-          className="min-w-32"
-          value={language}
-          onChange={setLanguage}
-          options={languages}
-          isMedium
-        />
+        <Select value={language} onChange={setLanguage} className="min-w-32">
+          <Select.Trigger isMedium>
+            {language && <Select.Value>{language.name}</Select.Value>}
+            <Select.Indicator isMedium />
+          </Select.Trigger>
+          <Select.Options>
+            {languages.map((option) => (
+              <Select.Option key={option.id} value={option} isMedium>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select.Options>
+        </Select>
       </Option>
     </>
   );

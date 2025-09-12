@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import Icon from "@/components/Icon";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 import Button from "@/components/Button";
 import ViewController from "@/components/ViewController";
 import AddFiles from "./AddFiles";
@@ -75,15 +75,25 @@ function Controls({
     <Box className="flex gap-2">
       <AddFiles className={disabledClass} />
       <Select
-        className={`min-w-38.5 mr-auto ${disabledClass}`}
-        classButton="!rounded-xl !text-heading"
-        classIcon="!mr-3 !fill-green"
-        icon="flash"
         value={setting}
         onChange={onSettingChange}
-        options={settings}
-        isWhite
-      />
+        className={`min-w-38.5 mr-auto ${disabledClass}`}
+      >
+        <Select.Trigger className="!rounded-xl !text-heading" isWhite>
+          <Select.Icon>
+            <Icon className="!size-4 !mr-3 !fill-green" name="flash" />
+          </Select.Icon>
+          {setting && <Select.Value>{setting.name}</Select.Value>}
+          <Select.Indicator />
+        </Select.Trigger>
+        <Select.Options>
+          {settings.map((option) => (
+            <Select.Option key={option.id} value={option}>
+              {option.name}
+            </Select.Option>
+          ))}
+        </Select.Options>
+      </Select>
       <SelectAi className={disabledClass} />
       <button
         className="group size-10 rounded-xl transition-colors hover:bg-surface-03"

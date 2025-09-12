@@ -21,23 +21,11 @@ function Node(props: ReactFlowNodeProps) {
 
   return (
     <div className="atomiton-node">
-      {isFirstNode ? (
-        <div className="relative">
-          <Handle
-            type="target"
-            position={Position.Left}
-            isConnectable
-            style={{ opacity: 0 }}
-          />
-          <Icon
-            name="flash"
-            size={16}
-            className="absolute left-[-20px] top-1/2 -translate-y-1/2 text-gray-500"
-          />
-        </div>
-      ) : (
-        <Handle type="target" position={Position.Left} isConnectable />
-      )}
+      <Handle
+        type="target"
+        position={Position.Left}
+        isConnectable={!isFirstNode}
+      />
       <Icon
         name={icon}
         size={32}

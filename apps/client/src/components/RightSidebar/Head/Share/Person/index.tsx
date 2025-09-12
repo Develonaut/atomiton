@@ -1,7 +1,7 @@
 import { useState, useId } from "react";
 import { Tooltip } from "react-tooltip";
 import Image from "@/components/Image";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 import Icon from "@/components/Icon";
 
 type Props = {
@@ -44,14 +44,22 @@ function Person({ name, email, avatar, accessPerson, isRemoveButton }: Props) {
           <Icon className="!size-4 fill-green" name="shield" />
         </div>
       ) : (
-        <Select
-          className="min-w-22"
-          classButton="!h-8 !px-2 !rounded-lg !border-transparent !bg-transparent"
-          value={access}
-          onChange={setAccess}
-          options={accesses}
-          isMedium
-        />
+        <Select value={access} onChange={setAccess} className="min-w-22">
+          <Select.Trigger
+            className="!h-8 !px-2 !rounded-lg !border-transparent !bg-transparent"
+            isMedium
+          >
+            {access && <Select.Value>{access.name}</Select.Value>}
+            <Select.Indicator isMedium />
+          </Select.Trigger>
+          <Select.Options>
+            {accesses.map((option) => (
+              <Select.Option key={option.id} value={option} isMedium>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select.Options>
+        </Select>
       )}
       {isRemoveButton && (
         <button

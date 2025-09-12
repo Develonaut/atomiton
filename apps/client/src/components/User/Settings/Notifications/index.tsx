@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Switch from "@/components/Switch";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 import Title from "../Title";
 import Option from "../Option";
 
@@ -29,13 +29,19 @@ function Notifications() {
     <>
       <Title value="Notifications" />
       <Option title="Display while working">
-        <Select
-          className="min-w-32"
-          value={display}
-          onChange={setDisplay}
-          options={displays}
-          isMedium
-        />
+        <Select value={display} onChange={setDisplay} className="min-w-32">
+          <Select.Trigger isMedium>
+            {display && <Select.Value>{display.name}</Select.Value>}
+            <Select.Indicator isMedium />
+          </Select.Trigger>
+          <Select.Options>
+            {displays.map((option) => (
+              <Select.Option key={option.id} value={option} isMedium>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select.Options>
+        </Select>
       </Option>
       <Option title="Video generated">
         <Switch

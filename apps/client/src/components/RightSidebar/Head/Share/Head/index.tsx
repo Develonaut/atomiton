@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "@/components/Button";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 
 const accesses = [
   { id: 0, name: "can view" },
@@ -28,13 +28,25 @@ function Head() {
           autoComplete="off"
         />
         <Select
-          className="absolute top-1 right-1 min-w-25.5"
-          classButton="!h-8 !pr-2 !rounded-lg !border-transparent !bg-surface-01 shadow-[0px_0px_4px_0px_rgba(18,18,18,0.10)]"
           value={access}
           onChange={setAccess}
-          options={accesses}
-          isMedium
-        />
+          className="absolute top-1 right-1 min-w-25.5"
+        >
+          <Select.Trigger
+            className="!h-8 !pr-2 !rounded-lg !border-transparent !bg-surface-01 shadow-[0px_0px_4px_0px_rgba(18,18,18,0.10)]"
+            isMedium
+          >
+            {access && <Select.Value>{access.name}</Select.Value>}
+            <Select.Indicator isMedium />
+          </Select.Trigger>
+          <Select.Options>
+            {accesses.map((option) => (
+              <Select.Option key={option.id} value={option} isMedium>
+                {option.name}
+              </Select.Option>
+            ))}
+          </Select.Options>
+        </Select>
       </form>
       <Button isSecondary>Invite</Button>
     </div>

@@ -1,7 +1,8 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 import Tabs from "@/components/Tabs";
 import Button from "@/components/Button";
+import Icon from "@/components/Icon";
 import Line from "../Line";
 
 import {
@@ -21,28 +22,43 @@ function Video() {
     <div className="flex flex-col grow p-4">
       <div className="flex flex-col gap-1.5 mb-3">
         <Line title="Camera">
-          <Select
-            icon="camera"
-            value={camera}
-            onChange={setCamera}
-            options={cameraOptions}
-            isMedium
-            isWhite
-          />
+          <Select value={camera} onChange={setCamera}>
+            <Select.Trigger isMedium isWhite>
+              <Select.Icon>
+                <Icon className="!size-4" name="camera" />
+              </Select.Icon>
+              {camera && <Select.Value>{camera.name}</Select.Value>}
+              <Select.Indicator isMedium />
+            </Select.Trigger>
+            <Select.Options>
+              {cameraOptions.map((option) => (
+                <Select.Option key={option.id} value={option} isMedium>
+                  {option.name}
+                </Select.Option>
+              ))}
+            </Select.Options>
+          </Select>
         </Line>
         <Line title="Format">
           <Tabs items={formats} value={format} setValue={setFormat} isMedium />
         </Line>
         <Line title="Frame rate">
-          <Select
-            icon="video"
-            indicator="FPS"
-            value={frameRate}
-            onChange={setFrameRate}
-            options={frameRateOptions}
-            isMedium
-            isWhite
-          />
+          <Select value={frameRate} onChange={setFrameRate}>
+            <Select.Trigger isMedium isWhite>
+              <Select.Icon>
+                <Icon className="!size-4" name="video" />
+              </Select.Icon>
+              {frameRate && <Select.Value>{frameRate.name}</Select.Value>}
+              <div className="shrink-0 mr-2 text-secondary">FPS</div>
+            </Select.Trigger>
+            <Select.Options>
+              {frameRateOptions.map((option) => (
+                <Select.Option key={option.id} value={option} isMedium>
+                  {option.name}
+                </Select.Option>
+              ))}
+            </Select.Options>
+          </Select>
         </Line>
         <Line title="Resolution">
           <Tabs

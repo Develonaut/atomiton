@@ -24,7 +24,7 @@ export default defineConfig({
   },
   // Optimize deps to exclude workspace packages for better HMR
   optimizeDeps: {
-    exclude: ["@atomiton/ui", "@atomiton/editor"],
+    exclude: ["@atomiton/ui", "@atomiton/editor", "@atomiton/form"],
   },
   resolve: {
     conditions:
@@ -42,6 +42,11 @@ export default defineConfig({
         __dirname,
         "../..",
         "packages/@atomiton/editor/src",
+      ),
+      "@atomiton/form": path.resolve(
+        __dirname,
+        "../..",
+        "packages/@atomiton/form/src",
       ),
     },
   },

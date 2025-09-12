@@ -5,11 +5,5 @@ export { default as ImageGrid } from "./ImageGrid";
 export type { ImageGridItem } from "./ImageGrid";
 export { default as NumberInput } from "./NumberInput";
 export { default as RangeSlider } from "./RangeSlider";
-export {
-  default as Select,
-  SelectOption,
-  SelectOptions,
-  SelectRoot,
-  SelectTrigger,
-  SelectValue,
-} from "./Select";
+export { default as Select } from "./Select";
+export type { SelectOption } from "./Select";

@@ -1,4 +1,5 @@
-import { PropsWithChildren, Children, isValidElement } from "react";
+import type { PropsWithChildren } from "react";
+import { Children, isValidElement } from "react";
 import { useTabsContext } from "./TabsRoot";
 
 type TabsListProps = PropsWithChildren<{
@@ -11,7 +12,7 @@ function TabsList({ children, className = "" }: TabsListProps) {
 
   // Calculate active index based on current value
   const activeIndex = childrenArray.findIndex(
-    (child) => isValidElement(child) && child.props.value === value,
+    (child) => isValidElement(child) && (child as any).props?.value === value,
   );
 
   const tabCount = childrenArray.length;

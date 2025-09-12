@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Select from "@/components/Select";
+import Select from "@/components/form/Select";
 import Tabs from "@/components/Tabs";
 import Icon from "@/components/Icon";
 
@@ -16,25 +16,38 @@ function Item({ defaultSize }: Props) {
 
   return (
     <div className="flex items-center gap-1.5">
-      <Select
-        className="w-20"
-        classButton="!px-2"
-        icon="focus-letter"
-        value={size}
-        onChange={setSize}
-        options={sizes}
-        isMedium
-      />
-      <Select
-        className="w-33"
-        classButton="!px-2"
-        icon="focus-letter"
-        value={formatColor}
-        onChange={setFormatColor}
-        options={formatsColor}
-        isMedium
-        isWhite
-      />
+      <Select value={size} onChange={setSize} className="w-20">
+        <Select.Trigger className="!px-2" isMedium>
+          <Select.Icon>
+            <Icon className="!size-4" name="focus-letter" />
+          </Select.Icon>
+          {size && <Select.Value>{size.name}</Select.Value>}
+          <Select.Indicator isMedium />
+        </Select.Trigger>
+        <Select.Options>
+          {sizes.map((option) => (
+            <Select.Option key={option.id} value={option} isMedium>
+              {option.name}
+            </Select.Option>
+          ))}
+        </Select.Options>
+      </Select>
+      <Select value={formatColor} onChange={setFormatColor} className="w-33">
+        <Select.Trigger className="!px-2" isMedium isWhite>
+          <Select.Icon>
+            <Icon className="!size-4" name="focus-letter" />
+          </Select.Icon>
+          {formatColor && <Select.Value>{formatColor.name}</Select.Value>}
+          <Select.Indicator isMedium />
+        </Select.Trigger>
+        <Select.Options>
+          {formatsColor.map((option) => (
+            <Select.Option key={option.id} value={option} isMedium>
+              {option.name}
+            </Select.Option>
+          ))}
+        </Select.Options>
+      </Select>
       <Tabs
         className="grow"
         items={formats}
