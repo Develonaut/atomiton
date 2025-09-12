@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 type SwitchLabelProps = PropsWithChildren<{
   className?: string;
@@ -6,7 +6,9 @@ type SwitchLabelProps = PropsWithChildren<{
 
 function SwitchLabel({ children, className = "" }: SwitchLabelProps) {
   return (
-    <label className={`text-sm text-primary ${className}`}>{children}</label>
+    <label className={`text-body-md-str text-primary ${className}`}>
+      {children}
+    </label>
   );
 }
 
