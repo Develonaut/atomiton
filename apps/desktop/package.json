@@ -4,7 +4,7 @@
   "type": "module",
   "main": "./out/main/index.js",
   "scripts": {
-    "dev": "sleep 3 && electron-vite dev",
+    "dev": "node -e \"setTimeout(() => process.exit(), 3000)\" && electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "eslint .",
