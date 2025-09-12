@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Switch from "@/components/Switch";
+import Switch from "@/components/form/Switch";
 import Select from "@/components/form/Select";
 import Title from "../Title";
 import Option from "../Option";

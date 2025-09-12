@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import Switch from "@/components/Switch";
+import Switch from "@/components/form/Switch";
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
 import Title from "../Title";

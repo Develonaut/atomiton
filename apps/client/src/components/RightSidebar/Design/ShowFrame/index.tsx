@@ -1,17 +1,20 @@
 import { useState } from "react";
-import Switch from "@/components/Switch";
-import Group from "../../Group";
+import Switch from "@/components/form/Switch";
 
 function ShowFrame() {
   const [showFrame, setShowFrame] = useState(true);
 
   return (
-    <Group
-      title="Show Frame"
-      rightContent={
-        <Switch checked={showFrame} onChange={() => setShowFrame(!showFrame)} />
-      }
-    />
+    <div className="px-4 py-3 border-b border-shade-02">
+      <Switch
+        checked={showFrame}
+        onChange={() => setShowFrame(!showFrame)}
+        fullWidth
+      >
+        <Switch.Label>Show Frame</Switch.Label>
+        <Switch.Thumb />
+      </Switch>
+    </div>
   );
 }
 
