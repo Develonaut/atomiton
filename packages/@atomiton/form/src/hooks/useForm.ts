@@ -1,7 +1,8 @@
-import { useForm as useReactHookForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { generateFieldsFromSchema, getDefaultValues } from "../utils/index.js";
+import { useMemo } from "react";
+import { useForm as useHookForm } from "react-hook-form";
 import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types.js";
+import { generateFieldsFromSchema, getDefaultValues } from "../utils/index.js";
 
 export type UseFormOptions = {
   schema: ZodSchema;
@@ -15,7 +16,7 @@ export function useForm(options: UseFormOptions) {
 
   const resolvedDefaultValues = defaultValues ?? getDefaultValues(schema);
 
-  const form = useReactHookForm({
+  const form = useHookForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(schema as any),
     defaultValues: resolvedDefaultValues,
@@ -29,8 +30,11 @@ export function useForm(options: UseFormOptions) {
     generatedFields = [];
   }
 
-  return {
-    ...form,
-    fields: generatedFields,
-  };
+  return useMemo(
+    () => ({
+      ...form,
+      fields: generatedFields,
+    }),
+    [form, generatedFields],
+  );
 }

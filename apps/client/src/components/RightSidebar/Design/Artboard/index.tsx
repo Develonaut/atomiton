@@ -1,20 +1,30 @@
-import { useState } from "react";
-import Select from "@/components/Select";
-import Icon from "@/components/Icon";
-import Group from "../../Group";
 import { NumberInput } from "@/components/form";
+import Icon from "@/components/Icon";
+import Select from "@/components/form/Select";
+import { useState } from "react";
+import Group from "../../Group";
 
-function Artboard() {
-  const xPostOptions = [
-    { id: 0, name: "800x600" },
-    { id: 1, name: "1024x768" },
-    { id: 2, name: "1280x1024" },
-    { id: 3, name: "1600x1200" },
-    { id: 4, name: "1920x1080" },
-  ];
+type XPostOption = {
+  id: number;
+  name: string;
+};
 
-  const [xPost, setXPost] = useState(xPostOptions[0]);
+const xPostOptions: XPostOption[] = [
+  { id: 0, name: "800x600" },
+  { id: 1, name: "1024x768" },
+  { id: 2, name: "1280x1024" },
+  { id: 3, name: "1600x1200" },
+  { id: 4, name: "1920x1080" },
+];
 
+/**
+ * ArtboardComposition Component
+ *
+ * Example of using the new Select composition API for better flexibility
+ * and composition patterns.
+ */
+function ArtboardComposition() {
+  const [xPost, setXPost] = useState<XPostOption>(xPostOptions[0]);
   const [width, setWidth] = useState(800);
   const [height, setHeight] = useState(600);
 
@@ -22,20 +32,30 @@ function Artboard() {
     <Group title="Artboard">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <Select
-            className="grow"
-            label="X Post"
-            icon="camera-1"
-            value={xPost}
-            onChange={setXPost}
-            options={xPostOptions}
-            isMedium
-            isWhite
-          />
+          <Select value={xPost} onChange={setXPost} className="grow">
+            <Select.Trigger isMedium isWhite>
+              <Select.Icon>
+                <Icon name="camera-1" className="!size-4" />
+              </Select.Icon>
+              <Select.Label>X Post</Select.Label>
+              <Select.Placeholder>Select resolution</Select.Placeholder>
+              <Select.Value>{xPost.name}</Select.Value>
+              <Select.Indicator isMedium />
+            </Select.Trigger>
+            <Select.Options>
+              {xPostOptions.map((option) => (
+                <Select.Option key={option.id} value={option} isMedium>
+                  {option.name}
+                </Select.Option>
+              ))}
+            </Select.Options>
+          </Select>
+
           <button className="btn-icon size-6">
             <Icon className="!size-4" name="lock" />
           </button>
         </div>
+
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <NumberInput
@@ -58,4 +78,4 @@ function Artboard() {
   );
 }
 
-export default Artboard;
+export default ArtboardComposition;

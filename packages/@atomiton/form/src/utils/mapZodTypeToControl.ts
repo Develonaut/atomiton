@@ -9,7 +9,7 @@ import type { FieldConfig, ZodSchema, UIControlType } from "../types.js";
 export function mapZodTypeToControl(
   schema: ZodSchema,
   fieldName: string,
-): Omit<FieldConfig, "label" | "placeholder" | "description" | "helpText"> {
+): Partial<FieldConfig> & { name: string; type: UIControlType } {
   const baseField = {
     name: fieldName,
     type: "text" as UIControlType,

@@ -26,54 +26,73 @@ export type UIControlType =
   | "range" // Range slider
   | "json"; // JSON editor
 
-export type UIFieldMetadata = {
+/**
+ * Base field configuration shared by all field types
+ */
+export interface BaseFieldConfig {
+  /** Field name (auto-generated from schema) */
+  name: string;
   /** Type of form control to render */
-  controlType?: UIControlType;
+  type: UIControlType;
   /** Display label (defaults to field name) */
   label?: string;
   /** Placeholder text for inputs */
   placeholder?: string;
-  /** Help text to display */
+  /** Help text to display below the field */
   helpText?: string;
-  /** Options for select controls */
-  options?: Array<{ value: string | number | boolean; label: string }>;
-  /** Default value */
-  defaultValue?: unknown;
-  /** Minimum value for number/range controls */
-  min?: number;
-  /** Maximum value for number/range controls */
-  max?: number;
-  /** Step size for number/range controls */
-  step?: number;
   /** Whether field is required */
   required?: boolean;
   /** Whether field is disabled */
   disabled?: boolean;
-  /** Field grouping */
+  /** Field grouping for layout */
   group?: string;
   /** Sort order within group */
   order?: number;
-};
+}
 
-export type FieldConfig = {
-  name: string;
-  type: UIControlType;
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  helpText?: string;
-  options?: Array<{ label: string; value: string | number | boolean }>;
+/**
+ * Configuration for select fields
+ */
+export interface SelectFieldConfig extends BaseFieldConfig {
+  type: "select";
+  /** Options for select controls */
+  options: Array<{ value: string | number | boolean; label: string }>;
+}
+
+/**
+ * Configuration for numeric fields (number and range)
+ */
+export interface NumberFieldConfig extends BaseFieldConfig {
+  type: "number" | "range";
+  /** Minimum value */
   min?: number;
+  /** Maximum value */
   max?: number;
+  /** Step size */
   step?: number;
-  required?: boolean;
-  disabled?: boolean;
-  group?: string;
-  order?: number;
+}
+
+/**
+ * Union type for all field configurations
+ * This replaces both UIFieldMetadata and the old FieldConfig
+ */
+export type FieldConfig =
+  | BaseFieldConfig
+  | SelectFieldConfig
+  | NumberFieldConfig;
+
+/**
+ * Metadata for fields that can be provided to customize field generation
+ * Maps field names to their configuration
+ */
+export type FieldsMetadata = {
+  [fieldName: string]: Partial<Omit<FieldConfig, "name">>;
 };
 
-export type FieldsMetadata = {
-  [fieldName: string]: UIFieldMetadata;
-};
+/**
+ * Legacy type alias for backwards compatibility
+ * @deprecated Use FieldConfig instead
+ */
+export type UIFieldMetadata = Partial<Omit<FieldConfig, "name">>;
 
 export type ZodSchema = z.ZodTypeAny;

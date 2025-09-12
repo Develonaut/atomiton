@@ -1,6 +1,7 @@
 export type * from "./types.js";
 export * from "./utils/index.js";
 export * from "./hooks/index.js";
+export * from "./components/index.js";
 
 export { z } from "zod";
 export { zodResolver } from "@hookform/resolvers/zod";

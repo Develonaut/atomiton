@@ -58,7 +58,7 @@ describe("Field Generation Performance", () => {
       firstName: { label: "First Name", placeholder: "Enter first name" },
       lastName: { label: "Last Name", placeholder: "Enter last name" },
       email: { label: "Email Address", placeholder: "email@example.com" },
-      bio: { controlType: "textarea" as const, label: "Biography" },
+      bio: { type: "textarea" as const, label: "Biography" },
     };
     generateFieldsFromSchema(mediumSchema, metadata);
   });

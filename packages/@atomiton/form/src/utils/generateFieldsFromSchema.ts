@@ -29,21 +29,29 @@ export function generateFieldsFromSchema(
 
     const field: FieldConfig = {
       ...baseField,
-      type: fieldMetadata.controlType || baseField.type,
+      type: ("type" in fieldMetadata && fieldMetadata.type) || baseField.type,
       label:
         fieldMetadata.label ||
         fieldName.charAt(0).toUpperCase() + fieldName.slice(1),
       placeholder: fieldMetadata.placeholder,
       helpText: fieldMetadata.helpText,
-      options: fieldMetadata.options || baseField.options,
-      min: fieldMetadata.min || baseField.min,
-      max: fieldMetadata.max || baseField.max,
-      step: fieldMetadata.step || baseField.step,
+      options:
+        ("options" in fieldMetadata ? fieldMetadata.options : undefined) ||
+        ("options" in baseField ? baseField.options : undefined),
+      min:
+        ("min" in fieldMetadata ? fieldMetadata.min : undefined) ||
+        ("min" in baseField ? baseField.min : undefined),
+      max:
+        ("max" in fieldMetadata ? fieldMetadata.max : undefined) ||
+        ("max" in baseField ? baseField.max : undefined),
+      step:
+        ("step" in fieldMetadata ? fieldMetadata.step : undefined) ||
+        ("step" in baseField ? baseField.step : undefined),
       required: fieldMetadata.required ?? baseField.required,
       disabled: fieldMetadata.disabled,
       group: fieldMetadata.group,
       order: fieldMetadata.order,
-    };
+    } as FieldConfig;
 
     fieldsArray.push(field);
   }

@@ -17,7 +17,11 @@ export { default as Card } from "./components/Card";
 
 export { default as Field } from "./components/Field";
 
-export { default as Select } from "./components/Select";
+export {
+  default as Select,
+  Select as SelectComposition,
+  LegacySelect,
+} from "./components/Select";
 export type { SelectOption } from "./components/Select";
 
 export { Icon, getNodeIcon, NODE_ICON_MAP } from "./components/Icon";

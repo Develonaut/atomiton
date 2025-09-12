@@ -1,53 +1,42 @@
-import type { TabItem } from "@/types";
+import TabsContent from "./TabsContent";
+import TabsList from "./TabsList";
+import TabsRoot from "./TabsRoot";
+import TabsTrigger from "./TabsTrigger";
+import TabsLegacy from "./TabsLegacy";
+import { TabItem } from "@/types";
 
-type Props = {
-  className?: string;
-  classButton?: string;
+// Check if props match legacy API
+function isLegacyProps(props: any): props is {
   items: TabItem[];
   value: TabItem;
   setValue: (value: TabItem) => void;
   isMedium?: boolean;
-};
-
-function Tabs({
-  className,
-  classButton,
-  items,
-  value,
-  setValue,
-  isMedium,
-}: Props) {
+  className?: string;
+  classButton?: string;
+} {
   return (
-    <div
-      className={`p-0.75 border border-s-02 bg-surface-03 rounded-xl ${
-        isMedium ? "" : "shadow-[inset_0px_1px_2px_0_rgba(50,50,50,0.10)]"
-      } ${className || ""}`}
-    >
-      <div className="relative flex">
-        <div
-          className={`absolute top-0 left-0 bottom-0 rounded-lg bg-surface-01 shadow-[0_1.25px_3px_0px_rgba(50,50,50,0.10)),inset_0px_1.25px_1px_0px_#FFF] transition-transform ${
-            items.length === 3 ? "w-1/3" : "w-1/2"
-          } ${value.id === items[1].id ? "translate-x-full" : ""}`}
-        ></div>
-        {items.map((item) => (
-          <button
-            className={`relative z-1 flex-1 transition-colors hover:text-primary ${
-              value.id === item.id ? "text-primary" : "text-secondary"
-            } ${
-              isMedium ? "h-7 text-body-md-str" : "h-8 text-body-lg-str"
-            } ${classButton || ""}`}
-            key={item.id}
-            onClick={() => {
-              setValue(item);
-              item.onClick?.();
-            }}
-          >
-            {item.name}
-          </button>
-        ))}
-      </div>
-    </div>
+    "items" in props && "setValue" in props && props.value?.id !== undefined
   );
 }
+
+// Wrapper component that handles both APIs
+function TabsWrapper(props: any) {
+  // If using legacy API, use TabsLegacy
+  if (isLegacyProps(props)) {
+    return <TabsLegacy {...props} />;
+  }
+  // Otherwise use new composition API
+  return <TabsRoot {...props} />;
+}
+
+// Export as compound component with wrapper as the base
+const Tabs = Object.assign(TabsWrapper, {
+  List: TabsList,
+  Trigger: TabsTrigger,
+  Content: TabsContent,
+});
+
+// Also export individual components for direct imports
+export { TabsContent, TabsList, TabsRoot, TabsTrigger, TabsLegacy };
 
 export default Tabs;

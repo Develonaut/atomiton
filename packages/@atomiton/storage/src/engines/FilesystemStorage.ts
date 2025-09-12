@@ -55,8 +55,8 @@ export class FilesystemStorage implements IStorageEngine {
       const format = options?.format || "yaml";
       const content =
         format === "yaml"
-          ? this.serializer.toYAML(data)
-          : this.serializer.toJSON(data);
+          ? this.serializer.toYAML(data as BlueprintDefinition)
+          : this.serializer.toJSON(data as BlueprintDefinition);
 
       const filepath = this.getFilePath(key, format);
       await fs.writeFile(filepath, content, "utf-8");
@@ -313,14 +313,14 @@ export class FilesystemStorage implements IStorageEngine {
    */
   private isBlueprintData(data: unknown): data is BlueprintDefinition {
     return (
-      data &&
       typeof data === "object" &&
+      data !== null &&
       "id" in data &&
       "name" in data &&
       "version" in data &&
-      typeof data.id === "string" &&
-      typeof data.name === "string" &&
-      typeof data.version === "string"
+      typeof (data as any).id === "string" &&
+      typeof (data as any).name === "string" &&
+      typeof (data as any).version === "string"
     );
   }
 }

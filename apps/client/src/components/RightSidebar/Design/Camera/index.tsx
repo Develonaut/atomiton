@@ -3,18 +3,28 @@ import Tabs from "@/components/Tabs";
 import Group from "../../Group";
 import Isometric from "./Isometric";
 
-const tabs = [
-  { id: 0, name: "Isometric" },
-  { id: 1, name: "Perspective" },
-];
-
 function Camera() {
-  const [tab, setTab] = useState(tabs[0]);
+  const [activeView, setActiveView] = useState<"isometric" | "perspective">(
+    "isometric",
+  );
 
   return (
     <Group title="Camera">
-      <Tabs items={tabs} value={tab} setValue={setTab} />
-      <div className="pt-3">{tab.id === 0 && <Isometric />}</div>
+      <Tabs value={activeView} onChange={setActiveView}>
+        <Tabs.List>
+          <Tabs.Trigger value="isometric">Isometric</Tabs.Trigger>
+          <Tabs.Trigger value="perspective">Perspective</Tabs.Trigger>
+        </Tabs.List>
+
+        <div className="pt-3">
+          <Tabs.Content value="isometric">
+            <Isometric />
+          </Tabs.Content>
+          <Tabs.Content value="perspective">
+            {/* Perspective content will go here */}
+          </Tabs.Content>
+        </div>
+      </Tabs>
     </Group>
   );
 }
