@@ -21,8 +21,8 @@
     "test:snapshots:compare": "playwright test tests/snapshots.spec.ts",
     "test:install": "playwright install",
     "kill:servers": "npm run kill:ports",
-    "kill": "lsof -ti:5173 | xargs kill -9 || true",
-    "kill:ports": "lsof -ti:5173,5174,5175 | xargs kill -9 || true"
+    "kill": "kill-port --port 5173 || true",
+    "kill:ports": "kill-port --port 5173,5174,5175 || true"
   },
   "dependencies": {
     "@atomiton/core": "workspace:^",
@@ -53,6 +53,7 @@
     "@playwright/test": "^1.55.0",
     "@tailwindcss/vite": "^4.1.12",
     "@types/node": "^20",
+    "kill-port": "^2.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-router-dom": "^5.3.3",

@@ -10,8 +10,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false",
-    "kill": "pkill -f electron || true",
-    "kill:electron": "pkill -f electron || true"
+    "kill": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\"",
+    "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
@@ -20,11 +20,13 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@types/node": "^20.0.0",
     "concurrently": "^8.2.0",
+    "cross-env": "^10.0.0",
     "electron": "^38.0.0",
     "electron-builder": "^26.0.0",
     "electron-vite": "^4.0.0",
     "typescript": "^5.0.0",
     "vite": "^7.0.0",
-    "wait-on": "^8.0.4"
+    "wait-on": "^8.0.4",
+    "kill-port": "^2.0.1"
   }
 }
