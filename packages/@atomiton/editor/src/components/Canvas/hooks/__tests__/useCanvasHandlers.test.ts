@@ -1,8 +1,10 @@
 import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import React from "react";
 import { useCanvasHandlers } from "../useCanvasHandlers";
 import { editorStore } from "../../../../store";
 import type { UseReactFlowReturn } from "../useReactFlow";
+import type { ReactFlowInstance, Node } from "../../../../primitives/ReactFlow";
 
 // Test file to verify pre-commit hooks run tests
 
@@ -76,8 +78,9 @@ describe("useCanvasHandlers", () => {
         }),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mockInstance = { id: "test-instance" } as any;
+      const mockInstance = {
+        id: "test-instance",
+      } as unknown as ReactFlowInstance;
 
       act(() => {
         result.current.handleOnInit(mockInstance);
@@ -95,8 +98,9 @@ describe("useCanvasHandlers", () => {
         }),
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mockInstance = { id: "test-instance" } as any;
+      const mockInstance = {
+        id: "test-instance",
+      } as unknown as ReactFlowInstance;
 
       act(() => {
         result.current.handleOnInit(mockInstance);
@@ -136,7 +140,8 @@ describe("useCanvasHandlers", () => {
     });
 
     it("should handle drop when wrapper ref is null", () => {
-      const nullWrapper = { current: null };
+      const nullWrapper =
+        React.createRef<HTMLDivElement>() as React.RefObject<HTMLDivElement>;
       const { result } = renderHook(() =>
         useCanvasHandlers({
           reactFlow: mockReactFlow,
@@ -277,7 +282,12 @@ describe("useCanvasHandlers", () => {
       );
 
       const mockEvent = {} as React.MouseEvent;
-      const mockNode = { id: "node-123", type: "test-node" };
+      const mockNode = {
+        id: "node-123",
+        type: "test-node",
+        position: { x: 0, y: 0 },
+        data: {},
+      } as Node;
 
       act(() => {
         result.current.handleOnNodeClick(mockEvent, mockNode);
@@ -299,7 +309,12 @@ describe("useCanvasHandlers", () => {
       );
 
       const mockEvent = {} as React.MouseEvent;
-      const mockNode = { id: "node-456", type: "test-node" };
+      const mockNode = {
+        id: "node-456",
+        type: "test-node",
+        position: { x: 0, y: 0 },
+        data: {},
+      } as Node;
 
       act(() => {
         result.current.handleOnNodeClick(mockEvent, mockNode);

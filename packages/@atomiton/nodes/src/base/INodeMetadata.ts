@@ -35,6 +35,13 @@ export type INodeMetadata = {
   /** Node type identifier (used for instantiation) */
   type: string;
 
+  /** Runtime specification for node execution */
+  runtime?: {
+    /** Language runtime for this node (currently only TypeScript supported) */
+    language: "typescript";
+    // Future: 'typescript' | 'rust' | 'python' | 'wasm' | 'golang'
+  };
+
   /** Keywords for search and discovery */
   keywords: string[];
 

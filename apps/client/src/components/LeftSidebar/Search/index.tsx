@@ -6,7 +6,7 @@ function Search() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
+    // TODO: Implement actual search functionality
   };
 
   return (

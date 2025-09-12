@@ -99,16 +99,12 @@ export class ErrorReporter {
   /**
    * Send error report to external monitoring service
    */
-  private async sendToExternalService(report: ErrorReport): Promise<void> {
+  private async sendToExternalService(_report: ErrorReport): Promise<void> {
     try {
       // In a real app, this would send to Sentry, LogRocket, etc.
       // For now, we'll just simulate the call
-      console.log("📤 Sending error report to monitoring service...");
-
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 100));
-
-      console.log("✅ Error report sent successfully");
     } catch (sendError) {
       console.error("❌ Failed to send error report:", sendError);
       // Don't throw here to avoid secondary errors

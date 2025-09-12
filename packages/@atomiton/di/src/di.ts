@@ -14,8 +14,7 @@ import "reflect-metadata";
  * Represents a class constructor type that can be instantiated with 'new'
  * @template T The type of instance the constructor creates
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Constructable<T = unknown> = new (...args: any[]) => T;
+export type Constructable<T = unknown> = new (...args: unknown[]) => T;
 
 type AbstractConstructable<T = unknown> = abstract new (
   ...args: unknown[]

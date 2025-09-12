@@ -13,7 +13,7 @@ function Head() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
+    // TODO: Implement actual share functionality
   };
 
   return (

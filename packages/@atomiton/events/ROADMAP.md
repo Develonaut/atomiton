@@ -14,11 +14,23 @@ Create a comprehensive, type-safe event system that serves as the backbone for c
 - [ ] Event validation and error handling
 - [ ] Performance optimization and monitoring
 
+### IPC Support (HIGH PRIORITY - Q1 2025)
+
+**Required by @atomiton/conductor package**
+
+- [ ] Electron IPC abstraction layer
+- [ ] Bidirectional renderer ↔ main process communication
+- [ ] Type-safe IPC event definitions
+- [ ] Automatic serialization/deserialization
+- [ ] IPC event batching for performance
+- [ ] Connection state management
+
 ### Developer Experience
 
 - [ ] Comprehensive documentation with examples
 - [ ] Event debugging and inspection tools
 - [ ] Testing utilities for event-driven code
+- [ ] IPC-specific debugging tools
 
 ## Q1 2026 - Advanced Features
 

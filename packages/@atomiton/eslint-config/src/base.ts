@@ -48,7 +48,11 @@ const baseConfig: Linter.Config[] = [
     rules: {
       // TypeScript rules
       "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      // Prefer type over interface, but interface is still allowed for:
+      // - Module augmentation (extending global interfaces)
+      // - Declaration merging
+      // - When extending other interfaces
+      "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
       "@typescript-eslint/no-unused-vars": [
         "error",
         {

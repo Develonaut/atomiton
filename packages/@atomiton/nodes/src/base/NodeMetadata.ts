@@ -20,6 +20,9 @@ export class NodeMetadata implements INodeMetadata {
   readonly description: string;
   readonly category: string;
   readonly type: string;
+  readonly runtime?: {
+    language: "typescript";
+  };
   readonly keywords: string[];
   readonly icon: string;
   readonly tags?: string[];
@@ -45,6 +48,7 @@ export class NodeMetadata implements INodeMetadata {
     this.description = metadata.description;
     this.category = metadata.category;
     this.type = metadata.type || metadata.id; // Default type to id if not specified
+    this.runtime = metadata.runtime || { language: "typescript" }; // Default to TypeScript
     this.keywords = metadata.keywords;
     this.icon = metadata.icon;
     this.tags = metadata.tags;
@@ -74,6 +78,11 @@ export class NodeMetadata implements INodeMetadata {
     // Validate version format (basic semver check)
     if (this.version && !/^\d+\.\d+\.\d+/.test(this.version)) {
       errors.push("Version must follow semantic versioning (e.g., 1.0.0)");
+    }
+
+    // Validate runtime if specified
+    if (this.runtime && this.runtime.language !== "typescript") {
+      errors.push("Only TypeScript runtime is currently supported");
     }
 
     return {

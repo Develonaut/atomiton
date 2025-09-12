@@ -152,8 +152,8 @@ export abstract class NodeLogic<TConfig = Record<string, unknown>> {
 
   protected sanitizeString(input: unknown): string {
     if (typeof input === "string") {
-      // eslint-disable-next-line no-control-regex
-      return input.replace(/[\x00-\x1F\x7F]/g, "");
+      // Remove ASCII control characters (0-31) and DEL (127)
+      return input.replace(/[\p{Cc}\u007F]/gu, "");
     }
     return String(input);
   }

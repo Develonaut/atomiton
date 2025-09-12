@@ -59,12 +59,12 @@ test.describe("Smoke Tests", () => {
       });
 
       const window = await app.firstWindow();
-      const isVisible = await window.isVisible();
+      const isVisible = await window.isVisible("body");
       expect(isVisible).toBe(true);
 
       await app.close();
     } catch (error) {
-      test.skip();
+      test.skip(true, "Desktop app not available");
     }
   });
 

@@ -1,5 +1,6 @@
 import { contextBridge } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
+import "./preload.d";
 
 const api = {
   // Add any custom API methods here
@@ -13,8 +14,6 @@ if (process.contextIsolated) {
     console.error(error);
   }
 } else {
-  // @ts-expect-error - window augmentation for non-isolated context
   window.electron = electronAPI;
-  // @ts-expect-error - window augmentation for non-isolated context
   window.api = api;
 }

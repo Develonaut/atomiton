@@ -12,7 +12,6 @@ function Assets() {
         <Accordion
           key={category.name}
           title={category.displayName}
-          titleButton="Add Node"
           items={category.items.map((item, itemIndex: number) => ({
             ...item,
             id: index * 100 + itemIndex, // Generate unique numeric id for compatibility

@@ -6,7 +6,6 @@ import AnimateHeight from "react-animate-height";
 type Props = {
   className?: string;
   title: string;
-  titleButton?: string;
   items: {
     id: number;
     nodeType?: string;
@@ -15,18 +14,10 @@ type Props = {
     icon?: string;
     description?: string;
   }[];
-  largeImage?: boolean;
   onAddNode?: (nodeType: string) => void;
 };
 
-function Accordion({
-  className,
-  title,
-  titleButton,
-  items,
-  largeImage,
-  onAddNode,
-}: Props) {
+function Accordion({ className, title, items, onAddNode }: Props) {
   const [active, setActive] = useState(true);
 
   return (

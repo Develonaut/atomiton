@@ -17,17 +17,11 @@ type ErrorBoundaryProps = {
 
 type ErrorDisplayProps = {
   error: Error;
-  errorInfo: ErrorInfo;
   onRetry: () => void;
   onDownloadReport: () => void;
 };
 
-function ErrorDisplay({
-  error,
-  errorInfo,
-  onRetry,
-  onDownloadReport,
-}: ErrorDisplayProps) {
+function ErrorDisplay({ error, onRetry, onDownloadReport }: ErrorDisplayProps) {
   return (
     <Box className="min-h-screen flex items-center justify-center bg-surface-02 p-8">
       <Box className="max-w-2xl w-full bg-surface-01 rounded-2xl border border-s-01 shadow-popover p-8">
@@ -96,13 +90,12 @@ export class ErrorBoundary extends Component<
     this.setState({ hasError: false, error: null, errorInfo: null });
   };
 
-  handleDownloadReport = () => {
+  handleDownloadReport = async () => {
     const { error, errorInfo } = this.state;
     if (!error || !errorInfo) return;
 
-    // Use the centralized error reporting system
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { errorReporter } = require("../../utils/errorReporting");
+    // Use the centralized error reporting system with dynamic import
+    const { errorReporter } = await import("../../utils/errorReporting");
     errorReporter.generateDownloadableReport(error, errorInfo);
   };
 
@@ -117,7 +110,6 @@ export class ErrorBoundary extends Component<
       return (
         <ErrorDisplay
           error={this.state.error}
-          errorInfo={this.state.errorInfo}
           onRetry={this.handleRetry}
           onDownloadReport={this.handleDownloadReport}
         />

@@ -10,7 +10,7 @@ test.describe.skip("Desktop App", () => {
   test("should launch and display main window", async () => {
     // Skip in CI for now - Electron testing requires special setup
     if (process.env.CI) {
-      test.skip();
+      test.skip(true, "Electron testing requires special setup in CI");
       return;
     }
 
@@ -35,7 +35,7 @@ test.describe.skip("Desktop App", () => {
     });
 
     // Check that content is loaded
-    const isVisible = await window.isVisible();
+    const isVisible = await window.isVisible("body");
     expect(isVisible).toBe(true);
 
     // Close the app
@@ -44,7 +44,7 @@ test.describe.skip("Desktop App", () => {
 
   test("should handle window controls", async () => {
     if (process.env.CI) {
-      test.skip();
+      test.skip(true, "Electron testing requires special setup in CI");
       return;
     }
 
@@ -57,8 +57,13 @@ test.describe.skip("Desktop App", () => {
     // Test minimize/maximize/restore
     const isMaximized = await window.evaluate(() => {
       return new Promise((resolve) => {
-        // @ts-ignore - Electron API
-        window.api?.isMaximized().then(resolve);
+        // Type assertion for the Electron preload API
+        const electronWindow = window as any;
+        if (electronWindow.api?.isMaximized) {
+          electronWindow.api.isMaximized().then(resolve);
+        } else {
+          resolve(false);
+        }
       });
     });
 

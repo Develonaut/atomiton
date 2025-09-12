@@ -1,4 +1,4 @@
-import core from "@atomiton/core";
+import core, { type NodeType } from "@atomiton/core";
 import { useNodes, useStore } from "@atomiton/editor";
 import Item from "./Item";
 
@@ -9,9 +9,8 @@ function Scene() {
   const handleDelete = (nodeId: string) => {
     if (deleteNode) {
       deleteNode(nodeId);
-    } else {
-      console.log("Delete node:", nodeId);
     }
+    // If deleteNode is not available, the operation is silently ignored
   };
 
   const handleNodeClick = (nodeId: string) => {
@@ -35,7 +34,7 @@ function Scene() {
       {nodes.map((node) => {
         if (!node.type) return null;
 
-        const nodeMetadata = core.nodes.getNodeMetadata(node.type as string);
+        const nodeMetadata = core.nodes.getNodeMetadata(node.type as NodeType);
 
         return (
           <Item

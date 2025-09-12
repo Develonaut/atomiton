@@ -10,7 +10,7 @@ function Folders() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(search);
+    // TODO: Implement actual folder search functionality
   };
 
   return (

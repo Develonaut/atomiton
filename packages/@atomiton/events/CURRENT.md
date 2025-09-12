@@ -11,7 +11,17 @@
 - ✅ **Event management** - Subscribe, unsubscribe, emit patterns
 - ✅ **Testing setup** - Vitest configuration and initial tests
 
-### 🚀 API Enhancements - IN PROGRESS
+### 🚀 IPC Support - HIGH PRIORITY
+
+**Required by @atomiton/conductor - Start ASAP:**
+
+- [ ] **IPC abstraction** - Unified API for renderer/main communication
+- [ ] **Process detection** - Auto-detect Electron renderer vs main
+- [ ] **Event routing** - Route events across IPC boundary
+- [ ] **Type preservation** - Maintain TypeScript types across IPC
+- [ ] **Serialization** - Handle complex data types
+
+### 📝 API Enhancements - IN PROGRESS
 
 **Active Tasks:**
 

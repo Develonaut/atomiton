@@ -5,6 +5,7 @@ import type {
   EdgeChange,
   Node,
   NodeChange,
+  ReactFlowInstance,
 } from "@xyflow/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useReactFlow } from "./useReactFlow";
@@ -15,12 +16,29 @@ vi.mock("@xyflow/react", () => ({
   useEdgesState: vi.fn(() => [[], vi.fn(), vi.fn()]),
 }));
 
-// Mock the store
+// Mock the store with correct interface
 vi.mock("../../../store", () => ({
   editorStore: {
-    pushToHistory: vi.fn(),
-    setElements: vi.fn(),
-    setConnections: vi.fn(),
+    // Flow module actions
+    setFlowInstance: vi.fn(),
+    getFlowInstance: vi.fn(),
+    updateFlowSnapshot: vi.fn(),
+    debouncedUpdateFlowSnapshot: vi.fn(),
+    getFlowSnapshot: vi.fn(),
+    getInitialFlowState: vi.fn((defaultNodes = [], defaultEdges = []) => ({
+      nodes: defaultNodes,
+      edges: defaultEdges,
+      viewport: undefined,
+    })),
+    // Node module actions
+    addNode: vi.fn(),
+    deleteNode: vi.fn(),
+    deleteSelectedNodes: vi.fn(),
+    handleConnect: vi.fn(),
+    handleDrop: vi.fn(),
+    // Base store methods
+    getState: vi.fn(),
+    setState: vi.fn(),
     subscribe: vi.fn(() => vi.fn()),
   },
 }));
@@ -61,11 +79,21 @@ describe("useReactFlow", () => {
       mockOnEdgesChange,
     ]);
 
-    // Reset store mocks
-    mockStore.pushToHistory = vi.fn();
-    mockStore.setElements = vi.fn();
-    mockStore.setConnections = vi.fn();
-    mockStore.subscribe = vi.fn(() => mockUnsubscribe);
+    // Reset store mocks with correct interface
+    mockStore.getInitialFlowState = vi.fn(
+      (defaultNodes = [], defaultEdges = []) => ({
+        nodes: defaultNodes.length > 0 ? defaultNodes : testNodes,
+        edges: defaultEdges.length > 0 ? defaultEdges : testEdges,
+        viewport: undefined,
+      }),
+    );
+    mockStore.debouncedUpdateFlowSnapshot = vi.fn();
+    mockStore.setFlowInstance = vi.fn();
+    mockStore.handleConnect = vi.fn();
+    mockStore.addNode = vi.fn();
+    mockStore.deleteSelectedNodes = vi.fn();
+    mockStore.handleDrop = vi.fn();
+    mockStore.subscribe = vi.fn().mockReturnValue(mockUnsubscribe);
   });
 
   afterEach(() => {
@@ -83,24 +111,25 @@ describe("useReactFlow", () => {
 
       renderHook(() =>
         useReactFlow({
-          nodes: initialNodes,
-          edges: initialEdges,
+          defaultNodes: initialNodes,
+          defaultEdges: initialEdges,
         }),
       );
 
-      expect(mockUseNodesState).toHaveBeenCalledWith(initialNodes);
-      expect(mockUseEdgesState).toHaveBeenCalledWith(initialEdges);
+      expect(mockStore.getInitialFlowState).toHaveBeenCalledWith(
+        initialNodes,
+        initialEdges,
+      );
     });
 
     it("should initialize with empty arrays when no nodes/edges provided", () => {
-      renderHook(() => useReactFlow({}));
+      renderHook(() => useReactFlow());
 
-      expect(mockUseNodesState).toHaveBeenCalledWith([]);
-      expect(mockUseEdgesState).toHaveBeenCalledWith([]);
+      expect(mockStore.getInitialFlowState).toHaveBeenCalledWith([], []);
     });
 
     it("should return correct adapter interface", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       expect(result.current).toEqual({
         nodes: testNodes,
@@ -110,14 +139,16 @@ describe("useReactFlow", () => {
         onNodesChange: expect.any(Function),
         onEdgesChange: expect.any(Function),
         onConnect: expect.any(Function),
-        onDrop: expect.any(Function),
-        onDragOver: expect.any(Function),
+        onInit: expect.any(Function),
+        addNode: mockStore.addNode,
+        deleteSelectedNodes: mockStore.deleteSelectedNodes,
+        handleDrop: mockStore.handleDrop,
       });
     });
   });
 
   describe("Node Changes Handling", () => {
-    it("should handle node changes and update history", () => {
+    it("should handle node changes and update flow snapshot", () => {
       const externalHandler = vi.fn();
       const { result } = renderHook(() =>
         useReactFlow({
@@ -134,16 +165,12 @@ describe("useReactFlow", () => {
       });
 
       expect(mockOnNodesChange).toHaveBeenCalledWith(nodeChanges);
-      expect(mockStore.pushToHistory).toHaveBeenCalledWith({
-        type: "nodes-change",
-        changes: nodeChanges,
-        timestamp: expect.any(Number),
-      });
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalled();
       expect(externalHandler).toHaveBeenCalledWith(nodeChanges);
     });
 
     it("should handle node changes without external handler", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const nodeChanges: NodeChange[] = [{ id: "1", type: "remove" }];
 
@@ -152,32 +179,29 @@ describe("useReactFlow", () => {
       });
 
       expect(mockOnNodesChange).toHaveBeenCalledWith(nodeChanges);
-      expect(mockStore.pushToHistory).toHaveBeenCalledWith({
-        type: "nodes-change",
-        changes: nodeChanges,
-        timestamp: expect.any(Number),
-      });
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalled();
     });
 
-    it("should not push to history when store is unavailable", () => {
-      mockStore.pushToHistory =
-        undefined as unknown as typeof mockStore.pushToHistory;
-      const { result } = renderHook(() => useReactFlow({}));
+    it("should not throw when debouncedUpdateFlowSnapshot is unavailable", () => {
+      mockStore.debouncedUpdateFlowSnapshot =
+        undefined as unknown as typeof mockStore.debouncedUpdateFlowSnapshot;
+      const { result } = renderHook(() => useReactFlow());
 
       const nodeChanges: NodeChange[] = [
         { id: "1", type: "select", selected: true },
       ];
 
-      act(() => {
-        result.current.onNodesChange(nodeChanges);
-      });
+      expect(() => {
+        act(() => {
+          result.current.onNodesChange(nodeChanges);
+        });
+      }).not.toThrow();
 
       expect(mockOnNodesChange).toHaveBeenCalledWith(nodeChanges);
-      // Should not throw error when pushToHistory is undefined
     });
 
     it("should handle multiple node changes at once", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const nodeChanges: NodeChange[] = [
         { id: "1", type: "position", position: { x: 10, y: 10 } },
@@ -191,12 +215,12 @@ describe("useReactFlow", () => {
 
       expect(mockOnNodesChange).toHaveBeenCalledTimes(1);
       expect(mockOnNodesChange).toHaveBeenCalledWith(nodeChanges);
-      expect(mockStore.pushToHistory).toHaveBeenCalledTimes(1);
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalledTimes(1);
     });
   });
 
   describe("Edge Changes Handling", () => {
-    it("should handle edge changes and update history", () => {
+    it("should handle edge changes and update flow snapshot", () => {
       const externalHandler = vi.fn();
       const { result } = renderHook(() =>
         useReactFlow({
@@ -211,16 +235,12 @@ describe("useReactFlow", () => {
       });
 
       expect(mockOnEdgesChange).toHaveBeenCalledWith(edgeChanges);
-      expect(mockStore.pushToHistory).toHaveBeenCalledWith({
-        type: "edges-change",
-        changes: edgeChanges,
-        timestamp: expect.any(Number),
-      });
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalled();
       expect(externalHandler).toHaveBeenCalledWith(edgeChanges);
     });
 
     it("should handle edge changes without external handler", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const edgeChanges: EdgeChange[] = [
         { id: "e1-2", type: "select", selected: true },
@@ -231,30 +251,28 @@ describe("useReactFlow", () => {
       });
 
       expect(mockOnEdgesChange).toHaveBeenCalledWith(edgeChanges);
-      expect(mockStore.pushToHistory).toHaveBeenCalledWith({
-        type: "edges-change",
-        changes: edgeChanges,
-        timestamp: expect.any(Number),
-      });
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalled();
     });
 
-    it("should not push to history when store is unavailable", () => {
-      mockStore.pushToHistory =
-        undefined as unknown as typeof mockStore.pushToHistory;
-      const { result } = renderHook(() => useReactFlow({}));
+    it("should not throw when store methods are unavailable", () => {
+      mockStore.debouncedUpdateFlowSnapshot =
+        undefined as unknown as typeof mockStore.debouncedUpdateFlowSnapshot;
+      const { result } = renderHook(() => useReactFlow());
 
       const edgeChanges: EdgeChange[] = [{ id: "e1-2", type: "remove" }];
 
-      act(() => {
-        result.current.onEdgesChange(edgeChanges);
-      });
+      expect(() => {
+        act(() => {
+          result.current.onEdgesChange(edgeChanges);
+        });
+      }).not.toThrow();
 
       expect(mockOnEdgesChange).toHaveBeenCalledWith(edgeChanges);
     });
   });
 
   describe("Connection Handling", () => {
-    it("should handle new connections and create edges", () => {
+    it("should handle new connections", () => {
       const externalHandler = vi.fn();
       const { result } = renderHook(() =>
         useReactFlow({
@@ -273,42 +291,12 @@ describe("useReactFlow", () => {
         result.current.onConnect(connection);
       });
 
-      expect(mockSetEdges).toHaveBeenCalledWith(expect.any(Function));
-
-      // Test the function passed to setEdges
-      const setEdgesFn = mockSetEdges.mock.calls[0][0];
-      const existingEdges: Edge[] = [
-        { id: "existing", source: "a", target: "b" },
-      ];
-      const result_edges = setEdgesFn(existingEdges);
-
-      expect(result_edges).toEqual([
-        ...existingEdges,
-        {
-          id: "1-2",
-          source: "1",
-          target: "2",
-          sourceHandle: "output",
-          targetHandle: "input",
-        },
-      ]);
-
-      expect(mockStore.pushToHistory).toHaveBeenCalledWith({
-        type: "edge-connect",
-        edge: {
-          id: "1-2",
-          source: "1",
-          target: "2",
-          sourceHandle: "output",
-          targetHandle: "input",
-        },
-        timestamp: expect.any(Number),
-      });
+      expect(mockStore.handleConnect).toHaveBeenCalledWith(connection);
       expect(externalHandler).toHaveBeenCalledWith(connection);
     });
 
     it("should handle connections without handles", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const connection: Connection = {
         source: "node1",
@@ -321,25 +309,14 @@ describe("useReactFlow", () => {
         result.current.onConnect(connection);
       });
 
-      expect(mockSetEdges).toHaveBeenCalledWith(expect.any(Function));
-
-      const setEdgesFn = mockSetEdges.mock.calls[0][0];
-      const result_edges = setEdgesFn([]);
-
-      expect(result_edges[0]).toEqual({
-        id: "node1-node2",
-        source: "node1",
-        target: "node2",
-        sourceHandle: undefined,
-        targetHandle: undefined,
-      });
+      expect(mockStore.handleConnect).toHaveBeenCalledWith(connection);
     });
 
-    it("should not create edge when connection is invalid", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+    it("should handle invalid connections gracefully", () => {
+      const { result } = renderHook(() => useReactFlow());
 
       const invalidConnection: Connection = {
-        source: null,
+        source: null as unknown as string,
         target: "2",
         sourceHandle: null,
         targetHandle: null,
@@ -351,8 +328,51 @@ describe("useReactFlow", () => {
         });
       }).not.toThrow();
 
-      // Should still call setEdges even with invalid connection
-      expect(mockSetEdges).toHaveBeenCalled();
+      expect(mockStore.handleConnect).toHaveBeenCalledWith(invalidConnection);
+    });
+  });
+
+  describe("Init Handling", () => {
+    it("should set flow instance on init", () => {
+      const { result } = renderHook(() => useReactFlow());
+
+      const mockInstance = {
+        setViewport: vi.fn(),
+        getNodes: vi.fn(),
+        getEdges: vi.fn(),
+      } as unknown as ReactFlowInstance;
+
+      act(() => {
+        result.current.onInit(mockInstance);
+      });
+
+      expect(mockStore.setFlowInstance).toHaveBeenCalledWith(mockInstance);
+    });
+
+    it("should restore viewport if available", () => {
+      mockStore.getInitialFlowState.mockReturnValue({
+        nodes: testNodes,
+        edges: testEdges,
+        viewport: { x: 100, y: 200, zoom: 1.5 },
+      });
+
+      const { result } = renderHook(() => useReactFlow());
+
+      const mockInstance = {
+        setViewport: vi.fn(),
+        getNodes: vi.fn(),
+        getEdges: vi.fn(),
+      } as unknown as ReactFlowInstance;
+
+      act(() => {
+        result.current.onInit(mockInstance);
+      });
+
+      expect(mockInstance.setViewport).toHaveBeenCalledWith({
+        x: 100,
+        y: 200,
+        zoom: 1.5,
+      });
     });
   });
 
@@ -409,7 +429,7 @@ describe("useReactFlow", () => {
 
   describe("Edge Cases", () => {
     it("should handle rapid successive changes", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const changes1: NodeChange[] = [
         { id: "1", type: "position", position: { x: 1, y: 1 } },
@@ -424,11 +444,11 @@ describe("useReactFlow", () => {
       });
 
       expect(mockOnNodesChange).toHaveBeenCalledTimes(2);
-      expect(mockStore.pushToHistory).toHaveBeenCalledTimes(2);
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalledTimes(2);
     });
 
     it("should handle empty change arrays", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       act(() => {
         result.current.onNodesChange([]);
@@ -437,11 +457,11 @@ describe("useReactFlow", () => {
 
       expect(mockOnNodesChange).toHaveBeenCalledWith([]);
       expect(mockOnEdgesChange).toHaveBeenCalledWith([]);
-      expect(mockStore.pushToHistory).toHaveBeenCalledTimes(2);
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalledTimes(2);
     });
 
     it("should handle concurrent connections", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const connection1: Connection = {
         source: "1",
@@ -461,135 +481,35 @@ describe("useReactFlow", () => {
         result.current.onConnect(connection2);
       });
 
-      expect(mockSetEdges).toHaveBeenCalledTimes(2);
-      expect(mockStore.pushToHistory).toHaveBeenCalledTimes(2);
+      expect(mockStore.handleConnect).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe("Drag and Drop", () => {
-    it("should handle drag over events", () => {
-      const onDragOver = vi.fn();
-      const { result } = renderHook(() => useReactFlow({ onDragOver }));
+  describe("Store Actions", () => {
+    it("should expose addNode action", () => {
+      const { result } = renderHook(() => useReactFlow());
 
-      const mockEvent = {
-        preventDefault: vi.fn(),
-        dataTransfer: { dropEffect: "none" },
-      } as unknown as React.DragEvent;
-
-      act(() => {
-        result.current.onDragOver(mockEvent);
-      });
-
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
-      expect(mockEvent.dataTransfer.dropEffect).toBe("move");
-      expect(onDragOver).toHaveBeenCalledWith(mockEvent);
+      expect(result.current.addNode).toBe(mockStore.addNode);
     });
 
-    it("should handle drop events", () => {
-      const onDrop = vi.fn();
-      const { result } = renderHook(() => useReactFlow({ onDrop }));
+    it("should expose deleteSelectedNodes action", () => {
+      const { result } = renderHook(() => useReactFlow());
 
-      const mockEvent = {
-        preventDefault: vi.fn(),
-        dataTransfer: { getData: vi.fn() },
-      } as unknown as React.DragEvent;
-
-      act(() => {
-        result.current.onDrop(mockEvent);
-      });
-
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
-      expect(onDrop).toHaveBeenCalledWith(mockEvent);
-    });
-
-    it("should handle read-only dataTransfer gracefully", () => {
-      const onDragOver = vi.fn();
-      const { result } = renderHook(() => useReactFlow({ onDragOver }));
-
-      const mockEvent = {
-        preventDefault: vi.fn(),
-        dataTransfer: {
-          get dropEffect() {
-            return "none";
-          },
-          set dropEffect(_value) {
-            throw new Error("Read-only");
-          },
-        },
-      } as unknown as React.DragEvent;
-
-      // Should not throw
-      expect(() => {
-        act(() => {
-          result.current.onDragOver(mockEvent);
-        });
-      }).not.toThrow();
-
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
-      expect(onDragOver).toHaveBeenCalledWith(mockEvent);
-    });
-  });
-
-  describe("Store Synchronization", () => {
-    it("should initialize store with provided nodes and edges", () => {
-      const initialNodes: Node[] = [
-        { id: "node1", position: { x: 50, y: 50 }, data: {} },
-      ];
-      const initialEdges: Edge[] = [
-        { id: "edge1", source: "node1", target: "node2" },
-      ];
-
-      renderHook(() =>
-        useReactFlow({
-          nodes: initialNodes,
-          edges: initialEdges,
-        }),
+      expect(result.current.deleteSelectedNodes).toBe(
+        mockStore.deleteSelectedNodes,
       );
-
-      expect(mockStore.setElements).toHaveBeenCalledWith(initialNodes);
-      expect(mockStore.setConnections).toHaveBeenCalledWith(initialEdges);
     });
 
-    it("should subscribe to store changes", () => {
-      const { unmount } = renderHook(() => useReactFlow({}));
+    it("should expose handleDrop action", () => {
+      const { result } = renderHook(() => useReactFlow());
 
-      expect(mockStore.subscribe).toHaveBeenCalled();
-
-      // Test that subscription callback updates nodes and edges
-      const subscribeCallback = mockStore.subscribe.mock.calls[0][0];
-      const newState = {
-        elements: [{ id: "new", position: { x: 0, y: 0 }, data: {} }],
-        connections: [{ id: "new-edge", source: "a", target: "b" }],
-      };
-
-      act(() => {
-        subscribeCallback(newState);
-      });
-
-      expect(mockSetNodes).toHaveBeenCalledWith(newState.elements);
-      expect(mockSetEdges).toHaveBeenCalledWith(newState.connections);
-
-      // Test cleanup
-      unmount();
-      expect(mockUnsubscribe).toHaveBeenCalled();
-    });
-
-    it("should not initialize store with empty arrays", () => {
-      renderHook(() =>
-        useReactFlow({
-          nodes: [],
-          edges: [],
-        }),
-      );
-
-      expect(mockStore.setElements).not.toHaveBeenCalled();
-      expect(mockStore.setConnections).not.toHaveBeenCalled();
+      expect(result.current.handleDrop).toBe(mockStore.handleDrop);
     });
   });
 
   describe("Performance", () => {
     it("should handle large numbers of node changes efficiently", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const manyChanges: NodeChange[] = Array.from(
         { length: 1000 },
@@ -608,11 +528,11 @@ describe("useReactFlow", () => {
 
       expect(end - start).toBeLessThan(100); // Should complete in under 100ms
       expect(mockOnNodesChange).toHaveBeenCalledWith(manyChanges);
-      expect(mockStore.pushToHistory).toHaveBeenCalledTimes(1);
+      expect(mockStore.debouncedUpdateFlowSnapshot).toHaveBeenCalledTimes(1);
     });
 
     it("should handle large numbers of edge changes efficiently", () => {
-      const { result } = renderHook(() => useReactFlow({}));
+      const { result } = renderHook(() => useReactFlow());
 
       const manyChanges: EdgeChange[] = Array.from(
         { length: 1000 },
@@ -635,7 +555,7 @@ describe("useReactFlow", () => {
 
   describe("Memory Management", () => {
     it("should not create memory leaks with repeated renders", () => {
-      const { result, rerender } = renderHook(() => useReactFlow({}));
+      const { result, rerender } = renderHook(() => useReactFlow());
 
       // Simulate many rerenders
       for (let i = 0; i < 100; i++) {

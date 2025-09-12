@@ -1,4 +1,4 @@
-import { core } from "@atomiton/core";
+import { core, type NodeType } from "@atomiton/core";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -12,7 +12,7 @@ import { memo } from "react";
  * Visual styling (borders, hover, selection) is handled at the canvas level
  */
 function Node(props: ReactFlowNodeProps) {
-  const nodeMetadata = core.nodes.getNodeMetadata(props.type as string);
+  const nodeMetadata = core.nodes.getNodeMetadata(props.type as NodeType);
   const icon = nodeMetadata?.icon || "circle";
 
   return (

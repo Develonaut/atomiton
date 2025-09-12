@@ -21,6 +21,7 @@ class CSVReaderNode extends Node<CSVReaderConfig> {
     description: "Read CSV files",
     category: "io",
     type: "csv-reader",
+    runtime: { language: "typescript" },
     keywords: ["csv", "data", "import", "spreadsheet", "table"],
     icon: "table-2",
     tags: ["csv", "data", "import"],

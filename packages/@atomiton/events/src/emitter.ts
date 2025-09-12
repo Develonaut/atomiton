@@ -29,8 +29,8 @@ let config: Required<EventEmitterOptions> = {
 };
 
 // Listener tracking for better debugging
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const listenerMap = new Map<string, Set<SystemEventListener<any>>>();
+// We use unknown here because the listener map can track listeners of various types
+const listenerMap = new Map<string, Set<SystemEventListener<unknown>>>();
 
 // Initialize on module load
 emitter.setMaxListeners(config.maxListeners);
@@ -199,10 +199,8 @@ export function getActiveChannels(): string[] {
 
 function createWrappedListener<T>(
   listener: SystemEventListener<T>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): (...args: any[]) => void {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return async (...args: any[]) => {
+): (...args: unknown[]) => void {
+  return async (...args: unknown[]) => {
     const event = args[0] as SystemEvent<T>;
     try {
       await listener(event);
@@ -215,8 +213,7 @@ function createWrappedListener<T>(
 function createFilteredListener<T>(
   filter: EventFilter,
   listener: SystemEventListener<T>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): (...args: any[]) => void {
+): (...args: unknown[]) => void {
   return createWrappedListener((event: SystemEvent<T>) => {
     if (matchesFilter(event, filter)) {
       return listener(event);
@@ -268,7 +265,8 @@ function trackListener<T = unknown>(
   if (!listenerMap.has(channel)) {
     listenerMap.set(channel, new Set());
   }
-  listenerMap.get(channel)!.add(listener);
+  // Cast is safe here as we're just tracking the listener reference
+  listenerMap.get(channel)!.add(listener as SystemEventListener<unknown>);
 }
 
 function untrackListener<T = unknown>(
@@ -277,7 +275,8 @@ function untrackListener<T = unknown>(
 ): void {
   const listeners = listenerMap.get(channel);
   if (listeners) {
-    listeners.delete(listener);
+    // Cast is safe here as we're just removing the listener reference
+    listeners.delete(listener as SystemEventListener<unknown>);
     if (listeners.size === 0) {
       listenerMap.delete(channel);
     }

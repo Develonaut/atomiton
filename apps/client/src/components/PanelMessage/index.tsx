@@ -3,7 +3,6 @@ import TextareaAutosize from "react-textarea-autosize";
 import Icon from "@/components/Icon";
 import Select from "@/components/Select";
 import Button from "@/components/Button";
-import VideoPlayer from "@/components/VideoPlayer";
 import ViewController from "@/components/ViewController";
 import AddFiles from "./AddFiles";
 import SelectAi from "./SelectAi";

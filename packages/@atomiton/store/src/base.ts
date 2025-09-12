@@ -133,8 +133,7 @@ export function createAction<T, Args extends unknown[], R>(
  */
 export function createActions<
   T,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Actions extends Record<string, (state: T, ...args: any[]) => any>,
+  Actions extends Record<string, (state: T, ...args: unknown[]) => unknown>,
 >(
   store: Store<T>,
   actions: Actions,

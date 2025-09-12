@@ -1,0 +1,45 @@
+{
+  "name": "@atomiton/conductor",
+  "version": "0.0.1",
+  "description": "Blueprint and node execution orchestrator for Atomiton",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@atomiton/nodes": "workspace:^",
+    "@atomiton/events": "workspace:^",
+    "p-queue": "^8.0.0",
+    "yaml": "^2.0.0"
+  },
+  "devDependencies": {
+    "@atomiton/eslint-config": "workspace:^",
+    "@atomiton/typescript-config": "workspace:^",
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "keywords": [
+    "conductor",
+    "orchestration",
+    "execution",
+    "workflow",
+    "blueprint"
+  ],
+  "license": "MIT"
+}

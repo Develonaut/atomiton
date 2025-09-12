@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
 
 test.use({
   viewport: { width: 1920, height: 1080 },
