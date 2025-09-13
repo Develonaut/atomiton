@@ -2,38 +2,22 @@
  * Blueprint Runner - Orchestrates multi-node Blueprint execution with dependency resolution
  */
 
-import type { INode } from "@atomiton/nodes";
 import type {
+  BlueprintDefinition,
+  BlueprintEdge,
+  BlueprintNode,
+  INode,
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
+import PQueue from "p-queue";
 import type { StateManager } from "../state/StateManager.js";
 import type { NodeExecutor } from "./NodeExecutor.js";
-import PQueue from "p-queue";
 
-export type BlueprintNode = {
-  id: string;
-  type: string;
-  config: Record<string, unknown>;
-  position: { x: number; y: number };
-};
-
-export type BlueprintConnection = {
-  id: string;
-  sourceNodeId: string;
-  sourcePort: string;
-  targetNodeId: string;
-  targetPort: string;
-};
-
-export type Blueprint = {
-  id: string;
-  name: string;
-  description?: string;
-  nodes: BlueprintNode[];
-  connections: BlueprintConnection[];
-  metadata?: Record<string, unknown>;
-};
+// Type aliases for backwards compatibility
+export type Blueprint = BlueprintDefinition;
+export type BlueprintConnection = BlueprintEdge;
+export { BlueprintNode };
 
 export type BlueprintExecutionOptions = {
   maxConcurrency?: number;

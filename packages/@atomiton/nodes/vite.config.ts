@@ -12,12 +12,6 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        // React & UI libraries
-        "react",
-        "react-dom",
-        "@mantine/core",
-        "@tabler/icons-react",
-        "@xyflow/react",
         // Node.js built-ins
         "fs",
         "fs/promises",
@@ -26,11 +20,9 @@ export default defineConfig({
         "os",
         "util",
         // Third-party libraries
-        "chokidar",
-        "glob",
         "zod",
         // Internal packages
-        "@atomiton/events",
+        "@atomiton/yaml",
       ],
     },
     sourcemap: true,

@@ -2,34 +2,36 @@
 
 ## Priority 1 - Critical
 
-### Core Node Set
+### Phase 3: Extended Essential Nodes (Current Focus)
 
-Build essential nodes for MVP:
+Based on ROADMAP.md Phase 3 requirements:
 
-- [ ] HTTP Request node
-- [ ] JSON Transform node
-- [ ] File Read/Write nodes
-- [ ] Database Query node
-- [ ] Conditional Logic node
-- [ ] Loop node
-- [ ] Timer/Cron node
-
-### Node System
-
-- [ ] Implement hot reload for development
-- [ ] Create node validation system
-- [ ] Add node versioning support
-- [ ] Build node testing framework
+- [ ] File Reader Node - Read text/binary files with encoding detection
+- [ ] File Writer Node - Write text/binary files with atomic operations
+- [ ] Directory Scanner Node - Recursive traversal with glob patterns
+- [ ] Webhook Receiver Node - HTTP server endpoint with validation
 
 ## Priority 2 - Important
 
-### Node Categories
+### Phase 4: Control Flow Nodes
 
-- [ ] Data Input nodes (10 nodes)
-- [ ] Data Processing nodes (15 nodes)
-- [ ] Output/Action nodes (10 nodes)
-- [ ] Control Flow nodes (5 nodes)
-- [ ] Utility nodes (5 nodes)
+Following the ROADMAP.md Phase 4 plan:
+
+- [ ] Conditional Node - Expression evaluation with multiple branches
+- [ ] Loop Node - For/while/forEach patterns with break conditions
+- [ ] Switch Node - Pattern matching with default branch
+- [ ] Wait Node - Time-based delays and condition-based waiting
+- [ ] Error Handler Node - Try-catch patterns with retry configuration
+
+### Phase 5: AI/LLM Integration
+
+AI-powered automation capabilities:
+
+- [ ] LLM Chat Node - Multiple provider support with streaming
+- [ ] Text Embedding Node - Vector generation with batch processing
+- [ ] Vector Search Node - Similarity search with KNN queries
+- [ ] Code Interpreter Node - Sandboxed execution environment
+- [ ] Image Analysis Node - OCR and object detection
 
 ### Developer Experience
 

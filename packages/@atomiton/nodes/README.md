@@ -1,16 +1,25 @@
 # @atomiton/nodes
 
-Blueprint node implementations providing the building blocks for visual automation workflows.
+Node implementations providing the building blocks for visual automation workflows. Features unified node architecture where both atomic and composite nodes implement the same INode interface.
 
 ## 📊 Progress Tracking
 
-- **[Current Work](./CURRENT.md)** - Active development tasks
-- **[Upcoming Features](./NEXT.md)** - Planned nodes and improvements
-- **[Release History](./COMPLETED.md)** - Completed features
+- **[Current Work](./docs/status/CURRENT.md)** - Active development tasks
+- **[Upcoming Features](./docs/planning/NEXT.md)** - Planned nodes and improvements
+- **[Release History](./docs/status/COMPLETED.md)** - Completed features
 
 ## Overview
 
-The nodes package provides a carefully curated set of high-quality nodes for the Atomiton Blueprint automation platform. We prioritize quality over quantity, focusing on 20-50 essential nodes that cover 80% of automation use cases rather than hundreds of mediocre integrations.
+The nodes package provides a carefully curated set of high-quality nodes for the Atomiton automation platform. We prioritize quality over quantity, focusing on 20-50 essential nodes that cover 80% of automation use cases rather than hundreds of mediocre integrations.
+
+## 🏗️ Unified Node Architecture
+
+All nodes implement the same `INode` interface, whether they are:
+
+- **Atomic Nodes**: Individual functionality (CSV Reader, HTTP Request, Transform)
+- **Composite Nodes**: Orchestrate other nodes (workflows, complex processes)
+
+This unified approach enables powerful composition patterns and seamless interoperability. See [Unified Architecture Documentation](./docs/architecture/UNIFIED_ARCHITECTURE.md) for details.
 
 ## Features
 
@@ -75,115 +84,85 @@ pnpm add @atomiton/nodes
 
 ## Usage
 
-### Using a Node
+### Using Any Node (Atomic or Composite)
 
 ```typescript
-import { csvParser } from "@atomiton/nodes";
+import { nodes } from "@atomiton/nodes";
 
-const result = await csvParser.logic.execute({
+// Execute any node through unified interface
+const node = await nodes.getNode("csv-reader");
+const result = await node.execute({
   nodeId: "csv-1",
   inputs: { csv: csvData },
   config: { hasHeader: true },
 });
+
+// Works the same for composite nodes (workflows)
+const composite = await nodes.getNode("data-pipeline");
+const pipelineResult = await composite.execute({
+  nodeId: "pipeline-1",
+  inputs: { sourceData: data },
+  config: { outputFormat: "json" },
+});
 ```
 
-### Registering Nodes
+### Creating Nodes with Factory API
 
 ```typescript
-import { NodeRegistry } from "@atomiton/nodes";
-import { csvParser, jsonTransform } from "@atomiton/nodes";
+import { nodes } from "@atomiton/nodes";
 
-const registry = new NodeRegistry();
-registry.register(csvParser);
-registry.register(jsonTransform);
+// Use extendNode() factory instead of classes
+const customNode = nodes.extendNode({
+  type: "custom-transformer",
+  category: "data",
+  inputs: [{ name: "data", type: "any" }],
+  outputs: [{ name: "result", type: "any" }],
+
+  async execute(context) {
+    // Custom logic here
+    return { success: true, data: transformed };
+  },
+});
 ```
 
-### Creating Custom Nodes with Enhanced Configuration
+### Advanced Node Configuration
 
 ```typescript
-import { BaseNodeLogic, NodePackage, NodeConfig } from "@atomiton/nodes";
+import { nodes } from "@atomiton/nodes";
 import { z } from "zod";
 
-// Enhanced configuration with UI metadata
-class MyNodeConfig extends NodeConfig {
-  static readonly schema = z.object({
+// Create nodes with rich configuration schemas
+const advancedNode = nodes.extendNode({
+  type: "api-client",
+  category: "integration",
+
+  // Zod schema for configuration
+  configSchema: z.object({
     apiUrl: z.string().url().describe("API endpoint"),
     timeout: z.number().min(1000).max(30000).default(5000),
     retries: z.number().min(0).max(5).default(3),
     enabled: z.boolean().default(true),
-  });
+  }),
 
-  static readonly defaults = {
-    apiUrl: "https://api.example.com",
-    timeout: 5000,
-    retries: 3,
-    enabled: true,
-  };
+  inputs: [{ name: "data", type: "any" }],
+  outputs: [{ name: "response", type: "any" }],
 
-  // UI metadata for automatic form generation
-  static readonly uiMetadata = {
-    apiUrl: {
-      label: "API URL",
-      type: "url",
-      placeholder: "https://api.example.com/endpoint",
-      description: "The API endpoint to call",
-    },
-    timeout: {
-      label: "Timeout (ms)",
-      type: "number",
-      min: 1000,
-      max: 30000,
-      step: 1000,
-      description: "Request timeout in milliseconds",
-    },
-    retries: {
-      label: "Max Retries",
-      type: "number",
-      min: 0,
-      max: 5,
-      description: "Number of retry attempts",
-    },
-    enabled: {
-      label: "Enable API Calls",
-      type: "boolean",
-      description: "Enable or disable API requests",
-    },
-  };
-
-  constructor() {
-    super(MyNodeConfig.schema, MyNodeConfig.defaults, MyNodeConfig.uiMetadata);
-  }
-}
-
-type MyNodeConfigType = z.infer<typeof MyNodeConfig.schema>;
-
-class MyNodeLogic extends BaseNodeLogic<MyNodeConfigType> {
-  async execute(context: NodeExecutionContext) {
+  async execute(context) {
     const { inputs, config } = context;
-    // Implementation with type-safe config
+
     if (!config.enabled) {
-      return this.createSuccessResult({ skipped: true });
+      return { success: true, data: { skipped: true } };
     }
 
     const response = await fetch(config.apiUrl, {
+      method: "POST",
+      body: JSON.stringify(inputs.data),
       timeout: config.timeout,
     });
 
-    return this.createSuccessResult({ data: await response.json() });
-  }
-}
-
-export const myNode: NodePackage = {
-  definition: {
-    type: "my-node",
-    category: "custom",
-    inputs: [{ name: "input", type: "any" }],
-    outputs: [{ name: "output", type: "any" }],
+    return { success: true, data: await response.json() };
   },
-  logic: new MyNodeLogic(),
-  config: new MyNodeConfig(), // Enhanced configuration
-  ui: MyNodeUI,
-};
+});
 ```
 
 ## Architecture
@@ -255,7 +234,7 @@ pnpm test:coverage
 
 ## Roadmap
 
-See [ROADMAP.md](./docs/ROADMAP.md) for detailed plans including:
+See [ROADMAP.md](./ROADMAP.md) for detailed plans including:
 
 - Essential node implementations
 - AI/LLM integration nodes
@@ -264,10 +243,18 @@ See [ROADMAP.md](./docs/ROADMAP.md) for detailed plans including:
 
 ## Documentation
 
-- [Architecture](./docs/ARCHITECTURE.md) - System design and patterns
-- [Developer Guide](./docs/DEVELOPER_GUIDE.md) - Creating custom nodes
-- [Comparison](./docs/COMPARISON.md) - How we differ from n8n
-- [API Reference](./docs/api/) - Complete API documentation
+- **Architecture**
+  - [Unified Architecture](./docs/architecture/UNIFIED_ARCHITECTURE.md) - Current unified INode architecture
+  - [Architecture Comparison](./docs/architecture/COMPARISON.md) - How we differ from n8n
+  - [Legacy Architecture](./docs/architecture/LEGACY_ARCHITECTURE.md) - Previous implementation
+- **Development**
+  - [Developer Guide](./docs/development/DEVELOPER_GUIDE.md) - Creating custom nodes
+- **Status & Planning**
+  - [Current Work](./CURRENT.md) - Active development tasks
+  - [Completed Work](./COMPLETED.md) - Release history
+  - [Roadmap](./ROADMAP.md) - Detailed development plan
+- **Reference**
+  - [Changelog](./CHANGELOG.md) - Version history
 
 ## Contributing
 

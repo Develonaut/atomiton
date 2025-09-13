@@ -9,9 +9,9 @@ import { z } from "zod";
 import type { INodeConfig } from "./INodeConfig";
 
 /**
- * UI Control Types for form rendering
+ * Field Control Types for form rendering
  */
-export type UIControlType =
+export type FieldControlType =
   | "text" // Text input
   | "number" // Number input
   | "boolean" // Checkbox/toggle
@@ -30,9 +30,9 @@ export type UIControlType =
 /**
  * UI metadata for individual fields
  */
-export type UIFieldMetadata = {
+export type FieldConfig = {
   /** Type of form control to render */
-  controlType?: UIControlType;
+  controlType?: FieldControlType;
   /** Display label (defaults to field name) */
   label?: string;
   /** Placeholder text for inputs */
@@ -66,7 +66,7 @@ export type UIFieldMetadata = {
  */
 export type FieldsConfig = {
   /** Configuration for individual fields */
-  [fieldName: string]: UIFieldMetadata;
+  [fieldName: string]: FieldConfig;
 };
 
 /**

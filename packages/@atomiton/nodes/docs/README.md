@@ -6,14 +6,14 @@ The @atomiton/nodes package provides the foundational building blocks for the At
 
 ## 🏗️ Unified Architecture
 
-**Key Innovation**: All nodes implement the same `INode` interface, whether they are atomic nodes (individual functionality) or composite nodes (blueprints). This creates a powerful, scalable system where "everything executable is a node."
+**Key Innovation**: All nodes implement the same `INode` interface, whether they are atomic nodes (individual functionality) or composite nodes (workflows). This creates a powerful, scalable system where "everything executable is a node."
 
 ## Documentation Structure
 
 ### 📁 Architecture
 
 - **[Unified Architecture](./architecture/UNIFIED_ARCHITECTURE.md)** - Current unified INode architecture with composition patterns
-- **[Current Architecture](./architecture/CURRENT_ARCHITECTURE.md)** - Detailed architectural overview
+- **[Current Architecture](./ARCHITECTURE.md)** - Detailed architectural overview
 - **[Comparison](./architecture/COMPARISON.md)** - How we differ from n8n and other platforms
 
 ### 🛠️ Development
@@ -29,7 +29,7 @@ The @atomiton/nodes package provides the foundational building blocks for the At
 
 ### 📚 Reference
 
-- **[Changelog](./CHANGELOG.md)** - Version history and notable changes
+- **[Changelog](../CHANGELOG.md)** - Version history and notable changes
 
 ## Current Status
 

@@ -99,13 +99,13 @@ React Hook Form + Zod was selected for the node configuration system because:
        encoding: "utf-8",
      };
 
-     // UI metadata for form controls - IMPLEMENTED
-     static readonly uiMetadata = {
-       hasHeader: { label: "Has Header Row", type: "boolean" },
-       delimiter: { label: "Delimiter", type: "text", placeholder: "," },
+     // Field configuration for form controls - IMPLEMENTED
+     static readonly fields = {
+       hasHeader: { label: "Has Header Row", controlType: "boolean" },
+       delimiter: { label: "Delimiter", controlType: "text", placeholder: "," },
        encoding: {
          label: "Encoding",
-         type: "select",
+         controlType: "select",
          options: ["utf-8", "latin1"],
        },
      };
@@ -134,19 +134,19 @@ React Hook Form + Zod was selected for the node configuration system because:
 // PropertyPanel component - IMPLEMENTED
 function NodeProperties({ selectedNode }: { selectedNode: Node }) {
   const nodeConfig = selectedNode.config;
-  const { schema, defaults, uiMetadata } = nodeConfig;
+  const { schema, defaults, fields } = nodeConfig;
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaults,
   });
 
-  const fields = generateFieldsFromSchema(schema, uiMetadata);
+  const formFields = generateFieldsFromSchema(schema, fields);
 
   return (
     <Form {...form}>
       <h3>Properties</h3>
-      {fields.map(field => (
+      {formFields.map(field => (
         <div key={field.name} className="form-group">
           <label>{field.label}</label>
           {renderFormControl(field, form.register, form.formState.errors)}
@@ -243,24 +243,32 @@ function NodeProperties({ selectedNode }: { selectedNode: Node }) {
 
 ### NodeConfig Base Class Enhancement
 
-The `NodeConfig` base class now supports optional UI metadata:
+The `NodeConfig` base class now supports field configuration and layout:
 
 ```typescript
-export abstract class NodeConfig {
+export class NodeConfig {
   constructor(
-    protected schema: ZodSchema<any>,
-    protected defaults: any,
-    protected uiMetadata?: Record<string, FieldMetadata>,
-  ) {}
+    schema: ZodRawShape,
+    defaults: T,
+    metadata: {
+      fields: Record<string, UIFieldMetadata>;
+      layout?: {
+        groups?: Record<string, { label: string; order: number }>;
+      };
+    },
+  ) {
+    this.schema = schema;
+    this.defaults = defaults;
+    this.fields = metadata.fields;
+    this.layout = metadata.layout;
+  }
 
-  getSchema() {
-    return this.schema;
+  parse(data: unknown) {
+    return this.schema.parse(data);
   }
-  getDefaults() {
-    return this.defaults;
-  }
-  getUIMetadata() {
-    return this.uiMetadata;
+
+  safeParse(data: unknown) {
+    return this.schema.safeParse(data);
   }
 }
 ```

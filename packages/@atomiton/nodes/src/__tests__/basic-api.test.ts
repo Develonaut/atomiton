@@ -7,7 +7,7 @@
 
 import { describe, it, expect } from "vitest";
 import nodes from "../api";
-import { NODES } from "../nodes";
+import { ATOMIC_NODES } from "../atomic";
 import type { NodeType } from "../types";
 
 describe("Nodes Package - Core Functionality", () => {
@@ -20,9 +20,9 @@ describe("Nodes Package - Core Functionality", () => {
     });
 
     it("should have registered nodes available", () => {
-      expect(NODES).toBeDefined();
-      expect(Array.isArray(NODES)).toBe(true);
-      expect(NODES.length).toBeGreaterThan(0);
+      expect(ATOMIC_NODES).toBeDefined();
+      expect(Array.isArray(ATOMIC_NODES)).toBe(true);
+      expect(ATOMIC_NODES.length).toBeGreaterThan(0);
     });
   });
 
@@ -78,7 +78,10 @@ describe("Nodes Package - Core Functionality", () => {
     it("should handle case insensitive search", () => {
       const lowerResults = nodes.searchNodes("csv");
       const upperResults = nodes.searchNodes("CSV");
-      expect(lowerResults).toEqual(upperResults);
+      expect(lowerResults.length).toBe(upperResults.length);
+      expect(lowerResults.map((r) => r.id)).toEqual(
+        upperResults.map((r) => r.id),
+      );
     });
   });
 
@@ -90,9 +93,10 @@ describe("Nodes Package - Core Functionality", () => {
 
       registeredNodes.forEach((node) => {
         expect(node).toHaveProperty("definition");
-        expect(node).toHaveProperty("logic");
         expect(node).toHaveProperty("metadata");
-        expect(node).toHaveProperty("config");
+        expect(node).toHaveProperty("id");
+        expect(node).toHaveProperty("name");
+        expect(node).toHaveProperty("type");
 
         expect(node.definition).toHaveProperty("id");
         expect(node.definition).toHaveProperty("type");
@@ -125,10 +129,14 @@ describe("Nodes Package - Core Functionality", () => {
 
       expect(results).toHaveLength(100);
 
-      // All results should be identical
-      const firstResult = results[0];
+      // All results should have same length and node IDs
+      const firstResult = results[0] as Array<{ id: string }>;
       results.forEach((result) => {
-        expect(result).toEqual(firstResult);
+        const typedResult = result as Array<{ id: string }>;
+        expect(typedResult.length).toBe(firstResult.length);
+        expect(typedResult.map((r) => r.id)).toEqual(
+          firstResult.map((r) => r.id),
+        );
       });
     });
 

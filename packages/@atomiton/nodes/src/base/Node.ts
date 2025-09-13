@@ -1,152 +1,222 @@
 /**
- * Node Base Class
+ * Node - Abstract base class for all nodes
  *
- * The main base class that all nodes extend from.
- * Provides a clean ES6 class interface for node instances.
+ * Provides common functionality for both atomic and composite nodes.
+ * All concrete node implementations should extend this class.
  */
 
-import type React from "react";
-import type {
-  NodeDefinition,
-  NodeExecutionContext,
-  NodeExecutionResult,
-} from "../types";
+import type { NodeExecutionContext, NodeExecutionResult } from "../types";
+import type { NodePortDefinition } from "../types";
 import type { INode } from "./INode";
-import type { INodeConfig } from "./INodeConfig";
-import type { INodeLogic } from "./INodeLogic";
-import type { INodeMetadata } from "./INodeMetadata";
-import type { NodeLogic } from "./NodeLogic";
 
-/**
- * Base Node Class
- * All nodes should extend this class and implement the required properties.
- *
- * Note: This architecture supports Blueprint composition - a Blueprint (workflow)
- * can be wrapped as a Node and used in other Blueprints. This enables:
- * - Reusable workflow components
- * - Hierarchical composition
- * - Abstraction of complex logic into simple nodes
- *
- * Future: Consider a BlueprintNode subclass that wraps a Blueprint as a Node
- */
-export abstract class Node<TConfig = Record<string, unknown>>
-  implements INode<TConfig>
-{
-  /**
-   * Node metadata
-   */
-  abstract readonly metadata: INodeMetadata;
+export abstract class Node implements INode {
+  abstract readonly id: string;
+  abstract readonly name: string;
+  abstract readonly type: string;
 
   /**
-   * Node configuration definition
+   * Get node metadata for serialization/API usage
+   * Returns proper INodeMetadata format for API compatibility
+   * Override this in subclasses to provide custom metadata
    */
-  abstract readonly config: INodeConfig<TConfig>;
-
-  /**
-   * Node logic implementation
-   */
-  abstract readonly logic: INodeLogic<TConfig> | NodeLogic<TConfig>;
-
-  /**
-   * Node definition for the runtime
-   */
-  abstract readonly definition: NodeDefinition;
-
-  /**
-   * Optional React component for visual representation
-   * If not provided, the editor will use BaseNodeComponent
-   */
-  readonly component?: React.ComponentType;
-
-  /**
-   * Execute the node with the given context
-   */
-  async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
-    // Validate and parse configuration
-    const config = this.config.schema.parse(
-      context.config || this.config.defaults,
-    );
-
-    // Execute the logic
-    return this.logic.execute(context, config);
+  get metadata() {
+    return {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      version: "1.0.0",
+      author: "Atomiton",
+      description: `${this.name} node`,
+      category: "unknown",
+      keywords: [] as string[],
+      icon: "node",
+      tags: [] as string[],
+      runtime: { language: "typescript" as const },
+      experimental: false,
+      deprecated: false,
+      // Add required INodeMetadata methods
+      validate: () => this.validate(),
+      getSearchTerms: () => {
+        const terms = new Set<string>();
+        terms.add(this.id.toLowerCase());
+        terms.add(this.name.toLowerCase());
+        terms.add(this.metadata.description.toLowerCase());
+        terms.add(this.metadata.category.toLowerCase());
+        (this.metadata.tags || []).forEach((tag) =>
+          terms.add(tag.toLowerCase()),
+        );
+        return Array.from(terms);
+      },
+      matchesSearch: (query: string) => {
+        const lowerQuery = query.toLowerCase();
+        const searchTerms = [
+          this.id,
+          this.name,
+          this.metadata.description,
+          this.metadata.category,
+          ...(this.metadata.tags || []),
+        ];
+        return searchTerms.some((term) =>
+          term.toLowerCase().includes(lowerQuery),
+        );
+      },
+    };
   }
 
   /**
-   * Get the node ID
+   * Get node definition for serialization/API usage
+   * Default implementation - override in subclasses for specific definitions
    */
-  getId(): string {
-    return this.metadata.id;
+  get definition() {
+    return {
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      category: this.metadata.category,
+      description: this.metadata.description,
+      version: this.metadata.version,
+      inputPorts: this.inputPorts,
+      outputPorts: this.outputPorts,
+      metadata: {
+        category: this.metadata.category,
+        description: this.metadata.description,
+        version: this.metadata.version,
+        author: this.metadata.author,
+        tags: this.metadata.tags,
+        icon: this.metadata.icon,
+      },
+    };
   }
 
   /**
-   * Get the node name
+   * Core execution method - must be implemented by subclasses
    */
-  getName(): string {
-    return this.metadata.name;
-  }
+  abstract execute(context: NodeExecutionContext): Promise<NodeExecutionResult>;
 
   /**
-   * Get the node version
-   */
-  getVersion(): string {
-    return this.metadata.version;
-  }
-
-  /**
-   * Check if node is experimental
-   */
-  isExperimental(): boolean {
-    return this.metadata.experimental ?? false;
-  }
-
-  /**
-   * Check if node is deprecated
-   */
-  isDeprecated(): boolean {
-    return this.metadata.deprecated ?? false;
-  }
-
-  /**
-   * Validate the node structure
+   * Validate this executable's configuration
+   * Default implementation - can be overridden
    */
   validate(): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
 
-    // Check and validate metadata
-    if (!this.metadata) {
-      errors.push("Node metadata is required");
-    } else {
-      const metadataValidation = this.metadata.validate();
-      if (!metadataValidation.valid) {
-        errors.push(...metadataValidation.errors);
-      }
+    if (!this.id || this.id.trim() === "") {
+      errors.push("Node ID is required");
     }
 
-    // Check config
-    if (!this.config) {
-      errors.push("Node config is required");
-    } else {
-      if (!this.config.schema) errors.push("Node config must have a schema");
-      if (!this.config.defaults) errors.push("Node config must have defaults");
+    if (!this.name || this.name.trim() === "") {
+      errors.push("Node name is required");
     }
 
-    // Check logic
-    if (!this.logic) {
-      errors.push("Node logic is required");
-    } else {
-      if (typeof this.logic.execute !== "function") {
-        errors.push("Node logic must have an execute function");
-      }
-    }
-
-    // Check definition
-    if (!this.definition) {
-      errors.push("Node definition is required");
+    if (!this.type || this.type.trim() === "") {
+      errors.push("Node type is required");
     }
 
     return {
       valid: errors.length === 0,
       errors,
     };
+  }
+
+  /**
+   * Input ports - default implementation returns empty array
+   * Override in subclasses to define actual ports
+   */
+  get inputPorts(): NodePortDefinition[] {
+    return [];
+  }
+
+  /**
+   * Output ports - default implementation returns empty array
+   * Override in subclasses to define actual ports
+   */
+  get outputPorts(): NodePortDefinition[] {
+    return [];
+  }
+
+  /**
+   * Check if this is a composite node
+   * Default implementation returns false (atomic node)
+   * Override in composite nodes to return true
+   */
+  isComposite(): boolean {
+    return false;
+  }
+
+  /**
+   * Dispose of resources used by this node
+   * Default implementation - override in subclasses if needed
+   */
+  dispose(): void {
+    // Default: no resources to clean up
+  }
+
+  /**
+   * Create a standardized success result
+   */
+  protected createSuccessResult(
+    outputs: Record<string, unknown> | unknown,
+  ): NodeExecutionResult {
+    // Convert unknown values to Record<string, unknown> format
+    const formattedOutputs =
+      outputs && typeof outputs === "object" && !Array.isArray(outputs)
+        ? (outputs as Record<string, unknown>)
+        : { result: outputs };
+    return {
+      success: true,
+      outputs: formattedOutputs,
+      error: undefined,
+      metadata: {
+        executedAt: new Date().toISOString(),
+        nodeId: this.id,
+        nodeType: this.type,
+      },
+    };
+  }
+
+  /**
+   * Create a standardized error result
+   */
+  protected createErrorResult(error: Error | string): NodeExecutionResult {
+    const errorMessage = error instanceof Error ? error.message : error;
+
+    return {
+      success: false,
+      outputs: undefined,
+      error: errorMessage,
+      metadata: {
+        executedAt: new Date().toISOString(),
+        nodeId: this.id,
+        nodeType: this.type,
+      },
+    };
+  }
+
+  /**
+   * Log execution information
+   */
+  protected log(
+    context: NodeExecutionContext,
+    level: "info" | "warn" | "error",
+    message: string,
+    data?: unknown,
+  ): void {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      level,
+      nodeId: this.id,
+      nodeType: this.type,
+      message,
+      data,
+    };
+
+    // Use context log functions if available, otherwise console
+    if (context.log && context.log[level]) {
+      context.log[level]!(message, data as Record<string, unknown>);
+    } else if (level === "error") {
+      console.error(`[ERROR]`, logEntry);
+    } else if (level === "warn") {
+      console.warn(`[WARN]`, logEntry);
+    }
   }
 }

@@ -11,11 +11,8 @@ export type NodeExecutionContext = {
   /** Node instance ID */
   nodeId: string;
 
-  /** Node instance ID (alias for compatibility) */
-  instanceId?: string;
-
-  /** Blueprint ID for context */
-  blueprintId?: string;
+  /** Composite ID for context */
+  compositeId?: string;
 
   /** Input data from connected ports */
   inputs: Record<string, unknown>;
@@ -52,6 +49,12 @@ export type NodeExecutionContext = {
     warn?: (message: string, data?: Record<string, unknown>) => void;
     error?: (message: string, data?: Record<string, unknown>) => void;
   };
+
+  /** Whether to stop execution on first error (for composite nodes) */
+  stopOnError?: boolean;
+
+  /** Results from previously executed nodes (for composite nodes) */
+  previousResults?: Record<string, NodeExecutionResult>;
 
   /** Abort signal for cancellation */
   abortSignal?: AbortSignal;
@@ -135,12 +138,6 @@ export type NodeDefinition = {
   /** Output port definitions */
   outputPorts?: NodePortDefinition[];
 
-  /** Legacy input definitions (for compatibility) */
-  inputs?: NodePortDefinition[];
-
-  /** Legacy output definitions (for compatibility) */
-  outputs?: NodePortDefinition[];
-
   /** Icon identifier for UI */
   icon?: string;
 
@@ -175,15 +172,3 @@ export type NodeType =
   | "code"
   | "loop"
   | "parallel";
-
-// Node item interface - kept for backwards compatibility
-// New code should use INodeMetadata directly
-export type NodeItem = {
-  id: string;
-  nodeType: string;
-  title: string;
-  category: string;
-  description?: string;
-  icon?: string;
-  tags?: string[];
-};

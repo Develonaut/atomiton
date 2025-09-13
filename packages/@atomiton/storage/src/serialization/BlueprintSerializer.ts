@@ -1,4 +1,8 @@
 import * as yaml from "yaml";
+import type { BlueprintDefinition } from "@atomiton/nodes";
+
+// Re-export for backwards compatibility
+export type { BlueprintDefinition };
 
 /**
  * Core interface for Blueprint serialization/deserialization
@@ -76,7 +80,7 @@ export class BlueprintSerializer implements IBlueprintSerializer {
 
   /**
    * Validate parsed data matches BlueprintDefinition structure
-   * TODO: Implement Zod schema validation when @atomiton/nodes is ready
+   * Uses basic validation - full Zod schema validation available in @atomiton/blueprints
    */
   private validateBlueprint(data: unknown): BlueprintDefinition {
     if (!data || typeof data !== "object") {
@@ -126,45 +130,3 @@ export class SerializationError extends Error {
     }
   }
 }
-
-/**
- * Temporary BlueprintDefinition interface
- * TODO: Use BlueprintDefinition from @atomiton/blueprints when available
- */
-export type BlueprintDefinition = {
-  id: string;
-  name: string;
-  version: string;
-  description?: string;
-  interface?: {
-    inputs?: Array<{
-      id: string;
-      name: string;
-      dataType: string;
-      required: boolean;
-    }>;
-    outputs?: Array<{
-      id: string;
-      name: string;
-      dataType: string;
-    }>;
-  };
-  nodes: Array<{
-    id: string;
-    type: string;
-    runtime?: {
-      language: "typescript";
-    };
-    position?: { x: number; y: number };
-    config?: Record<string, unknown>;
-  }>;
-  connections: Array<{
-    source: { node: string; port: string };
-    target: { node: string; port: string };
-  }>;
-  metadata?: {
-    created: string;
-    updated: string;
-    author?: string;
-  };
-};

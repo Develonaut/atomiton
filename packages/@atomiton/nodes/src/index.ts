@@ -1,26 +1,44 @@
 /**
- * @atomiton/nodes - Main Package Exports
+ * @atomiton/nodes - Unified Node Package
  *
- * Clean API surface - all functionality accessed through nodes singleton
+ * This package contains both atomic nodes (individual functionality) and
+ * composite nodes under a unified INode interface.
+ *
+ * Mental Model: "If it can execute, it's a node" - whether atomic or composite.
  */
 
-// Main API export (follows core package pattern with api.ts)
 export { nodes } from "./api";
-
-// Types consumers need
 export type { NodesAPI } from "./api";
+export { ExtendedNode } from "./api/ExtendedNode";
+export type { ExtendedNodeConfig } from "./api/ExtendedNode";
+
+export type {
+  CompositeEdge,
+  IAtomicNode,
+  ICompositeNode,
+  INode,
+} from "./base/INode";
+
 export type {
   NodeDefinition,
   NodeExecutionContext,
   NodeExecutionResult,
-  NodeItem,
   NodePortDefinition,
   NodeType,
 } from "./types";
 
-// Configuration system types
+export type {
+  CompositeChildNode,
+  CompositeDefinition,
+  CompositeExecutionResult,
+  CompositeExecutionSettings,
+  CompositeMetadata,
+  CompositeNodeDefinition,
+  CompositeNodeSpec,
+} from "./composite/index";
+
 export type {
   FormConfig,
-  UIControlType,
-  UIFieldMetadata,
+  FieldControlType,
+  FieldConfig,
 } from "./base/NodeConfig";
