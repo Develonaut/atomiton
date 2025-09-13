@@ -5,13 +5,18 @@
  * custom nodes without class inheritance, validating the unified architecture.
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import nodes from "../api";
-import type { NodeExecutionContext } from "../types";
 import { isAtomicNode, isCompositeNode } from "../base/INode";
+import type { NodeExecutionContext } from "../types";
 
 describe("Factory API - nodes.extendNode() Tests", () => {
   let mockContext: NodeExecutionContext;
+
+  beforeAll(async () => {
+    // Initialize nodes for testing
+    await nodes.initialize();
+  });
 
   beforeEach(() => {
     mockContext = {

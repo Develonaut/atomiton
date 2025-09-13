@@ -15,7 +15,7 @@ export function toJson(
       id: node.id,
       type: node.type,
       position: node.position || { x: 0, y: 0 },
-      data: node.config === null ? null : node.config || {},
+      data: node.config === undefined ? {} : node.config,
     })),
     edges: composite.edges.map((edge) => ({
       id: edge.id,

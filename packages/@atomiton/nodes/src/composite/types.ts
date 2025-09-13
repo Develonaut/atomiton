@@ -14,10 +14,6 @@ import type { CompositeEdge } from "../base/INode";
 // Re-export CompositeEdge for convenience
 export type { CompositeEdge } from "../base/INode";
 
-// ==========================
-// Composite-Specific Types
-// ==========================
-
 /**
  * Position in the visual editor for child nodes
  */
@@ -68,10 +64,6 @@ export type CompositeDefinition = NodeDefinition & {
   settings?: CompositeSettings;
 };
 
-// ==========================
-// Validation and Error Types
-// ==========================
-
 export type ValidationError = {
   path: string;
   message: string;
@@ -91,20 +83,12 @@ export type CompositeValidationContext = {
   strictMode?: boolean;
 };
 
-// ==========================
-// Schema and Configuration Types
-// ==========================
-
 export type CompositeSchema = {
   version: string;
   type: "composite";
   properties: Record<string, unknown>;
   required: string[];
 };
-
-// ==========================
-// Transformation Types
-// ==========================
 
 export type TransformationOptions = {
   preserveComments?: boolean;
@@ -119,20 +103,12 @@ export type TransformationResult<T> = {
   warnings?: ValidationError[];
 };
 
-// ==========================
-// Storage and Runtime Types
-// ==========================
-
 /**
  * Both storage (YAML) and runtime (JSON) use the same format
  * The only difference is serialization
  */
 export type CompositeStorageFormat = CompositeDefinition;
 export type CompositeRuntimeFormat = CompositeDefinition;
-
-// ==========================
-// Utility Types
-// ==========================
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Record<string, unknown>
@@ -144,10 +120,6 @@ export type RequiredFields<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 export type OptionalFields<T, K extends keyof T> = Omit<T, K> &
   Partial<Pick<T, K>>;
-
-// ==========================
-// API Response Types
-// ==========================
 
 export type CompositeAPIError = {
   message: string;

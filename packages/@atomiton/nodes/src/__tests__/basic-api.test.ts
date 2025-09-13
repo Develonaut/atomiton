@@ -5,12 +5,17 @@
  * Focuses on core functionality without diving into implementation details.
  */
 
-import { describe, it, expect } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import nodes from "../api";
-import { ATOMIC_NODES } from "../atomic";
+import { getAvailableNodeTypes, loadAllNodes } from "../atomic";
 import type { NodeType } from "../types";
 
 describe("Nodes Package - Core Functionality", () => {
+  beforeAll(async () => {
+    // Initialize nodes for testing
+    await nodes.initialize();
+  });
+
   describe("Package Exports", () => {
     it("should export a working nodes API", () => {
       expect(nodes).toBeDefined();
@@ -19,10 +24,15 @@ describe("Nodes Package - Core Functionality", () => {
       expect(typeof nodes.searchNodes).toBe("function");
     });
 
-    it("should have registered nodes available", () => {
-      expect(ATOMIC_NODES).toBeDefined();
-      expect(Array.isArray(ATOMIC_NODES)).toBe(true);
-      expect(ATOMIC_NODES.length).toBeGreaterThan(0);
+    it("should have registered nodes available", async () => {
+      const availableTypes = getAvailableNodeTypes();
+      expect(availableTypes).toBeDefined();
+      expect(Array.isArray(availableTypes)).toBe(true);
+      expect(availableTypes.length).toBeGreaterThan(0);
+
+      // Test that nodes are loaded after initialization
+      const loadedNodes = await loadAllNodes();
+      expect(loadedNodes.length).toBeGreaterThan(0);
     });
   });
 

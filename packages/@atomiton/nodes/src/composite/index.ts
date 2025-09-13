@@ -10,23 +10,14 @@
  * - Types and interfaces for composite functionality
  */
 
-// Core composite functionality
-export { CompositeExecutor } from "./CompositeExecutor";
-export type {
-  CompositeExecutionResult,
-  CompositeExecutionSettings,
-} from "./CompositeExecutor";
-export { CompositeNode } from "./CompositeNode";
+// Core composite types
 export type {
   CompositeChildNode,
   CompositeNodeDefinition,
 } from "./CompositeNode";
 
-// Serialization between UI format and composite nodes
-export { CompositeSerializer } from "./serializer";
-
-// Main composite API (replaces @atomiton/blueprints functionality)
-export { CompositeAPI, composites } from "./api";
+// Main unified composite API - single interface for all composite interactions
+export { CompositeAPI, composite } from "./api";
 export type {
   CompositeDefinition,
   CompositeNodeSpec,
@@ -35,14 +26,3 @@ export type {
   CompositeSettings,
 } from "./types";
 export type { CompositeEdge } from "../base/INode";
-
-// Utilities
-export {
-  calculateComplexityMetrics,
-  compositeToDefinition,
-  createCompositeFromDefinition,
-  extractCompositeMetadata,
-  findNodesByType,
-  isCompositeType,
-  validateCompositeDeep,
-} from "./utils";

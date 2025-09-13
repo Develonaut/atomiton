@@ -123,24 +123,20 @@ export const shellCommandConfig = new ShellCommandConfigClass();
 
 export type ShellCommandConfig = z.infer<typeof shellCommandConfig.schema>;
 
-// Input/Output schemas for external use
-export const ShellCommandInputSchema = z.object({
-  command: z.string().optional(),
-  args: z.array(z.string()).optional(),
-  workingDirectory: z.string().optional(),
-  stdin: z.string().optional(),
-});
+// Types for logic file usage
+export type ShellCommandInput = {
+  command?: string;
+  args?: string[];
+  workingDirectory?: string;
+  stdin?: string;
+};
 
-export type ShellCommandInput = z.infer<typeof ShellCommandInputSchema>;
-
-export const ShellCommandOutputSchema = z.object({
-  stdout: z.string(),
-  stderr: z.string(),
-  exitCode: z.number(),
-  success: z.boolean(),
-  command: z.string(),
-  duration: z.number(),
-  pid: z.number().optional(),
-});
-
-export type ShellCommandOutput = z.infer<typeof ShellCommandOutputSchema>;
+export type ShellCommandOutput = {
+  stdout: string;
+  stderr: string;
+  exitCode: number;
+  success: boolean;
+  command: string;
+  duration: number;
+  pid?: number;
+};

@@ -108,23 +108,8 @@ class CodeConfigClass extends NodeConfig<typeof codeSchema> {
   }
 }
 
-export const codeConfig = new CodeConfigClass();
+// Config instance is only used internally for type inference
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const codeConfig = new CodeConfigClass();
 
 export type CodeConfig = z.infer<typeof codeConfig.schema>;
-
-// Input/Output schemas for external use
-export const CodeInputSchema = z.object({
-  data: z.any().optional(),
-  params: z.record(z.any()).optional(),
-});
-
-export type CodeInput = z.infer<typeof CodeInputSchema>;
-
-export const CodeOutputSchema = z.object({
-  result: z.any(),
-  success: z.boolean(),
-  error: z.string().optional(),
-  executionTime: z.number().optional(),
-});
-
-export type CodeOutput = z.infer<typeof CodeOutputSchema>;

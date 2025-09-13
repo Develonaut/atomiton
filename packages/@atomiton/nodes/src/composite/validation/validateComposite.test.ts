@@ -40,10 +40,8 @@ describe("validateComposite", () => {
     edges: [
       {
         id: "edge1",
-        source: "node1",
-        target: "node2",
-        sourceHandle: "output",
-        targetHandle: "input",
+        source: { nodeId: "node1", portId: "output" },
+        target: { nodeId: "node2", portId: "input" },
         data: {},
       },
     ],
@@ -282,7 +280,7 @@ describe("validateComposite", () => {
   describe("Error Handling", () => {
     it("should handle validation exceptions gracefully", () => {
       // Create a circular reference that might cause JSON serialization issues
-      const circular: unknown = { ...validComposite };
+      const circular: any = { ...validComposite };
       circular.circular = circular;
 
       const result = validateComposite(circular);

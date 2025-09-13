@@ -93,24 +93,17 @@ class FileSystemConfigClass extends NodeConfig<typeof fileSystemSchema> {
   }
 }
 
-export const fileSystemConfig = new FileSystemConfigClass();
+// Config instance is only used internally for type inference
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fileSystemConfig = new FileSystemConfigClass();
 
 export type FileSystemConfig = z.infer<typeof fileSystemConfig.schema>;
 
-export const FileSystemInputSchema = z.object({
-  path: z.string().optional(),
-  content: z.string().optional(),
-  operation: z.enum(["read", "write", "create", "list"]).optional(),
-});
-
-export type FileSystemInput = z.infer<typeof FileSystemInputSchema>;
-
-export const FileSystemOutputSchema = z.object({
-  content: z.string().optional(),
-  files: z.array(z.string()).optional(),
-  success: z.boolean(),
-  path: z.string(),
-  size: z.number().optional(),
-});
-
-export type FileSystemOutput = z.infer<typeof FileSystemOutputSchema>;
+// Types for logic file usage
+export type FileSystemOutput = {
+  content?: string;
+  files?: string[];
+  success: boolean;
+  path: string;
+  size?: number;
+};

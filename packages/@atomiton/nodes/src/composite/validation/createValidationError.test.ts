@@ -430,7 +430,7 @@ describe("createValidationError", () => {
     });
 
     it("should handle circular reference in data", () => {
-      const circularData: unknown = { name: "test" };
+      const circularData: any = { name: "test" };
       circularData.self = circularData;
 
       const error = createValidationError(
@@ -441,7 +441,7 @@ describe("createValidationError", () => {
       );
 
       expect(error.data).toBe(circularData);
-      expect(error.data.self).toBe(circularData);
+      expect((error.data as any).self).toBe(circularData);
     });
 
     it("should handle special object types", () => {
@@ -468,7 +468,7 @@ describe("createValidationError", () => {
 
       // Modifying original should affect error data (reference preserved)
       originalData.count = 2;
-      expect((error.data as unknown).count).toBe(2);
+      expect((error.data as any).count).toBe(2);
     });
   });
 

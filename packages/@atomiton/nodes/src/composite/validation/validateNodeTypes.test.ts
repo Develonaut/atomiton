@@ -134,7 +134,9 @@ describe("validateNodeTypes", () => {
         true,
       );
 
-      const invalidTypes = result.errors.map((e) => (e.data as any)?.nodeType);
+      const invalidTypes = result.errors.map(
+        (e) => (e.data as Record<string, unknown>)?.nodeType,
+      );
       expect(invalidTypes).toContain("unknown-type-1");
       expect(invalidTypes).toContain("unknown-type-2");
 
@@ -171,7 +173,7 @@ describe("validateNodeTypes", () => {
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0].code).toBe("UNKNOWN_NODE_TYPE");
-      expect(result.errors[0].data?.availableTypes).toEqual([]);
+      expect((result.errors[0].data as any)?.availableTypes).toEqual([]);
     });
 
     it("should handle nodes when no types are available", () => {
@@ -202,8 +204,10 @@ describe("validateNodeTypes", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].data?.nodeType).toBe("other-type");
-      expect(result.errors[0].data?.availableTypes).toEqual(singleType);
+      expect((result.errors[0].data as any)?.nodeType).toBe("other-type");
+      expect((result.errors[0].data as any)?.availableTypes).toEqual(
+        singleType,
+      );
     });
   });
 
@@ -246,7 +250,9 @@ describe("validateNodeTypes", () => {
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(2);
 
-      const invalidTypes = result.errors.map((e) => (e.data as any)?.nodeType);
+      const invalidTypes = result.errors.map(
+        (e) => (e.data as Record<string, unknown>)?.nodeType,
+      );
       expect(invalidTypes).toContain("http-request");
       expect(invalidTypes).toContain("data-transform");
     });
@@ -334,7 +340,7 @@ describe("validateNodeTypes", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].data?.nodeType).toBe("");
+      expect((result.errors[0].data as any)?.nodeType).toBe("");
     });
   });
 
@@ -359,9 +365,15 @@ describe("validateNodeTypes", () => {
       expect(error.path).toBe("nodes[0].type");
       expect(error.message).toBe("Unknown node type: invalid-type");
       expect(error.code).toBe("UNKNOWN_NODE_TYPE");
-      expect((error.data as any)?.nodeId).toBe("test-node-id");
-      expect((error.data as any)?.nodeType).toBe("invalid-type");
-      expect((error.data as any)?.availableTypes).toEqual(testAvailableTypes);
+      expect((error.data as Record<string, unknown>)?.nodeId).toBe(
+        "test-node-id",
+      );
+      expect((error.data as Record<string, unknown>)?.nodeType).toBe(
+        "invalid-type",
+      );
+      expect((error.data as Record<string, unknown>)?.availableTypes).toEqual(
+        testAvailableTypes,
+      );
     });
 
     it("should provide correct indices in error paths", () => {
@@ -447,7 +459,7 @@ describe("validateNodeTypes", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect(result.errors[0].data?.nodeType).toBe("invalid-type");
+      expect((result.errors[0].data as any)?.nodeType).toBe("invalid-type");
       expect(endTime - startTime).toBeLessThan(50); // Should be fast with Set lookup
     });
   });
@@ -476,7 +488,9 @@ describe("validateNodeTypes", () => {
       expect(result.errors).toHaveLength(10);
       expect(
         result.errors.every((e) =>
-          (e.data as any)?.nodeType?.startsWith("unknown-"),
+          (e.data as Record<string, unknown>)?.nodeType
+            ?.toString()
+            .startsWith("unknown-"),
         ),
       ).toBe(true);
     });

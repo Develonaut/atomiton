@@ -34,10 +34,8 @@ describe("isCompositeDefinition", () => {
     edges: [
       {
         id: "edge1",
-        source: "node1",
-        target: "node1",
-        sourceHandle: "output",
-        targetHandle: "input",
+        source: { nodeId: "node1", portId: "output" },
+        target: { nodeId: "node1", portId: "input" },
       },
     ],
   };
@@ -323,7 +321,7 @@ describe("isCompositeDefinition", () => {
     });
 
     it("should handle circular references gracefully", () => {
-      const circular: unknown = { ...validComposite };
+      const circular: any = { ...validComposite };
       circular.self = circular;
 
       // Should not throw an error, but validation may fail

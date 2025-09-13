@@ -122,11 +122,15 @@ describe("validateNodeUniqueness", () => {
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(2);
 
-      const errorNodeIds = result.errors.map((e) => (e.data as any)?.nodeId);
+      const errorNodeIds = result.errors.map(
+        (e) => (e.data as Record<string, unknown>)?.nodeId,
+      );
       expect(errorNodeIds).toContain("dup1");
       expect(errorNodeIds).toContain("dup2");
 
-      const errorIndices = result.errors.map((e) => (e.data as any)?.index);
+      const errorIndices = result.errors.map(
+        (e) => (e.data as Record<string, unknown>)?.index,
+      );
       expect(errorIndices).toContain(2); // First duplicate at index 2
       expect(errorIndices).toContain(4); // Second duplicate at index 4
     });
@@ -142,8 +146,8 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(2); // Second and third occurrences are errors
-      expect((result.errors[0].data as any)?.index).toBe(1);
-      expect((result.errors[1].data as any)?.index).toBe(2);
+      expect((result.errors[0].data as Record<string, unknown>)?.index).toBe(1);
+      expect((result.errors[1].data as Record<string, unknown>)?.index).toBe(2);
     });
 
     it("should handle mixed unique and duplicate IDs", () => {
@@ -223,7 +227,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe("same-id");
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        "same-id",
+      );
     });
 
     it("should handle nodes with different data but same IDs", () => {
@@ -286,7 +292,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe("node-with-dashes");
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        "node-with-dashes",
+      );
     });
 
     it("should handle Unicode characters in node IDs", () => {
@@ -301,7 +309,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe("节点-1");
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        "节点-1",
+      );
     });
 
     it("should handle empty string node IDs", () => {
@@ -314,7 +324,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe("");
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        "",
+      );
     });
 
     it("should handle very long node IDs", () => {
@@ -328,7 +340,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe(longId);
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        longId,
+      );
     });
 
     it("should handle numeric-like node IDs", () => {
@@ -342,7 +356,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe("123");
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        "123",
+      );
     });
   });
 
@@ -396,7 +412,9 @@ describe("validateNodeUniqueness", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeId).toBe("duplicate");
+      expect((result.errors[0].data as Record<string, unknown>)?.nodeId).toBe(
+        "duplicate",
+      );
       expect(endTime - startTime).toBeLessThan(100); // Should still be fast
     });
   });

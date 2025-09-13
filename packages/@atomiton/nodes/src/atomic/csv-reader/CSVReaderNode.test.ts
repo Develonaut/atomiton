@@ -319,7 +319,13 @@ describe("CSVReaderNode - Unified Architecture Tests", () => {
 
     it("should maintain consistent state across operations", async () => {
       // Extract only data properties from metadata (exclude functions)
-      const extractDataProps = (meta: any) => {
+      const extractDataProps = (
+        meta: Record<string, unknown> & {
+          validate?: unknown;
+          getSearchTerms?: unknown;
+          matchesSearch?: unknown;
+        },
+      ) => {
         const { validate, getSearchTerms, matchesSearch, ...dataProps } = meta;
         return dataProps;
       };

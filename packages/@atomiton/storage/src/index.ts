@@ -1,19 +1,11 @@
 /**
  * @atomiton/storage
  *
- * Universal storage abstraction for Blueprints and application data across platforms
+ * Universal storage abstraction for Composites and application data across platforms
  */
 
-// Serialization exports
-export {
-  BlueprintSerializer,
-  SerializationError,
-  type IBlueprintSerializer,
-  type BlueprintDefinition,
-} from "./serialization/BlueprintSerializer.js";
-
 // Storage engine exports
-export { FilesystemStorage } from "./engines/FilesystemStorage.js";
+export { FileSystemStorage } from "./engines/FileSystemStorage";
 
 // Core interfaces
 export type IStorageEngine = {

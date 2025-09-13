@@ -625,7 +625,7 @@ describe("fromJson", () => {
             id: "node1",
             type: "test",
             position: { x: 0, y: 0 },
-            data: null as unknown,
+            data: null as unknown as Record<string, unknown>,
           },
         ],
         edges: [],
@@ -719,8 +719,8 @@ describe("fromJson", () => {
 
       const result = fromJson(jsonData);
 
-      expect(result.nodes[0].position.x).toBe(Number.MAX_SAFE_INTEGER);
-      expect(result.nodes[0].position.y).toBe(-Number.MAX_SAFE_INTEGER);
+      expect(result.nodes[0].position?.x).toBe(Number.MAX_SAFE_INTEGER);
+      expect(result.nodes[0].position?.y).toBe(-Number.MAX_SAFE_INTEGER);
     });
   });
 

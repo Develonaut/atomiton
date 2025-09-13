@@ -439,7 +439,13 @@ describe("HttpRequestNode - Unified Architecture Tests", () => {
 
     it("should maintain consistent state", async () => {
       // Extract only data properties from metadata (exclude functions)
-      const extractDataProps = (meta: any) => {
+      const extractDataProps = (
+        meta: Record<string, unknown> & {
+          validate?: unknown;
+          getSearchTerms?: unknown;
+          matchesSearch?: unknown;
+        },
+      ) => {
         const { validate, getSearchTerms, matchesSearch, ...dataProps } = meta;
         return dataProps;
       };

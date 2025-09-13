@@ -3,10 +3,6 @@
  * Central location for all node-related types
  */
 
-// ==========================
-// Execution Types
-// ==========================
-
 export type NodeExecutionContext = {
   /** Node instance ID */
   nodeId: string;
@@ -83,10 +79,6 @@ export type NodeExecutionResult = {
   };
 };
 
-// ==========================
-// Port and Node Definition Types
-// ==========================
-
 export type NodePortDefinition = {
   /** Unique port identifier */
   id: string;
@@ -157,11 +149,6 @@ export type NodeDefinition = {
   metadata?: Record<string, unknown>;
 };
 
-// ==========================
-// Node Type Definitions
-// ==========================
-
-// Available node types for TypeScript intellisense
 export type NodeType =
   | "csv-reader"
   | "file-system"

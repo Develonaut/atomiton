@@ -9,8 +9,8 @@
 
 export { nodes } from "./api";
 export type { NodesAPI } from "./api";
-export { ExtendedNode } from "./api/ExtendedNode";
-export type { ExtendedNodeConfig } from "./api/ExtendedNode";
+export { ExtendedNode } from "./ExtendedNode";
+export type { ExtendedNodeConfig } from "./ExtendedNode";
 
 export type {
   CompositeEdge,
@@ -30,17 +30,15 @@ export type {
 export type {
   CompositeChildNode,
   CompositeDefinition,
-  CompositeExecutionResult,
-  CompositeExecutionSettings,
   CompositeNodeDefinition,
   CompositeNodeSpec,
   CompositePosition,
-  CompositeVariable,
   CompositeSettings,
-} from "./composite/index";
+  CompositeVariable,
+} from "./composite";
 
 export type {
-  FormConfig,
-  FieldControlType,
   FieldConfig,
+  FieldControlType,
+  FormConfig,
 } from "./base/NodeConfig";

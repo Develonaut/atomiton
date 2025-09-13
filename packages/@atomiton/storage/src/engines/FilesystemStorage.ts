@@ -1,26 +1,22 @@
+import type { CompositeNodeDefinition } from "@atomiton/nodes";
+import { nodes } from "@atomiton/nodes";
 import * as fs from "fs/promises";
-import * as path from "path";
 import * as os from "os";
-import {
-  BlueprintSerializer,
-  type IBlueprintSerializer,
-  type BlueprintDefinition,
-} from "../serialization/BlueprintSerializer.js";
+import * as path from "path";
 import {
   StorageError,
   type IStorageEngine,
-  type StorageItem,
-  type StorageInfo,
-  type StorageOptions,
   type Platform,
-} from "../index.js";
+  type StorageInfo,
+  type StorageItem,
+  type StorageOptions,
+} from "../index";
 
 /**
  * Filesystem storage engine for desktop environments
  * Stores data as YAML files in local filesystem
  */
-export class FilesystemStorage implements IStorageEngine {
-  private serializer: IBlueprintSerializer = new BlueprintSerializer();
+export class FileSystemStorage implements IStorageEngine {
   private readonly baseDir: string;
 
   constructor(baseDir?: string) {
@@ -38,8 +34,8 @@ export class FilesystemStorage implements IStorageEngine {
     try {
       await this.ensureDirectory(key);
 
-      // Add/update metadata if it's a Blueprint
-      if (this.isBlueprintData(data)) {
+      // Add/update metadata if it's a Composite
+      if (this.isCompositeData(data)) {
         const now = new Date().toISOString();
         data = {
           ...data,
@@ -53,10 +49,16 @@ export class FilesystemStorage implements IStorageEngine {
       }
 
       const format = options?.format || "yaml";
-      const content =
-        format === "yaml"
-          ? this.serializer.toYAML(data as BlueprintDefinition)
-          : this.serializer.toJSON(data as BlueprintDefinition);
+      let content: string;
+
+      if (format === "yaml") {
+        content = nodes.composite.toYaml(data as CompositeNodeDefinition);
+      } else {
+        const jsonData = nodes.composite.toJson(
+          data as CompositeNodeDefinition,
+        );
+        content = JSON.stringify(jsonData, null, 2);
+      }
 
       const filepath = this.getFilePath(key, format);
       await fs.writeFile(filepath, content, "utf-8");
@@ -98,9 +100,12 @@ export class FilesystemStorage implements IStorageEngine {
       }
 
       const content = await fs.readFile(filepath, "utf-8");
-      return format === "yaml"
-        ? this.serializer.fromYAML(content)
-        : this.serializer.fromJSON(content);
+      if (format === "yaml") {
+        return await nodes.composite.fromYaml(content);
+      } else {
+        const jsonData = JSON.parse(content);
+        return nodes.composite.fromJson(jsonData);
+      }
     } catch (error) {
       if (error instanceof StorageError) throw error;
 
@@ -202,7 +207,7 @@ export class FilesystemStorage implements IStorageEngine {
    * Get full file path for key and format
    */
   private getFilePath(key: string, format: "yaml" | "json"): string {
-    const extension = format === "yaml" ? ".blueprint.yaml" : ".blueprint.json";
+    const extension = format === "yaml" ? ".composite.yaml" : ".composite.json";
     return path.join(this.baseDir, `${key}${extension}`);
   }
 
@@ -254,8 +259,8 @@ export class FilesystemStorage implements IStorageEngine {
         await this.walkDirectory(fullPath, items, prefix);
       } else if (
         entry.isFile() &&
-        (entry.name.endsWith(".blueprint.yaml") ||
-          entry.name.endsWith(".blueprint.json"))
+        (entry.name.endsWith(".composite.yaml") ||
+          entry.name.endsWith(".composite.json"))
       ) {
         try {
           const stats = await fs.stat(fullPath);
@@ -269,10 +274,10 @@ export class FilesystemStorage implements IStorageEngine {
           try {
             const content = await fs.readFile(fullPath, "utf-8");
             const data = entry.name.endsWith(".yaml")
-              ? this.serializer.fromYAML(content)
-              : this.serializer.fromJSON(content);
+              ? await nodes.composite.fromYaml(content)
+              : nodes.composite.fromJson(JSON.parse(content));
 
-            if (this.isBlueprintData(data)) {
+            if (this.isCompositeData(data)) {
               name = data.name || key;
               metadata = {
                 version: data.version,
@@ -304,14 +309,14 @@ export class FilesystemStorage implements IStorageEngine {
    */
   private extractKeyFromPath(relativePath: string): string {
     return relativePath
-      .replace(/\.blueprint\.(yaml|json)$/, "")
+      .replace(/\.composite\.(yaml|json)$/, "")
       .replace(/\\/g, "/"); // Normalize path separators
   }
 
   /**
-   * Check if data looks like Blueprint data
+   * Check if data looks like Composite data
    */
-  private isBlueprintData(data: unknown): data is BlueprintDefinition {
+  private isCompositeData(data: unknown): data is CompositeNodeDefinition {
     return (
       typeof data === "object" &&
       data !== null &&

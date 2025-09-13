@@ -7,16 +7,16 @@
  * This is the key requirement that makes atomic nodes testable in the editor.
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import nodes from "../api";
 import { csvReader } from "../atomic/csv-reader/CSVReaderNode";
 import { httpRequest } from "../atomic/http-request/HttpRequestNode";
+import type { IAtomicNode, ICompositeNode, INode } from "../base/INode";
+import { isAtomicNode, isCompositeNode } from "../base/INode";
 import {
   CompositeNode,
   type CompositeNodeDefinition,
 } from "../composite/CompositeNode";
-import type { INode, IAtomicNode, ICompositeNode } from "../base/INode";
-import { isAtomicNode, isCompositeNode } from "../base/INode";
 import type { NodeExecutionContext, NodeExecutionResult } from "../types";
 
 // Mock conductor-like executor that works with any INode

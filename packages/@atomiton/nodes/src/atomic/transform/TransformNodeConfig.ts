@@ -87,22 +87,8 @@ class TransformConfigClass extends NodeConfig<typeof transformSchema> {
   }
 }
 
-export const transformConfig = new TransformConfigClass();
+// Config instance is only used internally for type inference
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const transformConfig = new TransformConfigClass();
 
 export type TransformConfig = z.infer<typeof transformConfig.schema>;
-
-// Input/Output schemas for external use
-export const TransformInputSchema = z.object({
-  data: z.any().optional(),
-  template: z.string().optional(),
-  context: z.record(z.any()).optional(),
-});
-
-export type TransformInput = z.infer<typeof TransformInputSchema>;
-
-export const TransformOutputSchema = z.object({
-  result: z.any(),
-  success: z.boolean(),
-});
-
-export type TransformOutput = z.infer<typeof TransformOutputSchema>;

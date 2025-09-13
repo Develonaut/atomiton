@@ -20,20 +20,27 @@
  *   const nodeComponents = nodes.getNodeComponents();
  */
 
-import { ATOMIC_NODES } from "../atomic";
-import type { INodeMetadata } from "../base/INodeMetadata";
-import type { Node } from "../base/Node";
-import type { NodeType } from "../types";
 import { ExtendedNode, type ExtendedNodeConfig } from "./ExtendedNode";
+import {
+  getAvailableNodeTypes,
+  isNodeTypeAvailable,
+  loadAllNodes,
+  loadNode,
+} from "./atomic";
+import type { INodeMetadata } from "./base/INodeMetadata";
+import type { Node } from "./base/Node";
+import { composite } from "./composite";
+import type { NodeType } from "./types";
 
 class NodesAPI {
   private static instance: NodesAPI;
   private nodes: Node[] = [];
   private initialized = false;
+  public readonly composite = composite;
 
   private constructor() {
-    // Register all available atomic nodes
-    this.nodes = ATOMIC_NODES;
+    // Nodes will be loaded lazily
+    this.nodes = [];
   }
 
   static getInstance(): NodesAPI {
@@ -51,7 +58,8 @@ class NodesAPI {
       return;
     }
 
-    // Atomic nodes are automatically available from src/atomic directory
+    // Load all atomic nodes
+    this.nodes = await loadAllNodes();
     this.initialized = true;
   }
 
@@ -134,6 +142,28 @@ class NodesAPI {
   }
 
   /**
+   * Get node package by type for execution with lazy loading
+   * This method will dynamically load the node if it's not already loaded
+   */
+  async getNodePackageAsync(nodeType: NodeType): Promise<Node | null> {
+    // Check if already loaded
+    const existing = this.getNodePackage(nodeType);
+    if (existing) {
+      return existing;
+    }
+
+    // Try to load it dynamically
+    const node = await loadNode(nodeType);
+    if (node) {
+      // Add to registered nodes for future synchronous access
+      this.registerNode(node);
+      return node;
+    }
+
+    return null;
+  }
+
+  /**
    * Get node by ID
    */
   getNodeById(nodeId: string): Node | undefined {
@@ -198,6 +228,21 @@ class NodesAPI {
   }
 
   /**
+   * Get all available node types without loading nodes
+   * This is more efficient for UI components that just need to know what's available
+   */
+  getAvailableNodeTypes(): string[] {
+    return getAvailableNodeTypes();
+  }
+
+  /**
+   * Check if a node type is available without loading it
+   */
+  isNodeTypeAvailable(nodeType: string): boolean {
+    return isNodeTypeAvailable(nodeType);
+  }
+
+  /**
    * Convert category name to display name
    */
   getCategoryDisplayName(category: string): string {
@@ -220,10 +265,6 @@ class NodesAPI {
   isInitialized(): boolean {
     return this.initialized;
   }
-
-  // ==========================
-  // Extension API
-  // ==========================
 
   /**
    * Extend the node system by creating a custom node from configuration

@@ -153,25 +153,8 @@ class ParallelConfigClass extends NodeConfig<typeof parallelSchema> {
   }
 }
 
-export const parallelConfig = new ParallelConfigClass();
+// Config instance is only used internally for type inference
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const parallelConfig = new ParallelConfigClass();
 
 export type ParallelConfig = z.infer<typeof parallelConfig.schema>;
-
-// Input/Output schemas for external use
-export const ParallelInputSchema = z.object({
-  operations: z.array(z.any()).optional(),
-  data: z.any().optional(),
-});
-
-export type ParallelInput = z.infer<typeof ParallelInputSchema>;
-
-export const ParallelOutputSchema = z.object({
-  results: z.array(z.any()),
-  success: z.boolean(),
-  completed: z.number(),
-  failed: z.number(),
-  errors: z.array(z.string()).optional(),
-  duration: z.number().optional(),
-});
-
-export type ParallelOutput = z.infer<typeof ParallelOutputSchema>;

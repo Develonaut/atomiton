@@ -1,17 +1,44 @@
 # Current Work - Storage Package
 
-## Sprint: January 11, 2025
+## Sprint: September 13, 2025
 
-### 🏗️ Package Setup - IN PROGRESS
+### 🏗️ Package Cleanup - COMPLETED
 
-**Active Tasks:**
+**Recent Tasks (September 13, 2025):**
 
 - [x] **Package structure** - Created @atomiton/storage with TypeScript config
 - [x] **Core interfaces** - Defined IStorageEngine and universal API
-- [ ] **Factory function** - Implement createStorage with platform detection
-- [ ] **Base classes** - Create AbstractStorageEngine base class
-- [ ] **Error handling** - Implement StorageError types and context
-- [ ] **Type definitions** - Update references to use types from actual packages instead of placeholder types
+- [x] **Serialization cleanup** - Removed redundant serialization directory, now using @atomiton/nodes
+- [x] **FileSystemStorage** - Renamed from FilesystemStorage and updated to use nodes serialization
+- [x] **Export updates** - Updated package exports to remove BlueprintSerializer, use FileSystemStorage
+- [x] **Dependencies** - Removed yaml dependency (handled by @atomiton/nodes package)
+
+### 🔍 Performance Research - PENDING
+
+**Research needed:**
+
+- [ ] **Library evaluation** - Research performant FileSystemStorage libraries for Node.js
+- [ ] **Performance benchmarks** - Compare native fs vs specialized storage libraries
+- [ ] **Feature comparison** - Evaluate features like atomic writes, indexing, compression
+
+**Note**: Look for a performant library for FileSystemStorage functionality. The current implementation uses native Node.js fs module, but specialized storage libraries might offer better performance for frequent read/write operations.
+
+### 📋 Architecture Updates - COMPLETE
+
+**Completed September 13, 2025:**
+
+- ✅ **Serialization unified** - All composite/node serialization now handled by @atomiton/nodes package
+- ✅ **Package simplified** - Storage package focused purely on reading/writing to disk
+- ✅ **Clean separation** - Storage handles disk I/O, nodes handles serialization/deserialization
+- ✅ **Type consistency** - Using shared types from @atomiton/nodes for CompositeNodeDefinition
+- ✅ **API exposed** - Serialization available via `nodes.serializer` API:
+  ```typescript
+  // Clean API for serialization
+  nodes.serializer.toYaml(composite);
+  nodes.serializer.fromYaml(yaml);
+  nodes.serializer.toJson(composite);
+  nodes.serializer.fromJson(json);
+  ```
 
 ### 📋 Planning Phase - COMPLETE
 
@@ -57,6 +84,6 @@ This abstraction will enable:
 
 ---
 
-**Last Updated**: 2025-01-11
-**Status**: 🟡 Interface Design Phase  
-**Next Milestone**: Implement filesystem storage engine (Week 1)
+**Last Updated**: 2025-09-13
+**Status**: ✅ Package Cleanup Complete  
+**Next Milestone**: Research performant FileSystemStorage library alternatives

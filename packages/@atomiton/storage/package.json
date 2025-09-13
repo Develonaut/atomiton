@@ -1,7 +1,7 @@
 {
   "name": "@atomiton/storage",
   "version": "0.0.1",
-  "description": "Universal storage abstraction for Blueprints and application data across platforms",
+  "description": "Universal storage abstraction for Composites and application data across platforms",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,8 +28,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@atomiton/nodes": "workspace:*",
-    "yaml": "^2.0.0"
+    "@atomiton/nodes": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
@@ -44,7 +43,7 @@
     "abstraction",
     "filesystem",
     "cloud",
-    "blueprint",
+    "composite",
     "cross-platform"
   ],
   "license": "MIT"

@@ -469,7 +469,7 @@ describe("normalizeComposite", () => {
     it("should handle null YAML data", () => {
       mockToYaml.mockReturnValue({
         success: true,
-        data: null as unknown,
+        data: null as unknown as string,
       });
 
       const result = normalizeComposite(sampleComposite);

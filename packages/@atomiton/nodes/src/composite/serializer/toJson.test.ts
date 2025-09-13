@@ -723,7 +723,7 @@ describe("toJson", () => {
         category: "test",
         version: "1.0.0",
         metadata: {
-          author: null as unknown,
+          author: null as unknown as string,
           tags: undefined,
         },
         nodes: [
@@ -731,7 +731,7 @@ describe("toJson", () => {
             id: "node1",
             type: "test",
             position: { x: 0, y: 0 },
-            config: null as unknown,
+            config: null as unknown as Record<string, unknown>,
           },
         ],
         edges: [
@@ -739,15 +739,15 @@ describe("toJson", () => {
             id: "edge1",
             source: { nodeId: "node1", portId: "out" },
             target: { nodeId: "node2", portId: "in" },
-            data: null as unknown,
+            data: null as unknown as Record<string, unknown>,
           },
         ],
       };
 
       const result = toJson(composite);
 
-      expect(result.metadata.author).toBeNull();
-      expect(result.metadata.tags).toBeUndefined();
+      expect(result.metadata?.author).toBeNull();
+      expect(result.metadata?.tags).toBeUndefined();
       // Custom fields are not preserved
       // expect(result.metadata.customField).toBeNull();
       expect(result.nodes[0].data).toBe(null as unknown);

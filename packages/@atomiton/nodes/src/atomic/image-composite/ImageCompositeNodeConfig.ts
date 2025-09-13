@@ -127,28 +127,12 @@ export const imageCompositeConfig = new ImageCompositeConfigClass();
 
 export type ImageCompositeConfig = z.infer<typeof imageCompositeConfig.schema>;
 
-// Input/Output schemas for external use
-export const ImageCompositeInputSchema = z.object({
-  baseImage: z.string().optional(),
-  overlayImage: z.string().optional(),
-  images: z.array(z.string()).optional(),
-  position: z
-    .object({
-      x: z.number(),
-      y: z.number(),
-    })
-    .optional(),
-});
-
-export type ImageCompositeInput = z.infer<typeof ImageCompositeInputSchema>;
-
-export const ImageCompositeOutputSchema = z.object({
-  imagePath: z.string(),
-  width: z.number(),
-  height: z.number(),
-  format: z.string(),
-  size: z.number(),
-  success: z.boolean(),
-});
-
-export type ImageCompositeOutput = z.infer<typeof ImageCompositeOutputSchema>;
+// Types for logic file usage
+export type ImageCompositeOutput = {
+  imagePath: string;
+  width: number;
+  height: number;
+  format: string;
+  size: number;
+  success: boolean;
+};

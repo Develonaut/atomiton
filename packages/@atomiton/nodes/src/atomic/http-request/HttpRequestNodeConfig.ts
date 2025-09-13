@@ -102,25 +102,21 @@ export const httpRequestConfig = new HttpRequestConfigClass();
 
 export type HttpRequestConfig = z.infer<typeof httpRequestConfig.schema>;
 
-// Input/Output schemas for external use
-export const HttpRequestInputSchema = z.object({
-  url: z.string().url().optional(),
-  method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]).optional(),
-  headers: z.record(z.string()).optional(),
-  body: z.string().optional(),
-  params: z.record(z.string()).optional(),
-});
+// Types for logic file usage
+export type HttpRequestInput = {
+  url?: string;
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  headers?: Record<string, string>;
+  body?: string;
+  params?: Record<string, string>;
+};
 
-export type HttpRequestInput = z.infer<typeof HttpRequestInputSchema>;
-
-export const HttpRequestOutputSchema = z.object({
-  status: z.number(),
-  statusText: z.string(),
-  data: z.any(),
-  headers: z.record(z.string()),
-  success: z.boolean(),
-  url: z.string(),
-  duration: z.number(),
-});
-
-export type HttpRequestOutput = z.infer<typeof HttpRequestOutputSchema>;
+export type HttpRequestOutput = {
+  status: number;
+  statusText: string;
+  data: unknown;
+  headers: Record<string, string>;
+  success: boolean;
+  url: string;
+  duration: number;
+};

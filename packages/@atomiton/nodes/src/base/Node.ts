@@ -147,9 +147,7 @@ export abstract class Node implements INode {
    * Dispose of resources used by this node
    * Default implementation - override in subclasses if needed
    */
-  dispose(): void {
-    // Default: no resources to clean up
-  }
+  dispose(): void {}
 
   /**
    * Create a standardized success result

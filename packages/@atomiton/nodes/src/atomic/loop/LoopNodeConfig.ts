@@ -145,23 +145,8 @@ class LoopConfigClass extends NodeConfig<typeof loopSchema> {
   }
 }
 
-export const loopConfig = new LoopConfigClass();
+// Config instance is only used internally for type inference
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const loopConfig = new LoopConfigClass();
 
 export type LoopConfig = z.infer<typeof loopConfig.schema>;
-
-// Input/Output schemas for external use
-export const LoopInputSchema = z.object({
-  items: z.array(z.any()).optional(),
-  data: z.any().optional(),
-});
-
-export type LoopInput = z.infer<typeof LoopInputSchema>;
-
-export const LoopOutputSchema = z.object({
-  results: z.array(z.any()),
-  success: z.boolean(),
-  iterations: z.number(),
-  errors: z.array(z.string()).optional(),
-});
-
-export type LoopOutput = z.infer<typeof LoopOutputSchema>;
