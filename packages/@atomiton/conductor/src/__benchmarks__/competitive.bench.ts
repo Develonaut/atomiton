@@ -53,7 +53,7 @@ function createRealisticNode(
       type,
     },
     execute: async (
-      context: NodeExecutionContext,
+      _context: NodeExecutionContext,
     ): Promise<NodeExecutionResult> => {
       // Simulate network latency
       await new Promise((resolve) => setTimeout(resolve, latency));
@@ -1224,8 +1224,9 @@ describe("Error Resilience Benchmarks", () => {
 
     try {
       await executionEngine.executeBlueprint(blueprint);
-    } catch (error) {
+    } catch (_error) {
       // Expected - some executions will fail due to unreliable nodes
+      void _error;
     }
   });
 });

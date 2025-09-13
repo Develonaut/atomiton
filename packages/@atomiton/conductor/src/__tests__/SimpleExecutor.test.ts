@@ -122,7 +122,9 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
       value: 42,
       processed: true,
     });
-    expect((result.outputs as any).timestamp).toBeDefined();
+    expect(
+      (result.outputs as unknown as { timestamp: unknown }).timestamp,
+    ).toBeDefined();
   });
 
   it("should handle async node operations", async () => {
@@ -181,8 +183,12 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
     const result = await executor.executeBlueprint(blueprint, "webhook");
 
     expect(result.success).toBe(true);
-    expect((result.outputs as any).result).toBe("Hello from webhook");
-    expect((result.outputs as any).processed_at).toBeDefined();
+    expect((result.outputs as unknown as { result: string }).result).toBe(
+      "Hello from webhook",
+    );
+    expect(
+      (result.outputs as unknown as { processed_at: unknown }).processed_at,
+    ).toBeDefined();
   });
 
   it("should demonstrate n8n competitive performance pattern", async () => {
@@ -217,6 +223,8 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
 
     expect(result.success).toBe(true);
     expect(endTime - startTime).toBeLessThan(50); // Should complete in <50ms
-    expect((result.outputs as any).result).toContain("transformed");
+    expect((result.outputs as unknown as { result: string }).result).toContain(
+      "transformed",
+    );
   });
 });

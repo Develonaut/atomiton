@@ -74,7 +74,7 @@ export class RuntimeRouter {
    */
   private getNodeLanguage(node: INode): RuntimeLanguage {
     // Check for explicit runtime specification in metadata
-    const metadata = node.metadata as any;
+    const metadata = node.metadata as Record<string, unknown>;
     if (metadata?.runtime?.language) {
       return metadata.runtime.language as RuntimeLanguage;
     }
@@ -122,7 +122,7 @@ export class RuntimeRouter {
   /**
    * Check if a runtime can be dynamically loaded
    */
-  private canLoadRuntime(language: RuntimeLanguage): boolean {
+  private canLoadRuntime(_language: RuntimeLanguage): boolean {
     // Future: Check if runtime module is available
     // For now, only TypeScript is supported
     return false;

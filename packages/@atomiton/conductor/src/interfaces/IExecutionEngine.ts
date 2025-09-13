@@ -1,5 +1,5 @@
-import type { BlueprintDefinition } from "@atomiton/storage";
 import type { NodeExecutionContext } from "@atomiton/nodes";
+import type { BlueprintDefinition } from "@atomiton/storage";
 
 /**
  * Execution request with input data
@@ -88,7 +88,7 @@ export type NodeExecutionState = {
  * Main execution engine interface
  * Orchestrates Blueprint and node execution
  */
-export interface IExecutionEngine {
+export type IExecutionEngine = {
   /**
    * Execute a Blueprint with given inputs
    */
@@ -136,4 +136,4 @@ export interface IExecutionEngine {
    * Clean up completed executions
    */
   cleanup(before?: Date): Promise<number>;
-}
+};

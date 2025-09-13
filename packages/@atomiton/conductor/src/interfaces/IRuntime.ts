@@ -49,7 +49,7 @@ export type RuntimeExecutionOptions = {
  * Base runtime interface for executing nodes
  * Each language/environment has its own implementation
  */
-export interface IRuntime {
+export type IRuntime = {
   /**
    * Runtime language identifier
    */
@@ -93,7 +93,7 @@ export interface IRuntime {
    * Get runtime metrics
    */
   getMetrics(): RuntimeMetrics;
-}
+};
 
 /**
  * Runtime performance metrics

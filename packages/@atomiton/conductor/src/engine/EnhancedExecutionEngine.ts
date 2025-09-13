@@ -1,21 +1,21 @@
+import type { BlueprintDefinition } from "@atomiton/storage";
 import { EventEmitter } from "events";
-import type {
-  IExecutionEngine,
-  ExecutionResult,
-  ExecutionContext,
-  ExecutionStatus,
-} from "../interfaces/IExecutionEngine.js";
-import { StateManager } from "../state/StateManager.js";
 import { BlueprintRunner } from "../execution/BlueprintRunner.js";
-import { RuntimeRouter } from "../runtime/RuntimeRouter.js";
+import type {
+  ExecutionContext,
+  ExecutionResult,
+  ExecutionStatus,
+  IExecutionEngine,
+} from "../interfaces/IExecutionEngine.js";
 import {
   ScalableQueue,
   type JobData,
   type JobOptions,
 } from "../queue/Queue.js";
-import type { BlueprintDefinition } from "@atomiton/storage";
+import { RuntimeRouter } from "../runtime/RuntimeRouter.js";
+import { StateManager } from "../state/StateManager.js";
 
-export interface EnhancedExecutionOptions {
+export type EnhancedExecutionOptions = {
   concurrency?: number;
   maxRetries?: number;
   retryDelay?: number;
@@ -32,7 +32,7 @@ export interface EnhancedExecutionOptions {
     limit: number;
     duration: number;
   };
-}
+};
 
 export class EnhancedExecutionEngine
   extends EventEmitter
@@ -88,7 +88,7 @@ export class EnhancedExecutionEngine
   }
 
   private setupQueueHandlers(): void {
-    this.queue.on("job:started", ({ jobId, jobData }) => {
+    this.queue.on("job:started", ({ jobId: _jobId, jobData }) => {
       this.metrics.activeExecutions++;
       this.emit("execution:started", {
         executionId: jobData.executionId,
@@ -359,7 +359,7 @@ export class EnhancedExecutionEngine
   }
 }
 
-interface ExecutionMetrics {
+type ExecutionMetrics = {
   totalExecutions: number;
   successfulExecutions: number;
   failedExecutions: number;
@@ -368,9 +368,9 @@ interface ExecutionMetrics {
   activeExecutions: number;
   queueMetrics?: ReturnType<ScalableQueue["getMetrics"]>;
   workerMetrics?: ReturnType<ScalableQueue["getWorkerMetrics"]>;
-}
+};
 
-interface ExecutionHistoryEntry {
+type ExecutionHistoryEntry = {
   executionId: string;
   blueprintId: string;
   status: ExecutionStatus;
@@ -378,4 +378,4 @@ interface ExecutionHistoryEntry {
   endTime?: number;
   duration?: number;
   error?: string;
-}
+};

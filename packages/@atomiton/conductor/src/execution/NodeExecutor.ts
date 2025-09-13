@@ -537,9 +537,9 @@ class NodeTransformStream extends Transform {
 /**
  * Output collector stream
  */
-interface OutputCollector extends Writable {
+type OutputCollector = {
   getResults(): Record<string, unknown>;
-}
+} & Writable;
 
 /**
  * Node execution error

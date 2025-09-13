@@ -2,10 +2,7 @@ import { EventEmitter } from "events";
 import PQueue from "p-queue";
 import { v4 as uuidv4 } from "uuid";
 import type { BlueprintDefinition, IStorageEngine } from "@atomiton/storage";
-import type {
-  NodeExecutionContext,
-  NodeExecutionResult,
-} from "@atomiton/nodes";
+import type { NodeExecutionContext } from "@atomiton/nodes";
 import type {
   IExecutionEngine,
   ExecutionRequest,
@@ -13,7 +10,6 @@ import type {
   ExecutionStatus,
   ExecutionError,
   ExecutionMetrics,
-  NodeExecutionState,
 } from "../interfaces/IExecutionEngine.js";
 import { BlueprintRunner } from "../execution/BlueprintRunner.js";
 import { StateManager } from "../state/StateManager.js";

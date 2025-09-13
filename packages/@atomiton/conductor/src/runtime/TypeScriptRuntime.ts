@@ -205,7 +205,7 @@ export class TypeScriptRuntime implements IRuntime {
   /**
    * Load a native module (not applicable for TypeScript)
    */
-  async loadModule(modulePath: string): Promise<void> {
+  async loadModule(_modulePath: string): Promise<void> {
     // TypeScript modules are loaded via standard import
     // This method is mainly for native runtimes
     throw new Error("TypeScript runtime doesn't support native module loading");

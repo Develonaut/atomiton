@@ -1,44 +1,43 @@
 import { EventEmitter } from "events";
 import PQueue from "p-queue";
 import type {
-  BlueprintDefinition,
   ExecutionError,
   ExecutionResult,
 } from "../interfaces/IExecutionEngine.js";
 
-export interface JobData {
+export type JobData = {
   executionId: string;
   blueprintId: string;
   input?: unknown;
   loadStaticData?: boolean;
   retryOf?: string;
   webhookData?: WebhookData;
-}
+};
 
-export interface JobResponse {
+export type JobResponse = {
   success: boolean;
   result?: ExecutionResult;
   error?: ExecutionError;
-}
+};
 
-export interface WebhookData {
+export type WebhookData = {
   webhookId: string;
   httpMethod: string;
   path: string;
   headers: Record<string, string>;
   body: unknown;
-}
+};
 
-export interface WebhookResponse {
+export type WebhookResponse = {
   executionId: string;
   response: {
     statusCode: number;
     headers?: Record<string, string>;
     body?: unknown;
   };
-}
+};
 
-export interface QueueOptions {
+export type QueueOptions = {
   concurrency?: number;
   maxRetries?: number;
   retryDelay?: number;
@@ -50,9 +49,9 @@ export interface QueueOptions {
     limit: number;
     duration: number;
   };
-}
+};
 
-export interface JobOptions {
+export type JobOptions = {
   priority?: number;
   delay?: number;
   attempts?: number;
@@ -63,7 +62,7 @@ export interface JobOptions {
   removeOnComplete?: boolean;
   removeOnFail?: boolean;
   stackTraceLimit?: number;
-}
+};
 
 export class Queue extends EventEmitter {
   private jobQueue: PQueue;
@@ -214,7 +213,7 @@ export class Queue extends EventEmitter {
 
   private async processJob(
     jobData: JobData,
-    options: JobOptions,
+    _options: JobOptions,
   ): Promise<JobResponse> {
     await this.delay(100);
 
@@ -437,20 +436,20 @@ export class ScalableQueue extends Queue {
   }
 }
 
-interface WorkerInfo {
+type WorkerInfo = {
   id: string;
   status: "idle" | "busy" | "error";
   currentJob: string | null;
   processedCount: number;
   errorCount: number;
   startTime: number;
-}
+};
 
-interface RedisConfig {
+type RedisConfig = {
   host: string;
   port: number;
   password?: string;
   db?: number;
   prefix?: string;
   enableReadyCheck?: boolean;
-}
+};

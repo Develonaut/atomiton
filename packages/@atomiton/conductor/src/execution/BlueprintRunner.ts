@@ -2,13 +2,12 @@
  * Blueprint Runner - Orchestrates multi-node Blueprint execution with dependency resolution
  */
 
-import type { BlueprintDefinition } from "@atomiton/storage";
 import type { INode } from "@atomiton/nodes";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
-import type { StateManager, ExecutionContext } from "../state/StateManager.js";
+import type { StateManager } from "../state/StateManager.js";
 import type { NodeExecutor } from "./NodeExecutor.js";
 import PQueue from "p-queue";
 
@@ -392,12 +391,12 @@ export class BlueprintRunner {
         maxExecutionTimeMs: options.timeoutMs || 30000,
         maxMemoryMB: 512,
       },
-      reportProgress: (progress: number, message?: string) => {
+      reportProgress: (_progress: number, _message?: string) => {
         // Progress reporting handled in NodeExecutor
       },
       log: {
-        debug: (msg, data) => console.debug(`[${nodeId}]`, msg, data),
-        info: (msg, data) => console.info(`[${nodeId}]`, msg, data),
+        debug: (msg, data) => console.warn(`[${nodeId}]`, msg, data),
+        info: (msg, data) => console.warn(`[${nodeId}]`, msg, data),
         warn: (msg, data) => console.warn(`[${nodeId}]`, msg, data),
         error: (msg, data) => console.error(`[${nodeId}]`, msg, data),
       },

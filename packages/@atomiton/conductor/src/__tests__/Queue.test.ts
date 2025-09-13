@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { Queue, ScalableQueue } from "../queue/Queue.js";
 
 describe("Queue (n8n-inspired implementation)", () => {
@@ -78,12 +78,14 @@ describe("Queue (n8n-inspired implementation)", () => {
     });
 
     it("should handle job retries with exponential backoff", async () => {
-      let attemptCount = 0;
+      let _attemptCount = 0;
       const failingQueue = new Queue({ maxRetries: 3 });
 
       failingQueue.on("job:failed", () => {
-        attemptCount++;
+        _attemptCount++;
       });
+
+      void _attemptCount;
 
       const jobData = {
         executionId: "failing_job",
@@ -189,7 +191,7 @@ describe("Queue (n8n-inspired implementation)", () => {
     });
 
     it("should emit webhook events", async () => {
-      let eventData: any;
+      let eventData: unknown;
 
       queue.on("webhook:response", (data) => {
         eventData = data;

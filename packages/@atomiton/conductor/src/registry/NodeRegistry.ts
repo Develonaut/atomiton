@@ -201,7 +201,7 @@ export class NodeRegistry {
 
         return instance;
       }
-    } catch (error) {
+    } catch {
       // Node not found or couldn't be loaded
       // This is expected for many cases
     }

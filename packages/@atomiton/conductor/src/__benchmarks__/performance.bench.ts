@@ -2,17 +2,15 @@
  * Performance Benchmarks for Conductor Package
  */
 
-import { bench, describe } from "vitest";
-import { ExecutionEngine } from "../engine/ExecutionEngine.js";
-import { StateManager } from "../state/StateManager.js";
-import { NodeExecutor } from "../execution/NodeExecutor.js";
-import { BlueprintRunner } from "../execution/BlueprintRunner.js";
-import type { INode } from "@atomiton/nodes";
 import type {
+  INode,
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
+import { bench, describe } from "vitest";
+import { ExecutionEngine } from "../engine/ExecutionEngine.js";
 import type { Blueprint } from "../execution/BlueprintRunner.js";
+import { StateManager } from "../state/StateManager.js";
 
 // Mock nodes for benchmarking
 function createBenchmarkNode(
@@ -47,17 +45,18 @@ function createBenchmarkNode(
       type,
     },
     execute: async (
-      context: NodeExecutionContext,
+      _context: NodeExecutionContext,
     ): Promise<NodeExecutionResult> => {
       const startTime = Date.now();
 
       if (cpuIntensive) {
         // Simulate CPU-intensive work
-        let result = 0;
+        let _result = 0;
         const iterations = executionTimeMs * 10000;
         for (let i = 0; i < iterations; i++) {
-          result += Math.sqrt(i) * Math.random();
+          _result += Math.sqrt(i) * Math.random();
         }
+        void _result;
       } else {
         // Simulate I/O or network delay
         await new Promise((resolve) => setTimeout(resolve, executionTimeMs));
@@ -644,7 +643,7 @@ describe("State Management Benchmarks", () => {
       // Randomly set states
       const states = ["pending", "running", "completed", "failed"];
       const state = states[i % states.length];
-      stateManager.updateContext(executionId, { state: state as any });
+      stateManager.updateContext(executionId, { state: state as unknown });
     }
 
     // Benchmark: query active executions

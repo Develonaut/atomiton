@@ -1,5 +1,5 @@
 import { bench, describe } from "vitest";
-import { Queue, ScalableQueue, EnhancedExecutionEngine } from "../index.js";
+import { EnhancedExecutionEngine, Queue, ScalableQueue } from "../index.js";
 
 describe("n8n Comparison Benchmarks", () => {
   describe("Queue Performance vs n8n", () => {
@@ -77,16 +77,18 @@ describe("n8n Comparison Benchmarks", () => {
         input: { data: i },
       }));
 
-      let completed = 0;
+      let _completed = 0;
       for (const job of jobs) {
         try {
           await queue.add(job);
-          completed++;
-        } catch (error) {
+          _completed++;
+        } catch (_error) {
           // Rate limit hit
+          void _error;
           break;
         }
       }
+      void _completed;
     });
 
     bench("Webhook handling (vs n8n webhook processing)", async () => {
@@ -131,8 +133,9 @@ describe("n8n Comparison Benchmarks", () => {
       await engine.execute("test_blueprint", { test: true });
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      const metrics = engine.getMetrics();
+      const _metrics = engine.getMetrics();
       // Metrics collection should be minimal overhead
+      void _metrics;
     });
 
     bench("Execution with retry (vs n8n retry logic)", async () => {
@@ -149,8 +152,9 @@ describe("n8n Comparison Benchmarks", () => {
             priority: 10,
           },
         );
-      } catch (error) {
+      } catch (_error) {
         // Expected failure after retries
+        void _error;
       }
     });
 
@@ -171,7 +175,7 @@ describe("n8n Comparison Benchmarks", () => {
       const memoryGrowth = endMemory - startMemory;
 
       // Should be minimal memory growth
-      console.log(`Memory growth: ${memoryGrowth / 1024 / 1024}MB`);
+      console.warn(`Memory growth: ${memoryGrowth / 1024 / 1024}MB`);
     });
   });
 
@@ -268,7 +272,7 @@ describe("n8n Comparison Benchmarks", () => {
       const successCount = results.filter(
         (r) => r.status === "fulfilled",
       ).length;
-      console.log(`Success rate after retries: ${successCount}/5`);
+      console.warn(`Success rate after retries: ${successCount}/5`);
     });
 
     bench("Large data processing (vs n8n memory limits)", async () => {

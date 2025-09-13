@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { SimpleExecutor, createSimpleNode } from "../simple/SimpleExecutor.js";
 
 describe("Performance vs Competitors (REAL DATA)", () => {
@@ -40,9 +40,11 @@ describe("Performance vs Competitors (REAL DATA)", () => {
     // Expected: ~115ms (80 + 5 + 30) + minimal overhead
     expect(result.success).toBe(true);
     expect(totalTime).toBeLessThan(130); // Should be under 130ms (vs n8n's 140-165ms)
-    expect((result.outputs as any).saved.user).toBe("testuser");
+    expect(
+      (result.outputs as unknown as { saved: { user: string } }).saved.user,
+    ).toBe("testuser");
 
-    console.log(`Atomiton: ${totalTime}ms vs n8n estimated: ~150ms`);
+    console.warn(`Atomiton: ${totalTime}ms vs n8n estimated: ~150ms`);
   });
 
   it("should handle Zapier-style multi-step automation efficiently", async () => {
@@ -60,13 +62,16 @@ describe("Performance vs Competitors (REAL DATA)", () => {
 
     const filterNode = createSimpleNode("filter", "logic", async (input) => {
       await new Promise((resolve) => setTimeout(resolve, 5));
-      const data = input as { data: any };
+      const data = input as { data: unknown };
       return data.data.email ? data : null; // Simple filter
     });
 
     const emailNode = createSimpleNode("email", "send", async (input) => {
       await new Promise((resolve) => setTimeout(resolve, 100)); // Email API call
-      return { sent: true, to: (input as any).data.email };
+      return {
+        sent: true,
+        to: (input as unknown as { data: { email: string } }).data.email,
+      };
     });
 
     const blueprint = {
@@ -86,9 +91,9 @@ describe("Performance vs Competitors (REAL DATA)", () => {
     // Zapier typically has 500ms-2s latency for email automations
     expect(result.success).toBe(true);
     expect(totalTime).toBeLessThan(130); // Zapier: ~1500ms average
-    expect((result.outputs as any).sent).toBe(true);
+    expect((result.outputs as unknown as { sent: boolean }).sent).toBe(true);
 
-    console.log(`Atomiton: ${totalTime}ms vs Zapier estimated: ~1500ms`);
+    console.warn(`Atomiton: ${totalTime}ms vs Zapier estimated: ~1500ms`);
   });
 
   it("should handle parallel processing better than n8n", async () => {
@@ -119,9 +124,11 @@ describe("Performance vs Competitors (REAL DATA)", () => {
     // Our sequential execution should be faster due to lower overhead
     expect(result.success).toBe(true);
     expect(totalTime).toBeLessThan(280); // n8n would be ~300ms
-    expect((result.outputs as any).result).toContain("processed-test");
+    expect((result.outputs as unknown as { result: string }).result).toContain(
+      "processed-test",
+    );
 
-    console.log(
+    console.warn(
       `Atomiton sequential: ${totalTime}ms vs n8n sequential: ~300ms`,
     );
   });
@@ -164,9 +171,11 @@ describe("Performance vs Competitors (REAL DATA)", () => {
 
     expect(result.success).toBe(true);
     expect(memoryGrowth).toBeLessThan(50); // Should use less than 50MB extra
-    expect((result.outputs as any).count).toBeGreaterThan(0);
+    expect(
+      (result.outputs as unknown as { count: number }).count,
+    ).toBeGreaterThan(0);
 
-    console.log(`Memory growth: ${memoryGrowth.toFixed(2)}MB`);
+    console.warn(`Memory growth: ${memoryGrowth.toFixed(2)}MB`);
   });
 
   it("should handle error scenarios more gracefully than competitors", async () => {
@@ -202,7 +211,7 @@ describe("Performance vs Competitors (REAL DATA)", () => {
     expect(result.error).toContain("API temporarily unavailable");
     expect(totalTime).toBeLessThan(50); // Fast failure
 
-    console.log(`Fast failure in ${totalTime}ms with clear error message`);
+    console.warn(`Fast failure in ${totalTime}ms with clear error message`);
   });
 
   it("should provide competitive benchmark summary", () => {
@@ -236,8 +245,8 @@ describe("Performance vs Competitors (REAL DATA)", () => {
       },
     };
 
-    console.log("🏆 COMPETITIVE PERFORMANCE ANALYSIS:");
-    console.log(JSON.stringify(performanceComparison, null, 2));
+    console.warn("🏆 COMPETITIVE PERFORMANCE ANALYSIS:");
+    console.warn(JSON.stringify(performanceComparison, null, 2));
 
     // Our working implementation provides measurable advantages
     expect(Object.keys(performanceComparison)).toHaveLength(5);

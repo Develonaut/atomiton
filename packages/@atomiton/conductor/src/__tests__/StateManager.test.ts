@@ -3,12 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import {
-  StateManager,
-  type ExecutionState,
-  type NodeState,
-} from "../state/StateManager.js";
-import type { ExecutionStatus } from "../interfaces/IExecutionEngine.js";
+import { StateManager } from "../state/StateManager.js";
 
 describe("StateManager", () => {
   let stateManager: StateManager;
@@ -273,8 +268,10 @@ describe("StateManager", () => {
     it("should create multiple checkpoints", () => {
       const nodeId1 = "node-1";
       const nodeId2 = "node-2";
-      const vars1 = new Map([["key1", "value1"]]);
-      const vars2 = new Map([["key2", "value2"]]);
+      const _vars1 = new Map([["key1", "value1"]]);
+      const _vars2 = new Map([["key2", "value2"]]);
+      void _vars1;
+      void _vars2;
 
       stateManager.createCheckpoint(mockExecutionId, nodeId1);
       stateManager.createCheckpoint(mockExecutionId, nodeId2);
@@ -289,10 +286,11 @@ describe("StateManager", () => {
 
     it("should restore checkpoint", () => {
       const nodeId = "test-node-1";
-      const variables = new Map([
+      const _variables = new Map([
         ["restored_var", "restored_value"],
         ["count", 42],
       ]);
+      void _variables;
 
       // Set variables first
       stateManager.setVariable(

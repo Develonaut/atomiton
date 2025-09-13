@@ -3,22 +3,22 @@
  * Focus: Get ONE Blueprint executing successfully
  */
 
-export interface SimpleNode {
+export type SimpleNode = {
   id: string;
   type: string;
   execute: (input: unknown) => Promise<unknown>;
-}
+};
 
-export interface SimpleBlueprint {
+export type SimpleBlueprint = {
   id: string;
   nodes: SimpleNode[];
-}
+};
 
-export interface SimpleResult {
+export type SimpleResult = {
   success: boolean;
   outputs?: unknown;
   error?: string;
-}
+};
 
 /**
  * Dead simple executor - no abstractions, just working execution
@@ -33,7 +33,7 @@ export class SimpleExecutor {
 
       // Execute nodes sequentially (simplest approach)
       for (const node of blueprint.nodes) {
-        console.log(`Executing node: ${node.id}`);
+        console.warn(`Executing node: ${node.id}`);
         currentOutput = await node.execute(currentOutput);
       }
 
