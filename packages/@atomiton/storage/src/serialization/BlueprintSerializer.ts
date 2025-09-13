@@ -129,7 +129,7 @@ export class SerializationError extends Error {
 
 /**
  * Temporary BlueprintDefinition interface
- * TODO: Import from @atomiton/nodes when available
+ * TODO: Use BlueprintDefinition from @atomiton/blueprints when available
  */
 export type BlueprintDefinition = {
   id: string;
