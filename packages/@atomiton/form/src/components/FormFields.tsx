@@ -4,10 +4,10 @@ import type { FieldConfig } from "../types.js";
 import { FieldRenderer } from "./FieldRenderer.js";
 import { useFormFields } from "./FormProvider.js";
 
-interface FormFieldsProps {
+type FormFieldsProps = {
   className?: string;
   fields?: Record<string, FieldConfig>;
-}
+};
 
 /**
  * FormFields Component

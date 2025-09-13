@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { FormProvider as RHFFormProvider } from "react-hook-form";
 import { useForm as useAtomitonForm } from "../hooks/useForm.js";
-import type { FieldsMetadata } from "../types.js";
+import type { FieldsMetadata, FieldConfig, ZodSchema } from "../types.js";
 
-interface FormContextValue {
-  generatedFields: Record<string, any>;
-}
+type FormContextValue = {
+  generatedFields: FieldConfig[];
+};
 
 const FormContext = createContext<FormContextValue | null>(null);
 
@@ -17,13 +17,13 @@ export const useFormFields = () => {
   return context;
 };
 
-interface FormProviderProps {
+type FormProviderProps = {
   children: React.ReactNode;
-  schema: any;
+  schema: ZodSchema;
   defaultValues?: Record<string, unknown>;
   fields?: FieldsMetadata;
   onChange?: (data: Record<string, unknown>) => void;
-}
+};
 
 /**
  * FormProvider Component
@@ -34,7 +34,7 @@ interface FormProviderProps {
 export const FormProvider = React.memo<FormProviderProps>(
   ({ children, schema, defaultValues = {}, fields = {}, onChange }) => {
     const form = useAtomitonForm({
-      schema,
+      schema: schema as ZodSchema,
       defaultValues,
       fields,
     });

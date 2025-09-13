@@ -20,10 +20,10 @@ import {
 type FieldRendererProps = {
   fieldName: string;
   fieldConfig: FieldConfig;
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Record<string, unknown>>;
   errors: FieldErrors;
-  watch: UseFormWatch<any>;
-  setValue: UseFormSetValue<any>;
+  watch: UseFormWatch<Record<string, unknown>>;
+  setValue: UseFormSetValue<Record<string, unknown>>;
 };
 
 export const FieldRenderer = React.memo<FieldRendererProps>(
@@ -48,8 +48,9 @@ export const FieldRenderer = React.memo<FieldRendererProps>(
 
     const selectProps = {
       ...commonProps,
-      value,
-      onChange: (newValue: any) => setValue(fieldName, newValue),
+      value: value as string | number | boolean | null | undefined,
+      onChange: (newValue: string | number | boolean) =>
+        setValue(fieldName, newValue),
       options: FIELD_PROPERTY_EXTRACTORS.extractOptions(fieldConfig),
     };
 

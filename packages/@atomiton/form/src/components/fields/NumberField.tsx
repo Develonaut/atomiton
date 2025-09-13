@@ -2,19 +2,19 @@ import React from "react";
 import type { UseFormRegister } from "react-hook-form";
 import { Field } from "@atomiton/ui";
 
-interface NumberFieldProps {
+type NumberFieldProps = {
   name: string;
   label?: string;
   placeholder?: string;
   helpText?: string;
   error?: { message?: string };
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Record<string, unknown>>;
   disabled?: boolean;
   readOnly?: boolean;
   min?: number;
   max?: number;
   step?: number;
-}
+};
 
 export const NumberField = React.memo<NumberFieldProps>(
   ({

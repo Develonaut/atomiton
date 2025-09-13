@@ -1,4 +1,4 @@
-import type { UIControlType } from "./types.js";
+import type { UIControlType, FieldConfig } from "./types.js";
 
 /**
  * Zod type name to control type mapping
@@ -30,7 +30,7 @@ export const FIELD_PROPERTY_EXTRACTORS = {
    * Extract options from field config with proper typing
    */
   extractOptions: (
-    fieldConfig: any,
+    fieldConfig: Partial<FieldConfig>,
   ): Array<{ label: string; value: string | number | boolean }> => {
     return ("options" in fieldConfig ? fieldConfig.options : []) as Array<{
       label: string;
@@ -41,7 +41,7 @@ export const FIELD_PROPERTY_EXTRACTORS = {
   /**
    * Extract numeric properties (min, max, step) with proper fallbacks
    */
-  extractNumericProps: (fieldConfig: any) => ({
+  extractNumericProps: (fieldConfig: Partial<FieldConfig>) => ({
     min: "min" in fieldConfig ? fieldConfig.min : undefined,
     max: "max" in fieldConfig ? fieldConfig.max : undefined,
     step: "step" in fieldConfig ? fieldConfig.step : undefined,
@@ -50,7 +50,7 @@ export const FIELD_PROPERTY_EXTRACTORS = {
   /**
    * Extract base field properties with clean defaults
    */
-  extractBaseProps: (fieldName: string, fieldConfig: any) => ({
+  extractBaseProps: (fieldName: string, fieldConfig: Partial<FieldConfig>) => ({
     label: fieldConfig.label || fieldName,
     placeholder: fieldConfig.placeholder || "",
     helpText: fieldConfig.helpText || "",

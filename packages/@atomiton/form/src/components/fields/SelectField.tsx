@@ -2,21 +2,21 @@ import React from "react";
 import { Select } from "@atomiton/ui";
 import type { SelectOption } from "@atomiton/ui";
 
-interface SelectFieldProps {
+type SelectFieldProps = {
   name: string;
   label?: string;
   placeholder?: string;
   helpText?: string;
   error?: { message?: string };
-  value: any;
-  onChange: (value: any) => void;
+  value: string | number | boolean | null | undefined;
+  onChange: (value: string | number | boolean) => void;
   options: Array<{ label: string; value: string | number | boolean }>;
   disabled?: boolean;
-}
+};
 
 export const SelectField = React.memo<SelectFieldProps>(
   ({
-    name,
+    name: _name,
     label,
     placeholder,
     helpText,

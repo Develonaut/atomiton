@@ -1,14 +1,14 @@
 import React from "react";
 import type { UseFormRegister } from "react-hook-form";
 
-interface BooleanFieldProps {
+type BooleanFieldProps = {
   name: string;
   label?: string;
   helpText?: string;
   error?: { message?: string };
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Record<string, unknown>>;
   disabled?: boolean;
-}
+};
 
 export const BooleanField = React.memo<BooleanFieldProps>(
   ({ name, label, helpText, error, register, disabled = false }) => (

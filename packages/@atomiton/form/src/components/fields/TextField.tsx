@@ -8,7 +8,7 @@ type TextFieldProps = {
   placeholder?: string;
   helpText?: string;
   error?: { message?: string };
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Record<string, unknown>>;
   disabled?: boolean;
   readOnly?: boolean;
   type?:

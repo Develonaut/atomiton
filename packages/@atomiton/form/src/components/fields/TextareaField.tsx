@@ -2,16 +2,16 @@ import React from "react";
 import type { UseFormRegister } from "react-hook-form";
 import { Field } from "@atomiton/ui";
 
-interface TextareaFieldProps {
+type TextareaFieldProps = {
   name: string;
   label?: string;
   placeholder?: string;
   helpText?: string;
   error?: { message?: string };
-  register: UseFormRegister<any>;
+  register: UseFormRegister<Record<string, unknown>>;
   disabled?: boolean;
   readOnly?: boolean;
-}
+};
 
 export const TextareaField = React.memo<TextareaFieldProps>(
   ({

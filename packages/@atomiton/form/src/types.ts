@@ -29,7 +29,7 @@ export type UIControlType =
 /**
  * Base field configuration shared by all field types
  */
-export interface BaseFieldConfig {
+export type BaseFieldConfig = {
   /** Field name (auto-generated from schema) */
   name: string;
   /** Type of form control to render */
@@ -48,21 +48,21 @@ export interface BaseFieldConfig {
   group?: string;
   /** Sort order within group */
   order?: number;
-}
+};
 
 /**
  * Configuration for select fields
  */
-export interface SelectFieldConfig extends BaseFieldConfig {
+export type SelectFieldConfig = {
   type: "select";
   /** Options for select controls */
   options: Array<{ value: string | number | boolean; label: string }>;
-}
+} & BaseFieldConfig;
 
 /**
  * Configuration for numeric fields (number and range)
  */
-export interface NumberFieldConfig extends BaseFieldConfig {
+export type NumberFieldConfig = {
   type: "number" | "range";
   /** Minimum value */
   min?: number;
@@ -70,7 +70,7 @@ export interface NumberFieldConfig extends BaseFieldConfig {
   max?: number;
   /** Step size */
   step?: number;
-}
+} & BaseFieldConfig;
 
 /**
  * Union type for all field configurations

@@ -1,4 +1,9 @@
-import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types.js";
+import type {
+  FieldConfig,
+  FieldsMetadata,
+  UIControlType,
+  ZodSchema,
+} from "../types.js";
 import { mapZodTypeToControl } from "./mapZodTypeToControl.js";
 
 /**
@@ -33,7 +38,7 @@ export function generateFieldsFromSchema(
       type:
         ("type" in fieldMetadata && fieldMetadata.type) ||
         ("controlType" in fieldMetadata &&
-          (fieldMetadata as any).controlType) ||
+          (fieldMetadata as { controlType?: UIControlType }).controlType) ||
         baseField.type,
       label:
         fieldMetadata.label ||

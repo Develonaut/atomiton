@@ -1,15 +1,15 @@
 import React from "react";
-import type { FieldsMetadata } from "../types.js";
+import type { FieldsMetadata, ZodSchema } from "../types.js";
 import { FormProvider } from "./FormProvider.js";
 import { FormFields } from "./FormFields.js";
 
-interface FormProps {
-  schema: any; // Zod schema from node config
+type FormProps = {
+  schema: ZodSchema; // Zod schema from node config
   defaultValues?: Record<string, unknown>;
   fields?: FieldsMetadata;
   onChange?: (data: Record<string, unknown>) => void;
   className?: string;
-}
+};
 
 /**
  * Simple Form Component
