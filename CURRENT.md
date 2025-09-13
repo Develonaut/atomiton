@@ -39,6 +39,7 @@ This document aggregates current work across the entire monorepo. For detailed p
 - ✅ Basic node addition and selection working
 - ✅ Left/Right sidebars integrated with placeholder content
 - ✅ All packages building successfully
+- ✅ **@atomiton/core testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Jan 13, 2025)
 
 ### 📊 Current Priorities
 
@@ -59,14 +60,14 @@ Based on Karen's audit, **only 2 of 15 packages** meet our testing standards. Th
 
 #### 🔴 CRITICAL PRIORITY - Core API Packages (Missing Required Tests)
 
-**1. @atomiton/core**
+**1. @atomiton/core** ✅ **COMPLETED (Jan 13, 2025)**
 
 ```
-Fix the @atomiton/core package to meet our testing requirements per docs/development/PACKAGE_CREATION_GUIDE.md:
-- Add smoke tests in src/__tests__/*.smoke.test.ts for critical API functionality
-- Add benchmarks in src/__benchmarks__/*.bench.ts for performance-critical operations
-- Ensure all 8 test scripts are functional (not placeholders)
-- Verify vitest configuration is properly set up
+COMPLETED: Fixed the @atomiton/core package to meet testing requirements:
+- ✅ Added smoke tests in src/__tests__/api.smoke.test.ts for critical API functionality
+- ✅ Added benchmarks in src/__benchmarks__/api.bench.ts for performance-critical operations
+- ✅ All 8 test scripts are functional (not placeholders)
+- ✅ Vitest configuration properly set up
 ```
 
 **2. @atomiton/events**

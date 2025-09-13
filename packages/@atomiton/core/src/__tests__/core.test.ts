@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { core } from "../api";
+import core from "../api";
 
 describe("core API Contract", () => {
   it("should be a singleton", () => {
