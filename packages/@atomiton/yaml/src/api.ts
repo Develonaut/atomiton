@@ -1,41 +1,40 @@
 import type { Document } from "yaml";
+import type {
+  ParseResult,
+  StreamParseOptions,
+  ValidationSchema,
+  YamlDocument,
+  YamlError,
+  YamlParseOptions,
+  YamlStringifyOptions,
+  YamlValue,
+} from "./types.js";
 import {
-  parseYaml,
-  safeParseYaml,
-  parseYamlDocument,
-  parseMultipleDocuments,
-  parseYamlStream,
   isValidYaml,
+  parseMultipleDocuments,
+  parseYaml,
+  parseYamlDocument,
+  parseYamlStream,
+  safeParseYaml,
 } from "./utils/parser.js";
 import {
-  stringifyYaml,
-  stringifyYamlWithComments,
   formatYaml,
   minifyYaml,
   prettifyYaml,
+  stringifyYaml,
+  stringifyYamlWithComments,
   toYamlDocument,
 } from "./utils/stringifier.js";
-import { readYamlFile, safeReadYamlFile, writeYamlFile } from "./utils/file.js";
 import {
   createValidator,
-  validateRequired,
-  validateType,
+  validateArrayLength,
   validateEnum,
   validatePattern,
   validateRange,
-  validateArrayLength,
+  validateRequired,
   validateSchema,
+  validateType,
 } from "./utils/validator.js";
-import type {
-  YamlParseOptions,
-  YamlStringifyOptions,
-  ParseResult,
-  YamlDocument,
-  YamlError,
-  YamlValue,
-  StreamParseOptions,
-  ValidationSchema,
-} from "./types.js";
 
 /**
  * YamlAPI - Main interface for interacting with the YAML package
@@ -57,8 +56,6 @@ export class YamlAPI {
     }
     return YamlAPI.instance;
   }
-
-  // ========== Parsing Methods ==========
 
   /**
    * Parse a YAML string into a JavaScript object
@@ -154,39 +151,6 @@ export class YamlAPI {
    */
   toDocument(value: YamlDocument): Document {
     return toYamlDocument(value);
-  }
-
-  // ========== File Operations ==========
-
-  /**
-   * Read and parse a YAML file
-   */
-  async readFile<T = YamlDocument>(
-    filePath: string,
-    options?: YamlParseOptions,
-  ): Promise<T> {
-    return readYamlFile<T>(filePath, options);
-  }
-
-  /**
-   * Safely read and parse a YAML file with error handling
-   */
-  async safeReadFile<T = YamlDocument>(
-    filePath: string,
-    options?: YamlParseOptions,
-  ): Promise<ParseResult<T>> {
-    return safeReadYamlFile<T>(filePath, options);
-  }
-
-  /**
-   * Write a JavaScript object to a YAML file
-   */
-  async writeFile(
-    filePath: string,
-    data: unknown,
-    options?: YamlStringifyOptions,
-  ): Promise<void> {
-    return writeYamlFile(filePath, data, options);
   }
 
   // ========== Validation Methods ==========
