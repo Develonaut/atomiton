@@ -1,6 +1,6 @@
 import { Worker } from "worker_threads";
 import { performance } from "perf_hooks";
-import { Readable, Writable, pipeline } from "stream";
+import { Readable, Writable, pipeline, Transform } from "stream";
 import { promisify } from "util";
 import type { INode, NodeExecutionContext } from "@atomiton/nodes";
 
@@ -250,7 +250,7 @@ export class NodeExecutor {
     node: INode,
     inputs: Record<string, unknown>,
   ): Promise<Record<string, unknown>> {
-    const parallelTasks: Promise<any>[] = [];
+    const parallelTasks: Promise<unknown>[] = [];
 
     // Identify parallelizable operations
     for (const [key, value] of Object.entries(inputs)) {
@@ -319,7 +319,7 @@ export class NodeExecutor {
     return batches;
   }
 
-  private mergeBatchResults(results: any[]): any {
+  private mergeBatchResults(results: unknown[]): unknown {
     // Merge strategy depends on result type
     if (results.length === 0) return [];
 
@@ -336,7 +336,7 @@ export class NodeExecutor {
     return results;
   }
 
-  private combineParallelResults(results: any[]): Record<string, unknown> {
+  private combineParallelResults(results: unknown[]): Record<string, unknown> {
     // Combine parallel execution results
     const combined: Record<string, unknown> = {};
 
@@ -349,7 +349,7 @@ export class NodeExecutor {
     return combined;
   }
 
-  private serializeNode(node: INode): any {
+  private serializeNode(node: INode): Record<string, unknown> {
     // Serialize node for worker execution
     return {
       id: node.id,
@@ -447,17 +447,19 @@ class WorkerPoolManager {
 class StreamProcessor {
   processStream(
     input: Readable,
-    transform: (chunk: any) => any,
+    transform: (chunk: unknown) => unknown,
     output: Writable,
   ): Promise<void> {
     return pipelineAsync(input, this.createTransform(transform), output);
   }
 
-  private createTransform(fn: (chunk: any) => any) {
-    const { Transform } = require("stream");
-
+  private createTransform(fn: (chunk: unknown) => unknown) {
     return new Transform({
-      transform(chunk: any, encoding: string, callback: Function) {
+      transform(
+        chunk: unknown,
+        encoding: string,
+        callback: (error?: Error | null, data?: unknown) => void,
+      ) {
         try {
           const result = fn(chunk);
           callback(null, result);
@@ -513,7 +515,11 @@ class NodeTransformStream extends Transform {
     super({ objectMode: true });
   }
 
-  _transform(chunk: any, encoding: string, callback: Function): void {
+  _transform(
+    chunk: unknown,
+    encoding: string,
+    callback: (error?: Error | null, data?: unknown) => void,
+  ): void {
     try {
       // Process chunk through node
       const context: NodeExecutionContext = {
@@ -562,4 +568,3 @@ type ExecutionStrategy = "direct" | "worker" | "stream" | "batch" | "parallel";
 
 // Re-export for use in other modules
 export { WorkerPoolManager, StreamProcessor, MemoryPool, NodeExecutionError };
-import { Transform } from "stream";
