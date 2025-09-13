@@ -40,6 +40,7 @@ This document aggregates current work across the entire monorepo. For detailed p
 - ✅ Left/Right sidebars integrated with placeholder content
 - ✅ All packages building successfully
 - ✅ **@atomiton/core testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Jan 13, 2025)
+- ✅ **@atomiton/events testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Jan 13, 2025)
 
 ### 📊 Current Priorities
 
@@ -70,14 +71,14 @@ COMPLETED: Fixed the @atomiton/core package to meet testing requirements:
 - ✅ Vitest configuration properly set up
 ```
 
-**2. @atomiton/events**
+**2. @atomiton/events** ✅ **COMPLETED (Jan 13, 2025)**
 
 ```
-Fix the @atomiton/events package to meet our testing requirements per docs/development/PACKAGE_CREATION_GUIDE.md:
-- Add smoke tests in src/__tests__/*.smoke.test.ts for event system functionality
-- Add benchmarks in src/__benchmarks__/*.bench.ts for event dispatching performance
-- Ensure all 8 test scripts are functional
-- Add test configuration block to vite.config.ts
+COMPLETED: Fixed the @atomiton/events package to meet testing requirements:
+- ✅ Added smoke tests in src/__tests__/emitter.smoke.test.ts for event system functionality
+- ✅ Added benchmarks in src/__benchmarks__/emitter.bench.ts for event dispatching performance
+- ✅ All 8 test scripts are functional (not placeholders)
+- ✅ Test configuration block already existed in vite.config.ts
 ```
 
 **3. @atomiton/storage**
