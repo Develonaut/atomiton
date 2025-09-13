@@ -30,7 +30,7 @@ export type NodeActions = {
   deleteSelectedNodes: () => void;
   handleConnect: (connection: Connection) => void;
   handleDrop: (event: React.DragEvent, reactFlowBounds: DOMRect | null) => void;
-  updateNodeData: (id: string, data: unknown) => void;
+  updateNodeData: (id: string, data: Record<string, unknown>) => void;
 };
 
 export const createNodeModule = (
@@ -138,7 +138,7 @@ export const createNodeModule = (
       actions.addNode(nodeType, position);
     },
 
-    updateNodeData: (id: string, data: unknown) => {
+    updateNodeData: (id: string, data: Record<string, unknown>) => {
       const instance = store.getState().flowInstance;
       if (!instance) return;
 

@@ -1,29 +1,24 @@
 /**
  * Core - Centralized API for Atomiton internal packages
  *
- * Provides a unified interface to all Atomiton functionality,
- * similar to Firebase or Stripe SDK patterns.
+ * Provides a unified interface to high-level Atomiton functionality.
+ * Infrastructure packages (store, events) should be imported directly
+ * to avoid circular dependencies.
  *
  * Usage:
  *   import { core } from '@atomiton/core';
  *
- *   // Access store functionality
- *   core.store.initialize(...)
- *
- *   // Access event system
- *   core.events.emit(...)
- *
  *   // Access node system
  *   core.nodes.registerPackage(...)
+ *
+ *   // Infrastructure packages are imported directly:
+ *   import { store } from '@atomiton/store';
+ *   import { events } from '@atomiton/events';
  */
 
-import { events } from "@atomiton/events";
 import { nodes } from "@atomiton/nodes";
-import { store } from "@atomiton/store";
 
-import eventsPackage from "@atomiton/events/package.json";
 import nodesPackage from "@atomiton/nodes/package.json";
-import storePackage from "@atomiton/store/package.json";
 import corePackage from "../package.json";
 
 class CoreAPI {
@@ -38,14 +33,6 @@ class CoreAPI {
     return CoreAPI.instance;
   }
 
-  get store() {
-    return store;
-  }
-
-  get events() {
-    return events;
-  }
-
   get nodes() {
     return nodes;
   }
@@ -53,23 +40,15 @@ class CoreAPI {
   get version() {
     return {
       core: corePackage.version,
-      store: storePackage.version,
-      events: eventsPackage.version,
       nodes: nodesPackage.version,
     };
   }
 
-  async initialize(config?: {
-    store?: Record<string, unknown>;
-    events?: Record<string, unknown>;
-    nodes?: Record<string, unknown>;
-  }): Promise<void> {
-    // Initialize all subsystems
-    await store.initialize();
-    await events.initialize();
+  async initialize(): Promise<void> {
+    // Initialize nodes subsystem
+    // Note: Infrastructure packages (store, events) should be initialized
+    // directly by the packages that use them to avoid circular dependencies
     await nodes.initialize();
-
-    void config; // TODO: Use config for subsystem initialization if needed
   }
 }
 

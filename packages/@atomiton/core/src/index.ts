@@ -1,15 +1,17 @@
 /**
  * @atomiton/core - Centralized API for Atomiton Platform
  *
- * Provides a unified interface to all Atomiton functionality through
- * the core singleton.
+ * Provides a unified interface to high-level Atomiton functionality.
+ * Infrastructure packages (store, events) should be imported directly.
  *
  * Usage:
  *   import core from '@atomiton/core';
+ *   import { store } from '@atomiton/store';
+ *   import { events } from '@atomiton/events';
  *
- *   core.store.initialize();
- *   core.events.emit('event', data);
  *   core.nodes.registerPackage(package);
+ *   store.initialize();
+ *   events.emit('event', data);
  */
 
 import core from "./api";

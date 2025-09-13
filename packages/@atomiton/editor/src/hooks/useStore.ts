@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { core } from "@atomiton/core";
-import type { EditorState } from "../store/types";
+import { store as storeAPI } from "@atomiton/store";
+import { useEffect, useRef, useState } from "react";
 import { editorStore } from "../store";
+import type { EditorState } from "../store/types";
 
 /**
  * Hook to reactively subscribe to store state changes with equality checking
@@ -40,4 +40,4 @@ export function useStore<T>(
   return state;
 }
 
-export const shallow = core.store.shallow;
+export const shallow = storeAPI.shallow;

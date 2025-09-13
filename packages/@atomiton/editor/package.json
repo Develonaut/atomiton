@@ -43,6 +43,7 @@
     "@atomiton/core": "workspace:*",
     "@atomiton/hooks": "workspace:*",
     "@atomiton/nodes": "workspace:*",
+    "@atomiton/store": "workspace:*",
     "@atomiton/ui": "workspace:*",
     "@xyflow/react": "^12.0.0",
     "class-variance-authority": "^0.7.1",

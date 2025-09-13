@@ -265,15 +265,9 @@ importers:
 
   packages/@atomiton/core:
     dependencies:
-      '@atomiton/events':
-        specifier: workspace:*
-        version: link:../events
       '@atomiton/nodes':
         specifier: workspace:*
         version: link:../nodes
-      '@atomiton/store':
-        specifier: workspace:*
-        version: link:../store
       '@atomiton/ui':
         specifier: workspace:*
         version: link:../ui
@@ -348,6 +342,9 @@ importers:
       '@atomiton/nodes':
         specifier: workspace:*
         version: link:../nodes
+      '@atomiton/store':
+        specifier: workspace:*
+        version: link:../store
       '@atomiton/ui':
         specifier: workspace:*
         version: link:../ui

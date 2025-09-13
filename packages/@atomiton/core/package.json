@@ -41,8 +41,6 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
-    "@atomiton/store": "workspace:*",
-    "@atomiton/events": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/ui": "workspace:*"
   },

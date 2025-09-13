@@ -1,8 +1,9 @@
 /**
  * Core API Contract Tests
  *
- * Tests that the Core singleton properly exposes all internal packages
- * through a unified API. Actual functionality is tested in the respective packages.
+ * Tests that the Core singleton properly exposes high-level packages
+ * through a unified API. Infrastructure packages (store, events) are
+ * imported directly to avoid circular dependencies.
  */
 
 import { describe, expect, it } from "vitest";
@@ -13,16 +14,6 @@ describe("core API Contract", () => {
     const core1 = core;
     const core2 = core;
     expect(core1).toBe(core2);
-  });
-
-  it("should expose store API", () => {
-    expect(core.store).toBeDefined();
-    expect(typeof core.store).toBe("object");
-  });
-
-  it("should expose events API", () => {
-    expect(core.events).toBeDefined();
-    expect(typeof core.events).toBe("object");
   });
 
   it("should expose nodes API", () => {
@@ -39,23 +30,6 @@ describe("core API Contract", () => {
   it("should have initialize method", () => {
     expect(core.initialize).toBeDefined();
     expect(typeof core.initialize).toBe("function");
-  });
-
-  describe("store API surface", () => {
-    it("should expose store methods", () => {
-      // Just verify the shape, actual functionality tested in @atomiton/store
-      expect(core.store.initialize).toBeDefined();
-      expect(core.store.createStore).toBeDefined();
-      expect(core.store.registerStore).toBeDefined();
-    });
-  });
-
-  describe("events API surface", () => {
-    it("should expose event methods", () => {
-      // Just verify the shape, actual functionality tested in @atomiton/events
-      expect(core.events.emit).toBeDefined();
-      expect(core.events.subscribe).toBeDefined();
-    });
   });
 
   describe("nodes API surface", () => {
