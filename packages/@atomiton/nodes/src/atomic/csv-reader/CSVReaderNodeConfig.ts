@@ -69,8 +69,6 @@ class CSVReaderConfigClass extends NodeConfig<typeof csvReaderSchema> {
   }
 }
 
-// Config instance is only used internally for type inference
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const csvReaderConfig = new CSVReaderConfigClass();
+export const csvReaderConfig = new CSVReaderConfigClass();
 
 export type CSVReaderConfig = z.infer<typeof csvReaderConfig.schema>;

@@ -117,3 +117,4 @@ class CodeNode extends Node {
 }
 
 export const code = new CodeNode();
+export default code;

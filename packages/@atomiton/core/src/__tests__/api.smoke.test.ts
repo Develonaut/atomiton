@@ -1,15 +1,10 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, expect, it } from "vitest";
 import core from "../api";
 
 describe("Core API Smoke Tests", () => {
-  it("should initialize without errors", async () => {
-    await expect(core.initialize()).resolves.not.toThrow();
-  });
-
   it("should expose core methods", () => {
     expect(core.nodes).toBeDefined();
     expect(core.version).toBeDefined();
-    expect(core.initialize).toBeDefined();
   });
 
   it("should return version information", () => {
@@ -26,12 +21,9 @@ describe("Core API Smoke Tests", () => {
     expect(typeof core.nodes).toBe("object");
     expect(core.nodes.getAllNodes).toBeDefined();
     expect(core.nodes.getNodeMetadata).toBeDefined();
-    expect(core.nodes.initialize).toBeDefined();
   });
 
-  it("should handle basic node operations", async () => {
-    await core.initialize();
-
+  it("should handle basic node operations", () => {
     const allNodes = core.nodes.getAllNodes();
     expect(Array.isArray(allNodes)).toBe(true);
 

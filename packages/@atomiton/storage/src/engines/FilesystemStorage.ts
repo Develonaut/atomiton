@@ -1,5 +1,5 @@
-import nodes from "@atomiton/nodes";
 import type { CompositeNodeDefinition } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 import * as fs from "fs/promises";
 import * as os from "os";
 import * as path from "path";
@@ -52,11 +52,9 @@ export class FileSystemStorage implements IStorageEngine {
       let content: string;
 
       if (format === "yaml") {
-        content = nodes.composite.toYaml(data as CompositeNodeDefinition);
+        content = nodes.toYaml(data as CompositeNodeDefinition);
       } else {
-        const jsonData = nodes.composite.toJson(
-          data as CompositeNodeDefinition,
-        );
+        const jsonData = nodes.toJson(data as CompositeNodeDefinition);
         content = JSON.stringify(jsonData, null, 2);
       }
 
@@ -101,10 +99,10 @@ export class FileSystemStorage implements IStorageEngine {
 
       const content = await fs.readFile(filepath, "utf-8");
       if (format === "yaml") {
-        return await nodes.composite.fromYaml(content);
+        return await nodes.fromYaml(content);
       } else {
         const jsonData = JSON.parse(content);
-        return nodes.composite.fromJson(jsonData);
+        return nodes.fromJson(jsonData);
       }
     } catch (error) {
       if (error instanceof StorageError) throw error;
@@ -274,8 +272,8 @@ export class FileSystemStorage implements IStorageEngine {
           try {
             const content = await fs.readFile(fullPath, "utf-8");
             const data = entry.name.endsWith(".yaml")
-              ? await nodes.composite.fromYaml(content)
-              : nodes.composite.fromJson(JSON.parse(content));
+              ? await nodes.fromYaml(content)
+              : nodes.fromJson(JSON.parse(content));
 
             if (this.isCompositeData(data)) {
               name = data.name || key;

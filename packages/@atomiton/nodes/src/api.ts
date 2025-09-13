@@ -20,47 +20,24 @@
  *   const nodeComponents = nodes.getNodeComponents();
  */
 
-import { ExtendedNode, type ExtendedNodeConfig } from "./ExtendedNode.js";
+import atomic, { type NodeType } from "./atomic";
 import {
-  getAvailableNodeTypes,
-  isNodeTypeAvailable,
-  loadAllNodes,
-  loadNode,
-} from "./atomic/index.js";
-import type { INodeMetadata } from "./base/INodeMetadata.js";
-import type { Node } from "./base/Node.js";
-import { composite } from "./composite/index.js";
-import type { NodeType } from "./types.js";
+  ExtendedNode,
+  type ExtendedNodeConfig,
+  type INodeMetadata,
+  type Node,
+} from "./base";
+import type {
+  CompositeNodeDefinition,
+  JsonCompositeDefinition,
+} from "./composite";
+import composite from "./composite";
 
 class NodesAPI {
-  private static instance: NodesAPI;
   private nodes: Node[] = [];
-  private initialized = false;
-  public readonly composite = composite;
 
-  private constructor() {
-    // Nodes will be loaded lazily
-    this.nodes = [];
-  }
-
-  static getInstance(): NodesAPI {
-    if (!NodesAPI.instance) {
-      NodesAPI.instance = new NodesAPI();
-    }
-    return NodesAPI.instance;
-  }
-
-  /**
-   * Initialize the nodes system
-   */
-  async initialize(): Promise<void> {
-    if (this.initialized) {
-      return;
-    }
-
-    // Load all atomic nodes
-    this.nodes = await loadAllNodes();
-    this.initialized = true;
+  constructor() {
+    // Everything loads on demand, no initialization needed
   }
 
   /**
@@ -79,6 +56,8 @@ class NodesAPI {
 
   /**
    * Get nodes organized by category for the Assets accordion
+   * NOTE: This method requires nodes to be initialized (loads all nodes)
+   * For UI components that just need metadata, use getCategoriesMetadata() instead
    */
   getCategories(): Array<{
     name: string;
@@ -101,6 +80,37 @@ class NodesAPI {
       displayName: this.getCategoryDisplayName(category),
       items,
     }));
+  }
+
+  /**
+   * Get node metadata organized by category without loading any nodes
+   * This is the preferred method for UI components like the LeftSidebar
+   */
+  async getCategoriesMetadata(): Promise<
+    Array<{
+      name: string;
+      displayName: string;
+      items: INodeMetadata[];
+    }>
+  > {
+    return atomic.getMetadataByCategory();
+  }
+
+  /**
+   * Get all node metadata without loading any nodes
+   * This is the preferred method for UI components that need node information
+   */
+  async getAllNodesMetadata(): Promise<INodeMetadata[]> {
+    return atomic.getAllNodeMetadata();
+  }
+
+  /**
+   * Get specific node metadata by type without loading the node
+   */
+  async getNodeMetadataByType(
+    nodeType: NodeType,
+  ): Promise<INodeMetadata | null> {
+    return atomic.getNodeMetadata(nodeType);
   }
 
   /**
@@ -153,7 +163,7 @@ class NodesAPI {
     }
 
     // Try to load it dynamically
-    const node = await loadNode(nodeType);
+    const node = await atomic.loadNode(nodeType);
     if (node) {
       // Add to registered nodes for future synchronous access
       this.registerNode(node);
@@ -232,14 +242,14 @@ class NodesAPI {
    * This is more efficient for UI components that just need to know what's available
    */
   getAvailableNodeTypes(): string[] {
-    return getAvailableNodeTypes();
+    return atomic.getAvailableNodeTypes();
   }
 
   /**
    * Check if a node type is available without loading it
    */
   isNodeTypeAvailable(nodeType: string): boolean {
-    return isNodeTypeAvailable(nodeType);
+    return atomic.isNodeTypeAvailable(nodeType);
   }
 
   /**
@@ -257,13 +267,6 @@ class NodesAPI {
     return (
       names[category] || category.charAt(0).toUpperCase() + category.slice(1)
     );
-  }
-
-  /**
-   * Check if nodes are initialized
-   */
-  isInitialized(): boolean {
-    return this.initialized;
   }
 
   /**
@@ -285,9 +288,85 @@ class NodesAPI {
   extendNode(config: ExtendedNodeConfig): ExtendedNode {
     return new ExtendedNode(config);
   }
+
+  /**
+   * Convert a node to YAML - works with any node type
+   * @param nodeData - Any node instance (atomic or composite) or definition
+   * @returns YAML string representation
+   */
+  toYaml(nodeData: Node | CompositeNodeDefinition): string {
+    // For now, delegate to composite API
+    // TODO: Add atomic node serialization support
+    return composite.toYaml(nodeData as any);
+  }
+
+  /**
+   * Convert YAML to a node definition
+   * @param yaml - YAML string content
+   * @returns Promise<CompositeNodeDefinition>
+   */
+  async fromYaml(yaml: string): Promise<CompositeNodeDefinition> {
+    // For now, returns composite definitions
+    // TODO: Add atomic node deserialization support
+    return composite.fromYaml(yaml);
+  }
+
+  /**
+   * Convert a node to JSON - works with any node type
+   * @param nodeData - Any node instance (atomic or composite) or definition
+   * @returns JSON representation
+   */
+  toJson(nodeData: Node | CompositeNodeDefinition): JsonCompositeDefinition {
+    // For now, delegate to composite API
+    // TODO: Add atomic node serialization support
+    return composite.toJson(nodeData as any);
+  }
+
+  /**
+   * Convert JSON to a node definition
+   * @param jsonData - JSON definition
+   * @returns Node definition
+   */
+  fromJson(jsonData: JsonCompositeDefinition): CompositeNodeDefinition {
+    // For now, returns composite definitions
+    // TODO: Add atomic node deserialization support
+    return composite.fromJson(jsonData);
+  }
+
+  /**
+   * Create a new composite node
+   * @param idOrDefinition - Node ID or complete definition
+   * @param name - Optional node name (if ID provided)
+   * @param category - Optional category (defaults to "user-defined")
+   * @returns CompositeNode instance
+   */
+  createComposite(
+    idOrDefinition: string | CompositeNodeDefinition,
+    name?: string,
+    category?: string,
+  ): Node {
+    return composite.create(idOrDefinition, name, category);
+  }
+
+  /**
+   * Validate a node - works with any node type
+   * @param nodeData - Any node instance or definition
+   * @returns Validation result with valid flag and errors array
+   */
+  validate(nodeData: Node | CompositeNodeDefinition): {
+    valid: boolean;
+    errors: string[];
+  } {
+    // Check if it's an atomic node with validate method
+    if ("validate" in nodeData && typeof nodeData.validate === "function") {
+      return nodeData.validate();
+    }
+    // Otherwise treat as composite
+    return composite.validate(nodeData as any);
+  }
 }
 
-const nodes = NodesAPI.getInstance();
-
+// Create and export the singleton instance
+const nodes = new NodesAPI();
 export default nodes;
 export type { NodesAPI };

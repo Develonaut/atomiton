@@ -13,28 +13,39 @@
  *   const node = nodes.getNode('csv-reader');
  */
 
-import nodes from "./api.js";
+import nodes from "./api";
 
 export default nodes;
-export type { NodesAPI } from "./api.js";
-export { ExtendedNode } from "./ExtendedNode.js";
-export type { ExtendedNodeConfig } from "./ExtendedNode.js";
+export type { NodesAPI } from "./api";
+
+// Re-export base module types and classes
+export { ExtendedNode, isAtomicNode, isCompositeNode } from "./base";
 
 export type {
+  ExtendedNodeConfig,
   CompositeEdge,
   IAtomicNode,
   ICompositeNode,
   INode,
-} from "./base/INode.js";
+  INodeMetadata,
+  INodeConfig,
+  FieldConfig,
+  FieldControlType,
+  FormConfig,
+} from "./base";
 
+// Export NodeType from atomic module where it's defined
+export type { NodeType } from "./atomic";
+
+// Export other types from types module
 export type {
   NodeDefinition,
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-  NodeType,
-} from "./types.js";
+} from "./types";
 
+// Export composite types
 export type {
   CompositeChildNode,
   CompositeDefinition,
@@ -44,10 +55,4 @@ export type {
   CompositeSettings,
   CompositeVariable,
   JsonCompositeDefinition,
-} from "./composite/index.js";
-
-export type {
-  FieldConfig,
-  FieldControlType,
-  FormConfig,
-} from "./base/NodeConfig.js";
+} from "./composite";

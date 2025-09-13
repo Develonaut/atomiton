@@ -2,10 +2,6 @@ import { bench, describe } from "vitest";
 import core from "../api";
 
 describe("Core API Performance", () => {
-  bench("initialization", async () => {
-    await core.initialize();
-  });
-
   bench("version access", () => {
     const version = core.version;
   });
@@ -29,8 +25,7 @@ describe("Core API Performance", () => {
     const instance = core;
   });
 
-  bench("complete workflow - init and fetch nodes", async () => {
-    await core.initialize();
+  bench("complete workflow - fetch nodes", () => {
     const nodes = core.nodes.getAllNodes();
     if (nodes.length > 0) {
       core.nodes.getNodeMetadata(nodes[0]?.type as any);

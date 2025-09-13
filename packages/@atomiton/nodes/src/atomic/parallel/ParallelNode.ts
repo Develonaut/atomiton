@@ -117,3 +117,5 @@ class ParallelNode extends Node {
 }
 
 export const parallel = new ParallelNode();
+
+export default parallel;

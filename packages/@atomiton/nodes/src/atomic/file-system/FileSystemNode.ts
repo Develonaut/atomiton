@@ -126,3 +126,4 @@ class FileSystemNode extends Node {
 }
 
 export const fileSystem = new FileSystemNode();
+export default fileSystem;

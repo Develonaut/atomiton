@@ -10,20 +10,20 @@
  * - Types and interfaces for composite functionality
  */
 
-// Core composite types
+export type { CompositeEdge } from "../base/INode.js";
 export type {
   CompositeChildNode,
   CompositeNodeDefinition,
 } from "./CompositeNode.js";
-
-// Main unified composite API - single interface for all composite interactions
-export { composite } from "./api.js";
+export type { JsonCompositeDefinition } from "./serializer/index.js";
 export type {
   CompositeDefinition,
   CompositeNodeSpec,
   CompositePosition,
-  CompositeVariable,
   CompositeSettings,
+  CompositeVariable,
 } from "./types.js";
-export type { CompositeEdge } from "../base/INode.js";
-export type { JsonCompositeDefinition } from "./serializer/index.js";
+
+import { composite } from "./api.js";
+
+export default composite;

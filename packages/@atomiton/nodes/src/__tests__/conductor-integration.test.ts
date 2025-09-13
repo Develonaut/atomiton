@@ -9,10 +9,14 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import nodes from "../api.js";
-import { csvReader } from "../atomic/csv-reader/CSVReaderNode.js";
-import { httpRequest } from "../atomic/http-request/HttpRequestNode.js";
-import type { IAtomicNode, ICompositeNode, INode } from "../base/INode.js";
-import { isAtomicNode, isCompositeNode } from "../base/INode.js";
+import atomic from "../atomic";
+import {
+  isAtomicNode,
+  isCompositeNode,
+  type IAtomicNode,
+  type ICompositeNode,
+  type INode,
+} from "../base";
 import {
   CompositeNode,
   type CompositeNodeDefinition,
@@ -102,8 +106,10 @@ describe("Conductor Integration Tests - Unified Execution", () => {
   let atomicNodes: IAtomicNode[];
   let compositeNode: ICompositeNode;
   let factoryNode: INode;
+  let csvReaderNode: INode | null;
+  let httpRequestNode: INode | null;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     executor = new UniversalNodeExecutor();
 
     baseContext = {
@@ -120,8 +126,19 @@ describe("Conductor Integration Tests - Unified Execution", () => {
       },
     };
 
+    // Load atomic nodes using the atomic API
+    csvReaderNode = await atomic.loadNode("csv-reader");
+    httpRequestNode = await atomic.loadNode("http-request");
+
+    if (!csvReaderNode || !httpRequestNode) {
+      throw new Error("Failed to load required nodes");
+    }
+
     // Get atomic nodes
-    atomicNodes = [csvReader, httpRequest];
+    atomicNodes = [
+      csvReaderNode as IAtomicNode,
+      httpRequestNode as IAtomicNode,
+    ];
 
     // Create a composite node
     const compositeDefinition: CompositeNodeDefinition = {
@@ -143,7 +160,7 @@ describe("Conductor Integration Tests - Unified Execution", () => {
     };
 
     compositeNode = new CompositeNode(compositeDefinition);
-    compositeNode.setChildNodes([csvReader, httpRequest]);
+    compositeNode.setChildNodes([csvReaderNode, httpRequestNode]);
 
     // Create a factory node
     factoryNode = nodes.extendNode({
@@ -327,10 +344,10 @@ describe("Conductor Integration Tests - Unified Execution", () => {
   describe("Sequential Execution Patterns", () => {
     it("should execute mixed node types in sequence", async () => {
       const sequence: INode[] = [
-        csvReader,
+        csvReaderNode!,
         factoryNode,
         compositeNode,
-        httpRequest,
+        httpRequestNode!,
       ];
 
       const results = await executor.executeSequence(sequence, baseContext);
@@ -371,7 +388,11 @@ describe("Conductor Integration Tests - Unified Execution", () => {
         },
       });
 
-      const sequence: INode[] = [csvReader, httpRequest, processorNode];
+      const sequence: INode[] = [
+        csvReaderNode!,
+        httpRequestNode!,
+        processorNode,
+      ];
       const results = await executor.executeSequence(sequence, baseContext);
 
       expect(results).toHaveLength(3);
@@ -626,7 +647,7 @@ describe("Conductor Integration Tests - Unified Execution", () => {
         },
       });
 
-      const sequence: INode[] = [csvReader, failingNode, httpRequest];
+      const sequence: INode[] = [csvReaderNode!, failingNode, httpRequestNode!];
 
       // This test depends on how the executor handles failures
       // For now, we expect it to throw on the failing node
@@ -684,8 +705,8 @@ describe("Conductor Integration Tests - Unified Execution", () => {
 
     it("should handle concurrent execution of different node types", async () => {
       const mixedNodes: INode[] = [
-        csvReader,
-        httpRequest,
+        csvReaderNode!,
+        httpRequestNode!,
         compositeNode,
         factoryNode,
       ];

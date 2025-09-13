@@ -137,3 +137,5 @@ class ImageCompositeNode extends Node {
 }
 
 export const imageComposite = new ImageCompositeNode();
+
+export default imageComposite;

@@ -4,7 +4,7 @@ import Accordion from "./Accordion";
 
 function Assets() {
   const { addNode } = useNodes();
-  const categories = core.nodes.getCategories();
+  const categories = core.nodes.getCategoriesMetadata();
 
   return (
     <>

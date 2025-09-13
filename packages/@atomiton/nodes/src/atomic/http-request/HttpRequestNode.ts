@@ -160,3 +160,4 @@ class HttpRequestNode extends Node {
 }
 
 export const httpRequest = new HttpRequestNode();
+export default httpRequest;

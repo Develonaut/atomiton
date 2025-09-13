@@ -20,19 +20,7 @@ import nodes from "@atomiton/nodes";
 
 import nodesPackage from "@atomiton/nodes/package.json";
 import corePackage from "../package.json";
-
 class CoreAPI {
-  private static instance: CoreAPI;
-
-  private constructor() {}
-
-  static getInstance(): CoreAPI {
-    if (!CoreAPI.instance) {
-      CoreAPI.instance = new CoreAPI();
-    }
-    return CoreAPI.instance;
-  }
-
   get nodes() {
     return nodes;
   }
@@ -43,16 +31,10 @@ class CoreAPI {
       nodes: nodesPackage.version,
     };
   }
-
-  async initialize(): Promise<void> {
-    // Initialize nodes subsystem
-    // Note: Infrastructure packages (store, events) should be initialized
-    // directly by the packages that use them to avoid circular dependencies
-    await nodes.initialize();
-  }
 }
 
-const core = CoreAPI.getInstance();
+// Create a default instance for backwards compatibility
+const core = new CoreAPI();
 
 export default core;
 export type { CoreAPI };

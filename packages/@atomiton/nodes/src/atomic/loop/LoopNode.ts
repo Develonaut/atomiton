@@ -117,3 +117,5 @@ class LoopNode extends Node {
 }
 
 export const loop = new LoopNode();
+
+export default loop;

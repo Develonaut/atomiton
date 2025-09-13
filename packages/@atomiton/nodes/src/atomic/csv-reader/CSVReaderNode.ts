@@ -114,3 +114,4 @@ class CSVReaderNode extends Node {
 }
 
 export const csvReader = new CSVReaderNode();
+export default csvReader;

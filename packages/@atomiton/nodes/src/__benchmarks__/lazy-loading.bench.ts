@@ -24,7 +24,11 @@ describe("Lazy Loading Performance", () => {
     await nodes.getNodePackageAsync("csv-reader");
   });
 
-  bench("Get all categories without loading nodes", () => {
+  bench("Get all categories without loading nodes (new metadata API)", () => {
+    nodes.getCategoriesMetadata();
+  });
+
+  bench("Get all categories", () => {
     nodes.getCategories();
   });
 

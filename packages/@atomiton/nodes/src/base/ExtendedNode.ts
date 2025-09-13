@@ -2,12 +2,12 @@
  * ExtendedNode - A concrete Node class that can be instantiated with configuration
  */
 
-import { Node } from "./base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "./types.js";
+} from "../types.js";
+import { Node } from "./Node.js";
 
 /**
  * Configuration for creating an extended node

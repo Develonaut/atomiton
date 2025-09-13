@@ -148,14 +148,3 @@ export type NodeDefinition = {
   /** Additional metadata */
   metadata?: Record<string, unknown>;
 };
-
-export type NodeType =
-  | "csv-reader"
-  | "file-system"
-  | "http-request"
-  | "shell-command"
-  | "image-composite"
-  | "transform"
-  | "code"
-  | "loop"
-  | "parallel";

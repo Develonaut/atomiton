@@ -146,3 +146,5 @@ class ShellCommandNode extends Node {
 }
 
 export const shellCommand = new ShellCommandNode();
+
+export default shellCommand;

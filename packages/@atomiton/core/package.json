@@ -45,10 +45,14 @@
     "@atomiton/nodes": "workspace:*",
     "@atomiton/ui": "workspace:*"
   },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
     "concurrently": "^8.2.0",
     "eslint": "^9",
     "rollup-plugin-visualizer": "^6.0.3",

@@ -27,11 +27,6 @@ describe("core API Contract", () => {
     expect(typeof core.version.core).toBe("string");
   });
 
-  it("should have initialize method", () => {
-    expect(core.initialize).toBeDefined();
-    expect(typeof core.initialize).toBe("function");
-  });
-
   describe("nodes API surface", () => {
     it("should expose node system methods", () => {
       // Just verify the shape, actual functionality tested in @atomiton/nodes

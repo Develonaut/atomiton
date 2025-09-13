@@ -126,3 +126,5 @@ class TransformNode extends Node {
 }
 
 export const transform = new TransformNode();
+
+export default transform;

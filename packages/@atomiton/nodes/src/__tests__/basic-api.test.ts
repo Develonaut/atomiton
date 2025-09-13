@@ -5,17 +5,11 @@
  * Focuses on core functionality without diving into implementation details.
  */
 
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import nodes from "../api.js";
-import { getAvailableNodeTypes, loadAllNodes } from "../atomic/index.js";
-import type { NodeType } from "../types.js";
+import atomic, { type NodeType } from "../atomic";
 
 describe("Nodes Package - Core Functionality", () => {
-  beforeAll(async () => {
-    // Initialize nodes for testing
-    await nodes.initialize();
-  });
-
   describe("Package Exports", () => {
     it("should export a working nodes API", () => {
       expect(nodes).toBeDefined();
@@ -25,13 +19,13 @@ describe("Nodes Package - Core Functionality", () => {
     });
 
     it("should have registered nodes available", async () => {
-      const availableTypes = getAvailableNodeTypes();
+      const availableTypes = atomic.getAvailableNodeTypes();
       expect(availableTypes).toBeDefined();
       expect(Array.isArray(availableTypes)).toBe(true);
       expect(availableTypes.length).toBeGreaterThan(0);
 
       // Test that nodes are loaded after initialization
-      const loadedNodes = await loadAllNodes();
+      const loadedNodes = await atomic.loadAllNodes();
       expect(loadedNodes.length).toBeGreaterThan(0);
     });
   });
@@ -278,20 +272,6 @@ describe("Nodes Package - Core Functionality", () => {
         // Should either find the node or return null (if not implemented)
         expect(node === null || typeof node === "object").toBe(true);
       });
-    });
-  });
-
-  describe("Initialization", () => {
-    it("should initialize without errors", async () => {
-      await expect(nodes.initialize()).resolves.not.toThrow();
-    });
-
-    it("should handle multiple initializations", async () => {
-      await nodes.initialize();
-      await nodes.initialize();
-      await nodes.initialize();
-
-      expect(nodes.isInitialized()).toBe(true);
     });
   });
 });
