@@ -716,7 +716,7 @@ async execute(context, config) {
 You can also use the factory pattern for quick node creation:
 
 ```typescript
-import { nodes } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 
 const customTransformNode = nodes.extendNode({
   id: "custom-transform-001",

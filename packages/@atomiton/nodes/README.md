@@ -87,7 +87,7 @@ pnpm add @atomiton/nodes
 ### Using Any Node (Atomic or Composite)
 
 ```typescript
-import { nodes } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 
 // Execute any node through unified interface
 const node = await nodes.getNode("csv-reader");
@@ -109,7 +109,7 @@ const pipelineResult = await composite.execute({
 ### Creating Nodes with Factory API
 
 ```typescript
-import { nodes } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 
 // Use extendNode() factory instead of classes
 const customNode = nodes.extendNode({
@@ -128,7 +128,7 @@ const customNode = nodes.extendNode({
 ### Advanced Node Configuration
 
 ```typescript
-import { nodes } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 import { z } from "zod";
 
 // Create nodes with rich configuration schemas

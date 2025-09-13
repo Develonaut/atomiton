@@ -1,6 +1,6 @@
 import { useNodes } from "@atomiton/editor";
 import { Form } from "@atomiton/form";
-import { nodes } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 import { Box } from "@atomiton/ui";
 import { useCallback, useEffect, useState } from "react";
 
