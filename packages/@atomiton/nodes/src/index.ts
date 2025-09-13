@@ -56,3 +56,7 @@ export type {
   CompositeVariable,
   JsonCompositeDefinition,
 } from "./composite";
+
+// Export the node store for external consumers
+export { nodeStore, nodeActions, nodeSelectors } from "./stores";
+export type { NodeStoreState } from "./stores";

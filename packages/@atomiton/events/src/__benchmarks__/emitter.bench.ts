@@ -75,7 +75,7 @@ describe("Events System Performance", () => {
 
   bench("clear all listeners", () => {
     // Setup some listeners first
-    const subs = Array.from({ length: 5 }, () => subscribe(() => {}));
+    Array.from({ length: 5 }, () => subscribe(() => {}));
     clearAllListeners();
   });
 

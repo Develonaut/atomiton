@@ -93,14 +93,14 @@ export class TypeScriptRuntime implements IRuntime {
 
       // Add runtime metadata to result
       return {
-        ...result,
+        ...(result as object),
         metadata: {
-          ...result.metadata,
+          ...(result.metadata as object | undefined),
           runtime: this.language,
           executionTimeMs: executionTime,
           memoryUsedMB: memoryUsed,
         },
-      };
+      } as NodeExecutionResult;
     } catch (error) {
       // Update error metrics
       this.metrics.errors++;

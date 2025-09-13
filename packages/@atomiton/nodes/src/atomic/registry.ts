@@ -12,6 +12,7 @@
  */
 
 import type { INodeMetadata, Node } from "../base";
+import { nodeStore, nodeActions, nodeSelectors } from "../stores";
 
 /**
  * All available node types - single source of truth
@@ -60,8 +61,8 @@ export class AtomicRegistry {
   // Node registration map
   private registry: Map<string, NodeRegistryEntry> = new Map();
 
-  // Caches for different node parts
-  private metadataCache = new Map<string, INodeMetadata>();
+  // Local caches for non-metadata (config, logic, nodes)
+  // Metadata uses the store for persistence
   private configCache = new Map<string, any>();
   private logicCache = new Map<string, any>();
   private nodeCache = new Map<string, Node>();
@@ -80,29 +81,87 @@ export class AtomicRegistry {
 
   /**
    * Register all known atomic nodes
+   *
+   * IMPORTANT: We use explicit imports here instead of dynamic imports with variables
+   * because Vite needs to statically analyze all imports at build time for proper
+   * code splitting and bundling. Dynamic imports like `import(\`./\${nodeType}/\${file}.js\`)`
+   * cannot be resolved by Vite and will result in runtime errors:
+   * "Unknown variable dynamic import"
+   *
+   * Each node type must be explicitly registered with its full import paths.
+   * This allows Vite to properly bundle and code-split each node's modules.
    */
   private registerNodes(): void {
-    // Register each node type using the predefined array
-    for (const nodeType of AVAILABLE_NODE_TYPES) {
-      this.registerNodeType(nodeType);
-    }
-  }
+    // Register csv-reader
+    this.register("csv-reader", {
+      metadata: () => import("./csv-reader/CSVReaderNodeMetadata.js"),
+      config: () => import("./csv-reader/CSVReaderNodeConfig.js"),
+      logic: () => import("./csv-reader/CSVReaderNodeLogic.js"),
+      implementation: () => import("./csv-reader/CSVReaderNode.js"),
+    });
 
-  /**
-   * Register a single node type with its module paths
-   */
-  private registerNodeType(nodeType: NodeType): void {
-    // Convert node type to PascalCase for file names
-    const pascalCase = nodeType
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join("");
+    // Register file-system
+    this.register("file-system", {
+      metadata: () => import("./file-system/FileSystemNodeMetadata.js"),
+      config: () => import("./file-system/FileSystemNodeConfig.js"),
+      logic: () => import("./file-system/FileSystemNodeLogic.js"),
+      implementation: () => import("./file-system/FileSystemNode.js"),
+    });
 
-    this.register(nodeType, {
-      metadata: () => import(`./${nodeType}/${pascalCase}NodeMetadata.js`),
-      config: () => import(`./${nodeType}/${pascalCase}NodeConfig.js`),
-      logic: () => import(`./${nodeType}/${pascalCase}NodeLogic.js`),
-      implementation: () => import(`./${nodeType}/${pascalCase}Node.js`),
+    // Register http-request
+    this.register("http-request", {
+      metadata: () => import("./http-request/HttpRequestNodeMetadata.js"),
+      config: () => import("./http-request/HttpRequestNodeConfig.js"),
+      logic: () => import("./http-request/HttpRequestNodeLogic.js"),
+      implementation: () => import("./http-request/HttpRequestNode.js"),
+    });
+
+    // Register shell-command
+    this.register("shell-command", {
+      metadata: () => import("./shell-command/ShellCommandNodeMetadata.js"),
+      config: () => import("./shell-command/ShellCommandNodeConfig.js"),
+      logic: () => import("./shell-command/ShellCommandNodeLogic.js"),
+      implementation: () => import("./shell-command/ShellCommandNode.js"),
+    });
+
+    // Register image-composite
+    this.register("image-composite", {
+      metadata: () => import("./image-composite/ImageCompositeNodeMetadata.js"),
+      config: () => import("./image-composite/ImageCompositeNodeConfig.js"),
+      logic: () => import("./image-composite/ImageCompositeNodeLogic.js"),
+      implementation: () => import("./image-composite/ImageCompositeNode.js"),
+    });
+
+    // Register transform
+    this.register("transform", {
+      metadata: () => import("./transform/TransformNodeMetadata.js"),
+      config: () => import("./transform/TransformNodeConfig.js"),
+      logic: () => import("./transform/TransformNodeLogic.js"),
+      implementation: () => import("./transform/TransformNode.js"),
+    });
+
+    // Register code
+    this.register("code", {
+      metadata: () => import("./code/CodeNodeMetadata.js"),
+      config: () => import("./code/CodeNodeConfig.js"),
+      logic: () => import("./code/CodeNodeLogic.js"),
+      implementation: () => import("./code/CodeNode.js"),
+    });
+
+    // Register loop
+    this.register("loop", {
+      metadata: () => import("./loop/LoopNodeMetadata.js"),
+      config: () => import("./loop/LoopNodeConfig.js"),
+      logic: () => import("./loop/LoopNodeLogic.js"),
+      implementation: () => import("./loop/LoopNode.js"),
+    });
+
+    // Register parallel
+    this.register("parallel", {
+      metadata: () => import("./parallel/ParallelNodeMetadata.js"),
+      config: () => import("./parallel/ParallelNodeConfig.js"),
+      logic: () => import("./parallel/ParallelNodeLogic.js"),
+      implementation: () => import("./parallel/ParallelNode.js"),
     });
   }
 
@@ -153,9 +212,10 @@ export class AtomicRegistry {
    * Load metadata for a specific node type
    */
   async loadMetadata(nodeType: string): Promise<INodeMetadata | null> {
-    // Check cache first
-    if (this.metadataCache.has(nodeType)) {
-      return this.metadataCache.get(nodeType)!;
+    // Check store first
+    const cached = nodeSelectors.getMetadataByType()(nodeType);
+    if (cached) {
+      return cached;
     }
 
     // Get registry entry
@@ -165,13 +225,21 @@ export class AtomicRegistry {
     }
 
     try {
-      const module = await entry.metadata();
-      // Handle both named exports and default exports
-      const metadata = module.metadata || module.default || module;
-      this.metadataCache.set(nodeType, metadata);
+      nodeActions.setLoading("metadata", true);
+      const metadata = await entry.metadata();
+
+      // Store in the node store
+      nodeActions.setMetadata(nodeType, metadata);
+      nodeActions.setLoading("metadata", false);
+
       return metadata;
     } catch (error) {
       console.warn(`Failed to load metadata for "${nodeType}":`, error);
+      nodeActions.setError(
+        "metadata",
+        error instanceof Error ? error : new Error(String(error)),
+      );
+      nodeActions.setLoading("metadata", false);
       return null;
     }
   }
@@ -180,9 +248,10 @@ export class AtomicRegistry {
    * Load config for a specific node type
    */
   async loadConfig(nodeType: string): Promise<any | null> {
-    // Check cache first
-    if (this.configCache.has(nodeType)) {
-      return this.configCache.get(nodeType)!;
+    // Check store first
+    const cached = nodeSelectors.getConfigByType()(nodeType);
+    if (cached) {
+      return cached;
     }
 
     // Get registry entry
@@ -192,13 +261,23 @@ export class AtomicRegistry {
     }
 
     try {
+      nodeActions.setLoading("configs", true);
       const module = await entry.config();
       // Handle both named exports and default exports
       const config = module.config || module.default || module;
-      this.configCache.set(nodeType, config);
+
+      // Store in the node store
+      nodeActions.setConfig(nodeType, config);
+      nodeActions.setLoading("configs", false);
+
       return config;
     } catch (error) {
       console.warn(`Failed to load config for "${nodeType}":`, error);
+      nodeActions.setError(
+        "configs",
+        error instanceof Error ? error : new Error(String(error)),
+      );
+      nodeActions.setLoading("configs", false);
       return null;
     }
   }
@@ -267,8 +346,49 @@ export class AtomicRegistry {
     const nodeTypes = this.getNodeTypes();
     const promises = nodeTypes.map((nodeType) => this.loadMetadata(nodeType));
     const results = await Promise.all(promises);
-    return results.filter(
+    const validMetadata = results.filter(
       (metadata): metadata is INodeMetadata => metadata !== null,
+    );
+
+    // Build and store categories
+    const categoryMap = new Map<string, INodeMetadata[]>();
+    for (const metadata of validMetadata) {
+      const category = metadata.category || "uncategorized";
+      if (!categoryMap.has(category)) {
+        categoryMap.set(category, []);
+      }
+      categoryMap.get(category)!.push(metadata);
+    }
+
+    // Convert to category format and store
+    const categories = Array.from(categoryMap.entries()).map(
+      ([name, items]) => ({
+        name,
+        displayName: this.getCategoryDisplayName(name),
+        items,
+      }),
+    );
+
+    nodeActions.setCategories(categories);
+
+    return validMetadata;
+  }
+
+  /**
+   * Helper to convert category name to display name
+   */
+  private getCategoryDisplayName(category: string): string {
+    const names: Record<string, string> = {
+      io: "Input/Output",
+      data: "Data Processing",
+      media: "Media Processing",
+      system: "System",
+      logic: "Logic & Control",
+      uncategorized: "Uncategorized",
+    };
+
+    return (
+      names[category] || category.charAt(0).toUpperCase() + category.slice(1)
     );
   }
 
@@ -286,10 +406,13 @@ export class AtomicRegistry {
    * Clear all caches
    */
   clearAllCaches(): void {
-    this.metadataCache.clear();
+    // Clear local caches
     this.configCache.clear();
     this.logicCache.clear();
     this.nodeCache.clear();
+
+    // Clear store
+    nodeActions.clearAll();
   }
 
   /**
@@ -300,16 +423,19 @@ export class AtomicRegistry {
   ): void {
     switch (cacheType) {
       case "metadata":
-        this.metadataCache.clear();
+        nodeActions.clearMetadata();
         break;
       case "config":
         this.configCache.clear();
+        nodeActions.clearConfigs();
         break;
       case "logic":
         this.logicCache.clear();
+        nodeActions.clearLogic();
         break;
       case "node":
         this.nodeCache.clear();
+        nodeActions.clearNodes();
         break;
       case "all":
         this.clearAllCaches();
@@ -326,11 +452,12 @@ export class AtomicRegistry {
     logic: number;
     nodes: number;
   } {
+    const state = nodeStore.getState();
     return {
-      metadata: this.metadataCache.size,
-      config: this.configCache.size,
-      logic: this.logicCache.size,
-      nodes: this.nodeCache.size,
+      metadata: state.metadata.size,
+      config: state.configs.size,
+      logic: state.logic.size,
+      nodes: state.nodes.size,
     };
   }
 

@@ -44,6 +44,14 @@ export class NodeExecutor {
     this.memoryPool = new MemoryPool(memoryPoolSize);
   }
 
+  async executeNode(
+    node: INode,
+    context: NodeExecutionContext,
+    _executionId: string,
+  ): Promise<any> {
+    return node.execute(context);
+  }
+
   async execute(
     node: INode,
     inputs: Record<string, unknown>,
@@ -464,7 +472,7 @@ class StreamProcessor {
           const result = fn(chunk);
           callback(null, result);
         } catch (error) {
-          callback(error);
+          callback(error instanceof Error ? error : new Error(String(error)));
         }
       },
     });
@@ -530,12 +538,14 @@ class NodeTransformStream extends Transform {
 
       this.node
         .execute(context)
-        .then((result) => {
+        .then((result: any) => {
           callback(null, result);
         })
-        .catch(callback);
+        .catch((error: any) =>
+          callback(error instanceof Error ? error : new Error(String(error))),
+        );
     } catch (error) {
-      callback(error);
+      callback(error instanceof Error ? error : new Error(String(error)));
     }
   }
 }

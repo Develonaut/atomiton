@@ -74,7 +74,7 @@ export class RuntimeRouter {
    */
   private getNodeLanguage(node: INode): RuntimeLanguage {
     // Check for explicit runtime specification in metadata
-    const metadata = node.metadata as Record<string, unknown>;
+    const metadata = node.metadata as Record<string, any>;
     if (metadata?.runtime?.language) {
       return metadata.runtime.language as RuntimeLanguage;
     }

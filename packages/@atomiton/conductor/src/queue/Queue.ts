@@ -116,8 +116,8 @@ export class Queue extends EventEmitter {
       const ttl = this.options.resultTTL;
 
       for (const [id, result] of this.jobResults.entries()) {
-        if (result.result?.metrics?.endTime) {
-          const age = now - result.result.metrics.endTime;
+        if (result.result?.endTime) {
+          const age = now - result.result.endTime.getTime();
           if (age > ttl) {
             this.jobResults.delete(id);
           }
@@ -218,16 +218,18 @@ export class Queue extends EventEmitter {
     await this.delay(100);
 
     const mockResult: ExecutionResult = {
-      success: true,
       executionId: jobData.executionId,
+      blueprintId: jobData.blueprintId,
+      status: "completed",
+      startTime: new Date(Date.now() - 100),
+      endTime: new Date(),
       outputs: {
         result: `Processed ${jobData.blueprintId}`,
       },
       metrics: {
-        startTime: Date.now() - 100,
-        endTime: Date.now(),
-        executionTime: 100,
-        memoryUsed: 1024 * 1024,
+        executionTimeMs: 100,
+        memoryUsedMB: 1,
+        nodesExecuted: 1,
       },
     };
 

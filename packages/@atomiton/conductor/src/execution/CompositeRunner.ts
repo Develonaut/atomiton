@@ -8,6 +8,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
+import type { ExecutionStatus } from "../interfaces/IExecutionEngine.js";
 import PQueue from "p-queue";
 import type { StateManager } from "../state/StateManager.js";
 import type { NodeExecutor } from "./NodeExecutor.js";
@@ -53,6 +54,13 @@ export class CompositeRunner {
     this.nodeRegistry.set(nodeType, node);
   }
 
+  async execute(
+    composite: CompositeDefinition,
+    options: CompositeExecutionOptions = {},
+  ): Promise<CompositeExecutionResult> {
+    return this.executeComposite(composite, options);
+  }
+
   async executeComposite(
     composite: CompositeDefinition,
     options: CompositeExecutionOptions = {},
@@ -80,8 +88,7 @@ export class CompositeRunner {
       }
 
       this.stateManager.updateContext(executionId, {
-        state: "running",
-        metadata: { composite, options },
+        status: "running" as ExecutionStatus,
       });
 
       // Build execution graph
@@ -145,9 +152,10 @@ export class CompositeRunner {
       };
 
       this.stateManager.updateContext(executionId, {
-        state: result.success ? "completed" : "failed",
+        status: result.success
+          ? ("completed" as ExecutionStatus)
+          : ("failed" as ExecutionStatus),
         endTime,
-        data: { ...context.data, outputs },
       });
 
       return result;
@@ -156,9 +164,8 @@ export class CompositeRunner {
         error instanceof Error ? error.message : String(error);
 
       this.stateManager.updateContext(executionId, {
-        state: "failed",
+        status: "failed" as ExecutionStatus,
         endTime: new Date(),
-        error: errorMessage,
       });
 
       return {
@@ -177,7 +184,7 @@ export class CompositeRunner {
     }
   }
 
-  private validateComposite(composite: Composite): {
+  private validateComposite(composite: CompositeDefinition): {
     valid: boolean;
     errors: string[];
   } {
@@ -200,10 +207,10 @@ export class CompositeRunner {
     // Validate connections
     for (const connection of composite.edges) {
       const sourceNode = composite.nodes.find(
-        (n) => n.nodeId === connection.source.nodeId,
+        (n: INode) => n.nodeId === connection.source.nodeId,
       );
       const targetNode = composite.nodes.find(
-        (n) => n.nodeId === connection.target.nodeId,
+        (n: INode) => n.nodeId === connection.target.nodeId,
       );
 
       if (!sourceNode) {
@@ -226,7 +233,7 @@ export class CompositeRunner {
     return { valid: errors.length === 0, errors };
   }
 
-  private buildExecutionGraph(composite: Composite): {
+  private buildExecutionGraph(composite: CompositeDefinition): {
     sequential: string[][];
     parallelizable: string[];
   } {
@@ -286,7 +293,7 @@ export class CompositeRunner {
 
   private async executeNodesInParallel(
     nodeIds: string[],
-    composite: Composite,
+    composite: CompositeDefinition,
     executionId: string,
     options: CompositeExecutionOptions,
     results: Record<string, NodeExecutionResult>,
@@ -313,7 +320,7 @@ export class CompositeRunner {
 
   private async executeNodeLevel(
     nodeIds: string[],
-    composite: Composite,
+    composite: CompositeDefinition,
     executionId: string,
     options: CompositeExecutionOptions,
     results: Record<string, NodeExecutionResult>,
@@ -340,11 +347,13 @@ export class CompositeRunner {
 
   private async executeNode(
     nodeId: string,
-    composite: Composite,
+    composite: CompositeDefinition,
     executionId: string,
     options: CompositeExecutionOptions,
   ): Promise<NodeExecutionResult> {
-    const compositeNode = composite.nodes.find((n) => n.nodeId === nodeId);
+    const compositeNode = composite.nodes.find(
+      (n: INode) => n.nodeId === nodeId,
+    );
     if (!compositeNode) {
       throw new Error(`Node not found in composite: ${nodeId}`);
     }
@@ -372,10 +381,14 @@ export class CompositeRunner {
         // Progress reporting handled in NodeExecutor
       },
       log: {
-        debug: (msg, data) => console.warn(`[${nodeId}]`, msg, data),
-        info: (msg, data) => console.warn(`[${nodeId}]`, msg, data),
-        warn: (msg, data) => console.warn(`[${nodeId}]`, msg, data),
-        error: (msg, data) => console.error(`[${nodeId}]`, msg, data),
+        debug: (msg: string, data?: unknown) =>
+          console.warn(`[${nodeId}]`, msg, data),
+        info: (msg: string, data?: unknown) =>
+          console.warn(`[${nodeId}]`, msg, data),
+        warn: (msg: string, data?: unknown) =>
+          console.warn(`[${nodeId}]`, msg, data),
+        error: (msg: string, data?: unknown) =>
+          console.error(`[${nodeId}]`, msg, data),
       },
     };
 
@@ -384,7 +397,7 @@ export class CompositeRunner {
 
   private gatherNodeInputs(
     nodeId: string,
-    composite: Composite,
+    composite: CompositeDefinition,
     executionId: string,
   ): Record<string, unknown> {
     const inputs: Record<string, unknown> = {};
@@ -395,10 +408,9 @@ export class CompositeRunner {
     );
 
     for (const connection of incomingConnections) {
-      const sourceNodeState =
-        this.stateManager.getContext(executionId)?.nodeStates[
-          connection.source.nodeId
-        ];
+      const sourceNodeState = this.stateManager
+        .getContext(executionId)
+        ?.nodeStates.get(connection.source.nodeId);
 
       if (sourceNodeState?.outputs) {
         const outputValue = sourceNodeState.outputs[connection.source.portId];
@@ -410,7 +422,7 @@ export class CompositeRunner {
   }
 
   private calculateCompositeOutputs(
-    composite: Composite,
+    composite: CompositeDefinition,
     nodeResults: Record<string, NodeExecutionResult>,
   ): Record<string, unknown> {
     const outputs: Record<string, unknown> = {};
@@ -428,7 +440,7 @@ export class CompositeRunner {
     return outputs;
   }
 
-  private hasCircularDependencies(composite: Composite): boolean {
+  private hasCircularDependencies(composite: CompositeDefinition): boolean {
     const visited = new Set<string>();
     const recursionStack = new Set<string>();
 

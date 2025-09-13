@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "pnpm kill && turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/desktop\"",
+    "dev": "pnpm kill && turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/desktop\" --filter=\"@atomiton/nodes\" --filter=\"@atomiton/core\" --filter=\"@atomiton/editor\" --filter=\"@atomiton/store\"",
     "dev:client": "turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/editor\"",
     "dev:desktop": "turbo run dev --filter=\"@atomiton/desktop\"",
     "dev:ui": "turbo run dev:serve --filter=\"@atomiton/ui\"",

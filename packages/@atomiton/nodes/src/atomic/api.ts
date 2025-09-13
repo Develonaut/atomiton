@@ -92,7 +92,8 @@ export class AtomicAPI {
     const categories = new Map<string, INodeMetadata[]>();
 
     for (const metadata of allMetadata) {
-      const category = metadata.category;
+      // Default to 'uncategorized' if category is missing
+      const category = metadata.category || "uncategorized";
       if (!categories.has(category)) {
         categories.set(category, []);
       }
@@ -110,12 +111,18 @@ export class AtomicAPI {
    * Convert category name to display name
    */
   private getCategoryDisplayName(category: string): string {
+    // Handle undefined or empty category
+    if (!category) {
+      return "Uncategorized";
+    }
+
     const names: Record<string, string> = {
       io: "Input/Output",
       data: "Data Processing",
       media: "Media Processing",
       system: "System",
       logic: "Logic & Control",
+      uncategorized: "Uncategorized",
     };
 
     return (

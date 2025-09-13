@@ -2,17 +2,17 @@ import type { CompositeDefinition } from "@atomiton/nodes";
 import { EventEmitter } from "events";
 import { CompositeRunner } from "../execution/CompositeRunner.js";
 import type {
-  ExecutionContext,
   ExecutionResult,
   ExecutionStatus,
   IExecutionEngine,
+  ExecutionRequest,
 } from "../interfaces/IExecutionEngine.js";
 import {
   ScalableQueue,
   type JobData,
   type JobOptions,
 } from "../queue/Queue.js";
-import { RuntimeRouter } from "../runtime/RuntimeRouter.js";
+import { NodeExecutor } from "../execution/NodeExecutor.js";
 import { StateManager } from "../state/StateManager.js";
 
 export type EnhancedExecutionOptions = {
@@ -41,8 +41,8 @@ export class EnhancedExecutionEngine
   private queue: ScalableQueue;
   private stateManager: StateManager;
   private compositeRunner: CompositeRunner;
-  private runtimeRouter: RuntimeRouter;
-  private executionContexts: Map<string, ExecutionContext>;
+  private nodeExecutor: NodeExecutor;
+  private executionContexts: Map<string, any>;
   private webhookHandlers: Map<string, (data: unknown) => Promise<unknown>>;
   private metrics: ExecutionMetrics;
 
@@ -66,10 +66,10 @@ export class EnhancedExecutionEngine
     });
 
     this.stateManager = new StateManager();
-    this.runtimeRouter = new RuntimeRouter();
+    this.nodeExecutor = new NodeExecutor();
     this.compositeRunner = new CompositeRunner(
       this.stateManager,
-      this.runtimeRouter,
+      this.nodeExecutor,
     );
 
     this.executionContexts = new Map();
@@ -129,18 +129,16 @@ export class EnhancedExecutionEngine
     }, 5000);
   }
 
-  async execute(
-    compositeId: string,
-    input?: unknown,
-    options?: {
-      priority?: number;
-      delay?: number;
-      webhookId?: string;
-    },
-  ): Promise<ExecutionResult> {
+  async execute(request: ExecutionRequest): Promise<ExecutionResult> {
+    const compositeId = request.blueprintId;
+    const input = request.inputs;
+    const options = {
+      priority: request.config?.parallel ? 10 : 5,
+      delay: 0,
+    };
     const executionId = this.generateExecutionId();
 
-    const context: ExecutionContext = {
+    const context = {
       executionId,
       compositeId,
       input,
@@ -155,18 +153,9 @@ export class EnhancedExecutionEngine
 
     const jobData: JobData = {
       executionId,
-      compositeId,
+      blueprintId: compositeId,
       input,
       loadStaticData: true,
-      webhookData: options?.webhookId
-        ? {
-            webhookId: options.webhookId,
-            httpMethod: "POST",
-            path: `/webhook/${options.webhookId}`,
-            headers: {},
-            body: input,
-          }
-        : undefined,
     };
 
     const jobOptions: JobOptions = {
@@ -210,20 +199,32 @@ export class EnhancedExecutionEngine
     const executionId = this.generateExecutionId();
 
     try {
-      const result = await this.compositeRunner.execute(
-        composite,
-        executionId,
-        input,
-      );
+      const result = await this.compositeRunner.execute(composite, {
+        inputs: input as Record<string, unknown>,
+      });
 
       this.metrics.totalExecutions++;
       this.metrics.successfulExecutions++;
 
-      const executionTime =
-        Date.now() - (result.metrics?.startTime ?? Date.now());
+      const executionTime = result.metrics?.totalExecutionTime ?? 0;
       this.updateAverageExecutionTime(executionTime);
 
-      return result;
+      return {
+        executionId: result.executionId,
+        blueprintId: compositeId,
+        status: result.success
+          ? ("completed" as ExecutionStatus)
+          : ("failed" as ExecutionStatus),
+        startTime: new Date(),
+        outputs: result.outputs,
+        metrics: result.metrics
+          ? {
+              executionTimeMs: result.metrics.totalExecutionTime,
+              nodesExecuted: result.metrics.nodesExecuted,
+              memoryUsedMB: result.metrics.peakMemoryUsage,
+            }
+          : undefined,
+      };
     } catch (error) {
       this.metrics.totalExecutions++;
       this.metrics.failedExecutions++;

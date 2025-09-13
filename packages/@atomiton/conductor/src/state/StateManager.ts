@@ -230,6 +230,45 @@ export class StateManager extends EventEmitter {
   }
 
   /**
+   * Create execution context
+   */
+  createContext(executionId: string, blueprintId: string): ExecutionState {
+    this.initializeExecution(executionId, blueprintId);
+    return this.executions.get(executionId)!;
+  }
+
+  /**
+   * Get execution context
+   */
+  getContext(executionId: string): ExecutionState | undefined {
+    return this.executions.get(executionId);
+  }
+
+  /**
+   * Update execution context
+   */
+  updateContext(executionId: string, updates: Partial<ExecutionState>): void {
+    const state = this.executions.get(executionId);
+    if (!state) {
+      throw new Error(`Execution ${executionId} not found`);
+    }
+    Object.assign(state, updates);
+    this.emit("context:updated", { executionId, updates });
+  }
+
+  /**
+   * Set data in execution context
+   */
+  setData(executionId: string, key: string, value: unknown): void {
+    const state = this.executions.get(executionId);
+    if (!state) {
+      throw new Error(`Execution ${executionId} not found`);
+    }
+    state.variables.set(key, value);
+    this.emit("data:set", { executionId, key, value });
+  }
+
+  /**
    * Clear execution state
    */
   clearExecutionState(executionId: string): void {

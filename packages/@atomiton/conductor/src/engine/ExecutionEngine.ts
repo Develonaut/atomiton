@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import PQueue from "p-queue";
 import { v4 as uuidv4 } from "uuid";
-import type { IStorageEngine } from "@atomiton/storage";
+// import type { IStorageEngine } from "@atomiton/storage";
 import type {
   NodeExecutionContext,
   CompositeDefinition,
@@ -15,8 +15,8 @@ import type {
   ExecutionMetrics,
 } from "../interfaces/IExecutionEngine.js";
 import { CompositeRunner } from "../execution/CompositeRunner.js";
+import { NodeExecutor } from "../execution/NodeExecutor.js";
 import { StateManager } from "../state/StateManager.js";
-import { RuntimeRouter } from "../runtime/RuntimeRouter.js";
 
 /**
  * Main execution engine implementation
@@ -25,14 +25,14 @@ import { RuntimeRouter } from "../runtime/RuntimeRouter.js";
 export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
   private readonly queue: PQueue;
   private readonly stateManager: StateManager;
-  private readonly runtimeRouter: RuntimeRouter;
+  private readonly nodeExecutor: NodeExecutor;
   private readonly compositeRunner: CompositeRunner;
-  private readonly storage?: IStorageEngine;
+  private readonly storage?: any; // IStorageEngine;
   private readonly executions: Map<string, ExecutionResult>;
 
   constructor(config?: {
     concurrency?: number;
-    storage?: IStorageEngine;
+    storage?: any; // IStorageEngine from @atomiton/storage
     timeout?: number;
   }) {
     super();
@@ -46,10 +46,10 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
 
     // Initialize components
     this.stateManager = new StateManager();
-    this.runtimeRouter = new RuntimeRouter();
+    this.nodeExecutor = new NodeExecutor();
     this.compositeRunner = new CompositeRunner(
-      this.runtimeRouter,
       this.stateManager,
+      this.nodeExecutor,
     );
 
     this.storage = config?.storage;
@@ -69,7 +69,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
     // Create initial execution result
     const execution: ExecutionResult = {
       executionId,
-      compositeId: request.compositeId,
+      blueprintId: request.blueprintId,
       status: "pending",
       startTime,
       nodeResults: new Map(),
@@ -78,18 +78,18 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
     this.executions.set(executionId, execution);
     this.emit("execution:started", {
       executionId,
-      compositeId: request.compositeId,
+      blueprintId: request.blueprintId,
     });
 
     try {
       // Load Composite from storage if available
       let composite: CompositeDefinition;
       if (this.storage) {
-        const data = await this.storage.load(request.compositeId);
+        const data = await this.storage.load(request.blueprintId);
         composite = data as CompositeDefinition;
       } else {
         throw new Error(
-          `No storage configured, cannot load Composite ${request.compositeId}`,
+          `No storage configured, cannot load Composite ${request.blueprintId}`,
         );
       }
 
@@ -106,7 +106,10 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
 
       // Queue the execution
       const result = await this.queue.add(async () => {
-        return this.compositeRunner.execute(composite, context, request.config);
+        return this.compositeRunner.execute(composite, {
+          inputs: request.inputs,
+          workspaceRoot: context.workspaceRoot,
+        });
       });
 
       // Update execution result
@@ -145,7 +148,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
 
     const execution: ExecutionResult = {
       executionId,
-      compositeId: composite.id,
+      blueprintId: composite.id,
       status: "running",
       startTime,
       nodeResults: new Map(),
@@ -314,17 +317,17 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
         maxExecutionTimeMs: request.config?.timeout ?? 60000,
         maxMemoryMB: request.config?.maxMemory ?? 512,
       },
-      reportProgress: (progress, message) => {
+      reportProgress: (progress: number, message?: string) => {
         this.emit("execution:progress", { executionId, progress, message });
       },
       log: {
-        debug: (message, data) =>
+        debug: (message: string, data?: unknown) =>
           this.emit("log:debug", { executionId, message, data }),
-        info: (message, data) =>
+        info: (message: string, data?: unknown) =>
           this.emit("log:info", { executionId, message, data }),
-        warn: (message, data) =>
+        warn: (message: string, data?: unknown) =>
           this.emit("log:warn", { executionId, message, data }),
-        error: (message, data) =>
+        error: (message: string, data?: unknown) =>
           this.emit("log:error", { executionId, message, data }),
       },
       ...request.context,
@@ -381,9 +384,10 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       this.emit("error", error);
     });
 
-    this.compositeRunner.on("error", (error) => {
-      this.emit("error", error);
-    });
+    // TODO: Add error handling for CompositeRunner
+    // this.compositeRunner.on("error", (error) => {
+    //   this.emit("error", error);
+    // });
   }
 
   /**
