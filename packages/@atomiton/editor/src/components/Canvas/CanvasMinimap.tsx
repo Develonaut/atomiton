@@ -1,5 +1,5 @@
-import { MiniMap, type Node } from "@xyflow/react";
 import { styled } from "@atomiton/ui";
+import { MiniMap, type Node } from "@xyflow/react";
 
 export type CanvasMinimapProps = {
   className?: string;
@@ -12,7 +12,7 @@ export type CanvasMinimapProps = {
 
 const CanvasMinimapStyled = styled(MiniMap, {
   name: "CanvasMinimap",
-})("atomiton-canvas-minimap");
+})("border border-s-02 bg-surface-transparent rounded-xl");
 
 /**
  * Canvas minimap

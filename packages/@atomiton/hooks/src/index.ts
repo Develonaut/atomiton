@@ -1,2 +1,2 @@
-export { useEventCallback } from "./useEventCallback";
 export { useDidMount } from "./useDidMount";
+export { useEventCallback } from "./useEventCallback";

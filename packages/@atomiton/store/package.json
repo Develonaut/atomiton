@@ -1,10 +1,19 @@
 {
   "name": "@atomiton/store",
   "version": "0.1.0",
-  "private": true,
+  "description": "State management for Atomiton workflow automation",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
@@ -21,6 +30,15 @@
     "test:e2e": "echo \"No E2E tests for this package\"",
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
   },
+  "keywords": [
+    "store",
+    "state-management",
+    "zustand",
+    "workflow",
+    "automation"
+  ],
+  "author": "Atomiton",
+  "license": "MIT",
   "dependencies": {
     "immer": "^10.0.0",
     "zustand": "^5.0.2"
@@ -34,6 +52,7 @@
     "terser": "^5.44.0",
     "typescript": "~5.6.3",
     "vite": "^7.0.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.1.8"
   }
 }

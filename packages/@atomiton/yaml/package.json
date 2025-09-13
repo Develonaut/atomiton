@@ -1,17 +1,23 @@
 {
   "name": "@atomiton/yaml",
   "version": "0.1.0",
+  "description": "YAML parsing utilities for Atomiton Blueprint system",
   "type": "module",
   "private": true,
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
+  "keywords": ["yaml", "parser", "blueprint", "automation"],
+  "author": "Atomiton",
+  "license": "MIT",
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
@@ -38,7 +44,8 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "terser": "^5.44.0",
     "typescript": "^5.9.2",
-    "vite": "^7.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.0.5"
   }
 }

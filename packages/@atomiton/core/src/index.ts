@@ -16,7 +16,6 @@
 
 import core from "./api";
 
-export { core, type CoreAPI } from "./api";
-export type { NodeType } from "@atomiton/nodes";
-
 export default core;
+export type { CoreAPI } from "./api";
+export type { NodeType } from "@atomiton/nodes";

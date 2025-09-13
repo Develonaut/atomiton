@@ -1,4 +1,4 @@
-import { core } from "@atomiton/core";
+import core from "@atomiton/core";
 import type { NodeTypes } from "@xyflow/react";
 import { useMemo } from "react";
 import Node from "../components/Node";

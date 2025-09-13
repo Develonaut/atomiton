@@ -5,13 +5,15 @@
   "type": "module",
   "private": true,
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -26,6 +28,8 @@
     "react-hook-form",
     "atomiton"
   ],
+  "author": "Atomiton",
+  "license": "MIT",
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
@@ -43,7 +47,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@atomiton/ui": "workspace:^",
+    "@atomiton/ui": "workspace:*",
     "@hookform/resolvers": "^3.3.4",
     "react-hook-form": "^7.49.3",
     "zod": "^3.25.3"

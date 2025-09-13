@@ -82,6 +82,9 @@ export function ReactFlowCanvas({
       deleteKeyCode={deleteKeyCode}
       minZoom={minZoom}
       maxZoom={maxZoom}
+      proOptions={{
+        hideAttribution: true,
+      }}
     >
       {children}
     </ReactFlow>

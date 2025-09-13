@@ -17,7 +17,8 @@
       "default": "./dist/style.css"
     },
     "./theme/index.css": "./src/theme/index.css",
-    "./theme/variables.css": "./src/theme/variables.css"
+    "./theme/variables.css": "./src/theme/variables.css",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "dev": "vite build --watch",

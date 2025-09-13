@@ -1,8 +1,16 @@
-import { defineConfig } from "vite";
 import { resolve } from "path";
 import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
+  plugins: [
+    dts({
+      insertTypesEntry: true,
+      include: ["src/**/*.ts", "src/**/*.tsx"],
+      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    }),
+  ],
   build: {
     target: "es2020",
     lib: {

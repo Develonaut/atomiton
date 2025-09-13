@@ -1,4 +1,5 @@
-import { core, type NodeType } from "@atomiton/core";
+import type { NodeType } from "@atomiton/core";
+import core from "@atomiton/core";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,

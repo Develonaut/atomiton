@@ -5,12 +5,14 @@
   "type": "module",
   "private": true,
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "vite build",
@@ -29,21 +31,22 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@atomiton/events": "workspace:^",
-    "@atomiton/nodes": "workspace:^",
-    "@atomiton/storage": "workspace:^",
+    "@atomiton/events": "workspace:*",
+    "@atomiton/nodes": "workspace:*",
+    "@atomiton/storage": "workspace:*",
     "p-queue": "^8.0.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@atomiton/eslint-config": "workspace:^",
-    "@atomiton/typescript-config": "workspace:^",
+    "@atomiton/eslint-config": "workspace:*",
+    "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
     "eslint": "^9.0.0",
     "rollup-plugin-visualizer": "^6.0.3",
     "terser": "^5.44.0",
     "typescript": "^5.0.0",
-    "vite": "^7.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.0.0"
   },
   "keywords": [
@@ -53,5 +56,6 @@
     "workflow",
     "blueprint"
   ],
+  "author": "Atomiton",
   "license": "MIT"
 }

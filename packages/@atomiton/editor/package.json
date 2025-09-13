@@ -12,7 +12,8 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./*.css": "./src/*.css"
+    "./*.css": "./src/*.css",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "dev": "vite build --watch",
@@ -51,7 +52,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@atomiton/eslint-config": "workspace:^",
+    "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",

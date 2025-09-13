@@ -5,9 +5,17 @@
  * composite nodes under a unified INode interface.
  *
  * Mental Model: "If it can execute, it's a node" - whether atomic or composite.
+ *
+ * Usage:
+ *   import nodes from '@atomiton/nodes';
+ *
+ *   const categories = nodes.getCategories();
+ *   const node = nodes.getNode('csv-reader');
  */
 
-export { nodes } from "./api.js";
+import nodes from "./api.js";
+
+export default nodes;
 export type { NodesAPI } from "./api.js";
 export { ExtendedNode } from "./ExtendedNode.js";
 export type { ExtendedNodeConfig } from "./ExtendedNode.js";

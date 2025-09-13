@@ -373,7 +373,9 @@ cd packages/@atomiton/[package-name]
 - [ ] Create `src/index.ts` as main entry point
 - [ ] Create `src/api.ts` if using API pattern
 - [ ] Create `src/types.ts` for type definitions
-- [ ] Create `src/__tests__/` directory with initial test
+- [ ] Create `src/__tests__/` directory with initial unit test
+- [ ] Create `src/__tests__/api.smoke.test.ts` for smoke tests (REQUIRED)
+- [ ] Create `src/__benchmarks__/api.bench.ts` for benchmarks (REQUIRED for API packages)
 
 ### 4. Create Documentation
 
@@ -387,7 +389,10 @@ cd packages/@atomiton/[package-name]
 - [ ] Run `pnpm typecheck` to verify TypeScript setup
 - [ ] Run `pnpm lint` to verify ESLint setup
 - [ ] Run `pnpm build` to verify build setup (if applicable)
-- [ ] Run `pnpm test` to verify test setup
+- [ ] Run `pnpm test:unit` to verify unit tests
+- [ ] Run `pnpm test:smoke` to verify smoke tests (MUST have actual tests, not just echo)
+- [ ] Run `pnpm test:benchmark` to verify benchmarks (MUST have actual benchmarks for API packages)
+- [ ] Run `pnpm test:all` to verify complete test suite
 
 ### 6. Integration
 
@@ -428,6 +433,29 @@ For configuration packages:
 
 ## Testing Conventions
 
+### 🚨 MANDATORY Testing Requirements
+
+**ALL packages MUST include the complete test script suite.** This is non-negotiable.
+
+#### Required Test Types
+
+1. **Smoke Tests** (`*.smoke.test.ts`)
+   - Small, fast suite of critical functionality tests
+   - Act as "canary in the coal mine" for package health
+   - Should run in < 5 seconds
+   - **REQUIRED for API packages**: Must test core API methods
+
+2. **Benchmark Tests** (`*.bench.ts`)
+   - Track performance of critical operations
+   - Early warning system for performance degradation
+   - **REQUIRED for API packages**: Must benchmark main operations
+   - **REQUIRED for data processing packages**: Must benchmark transformations
+
+3. **Unit Tests** (`*.test.ts`)
+   - Comprehensive testing of individual functions/components
+   - Should aim for >80% code coverage
+   - All public APIs must have tests
+
 ### Test File Organization
 
 - Unit tests: `src/**/*.test.ts`
@@ -437,7 +465,7 @@ For configuration packages:
 
 ### Standard Test Scripts
 
-All packages include these test scripts:
+**ALL packages MUST include these test scripts**:
 
 ```json
 {
@@ -451,6 +479,63 @@ All packages include these test scripts:
   "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
 }
 ```
+
+### Example Test Implementations
+
+#### Smoke Test Example (`src/__tests__/api.smoke.test.ts`)
+
+```typescript
+import { describe, it, expect } from "vitest";
+import api from "../api";
+
+describe("API Smoke Tests", () => {
+  it("should initialize without errors", async () => {
+    await expect(api.initialize()).resolves.not.toThrow();
+  });
+
+  it("should expose core methods", () => {
+    expect(api.getVersion).toBeDefined();
+    expect(api.process).toBeDefined();
+  });
+
+  it("should handle basic operation", async () => {
+    const result = await api.process({ data: "test" });
+    expect(result).toBeDefined();
+    expect(result.success).toBe(true);
+  });
+});
+```
+
+#### Benchmark Example (`src/__benchmarks__/api.bench.ts`)
+
+```typescript
+import { bench, describe } from "vitest";
+import api from "../api";
+
+describe("API Performance", () => {
+  bench("initialization", async () => {
+    await api.initialize();
+  });
+
+  bench("data processing (small)", () => {
+    api.process({ size: "small", data: testData.small });
+  });
+
+  bench("data processing (large)", () => {
+    api.process({ size: "large", data: testData.large });
+  });
+});
+```
+
+### Testing Enforcement
+
+**Karen will REJECT packages that:**
+
+- Don't have all test scripts defined in package.json
+- Have placeholder test scripts without actual test files
+- API packages without smoke tests and benchmarks
+- Data processing packages without performance benchmarks
+- Any package with failing smoke tests
 
 ## Common Patterns Summary
 

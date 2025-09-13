@@ -13,7 +13,6 @@
   ],
   "author": "Atomiton",
   "license": "MIT",
-  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,7 +21,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -55,6 +55,7 @@
     "terser": "^5.44.0",
     "typescript": "^5.3.3",
     "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.0.0"
   },
   "engines": {

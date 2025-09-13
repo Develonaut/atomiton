@@ -16,7 +16,7 @@
  *   import { events } from '@atomiton/events';
  */
 
-import { nodes } from "@atomiton/nodes";
+import nodes from "@atomiton/nodes";
 
 import nodesPackage from "@atomiton/nodes/package.json";
 import corePackage from "../package.json";
@@ -55,5 +55,4 @@ class CoreAPI {
 const core = CoreAPI.getInstance();
 
 export default core;
-export { core };
 export type { CoreAPI };

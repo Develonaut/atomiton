@@ -1,8 +1,18 @@
 {
   "name": "@atomiton/typescript-config",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Shared TypeScript configuration for Atomiton packages",
   "type": "module",
   "private": true,
+  "main": "./base.json",
+  "types": "./base.json",
+  "exports": {
+    "./base.json": "./base.json",
+    "./react-library.json": "./react-library.json",
+    "./package.json": "./package.json"
+  },
+  "keywords": ["typescript", "config", "shared"],
+  "author": "Atomiton",
   "license": "MIT",
   "scripts": {
     "lint": "echo 'No linting needed for config-only package'",

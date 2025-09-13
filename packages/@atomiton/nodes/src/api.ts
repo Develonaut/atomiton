@@ -290,5 +290,4 @@ class NodesAPI {
 const nodes = NodesAPI.getInstance();
 
 export default nodes;
-export { nodes };
 export type { NodesAPI };
