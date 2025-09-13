@@ -1,260 +1,130 @@
-# Nodes Domain - Blueprint Building Blocks
+# @atomiton/nodes Documentation
 
 ## Overview
 
-The nodes domain provides the foundational building blocks for the Blueprint automation system. Each node represents a discrete unit of functionality that can be connected to form complex workflows. This domain emphasizes quality over quantity, desktop-first capabilities, and elegant simplicity.
+The @atomiton/nodes package provides the foundational building blocks for the Atomiton automation platform. Each node represents a discrete unit of functionality that can be connected to form complex workflows. This package emphasizes quality over quantity, desktop-first capabilities, and unified architecture.
 
-## Current Architecture Analysis
+## 🏗️ Unified Architecture
 
-### Strengths
+**Key Innovation**: All nodes implement the same `INode` interface, whether they are atomic nodes (individual functionality) or composite nodes (blueprints). This creates a powerful, scalable system where "everything executable is a node."
 
-1. **Clean Separation of Concerns**
-   - Logic and UI components are cleanly separated but co-located
-   - Node packages follow a consistent structure with definition, logic, UI, and config schema
-   - Type-safe configuration through Zod schemas
+## Documentation Structure
 
-2. **Robust Base Classes**
-   - `BaseNodeLogic` provides excellent utilities (timeout, retry, validation, sanitization)
-   - Helper methods reduce boilerplate while maintaining flexibility
-   - Progress reporting and logging built into the foundation
+### 📁 Architecture
 
-3. **Registry Pattern**
-   - Well-designed registry with validation, search, and categorization
-   - Event-driven architecture for monitoring changes
-   - Support for experimental and deprecated nodes
+- **[Unified Architecture](./architecture/UNIFIED_ARCHITECTURE.md)** - Current unified INode architecture with composition patterns
+- **[Current Architecture](./architecture/CURRENT_ARCHITECTURE.md)** - Detailed architectural overview
+- **[Comparison](./architecture/COMPARISON.md)** - How we differ from n8n and other platforms
 
-4. **Adapter System**
-   - Theme injection pattern eliminates color duplication
-   - Vendor-agnostic visualization adapters
-   - Easy switching between React Flow, Cytoscape, and other libraries
+### 🛠️ Development
 
-### Areas for Enhancement
+- **[Developer Guide](./development/DEVELOPER_GUIDE.md)** - Creating custom nodes with the new unified architecture
 
-1. **Limited Node Implementations**
-   - Currently only CSV Parser is implemented
-   - Need 20-50 essential nodes for a complete system
+### 📊 Status & Planning
 
-2. **Testing Infrastructure**
-   - Test suite interface defined but not utilized
-   - Need comprehensive testing patterns for nodes
+- **[Current Work](../CURRENT.md)** - Active development tasks and sprint status
+- **[Completed Work](../COMPLETED.md)** - Release history and accomplishments
+- **[Next Work](../NEXT.md)** - Upcoming features and improvements
+- **[Roadmap](../ROADMAP.md)** - Detailed long-term development plan
 
-3. **Documentation**
-   - Node packages lack inline documentation
-   - Missing developer guide for creating new nodes
+### 📚 Reference
 
-4. **Desktop Integration**
-   - File system access patterns not established
-   - Local execution capabilities not leveraged
+- **[Changelog](./CHANGELOG.md)** - Version history and notable changes
 
-## Comparison with n8n
+## Current Status
 
-### What n8n Does Well
+### ✅ Completed (MVP Phase 2)
 
-1. **Extensive Node Library** - 500+ integrations provide broad coverage
-2. **Consistent Interface** - Predictable node behavior and configuration
-3. **Error Handling** - Robust error recovery and retry mechanisms
-4. **Credential Management** - Secure handling of API keys and secrets
+1. **Unified Node Architecture** - All nodes implement `INode` interface
+2. **9 Essential Nodes** - MVP node set complete (CSV, HTTP, Transform, etc.)
+3. **Factory API** - `nodes.extendNode()` for creating custom nodes without classes
+4. **Conductor Compatible** - Any node (atomic or composite) can be executed
+5. **DRY Implementation** - CompositeDefinition extends NodeDefinition
 
-### Our Differentiation
+### 🔄 In Progress (Phase 3)
 
-1. **Quality Over Quantity**
-   - 20-50 excellent nodes vs 500+ mediocre ones
-   - Each node is carefully crafted and thoroughly tested
-   - Focus on common automation needs, not edge cases
+- Extended Essential Nodes (File Reader, File Writer, Directory Scanner, Webhook Receiver)
+- Enhanced developer documentation
+- Testing infrastructure improvements
 
-2. **Desktop-First Capabilities**
-   - Direct file system access without restrictions
-   - Local process execution and system integration
-   - No cloud dependency or limitations
+## Key Features
 
-3. **AI-Native Integration**
-   - Nodes designed for AI workflows from the ground up
-   - Streaming support for real-time AI processing
-   - Context-aware execution with semantic understanding
+### 🔗 Unified Interface
 
-4. **Developer Experience**
-   - TypeScript-first with full type safety
-   - Co-located logic and UI for maintainability
-   - Clear patterns for extending functionality
+- Same `INode` interface for atomic and composite nodes
+- Polymorphic execution: `node.execute()` works for any node type
+- Seamless composition of atomic nodes into composite workflows
 
-## Node Categories
+### 🏭 Factory Pattern
 
-### 1. Input/Output (5-7 nodes)
+- Create nodes without classes using `nodes.extendNode()`
+- Type-safe configuration with Zod schemas
+- Automatic UI generation from schemas
 
-- **File Reader** - Read files with encoding detection
-- **File Writer** - Write files with atomic operations
-- **Directory Scanner** - Traverse and filter directory contents
-- **HTTP Request** - Make API calls with retry logic
-- **Webhook Receiver** - Accept incoming HTTP requests
-- **Database Query** - Connect to SQL/NoSQL databases
+### 🎯 Desktop-First
 
-### 2. Data Processing (8-10 nodes)
+- Direct file system access without restrictions
+- Local process execution and system integration
+- No cloud dependencies or limitations
 
-- **JSON Transform** - JSONPath queries and transformations
-- **CSV Parser** ✅ - Parse and validate CSV data
-- **Excel Processor** - Read/write Excel with formulas
-- **Text Processor** - Regex, replace, split operations
-- **Data Mapper** - Transform between data structures
-- **Array Operations** - Filter, map, reduce, sort
-- **Data Validator** - Schema validation with detailed errors
-- **Merge Data** - Combine multiple data sources
+### 🤖 AI-Native
 
-### 3. AI & LLM (5-7 nodes)
+- Built for AI workflows from the ground up
+- Streaming support for real-time processing
+- Context-aware execution
 
-- **LLM Chat** - Interact with language models
-- **Text Embedding** - Generate semantic embeddings
-- **Vector Search** - Similarity search in vector stores
-- **Image Analysis** - Computer vision operations
-- **Speech to Text** - Audio transcription
-- **Code Interpreter** - Execute code in sandboxed environment
+## Getting Started
 
-### 4. Control Flow (4-5 nodes)
+For developers looking to:
 
-- **Conditional** - If/else branching logic
-- **Loop** - Iterate over arrays or ranges
-- **Switch** - Multi-way branching
-- **Wait** - Delay or schedule execution
-- **Error Handler** - Catch and handle errors
+- **Use existing nodes**: See the main [README.md](../README.md) for usage examples
+- **Create custom nodes**: Start with the [Developer Guide](./development/DEVELOPER_GUIDE.md)
+- **Understand the architecture**: Read the [Unified Architecture](./architecture/UNIFIED_ARCHITECTURE.md) docs
+- **Track progress**: Check [Current Work](../CURRENT.md) and [Roadmap](../ROADMAP.md)
 
-### 5. System Integration (5-7 nodes)
+## Node Categories (Current Implementation)
 
+### ✅ MVP Complete (9 Nodes)
+
+- **CSV/Spreadsheet Reader** - Read CSV files and spreadsheet data
+- **File System** - Read, write files and manage directories
+- **HTTP/API Request** - Call APIs with retry logic
 - **Shell Command** - Execute system commands
-- **Process Monitor** - Watch system processes
-- **Environment Variables** - Read/write env vars
-- **Git Operations** - Clone, commit, push
-- **Docker Control** - Manage containers
-- **Schedule Trigger** - Cron-based activation
+- **Image Processor** - Composite and manipulate images
+- **Transform** - Transform data, arrays, JSON, templates
+- **JavaScript Code** - Custom JavaScript for complex logic
+- **Loop/Iterate** - Process each row/item in data
+- **Parallel** - Run multiple operations simultaneously
 
-### 6. Utilities (4-5 nodes)
+## Architecture Benefits
 
-- **Logger** - Structured logging with levels
-- **Notification** - Send alerts via various channels
-- **Cache** - Store and retrieve temporary data
-- **Metrics Collector** - Gather performance data
-- **Debug Inspector** - Examine data flow
+### 🔄 Unified Execution
 
-## Integration Points
+- Same interface works for atomic and composite nodes
+- Conductor can execute any node type seamlessly
+- Recursive composition enables powerful patterns
 
-### With Core Domain
+### 🏗️ Clean Abstractions
 
-- Nodes implement the execution interface defined in core
-- Core provides the runtime context and execution engine
-- Node definitions are consumed by the core Blueprint system
+- Clear separation between atomic (building blocks) and composite (orchestrators)
+- No circular dependencies
+- Framework-agnostic business logic
 
-### With Workflow Domain
+### 🚀 Developer Experience
 
-- Workflows orchestrate node execution
-- Node connections define data flow
-- Workflow validation ensures node compatibility
-
-### With Editor Domain
-
-- Editor renders nodes using the adapter system
-- Node UI components integrate with the editor canvas
-- Configuration forms generated from schemas
-
-### With Runtime Domain
-
-- Runtime executes node logic in isolated contexts
-- Resource limits enforced during execution
-- Progress and logs streamed to UI
-
-## Technical Implementation
-
-### Node Package Structure
-
-```typescript
-interface NodePackage<TConfig, TUIData> {
-  definition: NodeDefinition; // Metadata and ports
-  logic: NodeLogic<TConfig>; // Business logic
-  ui: NodeUIComponent<TUIData>; // React component
-  configSchema: z.ZodSchema; // Configuration schema
-  tests?: NodeTestSuite; // Optional test suite
-  metadata: {
-    version: string;
-    author: string;
-    description: string;
-    keywords: string[];
-    icon: string;
-  };
-}
-```
-
-### Execution Context
-
-```typescript
-interface NodeExecutionContext {
-  nodeId: string;
-  inputs: Record<string, unknown>;
-  config?: Record<string, unknown>;
-  workspaceRoot?: string;
-  tempDirectory?: string;
-  limits: {
-    maxExecutionTimeMs: number;
-    maxMemoryMB?: number;
-  };
-  reportProgress: (progress: number, message?: string) => void;
-  log: LogFunctions;
-  abortSignal?: AbortSignal;
-}
-```
-
-## Development Roadmap
-
-### Phase 1: Foundation (Current)
-
-- ✅ Base architecture established
-- ✅ Registry and adapter systems
-- ✅ CSV Parser implementation
-- ⏳ Testing patterns
-
-### Phase 2: Essential Nodes (Next)
-
-- [ ] File I/O nodes
-- [ ] Data processing nodes
-- [ ] Basic control flow
-- [ ] HTTP/Webhook nodes
-
-### Phase 3: AI Integration
-
-- [ ] LLM interaction nodes
-- [ ] Embedding and vector nodes
-- [ ] Streaming support
-- [ ] Context management
-
-### Phase 4: Desktop Power
-
-- [ ] System integration nodes
-- [ ] Process control nodes
-- [ ] Local database nodes
-- [ ] File system watchers
-
-### Phase 5: Polish
-
-- [ ] Comprehensive testing
-- [ ] Performance optimization
-- [ ] Developer documentation
-- [ ] Example blueprints
+- Factory pattern eliminates boilerplate classes
+- Type-safe configuration with automatic validation
+- Rich error handling and progress reporting
 
 ## Design Principles
 
-1. **Simplicity First** - Each node does one thing well
-2. **Type Safety** - Full TypeScript coverage with strict types
-3. **Error Resilience** - Graceful degradation and clear error messages
-4. **Performance** - Streaming support and efficient memory usage
-5. **Extensibility** - Clear patterns for custom nodes
-6. **Desktop Power** - Leverage local capabilities fully
-7. **AI Native** - Built for AI workflows from the ground up
+1. **Quality Over Quantity** - 20-50 excellent nodes vs 500+ mediocre ones
+2. **Desktop-First** - Leverage local capabilities without cloud restrictions
+3. **AI-Native** - Built for AI workflows from the ground up
+4. **Type Safety** - Full TypeScript coverage with runtime validation
+5. **Unified Interface** - Everything executable implements `INode`
+6. **Composition** - Atomic nodes compose into powerful composite workflows
 
-## Success Metrics
+---
 
-- **Quality**: Zero runtime errors in production nodes
-- **Performance**: Sub-100ms execution for basic operations
-- **Coverage**: 20-50 nodes covering 80% of use cases
-- **Developer Experience**: New node creation in < 30 minutes
-- **Testing**: 100% test coverage for node logic
-- **Documentation**: Every node fully documented with examples
-
-## Conclusion
-
-The nodes domain is well-architected with strong foundations. The focus now should be on implementing the essential node library while maintaining the high quality bar established by the current architecture. By prioritizing desktop-first capabilities and AI-native integration, we can create a node system that is both powerful and approachable.
+For detailed information, see the specific documentation linked above. The documentation is organized to support both newcomers learning the system and experienced developers implementing advanced features.
