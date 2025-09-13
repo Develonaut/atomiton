@@ -318,9 +318,9 @@ export class FilesystemStorage implements IStorageEngine {
       "id" in data &&
       "name" in data &&
       "version" in data &&
-      typeof (data as any).id === "string" &&
-      typeof (data as any).name === "string" &&
-      typeof (data as any).version === "string"
+      typeof (data as Record<string, unknown>).id === "string" &&
+      typeof (data as Record<string, unknown>).name === "string" &&
+      typeof (data as Record<string, unknown>).version === "string"
     );
   }
 }

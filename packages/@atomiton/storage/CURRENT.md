@@ -11,6 +11,7 @@
 - [ ] **Factory function** - Implement createStorage with platform detection
 - [ ] **Base classes** - Create AbstractStorageEngine base class
 - [ ] **Error handling** - Implement StorageError types and context
+- [ ] **Type definitions** - Update references to use types from actual packages instead of placeholder types
 
 ### 📋 Planning Phase - COMPLETE
 

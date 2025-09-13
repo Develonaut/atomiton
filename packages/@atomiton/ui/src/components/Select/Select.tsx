@@ -1,4 +1,4 @@
-import type { ReactNode, ComponentPropsWithoutRef } from "react";
+import type { ReactNode } from "react";
 import { forwardRef } from "react";
 import {
   Listbox,
@@ -21,13 +21,13 @@ export type SelectOption = {
 // Root Select Component
 // ============================================================================
 
-interface SelectRootProps<T = SelectOption | null> {
+type SelectRootProps<T = SelectOption | null> = {
   value: T;
   onChange: (value: T) => void;
   children: ReactNode;
   className?: string;
   disabled?: boolean;
-}
+};
 
 function SelectRoot<T = SelectOption | null>({
   value,
@@ -53,12 +53,12 @@ function SelectRoot<T = SelectOption | null>({
 // Select Trigger/Button Component
 // ============================================================================
 
-interface SelectTriggerProps extends Omit<ListboxButtonProps, "className"> {
+type SelectTriggerProps = {
   children: ReactNode;
   className?: string;
   variant?: "default" | "white" | "minimal";
   size?: "sm" | "md" | "lg";
-}
+} & Omit<ListboxButtonProps, "className">;
 
 const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
   (
@@ -105,11 +105,11 @@ SelectTrigger.displayName = "SelectTrigger";
 // Select Value Component (displays current selection)
 // ============================================================================
 
-interface SelectValueProps {
+type SelectValueProps = {
   placeholder?: string;
   children?: ReactNode;
   className?: string;
-}
+};
 
 function SelectValue({ placeholder, children, className }: SelectValueProps) {
   return (
@@ -125,10 +125,10 @@ function SelectValue({ placeholder, children, className }: SelectValueProps) {
 // Select Icon Component
 // ============================================================================
 
-interface SelectIconProps {
+type SelectIconProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 function SelectIcon({ children, className }: SelectIconProps) {
   return (
@@ -147,10 +147,10 @@ function SelectIcon({ children, className }: SelectIconProps) {
 // Select Indicator (chevron) Component
 // ============================================================================
 
-interface SelectIndicatorProps {
+type SelectIndicatorProps = {
   className?: string;
   children?: ReactNode;
-}
+};
 
 function SelectIndicator({ className, children }: SelectIndicatorProps) {
   if (children) {
@@ -179,10 +179,10 @@ function SelectIndicator({ className, children }: SelectIndicatorProps) {
 // Select Options Container Component
 // ============================================================================
 
-interface SelectOptionsProps extends Omit<ListboxOptionsProps, "className"> {
+type SelectOptionsProps = {
   children: ReactNode;
   className?: string;
-}
+} & Omit<ListboxOptionsProps, "className">;
 
 const SelectOptions = forwardRef<HTMLDivElement, SelectOptionsProps>(
   ({ children, className, ...props }, ref) => {
@@ -215,12 +215,11 @@ SelectOptions.displayName = "SelectOptions";
 // Select Option Item Component
 // ============================================================================
 
-interface SelectOptionProps
-  extends Omit<ListboxOptionProps, "className" | "value"> {
+type SelectOptionProps = {
   children: ReactNode;
   className?: string;
   value: SelectOption;
-}
+} & Omit<ListboxOptionProps, "className" | "value">;
 
 const SelectOption = forwardRef<HTMLDivElement, SelectOptionProps>(
   ({ children, className, value, ...props }, ref) => {
@@ -251,10 +250,10 @@ SelectOption.displayName = "SelectOption";
 // Select Label Component
 // ============================================================================
 
-interface SelectLabelProps {
+type SelectLabelProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 function SelectLabel({ children, className }: SelectLabelProps) {
   return (
@@ -283,7 +282,7 @@ export const Select = {
 // Legacy/Convenience wrapper for backward compatibility
 // ============================================================================
 
-interface LegacySelectProps {
+type LegacySelectProps = {
   className?: string;
   classButton?: string;
   classOptions?: string;
@@ -300,7 +299,7 @@ interface LegacySelectProps {
   isMinimal?: boolean;
   icon?: ReactNode | string;
   disabled?: boolean;
-}
+};
 
 export function LegacySelect({
   className,
@@ -344,7 +343,7 @@ export function LegacySelect({
   return (
     <Select.Root
       value={value}
-      onChange={handleChange as any}
+      onChange={handleChange as (value: SelectOption | null) => void}
       className={className}
       disabled={disabled}
     >
