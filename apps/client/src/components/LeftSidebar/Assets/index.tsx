@@ -1,10 +1,30 @@
+import { useEffect, useState } from "react";
 import core from "@atomiton/core";
 import { useNodes } from "@atomiton/editor";
+import type { INodeMetadata } from "@atomiton/nodes";
 import Accordion from "./Accordion";
 
 function Assets() {
   const { addNode } = useNodes();
-  const categories = core.nodes.getCategoriesMetadata();
+  const [categories, setCategories] = useState<
+    Array<{
+      name: string;
+      displayName: string;
+      items: INodeMetadata[];
+    }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    core.nodes
+      .getCategoriesMetadata()
+      .then(setCategories)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div>Loading nodes...</div>;
+  }
 
   return (
     <>
