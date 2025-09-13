@@ -223,4 +223,4 @@ export class NodeConfig<T extends z.ZodRawShape = Record<string, never>>
   }
 }
 
-export type NodeConfigBase = z.infer<typeof baseSchema>;
+type NodeConfigBase = z.infer<typeof baseSchema>;

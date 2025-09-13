@@ -1,4 +1,4 @@
-import { useSwitchContext } from "./SwitchRoot";
+import { useSwitchContext } from "./SwitchContext";
 
 type SwitchThumbProps = {
   className?: string;

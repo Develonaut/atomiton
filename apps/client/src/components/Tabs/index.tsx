@@ -37,6 +37,4 @@ const Tabs = Object.assign(TabsWrapper, {
 });
 
 // Also export individual components for direct imports
-export { TabsContent, TabsList, TabsRoot, TabsTrigger, TabsLegacy };
-
 export default Tabs;

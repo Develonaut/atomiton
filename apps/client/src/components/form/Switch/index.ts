@@ -2,7 +2,7 @@ import SwitchLabel from "./SwitchLabel";
 import SwitchRoot from "./SwitchRoot";
 import SwitchThumb from "./SwitchThumb";
 
-export const Switch = Object.assign(SwitchRoot, {
+const Switch = Object.assign(SwitchRoot, {
   Thumb: SwitchThumb,
   Label: SwitchLabel,
 });

@@ -25,5 +25,4 @@ const Canvas = Object.assign(CanvasRoot, {
   Selection: CanvasSelection,
 });
 
-export { Canvas };
 export default Canvas;

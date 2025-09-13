@@ -1,6 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  "concurrency": "15",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -120,6 +121,11 @@
       "persistent": true,
       "dependsOn": ["^build"]
     },
+    "dev#@atomiton/client": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^build"]
+    },
     "dev#@atomiton/desktop": {
       "cache": false,
       "persistent": true,
@@ -128,6 +134,18 @@
     "watch": {
       "cache": false,
       "persistent": false
+    },
+    "validate": {
+      "inputs": ["package.json", "tsconfig.json", "vite.config.ts", "src/**"],
+      "outputs": [],
+      "cache": false,
+      "env": ["NODE_ENV"]
+    },
+    "validate:packages": {
+      "inputs": ["package.json", "**/package.json"],
+      "outputs": [],
+      "cache": false,
+      "env": ["NODE_ENV"]
     }
   }
 }

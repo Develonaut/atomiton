@@ -13,8 +13,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
+    "build": "vite build",
+    "dev": "vite build --watch",
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
     "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests",
@@ -35,7 +35,10 @@
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^24.3.1",
     "eslint": "^9.34.0",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.44.0",
     "typescript": "^5.9.2",
+    "vite": "^7.0.0",
     "vitest": "^2.0.5"
   }
 }

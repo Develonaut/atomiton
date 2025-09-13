@@ -5,9 +5,7 @@ type SelectContextValue = {
   value: any;
 };
 
-export const SelectContext = createContext<SelectContextValue | undefined>(
-  undefined,
-);
+const SelectContext = createContext<SelectContextValue | undefined>(undefined);
 
 export const useSelectContext = () => {
   const context = useContext(SelectContext);

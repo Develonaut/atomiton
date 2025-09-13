@@ -4,6 +4,16 @@
 
 echo "🔍 Running pre-commit checks on staged files..."
 
+# Validate package consistency first
+echo "📦 Validating package consistency..."
+node scripts/validate-packages.js
+
+if [ $? -ne 0 ]; then
+  echo "❌ Package validation failed! Fix consistency issues before committing."
+  echo "💡 See Package Creation Guide: docs/development/PACKAGE_CREATION_GUIDE.md"
+  exit 1
+fi
+
 # Run lint-staged to format and lint only staged files
 npx lint-staged
 

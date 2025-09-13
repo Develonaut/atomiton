@@ -4,9 +4,7 @@ import type { ButtonProps } from "./Button.types";
  * Button Props Resolver to convert Brainwave 2.0 Props to Atomoton UI Props.
  * TODO: Remove once we update all usages of Button to use Atomiton UI Props.
  */
-export function resolveButtonProps<T extends Record<string, unknown>>(
-  props: T,
-): T {
+function resolveButtonProps<T extends Record<string, unknown>>(props: T): T {
   const anyProps = props as Record<string, unknown>;
 
   // Start with all props, we'll remove legacy ones

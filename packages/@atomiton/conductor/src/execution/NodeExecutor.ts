@@ -1,8 +1,8 @@
-import { Worker } from "worker_threads";
-import { performance } from "perf_hooks";
-import { Readable, Writable, pipeline, Transform } from "stream";
-import { promisify } from "util";
 import type { INode, NodeExecutionContext } from "@atomiton/nodes";
+import { performance } from "perf_hooks";
+import { pipeline, Readable, Transform, Writable } from "stream";
+import { promisify } from "util";
+import { Worker } from "worker_threads";
 
 const pipelineAsync = promisify(pipeline);
 
@@ -565,6 +565,3 @@ class NodeExecutionError extends Error {
  * Execution strategy types
  */
 type ExecutionStrategy = "direct" | "worker" | "stream" | "batch" | "parallel";
-
-// Re-export for use in other modules
-export { WorkerPoolManager, StreamProcessor, MemoryPool, NodeExecutionError };

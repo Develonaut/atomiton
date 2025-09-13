@@ -20,8 +20,9 @@
     "./theme/variables.css": "./src/theme/variables.css"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "dev": "vite build --watch",
+    "dev:serve": "vite",
+    "build": "vite build",
     "clean": "rm -rf dist",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -43,7 +44,6 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",
-    "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/vite": "^4.1.12",
     "class-variance-authority": "^0.7.1",
@@ -66,15 +66,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^5.0.2",
-    "concurrently": "^8.2.0",
     "eslint": "^9",
     "jsdom": "^24.0.0",
-    "tailwindcss": "^4",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "tailwindcss": "^4.1.13",
+    "terser": "^5.44.0",
     "tsc-alias": "^1.8.16",
     "typescript": "^5",
     "vite": "^7.1.4",
+    "vite-plugin-dts": "^4.5.4",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.0.0"
   }

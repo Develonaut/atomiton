@@ -15,7 +15,8 @@
     "./*.css": "./src/*.css"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build --watch",
+    "dev:serve": "vite",
     "build": "vite build",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
@@ -46,11 +47,8 @@
     "@atomiton/store": "workspace:*",
     "@atomiton/ui": "workspace:*",
     "@xyflow/react": "^12.0.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.3.1"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
@@ -61,10 +59,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.0.2",
-    "concurrently": "^8.2.0",
     "eslint": "^9",
     "jsdom": "^24.0.0",
-    "tsc-alias": "^1.8.16",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.44.0",
     "typescript": "^5",
     "vite": "^6.0.0",
     "vite-plugin-dts": "^4.5.4",

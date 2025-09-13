@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "vite build",
+    "dev": "vite build --watch",
     "clean": "rm -rf dist",
     "test": "vitest",
     "test:watch": "vitest watch",
@@ -21,15 +22,17 @@
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0",
-    "events": "^3.3.0"
+    "eventemitter3": "^5.0.0"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.14.9",
     "eslint": "^9.18.0",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.44.0",
     "typescript": "~5.6.3",
+    "vite": "^7.0.0",
     "vitest": "^2.1.8"
   }
 }

@@ -155,5 +155,3 @@ export function styled<
     return StyledComponent;
   };
 }
-
-export default styled;

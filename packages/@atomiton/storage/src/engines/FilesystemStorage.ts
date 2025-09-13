@@ -10,7 +10,7 @@ import {
   type StorageInfo,
   type StorageItem,
   type StorageOptions,
-} from "../index";
+} from "../types";
 
 /**
  * Filesystem storage engine for desktop environments

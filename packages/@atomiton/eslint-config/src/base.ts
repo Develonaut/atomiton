@@ -86,6 +86,23 @@ const baseConfig: Linter.Config[] = [
       "no-empty": ["error", { allowEmptyCatch: true }],
       "no-useless-catch": "error",
       "no-constant-condition": ["error", { checkLoops: false }],
+
+      // Package consistency rules for monorepo
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            // Prevent imports from internal packages that don't use workspace: protocol
+            {
+              target: "./packages/**/src/**",
+              from: "./packages/**",
+              except: ["**/dist/**"],
+              message:
+                "Use workspace: protocol for internal package dependencies",
+            },
+          ],
+        },
+      ],
     },
   } satisfies Linter.Config,
 ];

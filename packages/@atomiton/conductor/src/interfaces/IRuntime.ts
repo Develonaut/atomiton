@@ -17,7 +17,7 @@ export type RuntimeLanguage =
 /**
  * Runtime configuration
  */
-export type RuntimeConfig = {
+type RuntimeConfig = {
   language: RuntimeLanguage;
   module?: string;
   handler?: string;

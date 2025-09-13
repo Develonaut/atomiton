@@ -58,4 +58,4 @@ export const editorStore: EditorStoreActions = {
   ...viewportModule,
 };
 
-export type EditorStore = typeof editorStore;
+type EditorStore = typeof editorStore;

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Minimal form library for Atomiton - React Hook Form + Zod with automatic field generation",
   "type": "module",
+  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -26,8 +27,9 @@
     "atomiton"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "dev": "tsc -p tsconfig.json --watch",
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "dev:serve": "vite",
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
     "test:smoke": "vitest run src/*.smoke.test.ts src/**/*.smoke.test.{ts,tsx} --passWithNoTests",
@@ -61,8 +63,11 @@
     "@vitejs/plugin-react": "^5.0.2",
     "eslint": "^9",
     "jsdom": "^24.0.0",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.44.0",
     "typescript": "^5",
-    "vite-tsconfig-paths": "^5.1.4",
+    "vite": "^7.0.0",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^2.0.0"
   }
 }

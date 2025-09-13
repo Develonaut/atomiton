@@ -33,7 +33,7 @@ type ElectronWebContents = {
 };
 
 // Type guards for Electron environment
-export function isElectronRenderer(): boolean {
+function isElectronRenderer(): boolean {
   return (
     typeof window !== "undefined" &&
     typeof process !== "undefined" &&
@@ -41,7 +41,7 @@ export function isElectronRenderer(): boolean {
   );
 }
 
-export function isElectronMain(): boolean {
+function isElectronMain(): boolean {
   return (
     typeof window === "undefined" &&
     typeof process !== "undefined" &&
@@ -49,14 +49,10 @@ export function isElectronMain(): boolean {
   );
 }
 
-export function isElectron(): boolean {
-  return isElectronRenderer() || isElectronMain();
-}
-
 /**
  * IPC Bridge - Handles cross-process event communication
  */
-export class IPCBridge {
+class IPCBridge {
   private handlers = new Map<string, Set<IPCEventHandler>>();
   private ipcRenderer?: IpcRenderer;
   private ipcMain?: IpcMain;

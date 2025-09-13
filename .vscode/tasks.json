@@ -3,7 +3,7 @@
   "tasks": [
     {
       "label": "🚀 dev",
-      "detail": "Start dev server with hot reload",
+      "detail": "Start development: app servers (HMR) + library build watch",
       "type": "shell",
       "command": "pnpm dev",
       "group": {
@@ -48,9 +48,69 @@
       "label": "🔎 typecheck",
       "detail": "Verify TypeScript types across all packages",
       "type": "shell",
-      "command": "pnpm check-types",
+      "command": "pnpm typecheck",
       "group": "build",
       "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "🎨 dev:ui",
+      "detail": "Start UI component dev server for standalone development",
+      "type": "shell",
+      "command": "pnpm --filter=\"@atomiton/ui\" run dev:serve",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "✏️ dev:editor",
+      "detail": "Start Editor dev server for standalone development",
+      "type": "shell",
+      "command": "pnpm --filter=\"@atomiton/editor\" run dev:serve",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "📝 dev:form",
+      "detail": "Start Form components dev server for standalone development",
+      "type": "shell",
+      "command": "pnpm --filter=\"@atomiton/form\" run dev:serve",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🖥️ dev:client",
+      "detail": "Start client app with editor in development mode",
+      "type": "shell",
+      "command": "pnpm -w run dev:client",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "🖱️ dev:desktop",
+      "detail": "Start Electron desktop app",
+      "type": "shell",
+      "command": "pnpm -w run dev:desktop",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
     },
     {
       "label": "🔌 kill-ports",
@@ -62,6 +122,77 @@
       "presentation": {
         "reveal": "always",
         "panel": "shared"
+      }
+    },
+    {
+      "label": "📦 build:ui",
+      "detail": "Build UI package only",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/ui build",
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "📦 build:editor",
+      "detail": "Build Editor package only",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/editor build",
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "📦 build:core",
+      "detail": "Build Core package only",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/core build",
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "📦 build:nodes",
+      "detail": "Build Nodes package only",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/nodes build",
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "👀 watch:ui",
+      "detail": "Watch UI package and rebuild on file changes",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/ui dev",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "👀 watch:editor",
+      "detail": "Watch Editor package and rebuild on file changes",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/editor dev",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "👀 watch:core",
+      "detail": "Watch Core package and rebuild on file changes",
+      "type": "shell",
+      "command": "pnpm --filter @atomiton/core dev",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
       }
     },
     {
@@ -125,6 +256,81 @@
       "presentation": {
         "reveal": "always",
         "panel": "new"
+      }
+    },
+    {
+      "label": "🔍 validate:packages",
+      "detail": "Validate package consistency across monorepo",
+      "type": "shell",
+      "command": "pnpm validate:packages",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🔍 validate:knip",
+      "detail": "Validate dependencies and exports with Knip",
+      "type": "shell",
+      "command": "pnpm validate:knip",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🔍 validate:all",
+      "detail": "Run all validation checks (packages + dependencies)",
+      "type": "shell",
+      "command": "pnpm validate:packages && pnpm validate:knip",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🧹 knip:dependencies",
+      "detail": "Analyze unused/unlisted dependencies",
+      "type": "shell",
+      "command": "pnpm knip:dependencies",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🧹 knip:exports",
+      "detail": "Find unused exports across packages",
+      "type": "shell",
+      "command": "pnpm knip:unused-exports",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "🧹 knip:fix",
+      "detail": "Auto-fix Knip issues where possible",
+      "type": "shell",
+      "command": "pnpm knip:fix",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
       }
     }
   ]

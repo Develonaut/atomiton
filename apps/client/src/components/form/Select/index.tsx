@@ -19,7 +19,7 @@ const Select = Object.assign(SelectRoot, {
   Label: SelectLabel,
 });
 
-export type SelectOption = {
+type SelectOption = {
   id: number;
   name: string;
 };

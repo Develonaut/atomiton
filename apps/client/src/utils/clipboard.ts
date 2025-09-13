@@ -5,7 +5,7 @@ import { useState } from "react";
  * @param text - text to copy
  * @returns Promise<boolean> - true if copy was successful, false otherwise
  */
-export const copyToClipboard = async (text: string): Promise<boolean> => {
+const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
     // Check if Clipboard API is supported
     if (navigator.clipboard && window.isSecureContext) {

@@ -127,4 +127,4 @@ export function useCanvasHandlers({
   };
 }
 
-export type UseCanvasHandlersReturn = ReturnType<typeof useCanvasHandlers>;
+type UseCanvasHandlersReturn = ReturnType<typeof useCanvasHandlers>;

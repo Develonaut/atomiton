@@ -2,7 +2,7 @@
  * Calculates the width of the scrollbar more reliably
  * @returns scrollbar width in pixels
  */
-export const getScrollbarWidth = (): number => {
+const getScrollbarWidth = (): number => {
   // Method 1: Standard calculation
   const standardWidth =
     window.innerWidth - document.documentElement.clientWidth;

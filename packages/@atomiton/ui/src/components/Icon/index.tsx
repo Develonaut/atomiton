@@ -120,5 +120,3 @@ export const NODE_ICON_MAP: Record<string, string> = {
 export function getNodeIcon(nodeType: string): string {
   return NODE_ICON_MAP[nodeType] || "circle";
 }
-
-export default Icon;

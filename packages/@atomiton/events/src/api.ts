@@ -133,6 +133,5 @@ class EventsAPI {
 // Export singleton instance
 const events = EventsAPI.getInstance();
 
-export default events;
 export { events };
 export type { EventsAPI };

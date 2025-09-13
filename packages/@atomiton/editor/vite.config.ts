@@ -2,6 +2,7 @@ import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vitest/config";
+import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
   plugins: [
@@ -35,18 +36,63 @@ export default defineConfig({
         "react-dom",
         "react/jsx-runtime",
         "@atomiton/core",
+        "@atomiton/hooks",
         "@atomiton/nodes",
+        "@atomiton/store",
         "@atomiton/ui",
         "@xyflow/react",
       ],
       output: {
         // Ensure CSS is bundled
         assetFileNames: "style.css",
+        // Enable manual chunks for better tree shaking
+        manualChunks(id) {
+          // Keep node modules as separate chunks
+          if (id.includes("node_modules")) {
+            if (id.includes("@xyflow/react")) return "xyflow";
+            return "vendor";
+          }
+
+          // Split editor functionality
+          if (id.includes("src/components/")) {
+            return "components";
+          }
+
+          if (id.includes("src/nodes/")) {
+            return "nodes";
+          }
+
+          if (id.includes("src/hooks/") || id.includes("src/lib/")) {
+            return "utils";
+          }
+        },
+      },
+      plugins: [
+        visualizer({
+          filename: "dist/stats.html",
+          open: false,
+          gzipSize: true,
+          brotliSize: true,
+        }),
+      ],
+    },
+    // Enable minification and compression
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true, // Remove console.log in production
+        drop_debugger: true,
+        pure_funcs: ["console.log", "console.debug"],
+      },
+      mangle: {
+        keep_classnames: true, // Keep class names for CSS and debugging
+        keep_fnames: true, // Keep function names for debugging
       },
     },
     sourcemap: true,
     // Process CSS
     cssCodeSplit: false,
+    reportCompressedSize: true,
   },
   test: {
     environment: "jsdom",

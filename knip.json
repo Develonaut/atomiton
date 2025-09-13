@@ -94,16 +94,16 @@
   "ignoreWorkspaces": [],
   "rules": {
     "files": "error",
-    "dependencies": "warn",
+    "dependencies": "error",
     "devDependencies": "warn",
     "optionalPeerDependencies": "off",
-    "unlisted": "warn",
+    "unlisted": "error",
     "binaries": "warn",
     "unresolved": "off",
     "exports": "warn",
     "types": "off",
     "nsExports": "warn",
-    "duplicates": "warn"
+    "duplicates": "error"
   },
   "exclude": [
     "unresolved"

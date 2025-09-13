@@ -47,6 +47,8 @@ This document aggregates current work across the entire monorepo. For detailed p
 3. **🟡 Workflow Execution** - Run workflows from the editor
 4. **🟡 Save/Load** - Persist Blueprints to .atom files
 5. **🟢 Visual Feedback** - Show execution status on nodes
+6. **🟢 Validation Package** - Extract Zod usage into @atomiton/validation package
+7. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
 
 ## Quick Links
 

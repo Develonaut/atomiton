@@ -34,10 +34,6 @@ import { shallow } from "zustand/shallow";
 // Types
 // ============================================================================
 
-export type StoreSubscription = {
-  unsubscribe: () => void;
-};
-
 class StoreAPI {
   private static instance: StoreAPI;
   private initialized = false;
@@ -193,6 +189,5 @@ class StoreAPI {
 // Export singleton instance
 const store = StoreAPI.getInstance();
 
-export default store;
 export { store };
 export type { StoreAPI };

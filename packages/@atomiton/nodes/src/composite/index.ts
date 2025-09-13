@@ -17,7 +17,7 @@ export type {
 } from "./CompositeNode.js";
 
 // Main unified composite API - single interface for all composite interactions
-export { CompositeAPI, composite } from "./api.js";
+export { composite } from "./api.js";
 export type {
   CompositeDefinition,
   CompositeNodeSpec,

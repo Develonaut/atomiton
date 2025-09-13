@@ -1,7 +1,7 @@
 // Navigation hooks for Vite/React Router compatibility
 // These provide the same API as Next.js navigation hooks
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const useRouter = () => {
   const navigate = useNavigate();

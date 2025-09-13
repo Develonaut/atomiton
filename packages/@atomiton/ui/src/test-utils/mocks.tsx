@@ -13,7 +13,7 @@ MockButton.displayName = "MockButton";
 /**
  * Mock Link component for testing
  */
-export const MockLink = forwardRef<HTMLAnchorElement, ComponentProps<"a">>(
+const MockLink = forwardRef<HTMLAnchorElement, ComponentProps<"a">>(
   (props, ref) => <a ref={ref} {...props} />,
 );
 MockLink.displayName = "MockLink";
@@ -29,7 +29,7 @@ MockDiv.displayName = "MockDiv";
 /**
  * Mock Span component for testing
  */
-export const MockSpan = forwardRef<HTMLSpanElement, ComponentProps<"span">>(
+const MockSpan = forwardRef<HTMLSpanElement, ComponentProps<"span">>(
   (props, ref) => <span ref={ref} {...props} />,
 );
 MockSpan.displayName = "MockSpan";
@@ -43,7 +43,7 @@ export type MockComponentProps = {
   testProp?: string;
 } & ComponentProps<"div">;
 
-export const MockComponent = forwardRef<HTMLDivElement, MockComponentProps>(
+const MockComponent = forwardRef<HTMLDivElement, MockComponentProps>(
   ({ variant, size, testProp, ...props }, ref) => (
     <div
       ref={ref}
@@ -59,9 +59,7 @@ MockComponent.displayName = "MockComponent";
 /**
  * Mock props resolver for testing
  */
-export const mockPropsResolver = <T extends Record<string, unknown>>(
-  props: T,
-): T => {
+const mockPropsResolver = <T extends Record<string, unknown>>(props: T): T => {
   const { as, ...rest } = props as T & { as?: unknown };
   return {
     ...rest,
@@ -73,7 +71,7 @@ export const mockPropsResolver = <T extends Record<string, unknown>>(
 /**
  * Mock props resolver that transforms variant names
  */
-export const mockVariantResolver = <T extends Record<string, unknown>>(
+const mockVariantResolver = <T extends Record<string, unknown>>(
   props: T,
 ): T => {
   const { variant, ...rest } = props as T & { variant?: unknown };

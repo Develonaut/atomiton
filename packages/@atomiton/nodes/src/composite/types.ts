@@ -83,7 +83,7 @@ export type CompositeValidationContext = {
   strictMode?: boolean;
 };
 
-export type CompositeSchema = {
+type CompositeSchema = {
   version: string;
   type: "composite";
   properties: Record<string, unknown>;
@@ -107,8 +107,8 @@ export type TransformationResult<T> = {
  * Both storage (YAML) and runtime (JSON) use the same format
  * The only difference is serialization
  */
-export type CompositeStorageFormat = CompositeDefinition;
-export type CompositeRuntimeFormat = CompositeDefinition;
+type CompositeStorageFormat = CompositeDefinition;
+type CompositeRuntimeFormat = CompositeDefinition;
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Record<string, unknown>
@@ -116,10 +116,9 @@ export type DeepPartial<T> = {
     : T[P];
 };
 
-export type RequiredFields<T, K extends keyof T> = T & Required<Pick<T, K>>;
+type RequiredFields<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
-export type OptionalFields<T, K extends keyof T> = Omit<T, K> &
-  Partial<Pick<T, K>>;
+type OptionalFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export type CompositeAPIError = {
   message: string;
@@ -127,7 +126,7 @@ export type CompositeAPIError = {
   details?: Record<string, unknown>;
 };
 
-export type CompositeAPIResult<T> = {
+type CompositeAPIResult<T> = {
   success: boolean;
   data?: T;
   error?: CompositeAPIError;
@@ -137,7 +136,7 @@ export type CompositeAPIResult<T> = {
 /**
  * Composite-specific execution context
  */
-export type CompositeExecutionContext = {
+type CompositeExecutionContext = {
   nodeResults: Record<string, unknown>;
   variables: Record<string, unknown>;
   settings: CompositeExecutionSettings;

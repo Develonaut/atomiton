@@ -2,6 +2,8 @@
   "name": "@atomiton/di",
   "version": "0.1.0",
   "description": "Dependency injection system for the Atomiton platform",
+  "type": "module",
+  "private": true,
   "keywords": [
     "dependency-injection",
     "DI",
@@ -49,6 +51,8 @@
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.11.5",
     "eslint": "^9.10.0",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.44.0",
     "typescript": "^5.3.3",
     "vite": "^6.0.0",
     "vitest": "^2.0.0"

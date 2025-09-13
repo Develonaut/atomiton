@@ -363,5 +363,3 @@ export function LegacySelect({
     </Select.Root>
   );
 }
-
-export default LegacySelect;

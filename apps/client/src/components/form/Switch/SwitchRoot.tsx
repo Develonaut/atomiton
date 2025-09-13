@@ -1,22 +1,9 @@
 import { Switch as HeadlessSwitch } from "@headlessui/react";
 import type { PropsWithChildren } from "react";
-import { Children, createContext, isValidElement, useContext } from "react";
+import { Children, isValidElement } from "react";
+import { SwitchContext } from "./SwitchContext";
 import SwitchLabel from "./SwitchLabel";
 import SwitchThumb from "./SwitchThumb";
-
-type SwitchContextValue = {
-  checked: boolean;
-};
-
-const SwitchContext = createContext<SwitchContextValue | null>(null);
-
-export const useSwitchContext = () => {
-  const context = useContext(SwitchContext);
-  if (!context) {
-    throw new Error("Switch components must be used within a Switch.Root");
-  }
-  return context;
-};
 
 type SwitchRootProps = PropsWithChildren<{
   className?: string;

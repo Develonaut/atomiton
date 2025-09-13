@@ -1,0 +1,29 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "include": ["dependencies", "devDependencies", "exports", "scripts"],
+  "workspaces": {
+    "packages/@atomiton/*": {
+      "entry": ["src/index.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    }
+  },
+  "rules": {
+    "dependencies": "error",
+    "devDependencies": "error",
+    "exports": "error",
+    "scripts": "warn",
+    "duplicates": "error"
+  },
+  "plugins": {
+    "package-json": {
+      "config": {
+        "enforceWorkspaceProtocol": true,
+        "requiredFields": ["name", "version", "private", "type"],
+        "requiredScripts": {
+          "library": ["build", "dev", "lint", "lint:fix", "typecheck"],
+          "config": ["lint"]
+        }
+      }
+    }
+  }
+}

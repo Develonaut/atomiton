@@ -89,14 +89,6 @@ export function getAvailableNodeTypes(): string[] {
 }
 
 /**
- * Get all loaded atomic nodes (synchronous)
- * Use this for backward compatibility
- */
-export function getLoadedNodes(): Node[] {
-  return ATOMIC_NODES;
-}
-
-/**
  * Check if a node type is available
  */
 export function isNodeTypeAvailable(nodeType: string): boolean {
@@ -105,4 +97,3 @@ export function isNodeTypeAvailable(nodeType: string): boolean {
 
 // Legacy export for backward compatibility
 // This will be empty until loadAllNodes() is called
-export { ATOMIC_NODES };

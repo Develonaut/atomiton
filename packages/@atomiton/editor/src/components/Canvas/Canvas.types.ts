@@ -7,7 +7,14 @@ import type {
   ReactFlowInstance,
   Viewport,
 } from "@xyflow/react";
-import type { StyleProps } from "../../types";
+
+/**
+ * Base props for styled components
+ */
+export type StyleProps = {
+  className?: string;
+  style?: React.CSSProperties;
+};
 
 /**
  * Props for the root Canvas component

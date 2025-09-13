@@ -223,4 +223,3 @@ export const Container = new ContainerClass();
 /**
  * Default container export for convenience
  */
-export default Container;

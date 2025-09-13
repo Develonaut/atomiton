@@ -39,5 +39,3 @@ export const themeConfig = {
   css: "./index.css",
   variables: "./variables.css",
 } as const;
-
-export default themeConfig;

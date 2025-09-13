@@ -225,5 +225,3 @@ function UnknownError() {
     </div>
   );
 }
-
-export default RouteErrorBoundary;

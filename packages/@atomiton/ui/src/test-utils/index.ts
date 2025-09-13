@@ -3,7 +3,7 @@ export * from "./mocks";
 /**
  * Test utility to render and get class names
  */
-export function getClassNames(
+function getClassNames(
   element: React.ReactElement<Record<string, unknown>>,
 ): string[] {
   const className = element.props?.className as string | undefined;
@@ -14,7 +14,7 @@ export function getClassNames(
 /**
  * Test utility to check if element has specific class
  */
-export function hasClass(
+function hasClass(
   element: React.ReactElement<Record<string, unknown>>,
   className: string,
 ): boolean {
@@ -24,7 +24,7 @@ export function hasClass(
 /**
  * Test utility to get data attributes
  */
-export function getDataAttributes(
+function getDataAttributes(
   element: React.ReactElement<Record<string, unknown>>,
 ): Record<string, unknown> {
   const props = element.props as Record<string, unknown>;
