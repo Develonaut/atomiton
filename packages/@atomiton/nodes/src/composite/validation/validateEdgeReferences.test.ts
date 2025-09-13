@@ -6,9 +6,9 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { validateEdgeReferences } from "./validateEdgeReferences";
-import type { CompositeNodeSpec } from "../types";
-import type { CompositeEdge } from "../../base/INode";
+import { validateEdgeReferences } from "./validateEdgeReferences.js";
+import type { CompositeNodeSpec } from "../types.js";
+import type { CompositeEdge } from "../../base/INode.js";
 
 describe("validateEdgeReferences", () => {
   const sampleNodes: CompositeNodeSpec[] = [
@@ -184,7 +184,9 @@ describe("validateEdgeReferences", () => {
         true,
       );
 
-      const sourceIds = result.errors.map((e) => (e.data as any)?.sourceId);
+      const sourceIds = result.errors.map(
+        (e) => (e.data as { sourceId?: string })?.sourceId,
+      );
       expect(sourceIds).toContain("invalid1");
       expect(sourceIds).toContain("invalid2");
     });
@@ -235,7 +237,9 @@ describe("validateEdgeReferences", () => {
         true,
       );
 
-      const targetIds = result.errors.map((e) => (e.data as any)?.targetId);
+      const targetIds = result.errors.map(
+        (e) => (e.data as { targetId?: string })?.targetId,
+      );
       expect(targetIds).toContain("invalid1");
       expect(targetIds).toContain("invalid2");
     });
@@ -339,8 +343,12 @@ describe("validateEdgeReferences", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.edgeId).toBe("my-edge-id");
-      expect((result.errors[0].data as any)?.sourceId).toBe("invalid-node");
+      expect((result.errors[0].data as { edgeId?: string })?.edgeId).toBe(
+        "my-edge-id",
+      );
+      expect((result.errors[0].data as { sourceId?: string })?.sourceId).toBe(
+        "invalid-node",
+      );
     });
 
     it("should provide meaningful error messages", () => {
@@ -533,7 +541,9 @@ describe("validateEdgeReferences", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.targetId).toBe("invalid");
+      expect((result.errors[0].data as { targetId?: string })?.targetId).toBe(
+        "invalid",
+      );
     });
   });
 

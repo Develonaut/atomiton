@@ -4,13 +4,13 @@
  * Node for running multiple operations simultaneously
  */
 
-import { Node } from "../../base/Node";
+import { Node } from "../../base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types";
-import { ParallelLogic } from "./ParallelNodeLogic";
+} from "../../types.js";
+import { ParallelLogic } from "./ParallelNodeLogic.js";
 
 /**
  * Parallel Node Class

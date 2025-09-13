@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { isCompositeDefinition } from "./isCompositeDefinition";
-import type { CompositeDefinition } from "../types";
+import { isCompositeDefinition } from "./isCompositeDefinition.js";
+import type { CompositeDefinition } from "../types.js";
 
 describe("isCompositeDefinition", () => {
   const validComposite: CompositeDefinition = {
@@ -321,7 +321,9 @@ describe("isCompositeDefinition", () => {
     });
 
     it("should handle circular references gracefully", () => {
-      const circular: any = { ...validComposite };
+      const circular: typeof validComposite & { self?: unknown } = {
+        ...validComposite,
+      };
       circular.self = circular;
 
       // Should not throw an error, but validation may fail

@@ -1,11 +1,11 @@
-import { COMPOSITE_SCHEMA } from "../schema";
+import { COMPOSITE_SCHEMA } from "../schema.js";
 import type {
   CompositeDefinition,
   CompositeValidationContext,
   ValidationError,
   ValidationResult,
-} from "../types";
-import { validateCompositeSemantics } from "./validateCompositeSemantics";
+} from "../types.js";
+import { validateCompositeSemantics } from "./validateCompositeSemantics.js";
 
 /**
  * Validate a composite definition using Zod schema
@@ -32,24 +32,9 @@ export function validateComposite(
       );
       errors.push(...zodErrors);
     } else {
-      // If schema validation passes, transform edges and perform semantic validation
-      const parsedData = parseResult.data;
-      const composite = {
-        ...parsedData,
-        edges: parsedData.edges.map((edge) => ({
-          id: edge.id,
-          source: {
-            nodeId: edge.source,
-            portId: edge.sourceHandle || "output",
-          },
-          target: {
-            nodeId: edge.target,
-            portId: edge.targetHandle || "input",
-          },
-          data: edge.data,
-        })),
-      } as CompositeDefinition;
-      const semanticResult = validateCompositeSemantics(composite, context);
+      // If schema validation passes, perform semantic validation
+      const parsedData = parseResult.data as CompositeDefinition;
+      const semanticResult = validateCompositeSemantics(parsedData, context);
       errors.push(...semanticResult.errors);
       warnings.push(...(semanticResult.warnings || []));
     }

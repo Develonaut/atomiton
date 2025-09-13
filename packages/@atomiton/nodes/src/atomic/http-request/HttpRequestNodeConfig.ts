@@ -5,7 +5,7 @@
  */
 
 import { z } from "zod";
-import { NodeConfig } from "../../base/NodeConfig";
+import { NodeConfig } from "../../base/NodeConfig.js";
 
 /**
  * HTTP Request specific configuration schema

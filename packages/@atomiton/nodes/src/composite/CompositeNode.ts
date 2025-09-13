@@ -8,14 +8,14 @@
  * Mental Model: "A blueprint is just a node that happens to contain other nodes"
  */
 
-import type { CompositeEdge, ICompositeNode, INode } from "../base/INode";
-import { Node } from "../base/Node";
+import type { CompositeEdge, ICompositeNode, INode } from "../base/INode.js";
+import { Node } from "../base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../types";
-import { CompositeExecutor } from "./CompositeExecutor";
+} from "../types.js";
+import { CompositeExecutor } from "./CompositeExecutor.js";
 
 export type CompositeNodeDefinition = {
   id: string;

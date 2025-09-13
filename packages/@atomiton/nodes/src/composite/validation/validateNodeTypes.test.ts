@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { validateNodeTypes } from "./validateNodeTypes";
-import type { CompositeNodeSpec } from "../types";
+import { validateNodeTypes } from "./validateNodeTypes.js";
+import type { CompositeNodeSpec } from "../types.js";
 
 describe("validateNodeTypes", () => {
   const availableTypes = [
@@ -173,7 +173,10 @@ describe("validateNodeTypes", () => {
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
       expect(result.errors[0].code).toBe("UNKNOWN_NODE_TYPE");
-      expect((result.errors[0].data as any)?.availableTypes).toEqual([]);
+      expect(
+        (result.errors[0].data as { availableTypes?: string[] })
+          ?.availableTypes,
+      ).toEqual([]);
     });
 
     it("should handle nodes when no types are available", () => {
@@ -204,10 +207,13 @@ describe("validateNodeTypes", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeType).toBe("other-type");
-      expect((result.errors[0].data as any)?.availableTypes).toEqual(
-        singleType,
+      expect((result.errors[0].data as { nodeType?: string })?.nodeType).toBe(
+        "other-type",
       );
+      expect(
+        (result.errors[0].data as { availableTypes?: string[] })
+          ?.availableTypes,
+      ).toEqual(singleType);
     });
   });
 
@@ -340,7 +346,9 @@ describe("validateNodeTypes", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeType).toBe("");
+      expect((result.errors[0].data as { nodeType?: string })?.nodeType).toBe(
+        "",
+      );
     });
   });
 
@@ -459,7 +467,9 @@ describe("validateNodeTypes", () => {
 
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
-      expect((result.errors[0].data as any)?.nodeType).toBe("invalid-type");
+      expect((result.errors[0].data as { nodeType?: string })?.nodeType).toBe(
+        "invalid-type",
+      );
       expect(endTime - startTime).toBeLessThan(50); // Should be fast with Set lookup
     });
   });

@@ -1,6 +1,6 @@
-export { fromJson } from "./fromJson";
-export { fromYaml } from "./fromYaml";
-export { toJson } from "./toJson";
-export { toYaml } from "./toYaml";
-export { validate } from "./validate";
-export type { JsonCompositeDefinition } from "./types";
+export { fromJson } from "./fromJson.js";
+export { fromYaml } from "./fromYaml.js";
+export { toJson } from "./toJson.js";
+export { toYaml } from "./toYaml.js";
+export { validate } from "./validate.js";
+export type { JsonCompositeDefinition } from "./types.js";

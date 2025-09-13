@@ -4,13 +4,13 @@
  * Node for executing system shell commands
  */
 
-import { Node } from "../../base/Node";
+import { Node } from "../../base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types";
-import { ShellCommandLogic } from "./ShellCommandNodeLogic";
+} from "../../types.js";
+import { ShellCommandLogic } from "./ShellCommandNodeLogic.js";
 
 /**
  * Shell Command Node Class

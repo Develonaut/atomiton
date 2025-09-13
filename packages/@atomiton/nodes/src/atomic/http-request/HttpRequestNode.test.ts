@@ -6,9 +6,9 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { httpRequest } from "./HttpRequestNode";
-import type { NodeExecutionContext } from "../../types";
-import { isAtomicNode, isCompositeNode } from "../../base/INode";
+import { httpRequest } from "./HttpRequestNode.js";
+import type { NodeExecutionContext } from "../../types.js";
+import { isAtomicNode, isCompositeNode } from "../../base/INode.js";
 
 describe("HttpRequestNode - Unified Architecture Tests", () => {
   let mockContext: NodeExecutionContext;

@@ -1,5 +1,7 @@
-import type { NodeExecutionContext } from "@atomiton/nodes";
-import type { BlueprintDefinition } from "@atomiton/storage";
+import type {
+  NodeExecutionContext,
+  CompositeDefinition,
+} from "@atomiton/nodes";
 
 /**
  * Execution request with input data
@@ -95,10 +97,10 @@ export type IExecutionEngine = {
   execute(request: ExecutionRequest): Promise<ExecutionResult>;
 
   /**
-   * Execute a Blueprint directly (for nested execution)
+   * Execute a Composite directly (for nested execution)
    */
-  executeBlueprint(
-    blueprint: BlueprintDefinition,
+  executeComposite(
+    composite: CompositeDefinition,
     context: NodeExecutionContext,
   ): Promise<ExecutionResult>;
 

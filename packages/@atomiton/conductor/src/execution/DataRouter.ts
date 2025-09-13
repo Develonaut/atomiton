@@ -1,9 +1,9 @@
-import type { BlueprintDefinition } from "@atomiton/storage";
+import type { CompositeEdge } from "@atomiton/nodes";
 
 /**
  * Connection between nodes in a Blueprint
  */
-type Connection = BlueprintDefinition["connections"][0];
+type Connection = CompositeEdge;
 
 /**
  * DataRouter manages data flow between nodes in a Blueprint
@@ -22,13 +22,13 @@ export class DataRouter {
 
     // Find all connections targeting this node
     const targetConnections = connections.filter(
-      (conn) => conn.target.node === nodeId,
+      (conn) => conn.target.nodeId === nodeId,
     );
 
     for (const connection of targetConnections) {
-      const sourceNode = connection.source.node;
-      const sourcePort = connection.source.port;
-      const targetPort = connection.target.port;
+      const sourceNode = connection.source.nodeId;
+      const sourcePort = connection.source.portId;
+      const targetPort = connection.target.portId;
 
       // Get output from source node
       const sourceOutputs = nodeOutputs.get(sourceNode);
@@ -52,13 +52,13 @@ export class DataRouter {
 
     // Find all connections targeting the output node
     const outputConnections = connections.filter(
-      (conn) => conn.target.node === "output",
+      (conn) => conn.target.nodeId === "output",
     );
 
     for (const connection of outputConnections) {
-      const sourceNode = connection.source.node;
-      const sourcePort = connection.source.port;
-      const targetPort = connection.target.port;
+      const sourceNode = connection.source.nodeId;
+      const sourcePort = connection.source.portId;
+      const targetPort = connection.target.portId;
 
       // Get output from source node
       const sourceOutputs = nodeOutputs.get(sourceNode);

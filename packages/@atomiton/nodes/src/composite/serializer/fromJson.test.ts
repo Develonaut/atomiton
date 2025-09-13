@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { fromJson } from "./fromJson";
-import type { JsonCompositeDefinition } from "./types";
+import { fromJson } from "./fromJson.js";
+import type { JsonCompositeDefinition } from "./types.js";
 
 describe("fromJson", () => {
   describe("Basic Conversion", () => {

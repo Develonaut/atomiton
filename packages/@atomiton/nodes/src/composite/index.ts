@@ -14,15 +14,16 @@
 export type {
   CompositeChildNode,
   CompositeNodeDefinition,
-} from "./CompositeNode";
+} from "./CompositeNode.js";
 
 // Main unified composite API - single interface for all composite interactions
-export { CompositeAPI, composite } from "./api";
+export { CompositeAPI, composite } from "./api.js";
 export type {
   CompositeDefinition,
   CompositeNodeSpec,
   CompositePosition,
   CompositeVariable,
   CompositeSettings,
-} from "./types";
-export type { CompositeEdge } from "../base/INode";
+} from "./types.js";
+export type { CompositeEdge } from "../base/INode.js";
+export type { JsonCompositeDefinition } from "./serializer/index.js";

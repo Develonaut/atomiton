@@ -1,4 +1,4 @@
-import type { CompositeNodeDefinition } from "../CompositeNode";
+import type { CompositeNodeDefinition } from "../CompositeNode.js";
 
 export function validate(composite: CompositeNodeDefinition): {
   valid: boolean;

@@ -5,9 +5,9 @@
  * Handles the business logic for looping and iterating over data
  */
 
-import { NodeLogic } from "../../base/NodeLogic";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
-import type { LoopConfig } from "./LoopNodeConfig";
+import { NodeLogic } from "../../base/NodeLogic.js";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+import type { LoopConfig } from "./LoopNodeConfig.js";
 
 export class LoopLogic extends NodeLogic<LoopConfig> {
   async execute(

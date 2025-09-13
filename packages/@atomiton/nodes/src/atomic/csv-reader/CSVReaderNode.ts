@@ -4,13 +4,13 @@
  * Node for reading CSV files and spreadsheet data
  */
 
-import { Node } from "../../base/Node";
+import { Node } from "../../base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types";
-import { CSVReaderLogic } from "./CSVReaderNodeLogic";
+} from "../../types.js";
+import { CSVReaderLogic } from "./CSVReaderNodeLogic.js";
 
 /**
  * CSV Reader Node Class

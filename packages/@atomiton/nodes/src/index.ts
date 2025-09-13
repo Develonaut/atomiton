@@ -7,17 +7,17 @@
  * Mental Model: "If it can execute, it's a node" - whether atomic or composite.
  */
 
-export { nodes } from "./api";
-export type { NodesAPI } from "./api";
-export { ExtendedNode } from "./ExtendedNode";
-export type { ExtendedNodeConfig } from "./ExtendedNode";
+export { nodes } from "./api.js";
+export type { NodesAPI } from "./api.js";
+export { ExtendedNode } from "./ExtendedNode.js";
+export type { ExtendedNodeConfig } from "./ExtendedNode.js";
 
 export type {
   CompositeEdge,
   IAtomicNode,
   ICompositeNode,
   INode,
-} from "./base/INode";
+} from "./base/INode.js";
 
 export type {
   NodeDefinition,
@@ -25,7 +25,7 @@ export type {
   NodeExecutionResult,
   NodePortDefinition,
   NodeType,
-} from "./types";
+} from "./types.js";
 
 export type {
   CompositeChildNode,
@@ -35,10 +35,11 @@ export type {
   CompositePosition,
   CompositeSettings,
   CompositeVariable,
-} from "./composite";
+  JsonCompositeDefinition,
+} from "./composite/index.js";
 
 export type {
   FieldConfig,
   FieldControlType,
   FormConfig,
-} from "./base/NodeConfig";
+} from "./base/NodeConfig.js";

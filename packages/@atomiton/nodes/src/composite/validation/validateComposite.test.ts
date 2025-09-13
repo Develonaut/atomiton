@@ -6,8 +6,11 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { validateComposite } from "./validateComposite";
-import type { CompositeDefinition, CompositeValidationContext } from "../types";
+import { validateComposite } from "./validateComposite.js";
+import type {
+  CompositeDefinition,
+  CompositeValidationContext,
+} from "../types.js";
 
 describe("validateComposite", () => {
   const validComposite: CompositeDefinition = {
@@ -280,8 +283,10 @@ describe("validateComposite", () => {
   describe("Error Handling", () => {
     it("should handle validation exceptions gracefully", () => {
       // Create a circular reference that might cause JSON serialization issues
-      const circular: any = { ...validComposite };
-      circular.circular = circular;
+      const circular: typeof validComposite & { self?: unknown } = {
+        ...validComposite,
+      };
+      circular.self = circular;
 
       const result = validateComposite(circular);
 

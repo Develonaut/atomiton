@@ -4,9 +4,9 @@
  * Single entry point that handles both CompositeNode instances and CompositeNodeDefinition transparently.
  */
 
-import { CompositeNode } from "./CompositeNode";
-import type { CompositeNodeDefinition } from "./CompositeNode";
-import type { JsonCompositeDefinition } from "./serializer/types";
+import { CompositeNode } from "./CompositeNode.js";
+import type { CompositeNodeDefinition } from "./CompositeNode.js";
+import type { JsonCompositeDefinition } from "./serializer/types.js";
 
 // Import serializer functions for definitions
 import {
@@ -15,7 +15,7 @@ import {
   toJson as toJsonDef,
   toYaml as toYamlDef,
   validate as validateDef,
-} from "./serializer";
+} from "./serializer/index.js";
 
 /**
  * Check if an object is a CompositeNode instance

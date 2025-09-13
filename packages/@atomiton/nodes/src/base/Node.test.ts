@@ -6,12 +6,12 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { Node } from "./Node";
+import { Node } from "./Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../types";
+} from "../types.js";
 
 // Test implementation of Node class
 class TestNode extends Node {

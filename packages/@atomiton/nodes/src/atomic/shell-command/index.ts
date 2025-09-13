@@ -3,5 +3,5 @@
  * Entry point for shell command functionality
  */
 
-export { shellCommand as default } from "./ShellCommandNode";
-export * from "./ShellCommandNode";
+export { shellCommand as default } from "./ShellCommandNode.js";
+export * from "./ShellCommandNode.js";

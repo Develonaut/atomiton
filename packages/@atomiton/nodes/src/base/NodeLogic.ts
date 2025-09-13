@@ -1,4 +1,4 @@
-import type { NodeExecutionContext, NodeExecutionResult } from "../types";
+import type { NodeExecutionContext, NodeExecutionResult } from "../types.js";
 
 export abstract class NodeLogic<TConfig = Record<string, unknown>> {
   // Store context for use in result creation

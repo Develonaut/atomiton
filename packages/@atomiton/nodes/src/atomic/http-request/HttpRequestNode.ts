@@ -4,13 +4,13 @@
  * Node for making HTTP/API requests
  */
 
-import { Node } from "../../base/Node";
+import { Node } from "../../base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types";
-import { HttpRequestLogic } from "./HttpRequestNodeLogic";
+} from "../../types.js";
+import { HttpRequestLogic } from "./HttpRequestNodeLogic.js";
 
 /**
  * HTTP Request Node Class

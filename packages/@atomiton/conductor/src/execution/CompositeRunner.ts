@@ -1,11 +1,9 @@
 /**
- * Blueprint Runner - Orchestrates multi-node Blueprint execution with dependency resolution
+ * Composite Runner - Orchestrates multi-node Composite execution with dependency resolution
  */
 
 import type {
-  BlueprintDefinition,
-  BlueprintEdge,
-  BlueprintNode,
+  CompositeDefinition,
   INode,
   NodeExecutionContext,
   NodeExecutionResult,
@@ -14,12 +12,7 @@ import PQueue from "p-queue";
 import type { StateManager } from "../state/StateManager.js";
 import type { NodeExecutor } from "./NodeExecutor.js";
 
-// Type aliases for backwards compatibility
-export type Blueprint = BlueprintDefinition;
-export type BlueprintConnection = BlueprintEdge;
-export { BlueprintNode };
-
-export type BlueprintExecutionOptions = {
+export type CompositeExecutionOptions = {
   maxConcurrency?: number;
   enableParallelExecution?: boolean;
   timeoutMs?: number;
@@ -27,7 +20,7 @@ export type BlueprintExecutionOptions = {
   inputs?: Record<string, unknown>;
 };
 
-export type BlueprintExecutionResult = {
+export type CompositeExecutionResult = {
   success: boolean;
   outputs: Record<string, unknown>;
   error?: string;
@@ -42,7 +35,7 @@ export type BlueprintExecutionResult = {
   };
 };
 
-export class BlueprintRunner {
+export class CompositeRunner {
   private nodeRegistry = new Map<string, INode>();
   private executionQueue: PQueue;
 
@@ -60,22 +53,22 @@ export class BlueprintRunner {
     this.nodeRegistry.set(nodeType, node);
   }
 
-  async executeBlueprint(
-    blueprint: Blueprint,
-    options: BlueprintExecutionOptions = {},
-  ): Promise<BlueprintExecutionResult> {
+  async executeComposite(
+    composite: CompositeDefinition,
+    options: CompositeExecutionOptions = {},
+  ): Promise<CompositeExecutionResult> {
     const executionId = `execution-${Date.now()}-${Math.random().toString(36).substring(7)}`;
     const startTime = new Date();
 
     // Create execution context
-    const context = this.stateManager.createContext(executionId, blueprint.id);
+    const context = this.stateManager.createContext(executionId, composite.id);
 
     try {
-      // Validate blueprint
-      const validation = this.validateBlueprint(blueprint);
+      // Validate composite
+      const validation = this.validateComposite(composite);
       if (!validation.valid) {
         throw new Error(
-          `Blueprint validation failed: ${validation.errors.join(", ")}`,
+          `Composite validation failed: ${validation.errors.join(", ")}`,
         );
       }
 
@@ -88,11 +81,11 @@ export class BlueprintRunner {
 
       this.stateManager.updateContext(executionId, {
         state: "running",
-        metadata: { blueprint, options },
+        metadata: { composite, options },
       });
 
       // Build execution graph
-      const executionGraph = this.buildExecutionGraph(blueprint);
+      const executionGraph = this.buildExecutionGraph(composite);
 
       // Execute nodes in dependency order
       const nodeResults: Record<string, NodeExecutionResult> = {};
@@ -105,7 +98,7 @@ export class BlueprintRunner {
         // Execute parallelizable nodes
         await this.executeNodesInParallel(
           executionGraph.parallelizable,
-          blueprint,
+          composite,
           executionId,
           options,
           nodeResults,
@@ -117,7 +110,7 @@ export class BlueprintRunner {
       for (const nodeLevel of executionGraph.sequential) {
         await this.executeNodeLevel(
           nodeLevel,
-          blueprint,
+          composite,
           executionId,
           options,
           nodeResults,
@@ -129,7 +122,7 @@ export class BlueprintRunner {
       const totalExecutionTime = endTime.getTime() - startTime.getTime();
 
       // Calculate final outputs
-      const outputs = this.calculateBlueprintOutputs(blueprint, nodeResults);
+      const outputs = this.calculateCompositeOutputs(composite, nodeResults);
 
       // Calculate metrics
       const nodesExecuted = Object.keys(nodeResults).length;
@@ -138,7 +131,7 @@ export class BlueprintRunner {
       ).length;
       const nodesFailed = nodesExecuted - nodesSucceeded;
 
-      const result: BlueprintExecutionResult = {
+      const result: CompositeExecutionResult = {
         success: nodesFailed === 0,
         outputs,
         executionId,
@@ -184,69 +177,69 @@ export class BlueprintRunner {
     }
   }
 
-  private validateBlueprint(blueprint: Blueprint): {
+  private validateComposite(composite: Composite): {
     valid: boolean;
     errors: string[];
   } {
     const errors: string[] = [];
 
     // Check for required fields
-    if (!blueprint.id) errors.push("Blueprint ID is required");
-    if (!blueprint.name) errors.push("Blueprint name is required");
-    if (!blueprint.nodes || blueprint.nodes.length === 0) {
-      errors.push("Blueprint must have at least one node");
+    if (!composite.id) errors.push("Composite ID is required");
+    if (!composite.name) errors.push("Composite name is required");
+    if (!composite.nodes || composite.nodes.length === 0) {
+      errors.push("Composite must have at least one node");
     }
 
     // Validate node types exist
-    for (const node of blueprint.nodes) {
+    for (const node of composite.nodes) {
       if (!this.nodeRegistry.has(node.type)) {
         errors.push(`Unknown node type: ${node.type}`);
       }
     }
 
     // Validate connections
-    for (const connection of blueprint.connections) {
-      const sourceNode = blueprint.nodes.find(
-        (n) => n.id === connection.sourceNodeId,
+    for (const connection of composite.edges) {
+      const sourceNode = composite.nodes.find(
+        (n) => n.nodeId === connection.source.nodeId,
       );
-      const targetNode = blueprint.nodes.find(
-        (n) => n.id === connection.targetNodeId,
+      const targetNode = composite.nodes.find(
+        (n) => n.nodeId === connection.target.nodeId,
       );
 
       if (!sourceNode) {
         errors.push(
-          `Connection references unknown source node: ${connection.sourceNodeId}`,
+          `Connection references unknown source node: ${connection.source.nodeId}`,
         );
       }
       if (!targetNode) {
         errors.push(
-          `Connection references unknown target node: ${connection.targetNodeId}`,
+          `Connection references unknown target node: ${connection.target.nodeId}`,
         );
       }
     }
 
     // Check for circular dependencies
-    if (this.hasCircularDependencies(blueprint)) {
-      errors.push("Blueprint contains circular dependencies");
+    if (this.hasCircularDependencies(composite)) {
+      errors.push("Composite contains circular dependencies");
     }
 
     return { valid: errors.length === 0, errors };
   }
 
-  private buildExecutionGraph(blueprint: Blueprint): {
+  private buildExecutionGraph(composite: Composite): {
     sequential: string[][];
     parallelizable: string[];
   } {
-    const nodeIds = blueprint.nodes.map((n) => n.id);
+    const nodeIds = composite.nodes.map((n) => n.nodeId);
     const dependencies = new Map<string, Set<string>>();
 
     // Build dependency map
     nodeIds.forEach((nodeId) => dependencies.set(nodeId, new Set()));
 
-    for (const connection of blueprint.connections) {
-      const deps = dependencies.get(connection.targetNodeId);
+    for (const connection of composite.edges) {
+      const deps = dependencies.get(connection.target.nodeId);
       if (deps) {
-        deps.add(connection.sourceNodeId);
+        deps.add(connection.source.nodeId);
       }
     }
 
@@ -281,7 +274,7 @@ export class BlueprintRunner {
       }
 
       if (ready.length === 0) {
-        throw new Error("Circular dependency detected in blueprint");
+        throw new Error("Circular dependency detected in composite");
       }
 
       sequential.push(ready);
@@ -293,9 +286,9 @@ export class BlueprintRunner {
 
   private async executeNodesInParallel(
     nodeIds: string[],
-    blueprint: Blueprint,
+    composite: Composite,
     executionId: string,
-    options: BlueprintExecutionOptions,
+    options: CompositeExecutionOptions,
     results: Record<string, NodeExecutionResult>,
     times: Record<string, number>,
   ): Promise<void> {
@@ -304,7 +297,7 @@ export class BlueprintRunner {
         const startTime = performance.now();
         const result = await this.executeNode(
           nodeId,
-          blueprint,
+          composite,
           executionId,
           options,
         );
@@ -320,9 +313,9 @@ export class BlueprintRunner {
 
   private async executeNodeLevel(
     nodeIds: string[],
-    blueprint: Blueprint,
+    composite: Composite,
     executionId: string,
-    options: BlueprintExecutionOptions,
+    options: CompositeExecutionOptions,
     results: Record<string, NodeExecutionResult>,
     times: Record<string, number>,
   ): Promise<void> {
@@ -330,7 +323,7 @@ export class BlueprintRunner {
       const startTime = performance.now();
       const result = await this.executeNode(
         nodeId,
-        blueprint,
+        composite,
         executionId,
         options,
       );
@@ -347,28 +340,28 @@ export class BlueprintRunner {
 
   private async executeNode(
     nodeId: string,
-    blueprint: Blueprint,
+    composite: Composite,
     executionId: string,
-    options: BlueprintExecutionOptions,
+    options: CompositeExecutionOptions,
   ): Promise<NodeExecutionResult> {
-    const blueprintNode = blueprint.nodes.find((n) => n.id === nodeId);
-    if (!blueprintNode) {
-      throw new Error(`Node not found in blueprint: ${nodeId}`);
+    const compositeNode = composite.nodes.find((n) => n.nodeId === nodeId);
+    if (!compositeNode) {
+      throw new Error(`Node not found in composite: ${nodeId}`);
     }
 
-    const node = this.nodeRegistry.get(blueprintNode.type);
+    const node = this.nodeRegistry.get(compositeNode.type);
     if (!node) {
-      throw new Error(`Node type not registered: ${blueprintNode.type}`);
+      throw new Error(`Node type not registered: ${compositeNode.type}`);
     }
 
     // Gather inputs from connected nodes
-    const inputs = this.gatherNodeInputs(nodeId, blueprint, executionId);
+    const inputs = this.gatherNodeInputs(nodeId, composite, executionId);
 
     const context: NodeExecutionContext = {
       nodeId,
-      blueprintId: blueprint.id,
+      compositeId: composite.id,
       inputs,
-      config: blueprintNode.config,
+      config: compositeNode.config,
       workspaceRoot: options.workspaceRoot,
       startTime: new Date(),
       limits: {
@@ -391,39 +384,39 @@ export class BlueprintRunner {
 
   private gatherNodeInputs(
     nodeId: string,
-    blueprint: Blueprint,
+    composite: Composite,
     executionId: string,
   ): Record<string, unknown> {
     const inputs: Record<string, unknown> = {};
 
     // Find all connections that target this node
-    const incomingConnections = blueprint.connections.filter(
-      (conn) => conn.targetNodeId === nodeId,
+    const incomingConnections = composite.edges.filter(
+      (conn) => conn.target.nodeId === nodeId,
     );
 
     for (const connection of incomingConnections) {
       const sourceNodeState =
         this.stateManager.getContext(executionId)?.nodeStates[
-          connection.sourceNodeId
+          connection.source.nodeId
         ];
 
       if (sourceNodeState?.outputs) {
-        const outputValue = sourceNodeState.outputs[connection.sourcePort];
-        inputs[connection.targetPort] = outputValue;
+        const outputValue = sourceNodeState.outputs[connection.source.portId];
+        inputs[connection.target.portId] = outputValue;
       }
     }
 
     return inputs;
   }
 
-  private calculateBlueprintOutputs(
-    blueprint: Blueprint,
+  private calculateCompositeOutputs(
+    composite: Composite,
     nodeResults: Record<string, NodeExecutionResult>,
   ): Record<string, unknown> {
     const outputs: Record<string, unknown> = {};
 
     // For now, collect all outputs from all nodes
-    // In the future, this could be more sophisticated based on blueprint output definitions
+    // In the future, this could be more sophisticated based on composite output definitions
     for (const [nodeId, result] of Object.entries(nodeResults)) {
       if (result.success && result.outputs) {
         Object.entries(result.outputs).forEach(([key, value]) => {
@@ -435,7 +428,7 @@ export class BlueprintRunner {
     return outputs;
   }
 
-  private hasCircularDependencies(blueprint: Blueprint): boolean {
+  private hasCircularDependencies(composite: Composite): boolean {
     const visited = new Set<string>();
     const recursionStack = new Set<string>();
 
@@ -447,9 +440,9 @@ export class BlueprintRunner {
       recursionStack.add(nodeId);
 
       // Find all nodes that depend on this node
-      const dependents = blueprint.connections
-        .filter((conn) => conn.sourceNodeId === nodeId)
-        .map((conn) => conn.targetNodeId);
+      const dependents = composite.edges
+        .filter((conn) => conn.source.nodeId === nodeId)
+        .map((conn) => conn.target.nodeId);
 
       for (const dependent of dependents) {
         if (hasCycle(dependent)) return true;
@@ -459,6 +452,6 @@ export class BlueprintRunner {
       return false;
     };
 
-    return blueprint.nodes.some((node) => hasCycle(node.id));
+    return composite.nodes.some((node) => hasCycle(node.id));
   }
 }

@@ -6,13 +6,13 @@
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
-import type { INode, IAtomicNode, ICompositeNode } from "./INode";
-import { isAtomicNode, isCompositeNode } from "./INode";
+import type { INode, IAtomicNode, ICompositeNode } from "./INode.js";
+import { isAtomicNode, isCompositeNode } from "./INode.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../types";
+} from "../types.js";
 
 // Mock atomic node for testing
 class MockAtomicNode implements IAtomicNode {

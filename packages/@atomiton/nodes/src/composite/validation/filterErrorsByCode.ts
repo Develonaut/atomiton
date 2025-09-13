@@ -1,4 +1,4 @@
-import type { ValidationError } from "../types";
+import type { ValidationError } from "../types.js";
 
 /**
  * Filter validation errors by code

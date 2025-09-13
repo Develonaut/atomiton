@@ -1,4 +1,4 @@
-import type { ValidationError } from "../types";
+import type { ValidationError } from "../types.js";
 
 /**
  * Group validation errors by path

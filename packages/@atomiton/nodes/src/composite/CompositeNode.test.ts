@@ -6,16 +6,19 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { CompositeNode, type CompositeNodeDefinition } from "./CompositeNode";
-import { Node } from "../base/Node";
-import type { INode } from "../base/INode";
-import { isAtomicNode, isCompositeNode } from "../base/INode";
+import {
+  CompositeNode,
+  type CompositeNodeDefinition,
+} from "./CompositeNode.js";
+import { Node } from "../base/Node.js";
+import type { INode } from "../base/INode.js";
+import { isAtomicNode, isCompositeNode } from "../base/INode.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../types";
-import type { CompositeEdge } from "../base/INode";
+} from "../types.js";
+import type { CompositeEdge } from "../base/INode.js";
 
 // Mock atomic node for testing
 class MockAtomicNode extends Node {

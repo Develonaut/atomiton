@@ -5,9 +5,9 @@
  * Handles the business logic for reading CSV files and spreadsheet data
  */
 
-import { NodeLogic } from "../../base/NodeLogic";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
-import type { CSVReaderConfig } from "./CSVReaderNodeConfig";
+import { NodeLogic } from "../../base/NodeLogic.js";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+import type { CSVReaderConfig } from "./CSVReaderNodeConfig.js";
 
 export class CSVReaderLogic extends NodeLogic<CSVReaderConfig> {
   async execute(

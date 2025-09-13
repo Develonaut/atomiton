@@ -5,9 +5,9 @@
  * All concrete node implementations should extend this class.
  */
 
-import type { NodeExecutionContext, NodeExecutionResult } from "../types";
-import type { NodePortDefinition } from "../types";
-import type { INode } from "./INode";
+import type { NodeExecutionContext, NodeExecutionResult } from "../types.js";
+import type { NodePortDefinition } from "../types.js";
+import type { INode } from "./INode.js";
 
 export abstract class Node implements INode {
   abstract readonly id: string;

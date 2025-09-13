@@ -4,13 +4,13 @@
  * Node for transforming data, arrays, JSON, and templates
  */
 
-import { Node } from "../../base/Node";
+import { Node } from "../../base/Node.js";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types";
-import { TransformLogic } from "./TransformNodeLogic";
+} from "../../types.js";
+import { TransformLogic } from "./TransformNodeLogic.js";
 
 /**
  * Transform Node Class

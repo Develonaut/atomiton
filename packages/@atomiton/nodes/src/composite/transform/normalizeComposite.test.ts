@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { normalizeComposite } from "./normalizeComposite";
-import type { CompositeDefinition, TransformationOptions } from "../types";
+import { normalizeComposite } from "./normalizeComposite.js";
+import type { CompositeDefinition, TransformationOptions } from "../types.js";
 
 // Mock the transform functions since they might have YAML import issues
 vi.mock("./toYaml", () => ({
@@ -18,8 +18,8 @@ vi.mock("./fromYaml", () => ({
   fromYaml: vi.fn(),
 }));
 
-import { toYaml } from "./toYaml";
-import { fromYaml } from "./fromYaml";
+import { toYaml } from "./toYaml.js";
+import { fromYaml } from "./fromYaml.js";
 
 const mockToYaml = vi.mocked(toYaml);
 const mockFromYaml = vi.mocked(fromYaml);

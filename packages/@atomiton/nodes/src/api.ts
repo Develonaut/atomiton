@@ -20,17 +20,17 @@
  *   const nodeComponents = nodes.getNodeComponents();
  */
 
-import { ExtendedNode, type ExtendedNodeConfig } from "./ExtendedNode";
+import { ExtendedNode, type ExtendedNodeConfig } from "./ExtendedNode.js";
 import {
   getAvailableNodeTypes,
   isNodeTypeAvailable,
   loadAllNodes,
   loadNode,
-} from "./atomic";
-import type { INodeMetadata } from "./base/INodeMetadata";
-import type { Node } from "./base/Node";
-import { composite } from "./composite";
-import type { NodeType } from "./types";
+} from "./atomic/index.js";
+import type { INodeMetadata } from "./base/INodeMetadata.js";
+import type { Node } from "./base/Node.js";
+import { composite } from "./composite/index.js";
+import type { NodeType } from "./types.js";
 
 class NodesAPI {
   private static instance: NodesAPI;

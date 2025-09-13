@@ -1,7 +1,7 @@
 import { yaml } from "@atomiton/yaml";
-import type { CompositeNodeDefinition } from "../CompositeNode";
-import type { JsonCompositeDefinition } from "./types";
-import { fromJson } from "./fromJson";
+import type { CompositeNodeDefinition } from "../CompositeNode.js";
+import type { JsonCompositeDefinition } from "./types.js";
+import { fromJson } from "./fromJson.js";
 
 export async function fromYaml(
   yamlContent: string,

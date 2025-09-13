@@ -1,6 +1,6 @@
 /**
- * Minimal working Blueprint executor - Karen approved approach
- * Focus: Get ONE Blueprint executing successfully
+ * Minimal working Composite executor - Karen approved approach
+ * Focus: Get ONE Composite executing successfully
  */
 
 export type SimpleNode = {
@@ -9,7 +9,7 @@ export type SimpleNode = {
   execute: (input: unknown) => Promise<unknown>;
 };
 
-export type SimpleBlueprint = {
+export type SimpleComposite = {
   id: string;
   nodes: SimpleNode[];
 };
@@ -24,15 +24,15 @@ export type SimpleResult = {
  * Dead simple executor - no abstractions, just working execution
  */
 export class SimpleExecutor {
-  async executeBlueprint(
-    blueprint: SimpleBlueprint,
+  async executeComposite(
+    composite: SimpleComposite,
     input?: unknown,
   ): Promise<SimpleResult> {
     try {
       let currentOutput = input;
 
       // Execute nodes sequentially (simplest approach)
-      for (const node of blueprint.nodes) {
+      for (const node of composite.nodes) {
         console.warn(`Executing node: ${node.id}`);
         currentOutput = await node.execute(currentOutput);
       }

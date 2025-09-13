@@ -6,12 +6,12 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { csvReader } from "./CSVReaderNode";
-import { CSVReaderLogic } from "./CSVReaderNodeLogic";
-import type { CSVReaderConfig } from "./CSVReaderNodeConfig";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
-import { isAtomicNode, isCompositeNode } from "../../base/INode";
-import type { IAtomicNode } from "../../base/INode";
+import { csvReader } from "./CSVReaderNode.js";
+import { CSVReaderLogic } from "./CSVReaderNodeLogic.js";
+import type { CSVReaderConfig } from "./CSVReaderNodeConfig.js";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+import { isAtomicNode, isCompositeNode } from "../../base/INode.js";
+import type { IAtomicNode } from "../../base/INode.js";
 
 describe("CSVReaderNode - Unified Architecture Tests", () => {
   let mockContext: NodeExecutionContext;

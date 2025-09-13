@@ -1,8 +1,11 @@
 import { EventEmitter } from "events";
 import PQueue from "p-queue";
 import { v4 as uuidv4 } from "uuid";
-import type { BlueprintDefinition, IStorageEngine } from "@atomiton/storage";
-import type { NodeExecutionContext } from "@atomiton/nodes";
+import type { IStorageEngine } from "@atomiton/storage";
+import type {
+  NodeExecutionContext,
+  CompositeDefinition,
+} from "@atomiton/nodes";
 import type {
   IExecutionEngine,
   ExecutionRequest,
@@ -11,19 +14,19 @@ import type {
   ExecutionError,
   ExecutionMetrics,
 } from "../interfaces/IExecutionEngine.js";
-import { BlueprintRunner } from "../execution/BlueprintRunner.js";
+import { CompositeRunner } from "../execution/CompositeRunner.js";
 import { StateManager } from "../state/StateManager.js";
 import { RuntimeRouter } from "../runtime/RuntimeRouter.js";
 
 /**
  * Main execution engine implementation
- * Orchestrates Blueprint and node execution with proper state management
+ * Orchestrates Composite and node execution with proper state management
  */
 export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
   private readonly queue: PQueue;
   private readonly stateManager: StateManager;
   private readonly runtimeRouter: RuntimeRouter;
-  private readonly blueprintRunner: BlueprintRunner;
+  private readonly compositeRunner: CompositeRunner;
   private readonly storage?: IStorageEngine;
   private readonly executions: Map<string, ExecutionResult>;
 
@@ -44,7 +47,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
     // Initialize components
     this.stateManager = new StateManager();
     this.runtimeRouter = new RuntimeRouter();
-    this.blueprintRunner = new BlueprintRunner(
+    this.compositeRunner = new CompositeRunner(
       this.runtimeRouter,
       this.stateManager,
     );
@@ -57,7 +60,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
   }
 
   /**
-   * Execute a Blueprint with given inputs
+   * Execute a Composite with given inputs
    */
   async execute(request: ExecutionRequest): Promise<ExecutionResult> {
     const executionId = uuidv4();
@@ -66,7 +69,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
     // Create initial execution result
     const execution: ExecutionResult = {
       executionId,
-      blueprintId: request.blueprintId,
+      compositeId: request.compositeId,
       status: "pending",
       startTime,
       nodeResults: new Map(),
@@ -75,25 +78,25 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
     this.executions.set(executionId, execution);
     this.emit("execution:started", {
       executionId,
-      blueprintId: request.blueprintId,
+      compositeId: request.compositeId,
     });
 
     try {
-      // Load Blueprint from storage if available
-      let blueprint: BlueprintDefinition;
+      // Load Composite from storage if available
+      let composite: CompositeDefinition;
       if (this.storage) {
-        const data = await this.storage.load(request.blueprintId);
-        blueprint = data as BlueprintDefinition;
+        const data = await this.storage.load(request.compositeId);
+        composite = data as CompositeDefinition;
       } else {
         throw new Error(
-          `No storage configured, cannot load Blueprint ${request.blueprintId}`,
+          `No storage configured, cannot load Composite ${request.compositeId}`,
         );
       }
 
       // Create execution context
       const context = this.createExecutionContext(
         executionId,
-        blueprint,
+        composite,
         request,
       );
 
@@ -103,7 +106,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
 
       // Queue the execution
       const result = await this.queue.add(async () => {
-        return this.blueprintRunner.execute(blueprint, context, request.config);
+        return this.compositeRunner.execute(composite, context, request.config);
       });
 
       // Update execution result
@@ -131,10 +134,10 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
   }
 
   /**
-   * Execute a Blueprint directly (for nested execution)
+   * Execute a Composite directly (for nested execution)
    */
-  async executeBlueprint(
-    blueprint: BlueprintDefinition,
+  async executeComposite(
+    composite: CompositeDefinition,
     context: NodeExecutionContext,
   ): Promise<ExecutionResult> {
     const executionId = uuidv4();
@@ -142,7 +145,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
 
     const execution: ExecutionResult = {
       executionId,
-      blueprintId: blueprint.id,
+      compositeId: composite.id,
       status: "running",
       startTime,
       nodeResults: new Map(),
@@ -151,7 +154,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
     this.executions.set(executionId, execution);
 
     try {
-      const result = await this.blueprintRunner.execute(blueprint, context);
+      const result = await this.compositeRunner.execute(composite, context);
 
       execution.status = "completed";
       execution.endTime = new Date();
@@ -245,7 +248,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
    */
   async listExecutions(filter?: {
     status?: ExecutionStatus;
-    blueprintId?: string;
+    compositeId?: string;
     startDate?: Date;
     endDate?: Date;
   }): Promise<ExecutionResult[]> {
@@ -255,9 +258,9 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       if (filter.status) {
         executions = executions.filter((e) => e.status === filter.status);
       }
-      if (filter.blueprintId) {
+      if (filter.compositeId) {
         executions = executions.filter(
-          (e) => e.blueprintId === filter.blueprintId,
+          (e) => e.compositeId === filter.compositeId,
         );
       }
       if (filter.startDate) {
@@ -298,12 +301,12 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
    */
   private createExecutionContext(
     executionId: string,
-    blueprint: BlueprintDefinition,
+    composite: CompositeDefinition,
     request: ExecutionRequest,
   ): NodeExecutionContext {
     return {
       nodeId: executionId,
-      blueprintId: blueprint.id,
+      compositeId: composite.id,
       inputs: request.inputs ?? {},
       config: request.config,
       startTime: new Date(),
@@ -378,7 +381,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       this.emit("error", error);
     });
 
-    this.blueprintRunner.on("error", (error) => {
+    this.compositeRunner.on("error", (error) => {
       this.emit("error", error);
     });
   }

@@ -1,6 +1,6 @@
-import type { BlueprintDefinition } from "@atomiton/storage";
+import type { CompositeDefinition } from "@atomiton/nodes";
 import { EventEmitter } from "events";
-import { BlueprintRunner } from "../execution/BlueprintRunner.js";
+import { CompositeRunner } from "../execution/CompositeRunner.js";
 import type {
   ExecutionContext,
   ExecutionResult,
@@ -40,7 +40,7 @@ export class EnhancedExecutionEngine
 {
   private queue: ScalableQueue;
   private stateManager: StateManager;
-  private blueprintRunner: BlueprintRunner;
+  private compositeRunner: CompositeRunner;
   private runtimeRouter: RuntimeRouter;
   private executionContexts: Map<string, ExecutionContext>;
   private webhookHandlers: Map<string, (data: unknown) => Promise<unknown>>;
@@ -67,7 +67,7 @@ export class EnhancedExecutionEngine
 
     this.stateManager = new StateManager();
     this.runtimeRouter = new RuntimeRouter();
-    this.blueprintRunner = new BlueprintRunner(
+    this.compositeRunner = new CompositeRunner(
       this.stateManager,
       this.runtimeRouter,
     );
@@ -92,7 +92,7 @@ export class EnhancedExecutionEngine
       this.metrics.activeExecutions++;
       this.emit("execution:started", {
         executionId: jobData.executionId,
-        blueprintId: jobData.blueprintId,
+        compositeId: jobData.compositeId,
       });
     });
 
@@ -130,7 +130,7 @@ export class EnhancedExecutionEngine
   }
 
   async execute(
-    blueprintId: string,
+    compositeId: string,
     input?: unknown,
     options?: {
       priority?: number;
@@ -142,7 +142,7 @@ export class EnhancedExecutionEngine
 
     const context: ExecutionContext = {
       executionId,
-      blueprintId,
+      compositeId,
       input,
       startTime: Date.now(),
       status: "pending" as ExecutionStatus,
@@ -151,11 +151,11 @@ export class EnhancedExecutionEngine
     };
 
     this.executionContexts.set(executionId, context);
-    this.stateManager.initializeExecution(executionId, blueprintId);
+    this.stateManager.initializeExecution(executionId, compositeId);
 
     const jobData: JobData = {
       executionId,
-      blueprintId,
+      compositeId,
       input,
       loadStaticData: true,
       webhookData: options?.webhookId
@@ -203,15 +203,15 @@ export class EnhancedExecutionEngine
     });
   }
 
-  async executeBlueprint(
-    blueprint: BlueprintDefinition,
+  async executeComposite(
+    composite: CompositeDefinition,
     input?: unknown,
   ): Promise<ExecutionResult> {
     const executionId = this.generateExecutionId();
 
     try {
-      const result = await this.blueprintRunner.execute(
-        blueprint,
+      const result = await this.compositeRunner.execute(
+        composite,
         executionId,
         input,
       );
@@ -309,7 +309,7 @@ export class EnhancedExecutionEngine
       const state = this.stateManager.getExecutionState(executionId);
       history.push({
         executionId,
-        blueprintId: context.blueprintId,
+        compositeId: context.compositeId,
         status: context.status,
         startTime: context.startTime,
         endTime: state?.endTime,
@@ -372,7 +372,7 @@ type ExecutionMetrics = {
 
 type ExecutionHistoryEntry = {
   executionId: string;
-  blueprintId: string;
+  compositeId: string;
   status: ExecutionStatus;
   startTime: number;
   endTime?: number;

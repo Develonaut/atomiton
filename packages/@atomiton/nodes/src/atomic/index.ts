@@ -6,7 +6,7 @@
  * Mental Model: These are the "building blocks" that do actual work.
  */
 
-import type { Node } from "../base/Node";
+import type { Node } from "../base/Node.js";
 
 /**
  * Node registry with lazy loading support
@@ -15,15 +15,15 @@ import type { Node } from "../base/Node";
 type NodeImportFunction = () => Promise<{ default: Node }>;
 
 const NODE_REGISTRY: Record<string, NodeImportFunction> = {
-  "csv-reader": () => import("./csv-reader"),
-  "file-system": () => import("./file-system"),
-  "http-request": () => import("./http-request"),
-  "shell-command": () => import("./shell-command"),
-  "image-composite": () => import("./image-composite"),
-  transform: () => import("./transform"),
-  code: () => import("./code"),
-  loop: () => import("./loop"),
-  parallel: () => import("./parallel"),
+  "csv-reader": () => import("./csv-reader/index.js"),
+  "file-system": () => import("./file-system/index.js"),
+  "http-request": () => import("./http-request/index.js"),
+  "shell-command": () => import("./shell-command/index.js"),
+  "image-composite": () => import("./image-composite/index.js"),
+  transform: () => import("./transform/index.js"),
+  code: () => import("./code/index.js"),
+  loop: () => import("./loop/index.js"),
+  parallel: () => import("./parallel/index.js"),
 };
 
 /**

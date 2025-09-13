@@ -6,9 +6,9 @@
  */
 
 import { beforeAll, describe, expect, it } from "vitest";
-import nodes from "../api";
-import { getAvailableNodeTypes, loadAllNodes } from "../atomic";
-import type { NodeType } from "../types";
+import nodes from "../api.js";
+import { getAvailableNodeTypes, loadAllNodes } from "../atomic/index.js";
+import type { NodeType } from "../types.js";
 
 describe("Nodes Package - Core Functionality", () => {
   beforeAll(async () => {

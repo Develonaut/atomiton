@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { validateNodeUniqueness } from "./validateNodeUniqueness";
-import type { CompositeNodeSpec } from "../types";
+import { validateNodeUniqueness } from "./validateNodeUniqueness.js";
+import type { CompositeNodeSpec } from "../types.js";
 
 describe("validateNodeUniqueness", () => {
   describe("Valid Node Arrays", () => {

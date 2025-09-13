@@ -8,11 +8,11 @@
  * are just nodes that contain other nodes, not special cases.
  */
 
-import type { NodeDefinition } from "../types";
-import type { CompositeEdge } from "../base/INode";
+import type { NodeDefinition } from "../types.js";
+import type { CompositeEdge } from "../base/INode.js";
 
 // Re-export CompositeEdge for convenience
-export type { CompositeEdge } from "../base/INode";
+export type { CompositeEdge } from "../base/INode.js";
 
 /**
  * Position in the visual editor for child nodes

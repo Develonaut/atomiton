@@ -38,12 +38,15 @@ const CompositeNodeSpecSchema = z.object({
   data: CompositeNodeDataSchema,
 });
 
+const CompositeEdgePortSchema = z.object({
+  nodeId: z.string().min(1),
+  portId: z.string().min(1),
+});
+
 const CompositeEdgeSchema = z.object({
   id: z.string().min(1),
-  source: z.string().min(1),
-  target: z.string().min(1),
-  sourceHandle: z.string().optional(),
-  targetHandle: z.string().optional(),
+  source: CompositeEdgePortSchema,
+  target: CompositeEdgePortSchema,
   data: CompositeEdgeDataSchema.optional(),
 });
 

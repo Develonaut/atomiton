@@ -8,16 +8,16 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import nodes from "../api";
-import { csvReader } from "../atomic/csv-reader/CSVReaderNode";
-import { httpRequest } from "../atomic/http-request/HttpRequestNode";
-import type { IAtomicNode, ICompositeNode, INode } from "../base/INode";
-import { isAtomicNode, isCompositeNode } from "../base/INode";
+import nodes from "../api.js";
+import { csvReader } from "../atomic/csv-reader/CSVReaderNode.js";
+import { httpRequest } from "../atomic/http-request/HttpRequestNode.js";
+import type { IAtomicNode, ICompositeNode, INode } from "../base/INode.js";
+import { isAtomicNode, isCompositeNode } from "../base/INode.js";
 import {
   CompositeNode,
   type CompositeNodeDefinition,
-} from "../composite/CompositeNode";
-import type { NodeExecutionContext, NodeExecutionResult } from "../types";
+} from "../composite/CompositeNode.js";
+import type { NodeExecutionContext, NodeExecutionResult } from "../types.js";
 
 // Mock conductor-like executor that works with any INode
 class UniversalNodeExecutor {
