@@ -5,16 +5,17 @@
  * Provides a clean ES6 class interface for node instances.
  */
 
+import type React from "react";
 import type {
   NodeDefinition,
   NodeExecutionContext,
   NodeExecutionResult,
 } from "../types";
-import type { INodeConfig } from "./INodeConfig";
-import type { NodeLogic } from "./NodeLogic";
-import type { INodeLogic } from "./INodeLogic";
 import type { INode } from "./INode";
+import type { INodeConfig } from "./INodeConfig";
+import type { INodeLogic } from "./INodeLogic";
 import type { INodeMetadata } from "./INodeMetadata";
+import type { NodeLogic } from "./NodeLogic";
 
 /**
  * Base Node Class

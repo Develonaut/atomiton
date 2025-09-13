@@ -190,6 +190,13 @@ class NodesAPI {
   }
 
   /**
+   * Get available node types
+   */
+  getNodeTypes(): string[] {
+    return this.nodes.map((node) => node.metadata.type);
+  }
+
+  /**
    * Convert category name to display name
    */
   getCategoryDisplayName(category: string): string {

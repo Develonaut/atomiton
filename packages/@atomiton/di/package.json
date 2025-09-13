@@ -50,8 +50,8 @@
     "@types/node": "^20.11.5",
     "eslint": "^9.10.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.12",
-    "vitest": "^1.2.2"
+    "vite": "^6.0.0",
+    "vitest": "^2.0.0"
   },
   "engines": {
     "node": ">=18"

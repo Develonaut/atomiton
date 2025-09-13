@@ -11,6 +11,8 @@ export { nodes } from "./api";
 export type { NodesAPI } from "./api";
 export type {
   NodeDefinition,
+  NodeExecutionContext,
+  NodeExecutionResult,
   NodeItem,
   NodePortDefinition,
   NodeType,
@@ -18,7 +20,7 @@ export type {
 
 // Configuration system types
 export type {
-  UIFieldMetadata,
-  UIControlType,
   FormConfig,
+  UIControlType,
+  UIFieldMetadata,
 } from "./base/NodeConfig";

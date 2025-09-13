@@ -32,29 +32,20 @@
   "license": "MIT",
   "dependencies": {
     "@atomiton/events": "workspace:*",
-    "@atomiton/ui": "workspace:*",
-    "@mantine/core": "^7.0.0",
-    "@tabler/icons-react": "^3.0.0",
     "chokidar": "^4.0.0",
     "glob": "^10.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "vitest": "^2.0.0",
-    "zod": "^3.0.0"
+    "zod": "^3.25.3"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "^19",
-    "@types/react-dom": "^19",
     "eslint": "^9",
     "typescript": "^5",
-    "vite": "^6.0.0"
+    "vitest": "^2.0.0"
   },
   "peerDependencies": {
-    "@mantine/core": "^7.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.0.0"
   }
 }
