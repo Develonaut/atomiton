@@ -16,6 +16,9 @@ export class HttpRequestLogic extends NodeLogic<HttpRequestConfig> {
     context: NodeExecutionContext,
     config: HttpRequestConfig,
   ): Promise<NodeExecutionResult> {
+    // Store context for metadata creation
+    this.context = context;
+
     const startTime = Date.now();
     const input = context.inputs as HttpRequestInput;
 

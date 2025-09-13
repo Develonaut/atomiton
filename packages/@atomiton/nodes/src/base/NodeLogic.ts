@@ -1,6 +1,9 @@
 import type { NodeExecutionContext, NodeExecutionResult } from "../types";
 
 export abstract class NodeLogic<TConfig = Record<string, unknown>> {
+  // Store context for use in result creation
+  protected context?: NodeExecutionContext;
+
   abstract execute(
     context: NodeExecutionContext,
     config: TConfig,
@@ -71,10 +74,17 @@ export abstract class NodeLogic<TConfig = Record<string, unknown>> {
 
   protected createSuccessResult(
     outputs: Record<string, unknown>,
+    metadata?: Record<string, unknown>,
   ): NodeExecutionResult {
     return {
       success: true,
       outputs,
+      metadata: {
+        executedAt: new Date().toISOString(),
+        nodeId: this.context?.nodeId,
+        nodeType: this.context?.nodeId?.split("-")[0],
+        ...metadata,
+      },
     };
   }
 

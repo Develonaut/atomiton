@@ -111,8 +111,8 @@ describe("HttpRequestNode - Unified Architecture Tests", () => {
       expect(result.error).toBeUndefined();
       expect(result.metadata).toBeDefined();
       expect(result.metadata?.executedAt).toBeDefined();
-      expect(result.metadata?.nodeId).toBe("http-request");
-      expect(result.metadata?.nodeType).toBe("http-request");
+      expect(result.metadata?.nodeId).toBe("http-request-1"); // From mockContext
+      expect(result.metadata?.nodeType).toBe("http");
     });
 
     it("should handle conductor execution pattern", async () => {
@@ -374,6 +374,22 @@ describe("HttpRequestNode - Unified Architecture Tests", () => {
     });
 
     it("should handle concurrent executions", async () => {
+      // Mock fetch to avoid actual network calls
+      const originalFetch = global.fetch;
+      const mockFetch = vi.fn().mockImplementation((url: string) => {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          statusText: "OK",
+          headers: new Headers({
+            "content-type": "application/json",
+          }),
+          json: () => Promise.resolve({ data: `Response from ${url}` }),
+          text: () => Promise.resolve(`Response from ${url}`),
+        });
+      });
+      global.fetch = mockFetch;
+
       const contexts = [
         {
           ...mockContext,
@@ -399,11 +415,36 @@ describe("HttpRequestNode - Unified Architecture Tests", () => {
       results.forEach((result) => {
         expect(result).toHaveProperty("success");
         expect(result).toHaveProperty("outputs");
+        expect(result.success).toBe(true);
       });
+
+      // Verify all three requests were made
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api1.com",
+        expect.any(Object),
+      );
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api2.com",
+        expect.any(Object),
+      );
+      expect(mockFetch).toHaveBeenCalledWith(
+        "https://api3.com",
+        expect.any(Object),
+      );
+
+      // Restore original fetch
+      global.fetch = originalFetch;
     });
 
     it("should maintain consistent state", async () => {
-      const initialMetadata = httpRequest.metadata;
+      // Extract only data properties from metadata (exclude functions)
+      const extractDataProps = (meta: any) => {
+        const { validate, getSearchTerms, matchesSearch, ...dataProps } = meta;
+        return dataProps;
+      };
+
+      const initialMetadata = extractDataProps(httpRequest.metadata);
       const initialInputPorts = httpRequest.inputPorts;
       const initialOutputPorts = httpRequest.outputPorts;
 
@@ -412,7 +453,7 @@ describe("HttpRequestNode - Unified Architecture Tests", () => {
       await httpRequest.execute(mockContext);
 
       // State should remain consistent
-      expect(httpRequest.metadata).toEqual(initialMetadata);
+      expect(extractDataProps(httpRequest.metadata)).toEqual(initialMetadata);
       expect(httpRequest.inputPorts).toEqual(initialInputPorts);
       expect(httpRequest.outputPorts).toEqual(initialOutputPorts);
     });

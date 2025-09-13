@@ -56,10 +56,41 @@ export class ExtendedNode extends Node {
 
   constructor(config: ExtendedNodeConfig) {
     super();
+
+    // Validate required fields
+    if (!config.id || config.id.trim() === "") {
+      throw new Error(
+        "Invalid node structure: id is required and cannot be empty",
+      );
+    }
+    if (!config.name || config.name.trim() === "") {
+      throw new Error(
+        "Invalid node structure: name is required and cannot be empty",
+      );
+    }
+    if (!config.type || config.type.trim() === "") {
+      throw new Error(
+        "Invalid node structure: type is required and cannot be empty",
+      );
+    }
+    if (typeof config.execute !== "function") {
+      throw new Error("Invalid node structure: execute function is required");
+    }
+
     this.config = config;
     this.id = config.id;
     this.name = config.name;
     this.type = config.type;
+
+    // Run validation if provided and throw if it fails
+    if (config.validate) {
+      const validation = config.validate();
+      if (!validation.valid) {
+        throw new Error(
+          `Invalid node structure: ${validation.errors.join(", ")}`,
+        );
+      }
+    }
   }
 
   async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {

@@ -318,7 +318,13 @@ describe("CSVReaderNode - Unified Architecture Tests", () => {
     });
 
     it("should maintain consistent state across operations", async () => {
-      const initialMetadata = csvReader.metadata;
+      // Extract only data properties from metadata (exclude functions)
+      const extractDataProps = (meta: any) => {
+        const { validate, getSearchTerms, matchesSearch, ...dataProps } = meta;
+        return dataProps;
+      };
+
+      const initialMetadata = extractDataProps(csvReader.metadata);
       const initialPorts = csvReader.outputPorts;
 
       // Execute multiple times
@@ -327,7 +333,7 @@ describe("CSVReaderNode - Unified Architecture Tests", () => {
       await csvReader.execute(mockContext);
 
       // Should maintain consistent state
-      expect(csvReader.metadata).toEqual(initialMetadata);
+      expect(extractDataProps(csvReader.metadata)).toEqual(initialMetadata);
       expect(csvReader.outputPorts).toEqual(initialPorts);
     });
   });

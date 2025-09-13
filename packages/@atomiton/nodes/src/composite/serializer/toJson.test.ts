@@ -608,14 +608,14 @@ describe("toJson", () => {
 
     it("should set type to 'blueprint' regardless of input", () => {
       // Even if the input had a different type somewhere, output should be "blueprint"
-      const composites = [
+      const composites: CompositeNodeDefinition[] = [
         {
           id: "test1",
           name: "Test 1",
           description: "Test",
           category: "test",
           version: "1.0.0",
-          metadata: { type: "different-type" }, // Different type in metadata
+          metadata: { author: "test-author" }, // Valid metadata field
           nodes: [],
           edges: [],
         },

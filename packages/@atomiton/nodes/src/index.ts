@@ -32,9 +32,11 @@ export type {
   CompositeDefinition,
   CompositeExecutionResult,
   CompositeExecutionSettings,
-  CompositeMetadata,
   CompositeNodeDefinition,
   CompositeNodeSpec,
+  CompositePosition,
+  CompositeVariable,
+  CompositeSettings,
 } from "./composite/index";
 
 export type {

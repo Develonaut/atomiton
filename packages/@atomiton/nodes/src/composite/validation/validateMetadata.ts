@@ -13,38 +13,56 @@ export function validateMetadata(
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
 
+  // If metadata is undefined, return success (it's optional)
+  if (!metadata) {
+    return { success: true, errors: [] };
+  }
+
   try {
-    // Validate timestamp formats
-    const created = new Date(metadata.created);
-    const modified = new Date(metadata.modified);
-
-    if (isNaN(created.getTime())) {
-      errors.push({
-        path: "metadata.created",
-        message: "Invalid created timestamp format",
-        code: "INVALID_TIMESTAMP",
-        data: { created: metadata.created },
-      });
-    }
-
-    if (isNaN(modified.getTime())) {
-      errors.push({
-        path: "metadata.modified",
-        message: "Invalid modified timestamp format",
-        code: "INVALID_TIMESTAMP",
-        data: { modified: metadata.modified },
-      });
-    }
-
-    // Check logical consistency
-    if (!isNaN(created.getTime()) && !isNaN(modified.getTime())) {
-      if (created > modified) {
-        warnings.push({
-          path: "metadata",
-          message: "Created date is after modified date",
-          code: "TIMESTAMP_INCONSISTENCY",
-          data: { created: metadata.created, modified: metadata.modified },
+    // Validate timestamp formats if they exist
+    if ("created" in metadata && metadata.created) {
+      const created = new Date(metadata.created as string);
+      if (isNaN(created.getTime())) {
+        errors.push({
+          path: "metadata.created",
+          message: "Invalid created timestamp format",
+          code: "INVALID_TIMESTAMP",
+          data: { created: metadata.created },
         });
+      }
+    }
+
+    if ("modified" in metadata && metadata.modified) {
+      const modified = new Date(metadata.modified as string);
+      if (isNaN(modified.getTime())) {
+        errors.push({
+          path: "metadata.modified",
+          message: "Invalid modified timestamp format",
+          code: "INVALID_TIMESTAMP",
+          data: { modified: metadata.modified },
+        });
+      }
+    }
+
+    // Check logical consistency if both timestamps exist
+    if (
+      "created" in metadata &&
+      metadata.created &&
+      "modified" in metadata &&
+      metadata.modified
+    ) {
+      const created = new Date(metadata.created as string);
+      const modified = new Date(metadata.modified as string);
+
+      if (!isNaN(created.getTime()) && !isNaN(modified.getTime())) {
+        if (created > modified) {
+          warnings.push({
+            path: "metadata",
+            message: "Created date is after modified date",
+            code: "TIMESTAMP_INCONSISTENCY",
+            data: { created: metadata.created, modified: metadata.modified },
+          });
+        }
       }
     }
 

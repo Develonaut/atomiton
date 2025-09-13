@@ -402,26 +402,38 @@ describe("Factory API - nodes.extendNode() Tests", () => {
     });
 
     it("should use custom validation when provided", () => {
+      // Create a node with validation that passes
       const customNode = nodes.extendNode({
         id: "custom-validation",
         name: "Custom Validation Node",
         type: "custom-validation",
         execute: async () => ({ success: true, outputs: {} }),
         validate: () => ({
-          valid: false,
-          errors: [
-            "Custom validation failed",
-            "Missing required configuration",
-          ],
+          valid: true,
+          errors: [],
         }),
       });
 
       const validation = customNode.validate();
-      expect(validation.valid).toBe(false);
-      expect(validation.errors).toEqual([
-        "Custom validation failed",
-        "Missing required configuration",
-      ]);
+      expect(validation.valid).toBe(true);
+      expect(validation.errors).toEqual([]);
+
+      // Test that failing validation throws during creation
+      expect(() => {
+        nodes.extendNode({
+          id: "failing-validation",
+          name: "Failing Validation Node",
+          type: "failing-validation",
+          execute: async () => ({ success: true, outputs: {} }),
+          validate: () => ({
+            valid: false,
+            errors: [
+              "Custom validation failed",
+              "Missing required configuration",
+            ],
+          }),
+        });
+      }).toThrow(/Custom validation failed.*Missing required configuration/);
     });
 
     it("should validate during factory creation", () => {

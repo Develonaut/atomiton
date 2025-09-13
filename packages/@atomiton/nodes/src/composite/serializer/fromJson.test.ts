@@ -35,11 +35,8 @@ describe("fromJson", () => {
         category: "test",
         version: "1.0.0",
         metadata: {
-          author: undefined,
-          tags: undefined,
-          icon: undefined,
           created: "2024-01-01T00:00:00Z",
-          updated: undefined,
+          updated: "2024-01-01T00:00:00Z",
         },
         nodes: [],
         edges: [],
@@ -107,9 +104,8 @@ describe("fromJson", () => {
         metadata: {
           author: "Test Author",
           tags: ["test", "complete"],
-          icon: undefined,
           created: "2024-01-01T00:00:00Z",
-          updated: undefined,
+          updated: "2024-01-02T00:00:00Z",
         },
         nodes: [
           {
@@ -443,10 +439,8 @@ describe("fromJson", () => {
 
       expect(result.metadata).toEqual({
         author: "Test Author",
-        tags: undefined,
-        icon: undefined,
         created: "2024-01-01T00:00:00Z",
-        updated: undefined,
+        updated: "2024-01-02T00:00:00Z",
       });
     });
 
@@ -469,11 +463,8 @@ describe("fromJson", () => {
       const result = fromJson(jsonData);
 
       expect(result.metadata).toEqual({
-        author: undefined,
-        tags: undefined,
-        icon: undefined,
         created: "2024-01-01T00:00:00Z",
-        updated: undefined,
+        updated: "2024-01-02T00:00:00Z",
       });
     });
   });

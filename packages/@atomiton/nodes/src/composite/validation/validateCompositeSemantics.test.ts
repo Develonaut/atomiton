@@ -13,12 +13,11 @@ describe("validateCompositeSemantics", () => {
   const baseComposite: CompositeDefinition = {
     id: "test-composite",
     name: "Test Composite",
+    type: "composite",
     category: "test",
     description: "A test composite node",
     version: "1.0.0",
     metadata: {
-      created: "2024-01-01T00:00:00Z",
-      modified: "2024-01-01T00:00:00Z",
       author: "Test Author",
     },
     nodes: [
@@ -258,6 +257,7 @@ describe("validateCompositeSemantics", () => {
             data: {},
           },
         ],
+        edges: [], // Override edges to avoid reference errors
       };
 
       const result = validateCompositeSemantics(invalidTypeComposite, context);
@@ -280,6 +280,7 @@ describe("validateCompositeSemantics", () => {
             data: {},
           },
         ],
+        edges: [], // Override edges to avoid reference errors
       };
 
       const result = validateCompositeSemantics(invalidTypeComposite);
@@ -417,6 +418,7 @@ describe("validateCompositeSemantics", () => {
             data: {},
           },
         ],
+        edges: [], // Override edges to avoid reference errors
       };
 
       const result = validateCompositeSemantics(testComposite, context);
@@ -473,7 +475,7 @@ describe("validateCompositeSemantics", () => {
 
       expect(result.success).toBe(false);
       expect(
-        result.errors.some((e) => e.message.includes("not available")),
+        result.errors.some((e) => e.message.includes("Unknown node type")),
       ).toBe(true);
     });
 
@@ -505,6 +507,7 @@ describe("validateCompositeSemantics", () => {
             },
           },
         ],
+        edges: [], // Override edges to avoid reference errors
       };
 
       const result = validateCompositeSemantics(complexComposite);

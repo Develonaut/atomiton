@@ -34,8 +34,10 @@ describe("isCompositeDefinition", () => {
     edges: [
       {
         id: "edge1",
-        source: { nodeId: "node1", portId: "output" },
-        target: { nodeId: "node1", portId: "input" },
+        source: "node1",
+        target: "node1",
+        sourceHandle: "output",
+        targetHandle: "input",
       },
     ],
   };

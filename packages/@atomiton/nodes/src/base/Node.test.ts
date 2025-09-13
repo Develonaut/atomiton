@@ -19,7 +19,8 @@ class TestNode extends Node {
   readonly name = "Test Node";
   readonly type = "test";
 
-  async execute(_context: NodeExecutionContext): Promise<NodeExecutionResult> {
+  async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
+    this.log(context, "info", "Executing test node");
     return this.createSuccessResult({ result: "test-execution" });
   }
 

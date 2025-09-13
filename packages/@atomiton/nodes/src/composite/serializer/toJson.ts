@@ -10,12 +10,12 @@ export function toJson(
     description: composite.description || "",
     category: composite.category,
     version: composite.version || "1.0.0",
-    metadata: composite.metadata,
+    metadata: composite.metadata ? { ...composite.metadata } : undefined,
     nodes: composite.nodes.map((node) => ({
       id: node.id,
       type: node.type,
       position: node.position || { x: 0, y: 0 },
-      data: node.config || {},
+      data: node.config === null ? null : node.config || {},
     })),
     edges: composite.edges.map((edge) => ({
       id: edge.id,

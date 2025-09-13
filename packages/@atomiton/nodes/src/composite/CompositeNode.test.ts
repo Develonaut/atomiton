@@ -503,7 +503,13 @@ describe("CompositeNode - Unified Architecture Tests", () => {
     });
 
     it("should maintain consistent state across operations", async () => {
-      const initialMetadata = compositeNode.metadata;
+      // Extract only data properties from metadata (exclude functions)
+      const extractDataProps = (meta: any) => {
+        const { validate, getSearchTerms, matchesSearch, ...dataProps } = meta;
+        return dataProps;
+      };
+
+      const initialMetadata = extractDataProps(compositeNode.metadata);
       const initialChildren = compositeNode.getChildNodes();
 
       // Execute multiple times
@@ -511,7 +517,7 @@ describe("CompositeNode - Unified Architecture Tests", () => {
       await compositeNode.execute(mockContext);
 
       // Should maintain consistent state
-      expect(compositeNode.metadata).toEqual(initialMetadata);
+      expect(extractDataProps(compositeNode.metadata)).toEqual(initialMetadata);
       expect(compositeNode.getChildNodes()).toEqual(initialChildren);
     });
 

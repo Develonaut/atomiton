@@ -29,8 +29,10 @@ export { CompositeSerializer } from "./serializer";
 export { CompositeAPI, composites } from "./api";
 export type {
   CompositeDefinition,
-  CompositeMetadata,
   CompositeNodeSpec,
+  CompositePosition,
+  CompositeVariable,
+  CompositeSettings,
 } from "./types";
 export type { CompositeEdge } from "../base/INode";
 

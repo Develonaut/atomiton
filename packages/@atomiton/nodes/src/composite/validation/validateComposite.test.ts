@@ -40,9 +40,11 @@ describe("validateComposite", () => {
     edges: [
       {
         id: "edge1",
-        source: { nodeId: "node1", portId: "output" },
-        target: { nodeId: "node2", portId: "input" },
-        data: { sourceHandle: "output", targetHandle: "input" },
+        source: "node1",
+        target: "node2",
+        sourceHandle: "output",
+        targetHandle: "input",
+        data: {},
       },
     ],
     variables: {
@@ -267,6 +269,7 @@ describe("validateComposite", () => {
             data: {},
           },
         ],
+        edges: [], // Override edges to avoid reference errors
       };
 
       const result = validateComposite(composite, context);

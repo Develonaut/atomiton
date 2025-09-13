@@ -14,6 +14,9 @@ export class CSVReaderLogic extends NodeLogic<CSVReaderConfig> {
     context: NodeExecutionContext,
     config: CSVReaderConfig,
   ): Promise<NodeExecutionResult> {
+    // Store context for metadata creation
+    this.context = context;
+
     try {
       this.log(context, "info", "Starting CSV read operation", { config });
 

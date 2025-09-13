@@ -3,59 +3,55 @@
  *
  * These types define the structure for composite nodes (blueprints)
  * in the unified node architecture.
+ *
+ * Following the principle: "A node is a node is a node" - composites
+ * are just nodes that contain other nodes, not special cases.
  */
-
-// Types for Composite node definitions and related structures
 
 import type { NodeDefinition } from "../types";
 import type { CompositeEdge } from "../base/INode";
 
+// Re-export CompositeEdge for convenience
+export type { CompositeEdge } from "../base/INode";
+
+// ==========================
+// Composite-Specific Types
+// ==========================
+
 /**
- * Composite Node Type Definitions
- *
- * This defines the structure for composite nodes (what the UI calls "blueprints").
- * Composite nodes are nodes that contain and orchestrate other nodes.
+ * Position in the visual editor for child nodes
  */
-
-// ==========================
-// Core Composite Types
-// ==========================
-
 export type CompositePosition = {
   x: number;
   y: number;
 };
 
-export type CompositeNodeData = Record<string, unknown>;
-
-export type CompositeEdgeData = Record<string, unknown>;
-
-export type CompositeMetadata = {
-  created: string;
-  modified: string;
-  author?: string;
-  tags?: string[];
-  [key: string]: unknown;
-};
-
+/**
+ * Variable definition for composite parameterization
+ */
 export type CompositeVariable = {
   type: string;
   defaultValue?: unknown;
   description?: string;
 };
 
-export type CompositeVariables = Record<string, CompositeVariable>;
-
+/**
+ * Composite-specific settings
+ */
 export type CompositeSettings = {
   runtime?: Record<string, unknown>;
   ui?: Record<string, unknown>;
 };
 
+/**
+ * Child node specification within a composite
+ * This is minimal - just what's needed to position and configure a child node
+ */
 export type CompositeNodeSpec = {
   id: string;
   type: string;
   position: CompositePosition;
-  data: CompositeNodeData;
+  data?: Record<string, unknown>;
 };
 
 /**
@@ -68,11 +64,8 @@ export type CompositeDefinition = NodeDefinition & {
   // Composite-specific fields - the only things unique to composites
   nodes: CompositeNodeSpec[];
   edges: CompositeEdge[];
-  variables?: CompositeVariables;
+  variables?: Record<string, CompositeVariable>;
   settings?: CompositeSettings;
-
-  // Override metadata to be required and use composite-specific type
-  metadata: CompositeMetadata;
 };
 
 // ==========================
@@ -131,13 +124,10 @@ export type TransformationResult<T> = {
 // ==========================
 
 /**
- * Storage format (YAML) - what's saved to files
+ * Both storage (YAML) and runtime (JSON) use the same format
+ * The only difference is serialization
  */
 export type CompositeStorageFormat = CompositeDefinition;
-
-/**
- * Runtime format (JSON) - what's used in editor and conductor
- */
 export type CompositeRuntimeFormat = CompositeDefinition;
 
 // ==========================

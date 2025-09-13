@@ -11,6 +11,11 @@ export function extractCompositeMetadata(yamlString: string): {
   created?: string;
   modified?: string;
 } | null {
+  // Return null for empty input
+  if (!yamlString || yamlString.trim() === "") {
+    return null;
+  }
+
   try {
     const parsed = yaml.fromYaml<Record<string, unknown>>(yamlString);
     return {
