@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import core from "@atomiton/core";
 import { useNodes } from "@atomiton/editor";
 import type { INodeMetadata } from "@atomiton/nodes";
+import { useEffect, useState } from "react";
 import Accordion from "./Accordion";
 
 function Assets() {

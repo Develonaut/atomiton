@@ -253,6 +253,13 @@ class NodesAPI {
   }
 
   /**
+   * Get node configuration schema by type
+   */
+  async getNodeConfig(nodeType: NodeType): Promise<any | null> {
+    return atomic.getNodeConfig(nodeType);
+  }
+
+  /**
    * Convert category name to display name
    */
   getCategoryDisplayName(category: string): string {

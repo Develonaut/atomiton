@@ -26,17 +26,18 @@ function NodeInspector() {
   // Load node configuration when selection changes
   useEffect(() => {
     if (selectedNode) {
-      try {
-        const nodePackage = nodes.getNodePackage(selectedNode.type as never);
-        if (nodePackage?.config) {
-          setNodeConfig(nodePackage.config);
-        } else {
+      // Use the nodes API to load node config
+      const loadNodeConfig = async () => {
+        try {
+          const config = await nodes.getNodeConfig(selectedNode.type as never);
+          setNodeConfig(config);
+        } catch (error) {
+          console.error("Error loading node configuration:", error);
           setNodeConfig(null);
         }
-      } catch (error) {
-        console.error("Error loading node configuration:", error);
-        setNodeConfig(null);
-      }
+      };
+
+      loadNodeConfig();
     } else {
       setNodeConfig(null);
     }
@@ -114,10 +115,7 @@ function NodeInspector() {
         schema={nodeConfig.schema}
         defaultValues={selectedNode.data || nodeConfig.defaults || {}}
         fields={nodeConfig.fields || {}}
-        onSubmit={handleSubmit}
         onChange={handleChange}
-        submitButtonText="Apply Changes"
-        showSubmitButton={false} // Since we're updating in real-time
       />
 
       {submitStatus === "success" && (
