@@ -44,14 +44,133 @@ This document aggregates current work across the entire monorepo. For detailed p
 
 ### 📊 Current Priorities
 
+## 🎯 TOP PRIORITY: Blueprint Workflow Implementation
+
+### Phase 1: Blueprint Loading & Editing System
+
+**Development Strategy**: Each step below should be developed in its own git worktree to enable parallel development without conflicts.
+
+#### Step 1: Blueprint Template Creation
+
+**Worktree**: `wtnew blueprint-templates`
+**Status**: 🔴 **CRITICAL - START HERE**
+
+Create example blueprints that appear in the Explore Gallery:
+
+- HelloWorld blueprint (simple console.log node)
+- DataTransform blueprint (CSV → HTTP → Transform chain)
+- ImageProcessor blueprint (FileSystem → ImageComposite → FileSystem)
+
+**Agent Prompt**:
+
+```
+Create three example YAML blueprint templates for the Explore Gallery. Use the existing @atomiton/nodes package (9 node types available: code, csvReader, fileSystem, httpRequest, imageComposite, loop, parallel, shellCommand, transform) to build:
+1. HelloWorld - Simple greeting workflow
+2. DataTransform - CSV processing pipeline
+3. ImageProcessor - Image manipulation workflow
+
+Store templates in apps/client/src/data/blueprints/ and update Explore Gallery to load them. Follow the mandatory workflow and coordinate with agents as required.
+```
+
+#### Step 2: Gallery-to-Editor Loading
+
+**Worktree**: `wtnew gallery-editor-integration`
+**Status**: 🔴 **CRITICAL**
+
+Enable clicking blueprints in gallery to load them into the React Flow editor:
+
+- Update Gallery Item click handlers
+- Implement blueprint→ReactFlow conversion using @atomiton/yaml package
+- Route to editor with loaded blueprint
+- Display nodes on canvas with proper positioning
+
+**Agent Prompt**:
+
+```
+Implement loading blueprints from Explore Gallery into the React Flow editor. The gallery already exists, YAML conversion exists in @atomiton/yaml package, and basic React Flow editor exists in @atomiton/editor package. Connect these pieces to load selected blueprints into the editor canvas with proper node positioning and connections. Follow the mandatory workflow and coordinate with agents as required.
+```
+
+#### Step 3: Blueprint Save/Restore
+
+**Worktree**: `wtnew blueprint-persistence`
+**Status**: 🔴 **CRITICAL**
+
+Implement saving edited blueprints:
+
+- Save current editor state to YAML format using @atomiton/yaml
+- Implement React Flow save/restore patterns from https://reactflow.dev/examples/interaction/save-and-restore
+- Store in localStorage initially, prepare for backend integration
+- Add save/load UI controls to editor
+
+**Agent Prompt**:
+
+```
+Implement blueprint save/restore functionality for the React Flow editor. Use the @atomiton/yaml package for conversion and follow React Flow save/restore patterns. Add save/load UI controls and localStorage persistence. Editor package already has React Flow setup. Follow the mandatory workflow and coordinate with agents as required.
+```
+
+#### Step 4a: Individual Node Testing
+
+**Worktree**: `wtnew node-testing-ui`
+**Status**: 🟡 **HIGH**
+
+Enable testing individual nodes during editing:
+
+- Add "Test Node" button to selected nodes
+- Integrate with @atomiton/conductor package for execution
+- Display test results inline
+- Handle nodes that can't be tested individually
+
+**Agent Prompt**:
+
+```
+Add individual node testing capability to the editor. When a node is selected, provide a "Test Node" button that executes just that node using the @atomiton/conductor execution engine. Display results inline and handle cases where nodes can't run in isolation. The conductor package exists with execution capabilities. Follow the mandatory workflow and coordinate with agents as required.
+```
+
+#### Step 4b: Full Blueprint Execution
+
+**Worktree**: `wtnew blueprint-execution`
+**Status**: 🟡 **HIGH**
+
+Implement full blueprint execution:
+
+- Add "Run Blueprint" button to editor toolbar
+- Execute entire workflow using @atomiton/conductor
+- Show real-time execution status on nodes
+- Display final results and any errors
+
+**Agent Prompt**:
+
+```
+Implement full blueprint execution in the editor. Add a "Run Blueprint" button that executes the entire workflow using @atomiton/conductor, shows real-time status on nodes, and displays results. The conductor package has execution capabilities and the editor has React Flow integration. Follow the mandatory workflow and coordinate with agents as required.
+```
+
+#### Step 5: My Scenes Integration
+
+**Worktree**: `wtnew my-scenes-integration`
+**Status**: 🟢 **MEDIUM**
+
+Enable saving custom blueprints to My Scenes:
+
+- Create My Scenes page layout (similar to Explore Gallery)
+- Save user-created/modified blueprints separately from templates
+- Enable loading saved blueprints back into editor
+- Add blueprint management (rename, delete, duplicate)
+
+**Agent Prompt**:
+
+```
+Create My Scenes functionality for user-created blueprints. Build a page similar to Explore Gallery that shows user-saved blueprints, enables loading them into the editor, and provides management features (rename, delete, duplicate). Integrate with the existing persistence system from Step 3. Follow the mandatory workflow and coordinate with agents as required.
+```
+
+### Secondary Priorities (After Blueprint System)
+
 1. **🔴 Node Inspector** - Display/edit node properties in right sidebar (CRITICAL)
 2. **🔴 Data Connections** - Enable node-to-node data flow connections
-3. **🟡 Workflow Execution** - Run workflows from the editor
-4. **🟡 Save/Load** - Persist Blueprints to .atom files
-5. **🟢 Visual Feedback** - Show execution status on nodes
-6. **🟢 Validation Package** - Extract Zod usage into @atomiton/validation package
-7. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
-8. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
+3. **🟢 Visual Feedback** - Show execution status on nodes
+4. **🟢 Validation Package** - Extract Zod usage into @atomiton/validation package
+5. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
+6. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
+7. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
 
 ## 🚨 CRITICAL: Testing Infrastructure Remediation
 

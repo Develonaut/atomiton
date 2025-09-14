@@ -20,14 +20,21 @@ export type SimpleResult = {
   error?: string;
 };
 
-/**
- * Dead simple executor - no abstractions, just working execution
- */
-export class SimpleExecutor {
-  async executeComposite(
+export type SimpleExecutorInstance = {
+  executeComposite: (
     composite: SimpleComposite,
     input?: unknown,
-  ): Promise<SimpleResult> {
+  ) => Promise<SimpleResult>;
+};
+
+/**
+ * Creates a dead simple executor - no abstractions, just working execution
+ */
+export function createSimpleExecutor(): SimpleExecutorInstance {
+  const executeComposite = async (
+    composite: SimpleComposite,
+    input?: unknown,
+  ): Promise<SimpleResult> => {
     try {
       let currentOutput = input;
 
@@ -47,7 +54,11 @@ export class SimpleExecutor {
         error: error instanceof Error ? error.message : String(error),
       };
     }
-  }
+  };
+
+  return {
+    executeComposite,
+  };
 }
 
 /**

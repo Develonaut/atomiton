@@ -1,15 +1,29 @@
 import type { CompositeDefinition } from "@atomiton/nodes";
 import { EventEmitter } from "events";
-import { CompositeRunner } from "../execution/CompositeRunner";
+import {
+  createCompositeRunner,
+  type CompositeRunnerInstance,
+} from "../execution/compositeRunner";
 import type {
   ExecutionResult,
   ExecutionStatus,
   IExecutionEngine,
   ExecutionRequest,
 } from "../interfaces/IExecutionEngine";
-import { ScalableQueue, type JobData, type JobOptions } from "../queue/Queue";
-import { NodeExecutor } from "../execution/NodeExecutor";
-import { StateManager } from "../state/StateManager";
+import {
+  createScalableQueue,
+  type ScalableQueueInstance,
+  type JobData,
+  type JobOptions,
+} from "../queue/queue";
+import {
+  createNodeExecutor,
+  type NodeExecutorInstance,
+} from "../execution/nodeExecutor";
+import {
+  createStateManager,
+  type StateManagerInstance,
+} from "../state/stateManager";
 
 export type EnhancedExecutionOptions = {
   concurrency?: number;
@@ -34,10 +48,10 @@ export class EnhancedExecutionEngine
   extends EventEmitter
   implements IExecutionEngine
 {
-  private queue: ScalableQueue;
-  private stateManager: StateManager;
-  private compositeRunner: CompositeRunner;
-  private nodeExecutor: NodeExecutor;
+  private queue: ScalableQueueInstance;
+  private stateManager: StateManagerInstance;
+  private compositeRunner: CompositeRunnerInstance;
+  private nodeExecutor: NodeExecutorInstance;
   private executionContexts: Map<
     string,
     {
@@ -54,7 +68,7 @@ export class EnhancedExecutionEngine
   constructor(options: EnhancedExecutionOptions = {}) {
     super();
 
-    this.queue = new ScalableQueue({
+    this.queue = createScalableQueue({
       concurrency: options.concurrency ?? 10,
       maxRetries: options.maxRetries ?? 3,
       retryDelay: options.retryDelay ?? 5000,
@@ -70,9 +84,9 @@ export class EnhancedExecutionEngine
       workers: options.workers,
     });
 
-    this.stateManager = new StateManager();
-    this.nodeExecutor = new NodeExecutor();
-    this.compositeRunner = new CompositeRunner(
+    this.stateManager = createStateManager();
+    this.nodeExecutor = createNodeExecutor();
+    this.compositeRunner = createCompositeRunner(
       this.stateManager,
       this.nodeExecutor,
     );
@@ -93,30 +107,36 @@ export class EnhancedExecutionEngine
   }
 
   private setupQueueHandlers(): void {
-    this.queue.on("job:started", ({ jobId: _jobId, jobData }) => {
+    this.queue.on("job:started", (...args: unknown[]) => {
       this.metrics.activeExecutions++;
+      const data = args[0] as {
+        jobId: string;
+        jobData: { executionId: string; compositeId: string };
+      };
       this.emit("execution:started", {
-        executionId: jobData.executionId,
-        compositeId: jobData.compositeId,
+        executionId: data.jobData.executionId,
+        compositeId: data.jobData.compositeId,
       });
     });
 
-    this.queue.on("job:completed", ({ jobId, result }) => {
+    this.queue.on("job:completed", (...args: unknown[]) => {
+      const [jobId, result] = args as [string, ExecutionResult];
       this.metrics.activeExecutions--;
       this.metrics.totalExecutions++;
-      if (result.success) {
+      if (result.status === "completed") {
         this.metrics.successfulExecutions++;
       }
       this.emit("execution:completed", { jobId, result });
     });
 
-    this.queue.on("job:failed", ({ jobId, error }) => {
+    this.queue.on("job:failed", (...args: unknown[]) => {
+      const [jobId, error] = args as [string, Error];
       this.metrics.activeExecutions--;
       this.metrics.failedExecutions++;
       this.emit("execution:failed", { jobId, error });
     });
 
-    this.queue.on("webhook:response", (response) => {
+    this.queue.on("webhook:response", (response: unknown) => {
       this.emit("webhook:received", response);
     });
   }
@@ -420,8 +440,8 @@ type EnhancedExecutionMetrics = {
   averageExecutionTime: number;
   peakMemoryUsage: number;
   activeExecutions: number;
-  queueMetrics?: ReturnType<ScalableQueue["getMetrics"]>;
-  workerMetrics?: ReturnType<ScalableQueue["getWorkerMetrics"]>;
+  queueMetrics?: ReturnType<ScalableQueueInstance["getMetrics"]>;
+  workerMetrics?: ReturnType<ScalableQueueInstance["getWorkerMetrics"]>;
 };
 
 type ExecutionHistoryEntry = {

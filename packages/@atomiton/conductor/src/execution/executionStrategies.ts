@@ -1,10 +1,10 @@
 import type { INode, NodeExecutionContext } from "@atomiton/nodes";
 import { pipeline, Readable, Writable } from "stream";
 import { promisify } from "util";
-import type { MemoryPool } from "./MemoryPool";
-import type { StreamProcessor } from "./StreamProcessor";
-import { NodeTransformStream, type OutputCollector } from "./StreamTypes";
-import type { WorkerPoolManager } from "./WorkerPoolManager";
+import type { MemoryPool } from "./memoryPool";
+import type { StreamProcessor } from "./streamProcessor";
+import { NodeTransformStream, type OutputCollector } from "./streamTypes";
+import type { WorkerPoolManager } from "./workerPoolManager";
 
 const pipelineAsync = promisify(pipeline);
 

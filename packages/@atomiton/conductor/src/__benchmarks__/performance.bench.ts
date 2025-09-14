@@ -8,9 +8,9 @@ import type {
   NodeExecutionResult,
 } from "@atomiton/nodes";
 import { bench, describe } from "vitest";
-import { ExecutionEngine } from "../engine/ExecutionEngine";
+import { ExecutionEngine } from "../engine/executionEngine";
 import type { Blueprint } from "../execution/BlueprintRunner";
-import { StateManager } from "../state/StateManager";
+import { StateManager } from "../state/stateManager";
 
 // Mock nodes for benchmarking
 function createBenchmarkNode(

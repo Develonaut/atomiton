@@ -1,5 +1,5 @@
 import type { INode } from "@atomiton/nodes";
-import type { ExecutionStrategy } from "./StreamTypes";
+import type { ExecutionStrategy } from "./streamTypes";
 
 export class StrategyAnalyzer {
   constructor(

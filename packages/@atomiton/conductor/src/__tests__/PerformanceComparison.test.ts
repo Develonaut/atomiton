@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SimpleExecutor, createSimpleNode } from "../simple/SimpleExecutor";
+import { SimpleExecutor, createSimpleNode } from "../simple/simpleExecutor";
 
 describe("Performance vs Competitors (REAL DATA)", () => {
   it("should beat n8n in simple workflow execution", async () => {
