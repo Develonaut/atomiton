@@ -34,8 +34,8 @@ export type {
   FormConfig,
 } from "./base";
 
-// Export NodeType from atomic module where it's defined
-export type { NodeType } from "./atomic";
+// NodeType was removed with the registry cleanup
+// TODO: Define NodeType properly when node system is reimplemented
 
 // Export other types from types module
 export type {

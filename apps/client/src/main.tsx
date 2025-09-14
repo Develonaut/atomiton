@@ -8,9 +8,6 @@ import "./index.css";
 // Import editor styles for ReactFlow nodes - after theme variables
 import "@atomiton/editor/index.css";
 
-// Import test store to verify Redux DevTools integration
-import "./test-store";
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

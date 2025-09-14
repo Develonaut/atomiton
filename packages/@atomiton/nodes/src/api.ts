@@ -20,7 +20,7 @@
  *   const nodeComponents = nodes.getNodeComponents();
  */
 
-import atomic, { type NodeType } from "./atomic";
+// Atomic imports removed - registry and api were deleted
 import {
   ExtendedNode,
   type ExtendedNodeConfig,
@@ -93,7 +93,8 @@ class NodesAPI {
       items: INodeMetadata[];
     }>
   > {
-    return atomic.getMetadataByCategory();
+    // TODO: Implement without registry
+    return [];
   }
 
   /**
@@ -101,16 +102,16 @@ class NodesAPI {
    * This is the preferred method for UI components that need node information
    */
   async getAllNodesMetadata(): Promise<INodeMetadata[]> {
-    return atomic.getAllNodeMetadata();
+    // TODO: Implement without registry
+    return [];
   }
 
   /**
    * Get specific node metadata by type without loading the node
    */
-  async getNodeMetadataByType(
-    nodeType: NodeType,
-  ): Promise<INodeMetadata | null> {
-    return atomic.getNodeMetadata(nodeType);
+  async getNodeMetadataByType(nodeType: string): Promise<INodeMetadata | null> {
+    // TODO: Implement without registry
+    return null;
   }
 
   /**
@@ -139,7 +140,7 @@ class NodesAPI {
   /**
    * Get a specific node metadata by its type
    */
-  getNodeMetadata(nodeType: NodeType): INodeMetadata | null {
+  getNodeMetadata(nodeType: string): INodeMetadata | null {
     const nodes = this.getAllNodes();
     return nodes.find((node) => node.type === nodeType) || null;
   }
@@ -147,7 +148,7 @@ class NodesAPI {
   /**
    * Get node package by type for execution
    */
-  getNodePackage(nodeType: NodeType): Node | undefined {
+  getNodePackage(nodeType: string): Node | undefined {
     return this.nodes.find((node) => node.definition.type === nodeType);
   }
 
@@ -155,7 +156,7 @@ class NodesAPI {
    * Get node package by type for execution with lazy loading
    * This method will dynamically load the node if it's not already loaded
    */
-  async getNodePackageAsync(nodeType: NodeType): Promise<Node | null> {
+  async getNodePackageAsync(nodeType: string): Promise<Node | null> {
     // Check if already loaded
     const existing = this.getNodePackage(nodeType);
     if (existing) {
@@ -163,7 +164,8 @@ class NodesAPI {
     }
 
     // Try to load it dynamically
-    const node = await atomic.loadNode(nodeType);
+    // TODO: Implement without registry
+    const node = null;
     if (node) {
       // Add to registered nodes for future synchronous access
       this.registerNode(node);
@@ -242,21 +244,24 @@ class NodesAPI {
    * This is more efficient for UI components that just need to know what's available
    */
   getAvailableNodeTypes(): string[] {
-    return atomic.getAvailableNodeTypes();
+    // TODO: Implement without registry
+    return [];
   }
 
   /**
    * Check if a node type is available without loading it
    */
   isNodeTypeAvailable(nodeType: string): boolean {
-    return atomic.isNodeTypeAvailable(nodeType);
+    // TODO: Implement without registry
+    return false;
   }
 
   /**
    * Get node configuration schema by type
    */
-  async getNodeConfig(nodeType: NodeType): Promise<any | null> {
-    return atomic.getNodeConfig(nodeType);
+  async getNodeConfig(nodeType: string): Promise<any | null> {
+    // TODO: Implement without registry
+    return null;
   }
 
   /**
