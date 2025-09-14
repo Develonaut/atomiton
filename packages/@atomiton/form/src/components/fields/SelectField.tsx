@@ -46,7 +46,7 @@ export const SelectField = React.memo<SelectFieldProps>(
           options={selectOptions}
           value={selectedOption}
           onChange={(option: SelectOption) => {
-            onChange(option.value);
+            onChange(option.value as string | number | boolean);
           }}
           placeholder={placeholder}
           disabled={disabled}
