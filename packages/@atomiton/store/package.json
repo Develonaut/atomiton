@@ -48,6 +48,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@redux-devtools/extension": "^3.3.0",
     "@types/node": "^20.14.9",
     "eslint": "^9.18.0",
     "rollup-plugin-visualizer": "^6.0.3",

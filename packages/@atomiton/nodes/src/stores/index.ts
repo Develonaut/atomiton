@@ -18,10 +18,10 @@ export type { NodeStoreState } from "./types";
  * Initial state for the node store
  */
 const initialState: NodeStoreState = {
-  metadata: new Map(),
-  configs: new Map(),
-  logic: new Map(),
-  nodes: new Map(),
+  metadata: {},
+  configs: {},
+  logic: {},
+  nodes: {},
   categories: [],
   lastUpdated: {
     metadata: null,
@@ -52,18 +52,17 @@ const store = storeAPI.createStore<NodeStoreState>({
   persist: {
     key: "atomiton-nodes",
     // Only persist the actual data, not loading/error states
-    partialize: (state) =>
-      ({
-        metadata: Array.from(state.metadata.entries()),
-        configs: Array.from(state.configs.entries()),
-        categories: state.categories,
-        lastUpdated: state.lastUpdated,
-      }) as any,
+    partialize: (state) => ({
+      metadata: state.metadata,
+      configs: state.configs,
+      categories: state.categories,
+      lastUpdated: state.lastUpdated,
+    }),
     hydrate: (persisted: any) => ({
-      metadata: new Map(persisted.metadata || []),
-      configs: new Map(persisted.configs || []),
-      logic: new Map(),
-      nodes: new Map(),
+      metadata: persisted.metadata || {},
+      configs: persisted.configs || {},
+      logic: {},
+      nodes: {},
       categories: persisted.categories || [],
       lastUpdated: persisted.lastUpdated || {
         metadata: null,

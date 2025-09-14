@@ -13,8 +13,8 @@ import type { BaseStore } from "../types";
 
 export type ConfigActions = {
   setConfig: (nodeType: string, config: any) => void;
-  setAllConfigs: (configs: Map<string, any>) => void;
-  getConfigs: () => Map<string, any>;
+  setAllConfigs: (configs: Record<string, any>) => void;
+  getConfigs: () => Record<string, any>;
   getConfigByType: (type: string) => any | undefined;
   hasConfigs: () => boolean;
   clearConfigs: () => void;
@@ -25,12 +25,12 @@ export type ConfigActions = {
 export const createConfigModule = (store: BaseStore): ConfigActions => ({
   setConfig: (nodeType: string, config: any) => {
     store.setState((state) => {
-      state.configs.set(nodeType, config);
+      state.configs[nodeType] = config;
       state.lastUpdated.configs = Date.now();
     });
   },
 
-  setAllConfigs: (configs: Map<string, any>) => {
+  setAllConfigs: (configs: Record<string, any>) => {
     store.setState((state) => {
       state.configs = configs;
       state.lastUpdated.configs = Date.now();
@@ -42,16 +42,16 @@ export const createConfigModule = (store: BaseStore): ConfigActions => ({
   },
 
   getConfigByType: (type: string) => {
-    return store.getState().configs.get(type);
+    return store.getState().configs[type];
   },
 
   hasConfigs: () => {
-    return store.getState().configs.size > 0;
+    return Object.keys(store.getState().configs).length > 0;
   },
 
   clearConfigs: () => {
     store.setState((state) => {
-      state.configs.clear();
+      state.configs = {};
       state.lastUpdated.configs = null;
     });
   },

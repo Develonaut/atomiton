@@ -15,7 +15,7 @@ import type { BaseStore } from "../types";
 
 export type MetadataActions = {
   setMetadata: (nodeType: string, metadata: INodeMetadata) => void;
-  setAllMetadata: (metadata: Map<string, INodeMetadata>) => void;
+  setAllMetadata: (metadata: Record<string, INodeMetadata>) => void;
   setCategories: (
     categories: Array<{
       name: string;
@@ -23,7 +23,7 @@ export type MetadataActions = {
       items: INodeMetadata[];
     }>,
   ) => void;
-  getMetadata: () => Map<string, INodeMetadata>;
+  getMetadata: () => Record<string, INodeMetadata>;
   getMetadataByType: (type: string) => INodeMetadata | undefined;
   getCategories: () => Array<{
     name: string;
@@ -39,12 +39,12 @@ export type MetadataActions = {
 export const createMetadataModule = (store: BaseStore): MetadataActions => ({
   setMetadata: (nodeType: string, metadata: INodeMetadata) => {
     store.setState((state) => {
-      state.metadata.set(nodeType, metadata);
+      state.metadata[nodeType] = metadata;
       state.lastUpdated.metadata = Date.now();
     });
   },
 
-  setAllMetadata: (metadata: Map<string, INodeMetadata>) => {
+  setAllMetadata: (metadata: Record<string, INodeMetadata>) => {
     store.setState((state) => {
       state.metadata = metadata;
       state.lastUpdated.metadata = Date.now();
@@ -54,11 +54,11 @@ export const createMetadataModule = (store: BaseStore): MetadataActions => ({
   setCategories: (categories) => {
     store.setState((state) => {
       state.categories = categories;
-      // Also update metadata map from categories
-      state.metadata.clear();
+      // Also update metadata object from categories
+      state.metadata = {};
       for (const category of categories) {
         for (const item of category.items) {
-          state.metadata.set(item.type, item);
+          state.metadata[item.type] = item;
         }
       }
       state.lastUpdated.metadata = Date.now();
@@ -70,7 +70,7 @@ export const createMetadataModule = (store: BaseStore): MetadataActions => ({
   },
 
   getMetadataByType: (type: string) => {
-    return store.getState().metadata.get(type);
+    return store.getState().metadata[type];
   },
 
   getCategories: () => {
@@ -78,12 +78,12 @@ export const createMetadataModule = (store: BaseStore): MetadataActions => ({
   },
 
   hasMetadata: () => {
-    return store.getState().metadata.size > 0;
+    return Object.keys(store.getState().metadata).length > 0;
   },
 
   clearMetadata: () => {
     store.setState((state) => {
-      state.metadata.clear();
+      state.metadata = {};
       state.categories = [];
       state.lastUpdated.metadata = null;
     });

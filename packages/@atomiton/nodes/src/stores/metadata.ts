@@ -10,7 +10,7 @@ import type { INodeMetadata } from "../base";
 
 export interface NodeMetadataState {
   // Metadata indexed by node type
-  metadata: Map<string, INodeMetadata>;
+  metadata: Record<string, INodeMetadata>;
 
   // Categories with their nodes
   categories: Array<{
@@ -27,20 +27,19 @@ export interface NodeMetadataState {
 export const nodeMetadataStore = store.createStore<NodeMetadataState>({
   name: "NodeMetadata",
   initialState: {
-    metadata: new Map(),
+    metadata: {},
     categories: [],
     lastUpdated: null,
   },
   persist: {
     key: "atomiton-node-metadata",
-    partialize: (state) =>
-      ({
-        metadata: Array.from(state.metadata.entries()),
-        categories: state.categories,
-        lastUpdated: state.lastUpdated,
-      }) as any,
+    partialize: (state) => ({
+      metadata: state.metadata,
+      categories: state.categories,
+      lastUpdated: state.lastUpdated,
+    }),
     hydrate: (persisted: any) => ({
-      metadata: new Map(persisted.metadata || []),
+      metadata: persisted.metadata || {},
       categories: persisted.categories || [],
       lastUpdated: persisted.lastUpdated || null,
     }),
@@ -51,7 +50,7 @@ export const nodeMetadataStore = store.createStore<NodeMetadataState>({
 export const nodeMetadataActions = store.createActions(nodeMetadataStore, {
   setMetadata: (state: NodeMetadataState, ...args: unknown[]) => {
     const [nodeType, metadata] = args as [string, INodeMetadata];
-    state.metadata.set(nodeType, metadata);
+    state.metadata[nodeType] = metadata;
     state.lastUpdated = Date.now();
   },
 
@@ -60,11 +59,11 @@ export const nodeMetadataActions = store.createActions(nodeMetadataStore, {
     state = state as NodeMetadataState;
     state.categories = categories;
 
-    // Also update the metadata map
-    state.metadata.clear();
+    // Also update the metadata object
+    state.metadata = {};
     for (const category of categories) {
       for (const item of category.items) {
-        state.metadata.set(item.type, item);
+        state.metadata[item.type] = item;
       }
     }
 
@@ -72,7 +71,7 @@ export const nodeMetadataActions = store.createActions(nodeMetadataStore, {
   },
 
   clear: (state) => {
-    state.metadata.clear();
+    state.metadata = {};
     state.categories = [];
     state.lastUpdated = null;
   },
@@ -82,7 +81,7 @@ export const nodeMetadataActions = store.createActions(nodeMetadataStore, {
 export const nodeMetadataSelectors = store.createSelectors(nodeMetadataStore, {
   getMetadata: (state) => state.metadata,
   getCategories: (state) => state.categories,
-  getNodeByType: (state) => (type: string) => state.metadata.get(type),
-  hasData: (state) => state.metadata.size > 0,
+  getNodeByType: (state) => (type: string) => state.metadata[type],
+  hasData: (state) => Object.keys(state.metadata).length > 0,
   getLastUpdated: (state) => state.lastUpdated,
 });

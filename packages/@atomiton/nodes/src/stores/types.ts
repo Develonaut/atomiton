@@ -12,16 +12,16 @@ import type { INodeMetadata, Node } from "../base";
  */
 export interface NodeStoreState {
   // Node metadata indexed by type
-  metadata: Map<string, INodeMetadata>;
+  metadata: Record<string, INodeMetadata>;
 
   // Node configurations indexed by type
-  configs: Map<string, any>;
+  configs: Record<string, any>;
 
   // Node logic implementations indexed by type
-  logic: Map<string, any>;
+  logic: Record<string, any>;
 
   // Full node implementations indexed by type
-  nodes: Map<string, Node>;
+  nodes: Record<string, Node>;
 
   // Categories with their nodes (derived from metadata)
   categories: Array<{

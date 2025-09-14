@@ -454,10 +454,10 @@ export class AtomicRegistry {
   } {
     const state = nodeStore.getState();
     return {
-      metadata: state.metadata.size,
-      config: state.configs.size,
-      logic: state.logic.size,
-      nodes: state.nodes.size,
+      metadata: Object.keys(state.metadata).length,
+      config: Object.keys(state.configs).length,
+      logic: Object.keys(state.logic).length,
+      nodes: Object.keys(state.nodes).length,
     };
   }
 
