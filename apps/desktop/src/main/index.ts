@@ -51,10 +51,6 @@ function createWindow(): void {
             },
             forceDownload: false,
           });
-
-          console.log("Redux DevTools extension installed");
-        } else {
-          console.log("Redux DevTools extension already loaded");
         }
 
         mainWindow.webContents.openDevTools();
@@ -83,13 +79,15 @@ app.whenReady().then(async () => {
       // Set a CSP that allows DevTools extension while maintaining security
       // Redux DevTools extension ID: lmhkpmbekcpmknklioeibfkpmmfibljd
       responseHeaders["Content-Security-Policy"] = [
-        "default-src 'self' http://localhost:* ws://localhost:*",
-        "script-src 'self' 'unsafe-inline' http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
-        "style-src 'self' 'unsafe-inline' http://localhost:* https://fonts.googleapis.com",
-        "img-src 'self' data: http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
-        "connect-src 'self' ws://localhost:* http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
-        "font-src 'self' data: https://fonts.gstatic.com",
-      ].join("; ");
+        [
+          "default-src 'self' http://localhost:* ws://localhost:*",
+          "script-src 'self' 'unsafe-inline' http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
+          "style-src 'self' 'unsafe-inline' http://localhost:* https://fonts.googleapis.com",
+          "img-src 'self' data: http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
+          "connect-src 'self' ws://localhost:* http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
+          "font-src 'self' data: https://fonts.gstatic.com",
+        ].join("; "),
+      ];
       callback({ responseHeaders });
     });
   } else {
@@ -97,13 +95,15 @@ app.whenReady().then(async () => {
     session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
       const responseHeaders = { ...details.responseHeaders };
       responseHeaders["Content-Security-Policy"] = [
-        "default-src 'self'",
-        "script-src 'self'",
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // May need unsafe-inline for some React styles
-        "img-src 'self' data: https:",
-        "connect-src 'self' https:",
-        "font-src 'self' data: https://fonts.gstatic.com",
-      ].join("; ");
+        [
+          "default-src 'self'",
+          "script-src 'self'",
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // May need unsafe-inline for some React styles
+          "img-src 'self' data: https:",
+          "connect-src 'self' https:",
+          "font-src 'self' data: https://fonts.gstatic.com",
+        ].join("; "),
+      ];
       callback({ responseHeaders });
     });
   }
