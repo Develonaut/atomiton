@@ -1,5 +1,6 @@
-import type { NodeType } from "@atomiton/core";
-import core from "@atomiton/core";
+// import type { NodeType } from "@atomiton/core";
+// import core from "@atomiton/core"; // TODO: Fix after core is restored
+type NodeType = string; // Temporary type
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -17,8 +18,9 @@ function Node(props: ReactFlowNodeProps) {
   const nodes = useNodes();
   const isFirstNode = nodes.length > 0 && nodes[0].id === props.id;
 
-  const nodeMetadata = core.nodes.getNodeMetadata(props.type as NodeType);
-  const icon = nodeMetadata?.icon || "circle";
+  // const nodeMetadata = core.nodes.getNodeMetadata(props.type as NodeType);
+  // const icon = nodeMetadata?.icon || "circle";
+  const icon = "circle"; // Temporary default icon
 
   return (
     <div className="atomiton-node">

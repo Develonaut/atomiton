@@ -1,4 +1,4 @@
-import core from "@atomiton/core";
+// import core from "@atomiton/core"; // TODO: Fix after core is restored
 import { useNodes } from "@atomiton/editor";
 import type { INodeMetadata } from "@atomiton/nodes";
 import { useEffect, useState } from "react";
@@ -16,10 +16,13 @@ function Assets() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    core.nodes
-      .getCategoriesMetadata()
-      .then(setCategories)
-      .finally(() => setLoading(false));
+    // TODO: Restore when core is available
+    // core.nodes
+    //   .getCategoriesMetadata()
+    //   .then(setCategories)
+    //   .finally(() => setLoading(false));
+    setCategories([]); // Temporary empty categories
+    setLoading(false);
   }, []);
 
   if (loading) {

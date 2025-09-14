@@ -49,15 +49,15 @@
   "devDependencies": {
     "@atomiton/typescript-config": "workspace:*",
     "@eslint/js": "^9.34.0",
-    "@types/node": "^24.3.1",
-    "eslint": "^9.34.0",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-turbo": "^2.5.0",
     "globals": "^16.3.0",
-    "typescript": "^5.9.2",
+    "typescript": "catalog:",
     "typescript-eslint": "^8.40.0",
-    "vitest": "^2.0.0"
+    "vitest": "catalog:"
   }
 }

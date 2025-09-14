@@ -25,7 +25,6 @@
     "kill:ports": "kill-port --port 5173,5174,5175 || true"
   },
   "dependencies": {
-    "@atomiton/core": "workspace:^",
     "@atomiton/editor": "workspace:*",
     "@atomiton/form": "workspace:*",
     "@atomiton/hooks": "workspace:^",
@@ -35,9 +34,9 @@
     "@headlessui/react": "^2.2.4",
     "framer-motion": "^12.17.0",
     "rc-slider": "^11.1.8",
-    "react": "^19.0.0",
+    "react": "catalog:",
     "react-animate-height": "^3.2.3",
-    "react-dom": "^19.0.0",
+    "react-dom": "catalog:",
     "react-hot-toast": "^2.5.2",
     "react-plock": "^3.5.1",
     "react-router-dom": "^7.8.2",
@@ -51,15 +50,15 @@
     "@atomiton/typescript-config": "workspace:^",
     "@playwright/test": "^1.55.0",
     "@tailwindcss/vite": "^4.1.12",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5.0.2",
-    "eslint": "^9",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "eslint": "catalog:",
     "kill-port": "^2.0.1",
     "tailwindcss": "^4.1.13",
-    "typescript": "^5",
-    "vite": "^7.1.4",
+    "typescript": "catalog:",
+    "vite": "catalog:",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }

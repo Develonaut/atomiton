@@ -1,4 +1,4 @@
-import core from "@atomiton/core";
+// import core from "@atomiton/core"; // TODO: Fix after core is restored
 import type { NodeTypes } from "@xyflow/react";
 import { useMemo } from "react";
 import Node from "../components/Node";
@@ -16,14 +16,14 @@ export function useNodeTypes(
       return customNodeTypes as NodeTypes;
     }
 
-    // Get all registered node types and map them to our Node component
-    const registeredNodes = core.nodes.getAllRegisteredNodes();
+    // TODO: Restore when core is available
+    // const registeredNodes = core.nodes.getAllRegisteredNodes();
     const nodeTypes: NodeTypes = {};
 
-    // Create a node type entry for each registered node, all using the same component
-    for (const nodeType of registeredNodes) {
-      nodeTypes[nodeType.definition.id] = Node;
-    }
+    // Temporary: Return empty node types until core is restored
+    // for (const nodeType of registeredNodes) {
+    //   nodeTypes[nodeType.definition.id] = Node;
+    // }
 
     return Object.keys(nodeTypes).length > 0 ? nodeTypes : {};
   }, [customNodeTypes]);

@@ -42,35 +42,34 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
-    "@atomiton/core": "workspace:*",
     "@atomiton/hooks": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/store": "workspace:*",
     "@atomiton/ui": "workspace:*",
     "@xyflow/react": "^12.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^15.0.2",
-    "@types/node": "^20.0.0",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^5.0.2",
-    "eslint": "^9",
-    "jsdom": "^24.0.0",
-    "rollup-plugin-visualizer": "^6.0.3",
-    "terser": "^5.44.0",
-    "typescript": "^5",
-    "vite": "^6.0.0",
-    "vite-plugin-dts": "^4.5.4",
-    "vitest": "^2.0.0"
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "eslint": "catalog:",
+    "jsdom": "catalog:",
+    "rollup-plugin-visualizer": "catalog:",
+    "terser": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
   },
   "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }

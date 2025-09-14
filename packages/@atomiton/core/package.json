@@ -46,21 +46,21 @@
     "@atomiton/ui": "workspace:*"
   },
   "peerDependencies": {
-    "react": "^18.0.0"
+    "react": "catalog:"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.0.0",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
     "concurrently": "^8.2.0",
-    "eslint": "^9",
-    "rollup-plugin-visualizer": "^6.0.3",
-    "terser": "^5.44.0",
+    "eslint": "catalog:",
+    "rollup-plugin-visualizer": "catalog:",
+    "terser": "catalog:",
     "tsc-alias": "^1.8.16",
-    "typescript": "^5",
-    "vite": "^6.0.0",
-    "vite-plugin-dts": "^4.5.4",
-    "vitest": "^2.0.0"
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
   }
 }
