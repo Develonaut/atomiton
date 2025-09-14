@@ -65,20 +65,17 @@ export function createStore<T extends object>(
 
   // Non-persisted store with DevTools (if available)
   if (!config.persist) {
-    // Always enable devtools in development, let Zustand handle the connection
-    if (process.env.NODE_ENV !== "production") {
-      // Correct middleware order: immer -> devtools
-      return create<T>()(
-        devtools(
-          immer((set) => config.initialState),
-          {
-            name: storeName,
-          },
-        ),
-      ) as Store<T>;
-    } else {
-      return create<T>()(immer((set) => config.initialState)) as Store<T>;
-    }
+    // Always wrap with devtools in development builds
+    // The devtools middleware will handle the connection
+    return create<T>()(
+      devtools(
+        immer((set) => config.initialState),
+        {
+          name: storeName,
+          enabled: true,
+        },
+      ),
+    ) as Store<T>;
   }
 
   // Persisted store with DevTools (if available)
@@ -101,16 +98,14 @@ export function createStore<T extends object>(
       : undefined,
   });
 
-  // Always enable devtools in development, let Zustand handle the connection
-  if (process.env.NODE_ENV !== "production") {
-    return create<T>()(
-      devtools(persistedStore, {
-        name: `${storeName}:${key}`,
-      }),
-    ) as Store<T>;
-  } else {
-    return create<T>()(persistedStore) as Store<T>;
-  }
+  // Always wrap with devtools in development builds
+  // The devtools middleware will handle the connection
+  return create<T>()(
+    devtools(persistedStore, {
+      name: `${storeName}:${key}`,
+      enabled: true,
+    }),
+  ) as Store<T>;
 }
 
 // ============================================================================
