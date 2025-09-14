@@ -9,12 +9,12 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: join(__dirname, "../preload/index.mjs"),
+      preload: join(__dirname, "../preload/index.js"),
       sandbox: true, // Keep sandbox enabled for security
       contextIsolation: true,
       nodeIntegration: false,
-      webSecurity: !is.dev, // Disable web security in dev for extension compatibility
-      allowRunningInsecureContent: is.dev,
+      webSecurity: true, // Always enable web security
+      allowRunningInsecureContent: false, // Never allow insecure content
     },
   });
 
@@ -31,23 +31,35 @@ function createWindow(): void {
   if (is.dev) {
     mainWindow.webContents.once("dom-ready", async () => {
       try {
-        const { default: installExtension, REDUX_DEVTOOLS } = await import(
-          "electron-devtools-installer"
+        // Check if extension is already installed
+        const existingExtensions =
+          session.defaultSession.extensions.getAllExtensions();
+        const isInstalled = existingExtensions.some(
+          (ext) => ext.id === "lmhkpmbekcpmknklioeibfkpmmfibljd",
         );
 
-        await installExtension(REDUX_DEVTOOLS, {
-          loadExtensionOptions: {
-            allowFileAccess: true,
-          },
-          forceDownload: false,
-        })
-          .then((name) => console.log(`Added Extension: ${name}`))
-          .catch((err) => console.log("Extension install error: ", err))
-          .finally(() => {
-            mainWindow.webContents.openDevTools();
+        if (!isInstalled) {
+          // Try to load from the electron-devtools-installer cache
+          const { default: installExtension, REDUX_DEVTOOLS } = await import(
+            "electron-devtools-installer"
+          );
+
+          // Install the extension (downloads it if needed)
+          await installExtension(REDUX_DEVTOOLS, {
+            loadExtensionOptions: {
+              allowFileAccess: true,
+            },
+            forceDownload: false,
           });
+
+          console.log("Redux DevTools extension installed");
+        } else {
+          console.log("Redux DevTools extension already loaded");
+        }
+
+        mainWindow.webContents.openDevTools();
       } catch (error) {
-        console.error("Failed to load devtools installer:", error);
+        console.error("Failed to load Redux DevTools:", error);
         mainWindow.webContents.openDevTools();
       }
     });
@@ -64,12 +76,34 @@ function createWindow(): void {
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId("com.electron");
 
-  // Remove CSP restrictions in development to allow extensions
+  // Set a proper CSP for development that allows DevTools but maintains security
   if (is.dev) {
     session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
       const responseHeaders = { ...details.responseHeaders };
-      delete responseHeaders["content-security-policy"];
-      delete responseHeaders["Content-Security-Policy"];
+      // Set a CSP that allows DevTools extension while maintaining security
+      // Redux DevTools extension ID: lmhkpmbekcpmknklioeibfkpmmfibljd
+      responseHeaders["Content-Security-Policy"] = [
+        "default-src 'self' http://localhost:* ws://localhost:*",
+        "script-src 'self' 'unsafe-inline' http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
+        "style-src 'self' 'unsafe-inline' http://localhost:* https://fonts.googleapis.com",
+        "img-src 'self' data: http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
+        "connect-src 'self' ws://localhost:* http://localhost:* chrome-extension://lmhkpmbekcpmknklioeibfkpmmfibljd",
+        "font-src 'self' data: https://fonts.gstatic.com",
+      ].join("; ");
+      callback({ responseHeaders });
+    });
+  } else {
+    // Production CSP - stricter
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      const responseHeaders = { ...details.responseHeaders };
+      responseHeaders["Content-Security-Policy"] = [
+        "default-src 'self'",
+        "script-src 'self'",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", // May need unsafe-inline for some React styles
+        "img-src 'self' data: https:",
+        "connect-src 'self' https:",
+        "font-src 'self' data: https://fonts.gstatic.com",
+      ].join("; ");
       callback({ responseHeaders });
     });
   }
