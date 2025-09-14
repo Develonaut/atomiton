@@ -6,7 +6,7 @@ export default defineConfig({
     environment: "node",
     testTimeout: 30000,
     include: ["src/**/*.{test,spec}.{js,ts,tsx}", "src/**/*.bench.{js,ts,tsx}"],
-    exclude: ["node_modules", "dist", ".turbo"],
+    exclude: ["node_modules", "dist", ".turbo", "src/__benchmarks__/legacy/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],

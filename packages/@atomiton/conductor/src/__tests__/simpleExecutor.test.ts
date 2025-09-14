@@ -1,9 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { SimpleExecutor, createSimpleNode } from "../simple/simpleExecutor";
+import {
+  createSimpleExecutor,
+  createSimpleNode,
+} from "../simple/simpleExecutor";
 
 describe("SimpleExecutor - Karen approved minimal approach", () => {
   it("should execute a single node blueprint", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     const addOneNode = createSimpleNode("add-one", "math", async (input) => {
       return (input as number) + 1;
@@ -14,7 +17,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
       nodes: [addOneNode],
     };
 
-    const result = await executor.executeBlueprint(blueprint, 5);
+    const result = await executor.executeComposite(blueprint, 5);
 
     expect(result.success).toBe(true);
     expect(result.outputs).toBe(6);
@@ -22,7 +25,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
   });
 
   it("should execute multiple nodes sequentially", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     const doubleNode = createSimpleNode("double", "math", async (input) => {
       return (input as number) * 2;
@@ -38,14 +41,14 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
     };
 
     // Start with 5 -> double -> 10 -> add 10 -> 20
-    const result = await executor.executeBlueprint(blueprint, 5);
+    const result = await executor.executeComposite(blueprint, 5);
 
     expect(result.success).toBe(true);
     expect(result.outputs).toBe(20);
   });
 
   it("should handle node errors gracefully", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     const failingNode = createSimpleNode("fail", "error", async () => {
       throw new Error("Node failed intentionally");
@@ -56,7 +59,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
       nodes: [failingNode],
     };
 
-    const result = await executor.executeBlueprint(blueprint, "test");
+    const result = await executor.executeComposite(blueprint, "test");
 
     expect(result.success).toBe(false);
     expect(result.error).toBe("Node failed intentionally");
@@ -64,7 +67,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
   });
 
   it("should process string data through nodes", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     const upperCaseNode = createSimpleNode(
       "uppercase",
@@ -87,14 +90,14 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
       nodes: [upperCaseNode, addExclamationNode],
     };
 
-    const result = await executor.executeBlueprint(blueprint, "hello world");
+    const result = await executor.executeComposite(blueprint, "hello world");
 
     expect(result.success).toBe(true);
     expect(result.outputs).toBe("HELLO WORLD!");
   });
 
   it("should work with complex objects", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     const addFieldNode = createSimpleNode(
       "add-field",
@@ -114,7 +117,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
     };
 
     const inputData = { name: "test", value: 42 };
-    const result = await executor.executeBlueprint(blueprint, inputData);
+    const result = await executor.executeComposite(blueprint, inputData);
 
     expect(result.success).toBe(true);
     expect(result.outputs).toMatchObject({
@@ -128,7 +131,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
   });
 
   it("should handle async node operations", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     const delayNode = createSimpleNode("delay", "utility", async (input) => {
       // Simulate async operation
@@ -141,14 +144,14 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
       nodes: [delayNode],
     };
 
-    const result = await executor.executeBlueprint(blueprint, "test input");
+    const result = await executor.executeComposite(blueprint, "test input");
 
     expect(result.success).toBe(true);
     expect(result.outputs).toBe("Delayed: test input");
   });
 
   it("should execute HTTP-like workflow pattern", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     // Simulate n8n/Zapier style HTTP -> JSON -> Process pattern
     const httpNode = createSimpleNode("http", "request", async (input) => {
@@ -180,7 +183,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
       nodes: [httpNode, jsonParseNode, processNode],
     };
 
-    const result = await executor.executeBlueprint(blueprint, "webhook");
+    const result = await executor.executeComposite(blueprint, "webhook");
 
     expect(result.success).toBe(true);
     expect((result.outputs as unknown as { result: string }).result).toBe(
@@ -192,7 +195,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
   });
 
   it("should demonstrate n8n competitive performance pattern", async () => {
-    const executor = new SimpleExecutor();
+    const executor = createSimpleExecutor();
 
     // Create nodes that simulate real-world processing times
     const nodes = [
@@ -218,7 +221,7 @@ describe("SimpleExecutor - Karen approved minimal approach", () => {
     };
 
     const startTime = Date.now();
-    const result = await executor.executeBlueprint(blueprint, "test");
+    const result = await executor.executeComposite(blueprint, "test");
     const endTime = Date.now();
 
     expect(result.success).toBe(true);

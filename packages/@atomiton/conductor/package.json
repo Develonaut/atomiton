@@ -12,6 +12,10 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
+    "./browser": {
+      "import": "./dist/browser.js",
+      "types": "./dist/browser.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
@@ -34,6 +38,8 @@
     "@atomiton/events": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/storage": "workspace:*",
+    "@atomiton/store": "workspace:*",
+    "@atomiton/utils": "workspace:*",
     "p-queue": "^8.0.0",
     "uuid": "^13.0.0"
   },
@@ -41,6 +47,7 @@
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "catalog:",
+    "electron": "^38.0.0",
     "eslint": "catalog:",
     "rollup-plugin-visualizer": "catalog:",
     "terser": "catalog:",

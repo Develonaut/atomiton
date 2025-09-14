@@ -1,3 +1,13 @@
+// Unified API - Use this!
+export { conductor, createConductor } from "./conductor";
+export type { ConductorInstance, ConductorConfig } from "./conductor";
+
+// Transport layer (for advanced use)
+export * from "./transport";
+
+// Electron integration
+export { setupMainProcessHandler } from "./electron/mainProcessHandler";
+
 // Simple Executor
 export {
   createSimpleNode,
@@ -8,14 +18,17 @@ export {
   type SimpleExecutorInstance,
 } from "./simple/simpleExecutor";
 
-// State Manager
+// Store
 export {
-  createStateManager,
-  type StateManagerInstance,
+  createExecutionStore,
+  type ExecutionStore,
+  type ExecutionStoreState,
+  type ExecutionRecord,
+  type NodeRecord,
   type ExecutionState,
   type NodeState,
   type Checkpoint,
-} from "./state/stateManager";
+} from "./store";
 
 // Queue
 export {
@@ -29,13 +42,16 @@ export {
   type JobOptions,
   type WebhookData,
   type WebhookResponse,
-} from "./queue/queue";
+} from "./queue";
 
 // Execution Engine
 export {
   createExecutionEngine,
   type ExecutionEngineInstance,
 } from "./engine/executionEngine";
+
+// Interfaces
+export * from "./interfaces/IExecutionEngine";
 
 // Node Executor
 export {
@@ -49,7 +65,7 @@ export {
   type CompositeRunnerInstance,
   type CompositeExecutionOptions,
   type CompositeExecutionResult,
-} from "./execution/compositeRunner";
+} from "./execution";
 
 // Runtime
 export {

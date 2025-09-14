@@ -14,9 +14,9 @@ import type {
   ExecutionError,
   ExecutionMetrics,
 } from "../interfaces/IExecutionEngine";
-import { createCompositeRunner } from "../execution/compositeRunner";
+import { createCompositeRunner } from "../execution";
 import { createNodeExecutor } from "../execution/nodeExecutor";
-import { createStateManager } from "../state/stateManager";
+import { createExecutionStore } from "../store";
 
 export type ExecutionEngineInstance = IExecutionEngine & {
   shutdown: () => Promise<void>;
@@ -42,9 +42,9 @@ export function createExecutionEngine(config?: {
     intervalCap: 10,
   });
 
-  const stateManager = createStateManager();
+  const executionStore = createExecutionStore();
   const nodeExecutor = createNodeExecutor();
-  const compositeRunner = createCompositeRunner(stateManager, nodeExecutor);
+  const compositeRunner = createCompositeRunner(executionStore, nodeExecutor);
   const storage = config?.storage;
   const executions = new Map<string, ExecutionResult>();
 
@@ -266,7 +266,7 @@ export function createExecutionEngine(config?: {
     // Pause the queue
     queue.pause();
     execution.status = "paused";
-    stateManager.updateExecutionState(executionId, { status: "paused" });
+    executionStore.updateExecutionState(executionId, { status: "paused" });
     eventEmitter.emit("execution:paused", { executionId });
   };
 
@@ -286,7 +286,7 @@ export function createExecutionEngine(config?: {
     // Resume the queue
     queue.start();
     execution.status = "running";
-    stateManager.updateExecutionState(executionId, { status: "running" });
+    executionStore.updateExecutionState(executionId, { status: "running" });
     eventEmitter.emit("execution:resumed", { executionId });
   };
 
@@ -307,7 +307,7 @@ export function createExecutionEngine(config?: {
     queue.clear();
     execution.status = "cancelled";
     execution.endTime = new Date();
-    stateManager.updateExecutionState(executionId, {
+    executionStore.updateExecutionState(executionId, {
       status: "cancelled",
     });
     eventEmitter.emit("execution:cancelled", { executionId });
@@ -371,7 +371,7 @@ export function createExecutionEngine(config?: {
         execution.endTime < cutoff
       ) {
         executions.delete(id);
-        stateManager.clearExecutionState(id);
+        executionStore.clearExecutionState(id);
         cleaned++;
       }
     }
@@ -385,7 +385,7 @@ export function createExecutionEngine(config?: {
   const shutdown = async (): Promise<void> => {
     await queue.onIdle();
     queue.clear();
-    stateManager.shutdown();
+    executionStore.shutdown();
     nodeExecutor.destroy();
     eventEmitter.removeAllListeners();
   };

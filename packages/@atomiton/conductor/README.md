@@ -1,46 +1,55 @@
 # @atomiton/conductor
 
-> Blueprint execution orchestrator for Atomiton - **Karen-approved working implementation**
+> Unified Blueprint execution orchestrator for all environments
 
-## 🎯 **What Actually Works**
+## 🎯 **Unified API**
 
-After extensive development and testing, we've built a **production-ready Blueprint execution engine** that demonstrably outperforms competitors.
+A single, consistent API that works identically across all environments:
 
-### ✅ **Working Components**
-
-- **SimpleExecutor**: Core Blueprint execution engine (50 lines, 8/8 tests passing)
-- **StateManager**: Comprehensive execution state tracking (35/35 tests passing)
-- **Performance**: 22-92% faster than n8n/Zapier (measured, not claimed)
-- **Memory efficiency**: <5MB overhead for complex workflows
-- **Error handling**: Fast failure detection (<50ms vs 30+ seconds)
-
-### 🚧 **In Development**
-
-Complex abstractions (ExecutionEngine, BlueprintRunner, etc.) are excluded from the build until proven working. We follow the **Karen Principle**: "Is it ACTUALLY working or are you just saying it is?"
+- **Electron Renderer**: Automatically uses IPC to communicate with main process
+- **Electron Main**: Executes directly using Node.js
+- **Browser**: Uses HTTP to communicate with API server
+- **Server**: Executes directly using Node.js
 
 ## 🚀 **Quick Start**
 
 ```typescript
-import { SimpleExecutor, createSimpleNode } from "@atomiton/conductor";
+import { conductor } from "@atomiton/conductor";
 
-// Create nodes
-const doubleNode = createSimpleNode("double", "math", async (input) => {
-  return (input as number) * 2;
+// Same API everywhere!
+const result = await conductor.execute({
+  blueprintId: "my-workflow",
+  inputs: { data: "test" },
 });
+```
 
-const addTenNode = createSimpleNode("add-ten", "math", async (input) => {
-  return (input as number) + 10;
+### Advanced Configuration
+
+```typescript
+import { createConductor } from "@atomiton/conductor";
+
+// Create with custom configuration
+const conductor = createConductor({
+  transport: "http", // Force specific transport
+  apiUrl: "https://api.example.com",
+  concurrency: 10,
+  timeout: 30000,
 });
 
 // Execute Blueprint
-const executor = new SimpleExecutor();
-const blueprint = {
-  id: "simple-math",
-  nodes: [doubleNode, addTenNode],
-};
-
-const result = await executor.executeBlueprint(blueprint, 5);
-// Result: { success: true, outputs: 20 }
+const result = await conductor.execute({
+  blueprintId: "complex-workflow",
+  inputs: {
+    source: "api",
+    data: {
+      /* ... */
+    },
+  },
+  config: {
+    parallel: true,
+    debugMode: true,
+  },
+});
 ```
 
 ## 📊 **Performance vs Competitors**

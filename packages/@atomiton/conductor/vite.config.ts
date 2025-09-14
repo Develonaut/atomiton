@@ -16,8 +16,8 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
       name: "AtomitonConductor",
-      formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
+      formats: ["es"],
+      fileName: "index",
     },
     rollupOptions: {
       external: [
@@ -25,8 +25,11 @@ export default defineConfig({
         "@atomiton/events",
         "@atomiton/nodes",
         "@atomiton/storage",
+        "@atomiton/store",
+        "@atomiton/utils",
         "p-queue",
         "uuid",
+        "electron",
         // Node.js built-ins
         "fs",
         "fs/promises",
@@ -35,6 +38,8 @@ export default defineConfig({
         "util",
         "os",
         "events",
+        "stream",
+        "worker_threads",
         /^node:/,
       ],
       output: {
@@ -45,21 +50,53 @@ export default defineConfig({
             return "vendor";
           }
 
-          // Split conductor functionality
-          if (id.includes("src/conductor/")) {
-            return "conductor";
+          // Split conductor functionality following BENTO_BOX_PRINCIPLE
+          if (id.includes("src/engine/enhanced/")) {
+            return "engine-enhanced";
+          }
+
+          if (id.includes("src/engine/")) {
+            return "engine";
+          }
+
+          if (id.includes("src/execution/composite/")) {
+            return "execution-composite";
           }
 
           if (id.includes("src/execution/")) {
             return "execution";
           }
 
+          if (id.includes("src/queue/core/")) {
+            return "queue-core";
+          }
+
           if (id.includes("src/queue/")) {
             return "queue";
           }
 
-          if (id.includes("src/utils/")) {
-            return "utils";
+          if (id.includes("src/store/")) {
+            return "store";
+          }
+
+          if (id.includes("src/transport/")) {
+            return "transport";
+          }
+
+          if (id.includes("src/electron/")) {
+            return "electron";
+          }
+
+          if (id.includes("src/runtime/")) {
+            return "runtime";
+          }
+
+          if (id.includes("src/simple/")) {
+            return "simple";
+          }
+
+          if (id.includes("src/interfaces/")) {
+            return "interfaces";
           }
         },
       },
