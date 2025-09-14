@@ -1,14 +1,8 @@
 /**
- * Atomic Node Package Registry - Single Source of Truth
+ * Atomic Node Package
  *
- * This file provides the atomic nodes API and registry.
+ * This file exports atomic node types and functionality.
  */
 
-import { atomicAPI } from "./api";
-export type { AtomicAPI } from "./api";
-export type { NodeType } from "./registry";
-export { AtomicRegistry } from "./registry";
-
-// Export the default instance without initialization
-// NodesAPI will handle initialization
-export default atomicAPI;
+// Placeholder for atomic node exports
+// Will be populated when atomic nodes are properly implemented
