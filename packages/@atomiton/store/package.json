@@ -40,7 +40,9 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
+    "@redux-devtools/remote": "^0.9.5",
     "immer": "^10.0.0",
+    "redux-devtools": "^3.7.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {

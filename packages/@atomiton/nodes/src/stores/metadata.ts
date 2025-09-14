@@ -25,7 +25,7 @@ export interface NodeMetadataState {
 
 // Create the store
 export const nodeMetadataStore = store.createStore<NodeMetadataState>({
-  name: "nodeMetadata",
+  name: "NodeMetadata",
   initialState: {
     metadata: new Map(),
     categories: [],

@@ -9,6 +9,13 @@ import type { PersistStorage } from "zustand/middleware";
 import { persist, devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+// Declare Redux DevTools extension types
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION__?: any;
+  }
+}
+
 // Enable Map/Set support in Immer on module load
 enableMapSet();
 
@@ -56,40 +63,54 @@ export function createStore<T extends object>(
 ): Store<T> {
   const storeName = config.name || "Store";
 
-  // Non-persisted store with DevTools
+  // Non-persisted store with DevTools (if available)
   if (!config.persist) {
-    return create<T>()(
-      devtools(
-        immer((set) => config.initialState),
-        { name: storeName },
-      ),
-    ) as Store<T>;
+    // Always enable devtools in development, let Zustand handle the connection
+    if (process.env.NODE_ENV !== "production") {
+      // Correct middleware order: immer -> devtools
+      return create<T>()(
+        devtools(
+          immer((set) => config.initialState),
+          {
+            name: storeName,
+          },
+        ),
+      ) as Store<T>;
+    } else {
+      return create<T>()(immer((set) => config.initialState)) as Store<T>;
+    }
   }
 
-  // Persisted store with DevTools
+  // Persisted store with DevTools (if available)
   const { key, storage, partialize, hydrate } = config.persist;
 
-  return create<T>()(
-    devtools(
-      persist(
-        immer((set) => config.initialState),
-        {
-          name: `store:${key}`,
-          storage,
-          partialize: partialize as ((state: T) => T) | undefined,
-          onRehydrateStorage: hydrate
-            ? () => (state) => {
-                if (state) {
-                  const hydrated = hydrate(state);
-                  Object.assign(state, hydrated);
-                }
-              }
-            : undefined,
-        },
-      ),
-      { name: `${storeName}:${key}` },
-    ),
-  ) as Store<T>;
+  // Correct middleware order: immer -> persist -> devtools
+  const immerStore = immer<T>((set) => config.initialState);
+
+  const persistedStore = persist(immerStore, {
+    name: `store:${key}`,
+    storage,
+    partialize: partialize as ((state: T) => T) | undefined,
+    onRehydrateStorage: hydrate
+      ? () => (state) => {
+          if (state) {
+            const hydrated = hydrate(state);
+            Object.assign(state, hydrated);
+          }
+        }
+      : undefined,
+  });
+
+  // Always enable devtools in development, let Zustand handle the connection
+  if (process.env.NODE_ENV !== "production") {
+    return create<T>()(
+      devtools(persistedStore, {
+        name: `${storeName}:${key}`,
+      }),
+    ) as Store<T>;
+  } else {
+    return create<T>()(persistedStore) as Store<T>;
+  }
 }
 
 // ============================================================================
@@ -112,6 +133,7 @@ export function createSelector<T, R>(
 export function createAction<T, Args extends unknown[], R>(
   store: Store<T>,
   action: (state: T, ...args: Args) => R,
+  actionName?: string,
 ): (...args: Args) => R {
   return (...args: Args) => {
     let result!: R;
@@ -154,6 +176,7 @@ export function createActions<
     (boundActions as Record<string, unknown>)[name] = createAction(
       store,
       action,
+      name, // Pass action name for better DevTools display
     );
   }
 

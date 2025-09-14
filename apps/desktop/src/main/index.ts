@@ -10,7 +10,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
-      sandbox: false,
+      sandbox: true, // Keep sandbox enabled for security
       contextIsolation: true,
       nodeIntegration: false,
       webSecurity: !is.dev, // Disable web security in dev for extension compatibility
@@ -20,16 +20,38 @@ function createWindow(): void {
 
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
-    // Open DevTools in development
-    if (is.dev) {
-      mainWindow.webContents.openDevTools();
-    }
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
     return { action: "deny" };
   });
+
+  // Install Redux DevTools after DOM is ready
+  if (is.dev) {
+    mainWindow.webContents.once("dom-ready", async () => {
+      try {
+        const { default: installExtension, REDUX_DEVTOOLS } = await import(
+          "electron-devtools-installer"
+        );
+
+        await installExtension(REDUX_DEVTOOLS, {
+          loadExtensionOptions: {
+            allowFileAccess: true,
+          },
+          forceDownload: false,
+        })
+          .then((name) => console.log(`Added Extension: ${name}`))
+          .catch((err) => console.log("Extension install error: ", err))
+          .finally(() => {
+            mainWindow.webContents.openDevTools();
+          });
+      } catch (error) {
+        console.error("Failed to load devtools installer:", error);
+        mainWindow.webContents.openDevTools();
+      }
+    });
+  }
 
   // Always load from a URL - localhost in dev, CDN in production
   const appUrl = is.dev
@@ -42,26 +64,14 @@ function createWindow(): void {
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId("com.electron");
 
-  // Install Redux DevTools Extension in development
+  // Remove CSP restrictions in development to allow extensions
   if (is.dev) {
-    try {
-      // Use the new session.defaultSession API for Electron 23+
-      const { default: installExtension, REDUX_DEVTOOLS } = await import(
-        "electron-devtools-installer"
-      );
-
-      // Install with options to suppress warnings
-      const extensionId = await installExtension(REDUX_DEVTOOLS, {
-        loadExtensionOptions: {
-          allowFileAccess: true,
-        },
-        forceDownload: false,
-      });
-
-      console.log("Redux DevTools Extension installed:", extensionId);
-    } catch (error) {
-      console.error("Failed to install Redux DevTools Extension:", error);
-    }
+    session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+      const responseHeaders = { ...details.responseHeaders };
+      delete responseHeaders["content-security-policy"];
+      delete responseHeaders["Content-Security-Policy"];
+      callback({ responseHeaders });
+    });
   }
 
   app.on("browser-window-created", (_, window) => {

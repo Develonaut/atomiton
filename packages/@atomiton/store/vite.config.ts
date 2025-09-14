@@ -4,6 +4,10 @@ import { visualizer } from "rollup-plugin-visualizer";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
+  define: {
+    // Ensure Redux DevTools are available in development
+    __DEV__: process.env.NODE_ENV !== "production",
+  },
   plugins: [
     dts({
       insertTypesEntry: true,
@@ -56,19 +60,22 @@ export default defineConfig({
         }),
       ],
     },
-    // Enable minification and compression
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console.log in production
-        drop_debugger: true,
-        pure_funcs: ["console.log", "console.debug"],
-      },
-      mangle: {
-        keep_classnames: true, // Keep class names for debugging
-        keep_fnames: true, // Keep function names for debugging
-      },
-    },
+    // Enable minification and compression only in production
+    minify: process.env.NODE_ENV === "production" ? "terser" : false,
+    terserOptions:
+      process.env.NODE_ENV === "production"
+        ? {
+            compress: {
+              drop_console: true, // Remove console.log in production
+              drop_debugger: true,
+              pure_funcs: ["console.log", "console.debug"],
+            },
+            mangle: {
+              keep_classnames: true, // Keep class names for debugging
+              keep_fnames: true, // Keep function names for debugging
+            },
+          }
+        : undefined,
     sourcemap: true,
     reportCompressedSize: true,
   },
