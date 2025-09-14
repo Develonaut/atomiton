@@ -4,7 +4,7 @@
  * Static metadata definition for the Code node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * Code Metadata Class

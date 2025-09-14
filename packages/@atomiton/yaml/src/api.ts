@@ -8,7 +8,7 @@ import type {
   YamlParseOptions,
   YamlStringifyOptions,
   YamlValue,
-} from "./types.js";
+} from "./types";
 import {
   isValidYaml,
   parseMultipleDocuments,
@@ -16,7 +16,7 @@ import {
   parseYamlDocument,
   parseYamlStream,
   safeParseYaml,
-} from "./utils/parser.js";
+} from "./utils/parser";
 import {
   formatYaml,
   minifyYaml,
@@ -24,7 +24,7 @@ import {
   stringifyYaml,
   stringifyYamlWithComments,
   toYamlDocument,
-} from "./utils/stringifier.js";
+} from "./utils/stringifier";
 import {
   createValidator,
   validateArrayLength,
@@ -34,7 +34,7 @@ import {
   validateRequired,
   validateSchema,
   validateType,
-} from "./utils/validator.js";
+} from "./utils/validator";
 
 /**
  * YamlAPI - Main interface for interacting with the YAML package

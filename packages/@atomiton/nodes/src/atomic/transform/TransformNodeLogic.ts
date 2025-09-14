@@ -5,9 +5,9 @@
  * Handles the business logic for data transformation operations
  */
 
-import { NodeLogic } from "../../base/NodeLogic.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
-import type { TransformConfig } from "./TransformNodeConfig.js";
+import { NodeLogic } from "../../base/NodeLogic";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
+import type { TransformConfig } from "./TransformNodeConfig";
 
 export class TransformLogic extends NodeLogic<TransformConfig> {
   async execute(

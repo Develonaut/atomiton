@@ -7,7 +7,7 @@ import {
   validateRange,
   validateArrayLength,
   createValidator,
-} from "../utils/validator.js";
+} from "../utils/validator";
 
 describe("validateRequired", () => {
   it("should pass when all required fields exist", () => {

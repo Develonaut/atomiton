@@ -5,8 +5,8 @@
  * according to their dependency graph and execution flow
  */
 
-import type { CompositeEdge, INode } from "../base/INode.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../types.js";
+import type { CompositeEdge, INode } from "../base/INode";
+import type { NodeExecutionContext, NodeExecutionResult } from "../types";
 
 export type CompositeExecutionSettings = {
   timeout?: number;

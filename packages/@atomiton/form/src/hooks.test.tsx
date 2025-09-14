@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { z } from "zod";
-import { useForm } from "./hooks/index.js";
+import { useForm } from "./hooks/index";
 
 describe("useForm", () => {
   it("creates form with generated fields", () => {

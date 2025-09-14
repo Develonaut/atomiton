@@ -8,8 +8,8 @@ import type {
   NodeExecutionResult,
 } from "@atomiton/nodes";
 import { bench, describe } from "vitest";
-import { ExecutionEngine } from "../engine/ExecutionEngine.js";
-import type { Blueprint } from "../execution/BlueprintRunner.js";
+import { ExecutionEngine } from "../engine/ExecutionEngine";
+import type { Blueprint } from "../execution/BlueprintRunner";
 
 // Realistic node implementations mimicking popular automation platforms
 function createRealisticNode(

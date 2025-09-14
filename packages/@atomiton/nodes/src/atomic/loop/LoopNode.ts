@@ -4,13 +4,13 @@
  * Node for looping and iterating over data items
  */
 
-import { Node } from "../../base/Node.js";
+import { Node } from "../../base/Node";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types.js";
-import { LoopLogic } from "./LoopNodeLogic.js";
+} from "../../types";
+import { LoopLogic } from "./LoopNodeLogic";
 
 /**
  * Loop Node Class

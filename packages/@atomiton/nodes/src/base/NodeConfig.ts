@@ -6,7 +6,7 @@
  */
 
 import { z } from "zod";
-import type { INodeConfig } from "./INodeConfig.js";
+import type { INodeConfig } from "./INodeConfig";
 
 /**
  * Field Control Types for form rendering

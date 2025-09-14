@@ -150,9 +150,7 @@ export function useAsync<T>(
         return result;
       } finally {
         // Clear the active request
-        if (activeRequestRef.current === operation) {
-          activeRequestRef.current = null;
-        }
+        activeRequestRef.current = null;
       }
     },
     [asyncFunction, dedupingInterval, retry, retryDelay, keepPreviousData],
@@ -213,7 +211,7 @@ export function createAsyncHook<T, Args extends unknown[] = []>(
   fetcher: (...args: Args) => Promise<T>,
 ) {
   return (options?: UseAsyncOptions) => {
-    return useAsync(fetcher, options);
+    return useAsync(fetcher as (...args: unknown[]) => Promise<T>, options);
   };
 }
 
@@ -224,7 +222,7 @@ export function useAsyncCallback<T, Args extends unknown[] = []>(
   asyncFunction: (...args: Args) => Promise<T>,
   options: Omit<UseAsyncOptions, "executeOnMount"> = {},
 ): UseAsyncReturn<T> {
-  return useAsync(asyncFunction, {
+  return useAsync(asyncFunction as (...args: unknown[]) => Promise<T>, {
     ...options,
     executeOnMount: false,
   });

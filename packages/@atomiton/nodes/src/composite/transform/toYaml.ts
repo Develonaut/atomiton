@@ -5,9 +5,9 @@ import type {
   TransformationOptions,
   TransformationResult,
   ValidationError,
-} from "../types.js";
-import { validateComposite } from "../validation/index.js";
-import { DEFAULT_TRANSFORMATION_OPTIONS } from "./constants.js";
+} from "../types";
+import { validateComposite } from "../validation/index";
+import { DEFAULT_TRANSFORMATION_OPTIONS } from "./constants";
 
 /**
  * Convert CompositeDefinition JSON to YAML string

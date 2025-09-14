@@ -3,7 +3,7 @@ import PQueue from "p-queue";
 import type {
   ExecutionError,
   ExecutionResult,
-} from "../interfaces/IExecutionEngine.js";
+} from "../interfaces/IExecutionEngine";
 
 export type JobData = {
   executionId: string;

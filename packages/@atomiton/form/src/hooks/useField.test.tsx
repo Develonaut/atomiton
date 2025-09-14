@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { z } from "zod";
-import { useForm } from "./useForm.js";
-import { useField } from "./useField.js";
+import { useForm } from "./useForm";
+import { useField } from "./useField";
 
 describe("useField", () => {
   it("returns field registration and state", () => {

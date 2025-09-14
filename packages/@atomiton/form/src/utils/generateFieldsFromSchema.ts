@@ -3,8 +3,8 @@ import type {
   FieldsMetadata,
   UIControlType,
   ZodSchema,
-} from "../types.js";
-import { mapZodTypeToControl } from "./mapZodTypeToControl.js";
+} from "../types";
+import { mapZodTypeToControl } from "./mapZodTypeToControl";
 
 /**
  * Generates field configurations from a Zod object schema

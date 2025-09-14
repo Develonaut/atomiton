@@ -33,11 +33,12 @@ export const nodeMetadataStore = store.createStore<NodeMetadataState>({
   },
   persist: {
     key: "atomiton-node-metadata",
-    partialize: (state) => ({
-      metadata: Array.from(state.metadata.entries()),
-      categories: state.categories,
-      lastUpdated: state.lastUpdated,
-    }),
+    partialize: (state) =>
+      ({
+        metadata: Array.from(state.metadata.entries()),
+        categories: state.categories,
+        lastUpdated: state.lastUpdated,
+      }) as any,
     hydrate: (persisted: any) => ({
       metadata: new Map(persisted.metadata || []),
       categories: persisted.categories || [],
@@ -48,12 +49,15 @@ export const nodeMetadataStore = store.createStore<NodeMetadataState>({
 
 // Actions for the registry to use
 export const nodeMetadataActions = store.createActions(nodeMetadataStore, {
-  setMetadata: (state, nodeType: string, metadata: INodeMetadata) => {
+  setMetadata: (state: NodeMetadataState, ...args: unknown[]) => {
+    const [nodeType, metadata] = args as [string, INodeMetadata];
     state.metadata.set(nodeType, metadata);
     state.lastUpdated = Date.now();
   },
 
-  setCategories: (state, categories: NodeMetadataState["categories"]) => {
+  setCategories: (state: NodeMetadataState, ...args: unknown[]) => {
+    const [categories] = args as [NodeMetadataState["categories"]];
+    state = state as NodeMetadataState;
     state.categories = categories;
 
     // Also update the metadata map

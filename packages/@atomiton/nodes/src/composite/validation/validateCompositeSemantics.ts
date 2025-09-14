@@ -3,12 +3,12 @@ import type {
   CompositeValidationContext,
   ValidationError,
   ValidationResult,
-} from "../types.js";
-import { validateNodeUniqueness } from "./validateNodeUniqueness.js";
-import { validateEdgeReferences } from "./validateEdgeReferences.js";
-import { validateNodeTypes } from "./validateNodeTypes.js";
-import { validateEdgeUniqueness } from "./validateEdgeUniqueness.js";
-import { validateMetadata } from "./validateMetadata.js";
+} from "../types";
+import { validateNodeUniqueness } from "./validateNodeUniqueness";
+import { validateEdgeReferences } from "./validateEdgeReferences";
+import { validateNodeTypes } from "./validateNodeTypes";
+import { validateEdgeUniqueness } from "./validateEdgeUniqueness";
+import { validateMetadata } from "./validateMetadata";
 
 /**
  * Validate composite semantics (relationships, references, etc.)

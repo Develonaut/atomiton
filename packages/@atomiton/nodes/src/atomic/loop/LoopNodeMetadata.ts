@@ -4,7 +4,7 @@
  * Static metadata definition for the Loop node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * Loop Metadata Class

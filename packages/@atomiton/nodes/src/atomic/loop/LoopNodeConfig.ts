@@ -5,7 +5,7 @@
  */
 
 import { z } from "zod";
-import { NodeConfig } from "../../base/NodeConfig.js";
+import { NodeConfig } from "../../base/NodeConfig";
 
 /**
  * Loop specific configuration schema

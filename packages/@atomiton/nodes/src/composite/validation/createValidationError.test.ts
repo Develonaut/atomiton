@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { createValidationError } from "./createValidationError.js";
+import { createValidationError } from "./createValidationError";
 
 describe("createValidationError", () => {
   describe("Basic Error Creation", () => {

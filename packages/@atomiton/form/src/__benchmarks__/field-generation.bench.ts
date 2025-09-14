@@ -4,7 +4,7 @@ import {
   generateFieldsFromSchema,
   getDefaultValues,
   mapZodTypeToControl,
-} from "../index.js";
+} from "../index";
 
 describe("Field Generation Performance", () => {
   const smallSchema = z.object({

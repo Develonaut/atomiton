@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { hasCriticalErrors } from "./hasCriticalErrors.js";
-import type { ValidationResult, ValidationError } from "../types.js";
+import { hasCriticalErrors } from "./hasCriticalErrors";
+import type { ValidationResult, ValidationError } from "../types";
 
 describe("hasCriticalErrors", () => {
   describe("No Errors", () => {

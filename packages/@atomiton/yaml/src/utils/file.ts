@@ -1,12 +1,12 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { parseYaml, safeParseYaml } from "./parser.js";
-import { stringifyYaml } from "./stringifier.js";
+import { parseYaml, safeParseYaml } from "./parser";
+import { stringifyYaml } from "./stringifier";
 import type {
   YamlParseOptions,
   YamlStringifyOptions,
   ParseResult,
   YamlDocument,
-} from "../types.js";
+} from "../types";
 
 export async function readYamlFile<T = YamlDocument>(
   filePath: string,

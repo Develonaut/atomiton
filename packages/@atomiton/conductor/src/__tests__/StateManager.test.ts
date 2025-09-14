@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { StateManager } from "../state/StateManager.js";
+import { StateManager } from "../state/StateManager";
 
 describe("StateManager", () => {
   let stateManager: StateManager;

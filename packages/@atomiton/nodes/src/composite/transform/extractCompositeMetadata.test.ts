@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { extractCompositeMetadata } from "./extractCompositeMetadata.js";
+import { extractCompositeMetadata } from "./extractCompositeMetadata";
 
 describe("extractCompositeMetadata", () => {
   describe("Basic Functionality", () => {

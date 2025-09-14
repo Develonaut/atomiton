@@ -4,13 +4,13 @@
  * Node for executing custom JavaScript code
  */
 
-import { Node } from "../../base/Node.js";
+import { Node } from "../../base/Node";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types.js";
-import { CodeLogic } from "./CodeNodeLogic.js";
+} from "../../types";
+import { CodeLogic } from "./CodeNodeLogic";
 
 /**
  * Code Node Class

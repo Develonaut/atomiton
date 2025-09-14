@@ -1,4 +1,4 @@
-import type { ValidationError } from "../types.js";
+import type { ValidationError } from "../types";
 
 /**
  * Create a validation error

@@ -4,7 +4,7 @@
  * Static metadata definition for the Parallel node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * Parallel Metadata Class

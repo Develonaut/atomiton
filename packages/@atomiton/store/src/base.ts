@@ -60,7 +60,7 @@ export function createStore<T extends object>(
   if (!config.persist) {
     return create<T>()(
       devtools(
-        immer(() => config.initialState),
+        immer((set) => config.initialState),
         { name: storeName },
       ),
     ) as Store<T>;
@@ -72,7 +72,7 @@ export function createStore<T extends object>(
   return create<T>()(
     devtools(
       persist(
-        immer(() => config.initialState),
+        immer((set) => config.initialState),
         {
           name: `store:${key}`,
           storage,

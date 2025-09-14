@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { generateFieldsFromSchema } from "./generateFieldsFromSchema.js";
+import { generateFieldsFromSchema } from "./generateFieldsFromSchema";
 
 describe("generateFieldsFromSchema", () => {
   describe("basic functionality", () => {

@@ -4,7 +4,7 @@
  * Static metadata definition for the File System node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * File System Metadata Class

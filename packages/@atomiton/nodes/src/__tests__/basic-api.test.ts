@@ -6,7 +6,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import nodes from "../api.js";
+import nodes from "../api";
 import atomic, { type NodeType } from "../atomic";
 
 describe("Nodes Package - Core Functionality", () => {

@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import { useForm } from "./hooks/useForm.js";
-import { generateFieldsFromSchema, getDefaultValues } from "./utils/index.js";
+import { useForm } from "./hooks/useForm";
+import { generateFieldsFromSchema, getDefaultValues } from "./utils/index";
 
 describe("Form Package Smoke Tests", () => {
   it("exports all required functions", () => {

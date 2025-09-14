@@ -4,13 +4,13 @@
  * Node for file system operations (read, write, manage directories)
  */
 
-import { Node } from "../../base/Node.js";
+import { Node } from "../../base/Node";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types.js";
-import { FileSystemLogic } from "./FileSystemNodeLogic.js";
+} from "../../types";
+import { FileSystemLogic } from "./FileSystemNodeLogic";
 
 /**
  * File System Node Class

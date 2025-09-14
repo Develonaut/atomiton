@@ -4,7 +4,7 @@
  * Static metadata definition for the Image Composite node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * Image Composite Metadata Class

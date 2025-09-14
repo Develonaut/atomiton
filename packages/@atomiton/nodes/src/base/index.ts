@@ -6,9 +6,9 @@
  */
 
 // Node base class and extended node
-export { Node } from "./Node.js";
-export { ExtendedNode } from "./ExtendedNode.js";
-export type { ExtendedNodeConfig } from "./ExtendedNode.js";
+export { Node } from "./Node";
+export { ExtendedNode } from "./ExtendedNode";
+export type { ExtendedNodeConfig } from "./ExtendedNode";
 
 // Node interfaces and type guards
 export type {
@@ -16,22 +16,22 @@ export type {
   IAtomicNode,
   ICompositeNode,
   CompositeEdge,
-} from "./INode.js";
-export { isAtomicNode, isCompositeNode } from "./INode.js";
+} from "./INode";
+export { isAtomicNode, isCompositeNode } from "./INode";
 
 // Node metadata interfaces and classes
-export type { INodeMetadata } from "./INodeMetadata.js";
-export { NodeMetadata } from "./NodeMetadata.js";
+export type { INodeMetadata } from "./INodeMetadata";
+export { NodeMetadata } from "./NodeMetadata";
 
 // Node configuration interfaces and classes
-export type { INodeConfig } from "./INodeConfig.js";
-export { NodeConfig } from "./NodeConfig.js";
+export type { INodeConfig } from "./INodeConfig";
+export { NodeConfig } from "./NodeConfig";
 export type {
   FieldConfig,
   FieldControlType,
   FormConfig,
   FieldsConfig,
-} from "./NodeConfig.js";
+} from "./NodeConfig";
 
 // Node logic
-export { NodeLogic } from "./NodeLogic.js";
+export { NodeLogic } from "./NodeLogic";

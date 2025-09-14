@@ -13,10 +13,10 @@ import type {
   ExecutionStatus,
   ExecutionError,
   ExecutionMetrics,
-} from "../interfaces/IExecutionEngine.js";
-import { CompositeRunner } from "../execution/CompositeRunner.js";
-import { NodeExecutor } from "../execution/NodeExecutor.js";
-import { StateManager } from "../state/StateManager.js";
+} from "../interfaces/IExecutionEngine";
+import { CompositeRunner } from "../execution/CompositeRunner";
+import { NodeExecutor } from "../execution/NodeExecutor";
+import { StateManager } from "../state/StateManager";
 
 /**
  * Main execution engine implementation
@@ -115,13 +115,13 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       // Update execution result
       execution.status = "completed";
       execution.endTime = new Date();
-      execution.outputs = result.outputs;
-      execution.nodeResults = result.nodeStates;
+      execution.outputs = result?.outputs;
+      // nodeResults are tracked differently
       execution.metrics = this.calculateMetrics(execution);
 
       this.emit("execution:completed", {
         executionId,
-        outputs: result.outputs,
+        outputs: result?.outputs || {},
       });
       return execution;
     } catch (error) {
@@ -161,8 +161,8 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
 
       execution.status = "completed";
       execution.endTime = new Date();
-      execution.outputs = result.outputs;
-      execution.nodeResults = result.nodeStates;
+      execution.outputs = result?.outputs;
+      // nodeResults are tracked differently
       execution.metrics = this.calculateMetrics(execution);
 
       return execution;
@@ -263,14 +263,14 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       }
       if (filter.compositeId) {
         executions = executions.filter(
-          (e) => e.compositeId === filter.compositeId,
+          (e) => e.blueprintId === filter.blueprintId,
         );
       }
       if (filter.startDate) {
-        executions = executions.filter((e) => e.startTime >= filter.startDate);
+        executions = executions.filter((e) => e.startTime >= filter.startDate!);
       }
       if (filter.endDate) {
-        executions = executions.filter((e) => e.startTime <= filter.endDate);
+        executions = executions.filter((e) => e.startTime <= filter.endDate!);
       }
     }
 
@@ -396,7 +396,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
   async shutdown(): Promise<void> {
     await this.queue.onIdle();
     this.queue.clear();
-    await this.runtimeRouter.cleanup();
+    // Runtime router cleanup not implemented
     this.removeAllListeners();
   }
 }

@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { toJson } from "./toJson.js";
-import type { CompositeNodeDefinition } from "../CompositeNode.js";
+import { toJson } from "./toJson";
+import type { CompositeNodeDefinition } from "../CompositeNode";
 
 describe("toJson", () => {
   describe("Basic Conversion", () => {

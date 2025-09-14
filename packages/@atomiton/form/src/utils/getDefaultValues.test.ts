@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { getDefaultValues } from "./getDefaultValues.js";
+import { getDefaultValues } from "./getDefaultValues";
 
 describe("getDefaultValues", () => {
   describe("basic type defaults", () => {

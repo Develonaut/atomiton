@@ -1,2 +1,2 @@
-export { default as baseConfig } from "./base.js";
-export { default as reactConfig } from "./react-internal.js";
+export { default as baseConfig } from "./base";
+export { default as reactConfig } from "./react-internal";

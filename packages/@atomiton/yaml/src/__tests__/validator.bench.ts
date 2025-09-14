@@ -6,7 +6,7 @@ import {
   validatePattern,
   validateRange,
   validateArrayLength,
-} from "../utils/validator.js";
+} from "../utils/validator";
 
 const simpleData = {
   name: "Test",

@@ -1,11 +1,11 @@
-import { NodeLogic } from "../../base/NodeLogic.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+import { NodeLogic } from "../../base/NodeLogic";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
 import type {
   ShellCommandConfig,
   ShellCommandInput,
   ShellCommandOutput,
-} from "./ShellCommandNodeConfig.js";
-import { shellCommandConfig } from "./ShellCommandNodeConfig.js";
+} from "./ShellCommandNodeConfig";
+import { shellCommandConfig } from "./ShellCommandNodeConfig";
 
 export class ShellCommandLogic extends NodeLogic<ShellCommandConfig> {
   getConfigSchema() {

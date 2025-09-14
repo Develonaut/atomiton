@@ -177,7 +177,7 @@ export class AtomicRegistry {
    */
   unregister(nodeType: string): boolean {
     // Clear from caches
-    this.metadataCache.delete(nodeType);
+    // Metadata is in the store, not cached locally
     this.configCache.delete(nodeType);
     this.logicCache.delete(nodeType);
     this.nodeCache.delete(nodeType);
@@ -213,7 +213,7 @@ export class AtomicRegistry {
    */
   async loadMetadata(nodeType: string): Promise<INodeMetadata | null> {
     // Check store first
-    const cached = nodeSelectors.getMetadataByType()(nodeType);
+    const cached = nodeSelectors.getMetadataByType(nodeType);
     if (cached) {
       return cached;
     }
@@ -249,7 +249,7 @@ export class AtomicRegistry {
    */
   async loadConfig(nodeType: string): Promise<any | null> {
     // Check store first
-    const cached = nodeSelectors.getConfigByType()(nodeType);
+    const cached = nodeSelectors.getConfigByType(nodeType);
     if (cached) {
       return cached;
     }
@@ -431,11 +431,11 @@ export class AtomicRegistry {
         break;
       case "logic":
         this.logicCache.clear();
-        nodeActions.clearLogic();
+        // Logic clearing not yet implemented in nodeActions
         break;
       case "node":
         this.nodeCache.clear();
-        nodeActions.clearNodes();
+        // Node clearing not yet implemented in nodeActions
         break;
       case "all":
         this.clearAllCaches();

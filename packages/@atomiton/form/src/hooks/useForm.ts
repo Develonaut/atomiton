@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { useForm as useHookForm } from "react-hook-form";
-import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types.js";
-import { generateFieldsFromSchema, getDefaultValues } from "../utils/index.js";
+import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types";
+import { generateFieldsFromSchema, getDefaultValues } from "../utils/index";
 
 export type UseFormOptions = {
   schema: ZodSchema;

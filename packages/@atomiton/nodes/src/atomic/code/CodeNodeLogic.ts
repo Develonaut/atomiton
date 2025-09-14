@@ -5,9 +5,9 @@
  * Handles the business logic for executing custom JavaScript code
  */
 
-import { NodeLogic } from "../../base/NodeLogic.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
-import type { CodeConfig } from "./CodeNodeConfig.js";
+import { NodeLogic } from "../../base/NodeLogic";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
+import type { CodeConfig } from "./CodeNodeConfig";
 
 export class CodeLogic extends NodeLogic<CodeConfig> {
   async execute(

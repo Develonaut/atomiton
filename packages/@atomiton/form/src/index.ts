@@ -1,8 +1,8 @@
-export type * from "./types.js";
-export * from "./utils/index.js";
-export * from "./hooks/index.js";
-export * from "./components/index.js";
+export type * from "./types";
+export * from "./utils/index";
+export * from "./hooks/index";
+export * from "./components/index";
 
 export { z } from "zod";
 export { zodResolver } from "@hookform/resolvers/zod";
-export type { FieldsMetadata as FieldsConfig } from "./types.js";
+export type { FieldsMetadata as FieldsConfig } from "./types";

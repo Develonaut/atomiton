@@ -1,5 +1,5 @@
-import type { CompositeDefinition } from "../types.js";
-import { validateComposite } from "./validateComposite.js";
+import type { CompositeDefinition } from "../types";
+import { validateComposite } from "./validateComposite";
 
 /**
  * Type guard function to check if data is a valid CompositeDefinition

@@ -52,12 +52,13 @@ const store = storeAPI.createStore<NodeStoreState>({
   persist: {
     key: "atomiton-nodes",
     // Only persist the actual data, not loading/error states
-    partialize: (state) => ({
-      metadata: Array.from(state.metadata.entries()),
-      configs: Array.from(state.configs.entries()),
-      categories: state.categories,
-      lastUpdated: state.lastUpdated,
-    }),
+    partialize: (state) =>
+      ({
+        metadata: Array.from(state.metadata.entries()),
+        configs: Array.from(state.configs.entries()),
+        categories: state.categories,
+        lastUpdated: state.lastUpdated,
+      }) as any,
     hydrate: (persisted: any) => ({
       metadata: new Map(persisted.metadata || []),
       configs: new Map(persisted.configs || []),

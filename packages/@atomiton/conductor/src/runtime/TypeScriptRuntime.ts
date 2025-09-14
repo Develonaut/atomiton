@@ -9,7 +9,7 @@ import type {
   RuntimeCapabilities,
   RuntimeExecutionOptions,
   RuntimeMetrics,
-} from "../interfaces/IRuntime.js";
+} from "../interfaces/IRuntime";
 
 /**
  * TypeScript runtime implementation

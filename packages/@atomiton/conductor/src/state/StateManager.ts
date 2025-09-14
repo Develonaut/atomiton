@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import type { ExecutionStatus } from "../interfaces/IExecutionEngine.js";
+import type { ExecutionStatus } from "../interfaces/IExecutionEngine";
 
 /**
  * Execution state information

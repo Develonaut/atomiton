@@ -5,7 +5,7 @@
  * Similar to NodeConfig but for static metadata instead of runtime configuration.
  */
 
-import type { INodeMetadata } from "./INodeMetadata.js";
+import type { INodeMetadata } from "./INodeMetadata";
 
 export abstract class NodeMetadata implements INodeMetadata {
   abstract readonly id: string;

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { FormProvider as RHFFormProvider } from "react-hook-form";
-import { useForm as useAtomitonForm } from "../hooks/useForm.js";
-import type { FieldsMetadata, FieldConfig, ZodSchema } from "../types.js";
+import { useForm as useAtomitonForm } from "../hooks/useForm";
+import type { FieldsMetadata, FieldConfig, ZodSchema } from "../types";
 
 type FormContextValue = {
   generatedFields: FieldConfig[];

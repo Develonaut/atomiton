@@ -1,3 +1,3 @@
-export * from "./mapZodTypeToControl.js";
-export * from "./generateFieldsFromSchema.js";
-export * from "./getDefaultValues.js";
+export * from "./mapZodTypeToControl";
+export * from "./generateFieldsFromSchema";
+export * from "./getDefaultValues";

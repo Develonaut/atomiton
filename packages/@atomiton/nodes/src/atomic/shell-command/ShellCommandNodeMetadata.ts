@@ -4,7 +4,7 @@
  * Static metadata definition for the Shell Command node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * Shell Command Metadata Class

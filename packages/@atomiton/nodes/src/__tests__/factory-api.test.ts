@@ -6,9 +6,9 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import nodes from "../api.js";
-import { isAtomicNode, isCompositeNode } from "../base/INode.js";
-import type { NodeExecutionContext } from "../types.js";
+import nodes from "../api";
+import { isAtomicNode, isCompositeNode } from "../base/INode";
+import type { NodeExecutionContext } from "../types";
 
 describe("Factory API - nodes.extendNode() Tests", () => {
   let mockContext: NodeExecutionContext;

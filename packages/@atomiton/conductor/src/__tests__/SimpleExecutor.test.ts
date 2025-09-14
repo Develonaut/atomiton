@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { SimpleExecutor, createSimpleNode } from "../simple/SimpleExecutor.js";
+import { SimpleExecutor, createSimpleNode } from "../simple/SimpleExecutor";
 
 describe("SimpleExecutor - Karen approved minimal approach", () => {
   it("should execute a single node blueprint", async () => {

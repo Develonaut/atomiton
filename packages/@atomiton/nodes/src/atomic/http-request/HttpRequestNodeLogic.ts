@@ -1,11 +1,11 @@
-import { NodeLogic } from "../../base/NodeLogic.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+import { NodeLogic } from "../../base/NodeLogic";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
 import type {
   HttpRequestConfig,
   HttpRequestInput,
   HttpRequestOutput,
-} from "./HttpRequestNodeConfig.js";
-import { httpRequestConfig } from "./HttpRequestNodeConfig.js";
+} from "./HttpRequestNodeConfig";
+import { httpRequestConfig } from "./HttpRequestNodeConfig";
 
 export class HttpRequestLogic extends NodeLogic<HttpRequestConfig> {
   getConfigSchema() {

@@ -1,4 +1,4 @@
-import type { UIControlType, FieldConfig } from "./types.js";
+import type { UIControlType, FieldConfig } from "./types";
 
 /**
  * Zod type name to control type mapping

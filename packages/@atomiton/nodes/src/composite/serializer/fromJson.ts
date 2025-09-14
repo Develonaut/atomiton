@@ -1,5 +1,5 @@
-import type { CompositeNodeDefinition } from "../CompositeNode.js";
-import type { JsonCompositeDefinition } from "./types.js";
+import type { CompositeNodeDefinition } from "../CompositeNode";
+import type { JsonCompositeDefinition } from "./types";
 
 export function fromJson(
   jsonData: JsonCompositeDefinition,

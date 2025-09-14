@@ -1,4 +1,4 @@
-import type { TransformationOptions } from "../types.js";
+import type { TransformationOptions } from "../types";
 
 /**
  * Default transformation options

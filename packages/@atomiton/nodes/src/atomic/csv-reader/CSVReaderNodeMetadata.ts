@@ -4,7 +4,7 @@
  * Static metadata definition for the CSV Reader node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * CSV Reader Metadata Class

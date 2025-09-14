@@ -1,4 +1,4 @@
-import type { ValidationResult } from "../types.js";
+import type { ValidationResult } from "../types";
 
 /**
  * Check if validation result has critical errors

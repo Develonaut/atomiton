@@ -6,9 +6,9 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { validateEdgeReferences } from "./validateEdgeReferences.js";
-import type { CompositeNodeSpec } from "../types.js";
-import type { CompositeEdge } from "../../base/INode.js";
+import { validateEdgeReferences } from "./validateEdgeReferences";
+import type { CompositeNodeSpec } from "../types";
+import type { CompositeEdge } from "../../base/INode";
 
 describe("validateEdgeReferences", () => {
   const sampleNodes: CompositeNodeSpec[] = [

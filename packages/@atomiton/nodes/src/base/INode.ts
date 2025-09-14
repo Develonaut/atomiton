@@ -12,7 +12,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../types.js";
+} from "../types";
 
 export type INode = {
   /**

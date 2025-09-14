@@ -4,13 +4,13 @@
  * Node for image composition and manipulation
  */
 
-import { Node } from "../../base/Node.js";
+import { Node } from "../../base/Node";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../../types.js";
-import { ImageCompositeLogic } from "./ImageCompositeNodeLogic.js";
+} from "../../types";
+import { ImageCompositeLogic } from "./ImageCompositeNodeLogic";
 
 /**
  * Image Composite Node Class

@@ -1,11 +1,11 @@
-import { COMPOSITE_SCHEMA } from "../schema.js";
+import { COMPOSITE_SCHEMA } from "../schema";
 import type {
   CompositeDefinition,
   CompositeValidationContext,
   ValidationError,
   ValidationResult,
-} from "../types.js";
-import { validateCompositeSemantics } from "./validateCompositeSemantics.js";
+} from "../types";
+import { validateCompositeSemantics } from "./validateCompositeSemantics";
 
 /**
  * Validate a composite definition using Zod schema

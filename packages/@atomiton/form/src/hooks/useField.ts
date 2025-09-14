@@ -1,4 +1,4 @@
-import type { useForm } from "./useForm.js";
+import type { useForm } from "./useForm";
 
 export function useField({
   name,

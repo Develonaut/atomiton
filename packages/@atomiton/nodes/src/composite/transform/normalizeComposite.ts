@@ -2,9 +2,9 @@ import type {
   CompositeDefinition,
   TransformationOptions,
   TransformationResult,
-} from "../types.js";
-import { toYaml } from "./toYaml.js";
-import { fromYaml } from "./fromYaml.js";
+} from "../types";
+import { toYaml } from "./toYaml";
+import { fromYaml } from "./fromYaml";
 
 /**
  * Normalize a composite by converting to YAML and back to JSON

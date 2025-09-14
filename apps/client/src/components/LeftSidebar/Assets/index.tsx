@@ -26,6 +26,8 @@ function Assets() {
     return <div>Loading nodes...</div>;
   }
 
+  console.log(categories);
+
   return (
     <>
       {categories.map((category, index) => (

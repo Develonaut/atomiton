@@ -4,7 +4,7 @@
  * Static metadata definition for the HTTP Request node
  */
 
-import { NodeMetadata } from "../../base/NodeMetadata.js";
+import { NodeMetadata } from "../../base/NodeMetadata";
 
 /**
  * HTTP Request Metadata Class

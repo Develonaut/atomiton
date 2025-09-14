@@ -6,7 +6,7 @@ import type {
   YamlDocument,
   YamlError,
   StreamParseOptions,
-} from "../types.js";
+} from "../types";
 
 export function parseYaml<T = YamlDocument>(
   input: string,

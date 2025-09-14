@@ -3,7 +3,7 @@
  */
 
 import { bench, describe } from "vitest";
-import nodes from "../api.js";
+import nodes from "../api";
 
 describe("Lazy Loading Performance", () => {
   bench("Get available node types (metadata only)", () => {

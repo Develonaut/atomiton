@@ -5,9 +5,9 @@
  * Handles the business logic for running multiple operations simultaneously
  */
 
-import { NodeLogic } from "../../base/NodeLogic.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
-import type { ParallelConfig } from "./ParallelNodeConfig.js";
+import { NodeLogic } from "../../base/NodeLogic";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
+import type { ParallelConfig } from "./ParallelNodeConfig";
 
 export class ParallelLogic extends NodeLogic<ParallelConfig> {
   async execute(

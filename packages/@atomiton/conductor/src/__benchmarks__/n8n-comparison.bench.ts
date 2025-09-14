@@ -1,5 +1,5 @@
 import { bench, describe } from "vitest";
-import { EnhancedExecutionEngine, Queue, ScalableQueue } from "../index.js";
+import { EnhancedExecutionEngine, Queue, ScalableQueue } from "../index";
 
 describe("n8n Comparison Benchmarks", () => {
   describe("Queue Performance vs n8n", () => {

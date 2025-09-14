@@ -6,11 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { validateCompositeSemantics } from "./validateCompositeSemantics.js";
-import type {
-  CompositeDefinition,
-  CompositeValidationContext,
-} from "../types.js";
+import { validateCompositeSemantics } from "./validateCompositeSemantics";
+import type { CompositeDefinition, CompositeValidationContext } from "../types";
 
 describe("validateCompositeSemantics", () => {
   const baseComposite: CompositeDefinition = {

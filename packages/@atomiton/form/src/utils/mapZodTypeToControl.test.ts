@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { mapZodTypeToControl } from "./mapZodTypeToControl.js";
+import { mapZodTypeToControl } from "./mapZodTypeToControl";
 
 describe("mapZodTypeToControl", () => {
   describe("basic types", () => {

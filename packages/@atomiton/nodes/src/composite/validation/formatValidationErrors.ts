@@ -1,4 +1,4 @@
-import type { ValidationError } from "../types.js";
+import type { ValidationError } from "../types";
 
 /**
  * Format validation errors for display

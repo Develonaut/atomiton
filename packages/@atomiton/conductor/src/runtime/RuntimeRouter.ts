@@ -3,8 +3,8 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
-import type { IRuntime, RuntimeLanguage } from "../interfaces/IRuntime.js";
-import { TypeScriptRuntime } from "./TypeScriptRuntime.js";
+import type { IRuntime, RuntimeLanguage } from "../interfaces/IRuntime";
+import { TypeScriptRuntime } from "./TypeScriptRuntime";
 
 /**
  * RuntimeRouter manages and routes node execution to appropriate runtimes

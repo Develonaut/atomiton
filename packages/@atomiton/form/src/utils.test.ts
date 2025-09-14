@@ -4,7 +4,7 @@ import {
   mapZodTypeToControl,
   generateFieldsFromSchema,
   getDefaultValues,
-} from "./utils/index.js";
+} from "./utils/index";
 
 describe("mapZodTypeToControl", () => {
   it("maps string to text input", () => {

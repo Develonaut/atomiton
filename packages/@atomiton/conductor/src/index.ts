@@ -4,6 +4,6 @@ export {
   type SimpleComposite,
   type SimpleNode,
   type SimpleResult,
-} from "./simple/SimpleExecutor.js";
+} from "./simple/SimpleExecutor";
 
-export { StateManager } from "./state/StateManager.js";
+export { StateManager } from "./state/StateManager";

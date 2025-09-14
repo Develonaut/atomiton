@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { isCompositeDefinition } from "./isCompositeDefinition.js";
-import type { CompositeDefinition } from "../types.js";
+import { isCompositeDefinition } from "./isCompositeDefinition";
+import type { CompositeDefinition } from "../types";
 
 describe("isCompositeDefinition", () => {
   const validComposite: CompositeDefinition = {

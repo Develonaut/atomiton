@@ -1,5 +1,5 @@
-export * from "./useForm.js";
-export * from "./useField.js";
+export * from "./useForm";
+export * from "./useField";
 
 export {
   useFormState,

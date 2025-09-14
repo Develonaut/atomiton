@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
-import type { FieldConfig } from "../types.js";
-import { FieldRenderer } from "./FieldRenderer.js";
-import { useFormFields } from "./FormProvider.js";
+import type { FieldConfig } from "../types";
+import { FieldRenderer } from "./FieldRenderer";
+import { useFormFields } from "./FormProvider";
 
 type FormFieldsProps = {
   className?: string;

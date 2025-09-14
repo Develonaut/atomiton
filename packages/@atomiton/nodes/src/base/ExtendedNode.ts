@@ -6,8 +6,8 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
-} from "../types.js";
-import { Node } from "./Node.js";
+} from "../types";
+import { Node } from "./Node";
 
 /**
  * Configuration for creating an extended node

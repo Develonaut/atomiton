@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { z } from "zod";
-import { generateFieldsFromSchema, getDefaultValues } from "./utils/index.js";
+import { generateFieldsFromSchema, getDefaultValues } from "./utils/index";
 
 describe("Integration Tests", () => {
   it("generates working field configurations", () => {

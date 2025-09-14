@@ -1,9 +1,9 @@
-import { NodeLogic } from "../../base/NodeLogic.js";
+import { NodeLogic } from "../../base/NodeLogic";
 import type {
   FileSystemConfig,
   FileSystemOutput,
-} from "./FileSystemNodeConfig.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+} from "./FileSystemNodeConfig";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
 
 export class FileSystemLogic extends NodeLogic<FileSystemConfig> {
   async execute(

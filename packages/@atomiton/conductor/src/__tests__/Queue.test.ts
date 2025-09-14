@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { Queue, ScalableQueue } from "../queue/Queue.js";
+import { Queue, ScalableQueue } from "../queue/Queue";
 
 describe("Queue (n8n-inspired implementation)", () => {
   let queue: Queue;

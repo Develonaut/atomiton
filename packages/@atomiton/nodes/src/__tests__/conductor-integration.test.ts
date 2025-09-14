@@ -8,7 +8,7 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import nodes from "../api.js";
+import nodes from "../api";
 import atomic from "../atomic";
 import {
   isAtomicNode,
@@ -20,8 +20,8 @@ import {
 import {
   CompositeNode,
   type CompositeNodeDefinition,
-} from "../composite/CompositeNode.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../types.js";
+} from "../composite/CompositeNode";
+import type { NodeExecutionContext, NodeExecutionResult } from "../types";
 
 // Mock conductor-like executor that works with any INode
 class UniversalNodeExecutor {

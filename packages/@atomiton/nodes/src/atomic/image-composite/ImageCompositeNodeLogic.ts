@@ -1,11 +1,11 @@
-import { NodeLogic } from "../../base/NodeLogic.js";
-import type { NodeExecutionContext, NodeExecutionResult } from "../../types.js";
+import { NodeLogic } from "../../base/NodeLogic";
+import type { NodeExecutionContext, NodeExecutionResult } from "../../types";
 import type {
   ImageCompositeConfig,
   ImageCompositeOutput,
-} from "./ImageCompositeNodeConfig.js";
-// import type { ImageCompositeInput } from "./ImageCompositeNodeConfig.js";
-import { imageCompositeConfig } from "./ImageCompositeNodeConfig.js";
+} from "./ImageCompositeNodeConfig";
+// import type { ImageCompositeInput } from "./ImageCompositeNodeConfig";
+import { imageCompositeConfig } from "./ImageCompositeNodeConfig";
 
 export class ImageCompositeLogic extends NodeLogic<ImageCompositeConfig> {
   getConfigSchema() {

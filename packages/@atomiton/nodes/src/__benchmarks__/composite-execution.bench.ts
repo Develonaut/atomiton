@@ -3,9 +3,9 @@
  */
 
 import { describe, bench } from "vitest";
-import { CompositeNode } from "../composite/CompositeNode.js";
-import type { CompositeNodeDefinition } from "../composite/CompositeNode.js";
-import type { NodeExecutionContext } from "../types.js";
+import { CompositeNode } from "../composite/CompositeNode";
+import type { CompositeNodeDefinition } from "../composite/CompositeNode";
+import type { NodeExecutionContext } from "../types";
 
 // Helper to create test composites of varying sizes
 function createTestComposite(nodeCount: number): CompositeNodeDefinition {

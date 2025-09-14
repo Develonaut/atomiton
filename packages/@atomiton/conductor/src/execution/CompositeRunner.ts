@@ -8,10 +8,10 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
-import type { ExecutionStatus } from "../interfaces/IExecutionEngine.js";
+import type { ExecutionStatus } from "../interfaces/IExecutionEngine";
 import PQueue from "p-queue";
-import type { StateManager } from "../state/StateManager.js";
-import type { NodeExecutor } from "./NodeExecutor.js";
+import type { StateManager } from "../state/StateManager";
+import type { NodeExecutor } from "./NodeExecutor";
 
 export type CompositeExecutionOptions = {
   maxConcurrency?: number;
@@ -207,10 +207,10 @@ export class CompositeRunner {
     // Validate connections
     for (const connection of composite.edges) {
       const sourceNode = composite.nodes.find(
-        (n: INode) => n.nodeId === connection.source.nodeId,
+        (n) => n.nodeId === connection.source.nodeId,
       );
       const targetNode = composite.nodes.find(
-        (n: INode) => n.nodeId === connection.target.nodeId,
+        (n) => n.nodeId === connection.target.nodeId,
       );
 
       if (!sourceNode) {
@@ -351,9 +351,7 @@ export class CompositeRunner {
     executionId: string,
     options: CompositeExecutionOptions,
   ): Promise<NodeExecutionResult> {
-    const compositeNode = composite.nodes.find(
-      (n: INode) => n.nodeId === nodeId,
-    );
+    const compositeNode = composite.nodes.find((n) => n.nodeId === nodeId);
     if (!compositeNode) {
       throw new Error(`Node not found in composite: ${nodeId}`);
     }
@@ -464,6 +462,6 @@ export class CompositeRunner {
       return false;
     };
 
-    return composite.nodes.some((node) => hasCycle(node.id));
+    return composite.nodes.some((node) => hasCycle(node.nodeId));
   }
 }

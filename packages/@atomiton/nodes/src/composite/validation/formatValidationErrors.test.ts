@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { formatValidationErrors } from "./formatValidationErrors.js";
-import type { ValidationError } from "../types.js";
+import { formatValidationErrors } from "./formatValidationErrors";
+import type { ValidationError } from "../types";
 
 describe("formatValidationErrors", () => {
   describe("Basic Formatting", () => {

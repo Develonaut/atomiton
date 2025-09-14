@@ -5,8 +5,8 @@ import {
   parseMultipleDocuments,
   parseYamlStream,
   isValidYaml,
-} from "../utils/parser.js";
-import type { YamlDocument, YamlError } from "../types.js";
+} from "../utils/parser";
+import type { YamlDocument, YamlError } from "../types";
 
 describe("parseYaml", () => {
   it("should parse simple YAML string", () => {
