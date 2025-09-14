@@ -1,6 +1,3 @@
-// import type { NodeType } from "@atomiton/core";
-// import core from "@atomiton/core"; // TODO: Fix after core is restored
-type NodeType = string; // Temporary type
 import { Icon } from "@atomiton/ui";
 import {
   Handle,

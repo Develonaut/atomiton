@@ -18,10 +18,6 @@
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]
     },
-    "packages/@atomiton/core": {
-      "entry": ["src/index.ts"],
-      "project": ["src/**/*.{ts,tsx}"]
-    },
     "packages/@atomiton/store": {
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]

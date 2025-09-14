@@ -35,7 +35,6 @@ export default defineConfig({
         "react",
         "react-dom",
         "react/jsx-runtime",
-        "@atomiton/core",
         "@atomiton/hooks",
         "@atomiton/nodes",
         "@atomiton/store",

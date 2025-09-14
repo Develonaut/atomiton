@@ -141,14 +141,6 @@
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "📦 build:core",
-      "detail": "Build Core package only",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/core build",
-      "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
       "label": "📦 build:nodes",
       "detail": "Build Nodes package only",
       "type": "shell",
@@ -174,19 +166,6 @@
       "detail": "Watch Editor package and rebuild on file changes",
       "type": "shell",
       "command": "pnpm --filter @atomiton/editor dev",
-      "group": "build",
-      "problemMatcher": ["$tsc"],
-      "isBackground": true,
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "👀 watch:core",
-      "detail": "Watch Core package and rebuild on file changes",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/core dev",
       "group": "build",
       "problemMatcher": ["$tsc"],
       "isBackground": true,
