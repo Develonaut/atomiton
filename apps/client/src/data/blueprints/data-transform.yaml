@@ -1,0 +1,70 @@
+name: "Data Transform Pipeline"
+description: "Read CSV data, transform it, and output processed results"
+category: "data"
+type: "composite"
+version: "1.0.0"
+metadata:
+  created: "2025-09-14T12:00:00.000Z"
+  modified: "2025-09-14T12:00:00.000Z"
+  author: "Atomiton Team"
+  tags: ["data", "csv", "transform", "pipeline"]
+
+nodes:
+  - id: "csv-source"
+    type: "csvReader"
+    position:
+      x: 50
+      y: 100
+    data:
+      filePath: "/data/sample.csv"
+      hasHeaders: true
+
+  - id: "filter-transform"
+    type: "transform"
+    position:
+      x: 300
+      y: 100
+    data:
+      expression: "data.filter(row => row.active === 'true')"
+
+  - id: "aggregate-code"
+    type: "code"
+    position:
+      x: 550
+      y: 100
+    data:
+      code: "const total = data.reduce((sum, row) => sum + parseFloat(row.amount || 0), 0); return { total, count: data.length };"
+
+  - id: "output-file"
+    type: "fileSystem"
+    position:
+      x: 800
+      y: 100
+    data:
+      operation: "write"
+      filePath: "/output/results.json"
+
+edges:
+  - id: "csv-to-filter"
+    source:
+      nodeId: "csv-source"
+      portId: "data"
+    target:
+      nodeId: "filter-transform"
+      portId: "input"
+
+  - id: "filter-to-aggregate"
+    source:
+      nodeId: "filter-transform"
+      portId: "output"
+    target:
+      nodeId: "aggregate-code"
+      portId: "data"
+
+  - id: "aggregate-to-output"
+    source:
+      nodeId: "aggregate-code"
+      portId: "result"
+    target:
+      nodeId: "output-file"
+      portId: "data"
