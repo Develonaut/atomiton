@@ -33,11 +33,14 @@
   ],
   "author": "Atomiton",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "uuid": "^13.0.0"
+  },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "catalog:",
+    "@types/uuid": "^10.0.0",
     "eslint": "catalog:",
     "rollup-plugin-visualizer": "catalog:",
     "terser": "catalog:",

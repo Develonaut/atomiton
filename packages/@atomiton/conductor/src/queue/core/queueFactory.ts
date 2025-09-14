@@ -55,7 +55,6 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
 
   const activeJobs = new Map<string, JobData>();
   const jobResults = new Map<string, JobResponse>();
-  let jobCounter = 0;
   let cleanupInterval: NodeJS.Timeout | null = null;
 
   // Initialize modular components
@@ -139,7 +138,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
       throw new Error("Rate limit exceeded");
     }
 
-    const jobId = generateJobId(++jobCounter);
+    const jobId = generateJobId();
 
     const job = async () => {
       try {

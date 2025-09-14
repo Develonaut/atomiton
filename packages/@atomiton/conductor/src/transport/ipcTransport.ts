@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { generateId } from "@atomiton/utils";
 import type {
   ExecutionRequest,
   ExecutionResult,
@@ -54,7 +54,7 @@ export function createIPCTransport(): IExecutionTransport {
       throw new Error("IPC transport requires Electron renderer context");
     }
 
-    const id = uuidv4();
+    const id = generateId();
 
     return new Promise((resolve, reject) => {
       pendingRequests.set(id, { resolve, reject });
