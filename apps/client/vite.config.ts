@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
 import path from "path";
 import { fileURLToPath } from "url";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -65,6 +65,7 @@ export default defineConfig({
     sourcemap: true,
     // Asset optimization
     assetsInlineLimit: 4096, // Inline assets smaller than 4kb
+    chunkSizeWarningLimit: 500, // Warn when chunks exceed 500kb
     rollupOptions: {
       output: {
         // Asset file naming
@@ -79,11 +80,6 @@ export default defineConfig({
             return `fonts/[name]-[hash][extname]`;
           }
           return `assets/[name]-[hash][extname]`;
-        },
-        // Chunk splitting for better caching
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          ui: ["framer-motion", "react-tooltip"],
         },
       },
     },
