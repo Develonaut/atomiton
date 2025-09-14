@@ -30,9 +30,7 @@
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
     "test:watch": "vitest watch"
   },
-  "dependencies": {
-    "@atomiton/nodes": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",

@@ -10,7 +10,12 @@ function Camera() {
 
   return (
     <Group title="Camera">
-      <Tabs value={activeView} onChange={setActiveView}>
+      <Tabs
+        value={activeView}
+        onChange={(value) =>
+          setActiveView(value as "isometric" | "perspective")
+        }
+      >
         <Tabs.List>
           <Tabs.Trigger value="isometric">Isometric</Tabs.Trigger>
           <Tabs.Trigger value="perspective">Perspective</Tabs.Trigger>

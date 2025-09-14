@@ -12,7 +12,10 @@ function TabsList({ children, className = "" }: TabsListProps) {
 
   // Calculate active index based on current value
   const activeIndex = childrenArray.findIndex(
-    (child) => isValidElement(child) && (child as any).props?.value === value,
+    (child) =>
+      isValidElement(child) &&
+      (child as React.ReactElement<{ value?: string | number }>).props
+        ?.value === value,
   );
 
   const tabCount = childrenArray.length;

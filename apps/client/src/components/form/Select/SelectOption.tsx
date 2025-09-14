@@ -1,8 +1,8 @@
 import { ListboxOption } from "@headlessui/react";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 type SelectOptionProps = PropsWithChildren<{
-  value: any;
+  value: unknown;
   className?: string;
   isMedium?: boolean;
 }>;
@@ -20,7 +20,7 @@ function SelectOption({
       className={`relative p-2 rounded-lg text-secondary cursor-pointer transition-colors data-[focus]:text-primary data-[selected]:bg-surface-03 data-[selected]:text-primary ${sizeClasses} ${className}`}
       value={value}
     >
-      {children || value}
+      {children || String(value)}
     </ListboxOption>
   );
 }

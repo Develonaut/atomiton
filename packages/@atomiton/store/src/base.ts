@@ -11,8 +11,14 @@ import { immer } from "zustand/middleware/immer";
 
 // Declare Redux DevTools extension types
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
-    __REDUX_DEVTOOLS_EXTENSION__?: any;
+    __REDUX_DEVTOOLS_EXTENSION__?: {
+      connect: () => {
+        send: (action: string, state: unknown) => void;
+        disconnect: () => void;
+      };
+    };
   }
 }
 
@@ -69,7 +75,7 @@ export function createStore<T extends object>(
     // The devtools middleware will handle the connection
     return create<T>()(
       devtools(
-        immer((set) => config.initialState),
+        immer((_set) => config.initialState),
         {
           name: storeName,
           enabled: true,
@@ -82,7 +88,7 @@ export function createStore<T extends object>(
   const { key, storage, partialize, hydrate } = config.persist;
 
   // Correct middleware order: immer -> persist -> devtools
-  const immerStore = immer<T>((set) => config.initialState);
+  const immerStore = immer<T>((_set) => config.initialState);
 
   const persistedStore = persist(immerStore, {
     name: `store:${key}`,
@@ -128,7 +134,7 @@ export function createSelector<T, R>(
 export function createAction<T, Args extends unknown[], R>(
   store: Store<T>,
   action: (state: T, ...args: Args) => R,
-  actionName?: string,
+  _actionName?: string,
 ): (...args: Args) => R {
   return (...args: Args) => {
     let result!: R;

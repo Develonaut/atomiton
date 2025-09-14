@@ -1,5 +1,5 @@
 import { useEventCallback } from "@atomiton/hooks";
-import type { ReactFlowInstance, Viewport, Node } from "@xyflow/react";
+import type { Node, ReactFlowInstance, Viewport } from "@xyflow/react";
 import { useCallback } from "react";
 import { editorStore } from "../../../store";
 import type { UseReactFlowReturn } from "./useReactFlow";
@@ -68,7 +68,8 @@ export function useCanvasHandlers({
   /**
    * Handle keyboard events (delete key for removing nodes)
    */
-  const handleOnKeyDown = useEventCallback((event: React.KeyboardEvent) => {
+  const handleOnKeyDown = useEventCallback((...args: unknown[]) => {
+    const event = args[0] as React.KeyboardEvent<Element>;
     // Delete selected nodes on Delete or Backspace (but not with meta key)
     if (
       (event.key === "Delete" || event.key === "Backspace") &&
@@ -127,4 +128,4 @@ export function useCanvasHandlers({
   };
 }
 
-type UseCanvasHandlersReturn = ReturnType<typeof useCanvasHandlers>;
+export type UseCanvasHandlersReturn = ReturnType<typeof useCanvasHandlers>;

@@ -1,4 +1,5 @@
-import { PropsWithChildren, forwardRef } from "react";
+import type { PropsWithChildren } from "react";
+import { forwardRef } from "react";
 import { ListboxButton } from "@headlessui/react";
 
 type SelectTriggerProps = PropsWithChildren<{

@@ -1,8 +1,8 @@
-import pluginReactHooks from "eslint-plugin-react-hooks";
+import type { Linter } from "eslint";
 import pluginReact from "eslint-plugin-react";
+import pluginReactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import baseConfig from "./base";
-import type { Linter } from "eslint";
 
 /**
  * ESLint configuration for React libraries and applications

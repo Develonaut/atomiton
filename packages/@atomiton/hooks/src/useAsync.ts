@@ -11,14 +11,14 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export interface AsyncState<T> {
+export type AsyncState<T> = {
   data: T | undefined;
   error: Error | undefined;
   isLoading: boolean;
   isValidating: boolean;
-}
+};
 
-export interface UseAsyncOptions {
+export type UseAsyncOptions = {
   // Auto-execute on mount
   executeOnMount?: boolean;
   // Dedupe requests within this window (ms)
@@ -30,13 +30,13 @@ export interface UseAsyncOptions {
   retryDelay?: number;
   // Keep previous data while revalidating
   keepPreviousData?: boolean;
-}
+};
 
-export interface UseAsyncReturn<T> extends AsyncState<T> {
+export type UseAsyncReturn<T> = {
   execute: (...args: unknown[]) => Promise<T>;
   reset: () => void;
   mutate: (data: T | ((current: T | undefined) => T)) => void;
-}
+} & AsyncState<T>;
 
 /**
  * Hook for async operations with loading, error, and data states

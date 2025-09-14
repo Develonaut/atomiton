@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-interface ColorDisplayProps {
+type ColorDisplayProps = {
   color: string;
   onColorChange?: (color: string) => void;
   opacity?: number;
@@ -9,7 +9,7 @@ interface ColorDisplayProps {
   className?: string;
   colorBoxClassName?: string;
   readonly?: boolean;
-}
+};
 
 const ColorDisplay = forwardRef<HTMLDivElement, ColorDisplayProps>(
   (

@@ -13,8 +13,8 @@ export type NodeExecutionContext = {
   /** Input data from connected ports */
   inputs: Record<string, unknown>;
 
-  /** Node configuration */
-  config?: Record<string, unknown>;
+  /** Node parameters */
+  parameters?: Record<string, unknown>;
 
   /** Workspace root directory */
   workspaceRoot?: string;
@@ -79,6 +79,8 @@ export type NodeExecutionResult = {
   };
 };
 
+import type { PortType, PortDataType } from "./base/types";
+
 export type NodePortDefinition = {
   /** Unique port identifier */
   id: string;
@@ -87,10 +89,10 @@ export type NodePortDefinition = {
   name: string;
 
   /** Port type (input/output) */
-  type: string;
+  type: PortType;
 
   /** Data type for this port */
-  dataType: string;
+  dataType: PortDataType;
 
   /** Whether this port is required */
   required?: boolean;

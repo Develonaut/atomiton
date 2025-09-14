@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-interface RangeSliderProps {
+type RangeSliderProps = {
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -8,7 +8,7 @@ interface RangeSliderProps {
   step?: number;
   className?: string;
   disabled?: boolean;
-}
+};
 
 const RangeSlider = forwardRef<HTMLInputElement, RangeSliderProps>(
   (

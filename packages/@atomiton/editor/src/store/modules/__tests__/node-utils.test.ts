@@ -24,8 +24,8 @@ describe("node-utils", () => {
       await new Promise((resolve) => setTimeout(resolve, 1));
       const id2 = generateNodeId();
 
-      expect(id1).toMatch(/^node-\d+$/);
-      expect(id2).toMatch(/^node-\d+$/);
+      expect(id1).toMatch(/^node-\d+-[a-z0-9]+$/);
+      expect(id2).toMatch(/^node-\d+-[a-z0-9]+$/);
       expect(id1).not.toBe(id2);
     });
 
@@ -34,7 +34,8 @@ describe("node-utils", () => {
       const id = generateNodeId();
       const after = Date.now();
 
-      const timestamp = parseInt(id.replace("node-", ""));
+      const timestampPart = id.split("-")[1];
+      const timestamp = parseInt(timestampPart);
       expect(timestamp).toBeGreaterThanOrEqual(before);
       expect(timestamp).toBeLessThanOrEqual(after);
     });
@@ -88,7 +89,7 @@ describe("node-utils", () => {
       expect(node.position).toEqual({ x: 150, y: 250 });
       expect(node.selected).toBe(false);
       expect(node.data).toEqual({});
-      expect(node.id).toMatch(/^node-\d+$/);
+      expect(node.id).toMatch(/^node-\d+-[a-z0-9]+$/);
     });
 
     it("should default selected to true when not specified", () => {

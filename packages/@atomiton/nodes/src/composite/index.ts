@@ -1,29 +1,23 @@
 /**
- * Composite Node Package
+ * Composite Node Module
  *
- * This module contains the composite node functionality - what users
- * know as "Blueprints" in the UI, but are "Composite Nodes" in code.
- *
- * Key exports:
- * - CompositeNode: The main composite node implementation
- * - CompositeExecutor: Orchestrates composite execution
- * - Types and interfaces for composite functionality
+ * Clean exports for composite node functionality
  */
 
-export type { CompositeEdge } from "../base/INode";
-export type {
-  CompositeChildNode,
-  CompositeNodeDefinition,
-} from "./CompositeNode";
-export type { JsonCompositeDefinition } from "./serializer/index";
-export type {
-  CompositeDefinition,
-  CompositeNodeSpec,
-  CompositePosition,
-  CompositeSettings,
-  CompositeVariable,
-} from "./types";
+export { createCompositeNode } from "./createCompositeNode";
+export type { CompositeNodeInput } from "./createCompositeNode";
 
-import { composite } from "./api";
+export { createCompositeLogic } from "./createCompositeLogic";
+export type { CompositeLogicInput } from "./createCompositeLogic";
 
-export default composite;
+export { createCompositePorts } from "./createCompositePorts";
+export type { CompositePortsInput } from "./createCompositePorts";
+
+export { createCompositeGraph } from "./createCompositeGraph";
+export type { CompositeGraph } from "./createCompositeGraph";
+
+// Types
+export * from "./types";
+
+// Serialization utilities
+export * from "./serializer";

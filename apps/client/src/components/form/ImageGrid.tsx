@@ -1,13 +1,13 @@
 import { forwardRef } from "react";
 import Image from "@/components/Image";
 
-export interface ImageGridItem {
+export type ImageGridItem = {
   id: number;
   image: string;
   alt?: string;
-}
+};
 
-interface ImageGridProps {
+type ImageGridProps = {
   items: ImageGridItem[];
   activeIndex: number | null;
   onSelectionChange: (index: number | null) => void;
@@ -15,7 +15,7 @@ interface ImageGridProps {
   itemClassName?: string;
   imageSize?: number;
   columns?: number;
-}
+};
 
 const ImageGrid = forwardRef<HTMLDivElement, ImageGridProps>(
   (

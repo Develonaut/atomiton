@@ -1,5 +1,6 @@
 import { ListboxOptions } from "@headlessui/react";
-import { PropsWithChildren, forwardRef } from "react";
+import type { PropsWithChildren } from "react";
+import { forwardRef } from "react";
 
 type SelectOptionsProps = PropsWithChildren<{
   className?: string;

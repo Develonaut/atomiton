@@ -48,7 +48,7 @@ export function useReactFlow({
     (changes: NodeChange[]) => {
       onNodesChange(changes);
       externalOnNodesChange?.(changes);
-      editorStore.debouncedUpdateFlowSnapshot();
+      editorStore.debouncedUpdateFlowSnapshot?.();
     },
     [onNodesChange, externalOnNodesChange],
   );
@@ -57,7 +57,7 @@ export function useReactFlow({
     (changes: EdgeChange[]) => {
       onEdgesChange(changes);
       externalOnEdgesChange?.(changes);
-      editorStore.debouncedUpdateFlowSnapshot();
+      editorStore.debouncedUpdateFlowSnapshot?.();
     },
     [onEdgesChange, externalOnEdgesChange],
   );

@@ -1,5 +1,4 @@
 import Icon from "@/components/Icon";
-import { useSelectContext } from "./SelectRoot";
 
 type SelectIndicatorProps = {
   className?: string;

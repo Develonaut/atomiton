@@ -63,7 +63,7 @@ export class RuntimeRouter {
     } catch (error) {
       // Wrap runtime errors with context
       throw new Error(
-        `Runtime execution failed for node "${node.getId()}" in ${language} runtime: ` +
+        `Runtime execution failed for node "${node.id}" in ${language} runtime: ` +
           (error instanceof Error ? error.message : String(error)),
       );
     }
@@ -74,9 +74,10 @@ export class RuntimeRouter {
    */
   private getNodeLanguage(node: INode): RuntimeLanguage {
     // Check for explicit runtime specification in metadata
-    const metadata = node.metadata as Record<string, any>;
-    if (metadata?.runtime?.language) {
-      return metadata.runtime.language as RuntimeLanguage;
+    const metadata = node.metadata as Record<string, unknown>;
+    const runtime = metadata?.runtime as Record<string, unknown> | undefined;
+    if (runtime?.language) {
+      return runtime.language as RuntimeLanguage;
     }
 
     // Default to TypeScript for all standard nodes

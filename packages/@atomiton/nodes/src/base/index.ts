@@ -5,10 +5,33 @@
  * This provides a clean API for importing base types and classes.
  */
 
-// Node base class and extended node
-export { Node } from "./Node";
-export { ExtendedNode } from "./ExtendedNode";
-export type { ExtendedNodeConfig } from "./ExtendedNode";
+// Factory functions for node creation
+export { createNode } from "./createNode";
+export type { NodeInput } from "./createNode";
+
+export { createNodeParameters } from "./createNodeParameters";
+export type { NodeParametersInput } from "./createNodeParameters";
+
+export { createNodeMetadata } from "./createNodeMetadata";
+export type { NodeMetadataInput } from "./createNodeMetadata";
+
+export { createNodeLogic } from "./createNodeLogic";
+export type { NodeLogicInput } from "./createNodeLogic";
+
+export { createNodePorts } from "./createNodePorts";
+export type { NodePortsInput, INodePorts } from "./createNodePorts";
+
+// Concrete type definitions
+export type {
+  NodeCategory,
+  NodeIcon,
+  NodeRuntime,
+  PortType,
+  PortDataType,
+  NodeStatus,
+  NodeExecutionMode,
+  FieldControlType,
+} from "./types";
 
 // Node interfaces and type guards
 export type {
@@ -19,19 +42,15 @@ export type {
 } from "./INode";
 export { isAtomicNode, isCompositeNode } from "./INode";
 
-// Node metadata interfaces and classes
+// Node metadata interfaces
 export type { INodeMetadata } from "./INodeMetadata";
-export { NodeMetadata } from "./NodeMetadata";
 
-// Node configuration interfaces and classes
-export type { INodeConfig } from "./INodeConfig";
-export { NodeConfig } from "./NodeConfig";
+// Node parameters interfaces
 export type {
+  INodeParameters,
   FieldConfig,
-  FieldControlType,
-  FormConfig,
   FieldsConfig,
-} from "./NodeConfig";
+} from "./INodeParameters";
 
-// Node logic
-export { NodeLogic } from "./NodeLogic";
+// Node logic interfaces
+export type { INodeLogic } from "./INodeLogic";

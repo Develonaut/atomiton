@@ -1,58 +1,17 @@
 /**
- * @atomiton/nodes - Unified Node Package
+ * @atomiton/nodes - Node System Module
  *
- * This package contains both atomic nodes (individual functionality) and
- * composite nodes under a unified INode interface.
- *
- * Mental Model: "If it can execute, it's a node" - whether atomic or composite.
- *
- * Usage:
- *   import nodes from '@atomiton/nodes';
- *
- *   const categories = nodes.getCategories();
- *   const node = nodes.getNode('csv-reader');
+ * Clean module exports for the node system
  */
 
-import nodes from "./api";
+// Base exports - types and factories
+export * from "./base";
 
-export default nodes;
-export type { NodesAPI } from "./api";
+// Node implementations
+export * from "./nodes";
 
-// Re-export base module types and classes
-export { ExtendedNode, isAtomicNode, isCompositeNode } from "./base";
+// Composite node functionality
+export * from "./composite";
 
-export type {
-  ExtendedNodeConfig,
-  CompositeEdge,
-  IAtomicNode,
-  ICompositeNode,
-  INode,
-  INodeMetadata,
-  INodeConfig,
-  FieldConfig,
-  FieldControlType,
-  FormConfig,
-} from "./base";
-
-// NodeType was removed with the registry cleanup
-// TODO: Define NodeType properly when node system is reimplemented
-
-// Export other types from types module
-export type {
-  NodeDefinition,
-  NodeExecutionContext,
-  NodeExecutionResult,
-  NodePortDefinition,
-} from "./types";
-
-// Export composite types
-export type {
-  CompositeChildNode,
-  CompositeDefinition,
-  CompositeNodeDefinition,
-  CompositeNodeSpec,
-  CompositePosition,
-  CompositeSettings,
-  CompositeVariable,
-  JsonCompositeDefinition,
-} from "./composite";
+// Type exports
+export * from "./types";

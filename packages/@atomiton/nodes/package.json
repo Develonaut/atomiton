@@ -41,6 +41,7 @@
   "license": "MIT",
   "dependencies": {
     "@atomiton/store": "workspace:*",
+    "@atomiton/utils": "workspace:*",
     "@atomiton/yaml": "workspace:*",
     "zod": "^3.25.3"
   },

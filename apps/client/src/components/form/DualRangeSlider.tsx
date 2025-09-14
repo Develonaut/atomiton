@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
-interface DualRangeSliderProps {
+type DualRangeSliderProps = {
   values: [number, number];
   onChange: (values: [number, number]) => void;
   min?: number;
@@ -11,7 +11,7 @@ interface DualRangeSliderProps {
   className?: string;
   disabled?: boolean;
   overlayStyle?: "timeline" | "default";
-}
+};
 
 const DualRangeSlider = forwardRef<HTMLDivElement, DualRangeSliderProps>(
   (

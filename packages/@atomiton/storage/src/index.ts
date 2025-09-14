@@ -8,7 +8,7 @@
 export * from "./types";
 
 // Storage engine exports
-export { FileSystemStorage } from "./engines/FileSystemStorage";
+export { FileSystemStorage } from "./engines/FilesystemStorage";
 
 // TODO: Implement storage engine factory
 // export function createStorage(config: StorageConfig): Promise<IStorageEngine>;

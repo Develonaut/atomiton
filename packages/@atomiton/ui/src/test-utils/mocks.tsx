@@ -59,7 +59,9 @@ MockComponent.displayName = "MockComponent";
 /**
  * Mock props resolver for testing
  */
-const mockPropsResolver = <T extends Record<string, unknown>>(props: T): T => {
+export const mockPropsResolver = <T extends Record<string, unknown>>(
+  props: T,
+): T => {
   const { as, ...rest } = props as T & { as?: unknown };
   return {
     ...rest,
@@ -71,7 +73,7 @@ const mockPropsResolver = <T extends Record<string, unknown>>(props: T): T => {
 /**
  * Mock props resolver that transforms variant names
  */
-const mockVariantResolver = <T extends Record<string, unknown>>(
+export const mockVariantResolver = <T extends Record<string, unknown>>(
   props: T,
 ): T => {
   const { variant, ...rest } = props as T & { variant?: unknown };

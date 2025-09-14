@@ -1,6 +1,6 @@
+import { useNodeTypes } from "@/hooks/useNodeTypes";
 import { styled } from "@atomiton/ui";
 import { useRef } from "react";
-import { useNodeTypes } from "../../hooks/useNodeTypes";
 import { ReactFlowCanvas, ReactFlowProvider } from "../../primitives/ReactFlow";
 import "./Canvas.css";
 import type { CanvasProps } from "./Canvas.types";
@@ -35,7 +35,7 @@ export function CanvasRoot({
   ...props
 }: CanvasProps) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null!);
-  const nodeTypes = useNodeTypes(nodeTypesProp);
+  const nodeTypes = useNodeTypes();
 
   const reactFlow = useReactFlow({
     defaultNodes,

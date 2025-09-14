@@ -1,8 +1,35 @@
 import { useNodes } from "@atomiton/editor";
 import { Form } from "@atomiton/form";
-import nodes from "@atomiton/nodes";
+import { getNodeByType, type INode } from "@atomiton/nodes";
 import { Box } from "@atomiton/ui";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+
+/**
+ * Error fallback component for form rendering errors
+ */
+function FormErrorFallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error;
+  resetErrorBoundary: () => void;
+}) {
+  return (
+    <Box className="p-4">
+      <div className="text-sm text-red-600">
+        <p className="font-semibold mb-2">Error loading form</p>
+        <p className="text-xs mb-2">{error.message}</p>
+        <button
+          onClick={resetErrorBoundary}
+          className="text-xs text-blue-600 hover:text-blue-800 underline"
+        >
+          Try again
+        </button>
+      </div>
+    </Box>
+  );
+}
 
 /**
  * NodeInspector Component
@@ -12,8 +39,8 @@ import { useCallback, useEffect, useState } from "react";
  */
 function NodeInspector() {
   const { nodes: flowNodes, selectedId, updateNodeData } = useNodes();
-  const [nodeConfig, setNodeConfig] = useState<any>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nodeConfig, setNodeConfig] = useState<INode | null>(null);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
     null,
   );
@@ -29,8 +56,19 @@ function NodeInspector() {
       // Use the nodes API to load node config
       const loadNodeConfig = async () => {
         try {
-          const config = await nodes.getNodeConfig(selectedNode.type as never);
-          setNodeConfig(config);
+          if (!selectedNode.type) {
+            setNodeConfig(null);
+            return;
+          }
+          const config = getNodeByType(selectedNode.type);
+
+          // Validate that we have a valid node config with schema
+          if (config && config.parameters && config.parameters.schema) {
+            setNodeConfig(config);
+          } else {
+            // Node config is missing parameters or schema
+            setNodeConfig(null);
+          }
         } catch (error) {
           console.error("Error loading node configuration:", error);
           setNodeConfig(null);
@@ -46,27 +84,27 @@ function NodeInspector() {
     setSubmitStatus(null);
   }, [selectedNode]);
 
-  // Handle form submission
-  const handleSubmit = async (data: Record<string, unknown>) => {
-    if (!selectedNode) return;
+  // Handle form submission - currently not used as we update in real-time
+  // const handleSubmit = async (data: Record<string, unknown>) => {
+  //   if (!selectedNode) return;
 
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+  //   setIsSubmitting(true);
+  //   setSubmitStatus(null);
 
-    try {
-      // Update the node data in the store
-      updateNodeData(selectedNode.id, data);
-      setSubmitStatus("success");
+  //   try {
+  //     // Update the node data in the store
+  //     updateNodeData(selectedNode.id, data);
+  //     setSubmitStatus("success");
 
-      // Clear success message after 2 seconds
-      setTimeout(() => setSubmitStatus(null), 2000);
-    } catch (error) {
-      console.error("Error updating node:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  //     // Clear success message after 2 seconds
+  //     setTimeout(() => setSubmitStatus(null), 2000);
+  //   } catch (error) {
+  //     console.error("Error updating node:", error);
+  //     setSubmitStatus("error");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   // Handle real-time form changes (updates store immediately)
   const handleChange = useCallback(
@@ -90,7 +128,23 @@ function NodeInspector() {
     );
   }
 
-  if (!nodeConfig?.schema) {
+  // Validate that we have a valid schema before attempting to render the form
+  const hasValidSchema = Boolean(
+    nodeConfig?.parameters?.schema &&
+      typeof nodeConfig.parameters.schema === "object" &&
+      nodeConfig.parameters.schema !== null,
+  );
+
+  // Extra validation to ensure the schema is a Zod schema
+  const isZodSchema =
+    hasValidSchema &&
+    nodeConfig?.parameters?.schema &&
+    ("_def" in nodeConfig.parameters.schema ||
+      "parse" in nodeConfig.parameters.schema ||
+      "safeParse" in nodeConfig.parameters.schema);
+
+  if (!hasValidSchema || !isZodSchema) {
+    // Schema validation failed - node has no configurable properties
     return (
       <Box className="p-4">
         <p className="text-sm text-[#7B7B7B]">
@@ -99,6 +153,12 @@ function NodeInspector() {
       </Box>
     );
   }
+
+  // Additional safety check for the schema object
+  const schema = nodeConfig!.parameters.schema;
+  const defaultValues =
+    selectedNode.data || nodeConfig!.parameters.defaults || {};
+  const fields = nodeConfig!.parameters.fields || {};
 
   return (
     <Box className="p-4">
@@ -111,12 +171,28 @@ function NodeInspector() {
         </p>
       </div>
 
-      <Form
-        schema={nodeConfig.schema}
-        defaultValues={selectedNode.data || nodeConfig.defaults || {}}
-        fields={nodeConfig.fields || {}}
-        onChange={handleChange}
-      />
+      <ErrorBoundary
+        FallbackComponent={FormErrorFallback}
+        resetKeys={[selectedNode.id, nodeConfig]}
+        onReset={() => {
+          // Clear state on reset
+          setSubmitStatus(null);
+        }}
+      >
+        <Suspense
+          fallback={
+            <div className="text-sm text-[#7B7B7B]">Loading form...</div>
+          }
+        >
+          <Form
+            key={`${selectedNode.id}-${selectedNode.type}`} // Force re-mount when node or type changes
+            schema={schema}
+            defaultValues={defaultValues}
+            fields={fields}
+            onChange={handleChange}
+          />
+        </Suspense>
+      </ErrorBoundary>
 
       {submitStatus === "success" && (
         <p className="text-xs text-green-600 mt-2 text-center">

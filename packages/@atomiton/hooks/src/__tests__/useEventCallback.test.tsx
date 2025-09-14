@@ -37,7 +37,9 @@ describe("useEventCallback", () => {
 
   it("should preserve function parameters and return types", () => {
     const callback = vi.fn((a: string, b: number) => `${a}-${b}`);
-    const { result } = renderHook(() => useEventCallback(callback));
+    const { result } = renderHook(() =>
+      useEventCallback(callback as (...args: unknown[]) => unknown),
+    );
 
     const stableCallback = result.current;
     const returnValue = stableCallback("test", 42);
@@ -59,7 +61,9 @@ describe("useEventCallback", () => {
 
   it("should handle functions with multiple parameters", () => {
     const callback = vi.fn((a: number, b: string, c: boolean) => ({ a, b, c }));
-    const { result } = renderHook(() => useEventCallback(callback));
+    const { result } = renderHook(() =>
+      useEventCallback(callback as (...args: unknown[]) => unknown),
+    );
 
     const stableCallback = result.current;
     const returnValue = stableCallback(1, "test", true);
@@ -85,7 +89,9 @@ describe("useEventCallback", () => {
     const callback = vi.fn(async (value: string) => {
       return `async-${value}`;
     });
-    const { result } = renderHook(() => useEventCallback(callback));
+    const { result } = renderHook(() =>
+      useEventCallback(callback as (...args: unknown[]) => unknown),
+    );
 
     const stableCallback = result.current;
     const promise = stableCallback("test");

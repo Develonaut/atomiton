@@ -39,6 +39,10 @@ export type CompositeExecutionResult = {
 export class CompositeRunner {
   private nodeRegistry = new Map<string, INode>();
   private executionQueue: PQueue;
+  private executionResults = new Map<
+    string,
+    Map<string, NodeExecutionResult>
+  >();
 
   constructor(
     private stateManager: StateManager,
@@ -69,7 +73,7 @@ export class CompositeRunner {
     const startTime = new Date();
 
     // Create execution context
-    const context = this.stateManager.createContext(executionId, composite.id);
+    this.stateManager.createContext(executionId, composite.id);
 
     try {
       // Validate composite
@@ -207,10 +211,10 @@ export class CompositeRunner {
     // Validate connections
     for (const connection of composite.edges) {
       const sourceNode = composite.nodes.find(
-        (n) => n.nodeId === connection.source.nodeId,
+        (n) => n.id === connection.source.nodeId,
       );
       const targetNode = composite.nodes.find(
-        (n) => n.nodeId === connection.target.nodeId,
+        (n) => n.id === connection.target.nodeId,
       );
 
       if (!sourceNode) {
@@ -237,7 +241,7 @@ export class CompositeRunner {
     sequential: string[][];
     parallelizable: string[];
   } {
-    const nodeIds = composite.nodes.map((n) => n.nodeId);
+    const nodeIds = composite.nodes.map((n) => n.id);
     const dependencies = new Map<string, Set<string>>();
 
     // Build dependency map
@@ -351,7 +355,7 @@ export class CompositeRunner {
     executionId: string,
     options: CompositeExecutionOptions,
   ): Promise<NodeExecutionResult> {
-    const compositeNode = composite.nodes.find((n) => n.nodeId === nodeId);
+    const compositeNode = composite.nodes.find((n) => n.id === nodeId);
     if (!compositeNode) {
       throw new Error(`Node not found in composite: ${nodeId}`);
     }
@@ -368,7 +372,7 @@ export class CompositeRunner {
       nodeId,
       compositeId: composite.id,
       inputs,
-      config: compositeNode.config,
+      parameters: compositeNode.data,
       workspaceRoot: options.workspaceRoot,
       startTime: new Date(),
       limits: {
@@ -390,7 +394,19 @@ export class CompositeRunner {
       },
     };
 
-    return this.nodeExecutor.executeNode(node, context, executionId);
+    const result = await this.nodeExecutor.executeNode(
+      node,
+      context,
+      executionId,
+    );
+
+    // Store the result for use by downstream nodes
+    if (!this.executionResults.has(executionId)) {
+      this.executionResults.set(executionId, new Map());
+    }
+    this.executionResults.get(executionId)!.set(nodeId, result);
+
+    return result;
   }
 
   private gatherNodeInputs(
@@ -406,12 +422,17 @@ export class CompositeRunner {
     );
 
     for (const connection of incomingConnections) {
-      const sourceNodeState = this.stateManager
+      this.stateManager
         .getContext(executionId)
         ?.nodeStates.get(connection.source.nodeId);
 
-      if (sourceNodeState?.outputs) {
-        const outputValue = sourceNodeState.outputs[connection.source.portId];
+      // Get results from the execution results map
+      const executionResult = this.executionResults
+        .get(executionId)
+        ?.get(connection.source.nodeId);
+
+      if (executionResult?.outputs) {
+        const outputValue = executionResult.outputs[connection.source.portId];
         inputs[connection.target.portId] = outputValue;
       }
     }
@@ -462,6 +483,6 @@ export class CompositeRunner {
       return false;
     };
 
-    return composite.nodes.some((node) => hasCycle(node.nodeId));
+    return composite.nodes.some((node) => hasCycle(node.id));
   }
 }

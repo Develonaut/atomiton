@@ -1,5 +1,4 @@
-import type { CompositeNodeDefinition } from "@atomiton/nodes";
-import nodes from "@atomiton/nodes";
+// @atomiton/nodes integration temporarily removed until API is stable
 import * as fs from "fs/promises";
 import * as os from "os";
 import * as path from "path";
@@ -52,10 +51,10 @@ export class FileSystemStorage implements IStorageEngine {
       let content: string;
 
       if (format === "yaml") {
-        content = nodes.toYaml(data as CompositeNodeDefinition);
+        // TODO: Implement YAML serialization when nodes API is stable
+        content = JSON.stringify(data, null, 2);
       } else {
-        const jsonData = nodes.toJson(data as CompositeNodeDefinition);
-        content = JSON.stringify(jsonData, null, 2);
+        content = JSON.stringify(data, null, 2);
       }
 
       const filepath = this.getFilePath(key, format);
@@ -99,10 +98,10 @@ export class FileSystemStorage implements IStorageEngine {
 
       const content = await fs.readFile(filepath, "utf-8");
       if (format === "yaml") {
-        return await nodes.fromYaml(content);
+        // TODO: Implement YAML deserialization when nodes API is stable
+        return JSON.parse(content);
       } else {
-        const jsonData = JSON.parse(content);
-        return nodes.fromJson(jsonData);
+        return JSON.parse(content);
       }
     } catch (error) {
       if (error instanceof StorageError) throw error;
@@ -271,9 +270,8 @@ export class FileSystemStorage implements IStorageEngine {
 
           try {
             const content = await fs.readFile(fullPath, "utf-8");
-            const data = entry.name.endsWith(".yaml")
-              ? await nodes.fromYaml(content)
-              : nodes.fromJson(JSON.parse(content));
+            // TODO: Implement YAML deserialization when nodes API is stable
+            const data = JSON.parse(content);
 
             if (this.isCompositeData(data)) {
               name = data.name || key;
@@ -314,7 +312,13 @@ export class FileSystemStorage implements IStorageEngine {
   /**
    * Check if data looks like Composite data
    */
-  private isCompositeData(data: unknown): data is CompositeNodeDefinition {
+  private isCompositeData(data: unknown): data is {
+    id: string;
+    name: string;
+    version: string;
+    description?: string;
+    metadata?: Record<string, unknown>;
+  } {
     return (
       typeof data === "object" &&
       data !== null &&

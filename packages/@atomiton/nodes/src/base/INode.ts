@@ -13,6 +13,8 @@ import type {
   NodeExecutionResult,
   NodePortDefinition,
 } from "../types";
+import type { INodeParameters } from "./INodeParameters";
+import type { INodeMetadata } from "./INodeMetadata";
 
 export type INode = {
   /**
@@ -31,6 +33,26 @@ export type INode = {
   readonly type: string;
 
   /**
+   * Metadata about this node
+   */
+  metadata: INodeMetadata;
+
+  /**
+   * Parameters schema, defaults, and field definitions for this node
+   */
+  parameters: INodeParameters;
+
+  /**
+   * Input port definitions
+   */
+  inputPorts: NodePortDefinition[];
+
+  /**
+   * Output port definitions
+   */
+  outputPorts: NodePortDefinition[];
+
+  /**
    * Execute this node with the given context
    * This is the core method - whether atomic or composite, everything executes the same way
    */
@@ -42,38 +64,9 @@ export type INode = {
   validate(): { valid: boolean; errors: string[] };
 
   /**
-   * Input port definitions
+   * Whether this is a composite node (true) or atomic node (false)
    */
-  get inputPorts(): NodePortDefinition[];
-
-  /**
-   * Output port definitions
-   */
-  get outputPorts(): NodePortDefinition[];
-
-  /**
-   * Metadata about this node (computed property)
-   */
-  get metadata(): {
-    id: string;
-    name: string;
-    type: string;
-    category: string;
-    description: string;
-    version: string;
-    author?: string;
-    tags?: string[];
-    icon?: string;
-    keywords: string[];
-    runtime?: { language: "typescript" };
-    experimental?: boolean;
-    deprecated?: boolean;
-  };
-
-  /**
-   * Check if this is an atomic or composite node
-   */
-  isComposite(): boolean;
+  isComposite: boolean;
 
   /**
    * Dispose of resources used by this node
@@ -89,7 +82,7 @@ export type IAtomicNode = {
   /**
    * Atomic nodes are never composite
    */
-  isComposite(): false;
+  isComposite: false;
 } & INode;
 
 /**
@@ -100,7 +93,7 @@ export type ICompositeNode = {
   /**
    * Composite nodes are always composite
    */
-  isComposite(): true;
+  isComposite: true;
 
   /**
    * Get the child nodes that make up this composite
@@ -153,12 +146,12 @@ export type CompositeEdge = {
  * Type guard to check if a node is atomic
  */
 export function isAtomicNode(node: INode): node is IAtomicNode {
-  return !node.isComposite();
+  return !node.isComposite;
 }
 
 /**
  * Type guard to check if a node is composite
  */
 export function isCompositeNode(node: INode): node is ICompositeNode {
-  return node.isComposite();
+  return node.isComposite;
 }

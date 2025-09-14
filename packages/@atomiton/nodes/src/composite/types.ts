@@ -83,13 +83,6 @@ export type CompositeValidationContext = {
   strictMode?: boolean;
 };
 
-type CompositeSchema = {
-  version: string;
-  type: "composite";
-  properties: Record<string, unknown>;
-  required: string[];
-};
-
 export type TransformationOptions = {
   preserveComments?: boolean;
   formatOutput?: boolean;
@@ -103,43 +96,16 @@ export type TransformationResult<T> = {
   warnings?: ValidationError[];
 };
 
-/**
- * Both storage (YAML) and runtime (JSON) use the same format
- * The only difference is serialization
- */
-type CompositeStorageFormat = CompositeDefinition;
-type CompositeRuntimeFormat = CompositeDefinition;
-
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends Record<string, unknown>
     ? DeepPartial<T[P]>
     : T[P];
 };
 
-type RequiredFields<T, K extends keyof T> = T & Required<Pick<T, K>>;
-
-type OptionalFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
-
 export type CompositeAPIError = {
   message: string;
   code: string;
   details?: Record<string, unknown>;
-};
-
-type CompositeAPIResult<T> = {
-  success: boolean;
-  data?: T;
-  error?: CompositeAPIError;
-  warnings?: CompositeAPIError[];
-};
-
-/**
- * Composite-specific execution context
- */
-type CompositeExecutionContext = {
-  nodeResults: Record<string, unknown>;
-  variables: Record<string, unknown>;
-  settings: CompositeExecutionSettings;
 };
 
 /**

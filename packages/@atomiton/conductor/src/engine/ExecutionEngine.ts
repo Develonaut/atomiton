@@ -27,12 +27,12 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
   private readonly stateManager: StateManager;
   private readonly nodeExecutor: NodeExecutor;
   private readonly compositeRunner: CompositeRunner;
-  private readonly storage?: any; // IStorageEngine;
+  private readonly storage?: unknown; // IStorageEngine;
   private readonly executions: Map<string, ExecutionResult>;
 
   constructor(config?: {
     concurrency?: number;
-    storage?: any; // IStorageEngine from @atomiton/storage
+    storage?: unknown; // IStorageEngine from @atomiton/storage
     timeout?: number;
   }) {
     super();
@@ -85,7 +85,9 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       // Load Composite from storage if available
       let composite: CompositeDefinition;
       if (this.storage) {
-        const data = await this.storage.load(request.blueprintId);
+        const data = await (
+          this.storage as { load: (id: string) => Promise<unknown> }
+        ).load(request.blueprintId);
         composite = data as CompositeDefinition;
       } else {
         throw new Error(
@@ -263,7 +265,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       }
       if (filter.compositeId) {
         executions = executions.filter(
-          (e) => e.blueprintId === filter.blueprintId,
+          (e) => e.blueprintId === filter.compositeId,
         );
       }
       if (filter.startDate) {
@@ -311,7 +313,7 @@ export class ExecutionEngine extends EventEmitter implements IExecutionEngine {
       nodeId: executionId,
       compositeId: composite.id,
       inputs: request.inputs ?? {},
-      config: request.config,
+      parameters: request.config,
       startTime: new Date(),
       limits: {
         maxExecutionTimeMs: request.config?.timeout ?? 60000,

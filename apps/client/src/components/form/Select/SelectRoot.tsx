@@ -1,8 +1,9 @@
-import { PropsWithChildren, createContext, useContext } from "react";
+import type { PropsWithChildren } from "react";
+import { createContext, useContext } from "react";
 import { Listbox } from "@headlessui/react";
 
 type SelectContextValue = {
-  value: any;
+  value: unknown;
 };
 
 const SelectContext = createContext<SelectContextValue | undefined>(undefined);
@@ -12,14 +13,14 @@ export const useSelectContext = () => {
   return context;
 };
 
-type SelectRootProps<T = any> = PropsWithChildren<{
+type SelectRootProps<T = unknown> = PropsWithChildren<{
   value: T;
   onChange: (value: T) => void;
   className?: string;
   disabled?: boolean;
 }>;
 
-function SelectRoot<T = any>({
+function SelectRoot<T = unknown>({
   value,
   onChange,
   children,

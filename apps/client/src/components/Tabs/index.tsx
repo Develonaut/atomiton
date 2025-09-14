@@ -3,10 +3,10 @@ import TabsList from "./TabsList";
 import TabsRoot from "./TabsRoot";
 import TabsTrigger from "./TabsTrigger";
 import TabsLegacy from "./TabsLegacy";
-import { TabItem } from "@/types";
+import type { TabItem } from "@/types";
 
 // Check if props match legacy API
-function isLegacyProps(props: any): props is {
+function isLegacyProps(props: unknown): props is {
   items: TabItem[];
   value: TabItem;
   setValue: (value: TabItem) => void;
@@ -15,12 +15,35 @@ function isLegacyProps(props: any): props is {
   classButton?: string;
 } {
   return (
-    "items" in props && "setValue" in props && props.value?.id !== undefined
+    typeof props === "object" &&
+    props !== null &&
+    "items" in props &&
+    "setValue" in props &&
+    "value" in props &&
+    (props as { value: { id?: unknown } }).value?.id !== undefined
   );
 }
 
+type TabsWrapperProps =
+  | {
+      items: TabItem[];
+      value: TabItem;
+      setValue: (value: TabItem) => void;
+      isMedium?: boolean;
+      className?: string;
+      classButton?: string;
+    }
+  | {
+      value?: string | number;
+      defaultValue?: string | number;
+      onChange?: (value: string | number) => void;
+      className?: string;
+      isMedium?: boolean;
+      children?: React.ReactNode;
+    };
+
 // Wrapper component that handles both APIs
-function TabsWrapper(props: any) {
+function TabsWrapper(props: TabsWrapperProps) {
   // If using legacy API, use TabsLegacy
   if (isLegacyProps(props)) {
     return <TabsLegacy {...props} />;

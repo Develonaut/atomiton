@@ -38,9 +38,18 @@ export class EnhancedExecutionEngine
   private stateManager: StateManager;
   private compositeRunner: CompositeRunner;
   private nodeExecutor: NodeExecutor;
-  private executionContexts: Map<string, any>;
+  private executionContexts: Map<
+    string,
+    {
+      status: string;
+      compositeId?: string;
+      startTime?: Date;
+      blueprint?: unknown;
+      nodes?: Map<string, unknown>;
+    }
+  >;
   private webhookHandlers: Map<string, (data: unknown) => Promise<unknown>>;
-  private metrics: ExecutionMetrics;
+  private metrics: EnhancedExecutionMetrics;
 
   constructor(options: EnhancedExecutionOptions = {}) {
     super();
@@ -138,8 +147,8 @@ export class EnhancedExecutionEngine
       executionId,
       compositeId,
       input,
-      startTime: Date.now(),
-      status: "pending" as ExecutionStatus,
+      startTime: new Date(),
+      status: "pending",
       variables: new Map(),
       outputs: {},
     };
@@ -192,7 +201,7 @@ export class EnhancedExecutionEngine
     composite: CompositeDefinition,
     input?: unknown,
   ): Promise<ExecutionResult> {
-    const executionId = this.generateExecutionId();
+    this.generateExecutionId();
 
     try {
       const result = await this.compositeRunner.execute(composite, {
@@ -237,7 +246,7 @@ export class EnhancedExecutionEngine
 
     await this.queue.pause();
     this.stateManager.updateExecutionState(executionId, { status: "paused" });
-    context.status = "paused";
+    (context as { status: string }).status = "paused";
 
     this.emit("execution:paused", { executionId });
   }
@@ -250,7 +259,7 @@ export class EnhancedExecutionEngine
 
     await this.queue.resume();
     this.stateManager.updateExecutionState(executionId, { status: "running" });
-    context.status = "running";
+    (context as { status: string }).status = "running";
 
     this.emit("execution:resumed", { executionId });
   }
@@ -265,7 +274,7 @@ export class EnhancedExecutionEngine
     this.stateManager.updateExecutionState(executionId, {
       status: "cancelled",
     });
-    context.status = "cancelled";
+    (context as { status: string }).status = "cancelled";
 
     this.executionContexts.delete(executionId);
     this.emit("execution:cancelled", { executionId });
@@ -308,14 +317,21 @@ export class EnhancedExecutionEngine
 
     for (const [executionId, context] of this.executionContexts.entries()) {
       const state = this.stateManager.getExecutionState(executionId);
+      const typedContext = context as {
+        compositeId: string;
+        status: string;
+        startTime: Date;
+      };
       history.push({
         executionId,
-        compositeId: context.compositeId,
-        status: context.status,
-        startTime: context.startTime,
+        compositeId: typedContext.compositeId,
+        status: typedContext.status as ExecutionStatus,
+        startTime: typedContext.startTime
+          ? typedContext.startTime.getTime()
+          : Date.now(),
         endTime: state?.endTime ? state.endTime.getTime() : undefined,
         duration: state?.endTime
-          ? state.endTime.getTime() - context.startTime.getTime()
+          ? state.endTime.getTime() - typedContext.startTime.getTime()
           : undefined,
         error: undefined, // Error is tracked in ExecutionState differently
       });
@@ -324,7 +340,7 @@ export class EnhancedExecutionEngine
     return history.slice(-limit);
   }
 
-  getMetrics(): ExecutionMetrics {
+  getMetrics(): EnhancedExecutionMetrics {
     return {
       ...this.metrics,
       queueMetrics: this.queue.getMetrics(),
@@ -372,18 +388,16 @@ export class EnhancedExecutionEngine
       endTime: state.endTime,
       outputs: undefined, // TODO: Add outputs to ExecutionState
       metrics: {
-        // Metrics structure differs between interfaces
-        successfulExecutions: this.metrics.successfulExecutions,
-        failedExecutions: this.metrics.failedExecutions,
-        averageExecutionTime: this.metrics.averageExecutionTime,
-        peakMemoryUsage: this.metrics.peakMemoryUsage,
-        activeExecutions: this.metrics.activeExecutions,
+        executionTimeMs: this.metrics.averageExecutionTime,
+        memoryUsedMB: this.metrics.peakMemoryUsage,
+        nodesExecuted: this.metrics.totalExecutions,
+        nodesFailed: this.metrics.failedExecutions,
       },
       nodeResults: state.nodeStates,
     };
   }
 
-  async listExecutions(filter?: {
+  async listExecutions(_filter?: {
     status?: ExecutionStatus;
     blueprintId?: string;
     startDate?: Date;
@@ -393,13 +407,13 @@ export class EnhancedExecutionEngine
     return [];
   }
 
-  async cleanup(before?: Date): Promise<number> {
+  async cleanup(_before?: Date): Promise<number> {
     // For now, return 0 - full implementation would clean up old executions
     return 0;
   }
 }
 
-type ExecutionMetrics = {
+type EnhancedExecutionMetrics = {
   totalExecutions: number;
   successfulExecutions: number;
   failedExecutions: number;

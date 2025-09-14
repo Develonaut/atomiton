@@ -70,14 +70,6 @@ export class TypeScriptRuntime implements IRuntime {
       // Apply execution options
       const executionContext = this.applyOptions(context, options);
 
-      // Validate node before execution
-      const validation = node.validate();
-      if (!validation.valid) {
-        throw new Error(
-          `Node validation failed: ${validation.errors.join(", ")}`,
-        );
-      }
-
       // Execute the node directly
       const result = await this.executeWithTimeout(
         () => node.execute(executionContext),
@@ -93,14 +85,16 @@ export class TypeScriptRuntime implements IRuntime {
 
       // Add runtime metadata to result
       return {
-        ...(result as object),
+        success: result.success,
+        outputs: result.outputs,
+        error: result.error,
         metadata: {
-          ...(result.metadata as object | undefined),
+          ...result.metadata,
           runtime: this.language,
           executionTimeMs: executionTime,
           memoryUsedMB: memoryUsed,
         },
-      } as NodeExecutionResult;
+      };
     } catch (error) {
       // Update error metrics
       this.metrics.errors++;

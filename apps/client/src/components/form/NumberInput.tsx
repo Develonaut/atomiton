@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 
-interface NumberInputProps {
+type NumberInputProps = {
   value: number;
   onChange: (value: number) => void;
   prefix?: string;
@@ -11,7 +11,7 @@ interface NumberInputProps {
   max?: number;
   step?: number;
   disabled?: boolean;
-}
+};
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   (

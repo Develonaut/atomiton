@@ -19,7 +19,7 @@ export type NodeCreationOptions = {
 };
 
 export const generateNodeId = (): string => {
-  return `node-${Date.now()}`;
+  return `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
 
 export const calculateNodePosition = (

@@ -13,7 +13,10 @@ function RightSidebar() {
     <Box className="sidebar right-3 flex flex-col">
       <Head />
       <Box className="px-4 py-3 border-b border-s-01">
-        <Tabs value={activeTab} onChange={setActiveTab}>
+        <Tabs
+          value={activeTab}
+          onChange={(value) => setActiveTab(value as "design" | "animation")}
+        >
           <Tabs.List>
             <Tabs.Trigger value="design">Design</Tabs.Trigger>
             <Tabs.Trigger value="animation">Animation</Tabs.Trigger>
@@ -21,7 +24,10 @@ function RightSidebar() {
         </Tabs>
       </Box>
       <Box className="grow overflow-y-auto scrollbar-none rounded-b-[1.25rem]">
-        <Tabs value={activeTab} onChange={setActiveTab}>
+        <Tabs
+          value={activeTab}
+          onChange={(value) => setActiveTab(value as "design" | "animation")}
+        >
           <Tabs.Content value="design">
             <Design />
           </Tabs.Content>

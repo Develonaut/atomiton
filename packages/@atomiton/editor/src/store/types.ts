@@ -10,7 +10,7 @@ export type FlowSnapshot = {
 // Legacy types for backward compatibility with existing test files
 export type Connection = Edge;
 
-type HistoryEntry = {
+export type HistoryEntry = {
   nodes: Node[];
   connections: Connection[];
   selectedNodeId: string | null;
@@ -46,4 +46,4 @@ export type BaseStore = {
   ) => () => void;
 };
 
-const MAX_HISTORY_SIZE = 50;
+export const MAX_HISTORY_SIZE = 50;

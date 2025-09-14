@@ -1,4 +1,4 @@
-import { TabItem } from "@/types";
+import type { TabItem } from "@/types";
 
 type TabsLegacyProps = {
   className?: string;

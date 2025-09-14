@@ -1,43 +1,25 @@
 import { useNodes } from "@atomiton/editor";
-import type { INodeMetadata } from "@atomiton/nodes";
-import { useEffect, useState } from "react";
+import type { INode } from "@atomiton/nodes";
+import { getNodesByCategory } from "@atomiton/nodes";
 import Accordion from "./Accordion";
 
 function Assets() {
   const { addNode } = useNodes();
-  const [categories, setCategories] = useState<
-    Array<{
-      name: string;
-      displayName: string;
-      items: INodeMetadata[];
-    }>
-  >([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // TODO: Implement node categories fetching
-    setCategories([]); // Temporary empty categories
-    setLoading(false);
-  }, []);
-
-  if (loading) {
-    return <div>Loading nodes...</div>;
-  }
-
-  console.log(categories);
+  const nodesByCategory = getNodesByCategory();
 
   return (
     <>
-      {categories.map((category, index) => (
+      {nodesByCategory.map((category, index) => (
         <Accordion
           key={category.name}
-          title={category.displayName}
-          items={category.items.map((item, itemIndex: number) => ({
-            ...item,
+          title={category.title}
+          items={category.items.map((item: INode, itemIndex: number) => ({
             id: index * 100 + itemIndex, // Generate unique numeric id for compatibility
-            nodeType: item.type, // Map type to nodeType for compatibility
-            title: item.name, // Map name to title for display
-            icon: item.icon || "circle", // Use icon name directly
+            nodeType: item.metadata.type, // Map type to nodeType for compatibility
+            title: item.metadata.name, // Map name to title for display
+            category: item.metadata.category, // Add required category property
+            icon: item.metadata.icon || "zap", // Use icon name directly
+            description: item.metadata.description, // Add description if available
           }))}
           onAddNode={addNode}
         />

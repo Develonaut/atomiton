@@ -1,3 +1,4 @@
+import { getNodeByType } from "@atomiton/nodes";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -15,9 +16,7 @@ function Node(props: ReactFlowNodeProps) {
   const nodes = useNodes();
   const isFirstNode = nodes.length > 0 && nodes[0].id === props.id;
 
-  // const nodeMetadata = core.nodes.getNodeMetadata(props.type as NodeType);
-  // const icon = nodeMetadata?.icon || "circle";
-  const icon = "circle"; // Temporary default icon
+  const icon = getNodeByType(props.type)?.metadata.icon || "zap";
 
   return (
     <div className="atomiton-node">
