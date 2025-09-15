@@ -18,6 +18,7 @@ import type {
 import { createCompositeGraph } from "./createCompositeGraph";
 import { createCompositeLogic } from "./createCompositeLogic";
 import { createCompositePorts } from "./createCompositePorts";
+import { validateNodeTypesStrict } from "./validation/validateNodeTypes";
 
 export type CompositeNodeInput = {
   id?: string; // Optional - will be generated if not provided
@@ -37,6 +38,17 @@ export type CompositeNodeInput = {
 export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
   // Generate ID if not provided
   const id = input.id || generateNodeId();
+
+  // Validate all node types before creating the composite
+  if (input.nodes && input.nodes.length > 0) {
+    try {
+      validateNodeTypesStrict(input.nodes);
+    } catch (error) {
+      throw new Error(
+        `Failed to create composite node "${input.name}": ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
 
   // Create graph for child nodes and edges
   const graph = createCompositeGraph(input.nodes || [], input.edges || []);
@@ -79,7 +91,7 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
         label: "Parallel Execution",
         helpText: "Execute child nodes in parallel when possible",
       },
-    }
+    },
   );
 
   // Create logic for execution (to be used in future implementation)
@@ -99,7 +111,7 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
   return {
     id,
     name: input.name,
-    type: `composite-${id}`,
+    type: "composite",
     metadata,
     parameters,
     isComposite: true,
@@ -129,6 +141,16 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
 
       if (!id) errors.push("Composite node ID is required");
       if (!input.name) errors.push("Composite node name is required");
+
+      // Validate node types
+      try {
+        const nodes = graph.getChildNodes();
+        if (nodes.length > 0) {
+          validateNodeTypesStrict(nodes);
+        }
+      } catch (error) {
+        errors.push(error instanceof Error ? error.message : String(error));
+      }
 
       const graphValidation = graph.validate();
       if (!graphValidation.valid) {
