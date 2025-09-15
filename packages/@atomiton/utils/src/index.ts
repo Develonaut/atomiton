@@ -4,5 +4,6 @@ export {
   generateExecutionId,
   generateJobId,
   generateWorkerId,
+  generateNodeId,
   generateId,
 } from "./generateId";

@@ -25,6 +25,13 @@ export function generateWorkerId(index: number): string {
 }
 
 /**
+ * Generates a unique node ID (for composite nodes/blueprints)
+ */
+export function generateNodeId(): string {
+  return `node_${uuidv4()}`;
+}
+
+/**
  * Generates a generic unique ID with optional prefix
  */
 export function generateId(prefix?: string): string {
