@@ -16,8 +16,8 @@ export type { CompositePortsInput } from "./createCompositePorts";
 export { createCompositeGraph } from "./createCompositeGraph";
 export type { CompositeGraph } from "./createCompositeGraph";
 
-// Types
 export * from "./types";
 
-// Serialization utilities
 export * from "./serializer";
+
+export * from "./transform";
