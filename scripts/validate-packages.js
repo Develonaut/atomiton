@@ -5,10 +5,6 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 const PACKAGES_DIR = path.join(__dirname, "../packages/@atomiton");
-const GUIDE_PATH = path.join(
-  __dirname,
-  "../docs/development/PACKAGE_CREATION_GUIDE.md",
-);
 
 class PackageValidator {
   constructor() {
@@ -42,7 +38,7 @@ class PackageValidator {
       return fs
         .readdirSync(PACKAGES_DIR)
         .filter((name) =>
-          fs.statSync(path.join(PACKAGES_DIR, name)).isDirectory(),
+          fs.statSync(path.join(PACKAGES_DIR, name)).isDirectory()
         )
         .map((name) => ({
           name,
@@ -73,7 +69,7 @@ class PackageValidator {
     if (packageData.name !== `@atomiton/${pkg.name}`) {
       this.addError(
         pkg.name,
-        `Name should be @atomiton/${pkg.name}, got ${packageData.name}`,
+        `Name should be @atomiton/${pkg.name}, got ${packageData.name}`
       );
     }
 
@@ -123,17 +119,30 @@ class PackageValidator {
 
     if (libraryPackages.includes(pkgName)) {
       const requiredScripts = ["build", "dev", "lint", "lint:fix", "typecheck"];
+      const requiredTestScripts = ["test", "test:unit", "test:watch"];
+
       requiredScripts.forEach((script) => {
         if (!scripts[script]) {
           this.addError(pkgName, `Missing required script: ${script}`);
         }
       });
 
+      // Validate test scripts - at least one should be present
+      const hasTestScript = requiredTestScripts.some(
+        (script) => scripts[script]
+      );
+      if (!hasTestScript) {
+        this.addError(
+          pkgName,
+          `Missing test scripts. Must have at least one of: ${requiredTestScripts.join(", ")}`
+        );
+      }
+
       // Validate dev script pattern
       if (scripts.dev && !scripts.dev.includes("vite build --watch")) {
         this.addWarning(
           pkgName,
-          'Dev script should use "vite build --watch" pattern',
+          'Dev script should use "vite build --watch" pattern'
         );
       }
 
@@ -148,7 +157,7 @@ class PackageValidator {
       if (scripts.build) {
         this.addWarning(
           pkgName,
-          "Config packages typically don't need build scripts",
+          "Config packages typically don't need build scripts"
         );
       }
     }
@@ -171,21 +180,24 @@ class PackageValidator {
       if (name.startsWith("@atomiton/") && !version.startsWith("workspace:")) {
         this.addError(
           pkgName,
-          `Internal dependency ${name} should use workspace: protocol, got ${version}`,
+          `Internal dependency ${name} should use workspace: protocol, got ${version}`
         );
       }
     });
   }
 
   validateFileStructure(pkg) {
-    const requiredFiles = ["package.json", "README.md", "src/index.ts"];
-
-    const optionalFiles = [
+    const requiredFiles = [
       "tsconfig.json",
       "vite.config.ts",
+      "package.json",
+      "README.md",
+      "src/index.ts",
+      "CHANGELOG.md",
       "CURRENT.md",
       "NEXT.md",
       "COMPLETED.md",
+      "ROADMAP.md",
     ];
 
     requiredFiles.forEach((file) => {
@@ -194,6 +206,18 @@ class PackageValidator {
         this.addError(pkg.name, `Missing required file: ${file}`);
       }
     });
+
+    // Validate CHANGELOG.md has content
+    const changelogPath = path.join(pkg.path, "CHANGELOG.md");
+    if (fs.existsSync(changelogPath)) {
+      const changelogContent = fs.readFileSync(changelogPath, "utf8");
+      if (changelogContent.trim().length < 50) {
+        this.addWarning(
+          pkg.name,
+          "CHANGELOG.md appears to be empty or minimal"
+        );
+      }
+    }
 
     optionalFiles.forEach((file) => {
       const filePath = path.join(pkg.path, file);
@@ -225,7 +249,7 @@ class PackageValidator {
       ) {
         this.addWarning(
           pkg.name,
-          "TypeScript config should extend @atomiton/typescript-config",
+          "TypeScript config should extend @atomiton/typescript-config"
         );
       }
     } catch (error) {
@@ -254,11 +278,11 @@ class PackageValidator {
     this.log(`Packages validated: ${this.packages.length}`, "info");
     this.log(
       `Errors found: ${this.errors.length}`,
-      this.errors.length > 0 ? "error" : "success",
+      this.errors.length > 0 ? "error" : "success"
     );
     this.log(
       `Warnings: ${this.warnings.length}`,
-      this.warnings.length > 0 ? "warning" : "info",
+      this.warnings.length > 0 ? "warning" : "info"
     );
 
     if (this.errors.length > 0) {
@@ -276,7 +300,7 @@ class PackageValidator {
     } else {
       this.log(
         `Found ${this.errors.length} critical issues that need fixing`,
-        "error",
+        "error"
       );
       process.exit(1);
     }
