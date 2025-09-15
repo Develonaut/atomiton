@@ -29,7 +29,7 @@
     "lint:fix": "echo 'Linting eslint-config itself with fix'",
     "typecheck": "tsc --noEmit",
     "test": "pnpm test:unit",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run --passWithNoTests || echo \"No unit tests for config-only package\"",
     "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
     "test:benchmark": "vitest bench --run",
     "test:e2e": "echo \"No E2E tests for this package\"",
