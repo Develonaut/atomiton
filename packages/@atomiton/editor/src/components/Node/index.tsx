@@ -19,7 +19,12 @@ function Node(props: ReactFlowNodeProps) {
   const icon = getNodeByType(props.type)?.metadata.icon || "zap";
 
   return (
-    <div className="atomiton-node">
+    <div
+      className="atomiton-node"
+      data-testid={`node-${props.type}-${props.id}`}
+      data-node-type={props.type}
+      data-node-id={props.id}
+    >
       <Handle
         type="target"
         position={Position.Left}
