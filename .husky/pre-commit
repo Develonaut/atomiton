@@ -24,24 +24,13 @@ fi
 
 echo "🔥 Running smoke tests before commit..."
 
-# Run smoke tests for all packages (should be < 5 seconds total)
-pnpm turbo test:smoke --filter='./packages/*'
+# Run smoke tests for all packages and apps (should be < 5 seconds total)
+pnpm turbo test:smoke
 
 if [ $? -ne 0 ]; then
   echo "❌ Smoke tests failed! Fix critical issues before committing."
   echo "💡 Tip: Run 'pnpm test:smoke' in the failing package to debug."
   exit 1
-fi
-
-# Run E2E smoke tests if they exist
-if [ -f "playwright/tests/smoke" ]; then
-  echo "🎭 Running E2E smoke tests..."
-  pnpm test:e2e:smoke --reporter=dot
-  
-  if [ $? -ne 0 ]; then
-    echo "❌ E2E smoke tests failed! Fix critical issues before committing."
-    exit 1
-  fi
 fi
 
 echo "✅ All pre-commit checks passed!"
