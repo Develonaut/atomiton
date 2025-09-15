@@ -9,6 +9,7 @@ import { createNodeMetadata } from "../../base/createNodeMetadata";
 export const transformMetadata = createNodeMetadata({
   id: "transform",
   name: "Transform",
+  type: "transform",
   description: "Transform and manipulate data arrays",
   category: "data",
   icon: "wand-2",
