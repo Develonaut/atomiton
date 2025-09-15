@@ -18,7 +18,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3001",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -42,7 +42,7 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         viewport: { width: 1920, height: 1080 },
-        baseURL: "http://localhost:3001",
+        baseURL: "http://localhost:5173",
       },
       testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
       snapshotDir: "./tests/snapshots/desktop",
@@ -52,7 +52,7 @@ export default defineConfig({
       name: "vite-mobile",
       use: {
         ...devices["Pixel 5"],
-        baseURL: "http://localhost:3001",
+        baseURL: "http://localhost:5173",
       },
       testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
       snapshotDir: "./tests/snapshots/mobile",
@@ -98,14 +98,15 @@ export default defineConfig({
     // },
   ],
 
-  /* Server configuration - handled manually for dual environment testing */
-  // webServer: {
-  //   command: "npm run dev",
-  //   url: "http://localhost:3000",
-  //   reuseExistingServer: !process.env.CI,
-  //   stdout: "ignore",
-  //   stderr: "pipe",
-  // },
+  /* Server configuration - automatically starts dev server for tests */
+  webServer: {
+    command: "pnpm run dev",
+    url: "http://localhost:5173",
+    reuseExistingServer: !process.env.CI,
+    stdout: "ignore",
+    stderr: "pipe",
+    timeout: 120 * 1000,
+  },
 
   /* Global setup and teardown */
   // globalSetup: require.resolve('./tests/global-setup'),
