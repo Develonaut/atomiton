@@ -2,13 +2,13 @@
 
 ## Test Organization Strategy
 
-We use **co-located tests** to keep tests close to the code they test, improving maintainability and discoverability.
+We **REQUIRE co-located tests** as our standard approach. Tests MUST be placed directly next to the files they test, improving maintainability and discoverability. This is our preferred and required pattern for all unit tests.
 
 ### File Structure
 
-#### Standard Unit Tests
+#### Standard Unit Tests (REQUIRED Pattern)
 
-Place `.test.ts` or `.test.tsx` files directly next to the files they test:
+**ALWAYS place `.test.ts` or `.test.tsx` files directly next to the files they test:**
 
 ```
 src/
@@ -32,9 +32,9 @@ src/
     └── useEditorStore.test.ts       # Co-located test
 ```
 
-#### Special Test Categories
+#### Special Test Categories (ONLY Exception to Co-location)
 
-Use `__tests__` folders for integration, performance, and edge case tests:
+Use `__tests__` folders **ONLY** for integration, performance, and edge case tests that don't belong to a specific file:
 
 ```
 src/
@@ -55,13 +55,16 @@ src/
 - **Edge case tests**: Place in `__tests__/edge-cases.test.ts`
 - **E2E tests**: Keep in root `/playwright` directory
 
-### Benefits of Co-location
+### Why Co-location is Required
 
-1. **Easier navigation** - Tests are right next to implementation
-2. **Better organization** - Clear mapping between tests and code
-3. **Simpler imports** - No complex relative paths
+1. **Easier navigation** - Tests are immediately findable next to implementation
+2. **Better organization** - 1:1 mapping between tests and code files
+3. **Simpler imports** - Minimal relative paths (`"./filename"` instead of `"../../../filename"`)
 4. **Encourages testing** - Visible reminder when files lack tests
-5. **Cleaner structure** - Special tests grouped logically
+5. **Easier refactoring** - Tests move with the code they test
+6. **Clear ownership** - No confusion about which tests belong to which code
+
+**Co-location is not optional** - it's our standard practice for all unit tests.
 
 ## Test Categories
 
@@ -240,12 +243,23 @@ pnpm test --grep "addElement"
 When migrating from centralized to co-located tests:
 
 1. **Identify existing tests** in `src/__tests__` or similar directories
-2. **Move unit tests** next to their source files
-3. **Create `__tests__` folders** for special test categories
-4. **Update imports** to reflect new paths
-5. **Update test config** if needed
+2. **Move unit tests** next to their source files (e.g., `modules/__tests__/crud.test.ts` → `modules/crud.test.ts`)
+3. **Create `__tests__` folders** for special test categories only
+4. **Update imports** to reflect new paths (usually changing `"../file"` to `"./file"`)
+5. **Update test config** if needed (most configs already support co-located tests)
 6. **Verify all tests pass** after migration
-7. **Remove old test directories**
+7. **Remove old `__tests__` directories** that are now empty
+
+### Recent Migration (September 2025)
+
+The following files were successfully migrated to co-location:
+
+- `apps/client/src/stores/blueprint/modules/__tests__/crud.test.ts` → `apps/client/src/stores/blueprint/modules/crud.test.ts`
+- `apps/client/src/stores/blueprint/hooks/__tests__/useBlueprint.test.tsx` → `apps/client/src/stores/blueprint/hooks/useBlueprint.test.tsx`
+- `apps/client/src/stores/blueprint/hooks/__tests__/useBlueprints.test.tsx` → `apps/client/src/stores/blueprint/hooks/useBlueprints.test.tsx`
+- `packages/@atomiton/nodes/src/composite/templates/__tests__/templates.test.ts` → `packages/@atomiton/nodes/src/composite/templates/templates.test.ts`
+
+All tests continue to run successfully with existing Vitest configurations.
 
 ## Future Improvements
 

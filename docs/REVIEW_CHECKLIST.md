@@ -28,13 +28,32 @@
 - [ ] **Clear boundaries** - well-defined interfaces
 - [ ] **Composable** - small pieces that work together
 
-## ⚛️ React Hooks Best Practices
+## ⚛️ React Components & Hooks
+
+### Component Architecture (Bento Box Compliance)
+
+- [ ] **Components are UI only** - components focus on rendering and user interaction
+- [ ] **No business logic in components** - complex logic lives in hooks or store actions
+- [ ] **No large useEffects** - if useEffect is complex, extract to custom hook
+- [ ] **No inline handlers with logic** - handlers should call hook functions or actions
+- [ ] **Composable structure** - components composed of smaller, focused components
+
+### Hook Best Practices
 
 - [ ] **Hooks are contracts** - hooks manage React lifecycle, not business logic
-- [ ] **Logic in utils** - functional logic extracted to testable util functions
+- [ ] **Logic in utils/stores** - functional logic extracted to testable util functions or store actions
 - [ ] **Clear I/O** - util functions have predictable inputs/outputs
 - [ ] **Minimal hook logic** - hooks only handle state, effects, and calling utils
 - [ ] **Testable functions** - business logic can be tested without React
+
+### Component Checklist
+
+- [ ] **Single responsibility** - component does ONE thing (display a form, show a list, etc.)
+- [ ] **Props are minimal** - only pass what's needed, avoid prop drilling
+- [ ] **State is appropriate** - UI state in component, business state in stores
+- [ ] **Effects are simple** - complex effects extracted to custom hooks
+- [ ] **Handlers delegate** - event handlers call hook functions, not implement logic
+- [ ] **Handler Naming** - use names that match the event and start with the word "handle" (e.g. `handleOnClick`, `handleOnChange`)
 
 ## 📋 Additional Checks
 
@@ -49,6 +68,7 @@
 - [ ] Public APIs have JSDoc comments
 - [ ] Complex logic is explained
 - [ ] README updated if API changed
+- [ ] CHANGELOG updated if needed
 
 ### Security
 

@@ -354,4 +354,30 @@ The editor is currently **~50% complete**. Users can:
 
 ---
 
-**Last Updated**: 2025-01-10
+## 🔗 URL Centralization - apps/client
+
+Create a url.ts file in apps/client/src/constants/ to centralize all important URLs.
+
+### Application Routes
+
+- `/` - Home page with My Scenes gallery
+- `/explore` - Explore Gallery with blueprint templates
+- `/editor` - Blueprint editor (React Flow canvas)
+- `/editor/:id` - Edit specific blueprint by ID
+
+### API Endpoints (Future)
+
+- `/api/blueprints` - Blueprint CRUD operations
+- `/api/blueprints/:id` - Individual blueprint operations
+- `/api/templates` - Template listing
+- `/api/users` - User management
+
+### External URLs
+
+- Documentation: `https://docs.atomiton.com`
+- GitHub Issues: `https://github.com/anthropics/claude-code/issues`
+- Support: `https://support.atomiton.com`
+
+---
+
+**Last Updated**: 2025-01-15
