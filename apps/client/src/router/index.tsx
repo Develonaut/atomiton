@@ -68,14 +68,6 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "create",
-    element: (
-      <SuspenseWrapper>
-        <CreatePage />
-      </SuspenseWrapper>
-    ),
-  },
-  {
     path: "explore",
     element: (
       <SuspenseWrapper>
@@ -160,6 +152,14 @@ export const router = createBrowserRouter([
     element: (
       <SuspenseWrapper>
         <ResetPasswordPageAdapter />
+      </SuspenseWrapper>
+    ),
+  },
+  {
+    path: "editor/:blueprintId?",
+    element: (
+      <SuspenseWrapper>
+        <CreatePage />
       </SuspenseWrapper>
     ),
   },
