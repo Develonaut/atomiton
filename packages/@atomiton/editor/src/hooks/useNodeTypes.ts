@@ -20,6 +20,10 @@ export function useNodeTypes(): NodeTypes {
       reactFlowNodeTypes[node.metadata.type] = Node;
     }
 
+    // Add composite node type for blueprints
+    // Composite nodes are created dynamically and use "composite" as their type
+    reactFlowNodeTypes["composite"] = Node;
+
     return reactFlowNodeTypes;
   }, []);
 }

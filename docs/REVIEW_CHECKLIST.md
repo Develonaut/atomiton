@@ -18,8 +18,8 @@
 
 - [ ] **No redundant comments** (remove one-liners that just repeat code)
 - [ ] **No commented-out code** (use git history instead)
-- [ ] **Files < 500 lines** (break up if larger)
-- [ ] **Functions < 50 lines** (refactor if larger)
+- [ ] **Files < ~250 lines** (break up if larger)
+- [ ] **Functions < 20 lines** (refactor if larger)
 
 ## 🍱 Bento Box Compliance
 
@@ -106,7 +106,7 @@
 
 - Any `any` types present
 - Build/lint/test failures
-- Files over 500 lines
+- Files over or around 250 lines
 - Significant redundant comments
 - Security concerns
 
