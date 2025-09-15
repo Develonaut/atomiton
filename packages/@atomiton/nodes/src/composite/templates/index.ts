@@ -38,17 +38,23 @@ export type CompositeTemplate = {
  * Parse and validate template YAML
  */
 function parseTemplate(yaml: string, id: string): CompositeDefinition {
-  const result = fromYaml(yaml);
-  if (!result.success || !result.data) {
-    const errorMessages = result.errors
-      ?.map((e) => (typeof e === "string" ? e : JSON.stringify(e)))
-      .join(", ");
-    throw new Error(`Failed to parse template ${id}: ${errorMessages}`);
+  try {
+    const result = fromYaml(yaml);
+    if (!result.success || !result.data) {
+      const errorMessages = result.errors
+        ?.map((e) => (typeof e === "string" ? e : JSON.stringify(e)))
+        .join(", ");
+      throw new Error(`Failed to parse template ${id}: ${errorMessages}`);
+    }
+    return {
+      ...result.data,
+      id,
+    } as CompositeDefinition;
+  } catch (error) {
+    throw new Error(
+      `Error parsing template ${id}: ${(error as Error).message}`
+    );
   }
-  return {
-    ...result.data,
-    id,
-  } as CompositeDefinition;
 }
 
 /**

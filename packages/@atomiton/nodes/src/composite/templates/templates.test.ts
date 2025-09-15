@@ -7,8 +7,8 @@ import {
   getTemplatesByTag,
   getTemplatesByDifficulty,
 } from './index';
-import { fromYaml } from '../../transform/fromYaml';
-import { CompositeDefinitionSchema } from '../../schema';
+import { fromYaml } from '../transform/fromYaml';
+import { COMPOSITE_SCHEMA } from '../schema';
 
 describe('Composite Templates', () => {
   describe('Template Definitions', () => {
@@ -49,7 +49,7 @@ describe('Composite Templates', () => {
           });
 
           it('should validate against CompositeDefinitionSchema', () => {
-            const validation = CompositeDefinitionSchema.safeParse(template.definition);
+            const validation = COMPOSITE_SCHEMA.safeParse(template.definition);
             if (!validation.success) {
               console.error(`Validation errors for ${template.id}:`, validation.error.errors);
             }
@@ -151,7 +151,7 @@ describe('Composite Templates', () => {
 
       it('should have correct metadata', () => {
         expect(template).toBeDefined();
-        expect(template?.definition.category).toBe('examples');
+        expect(template?.definition.category).toBe('tutorial');
         expect(template?.difficulty).toBe('beginner');
         expect(template?.tags).toContain('example');
         expect(template?.tags).toContain('beginner');

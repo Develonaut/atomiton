@@ -34,11 +34,11 @@ nodes:
 edges:
   - id: "greeting-to-display"
     source:
-      node: "greeting-code"
-      port: "output"
+      nodeId: "greeting-code"
+      portId: "output"
     target:
-      node: "display-transform"
-      port: "input"
+      nodeId: "display-transform"
+      portId: "input"
 
 variables:
   greeting:
