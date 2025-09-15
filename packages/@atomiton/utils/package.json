@@ -23,6 +23,7 @@
     "lint:fix": "eslint . --fix",
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
+    "test:smoke": "echo 'No smoke tests yet' && exit 0",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage"
   },
