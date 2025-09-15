@@ -21,3 +21,5 @@ export * from "./types";
 export * from "./serializer";
 
 export * from "./transform";
+
+export * from "./templates";

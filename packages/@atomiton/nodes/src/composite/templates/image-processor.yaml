@@ -1,0 +1,135 @@
+id: "550e8400-e29b-41d4-a716-446655440003"
+name: "Image Processing Workflow"
+description: "Batch process images with parallel operations for optimal performance"
+category: "media"
+type: "composite"
+version: "1.0.0"
+
+metadata:
+  created: "2025-01-15T00:00:00Z"
+  modified: "2025-01-15T00:00:00Z"
+  author: "Atomiton Team"
+  tags:
+    - "image"
+    - "processing"
+    - "media"
+
+nodes:
+  - id: "image-source"
+    type: "fileSystem"
+    position:
+      x: 50
+      y: 150
+    data:
+      operation: "list"
+      filePath: "/images/input"
+      pattern: "*.{jpg,png,gif}"
+
+  - id: "image-loop"
+    type: "loop"
+    position:
+      x: 250
+      y: 150
+    data:
+      iterateOver: "files"
+
+  - id: "parallel-processor"
+    type: "parallel"
+    position:
+      x: 450
+      y: 150
+    data:
+      concurrency: 4
+
+  - id: "image-resize"
+    type: "imageComposite"
+    position:
+      x: 650
+      y: 100
+    data:
+      operation: "resize"
+      width: 800
+      height: 600
+      maintainAspectRatio: true
+
+  - id: "image-watermark"
+    type: "imageComposite"
+    position:
+      x: 650
+      y: 200
+    data:
+      operation: "watermark"
+      watermarkPath: "/assets/watermark.png"
+      position: "bottom-right"
+      opacity: 0.7
+
+  - id: "save-processed"
+    type: "fileSystem"
+    position:
+      x: 900
+      y: 150
+    data:
+      operation: "write"
+      filePath: "/images/output"
+
+edges:
+  - id: "source-to-loop"
+    source:
+      node: "image-source"
+      port: "files"
+    target:
+      node: "image-loop"
+      port: "collection"
+
+  - id: "loop-to-parallel"
+    source:
+      node: "image-loop"
+      port: "item"
+    target:
+      node: "parallel-processor"
+      port: "input"
+
+  - id: "parallel-to-resize"
+    source:
+      node: "parallel-processor"
+      port: "output"
+    target:
+      node: "image-resize"
+      port: "image"
+
+  - id: "resize-to-watermark"
+    source:
+      node: "image-resize"
+      port: "result"
+    target:
+      node: "image-watermark"
+      port: "image"
+
+  - id: "watermark-to-save"
+    source:
+      node: "image-watermark"
+      port: "result"
+    target:
+      node: "save-processed"
+      port: "data"
+
+variables:
+  inputFolder:
+    type: "string"
+    defaultValue: "/images/input"
+    description: "Path to input images folder"
+  outputFolder:
+    type: "string"
+    defaultValue: "/images/output"
+    description: "Path to output images folder"
+  concurrency:
+    type: "number"
+    defaultValue: 4
+    description: "Number of parallel processing threads"
+
+settings:
+  runtime:
+    timeout: 60000
+    parallel: true
+  ui:
+    color: "#9C27B0"

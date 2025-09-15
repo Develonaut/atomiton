@@ -1,33 +1,19 @@
-# Changelog
+# Changelog - @atomiton/nodes
 
-All notable changes to the @atomiton/nodes package will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-
-### Added
-
-- Runtime property to INodeMetadata for future multi-language execution
-- TypeScript runtime support with future extensibility
-- Node versioning system for backward compatibility
-- Export transform utilities (fromYaml, toYaml) from composite module
-- Export all transform functions from composite/transform directory
+## [0.1.1] - 2025-01-15
 
 ### Changed
-
-- NodeMetadata class updated to handle runtime property with TypeScript default
-
-### Fixed
-
-- Added missing type field to transform node metadata
-
-## [0.0.1] - 2025-01-11
+- `createCompositeNode` now auto-generates ID if not provided using `generateNodeId()` from utils
+- `CompositeNodeInput.id` is now optional
 
 ### Added
+- Added `authorId?: string` field to `INodeMetadata` for ownership tracking
+- Added composite templates: `data-transform.yaml` and `image-processor.yaml`
+- Added `type: composite` field to template YAML definitions
 
-- Initial package creation with node system foundation
-- Base node interfaces and metadata system
-- Node type definitions and core abstractions
-- TypeScript configuration and build setup
+### Fixed
+- Improved type safety for composite node creation
+- Fixed template parsing errors by adding required `type` field
+- Improved error message formatting for template validation
+
+## [0.1.0] - Initial Release

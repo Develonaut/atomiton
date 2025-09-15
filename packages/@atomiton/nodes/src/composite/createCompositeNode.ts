@@ -4,22 +4,23 @@
  * Composite nodes are nodes that contain and orchestrate other nodes
  */
 
+import { generateNodeId } from "@atomiton/utils";
 import { z } from "zod";
 import { createNodeMetadata } from "../base/createNodeMetadata";
 import { createNodeParameters } from "../base/createNodeParameters";
-import { createCompositeLogic } from "./createCompositeLogic";
-import { createCompositePorts } from "./createCompositePorts";
-import { createCompositeGraph } from "./createCompositeGraph";
 import type { CompositeEdge, ICompositeNode, INode } from "../base/INode";
+import type { NodeCategory } from "../base/types";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
   NodePortDefinition,
 } from "../types";
-import type { NodeCategory } from "../base/types";
+import { createCompositeGraph } from "./createCompositeGraph";
+import { createCompositeLogic } from "./createCompositeLogic";
+import { createCompositePorts } from "./createCompositePorts";
 
 export type CompositeNodeInput = {
-  id: string;
+  id?: string; // Optional - will be generated if not provided
   name: string;
   description: string;
   category: string;
@@ -34,17 +35,20 @@ export type CompositeNodeInput = {
 };
 
 export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
+  // Generate ID if not provided
+  const id = input.id || generateNodeId();
+
   // Create graph for child nodes and edges
   const graph = createCompositeGraph(input.nodes || [], input.edges || []);
 
   // Create metadata for the composite
   const metadata = createNodeMetadata({
-    id: input.id,
+    id,
     name: input.name,
     description: input.description,
     category: (input.category || "logic") as NodeCategory,
     icon: "git-branch",
-    keywords: [input.id, input.name, "composite", "blueprint"],
+    keywords: [id, input.name, "composite", "blueprint"],
   });
 
   // Create parameters for composite settings
@@ -75,12 +79,12 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
         label: "Parallel Execution",
         helpText: "Execute child nodes in parallel when possible",
       },
-    },
+    }
   );
 
   // Create logic for execution (to be used in future implementation)
   createCompositeLogic({
-    id: input.id,
+    id,
     nodes: graph.getChildNodes(),
     edges: graph.getExecutionFlow(),
     settings: input.settings,
@@ -93,9 +97,9 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
   });
 
   return {
-    id: input.id,
+    id,
     name: input.name,
-    type: `composite-${input.id}`,
+    type: `composite-${id}`,
     metadata,
     parameters,
     isComposite: true,
@@ -111,7 +115,7 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
     async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
       // Refresh logic with current nodes and edges
       const currentLogic = createCompositeLogic({
-        id: input.id,
+        id,
         nodes: graph.getChildNodes(),
         edges: graph.getExecutionFlow(),
         settings: input.settings,
@@ -123,7 +127,7 @@ export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
     validate(): { valid: boolean; errors: string[] } {
       const errors: string[] = [];
 
-      if (!input.id) errors.push("Composite node ID is required");
+      if (!id) errors.push("Composite node ID is required");
       if (!input.name) errors.push("Composite node name is required");
 
       const graphValidation = graph.validate();

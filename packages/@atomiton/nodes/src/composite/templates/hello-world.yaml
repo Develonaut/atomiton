@@ -1,0 +1,53 @@
+id: "550e8400-e29b-41d4-a716-446655440001"
+name: "Hello World"
+description: "A simple greeting workflow that demonstrates basic node connectivity"
+category: "tutorial"
+type: "composite"
+version: "1.0.0"
+
+metadata:
+  created: "2025-01-15T00:00:00Z"
+  modified: "2025-01-15T00:00:00Z"
+  author: "Atomiton Team"
+  tags:
+    - "example"
+    - "beginner"
+    - "text"
+
+nodes:
+  - id: "greeting-code"
+    type: "code"
+    position:
+      x: 100
+      y: 100
+    data:
+      code: "return { message: 'Hello, World!' };"
+
+  - id: "display-transform"
+    type: "transform"
+    position:
+      x: 400
+      y: 100
+    data:
+      expression: "data.message.toUpperCase()"
+
+edges:
+  - id: "greeting-to-display"
+    source:
+      node: "greeting-code"
+      port: "output"
+    target:
+      node: "display-transform"
+      port: "input"
+
+variables:
+  greeting:
+    type: "string"
+    defaultValue: "Hello, World!"
+    description: "The greeting message to display"
+
+settings:
+  runtime:
+    timeout: 5000
+  ui:
+    color: "#4CAF50"

@@ -21,6 +21,7 @@ export type INodeMetadata = {
   type: string;
   version: string;
   author: string;
+  authorId?: string;
   description: string;
   category: NodeCategory;
   icon: NodeIcon;
