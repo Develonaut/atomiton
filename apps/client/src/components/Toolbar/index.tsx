@@ -7,8 +7,7 @@ import { useState } from "react";
 
 type ToolbarProps = {
   // Will be called to save the current blueprint.
-  // TODO: Non-functional placeholder until we implement actual saving.
-  onSave: () => void;
+  onSave: (editorState?: any) => void;
 };
 
 function Toolbar({ onSave }: ToolbarProps) {

@@ -20,9 +20,11 @@ const CURRENT_USER_ID = "user_default_123";
 
 export type CrudActions = {
   loadBlueprint: (id: string) => void;
+  copyBlueprint: (id: string) => string | null;
   createBlueprint: (blueprintData: Partial<Blueprint>) => string;
   saveBlueprintFromEditor: (id: string | undefined, editorState: any) => string;
   updateBlueprint: (id: string, updates: Partial<Blueprint>) => void;
+  removeBlueprint: (id: string) => void;
 };
 
 // Helper to create composite node from flow data
@@ -44,10 +46,6 @@ const flowDataToCompositeNode = (
 };
 
 export const createCrudModule = (store: BaseStore): CrudActions => ({
-  // TODO: Load blueprint should not be creating copies if not owner
-  // It should just load the existing blueprint for viewing
-  // Copying should be a separate action. Actions should be single-responsibility.
-  // Move functionality to a new copyBlueprint action.
   loadBlueprint: (id: string) => {
     // Check if blueprint exists in store using selector
     const existingBlueprint = selectBlueprintById(id)(store.getState());
@@ -67,33 +65,49 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
       });
     }
 
-    // Check if user owns this blueprint, otherwise create a copy
-    // TODO: Get actual user ID from user store
-    const isOwner =
-      (existingBlueprint.metadata as any)?.authorId === CURRENT_USER_ID;
-    if (!isOwner) {
-      store.setState((state) => {
-        const compositeNode = createCompositeNode({
-          // ID will be auto-generated
-          name: `${existingBlueprint.name} (Copy)`,
-          description: existingBlueprint.metadata?.description || "",
-          category: existingBlueprint.metadata?.category || "blueprints",
-          nodes: existingBlueprint.getChildNodes
-            ? existingBlueprint.getChildNodes()
-            : [],
-          edges: existingBlueprint.getExecutionFlow
-            ? existingBlueprint.getExecutionFlow()
-            : [],
-          variables: (existingBlueprint as any).variables,
-          settings: (existingBlueprint as any).settings,
-        });
+    // Simple load - no automatic copying
+    // Hook or caller can decide whether to copy based on ownership
+  },
 
-        state.blueprints.push(compositeNode as Blueprint);
-        console.log(
-          `Created copy ${compositeNode.id} from blueprint ${id} (not owner)`,
-        );
+  copyBlueprint: (id: string) => {
+    // Check if blueprint exists in store using selector
+    const existingBlueprint = selectBlueprintById(id)(store.getState());
+
+    if (!existingBlueprint) {
+      // Blueprint not found in store
+      store.setState((state) => {
+        state.error = `Blueprint with ID ${id} not found`;
       });
+      return null;
     }
+
+    // Create a copy
+    const compositeNode = createCompositeNode({
+      // ID will be auto-generated
+      name: `${existingBlueprint.name} (Copy)`,
+      description: existingBlueprint.metadata?.description || "",
+      category: existingBlueprint.metadata?.category || "blueprints",
+      nodes: existingBlueprint.getChildNodes
+        ? existingBlueprint.getChildNodes()
+        : [],
+      edges: existingBlueprint.getExecutionFlow
+        ? existingBlueprint.getExecutionFlow()
+        : [],
+      variables: (existingBlueprint as any).variables,
+      settings: (existingBlueprint as any).settings,
+    });
+
+    // Set ownership to current user
+    (compositeNode.metadata as any).authorId = CURRENT_USER_ID;
+
+    store.setState((state) => {
+      state.blueprints.push(compositeNode as Blueprint);
+      state.error = null;
+    });
+
+    console.log(`Created copy ${compositeNode.id} from blueprint ${id}`);
+
+    return compositeNode.id;
   },
 
   createBlueprint: (blueprintData: Partial<Blueprint>) => {
@@ -224,6 +238,30 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
 
       state.blueprints[index] = updatedBlueprint;
       state.error = null;
+    });
+  },
+
+  removeBlueprint: (id: string) => {
+    store.setState((state) => {
+      const index = state.blueprints.findIndex((bp) => bp.id === id);
+      if (index === -1) {
+        state.error = `Blueprint with ID ${id} not found`;
+        return;
+      }
+
+      // Don't allow removing blueprints you don't own
+      // TODO: Get actual user ID from user store
+      const isOwner =
+        (state.blueprints[index].metadata as any)?.authorId === CURRENT_USER_ID;
+      if (!isOwner) {
+        state.error = `Cannot remove blueprint ${id}. You are not the owner.`;
+        return;
+      }
+
+      // Remove the blueprint
+      state.blueprints.splice(index, 1);
+      state.error = null;
+      console.log(`Removed blueprint ${id}`);
     });
   },
 });
