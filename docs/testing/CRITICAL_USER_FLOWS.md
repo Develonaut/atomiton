@@ -4,7 +4,33 @@ These are the core user workflows that MUST work for the application to be funct
 
 ## 🎯 Primary User Flows
 
-### 1. **Node Management Flow**
+### 1. **Gallery-to-Editor Flow** ⭐ NEW
+
+**User Goal**: Load a blueprint from the gallery into the editor
+
+**Critical Path**:
+
+1. ✅ User visits home page
+2. ✅ User sees available blueprints/gallery items
+3. ✅ User clicks on a blueprint card
+4. ✅ User is navigated to `/editor/:id` route
+5. ✅ Editor loads with canvas visible
+6. ✅ Blueprint YAML is fetched and parsed
+7. ✅ Nodes appear on canvas with correct types
+8. ✅ Node data (positions, properties) is loaded correctly
+
+**Tests Required**:
+
+- Gallery items are clickable
+- Navigation to editor works
+- Blueprint loading from YAML works
+- Nodes render with correct test IDs
+- Expected node types are present (e.g., code, transform)
+- No JavaScript errors during load
+
+**Current Test Status**: ✅ **IMPLEMENTED** - `gallery-editor-flow.spec.ts`
+
+### 2. **Node Management Flow**
 
 **User Goal**: Add and configure nodes in the editor
 
@@ -89,6 +115,9 @@ These are the core user workflows that MUST work for the application to be funct
 ```javascript
 // These should be in our smoke tests NOW
 tests = [
+  "Gallery-to-Editor navigation works", // ✅ IMPLEMENTED
+  "Blueprint YAML loading works", // ✅ IMPLEMENTED
+  "Nodes render with test IDs", // ✅ IMPLEMENTED
   "Editor store can manage nodes",
   "Canvas renders and updates",
   "Node selection works",
@@ -124,12 +153,13 @@ tests = [
 
 ## 📊 Current Status
 
-| Flow              | Status       | Test Coverage |
-| ----------------- | ------------ | ------------- |
-| Node Management   | 70% Complete | Partial       |
-| Workflow Creation | 20% Complete | None          |
-| Save/Load         | 0% Complete  | None          |
-| Canvas Navigation | 90% Complete | Partial       |
+| Flow              | Status        | Test Coverage |
+| ----------------- | ------------- | ------------- |
+| Gallery-to-Editor | 100% Complete | ✅ Full       |
+| Node Management   | 70% Complete  | Partial       |
+| Workflow Creation | 20% Complete  | None          |
+| Save/Load         | 0% Complete   | None          |
+| Canvas Navigation | 90% Complete  | Partial       |
 
 ## 🎯 Definition of "Working"
 
@@ -145,6 +175,9 @@ A feature is considered **working** when:
 
 These scenarios should ALWAYS fail smoke tests:
 
+- Cannot navigate from gallery to editor
+- Blueprint YAML fails to load
+- Nodes don't appear after blueprint load
 - Cannot add nodes to canvas
 - Cannot select nodes
 - Canvas doesn't render
@@ -154,5 +187,15 @@ These scenarios should ALWAYS fail smoke tests:
 
 ---
 
-**Last Updated**: 2025-01-10
+**Last Updated**: 2025-09-14
 **Next Review**: When implementing connection system
+
+## 🧪 Smoke Test Files
+
+- **`gallery-editor-flow.spec.ts`** - Gallery-to-Editor flow (NEW)
+- **`smoke.spec.ts`** - Basic page loads and navigation
+- **`editor-core-flows.spec.ts`** - Node management and canvas operations
+
+## 🏃‍♂️ Pre-Commit Requirements
+
+All smoke tests must pass before commits are allowed. These tests ensure critical user flows remain functional.
