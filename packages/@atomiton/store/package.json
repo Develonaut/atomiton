@@ -1,6 +1,6 @@
 {
   "name": "@atomiton/store",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "State management for Atomiton workflow automation",
   "type": "module",
   "private": true,
