@@ -13,7 +13,7 @@ function LoadingFallback() {
 
 // Lazy load all route components for code splitting
 const HomePage = lazy(() => import("../templates/HomePage"));
-const CreatePage = lazy(() => import("../templates/CreatePage"));
+const EditorPage = lazy(() => import("../templates/EditorPage"));
 const ExplorePage = lazy(() => import("../templates/Explore/ExplorePage"));
 const DetailsPageAdapter = lazy(
   () => import("../components/DetailsPageAdapter"),
@@ -156,10 +156,10 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "editor/:blueprintId?",
+    path: "editor/:id",
     element: (
       <SuspenseWrapper>
-        <CreatePage />
+        <EditorPage />
       </SuspenseWrapper>
     ),
   },

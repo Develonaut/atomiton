@@ -1,3 +1,4 @@
+id: "550e8400-e29b-41d4-a716-446655440002"
 name: "Data Transform Pipeline"
 description: "Read CSV data, transform it, and output processed results"
 category: "data"

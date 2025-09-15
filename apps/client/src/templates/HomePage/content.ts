@@ -1,20 +1,20 @@
 export const content = [
   {
-    id: 0,
+    id: "550e8400-e29b-41d4-a716-446655440001",
     title: "Hello World",
     category: "Blueprint Templates",
     image: "/images/gallery/1.jpg",
     type: "blueprint",
   },
   {
-    id: 1,
+    id: "550e8400-e29b-41d4-a716-446655440002",
     title: "Data Transform Pipeline",
     category: "Blueprint Templates",
     image: "/images/gallery/2.jpg",
     type: "blueprint",
   },
   {
-    id: 2,
+    id: "550e8400-e29b-41d4-a716-446655440003",
     title: "Image Processing Workflow",
     category: "Blueprint Templates",
     image: "/images/gallery/3.jpg",

@@ -4,7 +4,7 @@ import Icon from "@/components/Icon";
 
 type Props = {
   value: {
-    id: number;
+    id: string | number;
     title: string;
     category: string;
     image: string;
