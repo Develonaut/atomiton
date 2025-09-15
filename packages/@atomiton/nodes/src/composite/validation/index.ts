@@ -7,7 +7,21 @@
 
 // Core Validation Functions
 export { validateComposite } from "./validateComposite";
+export { validateCompositeSemantics } from "./validateCompositeSemantics";
 
 // Specific Validation Functions
+export {
+  validateNodeTypes,
+  validateNodeTypesStrict,
+  NodeTypeValidationError,
+} from "./validateNodeTypes";
+export { validateNodeUniqueness } from "./validateNodeUniqueness";
+export { validateEdgeReferences } from "./validateEdgeReferences";
+export { validateEdgeUniqueness } from "./validateEdgeUniqueness";
+export { validateMetadata } from "./validateMetadata";
 
 // Utility Functions
+export { createValidationError } from "./createValidationError";
+export { formatValidationErrors } from "./formatValidationErrors";
+export { hasCriticalErrors } from "./hasCriticalErrors";
+export { isCompositeDefinition } from "./isCompositeDefinition";
