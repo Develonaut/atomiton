@@ -1,15 +1,115 @@
 /**
- * @atomiton/store - Main Package Exports
+ * @atomiton/store - Simplified State Management
  *
- * Clean API surface - all functionality accessed through store singleton
+ * Clean, functional API for creating Zustand stores with Immer and persistence
  */
 
-// Main API export (follows core package pattern with api.ts)
-export { store } from "./api";
+import { enableMapSet } from "immer";
+import { create } from "zustand";
+import type { PersistOptions, PersistStorage } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
-// React hook for using stores
+// Enable Map/Set support in Immer on module load
+enableMapSet();
+
+// ============================================================================
+// Types
+// ============================================================================
+
+/**
+ * Function that creates initial state
+ */
+export type StateCreator<T> = () => T;
+
+/**
+ * Store interface - What consumers actually need
+ */
+export type Store<T> = {
+  getState(): T;
+  setState(
+    partial: T | Partial<T> | ((state: T) => T | void),
+    replace?: boolean,
+  ): void;
+  subscribe(listener: (state: T, prevState: T) => void): () => void;
+};
+
+/**
+ * Persistence configuration - Essential options only
+ */
+export type PersistConfig<T> = {
+  key: string;
+  storage?: PersistStorage<T>;
+  partialize?: (state: T) => Partial<T>;
+  onRehydrateStorage?: (
+    state: T,
+  ) => ((state?: T | undefined, error?: Error | undefined) => void) | void;
+  version?: number;
+  migrate?: (persistedState: unknown, version: number) => T | Promise<T>;
+  skipHydration?: boolean;
+};
+
+/**
+ * Store configuration
+ */
+export type StoreConfig<T> = {
+  name?: string;
+  persist?: PersistConfig<T>;
+};
+
+// ============================================================================
+// Core Function
+// ============================================================================
+
+/**
+ * Creates a Zustand store with Immer for immutability and optional persistence
+ */
+export function createStore<T extends object>(
+  initializer: StateCreator<T>,
+  config: StoreConfig<T> = {},
+): Store<T> {
+  const { name = "Store", persist: persistConfig } = config;
+
+  // Create the basic store creator with Immer
+  const storeCreator = immer<T>(() => initializer());
+
+  // Non-persisted store
+  if (!persistConfig) {
+    const store = create<T>()(
+      devtools(storeCreator, {
+        name,
+        enabled: process.env.NODE_ENV === "development",
+      }),
+    );
+    return store as Store<T>;
+  }
+
+  // Persisted store
+  const { key, ...restPersistConfig } = persistConfig;
+
+  const persistOptions: PersistOptions<T, T> = {
+    name: `store:${key}`,
+    ...restPersistConfig,
+  } as PersistOptions<T, T>;
+
+  const persistedStore = persist(storeCreator, persistOptions);
+
+  const store = create<T>()(
+    devtools(persistedStore, {
+      name: `${name}:${key}`,
+      enabled: process.env.NODE_ENV === "development",
+    }),
+  );
+
+  return store as Store<T>;
+}
+
+// ============================================================================
+// Re-exports
+// ============================================================================
+
+// Re-export Zustand's useStore hook for React integration
 export { useStore } from "zustand";
 
-// Types consumers need
-export type { StoreAPI } from "./api";
-export type { StateUpdater, Store, StoreConfig } from "./base";
+// Re-export shallow for performance optimizations
+export { shallow } from "zustand/shallow";

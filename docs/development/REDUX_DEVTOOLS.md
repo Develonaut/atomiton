@@ -33,30 +33,51 @@ During development, use Chrome browser for state debugging:
 
 ### Store Configuration
 
-All stores are configured with Redux DevTools support:
+All stores are configured with Redux DevTools support using the simplified API:
 
 ```typescript
-// From packages/@atomiton/store/src/base.ts
+// From packages/@atomiton/store/src/index.ts
 export function createStore<T extends object>(
-  config: StoreConfig<T>,
+  initializer: StateCreator<T>,
+  config: StoreConfig<T> = {},
 ): Store<T> {
-  return create<T>()(
-    devtools(
-      immer((set) => config.initialState),
-      {
-        name: storeName,
-        enabled: true,
-      },
-    ),
-  ) as Store<T>;
+  const { name = "Store", persist: persistConfig } = config;
+
+  // Non-persisted store
+  if (!persistConfig) {
+    const store = create<T>()(
+      devtools(
+        immer(() => initializer()),
+        {
+          name,
+          enabled: process.env.NODE_ENV === "development",
+        },
+      ),
+    );
+    return store as Store<T>;
+  }
+
+  // Persisted store with devtools
+  const persistedStore = persist(
+    immer(() => initializer()),
+    persistOptions,
+  );
+  const store = create<T>()(
+    devtools(persistedStore, {
+      name: `${name}:${key}`,
+      enabled: process.env.NODE_ENV === "development",
+    }),
+  );
+  return store as Store<T>;
 }
 ```
 
-### Key Changes Made
+### Key Features
 
-1. **Replaced Map objects with plain objects** - Maps aren't serializable by default in Redux DevTools
-2. **Proper middleware order** - immer → persist → devtools
-3. **Always enable devtools** - Let the middleware handle the connection
+1. **Automatic DevTools Integration** - Enabled in development mode only
+2. **Proper Middleware Order** - immer → persist → devtools
+3. **Named Stores** - Each store has a descriptive name in DevTools
+4. **Map Support** - enableMapSet() called on module load for Map/Set serialization
 
 ## Testing Store Visibility
 

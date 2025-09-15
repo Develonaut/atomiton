@@ -1,4 +1,4 @@
-import { store as storeAPI } from "@atomiton/store";
+import { shallow } from "@atomiton/store";
 import { useEffect, useRef, useState } from "react";
 import { editorStore } from "../store";
 import type { EditorState } from "../store/types";
@@ -40,4 +40,4 @@ export function useStore<T>(
   return state;
 }
 
-export const shallow = storeAPI.shallow;
+export { shallow };

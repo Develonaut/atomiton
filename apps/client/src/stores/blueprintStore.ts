@@ -1,4 +1,4 @@
-import { store } from "@atomiton/store";
+import { createStore } from "@atomiton/store";
 import type { Store } from "@atomiton/store";
 
 export interface BlueprintData {
@@ -38,13 +38,15 @@ const initialState: BlueprintState = {
   error: null,
 };
 
-export const blueprintStore: Store<BlueprintState> = store.createStore({
-  name: "BlueprintStore",
-  initialState,
-  persist: {
-    key: "user-blueprints",
+export const blueprintStore: Store<BlueprintState> = createStore(
+  () => initialState,
+  {
+    name: "BlueprintStore",
+    persist: {
+      key: "user-blueprints",
+    },
   },
-});
+);
 
 export const blueprintActions = {
   addBlueprint: (blueprint: BlueprintData) => {

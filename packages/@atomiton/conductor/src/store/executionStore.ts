@@ -2,7 +2,7 @@
  * Execution state store using @atomiton/store (zustand)
  */
 
-import { store } from "@atomiton/store";
+import { createStore } from "@atomiton/store";
 import { events } from "@atomiton/events";
 import type { ExecutionStatus } from "../interfaces/IExecutionEngine";
 import type { ExecutionState, NodeState, Checkpoint } from "./types";
@@ -44,11 +44,14 @@ type StoreEvents = {
  */
 export function createExecutionStore(storeId = "default") {
   // Create the zustand store
-  const executionStore = store.createStore<ExecutionStoreState>({
-    initialState: {
+  const executionStore = createStore<ExecutionStoreState>(
+    () => ({
       executions: {},
+    }),
+    {
+      name: `ExecutionStore:${storeId}`,
     },
-  });
+  );
 
   // Event bus for state changes
   const stateEventBus = events.createEventBus<StoreEvents>(

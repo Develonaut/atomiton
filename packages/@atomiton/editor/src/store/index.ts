@@ -1,4 +1,4 @@
-import { store as storeAPI } from "@atomiton/store";
+import { createStore } from "@atomiton/store";
 import { createFlowModule, type FlowActions } from "./modules/flow";
 import { createHistoryModule, type HistoryActions } from "./modules/history";
 import { createNodeModule, type NodeActions } from "./modules/nodes";
@@ -28,8 +28,7 @@ const initialState: EditorState = {
   },
 };
 
-const store = storeAPI.createStore<EditorState>({
-  initialState,
+const store = createStore<EditorState>(() => initialState, {
   name: "EditorStore",
 });
 
