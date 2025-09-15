@@ -218,6 +218,12 @@ Fix the @atomiton/store package to meet our testing requirements per docs/develo
 - Add benchmarks in src/__benchmarks__/*.bench.ts for state update performance
 - Ensure all 8 test scripts are functional
 - Add test configuration block to vite.config.ts
+
+CRITICAL: Simplify store package - remove unnecessary abstractions
+- The current @atomiton/store package is overcomplicated with custom APIs
+- Should be simplified to basic Zustand utilities/helpers instead of complex abstraction
+- Currently used by blueprint store but should be refactored to direct Zustand usage
+- Store package should provide common patterns, not reinvent Zustand's API
 ```
 
 **5. @atomiton/di**

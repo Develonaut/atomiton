@@ -16,7 +16,7 @@ metadata:
 
 nodes:
   - id: "image-source"
-    type: "fileSystem"
+    type: "file-system"
     position:
       x: 50
       y: 150
@@ -42,7 +42,7 @@ nodes:
       concurrency: 4
 
   - id: "image-resize"
-    type: "imageComposite"
+    type: "image-composite"
     position:
       x: 650
       y: 100
@@ -53,7 +53,7 @@ nodes:
       maintainAspectRatio: true
 
   - id: "image-watermark"
-    type: "imageComposite"
+    type: "image-composite"
     position:
       x: 650
       y: 200
@@ -64,7 +64,7 @@ nodes:
       opacity: 0.7
 
   - id: "save-processed"
-    type: "fileSystem"
+    type: "file-system"
     position:
       x: 900
       y: 150

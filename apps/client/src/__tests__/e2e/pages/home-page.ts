@@ -30,7 +30,11 @@ export class HomePage extends BasePage {
    */
   async isHomePageLoaded(): Promise<boolean> {
     try {
-      await this.page.waitForSelector('main, [data-testid="main-content"]', {
+      // Check for the Layout wrapper and "My Scenes" title
+      await this.page.waitForSelector(".pl-55.pt-20, .pl-0.pt-20", {
+        timeout: 5000,
+      });
+      await this.page.waitForSelector('text="My Scenes"', {
         timeout: 5000,
       });
       return true;

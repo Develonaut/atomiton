@@ -4,7 +4,7 @@ import { defineConfig, devices } from "@playwright/test";
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: "./tests",
+  testDir: "./src/__tests__/e2e",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -31,7 +31,7 @@ export default defineConfig({
   },
 
   /* Snapshot directory */
-  snapshotDir: "./tests/snapshots",
+  snapshotDir: "./src/__tests__/e2e/snapshots",
   snapshotPathTemplate: "{snapshotDir}/routes/{arg}{ext}",
 
   /* Configure projects for major browsers and environments */
@@ -45,7 +45,7 @@ export default defineConfig({
         baseURL: "http://localhost:5173",
       },
       testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
-      snapshotDir: "./tests/snapshots/desktop",
+      snapshotDir: "./src/__tests__/e2e/snapshots/desktop",
       snapshotPathTemplate: "{snapshotDir}/{arg}{ext}",
     },
     {
@@ -55,7 +55,7 @@ export default defineConfig({
         baseURL: "http://localhost:5173",
       },
       testMatch: ["**/snapshots.spec.ts", "**/capture-reference.spec.ts"],
-      snapshotDir: "./tests/snapshots/mobile",
+      snapshotDir: "./src/__tests__/e2e/snapshots/mobile",
       snapshotPathTemplate: "{snapshotDir}/{arg}{ext}",
     },
 

@@ -10,7 +10,7 @@ function RightSidebar() {
   const [activeTab, setActiveTab] = useState<"design" | "animation">("design");
 
   return (
-    <Box className="sidebar right-3 flex flex-col">
+    <Box className="sidebar right-3 flex flex-col" data-testid="right-sidebar">
       <Head />
       <Box className="px-4 py-3 border-b border-s-01">
         <Tabs

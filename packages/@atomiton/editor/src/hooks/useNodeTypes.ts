@@ -24,6 +24,7 @@ export function useNodeTypes(): NodeTypes {
     // Composite nodes are created dynamically and use "composite" as their type
     reactFlowNodeTypes["composite"] = Node;
 
+    console.log("Registered node types:", Object.keys(reactFlowNodeTypes));
     return reactFlowNodeTypes;
   }, []);
 }

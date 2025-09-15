@@ -32,6 +32,48 @@ src/
     └── useEditorStore.test.ts       # Co-located test
 ```
 
+#### Smoke Tests (REQUIRED for all packages)
+
+**Smoke tests MUST be placed in `src/__tests__/smoke/` directory at the package root:**
+
+```
+src/
+├── __tests__/
+│   └── smoke/
+│       ├── api.smoke.test.ts        # Public API surface tests
+│       ├── validation.smoke.test.ts # Critical validation paths
+│       └── integration.smoke.test.ts # Key integration points
+├── components/...                   # Regular co-located unit tests
+└── utils/...                        # Regular co-located unit tests
+```
+
+**Smoke Test Philosophy:**
+
+- Test the public API exports from the package
+- Verify critical paths work end-to-end
+- Keep tests minimal and focused (< 5 seconds total)
+- Run in pre-commit hooks to catch breaking changes early
+- Name files with `.smoke.test.ts` suffix for easy identification
+- Group by domain when multiple smoke test areas exist
+
+**Example Smoke Test Structure:**
+
+```typescript
+// src/__tests__/smoke/api.smoke.test.ts
+import * as PackageAPI from "../../index";
+
+describe("Package API Smoke Tests", () => {
+  it("exports expected functions", () => {
+    expect(PackageAPI.mainFunction).toBeDefined();
+  });
+
+  it("critical path works", () => {
+    const result = PackageAPI.mainFunction(validInput);
+    expect(result).toBeDefined();
+  });
+});
+```
+
 #### Special Test Categories (ONLY Exception to Co-location)
 
 Use `__tests__` folders **ONLY** for integration, performance, and edge case tests that don't belong to a specific file:

@@ -5,7 +5,13 @@ import { useUndoRedo } from "@atomiton/editor";
 import { Box, Button } from "@atomiton/ui";
 import { useState } from "react";
 
-function Toolbar() {
+type ToolbarProps = {
+  // Will be called to save the current blueprint.
+  // TODO: Non-functional placeholder until we implement actual saving.
+  onSave: () => void;
+};
+
+function Toolbar({ onSave }: ToolbarProps) {
   const { canUndo, canRedo, undo, redo } = useUndoRedo();
   const [active, setActive] = useState<number | null>(0);
 
@@ -38,7 +44,10 @@ function Toolbar() {
   ];
 
   return (
-    <Box className="fixed top-3 left-1/2 z-20 -translate-x-1/2 flex shadow-toolbar border border-s-01 bg-surface-01 rounded-[1.25rem]">
+    <Box
+      className="fixed top-3 left-1/2 z-20 -translate-x-1/2 flex shadow-toolbar border border-s-01 bg-surface-01 rounded-[1.25rem]"
+      data-testid="toolbar"
+    >
       <Box className="flex gap-2 p-2">
         {actions.map((action) => (
           <Button

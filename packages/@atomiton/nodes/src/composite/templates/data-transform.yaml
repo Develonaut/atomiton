@@ -16,7 +16,7 @@ metadata:
 
 nodes:
   - id: "csv-source"
-    type: "csvReader"
+    type: "csv-reader"
     position:
       x: 50
       y: 100
@@ -41,7 +41,7 @@ nodes:
       code: "const total = data.reduce((sum, row) => sum + parseFloat(row.amount || 0), 0); return { total, count: data.length };"
 
   - id: "output-file"
-    type: "fileSystem"
+    type: "file-system"
     position:
       x: 800
       y: 100

@@ -175,10 +175,10 @@
       }
     },
     {
-      "label": "🚨 E2E: Smoke Tests",
-      "detail": "Quick smoke tests - Check all apps work",
+      "label": "🚨 Smoke Tests",
+      "detail": "Quick smoke tests - Check all apps and packages work",
       "type": "shell",
-      "command": "pnpm test:e2e:smoke",
+      "command": "pnpm test:smoke",
       "group": {
         "kind": "test",
         "isDefault": true

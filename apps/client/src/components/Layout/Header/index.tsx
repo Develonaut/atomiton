@@ -1,14 +1,14 @@
-import { useState } from "react";
+import Filters from "@/components/Filters";
+import Icon from "@/components/Icon";
+import Image from "@/components/Image";
+import Notifications from "@/components/Notifications";
+import Search from "@/components/Search";
+import User from "@/components/User";
+import { useScrollbarWidth } from "@/hooks";
 import { usePathname } from "@/router/hooks";
 import Link from "@/router/Link";
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
-import Notifications from "@/components/Notifications";
 import { Button } from "@atomiton/ui";
-import User from "@/components/User";
-import Filters from "@/components/Filters";
-import Search from "@/components/Search";
-import { useScrollbarWidth } from "@/hooks";
+import { useState } from "react";
 
 type Props = {
   onOpen: () => void;
@@ -76,7 +76,7 @@ function Header({ onOpen }: Props) {
         {isActiveExplore && <Filters onlyBtnIcon />}
         <Notifications />
         {!isActiveExplore && (
-          <Button isPrimary as="link" href="/create">
+          <Button isPrimary as="link" href="/editor">
             Create
           </Button>
         )}

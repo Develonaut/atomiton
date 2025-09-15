@@ -7,11 +7,12 @@
 
 import { fromYaml } from "../transform/fromYaml";
 import type { CompositeDefinition } from "../types";
-// @ts-ignore - Vite will handle these raw imports
+import { validateNodeTypesStrict } from "../validation/validateNodeTypes";
+// @ts-expect-error - Vite will handle these raw imports
 import dataTransformYaml from "./data-transform.yaml?raw";
-// @ts-ignore - Vite will handle these raw imports
+// @ts-expect-error - Vite will handle these raw imports
 import helloWorldYaml from "./hello-world.yaml?raw";
-// @ts-ignore - Vite will handle these raw imports
+// @ts-expect-error - Vite will handle these raw imports
 import imageProcessorYaml from "./image-processor.yaml?raw";
 
 /**
@@ -38,23 +39,31 @@ export type CompositeTemplate = {
  * Parse and validate template YAML
  */
 function parseTemplate(yaml: string, id: string): CompositeDefinition {
-  try {
-    const result = fromYaml(yaml);
-    if (!result.success || !result.data) {
-      const errorMessages = result.errors
-        ?.map((e) => (typeof e === "string" ? e : JSON.stringify(e)))
-        .join(", ");
-      throw new Error(`Failed to parse template ${id}: ${errorMessages}`);
-    }
-    return {
-      ...result.data,
-      id,
-    } as CompositeDefinition;
-  } catch (error) {
-    throw new Error(
-      `Error parsing template ${id}: ${(error as Error).message}`
-    );
+  const result = fromYaml(yaml);
+  if (!result.success || !result.data) {
+    const errorMessages = result.errors
+      ?.map((e) => (typeof e === "string" ? e : JSON.stringify(e)))
+      .join(", ");
+    throw new Error(`Failed to parse template ${id}: ${errorMessages}`);
   }
+
+  const composite: CompositeDefinition = {
+    ...result.data,
+    id,
+  };
+
+  // Validate that all node types in the template are registered
+  if (composite.nodes && composite.nodes.length > 0) {
+    try {
+      validateNodeTypesStrict(composite.nodes);
+    } catch (error) {
+      throw new Error(
+        `Invalid node types in template ${id}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+
+  return composite;
 }
 
 /**
@@ -88,7 +97,7 @@ export const compositeTemplates: CompositeTemplate[] = [
  * Get a composite template by ID
  */
 export function getCompositeTemplate(
-  id: string
+  id: string,
 ): CompositeTemplate | undefined {
   return compositeTemplates.find((template) => template.id === id);
 }
@@ -105,7 +114,7 @@ export function getAllCompositeTemplates(): CompositeTemplate[] {
  */
 export function getTemplatesByTag(tag: string): CompositeTemplate[] {
   return compositeTemplates.filter((template) =>
-    template.tags.includes(tag.toLowerCase())
+    template.tags.includes(tag.toLowerCase()),
   );
 }
 
@@ -113,9 +122,9 @@ export function getTemplatesByTag(tag: string): CompositeTemplate[] {
  * Get templates by difficulty
  */
 export function getTemplatesByDifficulty(
-  difficulty: CompositeTemplate["difficulty"]
+  difficulty: CompositeTemplate["difficulty"],
 ): CompositeTemplate[] {
   return compositeTemplates.filter(
-    (template) => template.difficulty === difficulty
+    (template) => template.difficulty === difficulty,
   );
 }

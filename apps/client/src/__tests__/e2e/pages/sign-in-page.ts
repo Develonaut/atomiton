@@ -14,23 +14,14 @@ export class SignInPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.formContainer = page
-      .locator('form, [data-testid="signin-form"]')
-      .first();
-    this.emailInput = page
-      .locator('input[type="email"], input[name="email"], #email')
-      .first();
-    this.passwordInput = page
-      .locator('input[type="password"], input[name="password"], #password')
-      .first();
-    this.signInButton = page
-      .locator('button[type="submit"], [data-testid="signin-button"]')
-      .first();
-    this.createAccountLink = page
-      .locator('a[href*="create-account"], text="Create Account"')
-      .first();
+    // The Login component doesn't use a form element, just input fields
+    this.formContainer = page.locator('text="Sign in to Brainwave"').first();
+    this.emailInput = page.locator('input[type="email"]').first();
+    this.passwordInput = page.locator('input[type="password"]').first();
+    this.signInButton = page.locator('a:has-text("Sign in")').first();
+    this.createAccountLink = page.locator('a[href="/create-account"]').first();
     this.resetPasswordLink = page
-      .locator('a[href*="reset-password"], text="Reset Password"')
+      .locator('a[href="/reset-password"], text="Forgot Password?"')
       .first();
   }
 

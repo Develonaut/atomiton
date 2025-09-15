@@ -8,7 +8,7 @@ function Assets() {
   const nodesByCategory = getNodesByCategory();
 
   return (
-    <>
+    <div data-testid="node-palette">
       {nodesByCategory.map((category, index) => (
         <Accordion
           key={category.name}
@@ -24,7 +24,7 @@ function Assets() {
           onAddNode={addNode}
         />
       ))}
-    </>
+    </div>
   );
 }
 

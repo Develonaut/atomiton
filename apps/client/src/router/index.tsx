@@ -156,6 +156,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "editor",
+    element: (
+      <SuspenseWrapper>
+        <EditorPage />
+      </SuspenseWrapper>
+    ),
+  },
+  {
     path: "editor/:id",
     element: (
       <SuspenseWrapper>

@@ -14,7 +14,7 @@ function LeftSidebar() {
   const [tab, setTab] = useState(tabs[0]);
 
   return (
-    <div className="sidebar left-3 flex flex-col">
+    <div className="sidebar left-3 flex flex-col" data-testid="left-sidebar">
       <Head />
       <div className="px-4 py-3 border-b border-s-01">
         <Tabs items={tabs} value={tab} setValue={setTab} />
