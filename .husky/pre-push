@@ -4,18 +4,40 @@
 
 echo "📤 Pre-push validation..."
 
+# Get the remote we're pushing to (usually origin)
+REMOTE="${1:-origin}"
+URL="$2"
+
 # Check for benchmark regressions (non-blocking warning)
 echo "📊 Checking for performance regressions..."
 
 # Run benchmark comparisons for packages with benchmarks
 echo "📈 Running benchmark comparisons..."
 
-# Run benchmarks for changed packages using turbo
-# We use turbo directly since test:benchmark is not at root level
-pnpm turbo run test:benchmark --filter="[origin/HEAD...HEAD]" 2>/dev/null || true
+# Detect what commits we're about to push
+# This gets the commits that are in HEAD but not in the remote
+CURRENT_BRANCH=$(git branch --show-current)
+REMOTE_REF="$REMOTE/$CURRENT_BRANCH"
 
-# Now check for regressions if benchmark files exist
-CHANGED_PACKAGES=$(git diff --name-only HEAD origin/$(git branch --show-current) 2>/dev/null | grep -E "packages/.*/" | cut -d'/' -f1-3 | sort -u)
+# Check if remote branch exists
+if git show-ref --verify --quiet "refs/remotes/$REMOTE_REF"; then
+  # Remote branch exists, find changes
+  CHANGED_FILES=$(git diff --name-only "$REMOTE_REF"...HEAD 2>/dev/null)
+else
+  # New branch, compare to main/master
+  MAIN_BRANCH=$(git remote show "$REMOTE" | grep 'HEAD branch' | cut -d' ' -f5)
+  MAIN_BRANCH=${MAIN_BRANCH:-main}
+  CHANGED_FILES=$(git diff --name-only "$REMOTE/$MAIN_BRANCH"...HEAD 2>/dev/null)
+fi
+
+# Extract changed packages
+CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E "packages/.*/" | cut -d'/' -f1-3 | sort -u)
+
+# Run benchmarks for changed packages using turbo
+if [ ! -z "$CHANGED_PACKAGES" ]; then
+  echo "Running benchmarks for changed packages..."
+  pnpm turbo run test:benchmark --filter="...[HEAD^]" 2>&1 || true
+fi
 
 if [ ! -z "$CHANGED_PACKAGES" ]; then
   for PACKAGE in $CHANGED_PACKAGES; do
@@ -25,7 +47,7 @@ if [ ! -z "$CHANGED_PACKAGES" ]; then
 
       if [ "$HAS_BENCHMARK" = "yes" ] && [ -f "$PACKAGE/benchmarks/baseline.json" ] && [ -f "$PACKAGE/benchmarks/latest.json" ]; then
         echo "📊 Comparing benchmarks for $PACKAGE..."
-        tsx scripts/benchmark-compare.ts "$PACKAGE/benchmarks/baseline.json" "$PACKAGE/benchmarks/latest.json" 2>/dev/null || {
+        tsx scripts/benchmark-compare.ts "$PACKAGE/benchmarks/baseline.json" "$PACKAGE/benchmarks/latest.json" || {
           echo "⚠️ Performance changes detected in $PACKAGE (non-blocking)"
           echo "💡 Review the comparison report before pushing"
         }
@@ -39,12 +61,12 @@ fi
 echo "🎭 Checking critical E2E tests..."
 
 # Check for changed files in apps/client (main E2E location)
-CLIENT_CHANGED=$(git diff --name-only HEAD origin/$(git branch --show-current) 2>/dev/null | grep -q "apps/client" && echo "yes" || echo "no")
+CLIENT_CHANGED=$(echo "$CHANGED_FILES" | grep -q "apps/client" && echo "yes" || echo "no")
 
 if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; then
   echo "Running critical user flow tests for client..."
   # Use the standard test:e2e script with critical tag filter
-  timeout 120 pnpm test:e2e --grep="@critical" 2>/dev/null || {
+  timeout 120 pnpm test:e2e --grep="@critical" || {
     echo "⚠️ Some E2E tests failed (non-blocking)"
     echo "💡 Consider fixing before push"
   }
@@ -58,7 +80,7 @@ if [ ! -z "$CHANGED_PACKAGES" ]; then
 
       if [ "$HAS_E2E" = "yes" ] && [ -f "$PACKAGE/playwright.config.ts" ]; then
         echo "Running E2E tests for $PACKAGE..."
-        (cd "$PACKAGE" && timeout 60 pnpm test:e2e 2>/dev/null) || {
+        (cd "$PACKAGE" && timeout 60 pnpm test:e2e) || {
           echo "⚠️ E2E tests for $PACKAGE had issues (non-blocking)"
         }
       fi
