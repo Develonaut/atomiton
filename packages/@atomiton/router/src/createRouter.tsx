@@ -2,6 +2,7 @@ import { type AnyRoute, type Router } from "@tanstack/react-router";
 import { Link } from "./components/Link";
 import {
   createUseCurrentRoute,
+  createUseLocation,
   createUseNavigate,
   createUseParams,
   createUsePathname,
@@ -62,6 +63,7 @@ export function createRouter<TRoutes extends readonly RouteConfig[]>(
   const useCurrentRoute = createUseCurrentRoute();
   const useParams = createUseParams();
   const usePathname = createUsePathname();
+  const useLocation = createUseLocation();
 
   // Initialize router with navigation store
   navigationStore.setRouter(router as unknown as Router<AnyRoute, never>);
@@ -77,6 +79,7 @@ export function createRouter<TRoutes extends readonly RouteConfig[]>(
     useCurrentRoute,
     useParams,
     usePathname,
+    useLocation,
     Link,
     RouterProvider,
   };

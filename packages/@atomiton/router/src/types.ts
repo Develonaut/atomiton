@@ -34,12 +34,12 @@ export type ExtractParams<T extends string> = RouteParams<T> &
 
 export type NavigationMethod<TPath extends string> =
   keyof ExtractParams<TPath> extends never
-    ? () => void
-    : (params: ExtractParams<TPath>) => void;
+    ? (options?: NavigationOptions) => void
+    : (params: ExtractParams<TPath>, options?: NavigationOptions) => void;
 
 export type NavigationMethods<TRoutes extends readonly RouteConfig[]> = {
-  [K in TRoutes[number]["name"] as `to${Capitalize<K>}`]: NavigationMethod<
-    Extract<TRoutes[number], { name: K }>["path"]
+  [K in TRoutes[number] as `to${Capitalize<K["name"]>}`]: NavigationMethod<
+    K["path"]
   >;
 };
 
@@ -61,15 +61,21 @@ export type RouterInstance<TRoutes extends readonly RouteConfig[]> = {
   useCurrentRoute: () => AnyRoute | undefined;
   useParams: <T = Record<string, string>>() => T;
   usePathname: () => string;
+  useLocation: () => {
+    pathname: string;
+    state?: Record<string, unknown>;
+    search?: Record<string, unknown>;
+    hash?: string;
+  };
   Link: ComponentType<LinkProps>;
   RouterProvider: ComponentType;
 };
 
 export type NavigationOptions = {
   replace?: boolean;
-  state?: unknown;
   search?: Record<string, unknown>;
   hash?: string;
+  state?: Record<string, unknown>;
 };
 
 export type LinkProps = {

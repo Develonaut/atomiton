@@ -71,17 +71,33 @@ export const createNavigationModule = (
       return;
     }
 
+    if (!path || typeof path !== "string") {
+      console.error("Invalid path provided to navigate:", path);
+      return;
+    }
+
     store.setState((state) => {
       state.isNavigating = true;
     });
 
-    router.navigate({
-      to: path,
-      search: options?.search,
-      hash: options?.hash,
-      replace: options?.replace,
-      state: options?.state as undefined,
-    });
+    try {
+      // Build navigation options with proper typing
+      router.navigate({
+        to: path,
+        search: options?.search,
+        hash: options?.hash,
+        replace: options?.replace,
+        // Note: TanStack Router expects state in a specific format
+        // We pass it as-is but it may not persist as expected
+        ...(options?.state && { state: options.state }),
+      } as Parameters<typeof router.navigate>[0]);
+    } catch (error) {
+      console.error("Navigation failed:", error);
+      store.setState((state) => {
+        state.isNavigating = false;
+      });
+      throw error;
+    }
   },
 
   replace: (path: string, options?: NavigationOptions) => {
@@ -91,17 +107,33 @@ export const createNavigationModule = (
       return;
     }
 
+    if (!path || typeof path !== "string") {
+      console.error("Invalid path provided to replace:", path);
+      return;
+    }
+
     store.setState((state) => {
       state.isNavigating = true;
     });
 
-    router.navigate({
-      to: path,
-      search: options?.search,
-      hash: options?.hash,
-      replace: true,
-      state: options?.state as undefined,
-    });
+    try {
+      // Build navigation options with proper typing
+      router.navigate({
+        to: path,
+        search: options?.search,
+        hash: options?.hash,
+        replace: true,
+        // Note: TanStack Router expects state in a specific format
+        // We pass it as-is but it may not persist as expected
+        ...(options?.state && { state: options.state }),
+      } as Parameters<typeof router.navigate>[0]);
+    } catch (error) {
+      console.error("Replace navigation failed:", error);
+      store.setState((state) => {
+        state.isNavigating = false;
+      });
+      throw error;
+    }
   },
 
   updateNavigationState: (updates) => {

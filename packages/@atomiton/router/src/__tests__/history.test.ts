@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createNavigationStore } from "../store";
-import type { Router } from "@tanstack/react-router";
+import type { AnyRouter } from "@tanstack/react-router";
 
 describe("Router History Navigation", () => {
   let store: ReturnType<typeof createNavigationStore>;
-  let mockRouter: Partial<Router<any, never>>;
+  let mockRouter: Partial<AnyRouter>;
   let historyGoSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -15,14 +15,25 @@ describe("Router History Navigation", () => {
         go: historyGoSpy,
         back: vi.fn(() => historyGoSpy(-1)),
         forward: vi.fn(() => historyGoSpy(1)),
-      } as any,
+      } as const,
       state: {
         location: {
           pathname: "/",
           search: {},
           hash: "",
+          href: "/",
+          searchStr: "",
+          state: { __TSR_index: 0 },
         },
-      } as any,
+        status: "idle",
+        statusCode: 200,
+        loadedAt: Date.now(),
+        isLoading: false,
+        isTransitioning: false,
+        matches: [],
+        pendingMatches: [],
+        cachedMatches: [],
+      } as const,
       subscribe: vi.fn(),
     };
 
@@ -30,7 +41,7 @@ describe("Router History Navigation", () => {
     store = createNavigationStore(false);
 
     // Initialize with mock router
-    store.setRouter(mockRouter as Router<any, never>);
+    store.setRouter(mockRouter as Parameters<typeof store.setRouter>[0]);
   });
 
   describe("back()", () => {

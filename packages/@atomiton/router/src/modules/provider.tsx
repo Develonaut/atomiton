@@ -11,15 +11,17 @@
 
 import {
   RouterProvider as TanStackRouterProvider,
-  type Router,
+  type AnyRouter,
 } from "@tanstack/react-router";
 import React from "react";
 
 /**
  * Creates the RouterProvider component
  */
-export const createRouterProvider = (router: Router<any, any>) => {
-  return () => {
+export const createRouterProvider = (router: AnyRouter) => {
+  const RouterProvider = () => {
     return <TanStackRouterProvider router={router} />;
   };
+  RouterProvider.displayName = "RouterProvider";
+  return RouterProvider;
 };

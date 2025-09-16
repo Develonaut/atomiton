@@ -34,35 +34,65 @@ export const generateNavigationMethods = <
       `to${capitalize(route.name)}` as keyof NavigationMethods<TRoutes>;
 
     if (route.navigator) {
-      // Use custom navigator if provided
+      // Use custom navigator if provided - last arg can be options
       (navigationMethods as Record<string, (...args: unknown[]) => void>)[
         methodName
       ] = (...args: unknown[]) => {
-        const path = route.navigator!(...args);
-        navigate(path);
+        // Check if last argument is navigation options
+        const lastArg = args[args.length - 1];
+        let options: NavigationOptions | undefined;
+        let navigatorArgs = args;
+
+        if (lastArg && typeof lastArg === "object" && !Array.isArray(lastArg)) {
+          // Check if it looks like NavigationOptions
+          const possibleOptions = lastArg as Record<string, unknown>;
+          if (
+            "state" in possibleOptions ||
+            "replace" in possibleOptions ||
+            "search" in possibleOptions ||
+            "hash" in possibleOptions
+          ) {
+            options = possibleOptions as NavigationOptions;
+            navigatorArgs = args.slice(0, -1);
+          }
+        }
+
+        const path = route.navigator!(...navigatorArgs);
+        navigate(path, options);
       };
     } else {
       // Auto-generate navigator based on path params
       const { required, optional } = extractParams(route.path);
 
       if (required.length === 0 && optional.length === 0) {
-        // No params
-        (navigationMethods as Record<string, () => void>)[methodName] = () => {
-          navigate(route.path);
-        };
-      } else {
-        // Has params
+        // No params - accept optional navigation options
         (
           navigationMethods as Record<
             string,
-            (params: Record<string, unknown>) => void
+            (options?: NavigationOptions) => void
           >
-        )[methodName] = (params: Record<string, unknown>) => {
+        )[methodName] = (options?: NavigationOptions) => {
+          navigate(route.path, options);
+        };
+      } else {
+        // Has params - accept params and optional navigation options
+        (
+          navigationMethods as Record<
+            string,
+            (
+              params: Record<string, unknown>,
+              options?: NavigationOptions,
+            ) => void
+          >
+        )[methodName] = (
+          params: Record<string, unknown>,
+          options?: NavigationOptions,
+        ) => {
           const path = buildPath(
             route.path,
             params as Record<string, string | number | boolean>,
           );
-          navigate(path);
+          navigate(path, options);
         };
       }
     }

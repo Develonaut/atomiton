@@ -15,7 +15,7 @@ import {
   createRoute,
   createRouter as createTanStackRouter,
   Outlet,
-  type Router,
+  type AnyRouter,
 } from "@tanstack/react-router";
 import React from "react";
 import type { RouteConfig, RouteComponent } from "../types";
@@ -107,14 +107,20 @@ export const createRouteFromConfig = (
     getParentRoute: () => rootRoute,
     path: tanStackPath,
     component: RouteComponent,
-    errorComponent: (errorComponent || defaultErrorComponent) as undefined,
+    errorComponent: errorComponent || defaultErrorComponent,
     loader: async () => {
       // Preload the component
-      const cached = componentCache.get(path);
-      if (!cached) {
-        const result = component();
-        componentCache.set(path, result);
-        await result;
+      try {
+        const cached = componentCache.get(path);
+        if (!cached) {
+          const result = component();
+          if (result && typeof result === "object" && "then" in result) {
+            componentCache.set(path, result);
+            await result;
+          }
+        }
+      } catch {
+        // Silently handle loading errors
       }
       return {};
     },
@@ -154,11 +160,11 @@ export const createTanStackRouterInstance = (
   routeTree: ReturnType<typeof createRoutesFromConfig>["routeTree"],
   defaultErrorComponent?: React.ComponentType,
   defaultPendingComponent?: React.ComponentType,
-): Router<any, any> => {
+): AnyRouter => {
   return createTanStackRouter({
     routeTree,
     defaultPreload: "intent",
-    defaultErrorComponent: defaultErrorComponent as undefined,
-    defaultPendingComponent: defaultPendingComponent as undefined,
+    defaultErrorComponent,
+    defaultPendingComponent,
   });
 };

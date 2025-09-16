@@ -6,11 +6,8 @@
  */
 
 import { createStore } from "@atomiton/store";
-import { createHistoryModule, type HistoryActions } from "./modules/history";
-import {
-  createNavigationModule,
-  type NavigationActions,
-} from "./modules/navigation";
+import { createHistoryModule } from "./modules/history";
+import { createNavigationModule } from "./modules/navigation";
 import { createInitialState } from "./modules/state";
 import type { BaseStore, RouterStore, RouterStoreState } from "./types";
 

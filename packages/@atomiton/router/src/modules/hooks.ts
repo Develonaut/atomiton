@@ -60,3 +60,13 @@ export const createUsePathname = () => {
     return routerState.location.pathname;
   };
 };
+
+/**
+ * Creates the useLocation hook
+ */
+export const createUseLocation = () => {
+  return () => {
+    const routerState = useRouterState();
+    return routerState.location;
+  };
+};
