@@ -60,6 +60,7 @@ export type RouterInstance<TRoutes extends readonly RouteConfig[]> = {
   };
   useCurrentRoute: () => AnyRoute | undefined;
   useParams: <T = Record<string, string>>() => T;
+  usePathname: () => string;
   Link: ComponentType<LinkProps>;
   RouterProvider: ComponentType;
 };

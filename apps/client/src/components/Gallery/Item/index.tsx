@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import Image from "@/components/Image";
 import { Tooltip } from "react-tooltip";
 import Icon from "@/components/Icon";
@@ -39,7 +39,7 @@ function Item({ value }: Props) {
         loaded && "opacity-100"
       }`}
     >
-      <Link href="/explore/details">
+      <Link to="/explore/details">
         <Image
           src={value.image}
           className="inline-block align-top w-full h-auto"

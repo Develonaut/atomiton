@@ -1,31 +1,30 @@
 import React from "react";
-import { useRouteError, isRouteErrorResponse, Link } from "react-router-dom";
+
+// Temporary Link component to avoid circular imports
+const Link = ({
+  to,
+  className,
+  children,
+  ...props
+}: {
+  to: string;
+  className?: string;
+  children: React.ReactNode;
+}) => (
+  <a href={to} className={className} {...props}>
+    {children}
+  </a>
+);
+
+export function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-lg">Loading...</div>
+    </div>
+  );
+}
 
 export function RouteErrorBoundary() {
-  const error = useRouteError();
-
-  if (isRouteErrorResponse(error)) {
-    if (error.status === 404) {
-      return <NotFoundError />;
-    }
-
-    if (error.status === 401) {
-      return <UnauthorizedError />;
-    }
-
-    if (error.status === 503) {
-      return <ServiceUnavailableError />;
-    }
-
-    return (
-      <GenericRouteError status={error.status} statusText={error.statusText} />
-    );
-  }
-
-  if (error instanceof Error) {
-    return <ApplicationError error={error} />;
-  }
-
   return <UnknownError />;
 }
 

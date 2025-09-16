@@ -1,4 +1,4 @@
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import NavLink from "./NavLink";
@@ -20,7 +20,7 @@ function Sidebar({ visible, onClose }: Props) {
       }`}
     >
       <div className="p-6 max-lg:flex">
-        <Link href="/">
+        <Link to="/">
           <Image
             className="opacity-100"
             src="/images/logo-text.svg"

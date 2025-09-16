@@ -4,7 +4,7 @@ import Toolbar from "@/components/Toolbar";
 import { useBlueprint } from "@/stores/blueprint/hooks";
 import { Canvas, Editor } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
-import { useParams } from "react-router-dom";
+import { useParams } from "@/router";
 
 function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();

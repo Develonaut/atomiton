@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import Icon from "@/components/Icon";
 
 type CommonProps = {

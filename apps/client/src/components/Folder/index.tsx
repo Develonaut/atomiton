@@ -1,5 +1,5 @@
-import Link from "@/router/Link";
-import { usePathname } from "@/router/hooks";
+import { Link } from "@/router";
+import { usePathname } from "@/router";
 
 type Props = {
   item: {
@@ -31,7 +31,7 @@ function Folder({ item }: Props) {
       className={`group relative flex items-center p-0.75 rounded-xl text-body-md-str border transition-colors hover:bg-surface-03 ${
         isActive(item.href) ? "bg-surface-03 border-s-01" : "border-transparent"
       }`}
-      href={item.href}
+      to={item.href}
     >
       <div
         className={`flex justify-center items-center size-8 mr-3 rounded-lg transition ${

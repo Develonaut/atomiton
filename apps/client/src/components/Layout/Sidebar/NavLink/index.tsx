@@ -1,5 +1,5 @@
-import Link from "@/router/Link";
-import { usePathname } from "@/router/hooks";
+import { Link } from "@/router";
+import { usePathname } from "@/router";
 import Icon from "@/components/Icon";
 
 type NavLinkProps = {

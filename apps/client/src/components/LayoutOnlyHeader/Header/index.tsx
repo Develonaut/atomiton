@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { usePathname } from "@/router/hooks";
-import Link from "@/router/Link";
+import { usePathname } from "@/router";
+import { Link } from "@/router";
 import Image from "@/components/Image";
 import Notifications from "@/components/Notifications";
 import User from "@/components/User";
@@ -33,7 +33,7 @@ function Header({ className }: Props) {
           : "right-0"
       } ${className || ""}`}
     >
-      <Link href="/">
+      <Link to="/">
         <Image
           className="opacity-100"
           src="/images/logo-text.svg"

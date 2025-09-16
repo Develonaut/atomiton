@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import Button from "@/components/Button";
 import Login from "@/components/Login";
 import Image from "@/components/Image";

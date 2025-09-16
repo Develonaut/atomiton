@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@/router";
 import ButtonAdapter from "./ButtonAdapter";
 import Login from "@/components/Login";
 import Image from "@/components/Image";

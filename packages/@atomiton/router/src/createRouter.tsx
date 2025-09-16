@@ -4,6 +4,7 @@ import {
   createUseCurrentRoute,
   createUseNavigate,
   createUseParams,
+  createUsePathname,
   createUseRouter,
 } from "./modules/hooks";
 import {
@@ -60,6 +61,7 @@ export function createRouter<TRoutes extends readonly RouteConfig[]>(
   const useNavigate = createUseNavigate(navigate);
   const useCurrentRoute = createUseCurrentRoute();
   const useParams = createUseParams();
+  const usePathname = createUsePathname();
 
   // Initialize router with navigation store
   navigationStore.setRouter(router as unknown as Router<AnyRoute, never>);
@@ -74,6 +76,7 @@ export function createRouter<TRoutes extends readonly RouteConfig[]>(
     useNavigate,
     useCurrentRoute,
     useParams,
+    usePathname,
     Link,
     RouterProvider,
   };

@@ -1,4 +1,4 @@
-import { useRouter } from "@/router/hooks";
+import { useRouter } from "@/router";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Icon from "@/components/Icon";
 import VideoPlayer from "@/components/VideoPlayer";

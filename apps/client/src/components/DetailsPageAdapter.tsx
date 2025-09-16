@@ -1,6 +1,6 @@
 // Vite-compatible adapter for DetailsPage
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/router";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Icon from "@/components/Icon";
 import VideoPlayer from "@/components/VideoPlayer";
@@ -17,7 +17,7 @@ function DetailsPageAdapter() {
         <div className="relative w-[calc(100%-40rem)] pb-16 max-[1940px]:w-[calc(100%-31rem)] max-xl:w-[calc(100%-25rem)] max-lg:w-full max-md:pb-24">
           <button
             className="absolute top-5 right-5 z-2 size-11 rounded-xl bg-surface-01 border border-s-02 transition-colors hover:bg-surface-03 max-md:top-3"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate.back()}
           >
             <Icon className="!size-4 fill-primary" name="close" />
           </button>

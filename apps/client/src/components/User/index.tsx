@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
@@ -83,7 +83,7 @@ function User() {
                   {item.title}
                 </a>
               ) : item.url ? (
-                <Link className={styleItem} href={item.url}>
+                <Link className={styleItem} to={item.url}>
                   <Icon className="fill-inherit" name={item.icon} />
                   {item.title}
                 </Link>

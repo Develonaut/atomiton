@@ -1,4 +1,4 @@
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import Image from "@/components/Image";
 
 type Props = {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { usePathname } from "@/router/hooks";
-import Link from "@/router/Link";
+import { usePathname } from "@/router";
+import { Link } from "@/router";
 import AnimateHeight from "react-animate-height";
 import Icon from "@/components/Icon";
 
@@ -34,7 +34,7 @@ function Dropdown({ value }: DropdownProps) {
         onClick={() => !value.href && setHeight(height === 0 ? "auto" : 0)}
       >
         {value.href && (
-          <Link className="absolute inset-0 z-2" href={value.href}>
+          <Link className="absolute inset-0 z-2" to={value.href}>
             <span className="sr-only">{value.title}</span>
           </Link>
         )}

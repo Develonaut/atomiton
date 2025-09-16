@@ -1,4 +1,4 @@
-import Link from "@/router/Link";
+import { Link } from "@/router";
 import Icon from "@/components/Icon";
 
 type FieldProps = {
@@ -33,7 +33,7 @@ function Field({
           {forgotPassword && (
             <Link
               className="text-body-sm text-secondary transition-colors hover:text-primary"
-              href="/reset-password"
+              to="/reset-password"
             >
               Forgot password?
             </Link>

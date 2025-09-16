@@ -50,3 +50,13 @@ export const createUseParams = () => {
     return useTanStackParams({ strict: false }) as T;
   };
 };
+
+/**
+ * Creates the usePathname hook
+ */
+export const createUsePathname = () => {
+  return (): string => {
+    const routerState = useRouterState();
+    return routerState.location.pathname;
+  };
+};
