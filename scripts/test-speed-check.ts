@@ -16,6 +16,25 @@ interface TestResult {
   status?: string;
 }
 
+interface VitestAssertion {
+  fullName: string;
+  title: string;
+  status: string;
+  duration: number;
+}
+
+interface VitestTestResult {
+  name: string;
+  startTime: number;
+  endTime: number;
+  assertionResults: VitestAssertion[];
+}
+
+interface VitestReport {
+  startTime: number;
+  testResults: VitestTestResult[];
+}
+
 interface TestReport {
   totalDuration?: number;
   duration?: number;
@@ -46,7 +65,7 @@ const colors = {
 };
 
 function formatDuration(ms: number): string {
-  return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
+  return ms < 1000 ? `${ms.toFixed(3)}ms` : `${(ms / 1000).toFixed(3)}s`;
 }
 
 function getPerformanceGrade(percentage: number): string {
@@ -54,6 +73,34 @@ function getPerformanceGrade(percentage: number): string {
   if (percentage > 60) return "👍 Good";
   if (percentage > 40) return "✅ Great";
   return "🏆 Excellent";
+}
+
+function parseVitestReport(data: any): {
+  totalDuration: number;
+  tests: TestResult[];
+} {
+  if (data.testResults && Array.isArray(data.testResults)) {
+    let totalDuration = 0;
+    const tests: TestResult[] = [];
+
+    data.testResults.forEach((testResult: VitestTestResult) => {
+      const testDuration = testResult.endTime - testResult.startTime;
+      totalDuration += testDuration;
+
+      testResult.assertionResults?.forEach((assertion: VitestAssertion) => {
+        tests.push({
+          name: assertion.fullName,
+          file: testResult.name,
+          duration: assertion.duration,
+          status: assertion.status,
+        });
+      });
+    });
+
+    return { totalDuration, tests };
+  }
+
+  return { totalDuration: 0, tests: [] };
 }
 
 function checkTestSpeed(
@@ -65,7 +112,7 @@ function checkTestSpeed(
     process.exit(1);
   }
 
-  const report: TestReport = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
+  const rawData = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
   const limit = LIMITS[type];
 
   if (!limit) {
@@ -74,7 +121,18 @@ function checkTestSpeed(
     process.exit(1);
   }
 
-  const totalDuration = report.totalDuration ?? report.duration ?? 0;
+  let totalDuration: number;
+  let tests: TestResult[] = [];
+
+  if (rawData.testResults) {
+    const parsed = parseVitestReport(rawData);
+    totalDuration = parsed.totalDuration;
+    tests = parsed.tests;
+  } else {
+    const report = rawData as TestReport;
+    totalDuration = report.totalDuration ?? report.duration ?? 0;
+    tests = report.tests ?? [];
+  }
 
   if (totalDuration > limit) {
     console.error(`\n❌ ${type.toUpperCase()} tests exceeded time limit!`);
@@ -83,8 +141,8 @@ function checkTestSpeed(
     console.error(`   Exceeded by: ${formatDuration(totalDuration - limit)}`);
 
     // Show slowest tests if available
-    if (report.tests?.length) {
-      const slowTests = report.tests
+    if (tests?.length) {
+      const slowTests = tests
         .filter((t) => t.duration)
         .sort((a, b) => b.duration - a.duration)
         .slice(0, 5);

@@ -51,6 +51,23 @@ interface TestPerformance {
   limit: number;
 }
 
+interface TestAverages {
+  unit: number;
+  smoke: number;
+  integration: number;
+  benchmark: number;
+}
+
+interface VitestTestResult {
+  name: string;
+  startTime: number;
+  endTime: number;
+  assertionResults: Array<{
+    duration: number;
+    status: string;
+  }>;
+}
+
 interface TestResults {
   speed: string[];
   benchmarks: string[];
@@ -134,8 +151,8 @@ function drawProgressBar(
 }
 
 function formatDuration(ms: number): string {
-  if (ms < 1000) return `${ms}ms`;
-  return `${(ms / 1000).toFixed(1)}s`;
+  if (ms < 1000) return `${ms.toFixed(3)}ms`;
+  return `${(ms / 1000).toFixed(3)}s`;
 }
 
 function getTestTypeIcon(type: string): string {
@@ -151,6 +168,78 @@ function getTestTypeIcon(type: string): string {
     default:
       return "📋";
   }
+}
+
+function parseVitestReport(
+  reportPath: string,
+): { totalDuration: number; avgDuration: number } | null {
+  try {
+    const report = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
+    if (report.testResults && Array.isArray(report.testResults)) {
+      let totalDuration = 0;
+      let testCount = 0;
+
+      report.testResults.forEach((testResult: VitestTestResult) => {
+        const testDuration = testResult.endTime - testResult.startTime;
+        totalDuration += testDuration;
+        testCount += testResult.assertionResults?.length || 0;
+      });
+
+      return {
+        totalDuration,
+        avgDuration: testCount > 0 ? totalDuration / testCount : 0,
+      };
+    }
+  } catch (error) {
+    // Ignore parsing errors
+  }
+  return null;
+}
+
+function calculateTestAverages(packages: Package[]): TestAverages {
+  const averages: TestAverages = {
+    unit: 0,
+    smoke: 0,
+    integration: 0,
+    benchmark: 0,
+  };
+
+  let counts = {
+    unit: 0,
+    smoke: 0,
+    integration: 0,
+    benchmark: 0,
+  };
+
+  packages.forEach((pkg) => {
+    // Check for smoke test results
+    const smokeReportPath = path.join(
+      pkg.path,
+      "test-results",
+      "speed-report.json",
+    );
+    if (fs.existsSync(smokeReportPath)) {
+      const smokeResult = parseVitestReport(smokeReportPath);
+      if (smokeResult) {
+        averages.smoke += smokeResult.totalDuration;
+        counts.smoke++;
+      }
+    }
+
+    // TODO: Add unit test result parsing when we implement that
+    // TODO: Add integration test result parsing when we implement that
+    // TODO: Add benchmark test result parsing when we implement that
+  });
+
+  // Calculate final averages
+  if (counts.smoke > 0) averages.smoke = averages.smoke / counts.smoke;
+  if (counts.unit > 0) averages.unit = averages.unit / counts.unit;
+  if (counts.integration > 0)
+    averages.integration = averages.integration / counts.integration;
+  if (counts.benchmark > 0)
+    averages.benchmark = averages.benchmark / counts.benchmark;
+
+  return averages;
 }
 
 function displayDashboard(): void {
@@ -206,17 +295,14 @@ function displayDashboard(): void {
         "speed-report.json",
       );
       if (fs.existsSync(reportPath)) {
-        try {
-          const report = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
-          if (report.smoke?.duration) {
-            smokeData.push({
-              name: pkg.name,
-              duration: report.smoke.duration,
-              limit: 5000,
-            });
-          }
-        } catch {
-          // Use placeholder if report can't be read
+        const result = parseVitestReport(reportPath);
+        if (result) {
+          smokeData.push({
+            name: pkg.name,
+            duration: result.totalDuration,
+            limit: 5000,
+          });
+        } else {
           smokeData.push({
             name: pkg.name,
             duration: 0,
@@ -274,6 +360,68 @@ function displayDashboard(): void {
   ];
 
   chart.forEach((line) => console.log(colors.gray + line + colors.reset));
+
+  // Average Test Times Section
+  console.log(colors.bold + "\n⏱️  Average Test Times by Type" + colors.reset);
+  console.log("─".repeat(45));
+
+  const averages = calculateTestAverages(sortedPackages);
+
+  const testTypes = [
+    {
+      name: "Smoke Tests",
+      icon: "🔥",
+      avg: averages.smoke,
+      limit: 5000,
+      color: colors.red,
+    },
+    {
+      name: "Unit Tests",
+      icon: "🧪",
+      avg: averages.unit,
+      limit: 100,
+      color: colors.green,
+    },
+    {
+      name: "Integration Tests",
+      icon: "🔗",
+      avg: averages.integration,
+      limit: 30000,
+      color: colors.blue,
+    },
+    {
+      name: "Benchmark Tests",
+      icon: "📊",
+      avg: averages.benchmark,
+      limit: 10000,
+      color: colors.magenta,
+    },
+  ];
+
+  testTypes.forEach(({ name, icon, avg, limit, color }) => {
+    if (avg > 0) {
+      const percentage = (avg / limit) * 100;
+      let status = "✅";
+      let statusColor = colors.green;
+
+      if (avg > limit) {
+        status = "❌";
+        statusColor = colors.red;
+      } else if (percentage > 80) {
+        status = "⚠️";
+        statusColor = colors.yellow;
+      }
+
+      const bar = drawProgressBar(avg, limit, 15);
+      console.log(
+        `${icon} ${name.padEnd(18)} ${bar} ${statusColor}${formatDuration(avg).padStart(8)} ${status}${colors.reset}`,
+      );
+    } else {
+      console.log(
+        `${icon} ${name.padEnd(18)} ${colors.gray}No data yet${colors.reset}`,
+      );
+    }
+  });
 
   // Recent Test Runs (placeholder for future implementation)
   console.log(colors.bold + "\n🏃 Recent Test Runs" + colors.reset);

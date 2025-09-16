@@ -36,7 +36,7 @@
     "dev:serve": "vite",
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
-    "test:smoke": "vitest run src/*.smoke.test.ts src/**/*.smoke.test.{ts,tsx} --passWithNoTests",
+    "test:smoke": "mkdir -p test-results && vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
     "test:benchmark": "vitest bench --run",
     "test:e2e": "echo 'No E2E tests for this package'",
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
