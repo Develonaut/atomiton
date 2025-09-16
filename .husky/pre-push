@@ -66,9 +66,12 @@ CLIENT_CHANGED=$(echo "$CHANGED_FILES" | grep -q "apps/client" && echo "yes" || 
 if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; then
   echo "Running critical user flow tests for client..."
   # Use the standard test:e2e script with critical tag filter
-  timeout 120 pnpm test:e2e --grep="@critical" || {
-    echo "⚠️ Some E2E tests failed (non-blocking)"
-    echo "💡 Consider fixing before push"
+  # Note: Will show "No tests found" if no @critical tests exist
+  timeout 120 pnpm test:e2e --grep="@critical" 2>&1 | grep -v "Error: No tests found" || {
+    if [ $? -ne 0 ]; then
+      echo "⚠️ Some E2E tests failed (non-blocking)"
+      echo "💡 Consider fixing before push"
+    fi
   }
 fi
 

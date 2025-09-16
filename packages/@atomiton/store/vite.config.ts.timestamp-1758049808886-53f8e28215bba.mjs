@@ -1,0 +1,20 @@
+// vite.config.ts
+import { defineLibraryConfig } from "file:///Users/Ryan/Code/atomiton/packages/@atomiton/vite-config/dist/index.js";
+var vite_config_default = defineLibraryConfig({
+  name: "AtomitonStore",
+  external: ["immer", "zustand"],
+  chunks: {
+    stores: "src/stores/",
+    hooks: "src/hooks/",
+    utils: "src/utils/"
+  },
+  additionalConfig: {
+    define: {
+      __DEV__: process.env.NODE_ENV !== "production"
+    }
+  }
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcudHMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvVXNlcnMvUnlhbi9Db2RlL2F0b21pdG9uL3BhY2thZ2VzL0BhdG9taXRvbi9zdG9yZVwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiL1VzZXJzL1J5YW4vQ29kZS9hdG9taXRvbi9wYWNrYWdlcy9AYXRvbWl0b24vc3RvcmUvdml0ZS5jb25maWcudHNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL1VzZXJzL1J5YW4vQ29kZS9hdG9taXRvbi9wYWNrYWdlcy9AYXRvbWl0b24vc3RvcmUvdml0ZS5jb25maWcudHNcIjtpbXBvcnQgeyBkZWZpbmVMaWJyYXJ5Q29uZmlnIH0gZnJvbSBcIkBhdG9taXRvbi92aXRlLWNvbmZpZ1wiO1xuXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVMaWJyYXJ5Q29uZmlnKHtcbiAgbmFtZTogXCJBdG9taXRvblN0b3JlXCIsXG4gIGV4dGVybmFsOiBbXCJpbW1lclwiLCBcInp1c3RhbmRcIl0sXG4gIGNodW5rczoge1xuICAgIHN0b3JlczogXCJzcmMvc3RvcmVzL1wiLFxuICAgIGhvb2tzOiBcInNyYy9ob29rcy9cIixcbiAgICB1dGlsczogXCJzcmMvdXRpbHMvXCIsXG4gIH0sXG4gIGFkZGl0aW9uYWxDb25maWc6IHtcbiAgICBkZWZpbmU6IHtcbiAgICAgIF9fREVWX186IHByb2Nlc3MuZW52Lk5PREVfRU5WICE9PSBcInByb2R1Y3Rpb25cIixcbiAgICB9LFxuICB9LFxufSk7Il0sCiAgIm1hcHBpbmdzIjogIjtBQUF3VSxTQUFTLDJCQUEyQjtBQUU1VyxJQUFPLHNCQUFRLG9CQUFvQjtBQUFBLEVBQ2pDLE1BQU07QUFBQSxFQUNOLFVBQVUsQ0FBQyxTQUFTLFNBQVM7QUFBQSxFQUM3QixRQUFRO0FBQUEsSUFDTixRQUFRO0FBQUEsSUFDUixPQUFPO0FBQUEsSUFDUCxPQUFPO0FBQUEsRUFDVDtBQUFBLEVBQ0Esa0JBQWtCO0FBQUEsSUFDaEIsUUFBUTtBQUFBLE1BQ04sU0FBUyxRQUFRLElBQUksYUFBYTtBQUFBLElBQ3BDO0FBQUEsRUFDRjtBQUNGLENBQUM7IiwKICAibmFtZXMiOiBbXQp9Cg==
