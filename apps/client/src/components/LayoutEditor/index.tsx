@@ -1,17 +1,47 @@
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar";
 import Toolbar from "@/components/Toolbar";
-import { useBlueprint } from "@/stores/blueprint/hooks";
+import { useLocation, useParams } from "@/router";
 import { Canvas, Editor } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
-import { useParams } from "@/router";
+import { useCallback } from "react";
 
 function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();
-  const { initialNodes, initialEdges, error, onSave } = useBlueprint(id);
+  const { state: locationState } = useLocation();
 
-  // Show error if blueprint can't be loaded
-  if (error && id) {
+  // Validate and sanitize location state
+  const initialNodes = Array.isArray(locationState?.defaultNodes)
+    ? locationState.defaultNodes
+    : [];
+  const initialEdges = Array.isArray(locationState?.defaultEdges)
+    ? locationState.defaultEdges
+    : [];
+
+  /**
+   * Handles saving the editor state
+   * @param editorState - The current editor state to save
+   */
+  const onSave = useCallback(
+    (editorState: unknown) => {
+      if (!id) {
+        console.error("Cannot save: No blueprint ID provided");
+        return;
+      }
+
+      if (!editorState || typeof editorState !== "object") {
+        console.error("Cannot save: Invalid editor state");
+        return;
+      }
+
+      // TODO: Implement save functionality
+      // blueprintStore.updateBlueprint(id, editorState);
+    },
+    [id],
+  );
+
+  // If no ID is provided, show an error message
+  if (!id) {
     return (
       <Box className="relative min-h-screen bg-surface-02 flex items-center justify-center">
         <div className="text-center">
@@ -32,7 +62,7 @@ function LayoutEditor() {
       <Editor>
         <Box className="absolute inset-0">
           <Box className="relative w-full h-full">
-            <Canvas nodes={initialNodes} edges={initialEdges}>
+            <Canvas key={id} nodes={initialNodes} edges={initialEdges}>
               <Canvas.Grid variant="dots" gap={12} size={1} />
               <Canvas.Minimap
                 placement="bottom-right"
