@@ -2,9 +2,9 @@ import {
   createRouter as createTanStackRouter,
   Link,
   RouterProvider,
-  useRouter,
-  useParams,
   useLocation,
+  useParams,
+  useRouter,
 } from "@tanstack/react-router";
 import React from "react";
 import { createRootRouteInstance, createTanStackRoutes } from "./routeFactory";
@@ -26,6 +26,7 @@ export function createRouter(options: CreateRouterOptions) {
   const router = createTanStackRouter({
     routeTree,
     defaultPreload: "intent",
+    defaultPreloadDelay: 50, // Small delay to ensure hover is intentional
   });
 
   // Return the expected API structure that the client expects
@@ -55,8 +56,7 @@ export function createRouter(options: CreateRouterOptions) {
         hash: location.hash,
       };
     },
-    Link: (props: Parameters<typeof Link>[0]) =>
-      React.createElement(Link, props),
+    Link,
     RouterProvider: () => React.createElement(RouterProvider, { router }),
   };
 }
