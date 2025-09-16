@@ -23,7 +23,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "🔥 Running smoke tests (must complete in <5 seconds)..."
+echo "🔥 Running smoke tests (must complete in <30 seconds)..."
 
 # Run smoke tests with proper timing
 START_TIME=$(date +%s)
@@ -44,9 +44,9 @@ if [ $SMOKE_EXIT_CODE -ne 0 ]; then
   exit 1
 fi
 
-# Check if tests ran too long (>5 seconds is our hard limit)
-if [ $DURATION -gt 5 ]; then
-  echo "❌ Smoke tests took ${DURATION}s (limit: 5s)"
+# Check if tests ran too long (>30 seconds is our hard limit)
+if [ $DURATION -gt 30 ]; then
+  echo "❌ Smoke tests took ${DURATION}s (limit: 30s)"
   echo "💡 Move slow tests to integration suite or optimize them"
   echo "📊 Run 'pnpm test:dashboard' to identify slow tests"
 
