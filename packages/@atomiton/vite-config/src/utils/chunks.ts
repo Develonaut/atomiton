@@ -1,6 +1,6 @@
 import type { ChunkMapping } from "../types";
 
-export function createManualChunks(mapping: ChunkMapping) {
+export function createManualChunks(mapping: ChunkMapping = {}) {
   return (id: string) => {
     if (id.includes("node_modules")) {
       return "vendor";
@@ -14,6 +14,12 @@ export function createManualChunks(mapping: ChunkMapping) {
       } else if (pattern instanceof RegExp) {
         if (pattern.test(id)) {
           return chunkName;
+        }
+      } else if (Array.isArray(pattern)) {
+        for (const p of pattern) {
+          if (typeof p === "string" && id.includes(p)) {
+            return chunkName;
+          }
         }
       }
     }

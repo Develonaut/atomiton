@@ -13,6 +13,7 @@ export function defineReactLibraryConfig(
     enableTsconfigPaths = true,
     testEnvironment = "jsdom",
     external = [],
+    optimizeDeps,
     additionalConfig = {},
     ...libraryOptions
   } = options;
@@ -53,6 +54,7 @@ export function defineReactLibraryConfig(
           ...additionalConfig.resolve?.alias,
         },
       },
+      optimizeDeps: optimizeDeps || additionalConfig.optimizeDeps,
     },
   });
 }

@@ -1,9 +1,10 @@
 import { resolve } from "path";
 import { defineConfig, type UserConfig } from "vite";
-import { createDtsPlugin } from "../plugins/dts";
-import { createVisualizerPlugin } from "../plugins/visualizer";
+import dts from "vite-plugin-dts";
+import { visualizer } from "rollup-plugin-visualizer";
 import { getTerserOptions } from "../utils/terser";
 import { createManualChunks } from "../utils/chunks";
+import { mergeViteConfig } from "../utils/merge";
 import type { LibraryOptions } from "../types";
 
 export function defineLibraryConfig(options: LibraryOptions): UserConfig {
@@ -14,14 +15,34 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
     chunks = {},
     enableVisualizer = true,
     enableMinification = true,
+    enableSourceMap = true,
+    assetsInlineLimit = 4096,
     testEnvironment = "node",
     additionalConfig = {},
   } = options;
 
-  const plugins = [createDtsPlugin()];
+  const plugins = [
+    dts({
+      insertTypesEntry: true,
+      include: ["src/**/*.ts", "src/**/*.tsx"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.smoke.test.ts",
+        "src/**/*.bench.ts",
+      ],
+    }),
+  ];
 
   if (enableVisualizer) {
-    plugins.push(createVisualizerPlugin());
+    plugins.push(
+      visualizer({
+        filename: "dist/stats.html",
+        open: false,
+        gzipSize: true,
+        brotliSize: true,
+      }),
+    );
   }
 
   const baseConfig: UserConfig = {
@@ -42,8 +63,9 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
       },
       minify: enableMinification ? "terser" : false,
       terserOptions: enableMinification ? getTerserOptions() : undefined,
-      sourcemap: true,
+      sourcemap: enableSourceMap,
       reportCompressedSize: true,
+      assetsInlineLimit,
     },
     test: {
       environment: testEnvironment,
@@ -51,36 +73,5 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
     },
   };
 
-  return defineConfig(mergeConfig(baseConfig, additionalConfig));
-}
-
-function mergeConfig(base: UserConfig, additional: UserConfig): UserConfig {
-  return {
-    ...base,
-    ...additional,
-    plugins: [
-      ...(Array.isArray(base.plugins) ? base.plugins : []),
-      ...(Array.isArray(additional.plugins) ? additional.plugins : []),
-    ],
-    build: {
-      ...base.build,
-      ...additional.build,
-      rollupOptions: {
-        ...base.build?.rollupOptions,
-        ...additional.build?.rollupOptions,
-        external: [
-          ...(Array.isArray(base.build?.rollupOptions?.external)
-            ? base.build.rollupOptions.external
-            : []),
-          ...(Array.isArray(additional.build?.rollupOptions?.external)
-            ? additional.build.rollupOptions.external
-            : []),
-        ],
-      },
-    },
-    test: {
-      ...base.test,
-      ...additional.test,
-    },
-  };
+  return defineConfig(mergeViteConfig(baseConfig, additionalConfig));
 }

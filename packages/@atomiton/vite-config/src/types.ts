@@ -12,11 +12,17 @@ export type LibraryOptions = {
   enableVisualizer?: boolean;
   enableMinification?: boolean;
   testEnvironment?: "node" | "jsdom" | "happy-dom";
+  assetsInlineLimit?: number;
+  enableSourceMap?: boolean;
 } & BaseOptions;
 
 export type ReactLibraryOptions = {
   enableTailwind?: boolean;
   enableTsconfigPaths?: boolean;
+  optimizeDeps?: {
+    include?: string[];
+    exclude?: string[];
+  };
 } & LibraryOptions;
 
 export type AppOptions = {
@@ -25,11 +31,13 @@ export type AppOptions = {
   workspacePackages?: string[];
   aliases?: Record<string, string>;
   enableTailwind?: boolean;
+  assetsInlineLimit?: number;
+  chunkSizeWarningLimit?: number;
   additionalConfig?: UserConfig;
 };
 
 export type ChunkMapping = {
-  [key: string]: string | RegExp;
+  [key: string]: string | RegExp | string[];
 };
 
 export type TerserConfig = {
