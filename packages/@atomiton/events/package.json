@@ -44,6 +44,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "rollup-plugin-visualizer": "catalog:",

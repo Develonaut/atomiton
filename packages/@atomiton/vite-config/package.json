@@ -1,0 +1,74 @@
+{
+  "name": "@atomiton/vite-config",
+  "version": "0.1.0",
+  "description": "Shared Vite configuration for Atomiton packages",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "clean": "rm -rf dist",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
+    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "echo \"No E2E tests for this package\"",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "vite": "^5.4.10",
+    "vite-plugin-dts": "^4.3.0",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "devDependencies": {
+    "@atomiton/eslint-config": "workspace:*",
+    "@atomiton/typescript-config": "workspace:*",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/node": "^22.9.3",
+    "@vitest/coverage-v8": "^2.1.6",
+    "eslint": "^9.16.0",
+    "prettier": "^3.4.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.6"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "vite",
+    "config",
+    "build",
+    "atomiton"
+  ],
+  "author": "Atomiton",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atomiton/atomiton.git",
+    "directory": "packages/@atomiton/vite-config"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

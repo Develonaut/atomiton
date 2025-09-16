@@ -1,38 +1,35 @@
-import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 import { resolve } from "path";
 import { visualizer } from "rollup-plugin-visualizer";
-import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
   plugins: [
-    react(),
     dts({
       insertTypesEntry: true,
-      include: ["src/**/*.ts", "src/**/*.tsx"],
-      exclude: [
-        "src/**/*.test.ts",
-        "src/**/*.test.tsx",
-        "src/**/*.smoke.test.ts",
-        "src/**/*.bench.ts",
-      ],
+      include: ["src/**/*.ts"],
+      exclude: ["src/**/*.test.ts", "src/**/*.smoke.test.ts", "src/**/*.bench.ts"],
     }),
   ],
   build: {
     target: "es2020",
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
-      name: "AtomitonRouter",
+      name: "AtomitonViteConfig",
       formats: ["es", "cjs"],
       fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: [
-        "react",
-        "react-dom",
-        "@tanstack/react-router",
-        "@atomiton/store",
-        "zustand",
+        "vite",
+        "path",
+        "url",
+        "@vitejs/plugin-react",
+        "rollup-plugin-visualizer",
+        "vite-plugin-dts",
+        "vite-tsconfig-paths",
+        "@tailwindcss/vite",
+        /^node:/,
       ],
       output: {
         manualChunks(id) {
@@ -66,7 +63,7 @@ export default defineConfig({
     reportCompressedSize: true,
   },
   test: {
-    environment: "jsdom",
+    environment: "node",
     globals: true,
   },
 });

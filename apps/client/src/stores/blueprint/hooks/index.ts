@@ -1,3 +1,3 @@
 export { useBlueprintStore } from "./useBlueprintStore";
-export { useBlueprint } from "./useBlueprint";
-export { useBlueprints } from "./useBlueprints";
+export { useTemplateBlueprints } from "./useTemplateBlueprints";
+export { useUserBlueprints } from "./useUserBlueprints";

@@ -9,6 +9,7 @@ _Last Updated: 2025-01-16_
 Atomiton uses a comprehensive testing strategy combining multiple test types with strict performance requirements and standardized organization across all packages.
 
 ### Key Requirements
+
 - ✅ 8 standard test scripts per package (no more, no less)
 - ✅ Co-located `__tests__` folders for test organization
 - ✅ Smoke tests must complete in <5 seconds

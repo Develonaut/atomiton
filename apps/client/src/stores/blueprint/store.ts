@@ -1,53 +1,23 @@
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
+import { createStore } from "@atomiton/store";
 import { createCrudModule } from "./modules/crud";
 import type { BlueprintState, BlueprintStoreActions } from "./types";
+import { initializeTemplates } from "./utils/initializeTemplates";
 
-export const store = create<BlueprintState>()(
-  devtools(
-    persist(
-      immer((set) => ({
-        blueprints: [],
-        isLoading: false,
-        error: null,
-        isHydrated: false,
-        // Add setState method for the crud module
-        setState: set,
-      })),
-      {
-        name: "atomiton-blueprints",
-        // Only persist user data, not templates or loading state
-        partialize: (state) => ({
-          blueprints: state.blueprints.filter((bp) => !(bp as any).isTemplate),
-        }),
-        // Handle rehydration
-        onRehydrateStorage: () => {
-          console.log("hydration starts");
+const initialState: BlueprintState = {
+  templates: initializeTemplates(),
+  userBlueprints: [],
+  isLoading: false,
+  error: null,
+};
 
-          return (state: BlueprintState | undefined, error: Error | null) => {
-            if (error) {
-              console.log("an error happened during hydration", error);
-            } else {
-              console.log("hydration finished");
-              // Initialize templates on successful rehydration
-              if (state) {
-                state.isHydrated = true;
-                // Import initializeTemplates and call it
-                import("./utils/initializeTemplates").then(
-                  ({ initializeTemplates }) => {
-                    initializeTemplates();
-                  },
-                );
-              }
-            }
-          };
-        },
-      },
-    ),
-    { name: "BlueprintStore" },
-  ),
-);
+const store = createStore<BlueprintState>(() => initialState, {
+  name: "blueprint",
+  persist: {
+    partialize: (state) => ({
+      userBlueprints: state.userBlueprints,
+    }),
+  },
+});
 
 const crudModule = createCrudModule(store);
 
@@ -55,9 +25,9 @@ const crudModule = createCrudModule(store);
 // Exported Store
 // ============================================================================
 
-export const blueprintStore = {
+export const blueprintStore: BlueprintStoreActions = {
   ...store,
   ...crudModule,
-} as BlueprintStoreActions;
+};
 
 export type BlueprintStore = typeof blueprintStore;

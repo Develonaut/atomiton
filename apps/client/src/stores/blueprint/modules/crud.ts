@@ -14,6 +14,7 @@
 import { createCompositeNode } from "@atomiton/nodes";
 import { selectBlueprintById } from "../selectors";
 import type { BaseStore, Blueprint } from "../types";
+import { compositeNodeToBlueprint } from "../types";
 
 // TODO: Replace with actual user ID from user store when implemented
 const CURRENT_USER_ID = "user_default_123";
@@ -21,6 +22,7 @@ const CURRENT_USER_ID = "user_default_123";
 export type CrudActions = {
   loadBlueprint: (id: string) => void;
   copyBlueprint: (id: string) => string | null;
+  createBlueprintCopy: (id: string) => Blueprint | null;
   createBlueprint: (blueprintData: Partial<Blueprint>) => string;
   saveBlueprintFromEditor: (id: string | undefined, editorState: any) => string;
   updateBlueprint: (id: string, updates: Partial<Blueprint>) => void;
@@ -87,27 +89,59 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
       name: `${existingBlueprint.name} (Copy)`,
       description: existingBlueprint.metadata?.description || "",
       category: existingBlueprint.metadata?.category || "blueprints",
-      nodes: existingBlueprint.getChildNodes
-        ? existingBlueprint.getChildNodes()
-        : [],
-      edges: existingBlueprint.getExecutionFlow
-        ? existingBlueprint.getExecutionFlow()
-        : [],
-      variables: (existingBlueprint as any).variables,
-      settings: (existingBlueprint as any).settings,
+      nodes: existingBlueprint.nodes || [],
+      edges: existingBlueprint.edges || [],
+      variables: existingBlueprint.variables,
+      settings: existingBlueprint.settings,
     });
 
-    // Set ownership to current user
-    (compositeNode.metadata as any).authorId = CURRENT_USER_ID;
+    // Convert to serializable format
+    const blueprint = compositeNodeToBlueprint(compositeNode);
+    blueprint.metadata.authorId = CURRENT_USER_ID;
 
     store.setState((state) => {
-      state.blueprints.push(compositeNode as Blueprint);
+      state.userBlueprints.push(blueprint);
       state.error = null;
     });
 
-    console.log(`Created copy ${compositeNode.id} from blueprint ${id}`);
+    console.log(`Created copy ${blueprint.id} from blueprint ${id}`);
 
-    return compositeNode.id;
+    return blueprint.id;
+  },
+
+  createBlueprintCopy: (id: string) => {
+    // Check if blueprint exists in store using selector
+    const existingBlueprint = selectBlueprintById(id)(store.getState());
+
+    if (!existingBlueprint) {
+      // Blueprint not found in store
+      store.setState((state) => {
+        state.error = `Blueprint with ID ${id} not found`;
+      });
+      return null;
+    }
+
+    // Create a copy WITHOUT adding to store
+    const compositeNode = createCompositeNode({
+      // ID will be auto-generated
+      name: `${existingBlueprint.name} (Copy)`,
+      description: existingBlueprint.metadata?.description || "",
+      category: existingBlueprint.metadata?.category || "blueprints",
+      nodes: existingBlueprint.nodes || [],
+      edges: existingBlueprint.edges || [],
+      variables: existingBlueprint.variables,
+      settings: existingBlueprint.settings,
+    });
+
+    // Convert to serializable format
+    const blueprint = compositeNodeToBlueprint(compositeNode);
+    blueprint.metadata.authorId = CURRENT_USER_ID;
+
+    console.log(
+      `Created copy ${blueprint.id} from blueprint ${id} (not saved to store)`,
+    );
+
+    return blueprint;
   },
 
   createBlueprint: (blueprintData: Partial<Blueprint>) => {
@@ -116,27 +150,22 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
       name: blueprintData.name || "New Blueprint",
       description: blueprintData.metadata?.description || "",
       category: (blueprintData.metadata?.category || "blueprints") as string,
-      nodes: blueprintData.getChildNodes ? blueprintData.getChildNodes() : [],
-      edges: blueprintData.getExecutionFlow
-        ? blueprintData.getExecutionFlow()
-        : [],
-      variables: (blueprintData as any).variables,
-      settings: (blueprintData as any).settings,
+      nodes: blueprintData.nodes || [],
+      edges: blueprintData.edges || [],
+      variables: blueprintData.variables,
+      settings: blueprintData.settings,
     };
 
     const compositeNode = createCompositeNode(
       blueprintData.id ? { id: blueprintData.id, ...nodeData } : nodeData,
     );
 
-    // Set the authorId to current user
-    // TODO: This should be done in createCompositeNode when we have user store
-    (compositeNode.metadata as any).authorId = CURRENT_USER_ID;
-
-    // The blueprint IS the composite node
-    const blueprint = compositeNode as Blueprint;
+    // Convert to serializable format
+    const blueprint = compositeNodeToBlueprint(compositeNode);
+    blueprint.metadata.authorId = CURRENT_USER_ID;
 
     store.setState((state) => {
-      state.blueprints.push(blueprint);
+      state.userBlueprints.push(blueprint);
       state.error = null;
     });
 
@@ -164,27 +193,29 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
             },
           );
 
-          // Set ownership to current user
-          (copyNode.metadata as any).authorId = CURRENT_USER_ID;
+          // Convert to serializable format
+          const blueprint = compositeNodeToBlueprint(copyNode);
+          blueprint.metadata.authorId = CURRENT_USER_ID;
 
           store.setState((state) => {
-            state.blueprints.push(copyNode as Blueprint);
+            state.userBlueprints.push(blueprint);
             state.error = null;
           });
 
-          return copyNode.id;
+          return blueprint.id;
         }
 
         // Update existing blueprint (user owns it)
         store.setState((state) => {
-          const index = state.blueprints.findIndex((bp) => bp.id === id);
+          const index = state.userBlueprints.findIndex((bp) => bp.id === id);
           if (index !== -1) {
             const updatedNode = flowDataToCompositeNode(id, editorState, {
-              name: state.blueprints[index].name,
-            }) as Blueprint;
-            // Preserve the authorId
-            (updatedNode.metadata as any).authorId = CURRENT_USER_ID;
-            state.blueprints[index] = updatedNode;
+              name: state.userBlueprints[index].name,
+            });
+            // Convert to serializable format
+            const blueprint = compositeNodeToBlueprint(updatedNode);
+            blueprint.metadata.authorId = CURRENT_USER_ID;
+            state.userBlueprints[index] = blueprint;
             state.error = null;
           }
         });
@@ -199,20 +230,21 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
       { description: "Blueprint created from Editor" },
     );
 
-    // Set the authorId to current user
-    (compositeNode.metadata as any).authorId = CURRENT_USER_ID;
+    // Convert to serializable format
+    const blueprint = compositeNodeToBlueprint(compositeNode);
+    blueprint.metadata.authorId = CURRENT_USER_ID;
 
     store.setState((state) => {
-      state.blueprints.push(compositeNode as Blueprint);
+      state.userBlueprints.push(blueprint);
       state.error = null;
     });
 
-    return compositeNode.id;
+    return blueprint.id;
   },
 
   updateBlueprint: (id: string, updates: Partial<Blueprint>) => {
     store.setState((state) => {
-      const index = state.blueprints.findIndex((bp) => bp.id === id);
+      const index = state.userBlueprints.findIndex((bp) => bp.id === id);
       if (index === -1) {
         state.error = `Blueprint with ID ${id} not found`;
         return;
@@ -221,7 +253,8 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
       // Don't allow updating blueprints you don't own
       // TODO: Get actual user ID from user store
       const isOwner =
-        (state.blueprints[index].metadata as any)?.authorId === CURRENT_USER_ID;
+        (state.userBlueprints[index].metadata as any)?.authorId ===
+        CURRENT_USER_ID;
       if (!isOwner) {
         state.error = `Cannot modify blueprint ${id}. You are not the owner.`;
         return;
@@ -229,21 +262,21 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
 
       // Create updated blueprint without lastModified (not in interface)
       const updatedBlueprint: Blueprint = {
-        ...state.blueprints[index],
+        ...state.userBlueprints[index],
         ...updates,
       } as Blueprint;
 
       // Content updates would be handled differently in a real implementation
       // TODO: Implement proper content update handling when needed
 
-      state.blueprints[index] = updatedBlueprint;
+      state.userBlueprints[index] = updatedBlueprint;
       state.error = null;
     });
   },
 
   removeBlueprint: (id: string) => {
     store.setState((state) => {
-      const index = state.blueprints.findIndex((bp) => bp.id === id);
+      const index = state.userBlueprints.findIndex((bp) => bp.id === id);
       if (index === -1) {
         state.error = `Blueprint with ID ${id} not found`;
         return;
@@ -252,14 +285,15 @@ export const createCrudModule = (store: BaseStore): CrudActions => ({
       // Don't allow removing blueprints you don't own
       // TODO: Get actual user ID from user store
       const isOwner =
-        (state.blueprints[index].metadata as any)?.authorId === CURRENT_USER_ID;
+        (state.userBlueprints[index].metadata as any)?.authorId ===
+        CURRENT_USER_ID;
       if (!isOwner) {
         state.error = `Cannot remove blueprint ${id}. You are not the owner.`;
         return;
       }
 
       // Remove the blueprint
-      state.blueprints.splice(index, 1);
+      state.userBlueprints.splice(index, 1);
       state.error = null;
       console.log(`Removed blueprint ${id}`);
     });

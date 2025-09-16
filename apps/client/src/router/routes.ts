@@ -61,11 +61,6 @@ export const routes = [
   },
   {
     name: "editor",
-    path: "/editor",
-    component: () => import("../templates/EditorPage"),
-  },
-  {
-    name: "editorWithId",
     path: "/editor/$id",
     component: () => import("../templates/EditorPage"),
   },

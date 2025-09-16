@@ -11,11 +11,11 @@ import {
   getTemplatesByTag,
   type CompositeTemplate,
 } from "@atomiton/nodes";
-import { blueprintStore } from "../store";
-import type { Blueprint } from "../types";
+import type { BaseStore, Blueprint } from "../types";
+import { compositeNodeToBlueprint } from "../types";
 
 /**
- * Convert a CompositeTemplate to a Blueprint
+ * Convert a CompositeTemplate to a serializable Blueprint
  */
 function templateToBlueprint(template: CompositeTemplate): Blueprint {
   // Create a proper composite node from the template
@@ -30,92 +30,68 @@ function templateToBlueprint(template: CompositeTemplate): Blueprint {
     settings: template.definition.settings,
   });
 
+  // Convert to serializable format
+  const blueprint = compositeNodeToBlueprint(compositeNode);
+
   // Add UI metadata
-  return Object.assign(compositeNode, {
+  return {
+    ...blueprint,
     content: template.yaml,
     lastModified: new Date().toISOString(),
-    tags: template.tags,
     author: "Atomiton Team",
     isPublic: true,
     isTemplate: true, // Mark as read-only template
-  });
+  };
 }
 
 /**
- * Initialize the blueprint store with all available templates
+ * Initialize templates - returns array of templates for initial state
  */
-export function initializeTemplates(): void {
+export function initializeTemplates(): Blueprint[] {
   try {
     const templates = getAllCompositeTemplates();
     console.log(`Initializing ${templates.length} templates...`);
 
     if (!templates || templates.length === 0) {
       console.error("No templates found from getAllCompositeTemplates()");
-      return;
+      return [];
     }
 
-    // Batch process templates to avoid rapid setState calls
-    const currentBlueprints = blueprintStore.getState().blueprints;
-    const newBlueprints: Blueprint[] = [];
-
-    templates.forEach((template) => {
-      try {
-        // Check if template already exists in store
-        const existingBlueprint = currentBlueprints.find(
-          (bp) => bp.id === template.id,
-        );
-
-        if (!existingBlueprint) {
-          // Convert template to blueprint
+    const blueprintTemplates = templates
+      .map((template) => {
+        try {
           const blueprint = templateToBlueprint(template);
           console.log(
             `Preparing template: ${template.id} - ${template.definition.name}`,
           );
-          newBlueprints.push(blueprint);
-        } else {
-          console.log(`Template already exists: ${template.id}`);
+          return blueprint;
+        } catch (error) {
+          console.error(`Failed to prepare template ${template.id}:`, error);
+          return null;
         }
-      } catch (error) {
-        console.error(`Failed to prepare template ${template.id}:`, error);
-      }
-    });
+      })
+      .filter(Boolean) as Blueprint[];
 
-    // Add all new blueprints in a single setState call
-    if (newBlueprints.length > 0) {
-      blueprintStore.setState((state) => {
-        state.blueprints.push(...newBlueprints);
-        state.error = null;
-      });
-      console.log(`Added ${newBlueprints.length} new templates to store`);
-    }
-
-    const finalBlueprints = blueprintStore.getState().blueprints;
-    console.log(
-      `Templates initialized. Current blueprints count: ${finalBlueprints.length}`,
-    );
-    console.log(
-      "Current blueprints:",
-      finalBlueprints.map((b) => ({
-        id: b.id,
-        name: b.name,
-        hasInputPorts: !!b.inputPorts,
-        hasOutputPorts: !!b.outputPorts,
-      })),
-    );
+    console.log(`Initialized ${blueprintTemplates.length} templates`);
+    return blueprintTemplates;
   } catch (error) {
     console.error("Failed to initialize templates:", error);
+    return [];
   }
 }
 
 /**
  * Load templates by tag
  */
-export function loadTemplatesByTag(tag: string): void {
+export function loadTemplatesByTag(store: BaseStore, tag: string): void {
   const templates = getTemplatesByTag(tag);
 
   templates.forEach((template) => {
     const blueprint = templateToBlueprint(template);
-    blueprintStore.createBlueprint(blueprint);
+    const newTemplates = [blueprint];
+    store.setState((state) => {
+      state.templates.push(...newTemplates);
+    });
   });
 }
 
@@ -123,12 +99,16 @@ export function loadTemplatesByTag(tag: string): void {
  * Load templates by difficulty
  */
 export function loadTemplatesByDifficulty(
+  store: BaseStore,
   difficulty: "beginner" | "intermediate" | "advanced",
 ): void {
   const templates = getTemplatesByDifficulty(difficulty);
 
   templates.forEach((template) => {
     const blueprint = templateToBlueprint(template);
-    blueprintStore.createBlueprint(blueprint);
+    const newTemplates = [blueprint];
+    store.setState((state) => {
+      state.templates.push(...newTemplates);
+    });
   });
 }

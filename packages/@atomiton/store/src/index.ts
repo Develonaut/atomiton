@@ -39,7 +39,7 @@ export type Store<T> = {
  * Persistence configuration - Essential options only
  */
 export type PersistConfig<T> = {
-  key: string;
+  key?: string;
   storage?: PersistStorage<T>;
   partialize?: (state: T) => Partial<T>;
   onRehydrateStorage?: (
@@ -90,10 +90,10 @@ export function createStore<T extends object>(
   }
 
   // Persisted store
-  const { key, ...restPersistConfig } = persistConfig;
+  const { key = "persisted", ...restPersistConfig } = persistConfig;
 
   const persistOptions: PersistOptions<T, T> = {
-    name: `store:${key}`,
+    name: `store:${key}`, // Key prefix to avoid collisions
     ...restPersistConfig,
   } as PersistOptions<T, T>;
 

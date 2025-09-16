@@ -55,6 +55,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@redux-devtools/extension": "^3.3.0",
     "react": "catalog:",
     "@types/node": "catalog:",

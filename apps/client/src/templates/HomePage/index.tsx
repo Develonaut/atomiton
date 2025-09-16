@@ -1,13 +1,13 @@
 import Catalog from "@/components/Catalog";
 import Layout from "@/components/Layout";
 import Templates from "@/components/Templates";
-import { useBlueprints } from "@/stores/blueprint/hooks";
+import { useUserBlueprints } from "@/stores/blueprint/hooks";
 import { titleCase } from "@atomiton/utils";
 import { useMemo } from "react";
 import { content as fakeContent } from "./content";
 
 function HomePage() {
-  const { blueprints, isLoading } = useBlueprints();
+  const { blueprints, isLoading } = useUserBlueprints();
   const blueprintsContent = useMemo(
     () =>
       blueprints.map((blueprint) => ({

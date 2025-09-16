@@ -1,6 +1,8 @@
-import { Link } from "@/router";
+import { useNavigate } from "@/router";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
+import { blueprintStore } from "@/stores/blueprint/store";
+import { selectBlueprintById } from "@/stores/blueprint/selectors";
 
 type Props = {
   value: {
@@ -13,10 +15,31 @@ type Props = {
 };
 
 function Card({ value }: Props) {
+  const navigate = useNavigate();
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    // If it's a blueprint type, load the blueprint and pass it to editor
+    if (value.type === "blueprint") {
+      const blueprint = selectBlueprintById(String(value.id))(
+        blueprintStore.getState(),
+      );
+      if (blueprint) {
+        navigate.toEditor(
+          { id: String(value.id) },
+          {
+            state: { blueprint },
+          },
+        );
+      }
+    }
+  };
+
   return (
-    <Link
+    <div
       className="group flex flex-col w-[calc(16.666%-0.75rem)] mt-3 mx-1.5 p-2 border border-s-01 bg-surface-01 rounded-3xl transition-shadow cursor-pointer hover:shadow-prompt-input max-[2200px]:w-[calc(20%-0.75rem)] max-[1940px]:w-[calc(25%-0.75rem)] max-xl:w-[calc(33.333%-0.75rem)] max-md:w-[calc(50%-0.75rem)]"
-      to={`/editor/${value.id}`}
+      onClick={handleClick}
     >
       <div className="relative mb-2">
         <Image
@@ -34,7 +57,7 @@ function Card({ value }: Props) {
         <div className="mb-1 text-body-md-str">{value.title}</div>
         <div className="text-body-sm text-secondary">{value.category}</div>
       </div>
-    </Link>
+    </div>
   );
 }
 

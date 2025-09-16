@@ -10,6 +10,7 @@ export const {
   useCurrentRoute,
   useParams,
   usePathname,
+  useLocation,
   Link,
   RouterProvider,
 } = createRouter({
