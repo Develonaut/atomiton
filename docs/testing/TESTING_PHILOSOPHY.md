@@ -18,6 +18,26 @@ We test how users actually interact with our system, not implementation details.
 
 ## Test Types & When to Use Them
 
+### 🚀 Smoke Tests (Vitest) vs Critical User Flows (Playwright)
+
+**Smoke Tests (Pre-commit):**
+
+- **Purpose**: Quick verification that components render and basic interactions work
+- **Tool**: Vitest + React Testing Library
+- **Speed**: Must run in <5 seconds total
+- **Examples**: Page loads, button clicks work, navigation doesn't crash
+- **Rule**: NO Playwright allowed - must use jsdom only
+
+**Critical User Flows (Pre-push/CI):**
+
+- **Purpose**: Verify complete user journeys in real browser
+- **Tool**: Playwright only
+- **Speed**: Can take up to 30 seconds
+- **Examples**: Creating a blueprint, loading from gallery, full workflows
+- **Rule**: Real browser required for accuracy
+
+## Test Types & When to Use Them
+
 ### 1. 🎭 Playwright E2E Tests (Primary)
 
 **Use For:**
@@ -166,18 +186,26 @@ test("user can click button to submit form", async ({ page }) => {
 
 ## Pre-commit/Push Strategy
 
-### Pre-commit (Fast)
+### Pre-commit (Fast) - Vitest Smoke Tests
 
+- **Tool**: Vitest with React Testing Library (NO Playwright)
+- **Speed**: ~1-3 seconds total
+- **Purpose**: Quick sanity check before commits
+- **Coverage**: Basic rendering, navigation, component mounting
+- **Location**: `src/__tests__/integration/smoke/`
 - Run tests for changed package only
 - Bail on first failure
 - No coverage collection
-- ~10 seconds max
 
-### Pre-push (Thorough)
+### Pre-push (Thorough) - Critical User Flows
 
-- Run Playwright smoke tests
+- **Tool**: Playwright E2E tests
+- **Speed**: ~30 seconds max
+- **Purpose**: Verify complete user journeys work
+- **Coverage**: Full workflows from CRITICAL_USER_FLOWS.md
+- **Location**: `src/__tests__/e2e/`
 - Test critical user paths
-- ~30 seconds max
+- Real browser testing
 
 ### CI/CD (Complete)
 
@@ -194,6 +222,93 @@ test("user can click button to submit form", async ({ page }) => {
 4. **Snapshots for design system only**
 5. **Fast tests get run, slow tests get skipped**
 6. **Real > Mocked every time**
+7. **ALWAYS use data-testid attributes, NEVER wild selectors**
+
+## Test ID Convention (MANDATORY)
+
+### Why data-testid?
+
+- **Explicit**: Makes it clear what elements are testable
+- **Stable**: Won't break when classes or text changes
+- **Searchable**: Easy to find test dependencies in code
+- **Intentional**: Forces developers to think about testability
+
+### Naming Convention
+
+```typescript
+// Component-Action-Element pattern
+data-testid="home-page"
+data-testid="create-button"
+data-testid="blueprint-card"
+data-testid="editor-canvas"
+data-testid="sidebar-navigation"
+data-testid="node-properties-panel"
+```
+
+### DO's and DON'Ts
+
+**✅ DO:**
+
+```typescript
+// Good - Explicit test ID
+<button data-testid="create-blueprint-button">Create</button>
+await screen.getByTestId('create-blueprint-button');
+```
+
+**❌ DON'T:**
+
+```typescript
+// Bad - Class selector
+<button className="btn-primary">Create</button>
+await page.locator('.btn-primary');
+
+// Bad - Text selector (fragile)
+await screen.getByText('Create');
+
+// Bad - Complex CSS selector
+await page.locator('div.sidebar > nav > ul > li:nth-child(2) > a');
+```
+
+### Implementation Example
+
+```typescript
+// Component
+export function HomePage() {
+  return (
+    <div data-testid="home-page">
+      <nav data-testid="main-navigation">
+        <a data-testid="create-button" href="/editor">Create</a>
+      </nav>
+      <main data-testid="blueprint-gallery">
+        {blueprints.map(bp => (
+          <div key={bp.id} data-testid={`blueprint-card-${bp.id}`}>
+            {bp.name}
+          </div>
+        ))}
+      </main>
+    </div>
+  );
+}
+
+// Test
+test('user can navigate to editor', async () => {
+  render(<HomePage />);
+  const createButton = screen.getByTestId('create-button');
+  await userEvent.click(createButton);
+  expect(screen.getByTestId('editor-canvas')).toBeInTheDocument();
+});
+```
+
+### Fallback Strategy for Smoke Tests
+
+When adding test IDs incrementally, use this pattern:
+
+```typescript
+// Try test ID first, fallback to other selectors
+const element =
+  screen.queryByTestId("create-button") ||
+  screen.queryByRole("link", { name: /create/i });
+```
 
 ## Practical Examples
 

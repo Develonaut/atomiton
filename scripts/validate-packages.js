@@ -187,17 +187,24 @@ class PackageValidator {
   }
 
   validateFileStructure(pkg) {
+    // Config packages don't need vite.config.ts
+    const isConfigPackage = pkg.name.includes("-config");
+
     const requiredFiles = [
       "tsconfig.json",
-      "vite.config.ts",
+      ...(!isConfigPackage ? ["vite.config.ts"] : []),
       "package.json",
       "README.md",
       "src/index.ts",
-      "CHANGELOG.md",
-      "CURRENT.md",
-      "NEXT.md",
-      "COMPLETED.md",
-      "ROADMAP.md",
+      ...(!isConfigPackage
+        ? [
+            "CURRENT.md",
+            "NEXT.md",
+            "COMPLETED.md",
+            "ROADMAP.md",
+            "CHANGELOG.md",
+          ]
+        : []),
     ];
 
     const optionalFiles = ["LICENSE", ".npmignore", "CONTRIBUTING.md"];

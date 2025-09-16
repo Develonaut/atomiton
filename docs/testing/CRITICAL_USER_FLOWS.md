@@ -1,6 +1,6 @@
 # Critical User Flows - Atomiton Editor
 
-These are the core user workflows that MUST work for the application to be functional. Smoke tests should verify these paths.
+These are the core user workflows that MUST work for the application to be functional. Playwright tests should verify these paths.
 
 ## 🎯 Primary User Flows
 
