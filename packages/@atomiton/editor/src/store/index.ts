@@ -1,4 +1,5 @@
 import { createStore } from "@atomiton/store";
+import type React from "react";
 import { createFlowModule, type FlowActions } from "./modules/flow";
 import { createHistoryModule, type HistoryActions } from "./modules/history";
 import { createNodeModule, type NodeActions } from "./modules/nodes";
@@ -37,7 +38,9 @@ type EditorStoreActions = {} & BaseStore &
   NodeActions &
   HistoryActions &
   UIActions &
-  ViewportActions;
+  ViewportActions & {
+    reset: () => void;
+  };
 
 const flowModule = createFlowModule(store);
 const historyModule = createHistoryModule(store);
@@ -55,6 +58,25 @@ export const editorStore: EditorStoreActions = {
   ...historyModule,
   ...uiModule,
   ...viewportModule,
+
+  // Reset the store to initial state
+  reset: () => {
+    store.setState(() => ({
+      selectedNodeId: null,
+      isLoading: false,
+      isDirty: false,
+      zoom: 100,
+      flowInstance: null,
+      flowSnapshot: {
+        nodes: [],
+        edges: [],
+      },
+      history: {
+        past: [],
+        future: [],
+      },
+    }));
+  },
 };
 
 export type EditorStore = typeof editorStore;

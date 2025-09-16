@@ -1,6 +1,7 @@
 import { useNodeTypes } from "@/hooks/useNodeTypes";
+import { editorStore } from "@/store";
 import { styled } from "@atomiton/ui";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ReactFlowCanvas, ReactFlowProvider } from "../../primitives/ReactFlow";
 import "./Canvas.css";
 import type { CanvasProps } from "./Canvas.types";
@@ -55,6 +56,13 @@ export function CanvasRoot({
     onPaneClick,
     onMove,
   });
+
+  // Reset editor store on unmount
+  useEffect(() => {
+    return () => {
+      editorStore.reset();
+    };
+  }, []);
 
   return (
     <CanvasStyled

@@ -46,6 +46,11 @@ export function useReactFlow({
   // Wrap handlers to sync with store
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
+      if (!Array.isArray(changes)) {
+        console.warn("Invalid node changes provided");
+        return;
+      }
+
       onNodesChange(changes);
       externalOnNodesChange?.(changes);
       editorStore.debouncedUpdateFlowSnapshot?.();
@@ -55,6 +60,11 @@ export function useReactFlow({
 
   const handleEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
+      if (!Array.isArray(changes)) {
+        console.warn("Invalid edge changes provided");
+        return;
+      }
+
       onEdgesChange(changes);
       externalOnEdgesChange?.(changes);
       editorStore.debouncedUpdateFlowSnapshot?.();
@@ -64,6 +74,11 @@ export function useReactFlow({
 
   const handleConnect = useCallback(
     (connection: Connection) => {
+      if (!connection || !connection.source || !connection.target) {
+        console.warn("Invalid connection parameters");
+        return;
+      }
+
       editorStore.handleConnect(connection);
       externalOnConnect?.(connection);
     },
@@ -72,10 +87,15 @@ export function useReactFlow({
 
   const handleInit = useCallback(
     (instance: ReactFlowInstance) => {
+      if (!instance) {
+        console.error("Invalid ReactFlow instance");
+        return;
+      }
+
       editorStore.setFlowInstance(instance);
 
       // Restore viewport if available
-      if (initialState.viewport) {
+      if (initialState.viewport && typeof instance.setViewport === "function") {
         instance.setViewport(initialState.viewport);
       }
     },
