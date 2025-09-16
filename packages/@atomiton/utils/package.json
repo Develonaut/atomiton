@@ -24,6 +24,9 @@
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
     "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests",
+    "test:benchmark": "vitest bench --run || echo 'No benchmark tests yet'",
+    "test:e2e": "echo 'No E2E tests for this package'",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage"
   },

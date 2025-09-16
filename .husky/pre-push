@@ -1,11 +1,78 @@
 #!/bin/sh
 
-# Husky pre-push hook - Run critical user flow tests
+# Husky pre-push hook - Performance warnings and critical tests
 
 echo "📤 Pre-push validation..."
 
-# TODO: Re-enable E2E tests once Playwright is properly configured
-# For now, we skip E2E tests to avoid blocking development
-# pnpm test:e2e:smoke
+# Check for benchmark regressions (non-blocking warning)
+echo "📊 Checking for performance regressions..."
 
-echo "✅ Pre-push validation complete - ready to push!"
+# Run benchmark comparisons for packages with benchmarks
+echo "📈 Running benchmark comparisons..."
+
+# Run benchmarks for changed packages using turbo
+# We use turbo directly since test:benchmark is not at root level
+pnpm turbo run test:benchmark --filter="[origin/HEAD...HEAD]" 2>/dev/null || true
+
+# Now check for regressions if benchmark files exist
+CHANGED_PACKAGES=$(git diff --name-only HEAD origin/$(git branch --show-current) 2>/dev/null | grep -E "packages/.*/" | cut -d'/' -f1-3 | sort -u)
+
+if [ ! -z "$CHANGED_PACKAGES" ]; then
+  for PACKAGE in $CHANGED_PACKAGES; do
+    # Check if this package has benchmark capability
+    if [ -f "$PACKAGE/package.json" ]; then
+      HAS_BENCHMARK=$(grep -q '"test:benchmark"' "$PACKAGE/package.json" && echo "yes" || echo "no")
+
+      if [ "$HAS_BENCHMARK" = "yes" ] && [ -f "$PACKAGE/benchmarks/baseline.json" ] && [ -f "$PACKAGE/benchmarks/latest.json" ]; then
+        echo "📊 Comparing benchmarks for $PACKAGE..."
+        tsx scripts/benchmark-compare.ts "$PACKAGE/benchmarks/baseline.json" "$PACKAGE/benchmarks/latest.json" 2>/dev/null || {
+          echo "⚠️ Performance changes detected in $PACKAGE (non-blocking)"
+          echo "💡 Review the comparison report before pushing"
+        }
+      fi
+    fi
+  done
+fi
+
+# Run critical E2E tests using the standardized script
+# Note: test:e2e is required in packages but may echo 'No E2E tests' if not applicable
+echo "🎭 Checking critical E2E tests..."
+
+# Check for changed files in apps/client (main E2E location)
+CLIENT_CHANGED=$(git diff --name-only HEAD origin/$(git branch --show-current) 2>/dev/null | grep -q "apps/client" && echo "yes" || echo "no")
+
+if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; then
+  echo "Running critical user flow tests for client..."
+  # Use the standard test:e2e script with critical tag filter
+  timeout 120 pnpm test:e2e --grep="@critical" 2>/dev/null || {
+    echo "⚠️ Some E2E tests failed (non-blocking)"
+    echo "💡 Consider fixing before push"
+  }
+fi
+
+# Also check other packages for E2E tests
+if [ ! -z "$CHANGED_PACKAGES" ]; then
+  for PACKAGE in $CHANGED_PACKAGES; do
+    if [ -f "$PACKAGE/package.json" ]; then
+      HAS_E2E=$(grep -q '"test:e2e"' "$PACKAGE/package.json" && echo "yes" || echo "no")
+
+      if [ "$HAS_E2E" = "yes" ] && [ -f "$PACKAGE/playwright.config.ts" ]; then
+        echo "Running E2E tests for $PACKAGE..."
+        (cd "$PACKAGE" && timeout 60 pnpm test:e2e 2>/dev/null) || {
+          echo "⚠️ E2E tests for $PACKAGE had issues (non-blocking)"
+        }
+      fi
+    fi
+  done
+fi
+
+# Show performance dashboard summary if available
+if [ -f "scripts/test-dashboard.ts" ]; then
+  echo ""
+  echo "📊 Performance Summary:"
+  tsx scripts/test-dashboard.ts 2>/dev/null | grep -A 5 "Alerts & Warnings" || true
+fi
+
+echo ""
+echo "✅ Pre-push checks complete - ready to push!"
+echo "💡 Run 'pnpm test:dashboard' for detailed performance report"

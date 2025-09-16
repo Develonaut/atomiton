@@ -4,7 +4,7 @@ import {
   formatYaml,
   minifyYaml,
   prettifyYaml,
-} from "../utils/stringifier";
+} from "../utils/stringifier.js";
 
 const smallObject = {
   name: "Test",

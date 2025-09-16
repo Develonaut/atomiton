@@ -4,7 +4,7 @@ import {
   safeParseYaml,
   parseYamlStream,
   isValidYaml,
-} from "../utils/parser";
+} from "../utils/parser.js";
 
 const smallYaml = `
 name: John Doe

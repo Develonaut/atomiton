@@ -2,19 +2,20 @@
 
 # Husky pre-commit hook - Run formatting, linting, and smoke tests
 
-echo "🔍 Running pre-commit checks on staged files..."
+echo "🔍 Running pre-commit checks..."
 
-# TODO: Re-enable package validation once requirements are relaxed
-# Currently the validator requires many doc files that don't exist yet
-# echo "📦 Validating package consistency..."
-# node scripts/validate-packages.js
-# if [ $? -ne 0 ]; then
-#   echo "❌ Package validation failed! Fix consistency issues before committing."
-#   echo "💡 See Package Creation Guide: docs/development/PACKAGE_CREATION_GUIDE.md"
-#   exit 1
-# fi
+# Validate package consistency first
+echo "📦 Validating package consistency..."
+pnpm exec tsx scripts/validate-packages.ts
+
+if [ $? -ne 0 ]; then
+  echo "❌ Package validation failed! Fix consistency issues before committing."
+  echo "💡 See Package Creation Guide: docs/development/PACKAGE_CREATION_GUIDE.md"
+  exit 1
+fi
 
 # Run lint-staged to format and lint only staged files
+echo "📝 Checking code style..."
 npx lint-staged
 
 if [ $? -ne 0 ]; then
@@ -22,14 +23,41 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# TODO: Re-enable smoke tests once test infrastructure is fixed
-# Currently some packages have failing smoke tests that need to be addressed
-# echo "🔥 Running smoke tests before commit..."
-# pnpm turbo test:smoke
-# if [ $? -ne 0 ]; then
-#   echo "❌ Smoke tests failed! Fix critical issues before committing."
-#   echo "💡 Tip: Run 'pnpm test:smoke' in the failing package to debug."
-#   exit 1
-# fi
+echo "🔥 Running smoke tests (must complete in <5 seconds)..."
 
-echo "✅ All pre-commit checks passed!"
+# Run smoke tests with proper timing
+START_TIME=$(date +%s)
+
+# Run smoke tests for all packages (using turbo for caching)
+# Note: test:smoke script must exist in all packages per our standards
+pnpm test:smoke
+
+SMOKE_EXIT_CODE=$?
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+# Check if tests failed
+if [ $SMOKE_EXIT_CODE -ne 0 ]; then
+  echo "❌ Smoke tests failed!"
+  echo "💡 Fix failing tests before committing"
+  echo "📊 Run 'pnpm test:dashboard' to see test status"
+  exit 1
+fi
+
+# Check if tests ran too long (>5 seconds is our hard limit)
+if [ $DURATION -gt 5 ]; then
+  echo "❌ Smoke tests took ${DURATION}s (limit: 5s)"
+  echo "💡 Move slow tests to integration suite or optimize them"
+  echo "📊 Run 'pnpm test:dashboard' to identify slow tests"
+
+  # Use TypeScript speed checker if available for detailed analysis
+  if [ -f "scripts/test-speed-check.ts" ]; then
+    echo ""
+    echo "🔍 Detailed speed analysis:"
+    tsx scripts/test-speed-check.ts test-results/speed-report.json smoke 2>/dev/null || true
+  fi
+
+  exit 1
+fi
+
+echo "✅ All pre-commit checks passed! (smoke tests: ${DURATION}s)"

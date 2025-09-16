@@ -1,35 +1,61 @@
 # Testing Strategy and Standards
 
+_Last Updated: 2025-01-16_
+
+> **Quick Reference**: [Package Testing Guide](./PACKAGE_TESTING_GUIDE.md) | [Performance Tracking](./TEST_PERFORMANCE_TRACKING.md) | [Summary](./TESTING_IMPROVEMENTS_SUMMARY.md)
+
+## Overview
+
+Atomiton uses a comprehensive testing strategy combining multiple test types with strict performance requirements and standardized organization across all packages.
+
+### Key Requirements
+- ✅ 8 standard test scripts per package (no more, no less)
+- ✅ Co-located `__tests__` folders for test organization
+- ✅ Smoke tests must complete in <5 seconds
+- ✅ Benchmark regression threshold of 10%
+- ✅ TypeScript for all test scripts and tools
+
 ## Test Organization Strategy
 
-We **REQUIRE co-located tests** as our standard approach. Tests MUST be placed directly next to the files they test, improving maintainability and discoverability. This is our preferred and required pattern for all unit tests.
+We **REQUIRE co-located tests** using `__tests__` folders next to the files they test. This provides clear organization while maintaining proximity to the code being tested.
 
 ### File Structure
 
 #### Standard Unit Tests (REQUIRED Pattern)
 
-**ALWAYS place `.test.ts` or `.test.tsx` files directly next to the files they test:**
+**ALWAYS place tests in `__tests__` folders co-located with the files they test:**
 
 ```
 src/
 ├── store/
 │   ├── actions/
 │   │   ├── elements.ts
-│   │   └── elements.test.ts        # Co-located test
+│   │   └── __tests__/
+│   │       └── elements.test.ts     # Co-located test folder
 │   ├── history.ts
-│   ├── history.test.ts              # Co-located test
 │   ├── getters.ts
-│   └── getters.test.ts              # Co-located test
+│   └── __tests__/
+│       ├── history.test.ts          # Co-located tests
+│       └── getters.test.ts          # Co-located tests
 ├── components/
 │   ├── Canvas/
 │   │   ├── CanvasRoot.tsx
-│   │   └── CanvasRoot.test.tsx      # Co-located test
+│   │   ├── CanvasNode.tsx
+│   │   └── __tests__/
+│   │       ├── CanvasRoot.test.tsx  # Co-located tests
+│   │       └── CanvasNode.test.tsx  # Co-located tests
 │   └── Button/
 │       ├── Button.tsx
-│       └── Button.test.tsx          # Co-located test
+│       ├── ButtonGroup.tsx
+│       └── __tests__/
+│           ├── Button.test.tsx      # Co-located tests
+│           └── ButtonGroup.test.tsx # Co-located tests
 └── hooks/
     ├── useEditorStore.ts
-    └── useEditorStore.test.ts       # Co-located test
+    ├── useNodeSelection.ts
+    └── __tests__/
+        ├── useEditorStore.test.ts   # Co-located tests
+        └── useNodeSelection.test.ts # Co-located tests
 ```
 
 #### Smoke Tests (REQUIRED for all packages)
@@ -74,19 +100,27 @@ describe("Package API Smoke Tests", () => {
 });
 ```
 
-#### Special Test Categories (ONLY Exception to Co-location)
+#### Integration and Special Test Categories
 
-Use `__tests__` folders **ONLY** for integration, performance, and edge case tests that don't belong to a specific file:
+For tests that span multiple modules or test broader functionality:
 
 ```
 src/
-└── store/
-    ├── index.ts
-    ├── index.test.ts                # Standard unit test
-    └── __tests__/                   # Special tests folder
-        ├── integration.test.ts      # Cross-module tests
-        ├── performance.test.ts      # Performance benchmarks
-        └── edge-cases.test.ts       # Edge case scenarios
+├── store/
+│   ├── index.ts
+│   ├── actions/
+│   │   └── __tests__/              # Unit tests for actions
+│   └── __tests__/
+│       ├── index.test.ts           # Tests for store/index.ts
+│       ├── integration.test.ts     # Cross-module integration tests
+│       ├── performance.test.ts     # Performance benchmarks
+│       └── edge-cases.test.ts      # Edge case scenarios
+└── __tests__/
+    ├── smoke/                       # Package-level smoke tests
+    │   ├── api.smoke.test.ts
+    │   └── critical-paths.smoke.test.ts
+    └── integration/                 # Package-level integration tests
+        └── workflow.test.ts
 ```
 
 ### Naming Conventions
@@ -97,16 +131,17 @@ src/
 - **Edge case tests**: Place in `__tests__/edge-cases.test.ts`
 - **E2E tests**: Keep in root `/playwright` directory
 
-### Why Co-location is Required
+### Why Co-located `__tests__` Folders are Required
 
-1. **Easier navigation** - Tests are immediately findable next to implementation
-2. **Better organization** - 1:1 mapping between tests and code files
-3. **Simpler imports** - Minimal relative paths (`"./filename"` instead of `"../../../filename"`)
-4. **Encourages testing** - Visible reminder when files lack tests
-5. **Easier refactoring** - Tests move with the code they test
-6. **Clear ownership** - No confusion about which tests belong to which code
+1. **Clear organization** - Tests grouped together but still next to their code
+2. **Better navigation** - Easy to find all tests for a module
+3. **Simpler imports** - Short relative paths (`"../filename"` instead of `"../../../filename"`)
+4. **Clean file listings** - Implementation files not mixed with test files
+5. **Easier refactoring** - Tests move with their parent directory
+6. **Visual clarity** - `__tests__` folders clearly indicate test coverage
+7. **IDE friendly** - Most IDEs recognize and properly handle `__tests__` folders
 
-**Co-location is not optional** - it's our standard practice for all unit tests.
+**This pattern is required** - all tests must be in co-located `__tests__` folders.
 
 ## Test Categories
 
@@ -282,26 +317,37 @@ pnpm test --grep "addElement"
 
 ## Migration Guide
 
-When migrating from centralized to co-located tests:
+When organizing tests into co-located `__tests__` folders:
 
-1. **Identify existing tests** in `src/__tests__` or similar directories
-2. **Move unit tests** next to their source files (e.g., `modules/__tests__/crud.test.ts` → `modules/crud.test.ts`)
-3. **Create `__tests__` folders** for special test categories only
-4. **Update imports** to reflect new paths (usually changing `"../file"` to `"./file"`)
-5. **Update test config** if needed (most configs already support co-located tests)
-6. **Verify all tests pass** after migration
-7. **Remove old `__tests__` directories** that are now empty
+1. **Create `__tests__` folders** next to the files being tested
+2. **Move test files** into the appropriate `__tests__` folder
+3. **Update imports** in test files (typically `"../filename"` for the file being tested)
+4. **Organize by module** - each directory gets its own `__tests__` folder
+5. **Keep smoke tests** at `src/__tests__/smoke/` (package root level)
+6. **Verify all tests pass** after reorganization
 
-### Recent Migration (September 2025)
+### Example Migration
 
-The following files were successfully migrated to co-location:
+```bash
+# Before (scattered test files)
+src/components/Button.tsx
+src/components/Button.test.tsx
+src/hooks/useAuth.ts
+src/hooks/useAuth.test.ts
 
-- `apps/client/src/stores/blueprint/modules/__tests__/crud.test.ts` → `apps/client/src/stores/blueprint/modules/crud.test.ts`
-- `apps/client/src/stores/blueprint/hooks/__tests__/useBlueprint.test.tsx` → `apps/client/src/stores/blueprint/hooks/useBlueprint.test.tsx`
-- `apps/client/src/stores/blueprint/hooks/__tests__/useBlueprints.test.tsx` → `apps/client/src/stores/blueprint/hooks/useBlueprints.test.tsx`
-- `packages/@atomiton/nodes/src/composite/templates/__tests__/templates.test.ts` → `packages/@atomiton/nodes/src/composite/templates/templates.test.ts`
+# After (organized in __tests__ folders)
+src/components/Button.tsx
+src/components/__tests__/Button.test.tsx
+src/hooks/useAuth.ts
+src/hooks/__tests__/useAuth.test.ts
+```
 
-All tests continue to run successfully with existing Vitest configurations.
+### Directory Structure Benefits
+
+- **Clean separation** - Implementation and test files don't clutter the same directory
+- **Easy to identify** - Clear which modules have test coverage
+- **Batch operations** - Easy to run all tests in a module
+- **Standard pattern** - Recognized by most tools and IDEs
 
 ## Future Improvements
 
