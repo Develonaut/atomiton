@@ -72,10 +72,13 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **REQUIRED for ALL work:**
 
-- **Voorhees**: Strategize the most efficient implementation approach
-  - Review existing code patterns
-  - Identify potential for reuse
-  - Recommend simplest solution
+- **Voorhees**: Cut through architectural complexity - find the SIMPLEST solution
+  - Challenge every abstraction and pattern
+  - Question if features are actually needed (YAGNI)
+  - Eliminate over-engineering before it starts
+  - **Review ALL barrel exports (index.ts)** - only allow for component composition
+  - Mandate: "What's the SIMPLEST possible solution that meets requirements?"
+  - Remember: Simple > Complex > Complicated
 
 **REQUIRED if changes involve adding/removing major components or significant updates:**
 
@@ -88,10 +91,13 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **REQUIRED checks during implementation:**
 
-- **Voorhees**: Review implementation for unnecessary complexity
-  - No over-engineering
-  - No premature optimization
-  - No unnecessary abstractions
+- **Voorhees**: Ruthlessly slash complexity during implementation
+  - Cut unnecessary abstractions
+  - Remove clever code in favor of obvious code
+  - Eliminate premature optimization
+  - Challenge every design pattern - is it needed?
+  - **Block unnecessary barrel exports** - direct imports for utils/types/services
+  - Enforce: "Make it work, make it right, make it simple"
 - **Brian**: Determine testing requirements
   - Identify what tests are needed
   - Ensure test coverage is appropriate

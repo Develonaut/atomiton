@@ -1,4 +1,6 @@
-export const routes = [
+import type { RouteConfig } from "@atomiton/router";
+
+export const routes: RouteConfig[] = [
   {
     name: "home",
     path: "/",
@@ -74,4 +76,4 @@ export const routes = [
     path: "/assets/materials",
     component: () => import("../templates/Assets/MaterialsPage"),
   },
-] as const;
+];

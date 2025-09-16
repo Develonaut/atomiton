@@ -164,13 +164,76 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
 
 ### Secondary Priorities (After Blueprint System)
 
-1. **🔴 Node Inspector** - Display/edit node properties in right sidebar (CRITICAL)
-2. **🔴 Data Connections** - Enable node-to-node data flow connections
-3. **🟢 Visual Feedback** - Show execution status on nodes
-4. **🟢 Validation Package** - Extract Zod usage into @atomiton/validation package
-5. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
-6. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
-7. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
+1. **🔴 Node Package Separation** - Implement n8n-inspired workflow/nodes separation for browser safety
+   - Create @atomiton/workflow package with browser-safe types and metadata
+   - Keep execution logic in @atomiton/nodes (Node.js only)
+   - Update conductor to use workflow types
+   - Detailed strategy: docs/strategies/NODE_PACKAGE_SEPARATION.md
+
+   **Agent Prompt**:
+
+   ```
+   Implement n8n-inspired package separation following the strategy in docs/strategies/NODE_PACKAGE_SEPARATION.md. Create @atomiton/workflow package for browser-safe types/metadata, keep execution in @atomiton/nodes, and update conductor imports. The strategy document contains complete implementation details. Follow the mandatory workflow and coordinate with agents as required.
+   ```
+
+2. **🔴 Node Inspector** - Display/edit node properties in right sidebar (CRITICAL)
+3. **🔴 Data Connections** - Enable node-to-node data flow connections
+4. **🔴 Barrel Export Audit** - Conduct comprehensive audit to remove unnecessary barrel exports (index.ts files)
+   - Review all packages for non-essential barrel exports
+   - Keep ONLY component composition and package public APIs
+   - Remove barrels from: utils, types, services, stores, hooks, constants
+   - Expected impact: Significantly faster build times and better tree-shaking
+
+   **Agent Prompt**:
+
+   ```
+   Conduct a comprehensive barrel export audit across the entire codebase to improve build performance. Following the guidelines in docs/guides/CODE_STYLE.md and docs/guides/DEVELOPMENT_PRINCIPLES.md:
+
+   1. Find all index.ts/index.tsx files using Glob
+   2. Review each barrel export file and categorize as:
+      - KEEP: Component composition (Card + CardHeader/Body/Footer pattern)
+      - KEEP: Package public API (main package entry point)
+      - REMOVE: Utility/helper re-exports
+      - REMOVE: Type/interface re-exports
+      - REMOVE: Service/store/hook re-exports
+      - REMOVE: Constant/config re-exports
+
+   3. For each file to REMOVE:
+      - Delete the index.ts file
+      - Update all imports to use direct paths
+      - Verify no broken imports
+
+   4. Generate a report showing:
+      - Total barrel files found
+      - Number kept vs removed
+      - Estimated build time improvement
+
+   Have Voorhees review the plan before execution. Follow the mandatory workflow and ensure all changes maintain functionality while improving performance.
+   ```
+
+5. **🔴 Smoke Test Optimization** - Reduce smoke test execution time to maintain <30s limit (Currently: 17s)
+
+   **Current Issues:**
+   - Client smoke tests: 3.4s (template initialization takes 1.7s)
+   - Editor smoke tests: 3.5s (node type registration)
+   - Multiple packages running in parallel causing cumulative slowdown
+
+   **Suggested Optimizations:**
+   - Mock template initialization in api.smoke.test.ts
+   - Use test fixtures for node type registration
+   - Consider splitting tests: keep only critical paths in smoke, move others to integration
+   - Implement test result caching for unchanged packages
+   - Parallelize test execution within packages where possible
+
+   **Target Performance:**
+   - Individual package smoke tests: <2s
+   - Total smoke test suite: <15s (with 30s as hard limit)
+
+6. **🟢 Visual Feedback** - Show execution status on nodes
+7. **🟢 Validation Package** - Extract Zod usage into @atomiton/validation package
+8. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
+9. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
+10. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
 
 ## 🚨 CRITICAL: Testing Infrastructure Remediation
 

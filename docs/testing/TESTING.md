@@ -103,34 +103,55 @@ describe("Package API Smoke Tests", () => {
 
 #### Integration and Special Test Categories
 
-For tests that span multiple modules or test broader functionality:
+For tests that span multiple modules or test broader functionality, organize them by type:
 
 ```
 src/
 ├── store/
 │   ├── index.ts
 │   ├── actions/
-│   │   └── __tests__/              # Unit tests for actions
+│   │   └── __tests__/              # Co-located unit tests for actions
 │   └── __tests__/
 │       ├── index.test.ts           # Tests for store/index.ts
 │       ├── integration.test.ts     # Cross-module integration tests
 │       ├── performance.test.ts     # Performance benchmarks
 │       └── edge-cases.test.ts      # Edge case scenarios
 └── __tests__/
-    ├── smoke/                       # Package-level smoke tests
+    ├── unit/                        # Package-level unit tests with heavy mocking
+    │   ├── navigation.unit.test.ts
+    │   └── utilities.unit.test.ts
+    ├── integration/                 # Package-level integration tests
+    │   ├── routing.integration.test.tsx
+    │   └── preloading.integration.test.tsx
+    ├── smoke/                       # Package-level smoke tests (<5s)
     │   ├── api.smoke.test.ts
     │   └── critical-paths.smoke.test.ts
-    └── integration/                 # Package-level integration tests
-        └── workflow.test.ts
+    └── benchmark/                   # Performance benchmarks
+        └── performance.bench.ts
 ```
+
+**Test Type Guidelines:**
+
+- `__tests__/unit/` - Pure unit tests that heavily mock dependencies
+- `__tests__/integration/` - Tests that verify component interactions and real functionality
+- `__tests__/smoke/` - Fast critical functionality tests for CI/CD pipelines
+- `__tests__/benchmark/` - Performance and speed tests
 
 ### Naming Conventions
 
-- **Unit tests**: `[filename].test.ts` or `[filename].test.tsx`
-- **Integration tests**: Place in `__tests__/integration.test.ts`
-- **Performance tests**: Place in `__tests__/performance.test.ts`
-- **Edge case tests**: Place in `__tests__/edge-cases.test.ts`
+- **Unit tests**: Place in `__tests__/unit/[feature].unit.test.ts`
+- **Integration tests**: Place in `__tests__/integration/[feature].integration.test.ts`
+- **Smoke tests**: Place in `__tests__/smoke/[feature].smoke.test.ts`
+- **Performance tests**: Place in `__tests__/benchmark/[feature].bench.ts`
 - **E2E tests**: Keep in root `/playwright` directory
+
+**File Naming Guidelines:**
+
+- Add `.unit.` for unit tests to be explicit
+- Add `.integration.` for integration tests
+- Add `.smoke.` for smoke tests
+- Add `.bench.` for benchmark/performance tests
+- Use descriptive feature names: `navigation.unit.test.ts`, `routing.integration.test.tsx`, `api.smoke.test.ts`
 
 ### Why Co-located `__tests__` Folders are Required
 

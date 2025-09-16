@@ -1,5 +1,80 @@
 # Code Style Guidelines
 
+## Module Organization and Imports
+
+### Barrel Exports (index.ts) - Use Minimally
+
+**⚠️ CRITICAL PERFORMANCE CONSIDERATION: Barrel exports significantly impact build times and bundle sizes.**
+
+#### When to Use Barrel Exports (LIMITED CASES)
+
+✅ **ONLY use for:**
+
+1. **Component composition** - When components have variants/slots that work together
+
+   ```typescript
+   // components/Card/index.ts - ACCEPTABLE
+   export { Card } from "./Card";
+   export { CardHeader } from "./CardHeader";
+   export { CardBody } from "./CardBody";
+   export { CardFooter } from "./CardFooter";
+   ```
+
+2. **Package public API** - Single entry point for external consumers
+   ```typescript
+   // packages/@atomiton/ui/src/index.ts - ACCEPTABLE
+   export { Button, Card, Modal } from "./components";
+   export type { ButtonProps, CardProps } from "./types";
+   ```
+
+#### When NOT to Use Barrel Exports
+
+❌ **NEVER use for:**
+
+- Utilities or helper functions
+- Types and interfaces
+- Services, stores, or hooks
+- Constants or configuration
+- Internal module organization
+
+#### Performance Impact Examples
+
+```typescript
+// ❌ BAD - Creates unnecessary module graph complexity
+// utils/index.ts
+export * from "./string";
+export * from "./array";
+export * from "./date";
+export * from "./number";
+
+// Importing one function loads ALL utilities
+import { capitalize } from "@/utils"; // Loads everything!
+```
+
+```typescript
+// ✅ GOOD - Direct imports for better tree-shaking
+import { capitalize } from "@/utils/string";
+import { formatDate } from "@/utils/date";
+```
+
+#### Why This Matters
+
+1. **Build Performance**: Each barrel export adds to the module resolution time
+2. **Bundle Size**: Prevents effective tree-shaking
+3. **Circular Dependencies**: Barrel exports increase risk of circular imports
+4. **Code Clarity**: Direct imports show exactly where code comes from
+5. **TypeScript Performance**: TS must analyze entire barrel chains
+
+#### Voorhees Review Checkpoint
+
+Before creating ANY index.ts file, ask:
+
+- Is this for component composition with variants/slots?
+- Is this the public API of a package?
+- Can we use direct imports instead?
+
+If the answer to the last question is yes, DO NOT create the barrel export.
+
 ## Comments
 
 ### Philosophy: Code Should Speak for Itself

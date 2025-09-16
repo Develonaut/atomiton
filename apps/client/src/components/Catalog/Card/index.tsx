@@ -1,4 +1,4 @@
-import { useNavigate } from "@/router";
+import { toEditor } from "@/router/navigation";
 import Image from "@/components/Image";
 import Icon from "@/components/Icon";
 import { blueprintStore } from "@/stores/blueprint/store";
@@ -15,8 +15,6 @@ type Props = {
 };
 
 function Card({ value }: Props) {
-  const navigate = useNavigate();
-
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -26,12 +24,7 @@ function Card({ value }: Props) {
         blueprintStore.getState(),
       );
       if (blueprint) {
-        navigate.toEditor(
-          { id: String(value.id) },
-          {
-            state: { blueprint },
-          },
-        );
+        toEditor(String(value.id), { blueprint });
       }
     }
   };

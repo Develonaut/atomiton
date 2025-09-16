@@ -36,6 +36,7 @@ function LayoutEditor() {
 
       // TODO: Implement save functionality
       // blueprintStore.updateBlueprint(id, editorState);
+      console.log("Save functionality not yet implemented");
     },
     [id],
   );

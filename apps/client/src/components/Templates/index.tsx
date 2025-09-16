@@ -1,5 +1,5 @@
 import Image from "@/components/Image";
-import { useNavigate } from "@/router";
+import { toEditor } from "@/router/navigation";
 import { useTemplateBlueprints } from "@/stores/blueprint/hooks";
 import { blueprintStore } from "@/stores/blueprint/store";
 import { useMemo } from "react";
@@ -7,7 +7,6 @@ import { useMemo } from "react";
 function Templates() {
   // Get template blueprints
   const { templates } = useTemplateBlueprints();
-  const navigate = useNavigate();
 
   /**
    * Handler for template clicks - creates a copy and navigates to editor
@@ -37,15 +36,10 @@ function Templates() {
       }
 
       // Navigate to editor with nodes and edges passed in state
-      navigate.toEditor(
-        { id: copiedBlueprint.id },
-        {
-          state: {
-            defaultNodes: copiedBlueprint.nodes || [],
-            defaultEdges: copiedBlueprint.edges || [],
-          },
-        },
-      );
+      toEditor(copiedBlueprint.id, {
+        defaultNodes: copiedBlueprint.nodes || [],
+        defaultEdges: copiedBlueprint.edges || [],
+      });
     } catch (error) {
       console.error("Failed to handle template click:", error);
     }

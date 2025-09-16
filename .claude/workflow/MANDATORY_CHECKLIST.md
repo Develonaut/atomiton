@@ -19,6 +19,7 @@
 
 ## Critical Quality Gates
 
+- **Voorhees complexity review** - Must pass simplicity check before ANY implementation
 - **NO `any` types** - Must be fixed before completion
 - **NO redundant comments** - Must be removed
 - **Files < 500 lines** - Must be refactored

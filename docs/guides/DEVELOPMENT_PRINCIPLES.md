@@ -3,11 +3,12 @@
 ## Table of Contents
 
 - [Foundation Principles](#foundation-principles)
+  - [Simplicity First (Voorhees' Law)](#simplicity-first-voorhees-law)
   - [DRY (Don't Repeat Yourself)](#dry-dont-repeat-yourself)
-  - [Composition Over Inheritance](#composition-over-inheritance)
-  - [Separation of Concerns](#separation-of-concerns)
   - [YAGNI (You Aren't Gonna Need It)](#yagni-you-arent-gonna-need-it)
   - [KISS (Keep It Simple, Stupid)](#kiss-keep-it-simple-stupid)
+  - [Composition Over Inheritance](#composition-over-inheritance)
+  - [Separation of Concerns](#separation-of-concerns)
 - [Code Quality Standards](#code-quality-standards)
 - [Performance Principles](#performance-principles)
 - [Error Handling](#error-handling)
@@ -20,12 +21,87 @@
 
 ## Foundation Principles
 
+### Simplicity First (Voorhees' Law)
+
+**"Cut through architectural complexity. What's the SIMPLEST possible solution that still meets all requirements?"**
+
+- **Simple is better than complex**
+- **Complex is better than complicated**
+- **Don't over-engineer - EVER**
+- Challenge every abstraction: Is it actually needed?
+- Obvious code over clever code
+- If you can't explain it simply, it's too complex
+- Delete code whenever possible
+- Make it work, make it right, make it simple
+
 ### DRY (Don't Repeat Yourself)
 
 - Single source of truth for every piece of knowledge
 - Extract common patterns into reusable components, utilities, or abstractions
 - When duplication is found, refactor to a shared solution
 - Configuration over duplication
+
+### YAGNI (You Aren't Gonna Need It)
+
+**Core Simplicity Principle:**
+
+- Build only what's needed NOW
+- No speculative features
+- No "might be useful later" code
+- Delete unused code immediately
+- Features should be pulled by requirements, not pushed by developers
+
+### KISS (Keep It Simple, Stupid)
+
+**Enhanced with Voorhees' Simplicity Mandate:**
+
+- Start with the simplest solution that could possibly work
+- Add complexity ONLY when proven necessary
+- Refactor to simplify, not to show off
+- Ask: "What can we remove?" before "What can we add?"
+- Flat is better than nested
+- Explicit is better than implicit
+
+### Minimal Barrel Exports (Performance First)
+
+**Barrel exports (index.ts files) slow down builds and bundlers. Use sparingly.**
+
+**ONLY use barrel exports for:**
+
+- Component composition and slot organization (UI components with variants/slots)
+- Public API surfaces of packages (single entry point)
+
+**NEVER use barrel exports for:**
+
+- Internal utilities or helpers
+- Types and interfaces (import directly)
+- Services or stores
+- Constants or configuration
+- Testing utilities
+
+**Why this matters:**
+
+- Barrel exports prevent tree-shaking
+- They increase build times exponentially
+- They create circular dependency risks
+- They obscure the actual import source
+
+**Instead of:**
+
+```typescript
+// utils/index.ts ❌
+export * from "./string";
+export * from "./array";
+export * from "./date";
+```
+
+**Do this:**
+
+```typescript
+// Import directly ✅
+import { formatDate } from "@/utils/date";
+import { capitalize } from "@/utils/string";
+```
 
 ### Build for Extensibility
 
@@ -119,6 +195,16 @@
 - Recovery strategies where possible
 
 ## Code Quality Standards
+
+### Simplicity Review Gate (Voorhees Check)
+
+**Before ANY code is accepted:**
+
+- Has unnecessary complexity been removed?
+- Can this be done with less code?
+- Are all abstractions justified?
+- Would a junior developer understand this?
+- Have we avoided premature optimization?
 
 ### Readability Over Cleverness
 

@@ -44,10 +44,18 @@ src/
 ├── utils/
 │   └── __tests__/        # Co-located unit tests
 └── __tests__/
-    ├── smoke/            # Package smoke tests (<5s)
+    ├── unit/             # Unit tests
     ├── integration/      # Integration tests
+    ├── smoke/            # Package smoke tests (<5s)
     └── benchmark/        # Performance tests
 ```
+
+**Folder Organization Guidelines:**
+
+- `__tests__/unit/` - Pure unit tests with heavy mocking (use `.unit.test.ts` naming)
+- `__tests__/integration/` - Cross-component integration tests (use `.integration.test.ts` naming)
+- `__tests__/smoke/` - Fast critical functionality tests (use `.smoke.test.ts` naming)
+- `__tests__/benchmark/` - Performance and speed tests (use `.bench.ts` naming)
 
 ### Performance Limits
 

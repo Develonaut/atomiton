@@ -3,21 +3,19 @@
 import Icon from "@/components/Icon";
 import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import VideoPlayer from "@/components/VideoPlayer";
-import { useNavigate } from "@/router";
+import { toExplore } from "@/router/navigation";
 import Details from "@/templates/Explore/DetailsPage/Details";
 import Report from "@/templates/Explore/DetailsPage/Report";
 import Slider from "@/templates/Explore/DetailsPage/Slider";
 
 function DetailsPageAdapter() {
-  const navigate = useNavigate();
-
   return (
     <LayoutOnlyHeader>
       <div className="flex max-lg:block">
         <div className="relative w-[calc(100%-40rem)] pb-16 max-[1940px]:w-[calc(100%-31rem)] max-xl:w-[calc(100%-25rem)] max-lg:w-full max-md:pb-24">
           <button
             className="absolute top-5 right-5 z-2 size-11 rounded-xl bg-surface-01 border border-s-02 transition-colors hover:bg-surface-03 max-md:top-3"
-            onClick={() => navigate.back()}
+            onClick={toExplore}
           >
             <Icon className="!size-4 fill-primary" name="close" />
           </button>

@@ -55,3 +55,7 @@ yarn-error.log*
 # Claude agent tracking (for activity tracking use only)
 .claude/LOG.md
 **/.claude/LOG.md
+
+# Script failures
+nul
+null

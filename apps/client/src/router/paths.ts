@@ -1,4 +1,4 @@
-// Central path definitions for routes
+// Central path definitions for routes - matches routes.ts exactly
 export const PATHS = {
   HOME: "/",
   EXPLORE: "/explore",
@@ -8,7 +8,7 @@ export const PATHS = {
   EDITOR: "/editor/$id",
   ASSETS_3D: "/assets/3d-objects",
   ASSETS_MATERIALS: "/assets/materials",
-  PROFILE: "/profile/$id?", // Optional param for viewing specific profiles
+  PROFILE: "/profile",
   PRICING: "/pricing",
   LIKES: "/likes",
   UPDATES: "/updates",

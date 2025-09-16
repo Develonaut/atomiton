@@ -21,12 +21,15 @@ Task(
 
     You MUST:
     1. Read and follow the mandatory workflow
-    2. Create worktree ONLY if starting NEW feature (not for assisting)
-    3. Use TodoWrite to track progress
-    4. Complete [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md) before marking done
-    5. Get Karen's approval using checklist before calling work complete
+    2. Get Voorhees to review approach BEFORE coding - "What's the SIMPLEST solution?"
+    3. Create worktree ONLY if starting NEW feature (not for assisting)
+    4. Use TodoWrite to track progress
+    5. Complete [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md) before marking done
+    6. Get Karen's approval using checklist before calling work complete
 
     Quality Requirements:
+    - Voorhees MUST approve simplicity before implementation
+    - NO unnecessary complexity or over-engineering
     - NO `any` types in code
     - Remove ALL redundant comments
     - Break up files over 500 lines
@@ -78,10 +81,12 @@ Task(
 When an agent returns their work, verify:
 
 - [ ] Did they confirm reading the execution plan?
-- [ ] Did they create a worktree?
+- [ ] **Did Voorhees review and approve the approach for simplicity?**
+- [ ] Did they create a worktree (if needed)?
 - [ ] Did they use TodoWrite to track workflow steps?
 - [ ] Did they follow ALL workflow steps in order?
 - [ ] Did they complete the REVIEW_CHECKLIST?
+- [ ] **Has unnecessary complexity been eliminated?**
 - [ ] Are there NO `any` types in the code?
 - [ ] Were redundant comments removed?
 - [ ] Are all files < 500 lines?
