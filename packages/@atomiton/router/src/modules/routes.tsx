@@ -29,6 +29,12 @@ export const createRootRouteInstance = () => {
   });
 };
 
+// Cache for preloaded components
+const componentCache = new Map<
+  string,
+  React.ComponentType | Promise<{ default: React.ComponentType }>
+>();
+
 /**
  * Converts a single route config to a TanStack route
  */
@@ -45,45 +51,73 @@ export const createRouteFromConfig = (
     .replace(/\$([^/?]+)\?/g, "$$$1") // Optional params
     .replace(/\$([^/?]+)/g, "$$$1"); // Required params
 
-  // Create the lazy component outside to avoid recreating on each render
-  const LazyComponent = React.lazy(() => {
-    const result = component();
+  // Create a wrapper component that handles preloaded modules
+  function RouteComponent() {
+    const [LoadedComponent, setLoadedComponent] =
+      React.useState<React.ComponentType | null>(() => {
+        const cached = componentCache.get(path);
+        // If we have a resolved component, use it immediately
+        if (cached && typeof cached !== "object") {
+          return cached as React.ComponentType;
+        }
+        return null;
+      });
 
-    // If it's already a Promise, handle it
-    if (result && typeof result === "object" && "then" in result) {
-      return result.then(
-        (module: { default: RouteComponent } | RouteComponent) =>
-          typeof module === "object" && "default" in module
-            ? module
-            : { default: module },
-      );
+    React.useEffect(() => {
+      if (!LoadedComponent) {
+        const cached = componentCache.get(path);
+
+        if (cached && typeof cached === "object" && "then" in cached) {
+          // If we have a promise, wait for it
+          cached.then((module) => {
+            const Component = module.default;
+            componentCache.set(path, Component);
+            setLoadedComponent(() => Component);
+          });
+        } else if (!cached) {
+          // If nothing cached, load it now
+          const result = component();
+          if (result && typeof result === "object" && "then" in result) {
+            componentCache.set(path, result);
+            result.then(
+              (module: { default: RouteComponent } | RouteComponent) => {
+                const Component =
+                  typeof module === "object" && "default" in module
+                    ? module.default
+                    : (module as React.ComponentType);
+                componentCache.set(path, Component);
+                setLoadedComponent(() => Component);
+              },
+            );
+          }
+        }
+      }
+    }, [LoadedComponent]);
+
+    const FallbackComponent = pendingComponent || defaultPendingComponent;
+
+    if (LoadedComponent) {
+      return <LoadedComponent />;
     }
 
-    // If it's a direct component, wrap it in a resolved Promise
-    return Promise.resolve({
-      default: result as React.ComponentType,
-    });
-  });
-
-  // Create a wrapper component
-  const RouteComponent = () => {
-    const FallbackComponent = pendingComponent || defaultPendingComponent;
-    return (
-      <React.Suspense
-        fallback={
-          FallbackComponent ? <FallbackComponent /> : <div>Loading...</div>
-        }
-      >
-        <LazyComponent />
-      </React.Suspense>
-    );
-  };
+    return FallbackComponent ? <FallbackComponent /> : <div>Loading...</div>;
+  }
 
   return createRoute({
     getParentRoute: () => rootRoute,
     path: tanStackPath,
     component: RouteComponent,
     errorComponent: (errorComponent || defaultErrorComponent) as undefined,
+    loader: async () => {
+      // Preload the component
+      const cached = componentCache.get(path);
+      if (!cached) {
+        const result = component();
+        componentCache.set(path, result);
+        await result;
+      }
+      return {};
+    },
   });
 };
 

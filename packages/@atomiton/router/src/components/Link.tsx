@@ -12,6 +12,7 @@ export function Link({
   state,
   search,
   hash,
+  preload = "intent",
 }: LinkProps) {
   return (
     <TanStackLink
@@ -23,6 +24,7 @@ export function Link({
       state={state as undefined}
       search={search}
       hash={hash}
+      preload={preload}
     >
       {children}
     </TanStackLink>

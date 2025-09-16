@@ -1,12 +1,12 @@
 // Vite-compatible adapter for DetailsPage
 
-import { useNavigate } from "@/router";
-import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import Icon from "@/components/Icon";
+import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
 import VideoPlayer from "@/components/VideoPlayer";
-import Slider from "@/templates/Explore/DetailsPage/Slider";
+import { useNavigate } from "@/router";
 import Details from "@/templates/Explore/DetailsPage/Details";
 import Report from "@/templates/Explore/DetailsPage/Report";
+import Slider from "@/templates/Explore/DetailsPage/Slider";
 
 function DetailsPageAdapter() {
   const navigate = useNavigate();

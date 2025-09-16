@@ -16,30 +16,26 @@ export type { HistoryActions };
 
 export const createHistoryModule = (store: BaseStore): HistoryActions => ({
   back: () => {
-    const { router, canGoBack } = store.getState();
+    const { router } = store.getState();
     if (!router) {
       console.error("Router not initialized");
       return;
     }
-    if (!canGoBack) {
-      console.warn("Cannot go back - already at first entry");
-      return;
-    }
 
+    // Let the browser and TanStack Router handle history navigation
+    // They maintain their own history state that's more accurate
     router.history.go(-1);
   },
 
   forward: () => {
-    const { router, canGoForward } = store.getState();
+    const { router } = store.getState();
     if (!router) {
       console.error("Router not initialized");
       return;
     }
-    if (!canGoForward) {
-      console.warn("Cannot go forward - already at latest entry");
-      return;
-    }
 
+    // Let the browser and TanStack Router handle history navigation
+    // They maintain their own history state that's more accurate
     router.history.go(1);
   },
 

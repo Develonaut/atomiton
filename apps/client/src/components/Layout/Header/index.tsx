@@ -76,7 +76,12 @@ function Header({ onOpen }: Props) {
         {isActiveExplore && <Filters onlyBtnIcon />}
         <Notifications />
         {!isActiveExplore && (
-          <Button isPrimary as="link" href="/editor">
+          <Button
+            isPrimary
+            as="link"
+            href="/editor"
+            data-testid="create-button"
+          >
             Create
           </Button>
         )}

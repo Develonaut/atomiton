@@ -69,7 +69,7 @@ function Dropdown({ value }: DropdownProps) {
                 pathname === item.href ? "text-primary" : "text-secondary"
               }`}
               onClick={() => setHeight("auto")}
-              href={item.href}
+              to={item.href}
               key={index}
             >
               {item.title}

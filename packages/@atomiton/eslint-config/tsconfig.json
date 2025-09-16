@@ -9,7 +9,8 @@
     "lib": ["ES2022"],
     "declaration": true,
     "declarationMap": true,
-    "types": ["node"]
+    "types": ["node"],
+    "allowImportingTsExtensions": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

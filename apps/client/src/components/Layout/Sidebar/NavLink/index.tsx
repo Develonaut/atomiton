@@ -1,6 +1,5 @@
-import { Link } from "@/router";
-import { usePathname } from "@/router";
 import Icon from "@/components/Icon";
+import { Link, usePathname } from "@/router";
 
 type NavLinkProps = {
   value: {
@@ -22,7 +21,7 @@ function NavLink({ value, onClick }: NavLinkProps) {
           ? "bg-surface-03 border-s-01"
           : "border-transparent"
       }`}
-      href={value.href}
+      to={value.href}
       onClick={onClick}
     >
       <div

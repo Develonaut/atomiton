@@ -1,13 +1,18 @@
 #!/bin/sh
 
-# Husky pre-push hook - Minimal checks only
+# Husky pre-push hook - Run critical user flow tests
 
-# Pre-push should be lightweight since all critical checks
-# are now handled in pre-commit
+echo "📤 Running critical user flow tests before push..."
 
-echo "📤 Preparing to push..."
+# Run Playwright E2E tests for critical user flows (max 30 seconds)
+# These verify complete user journeys in real browser
+pnpm test:e2e:smoke
 
-# Optionally, you could add a quick sanity check here
-# For now, we just pass through since pre-commit handles everything
+if [ $? -ne 0 ]; then
+  echo "❌ Critical user flow tests failed!"
+  echo "💡 Fix failing E2E tests before pushing."
+  echo "📚 See docs/testing/CRITICAL_USER_FLOWS.md for test requirements"
+  exit 1
+fi
 
-echo "✅ Ready to push!"
+echo "✅ All critical user flows passing - ready to push!"

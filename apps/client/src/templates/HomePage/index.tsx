@@ -1,5 +1,6 @@
 import Catalog from "@/components/Catalog";
 import Layout from "@/components/Layout";
+import Templates from "@/components/Templates";
 import { useBlueprints } from "@/stores/blueprint/hooks";
 import { titleCase } from "@atomiton/utils";
 import { useMemo } from "react";
@@ -25,11 +26,13 @@ function HomePage() {
   );
 
   return (
-    <Layout>
+    <Layout data-testid="home-page">
+      <Templates />
       <Catalog
         title="My Scenes"
         content={combinedContent}
         loading={isLoading}
+        data-testid="blueprint-gallery"
       />
     </Layout>
   );

@@ -2,7 +2,10 @@ import type { Linter } from "eslint";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
-import baseConfig from "./base";
+// Note: .js extension is required here because this package uses "type": "module"
+// in package.json, making it an ESM module where Node.js requires explicit
+// file extensions for all relative imports
+import baseConfig from "./base.js";
 
 /**
  * ESLint configuration for React libraries and applications

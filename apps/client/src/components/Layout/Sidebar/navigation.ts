@@ -39,12 +39,12 @@ export const navigation = [
 export const folders = [
   {
     title: "Untitled Folder",
-    href: "/folders/untitled",
+    to: "/folders/untitled",
     color: "#E36323",
   },
   {
     title: "3D Icons",
-    href: "/folders/3d-icons",
+    to: "/folders/3d-icons",
     color: "#49BA61",
   },
 ];

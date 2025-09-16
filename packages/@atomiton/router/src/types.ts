@@ -82,6 +82,7 @@ export type LinkProps = {
   state?: unknown;
   search?: Record<string, unknown>;
   hash?: string;
+  preload?: "intent" | "viewport" | "render" | false;
 };
 
 export type CreateRouterOptions<TRoutes extends readonly RouteConfig[]> = {
