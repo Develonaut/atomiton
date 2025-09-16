@@ -40,6 +40,7 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
+    "@atomiton/utils": "workspace:*",
     "immer": "^10.0.0",
     "zustand": "^5.0.2"
   },

@@ -4,10 +4,11 @@
  * Clean, functional API for creating Zustand stores with Immer and persistence
  */
 
+import { kebabCase } from "@atomiton/utils";
 import { enableMapSet } from "immer";
 import { create } from "zustand";
 import type { PersistOptions, PersistStorage } from "zustand/middleware";
-import { persist, devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 // Enable Map/Set support in Immer on module load
@@ -63,12 +64,16 @@ export type StoreConfig<T> = {
 
 /**
  * Creates a Zustand store with Immer for immutability and optional persistence
+ * Automatically prefixes store names with "atomiton-" and converts to kebab-case
  */
 export function createStore<T extends object>(
   initializer: StateCreator<T>,
   config: StoreConfig<T> = {},
 ): Store<T> {
   const { name = "Store", persist: persistConfig } = config;
+
+  // Auto-format name: prefix with "atomiton-" and convert to kebab-case
+  const formattedName = `atomiton-${kebabCase(name)}`;
 
   // Create the basic store creator with Immer
   const storeCreator = immer<T>(() => initializer());
@@ -77,7 +82,7 @@ export function createStore<T extends object>(
   if (!persistConfig) {
     const store = create<T>()(
       devtools(storeCreator, {
-        name,
+        name: formattedName,
         enabled: process.env.NODE_ENV === "development",
       }),
     );
@@ -96,7 +101,7 @@ export function createStore<T extends object>(
 
   const store = create<T>()(
     devtools(persistedStore, {
-      name: `${name}:${key}`,
+      name: `${formattedName}:${key}`,
       enabled: process.env.NODE_ENV === "development",
     }),
   );

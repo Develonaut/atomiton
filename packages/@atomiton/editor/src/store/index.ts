@@ -29,7 +29,7 @@ const initialState: EditorState = {
 };
 
 const store = createStore<EditorState>(() => initialState, {
-  name: "EditorStore",
+  name: "editor",
 });
 
 type EditorStoreActions = {} & BaseStore &

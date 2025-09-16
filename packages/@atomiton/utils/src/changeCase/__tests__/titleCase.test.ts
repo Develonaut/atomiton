@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { titleCase } from "../changeCase/titleCase";
+import { titleCase } from "../titleCase";
 
 describe("titleCase", () => {
   it("converts lowercase words to title case", () => {

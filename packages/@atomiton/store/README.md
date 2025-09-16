@@ -20,6 +20,19 @@ This package is part of the Atomiton monorepo and is not published separately.
 - **TypeScript-First**: Full type safety and excellent IntelliSense
 - **DevTools Support**: Automatic Redux DevTools integration in development
 - **React Integration**: Works seamlessly with React components
+- **Automatic Naming**: Consistent "atomiton-" prefix with kebab-case formatting
+
+## Store Naming Convention
+
+All stores automatically follow a consistent naming pattern:
+
+- **DevTools names**: Automatically prefixed with "atomiton-" and converted to kebab-case
+- **Examples**:
+  - `name: "BlueprintStore"` → DevTools shows `"atomiton-blueprint-store"`
+  - `name: "Navigation"` → DevTools shows `"atomiton-navigation"`
+  - `name: "Settings"` → DevTools shows `"atomiton-settings"`
+
+This ensures all Atomiton stores are easily identifiable in development tools and follows consistent naming conventions across the platform.
 
 ## Quick Start
 
@@ -59,7 +72,7 @@ const settingsStore = createStore(
     language: "en",
   }),
   {
-    name: "Settings",
+    name: "Settings", // DevTools name becomes "atomiton-settings"
     persist: {
       key: "app-settings", // Saves to localStorage as 'store:app-settings'
     },
@@ -71,11 +84,16 @@ const settingsStore = createStore(
 
 ```typescript
 // Blueprint store example
-const blueprintStore = createStore(() => ({
-  nodes: new Map(),
-  connections: [],
-  selectedNodeId: null as string | null,
-}));
+const blueprintStore = createStore(
+  () => ({
+    nodes: new Map(),
+    connections: [],
+    selectedNodeId: null as string | null,
+  }),
+  {
+    name: "BlueprintStore", // DevTools name becomes "atomiton-blueprint-store"
+  },
+);
 
 // Add a new node
 blueprintStore.setState((state) => {
@@ -106,6 +124,7 @@ Creates a new store with the given initial state and configuration.
 ```typescript
 interface StoreConfig<T> {
   name?: string; // Store name for DevTools (default: "Store")
+  // Automatically prefixed with "atomiton-" and converted to kebab-case
   persist?: PersistConfig<T>; // Persistence configuration
 }
 
@@ -161,9 +180,14 @@ const selector = StoreAPI.createSelector(/* ... */);
 ```typescript
 import { createStore } from "@atomiton/store";
 
-const store = createStore(() => ({
-  /* initial state */
-}));
+const store = createStore(
+  () => ({
+    /* initial state */
+  }),
+  {
+    name: "CounterStore", // DevTools will show "atomiton-counter-store"
+  },
+);
 
 // Actions are just functions that call setState
 const increment = () =>
@@ -175,7 +199,7 @@ const increment = () =>
 const getCount = (state) => state.count;
 ```
 
-See `MIGRATION.md` for detailed migration examples.
+The store package simplifies state management while maintaining full type safety and the automatic "atomiton-" prefix ensures all stores are easily identifiable in development tools.
 
 ## Development
 

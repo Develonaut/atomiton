@@ -1,5 +1,12 @@
 # Changelog - @atomiton/utils
 
+## [0.1.3] - 2025-01-15
+
+### Added
+
+- Added `kebabCase()` utility function for converting strings to kebab-case
+- Used by `@atomiton/store` for automatic store name formatting
+
 ## [0.1.2] - 2025-01-15
 
 ### Added
