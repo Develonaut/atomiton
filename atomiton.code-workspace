@@ -6,39 +6,39 @@
     },
     {
       "name": "📖 Documentation",
-      "path": "./docs",
+      "path": "docs",
     },
     {
       "name": "🎨 Client",
-      "path": "./apps/client",
+      "path": "apps/client",
     },
     {
       "name": "🖥️ Desktop",
-      "path": "./apps/desktop",
+      "path": "apps/desktop",
     },
     {
       "name": "📦 Packages",
-      "path": "./packages/@atomiton",
+      "path": "packages/@atomiton",
     },
     {
       "name": "⚡ Core",
-      "path": "./packages/@atomiton/core",
+      "path": "packages/@atomiton/core",
     },
     {
       "name": "🌐 Nodes",
-      "path": "./packages/@atomiton/nodes",
+      "path": "packages/@atomiton/nodes",
     },
     {
       "name": "🧠 Store",
-      "path": "./packages/@atomiton/store",
+      "path": "packages/@atomiton/store",
     },
     {
       "name": "🧩 UI",
-      "path": "./packages/@atomiton/ui",
+      "path": "packages/@atomiton/ui",
     },
     {
       "name": "✏️ Editor",
-      "path": "./packages/@atomiton/editor",
+      "path": "packages/@atomiton/editor",
     },
   ],
   "settings": {
