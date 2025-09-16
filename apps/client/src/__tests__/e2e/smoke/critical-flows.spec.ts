@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Critical User Flows @critical", () => {
-  test("Home page loads @critical", async ({ page }) => {
+test.describe("Critical User Flows", () => {
+  test("Home page loads", async ({ page }) => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
@@ -13,7 +13,7 @@ test.describe("Critical User Flows @critical", () => {
     await expect(nav).toBeVisible();
   });
 
-  test("Explore page navigation @critical", async ({ page }) => {
+  test("Explore page navigation", async ({ page }) => {
     await page.goto("/explore");
     await page.waitForLoadState("networkidle");
 
@@ -21,7 +21,7 @@ test.describe("Critical User Flows @critical", () => {
     await expect(page).toHaveURL(/\/explore/);
   });
 
-  test("Create/Editor page loads @critical", async ({ page }) => {
+  test("Create/Editor page loads", async ({ page }) => {
     await page.goto("/create");
     await page.waitForLoadState("networkidle");
 

@@ -64,15 +64,16 @@ echo "🎭 Checking critical E2E tests..."
 CLIENT_CHANGED=$(echo "$CHANGED_FILES" | grep -q "apps/client" && echo "yes" || echo "no")
 
 if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; then
-  echo "Running critical user flow tests for client..."
-  # Use the standard test:e2e script with critical tag filter
-  # Note: Will show "No tests found" if no @critical tests exist
-  timeout 120 pnpm test:e2e --grep="@critical" 2>&1 | grep -v "Error: No tests found" || {
-    if [ $? -ne 0 ]; then
-      echo "⚠️ Some E2E tests failed (non-blocking)"
+  echo "Running smoke E2E tests for client..."
+  # Run smoke tests from the smoke folder
+  if [ -d "apps/client/src/__tests__/e2e/smoke" ]; then
+    timeout 120 pnpm test:e2e src/__tests__/e2e/smoke 2>&1 || {
+      echo "⚠️ Some smoke E2E tests failed (non-blocking)"
       echo "💡 Consider fixing before push"
-    fi
-  }
+    }
+  else
+    echo "ℹ️ No smoke E2E tests found in src/__tests__/e2e/smoke"
+  fi
 fi
 
 # Also check other packages for E2E tests
