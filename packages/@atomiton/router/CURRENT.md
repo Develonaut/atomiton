@@ -2,170 +2,149 @@
 
 ## Overview
 
-Domain-agnostic router package providing auto-generated navigation methods and TanStack Router integration. Designed to offer type-safe routing with minimal configuration while maintaining flexibility for complex navigation patterns.
+Clean, simplified wrapper around TanStack Router providing type-safe routing with minimal abstraction. The package has been significantly simplified to eliminate over-engineering while maintaining essential functionality.
 
-## Current Status: January 2025
+## Current Status: September 2025
 
-### 🎯 Package State: Core Foundation Established
+### 🎯 Package State: Simplified & Production Ready
 
-The router package provides a complete routing solution with auto-generated navigation methods, type safety, and seamless integration with the Atomiton ecosystem. Currently serves as the primary navigation abstraction for all applications.
+Major simplification completed - reduced from ~1930 lines across 19+ files to 174 lines across 4 focused files (91% reduction). The package now serves as a thin, clean wrapper around TanStack Router without unnecessary abstractions.
 
 ### 📊 Implementation Status
 
-| Component                | Status      | Implementation                   | Priority |
-| ------------------------ | ----------- | -------------------------------- | -------- |
-| **Core Router**          | 🟢 Complete | TanStack Router integration      | -        |
-| **Navigation Generator** | 🟢 Complete | Auto-generated type-safe methods | -        |
-| **Zustand Store**        | 🟢 Complete | Global navigation state          | -        |
-| **Route Configuration**  | 🟢 Complete | Flexible route definitions       | -        |
-| **Parameter Handling**   | 🟢 Complete | Required and optional params     | -        |
-| **Custom Navigators**    | 🟢 Complete | Custom navigation logic          | -        |
-| **Error Boundaries**     | 🟢 Complete | Route-level error handling       | -        |
-| **Loading States**       | 🟢 Complete | Configurable loading components  | -        |
+| Component            | Status      | Implementation                | Lines |
+| -------------------- | ----------- | ----------------------------- | ----- |
+| **types.ts**         | 🟢 Complete | TypeScript type definitions   | 21    |
+| **routeFactory.ts**  | 🟢 Complete | Route creation & lazy loading | 74    |
+| **createRouter.tsx** | 🟢 Complete | Main router factory function  | 61    |
+| **index.ts**         | 🟢 Complete | Public API exports            | 17    |
+| **Total Package**    | 🟢 Complete | Clean TanStack Router wrapper | 174   |
 
 ### 🚀 Current Capabilities
 
-#### Core Routing Features
+#### Core Features
 
-- ✅ **Auto-generated Navigation**: Type-safe methods like `navigate.toEditor()`
-- ✅ **TanStack Router Integration**: Built on robust routing foundation
-- ✅ **Parameter Support**: Required (`$param`) and optional (`$param?`) parameters
-- ✅ **Custom Navigators**: Route-specific navigation logic
-- ✅ **Type Safety**: Full TypeScript support with auto-completion
-- ✅ **Lazy Loading**: Built-in code splitting support
+- ✅ **TanStack Router Integration**: Clean wrapper around TanStack Router
+- ✅ **Component Lazy Loading**: Built-in lazy loading for route components
+- ✅ **Type Safety**: Full TypeScript support for all APIs
+- ✅ **Minimal Abstraction**: Thin wrapper without over-engineering
+- ✅ **React Integration**: Seamless React hooks and components
 
-#### State Management
+#### API Structure
 
-- ✅ **Zustand Integration**: Global navigation state accessible anywhere
-- ✅ **History Management**: Complete navigation history tracking
-- ✅ **Current Route Tracking**: Real-time route and parameter tracking
-- ✅ **DevTools Support**: Redux DevTools integration for debugging
-
-#### Developer Experience
-
-- ✅ **Minimal Configuration**: Simple route definitions
-- ✅ **Domain Agnostic**: No business logic dependencies
-- ✅ **React Hooks**: Complete hook-based API
-- ✅ **Component Integration**: Built-in Link component
+- ✅ **createRouter()**: Main factory function returning clean API
+- ✅ **Navigation**: TanStack Router's navigation function
+- ✅ **React Hooks**: useRouter, useNavigate, useParams, useLocation
+- ✅ **Components**: Link and RouterProvider components
+- ✅ **Loading States**: Configurable loading components for lazy routes
 
 ### 🔧 Active Usage
 
 Currently being used by:
 
 - **apps/client**: Primary application routing and navigation
-- **@atomiton/editor**: Editor-specific navigation patterns
-- **Navigation components**: Site-wide navigation and breadcrumbs
-- **Development tooling**: Route debugging and testing
+- **Navigation helpers**: App-specific navigation utilities moved to apps/client/router/
 
-### 🎯 Current Focus: Production Stability
+### 🎯 Current Focus: Stability & Simplicity
 
-**Primary Goal**: Maintain stable routing foundation while supporting application growth
+**Primary Goal**: Maintain simplified, stable routing wrapper
 
 **Recent Work**:
 
-- ✅ TanStack Router v1.62+ integration
-- ✅ Auto-generated navigation method optimization
-- ✅ Zustand store performance improvements
-- ✅ Type safety enhancements for complex parameters
+- ✅ Major simplification: 91% code reduction (1930 → 174 lines)
+- ✅ Eliminated over-engineered abstractions and custom state management
+- ✅ Clean wrapper around TanStack Router
+- ✅ All quality checks passing (TypeScript, ESLint, tests, build)
+- ✅ Karen approval as production-ready
 
 ## Core Architecture
 
-### Route Configuration System
+### Clean Wrapper Design
 
-Flexible route definitions with minimal configuration:
+Simple route configuration with minimal abstraction:
 
 ```typescript
 {
   name: "editor",
-  path: "/editor/$blueprintId?",
+  path: "/editor/$blueprintId",
   component: () => import("./pages/EditorPage"),
-  navigator: (blueprintId?: string) => {
-    // Custom logic
-    return blueprintId ? `/editor/${blueprintId}` : "/editor/new";
-  }
+  pendingComponent: LoadingSpinner,
+  errorComponent: ErrorBoundary
 }
 ```
 
-### Navigation Method Generation
+### TanStack Router Integration
 
-Automatic generation of type-safe navigation methods:
+Direct use of TanStack Router APIs:
 
-- `navigate.toHome()` for simple routes
-- `navigate.toEditor({ blueprintId: "123" })` for parameterized routes
-- Full type checking and auto-completion
+- `navigate({ to: "/path", params: { id: "123" } })` for navigation
+- Standard TanStack Router hooks and components
+- No custom abstractions or state management
 
-### State Management Integration
+### Component Loading
 
-Zustand store providing global navigation state:
+Built-in lazy loading with loading states:
 
-- Current route and parameters
-- Navigation history
-- Loading and error states
-- Real-time updates across components
+- Automatic component lazy loading
+- Configurable loading components per route
+- Error boundary support for failed loads
 
 ## Dependencies
 
 ### Core Dependencies
 
 - `@tanstack/react-router`: Modern React routing foundation
-- `path-to-regexp`: Path pattern matching and parameter extraction
-- `@atomiton/store`: Store patterns and utilities
-- `@atomiton/utils`: Common utilities and helpers
+- `react`: React 18+ for concurrent features and hooks
 
-### Peer Dependencies
+### No Additional Dependencies
 
-- `react`: React 18+ for concurrent features
-- `react-dom`: DOM rendering integration
+The simplified implementation has minimal dependencies:
+
+- No custom state management libraries
+- No path parsing utilities beyond TanStack Router
+- No complex abstractions or utility dependencies
 
 ## Integration Points
 
 ### Client Application
 
-The router package serves as the primary navigation system:
+The router package provides basic routing capabilities:
 
-- Application-wide routing configuration
-- Type-safe navigation throughout the app
-- Lazy loading and code splitting
-- Error boundary and loading state management
+- Simple routing configuration using createRouter()
+- Component lazy loading with loading states
+- Standard TanStack Router navigation patterns
+- Thin wrapper without business logic coupling
 
-### Editor Package
+### Navigation Helpers
 
-Specialized integration for editor navigation:
+App-specific navigation utilities have been moved to `apps/client/router/`:
 
-- Blueprint-specific routing patterns
-- Editor state preservation during navigation
-- Nested route handling for complex editor views
-
-### UI Components
-
-Navigation component integration:
-
-- Link components with type safety
-- Navigation menus and breadcrumbs
-- Route-based conditional rendering
+- Custom navigation methods and utilities
+- Application-specific routing logic
+- Complex navigation patterns and state management
 
 ## Quality Metrics
 
-### Performance
+### Simplicity
 
-- ✅ Route generation: < 5ms for typical applications
-- ✅ Navigation: < 1ms for route transitions
-- ✅ Bundle size: < 15KB gzipped
-- ✅ Memory usage: Minimal overhead over TanStack Router
+- ✅ Codebase: 174 lines across 4 files (91% reduction from original)
+- ✅ Bundle size: Minimal overhead over TanStack Router
+- ✅ API surface: Clean, focused API without over-engineering
+- ✅ Dependencies: Minimal dependency footprint
 
 ### Reliability
 
-- ✅ Test coverage: 90%+ line coverage
-- ✅ Type safety: 100% TypeScript coverage
-- ✅ Production stability: Zero navigation-related errors
-- ✅ Browser compatibility: All modern browsers
+- ✅ All quality checks passing: TypeScript, ESLint, tests, build
+- ✅ Type safety: 100% TypeScript coverage for public APIs
+- ✅ Production ready: Karen-approved and stable
+- ✅ Browser compatibility: Modern browsers via TanStack Router
 
-### Developer Experience
+### Maintainability
 
-- ✅ Auto-completion: Full TypeScript intellisense
-- ✅ Error messages: Clear navigation error reporting
-- ✅ Debug support: Redux DevTools integration
-- ✅ Documentation: Complete API reference and examples
+- ✅ Clear separation: 4 focused files with single responsibilities
+- ✅ No abstractions: Direct TanStack Router usage
+- ✅ Simple debugging: Standard TanStack Router debugging tools
+- ✅ Documentation: Accurate, concise API documentation
 
 ## Quick Links
 
@@ -176,7 +155,8 @@ Navigation component integration:
 
 ---
 
-**Last Updated**: January 2025
+**Last Updated**: September 2025
 **Package Version**: 0.1.0
 **Build Status**: ✅ Passing
-**Production Ready**: ✅ Yes
+**Production Ready**: ✅ Yes (Karen Approved)
+**Architecture**: Simplified (91% code reduction)

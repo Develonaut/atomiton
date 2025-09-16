@@ -1,27 +1,17 @@
-/**
- * @atomiton/router - Domain-agnostic router with auto-generated navigation
- */
-
-export { Link } from "./components/Link";
 export { createRouter } from "./createRouter";
-export {
-  buildPath,
-  extractParams,
-  joinPaths,
-  normalizePath,
-  validateParams,
-} from "./utils/path";
+export type { RouteConfig, CreateRouterOptions, RouteComponent } from "./types";
 
-export type {
-  CreateRouterOptions,
-  ExtractParams,
-  LinkProps,
-  NavigationMethod,
-  NavigationMethods,
-  NavigationOptions,
-  OptionalParams,
-  RouteComponent,
-  RouteConfig,
-  RouteParams,
-  RouterInstance,
-} from "./types";
+export {
+  Link,
+  RouterProvider,
+  useRouter,
+  useNavigate,
+  useParams,
+  useLocation,
+  useRouteContext,
+  useSearch,
+  useLoaderData,
+  Navigate,
+  Outlet,
+  type LinkProps,
+} from "@tanstack/react-router";

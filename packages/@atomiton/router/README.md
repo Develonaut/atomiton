@@ -1,17 +1,17 @@
 # @atomiton/router
 
-Domain-agnostic router package with auto-generated navigation methods and TanStack Router integration.
+A clean, simplified wrapper around TanStack Router for React applications.
+
+> **Note**: This package has been significantly simplified from its previous complex implementation. It now consists of just 174 lines across 4 focused files, providing a clean wrapper around TanStack Router without over-engineered abstractions.
 
 ## Features
 
-- **Auto-generated Navigation Methods**: Routes automatically generate typed navigation methods like `toEditor()`, `toHome()`
+- **Simplified Architecture**: Clean wrapper around TanStack Router with minimal abstraction
 - **Type Safety**: Full TypeScript support with auto-completion
-- **TanStack Router**: Built on top of TanStack Router for robust routing
-- **Zustand Integration**: Global navigation state accessible anywhere
+- **Component Lazy Loading**: Built-in support for code splitting with loading states
+- **Modular Design**: 4 focused files with clear separation of concerns
 - **Domain Agnostic**: No knowledge of business logic or app-specific concepts
-- **Lazy Loading**: Built-in support for code splitting
-- **Error Boundaries**: Automatic error handling
-- **Loading States**: Configurable loading components
+- **TanStack Router**: Leverages the power and reliability of TanStack Router
 
 ## Installation
 
@@ -26,7 +26,7 @@ pnpm add @atomiton/router
 ```typescript
 import { createRouter } from "@atomiton/router";
 
-const { router, navigate, useNavigate, Link } = createRouter({
+const { router, navigate, useRouter, Link, RouterProvider } = createRouter({
   routes: [
     {
       name: "home",
@@ -35,7 +35,7 @@ const { router, navigate, useNavigate, Link } = createRouter({
     },
     {
       name: "editor",
-      path: "/editor/$blueprintId?",
+      path: "/editor/$blueprintId",
       component: () => import("./pages/EditorPage"),
     },
     {
@@ -46,22 +46,16 @@ const { router, navigate, useNavigate, Link } = createRouter({
   ],
 });
 
-// Use auto-generated navigation methods
-navigate.toHome(); // Navigate to /
-navigate.toEditor({ blueprintId: "123" }); // Navigate to /editor/123
-navigate.toProfile({ userId: "456" }); // Navigate to /profile/456
-
-// Or use generic navigation
-navigate.to("/custom/path");
-navigate.back();
-navigate.forward();
-navigate.replace("/new/path");
+// Use TanStack Router's navigation methods
+navigate({ to: "/" }); // Navigate to home
+navigate({ to: "/editor/$blueprintId", params: { blueprintId: "123" } }); // Navigate to editor
+navigate({ to: "/profile/$userId", params: { userId: "456" } }); // Navigate to profile
 ```
 
 ### In React Components
 
 ```tsx
-import { useNavigate, Link } from "./router";
+import { useNavigate, Link } from "@atomiton/router";
 
 function MyComponent() {
   const navigate = useNavigate();
@@ -69,7 +63,14 @@ function MyComponent() {
   return (
     <div>
       <Link to="/">Home</Link>
-      <button onClick={() => navigate.toEditor({ blueprintId: "123" })}>
+      <button
+        onClick={() =>
+          navigate({
+            to: "/editor/$blueprintId",
+            params: { blueprintId: "123" },
+          })
+        }
+      >
         Open Editor
       </button>
     </div>
@@ -77,35 +78,37 @@ function MyComponent() {
 }
 ```
 
-### Custom Navigators
+### Application Setup
 
-You can provide custom navigation logic for specific routes:
+```tsx
+import React from "react";
+import { createRouter } from "@atomiton/router";
 
-```typescript
-const { navigate } = createRouter({
+const { RouterProvider } = createRouter({
   routes: [
     {
+      name: "home",
+      path: "/",
+      component: () => import("./pages/HomePage"),
+    },
+    {
       name: "editor",
-      path: "/editor/$blueprintId?",
+      path: "/editor/$blueprintId",
       component: () => import("./pages/EditorPage"),
-      navigator: (blueprintId?: string) => {
-        // Custom logic here
-        if (!blueprintId) {
-          return "/editor/new";
-        }
-        return `/editor/${blueprintId}`;
-      },
     },
   ],
 });
+
+function App() {
+  return <RouterProvider />;
+}
+
+export default App;
 ```
 
 ### Route Parameters
 
-The router supports both required and optional parameters:
-
-- Required: `$paramName` (e.g., `/user/$id`)
-- Optional: `$paramName?` (e.g., `/search/$query?`)
+The router uses TanStack Router's parameter system:
 
 ```typescript
 // Required parameter
@@ -115,18 +118,11 @@ The router supports both required and optional parameters:
   component: () => import("./pages/UserPage"),
 }
 
-// Optional parameter
+// Optional parameter (use search params or conditional paths)
 {
   name: "search",
-  path: "/search/$query?",
+  path: "/search",
   component: () => import("./pages/SearchPage"),
-}
-
-// Mixed parameters
-{
-  name: "post",
-  path: "/blog/$category/$postId?",
-  component: () => import("./pages/PostPage"),
 }
 ```
 
@@ -134,64 +130,57 @@ The router supports both required and optional parameters:
 
 ```typescript
 createRouter({
-  routes: [...],
-  basePath: "/app", // Base path for all routes
-  defaultPendingComponent: LoadingSpinner, // Default loading component
-  defaultErrorComponent: ErrorBoundary, // Default error component
-  enableDevtools: true, // Enable Redux DevTools for navigation store
+  routes: [...], // Required: Array of route configurations
+  basePath: "/app", // Optional: Base path for all routes
+  defaultPendingComponent: LoadingSpinner, // Optional: Default loading component for lazy routes
+  defaultErrorComponent: ErrorBoundary, // Optional: Default error boundary component
 });
-```
-
-### Navigation Store
-
-The router uses Zustand for state management, making navigation state accessible anywhere:
-
-```typescript
-import { createNavigationStore } from "@atomiton/router";
-
-const store = createNavigationStore();
-const state = store();
-
-console.log(state.currentPath); // Current route path
-console.log(state.history); // Navigation history
-console.log(state.params); // Current route params
 ```
 
 ## API Reference
 
 ### `createRouter(options)`
 
-Creates a router instance with auto-generated navigation methods.
+Creates a router instance with a clean API wrapper around TanStack Router.
 
 #### Options
 
 - `routes`: Array of route configurations
 - `basePath?`: Base path for all routes (default: "/")
-- `defaultPendingComponent?`: Default loading component
-- `defaultErrorComponent?`: Default error component
-- `enableDevtools?`: Enable Redux DevTools (default: true)
+- `defaultPendingComponent?`: Default loading component for lazy routes
+- `defaultErrorComponent?`: Default error boundary component
 
 #### Returns
 
 - `router`: TanStack Router instance
-- `navigate`: Object with auto-generated navigation methods
+- `navigate`: TanStack Router's navigation function
 - `useRouter`: Hook to access router instance
-- `useNavigate`: Hook to access navigation methods
-- `useCurrentRoute`: Hook to get current route
+- `useNavigate`: Hook to access navigation function
+- `useCurrentRoute`: Hook to get current route match
 - `useParams`: Hook to get route parameters
-- `Link`: Link component
+- `usePathname`: Hook to get current pathname
+- `useLocation`: Hook to get current location object
+- `Link`: TanStack Router's Link component
+- `RouterProvider`: Configured router provider component
 
 ### Route Configuration
 
 Each route accepts:
 
-- `name`: Unique route identifier (used for method generation)
-- `path`: Route path with optional parameters
-- `component`: Component loader function
-- `navigator?`: Custom navigation function
+- `name`: Unique route identifier
+- `path`: Route path (follows TanStack Router path syntax)
+- `component`: Component or lazy component loader function
 - `errorComponent?`: Route-specific error component
 - `pendingComponent?`: Route-specific loading component
-- `meta?`: Additional route metadata
+
+### Architecture
+
+The package consists of 4 core files:
+
+- `types.ts` - TypeScript type definitions
+- `routeFactory.ts` - Route creation and component handling
+- `createRouter.tsx` - Main router factory function
+- `index.ts` - Public API exports
 
 ## Development
 

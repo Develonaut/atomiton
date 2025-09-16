@@ -1,60 +1,42 @@
 import { bench, describe } from "vitest";
 import { createRouter } from "../createRouter";
-import { createNavigationStore } from "../store";
-import type { RouteConfig } from "../types";
-import { buildPath, extractParams, validateParams } from "../utils/path";
 
 describe("Router Performance", () => {
-  const routes = Array.from({ length: 100 }, (_, i) => ({
-    name: `route${i}` as const,
-    path: `/route${i}/$param${i}?`,
-    component: () => Promise.resolve({ default: () => null }),
-  }));
+  const routes = [
+    {
+      name: "home",
+      path: "/",
+      component: () => Promise.resolve({ default: () => null }),
+    },
+    {
+      name: "editor",
+      path: "/editor/$id",
+      component: () => Promise.resolve({ default: () => null }),
+    },
+    {
+      name: "profile",
+      path: "/profile/{-$id}",
+      component: () => Promise.resolve({ default: () => null }),
+    },
+  ];
 
-  bench("router initialization", () => {
-    createRouter({ routes: routes as readonly RouteConfig[] });
+  bench("createRouter - simple config", () => {
+    createRouter({ routes });
   });
 
-  bench("navigation method generation", () => {
-    const router = createRouter({ routes: routes as readonly RouteConfig[] });
-    // Access all generated methods to trigger any lazy initialization
-    Object.keys(router.navigate).forEach((key) => {
-      if (key.startsWith("to")) {
-        // Just access the method, don't call it
-        void (router.navigate as Record<string, unknown>)[key];
-      }
+  bench("createRouter - with options", () => {
+    createRouter({
+      routes,
+      enableDevtools: false,
+      defaultPendingComponent: () => null,
+      defaultErrorComponent: () => null,
     });
   });
 
-  bench("path building (simple)", () => {
-    buildPath("/user/profile", {});
-  });
-
-  bench("path building (with params)", () => {
-    buildPath("/user/$id/posts/$postId", { id: "123", postId: "456" });
-  });
-
-  bench("path building (optional params)", () => {
-    buildPath("/search/$query?/$page?", { query: "test" });
-  });
-
-  bench("param extraction", () => {
-    extractParams("/user/$id/posts/$postId?/$commentId?");
-  });
-
-  bench("param validation", () => {
-    validateParams("/user/$id/posts/$postId", { id: "123", postId: "456" });
-  });
-
-  bench("navigation store creation", () => {
-    createNavigationStore();
-  });
-
-  bench("navigation store update", () => {
-    const store = createNavigationStore();
-    store.updateNavigationState({
-      currentPath: "/new/path",
-      isNavigating: true,
-    });
+  bench("router.navigate calls", () => {
+    const router = createRouter({ routes });
+    router.navigate({ to: "/" });
+    router.navigate({ to: "/editor/123" });
+    router.navigate({ to: "/profile/456" });
   });
 });

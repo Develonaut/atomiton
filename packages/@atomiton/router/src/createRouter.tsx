@@ -1,86 +1,62 @@
-import { type AnyRoute, type Router } from "@tanstack/react-router";
-import { Link } from "./components/Link";
 import {
-  createUseCurrentRoute,
-  createUseLocation,
-  createUseNavigate,
-  createUseParams,
-  createUsePathname,
-  createUseRouter,
-} from "./modules/hooks";
-import {
-  createNavigateObject,
-  generateNavigationMethods,
-} from "./modules/navigation";
-import { createRouterProvider } from "./modules/provider";
-import {
-  createRoutesFromConfig,
-  createTanStackRouterInstance,
-} from "./modules/routes";
-import { createNavigationStore } from "./store";
-import type { CreateRouterOptions, RouteConfig, RouterInstance } from "./types";
+  createRouter as createTanStackRouter,
+  Link,
+  RouterProvider,
+  useRouter,
+  useParams,
+  useLocation,
+} from "@tanstack/react-router";
+import React from "react";
+import { createRootRouteInstance, createTanStackRoutes } from "./routeFactory";
+import type { CreateRouterOptions } from "./types";
 
-export function createRouter<TRoutes extends readonly RouteConfig[]>(
-  options: CreateRouterOptions<TRoutes>,
-): RouterInstance<TRoutes> {
-  const {
+export function createRouter(options: CreateRouterOptions) {
+  const { routes, defaultPendingComponent } = options;
+
+  const rootRoute = createRootRouteInstance();
+
+  const tanStackRoutes = createTanStackRoutes(
     routes,
+    rootRoute,
     defaultPendingComponent,
-    defaultErrorComponent,
-    enableDevtools = true,
-  } = options;
-
-  const navigationStore = createNavigationStore(enableDevtools);
-
-  const { routeTree } = createRoutesFromConfig(
-    routes,
-    defaultPendingComponent,
-    defaultErrorComponent,
   );
 
-  const router = createTanStackRouterInstance(
+  const routeTree = rootRoute.addChildren(tanStackRoutes);
+
+  const router = createTanStackRouter({
     routeTree,
-    defaultErrorComponent,
-    defaultPendingComponent,
-  );
+    defaultPreload: "intent",
+  });
 
-  const navigationMethods = generateNavigationMethods(
-    routes,
-    navigationStore.navigate,
-  );
-
-  const navigate = createNavigateObject(
-    routes,
-    navigationMethods,
-    navigationStore.navigate,
-    navigationStore.back,
-    navigationStore.forward,
-    navigationStore.replace,
-  );
-
-  const useRouter = createUseRouter();
-  const useNavigate = createUseNavigate(navigate);
-  const useCurrentRoute = createUseCurrentRoute();
-  const useParams = createUseParams();
-  const usePathname = createUsePathname();
-  const useLocation = createUseLocation();
-
-  // Initialize router with navigation store
-  navigationStore.setRouter(router as unknown as Router<AnyRoute, never>);
-
-  // Create RouterProvider component
-  const RouterProvider = createRouterProvider(router);
-
+  // Return the expected API structure that the client expects
   return {
-    router: router as unknown as Router<AnyRoute, never>,
-    navigate,
-    useRouter: useRouter as unknown as () => Router<AnyRoute, never>,
-    useNavigate,
-    useCurrentRoute,
-    useParams,
-    usePathname,
-    useLocation,
-    Link,
-    RouterProvider,
+    router,
+    navigate: router.navigate.bind(router),
+    useRouter: () => useRouter(),
+    useNavigate: () => router.navigate.bind(router),
+    useCurrentRoute: () => {
+      const routerInstance = useRouter();
+      return routerInstance.state.matches[
+        routerInstance.state.matches.length - 1
+      ];
+    },
+    useParams: <T = Record<string, string>,>() =>
+      useParams({ strict: false }) as T,
+    usePathname: () => {
+      const location = useLocation();
+      return location.pathname;
+    },
+    useLocation: () => {
+      const location = useLocation();
+      return {
+        pathname: location.pathname,
+        state: location.state,
+        search: location.search,
+        hash: location.hash,
+      };
+    },
+    Link: (props: Parameters<typeof Link>[0]) =>
+      React.createElement(Link, props),
+    RouterProvider: () => React.createElement(RouterProvider, { router }),
   };
 }

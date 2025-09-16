@@ -1,100 +1,21 @@
-import type { AnyRoute, Router } from "@tanstack/react-router";
-import type { ComponentType, LazyExoticComponent } from "react";
+import type { ComponentType } from "react";
 
 export type RouteComponent =
-  | ComponentType<Record<string, unknown>>
-  | LazyExoticComponent<ComponentType<Record<string, unknown>>>;
+  | ComponentType
+  | (() => Promise<{ default: ComponentType }>);
 
-export type RouteConfig<TName extends string = string> = {
-  name: TName;
+export type RouteConfig = {
+  name: string;
   path: string;
-  component: () => Promise<{ default: RouteComponent }> | RouteComponent;
-  navigator?: (...args: unknown[]) => string;
-  errorComponent?: RouteComponent;
-  pendingComponent?: RouteComponent;
-  meta?: Record<string, unknown>;
+  component: RouteComponent;
+  errorComponent?: ComponentType;
+  pendingComponent?: ComponentType;
 };
 
-export type RouteParams<T extends string> =
-  T extends `${string}$${infer Param}/${infer Rest}`
-    ? { [K in Param]: string } & RouteParams<Rest>
-    : T extends `${string}$${infer Param}`
-      ? { [K in Param]: string }
-      : Record<string, never>;
-
-export type OptionalParams<T extends string> =
-  T extends `${string}$${infer Param}?${infer Rest}`
-    ? { [K in Param]?: string } & OptionalParams<Rest>
-    : T extends `${string}$${infer Param}?`
-      ? { [K in Param]?: string }
-      : Record<string, never>;
-
-export type ExtractParams<T extends string> = RouteParams<T> &
-  OptionalParams<T>;
-
-export type NavigationMethod<TPath extends string> =
-  keyof ExtractParams<TPath> extends never
-    ? (options?: NavigationOptions) => void
-    : (params: ExtractParams<TPath>, options?: NavigationOptions) => void;
-
-export type NavigationMethods<TRoutes extends readonly RouteConfig[]> = {
-  [K in TRoutes[number] as `to${Capitalize<K["name"]>}`]: NavigationMethod<
-    K["path"]
-  >;
-};
-
-export type RouterInstance<TRoutes extends readonly RouteConfig[]> = {
-  router: Router<AnyRoute, never>;
-  navigate: NavigationMethods<TRoutes> & {
-    to: (path: string, options?: NavigationOptions) => void;
-    back: () => void;
-    forward: () => void;
-    replace: (path: string, options?: NavigationOptions) => void;
-  };
-  useRouter: () => Router<AnyRoute, never>;
-  useNavigate: () => NavigationMethods<TRoutes> & {
-    to: (path: string, options?: NavigationOptions) => void;
-    back: () => void;
-    forward: () => void;
-    replace: (path: string, options?: NavigationOptions) => void;
-  };
-  useCurrentRoute: () => AnyRoute | undefined;
-  useParams: <T = Record<string, string>>() => T;
-  usePathname: () => string;
-  useLocation: () => {
-    pathname: string;
-    state?: Record<string, unknown>;
-    search?: Record<string, unknown>;
-    hash?: string;
-  };
-  Link: ComponentType<LinkProps>;
-  RouterProvider: ComponentType;
-};
-
-export type NavigationOptions = {
-  replace?: boolean;
-  search?: Record<string, unknown>;
-  hash?: string;
-  state?: Record<string, unknown>;
-};
-
-export type LinkProps = {
-  to: string;
-  children: React.ReactNode;
-  className?: string;
-  activeClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
-  replace?: boolean;
-  state?: unknown;
-  search?: Record<string, unknown>;
-  hash?: string;
-  preload?: "intent" | "viewport" | "render" | false;
-};
-
-export type CreateRouterOptions<TRoutes extends readonly RouteConfig[]> = {
-  routes: TRoutes;
+export type CreateRouterOptions = {
+  routes: RouteConfig[];
   basePath?: string;
-  defaultPendingComponent?: RouteComponent;
-  defaultErrorComponent?: RouteComponent;
+  defaultPendingComponent?: ComponentType;
+  defaultErrorComponent?: ComponentType;
   enableDevtools?: boolean;
 };
