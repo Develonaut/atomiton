@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   buildPath,
   extractParams,
-  validateParams,
-  normalizePath,
   joinPaths,
+  normalizePath,
+  validateParams,
 } from "../utils/path";
 
 describe("Path Utils", () => {

@@ -2,29 +2,26 @@
  * @atomiton/router - Domain-agnostic router with auto-generated navigation
  */
 
-export { createRouter } from "./createRouter";
 export { Link } from "./components/Link";
-export { createNavigationStore } from "./navigation/store";
+export { createRouter } from "./createRouter";
 export {
   buildPath,
   extractParams,
-  validateParams,
-  normalizePath,
   joinPaths,
+  normalizePath,
+  validateParams,
 } from "./utils/path";
 
 export type {
-  RouteConfig,
-  RouterInstance,
-  NavigationOptions,
-  LinkProps,
   CreateRouterOptions,
-  NavigationMethods,
-  NavigationMethod,
-  RouteParams,
-  OptionalParams,
   ExtractParams,
+  LinkProps,
+  NavigationMethod,
+  NavigationMethods,
+  NavigationOptions,
+  OptionalParams,
   RouteComponent,
+  RouteConfig,
+  RouteParams,
+  RouterInstance,
 } from "./types";
-
-export type { NavigationStore } from "./navigation/store";

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createRouter } from "../createRouter";
-import { createNavigationStore } from "../navigation/store";
+import { createNavigationStore } from "../store";
 import { buildPath, extractParams } from "../utils/path";
 
 describe("Router Smoke Tests", () => {
@@ -87,8 +87,10 @@ describe("Router Smoke Tests", () => {
     expect(state.currentPath).toBe("/");
     expect(state.history).toEqual(["/"]);
     expect(state.isNavigating).toBe(false);
-    expect(state.navigate).toBeDefined();
-    expect(state.back).toBeDefined();
-    expect(state.forward).toBeDefined();
+
+    // Actions are on the store, not the state
+    expect(store.navigate).toBeDefined();
+    expect(store.back).toBeDefined();
+    expect(store.forward).toBeDefined();
   });
 });

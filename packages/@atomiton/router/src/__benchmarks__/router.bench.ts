@@ -1,8 +1,8 @@
 import { bench, describe } from "vitest";
 import { createRouter } from "../createRouter";
-import { createNavigationStore } from "../navigation/store";
-import { buildPath, extractParams, validateParams } from "../utils/path";
+import { createNavigationStore } from "../store";
 import type { RouteConfig } from "../types";
+import { buildPath, extractParams, validateParams } from "../utils/path";
 
 describe("Router Performance", () => {
   const routes = Array.from({ length: 100 }, (_, i) => ({
@@ -52,7 +52,9 @@ describe("Router Performance", () => {
 
   bench("navigation store update", () => {
     const store = createNavigationStore();
-    const { updateState } = store.getState();
-    updateState({ currentPath: "/new/path", isNavigating: true });
+    store.updateNavigationState({
+      currentPath: "/new/path",
+      isNavigating: true,
+    });
   });
 });

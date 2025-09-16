@@ -61,6 +61,7 @@ export type RouterInstance<TRoutes extends readonly RouteConfig[]> = {
   useCurrentRoute: () => AnyRoute | undefined;
   useParams: <T = Record<string, string>>() => T;
   Link: ComponentType<LinkProps>;
+  RouterProvider: ComponentType;
 };
 
 export type NavigationOptions = {
