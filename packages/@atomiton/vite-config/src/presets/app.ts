@@ -5,6 +5,13 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import type { AppOptions } from "../types";
+import {
+  getAssetFileName,
+  DEFAULT_ASSETS_INCLUDE,
+  DEFAULT_INLINE_LIMIT,
+} from "../utils/assets";
+import { getOptimizeDepsConfig } from "../utils/optimizeDeps";
+import { mergeViteConfig } from "../utils/merge";
 
 export function defineAppConfig(options: AppOptions): UserConfig {
   const {
@@ -13,6 +20,8 @@ export function defineAppConfig(options: AppOptions): UserConfig {
     workspacePackages = [],
     aliases = {},
     enableTailwind = true,
+    assetsInlineLimit = DEFAULT_INLINE_LIMIT,
+    chunkSizeWarningLimit = 500,
     additionalConfig = {},
   } = options;
 
@@ -35,9 +44,7 @@ export function defineAppConfig(options: AppOptions): UserConfig {
         allow: [workspaceRoot],
       },
     },
-    optimizeDeps: {
-      exclude: workspacePackages,
-    },
+    optimizeDeps: getOptimizeDepsConfig({ workspacePackages }),
     resolve: {
       alias: Object.entries(aliases).reduce(
         (acc, [key, value]) => {
@@ -50,22 +57,11 @@ export function defineAppConfig(options: AppOptions): UserConfig {
     build: {
       outDir: "dist",
       sourcemap: true,
-      assetsInlineLimit: 4096,
-      chunkSizeWarningLimit: 500,
+      assetsInlineLimit,
+      chunkSizeWarningLimit,
       rollupOptions: {
         output: {
-          assetFileNames: (assetInfo) => {
-            const fileName = assetInfo.names?.[0] || assetInfo.name || "asset";
-            const info = fileName.split(".");
-            const extType = info[info.length - 1];
-            if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-              return `images/[name]-[hash][extname]`;
-            }
-            if (/woff2?|eot|ttf|otf/i.test(extType)) {
-              return `fonts/[name]-[hash][extname]`;
-            }
-            return `assets/[name]-[hash][extname]`;
-          },
+          assetFileNames: getAssetFileName,
         },
       },
     },
@@ -73,54 +69,8 @@ export function defineAppConfig(options: AppOptions): UserConfig {
       global: "globalThis",
       "process.env": {},
     },
-    assetsInclude: [
-      "**/*.png",
-      "**/*.jpg",
-      "**/*.jpeg",
-      "**/*.svg",
-      "**/*.gif",
-      "**/*.webp",
-    ],
+    assetsInclude: DEFAULT_ASSETS_INCLUDE,
   };
 
-  return defineConfig(mergeConfig(baseConfig, additionalConfig));
-}
-
-function mergeConfig(base: UserConfig, additional: UserConfig): UserConfig {
-  return {
-    ...base,
-    ...additional,
-    plugins: [
-      ...(Array.isArray(base.plugins) ? base.plugins : []),
-      ...(Array.isArray(additional.plugins) ? additional.plugins : []),
-    ],
-    server: {
-      ...base.server,
-      ...additional.server,
-    },
-    optimizeDeps: {
-      ...base.optimizeDeps,
-      ...additional.optimizeDeps,
-      exclude: [
-        ...(base.optimizeDeps?.exclude || []),
-        ...(additional.optimizeDeps?.exclude || []),
-      ],
-    },
-    resolve: {
-      ...base.resolve,
-      ...additional.resolve,
-      alias: {
-        ...base.resolve?.alias,
-        ...additional.resolve?.alias,
-      },
-    },
-    build: {
-      ...base.build,
-      ...additional.build,
-    },
-    define: {
-      ...base.define,
-      ...additional.define,
-    },
-  };
+  return defineConfig(mergeViteConfig(baseConfig, additionalConfig));
 }

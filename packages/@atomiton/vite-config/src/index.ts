@@ -2,12 +2,18 @@ export { defineLibraryConfig } from "./presets/library";
 export { defineReactLibraryConfig } from "./presets/react";
 export { defineAppConfig } from "./presets/app";
 
-export { createDtsPlugin } from "./plugins/dts";
-export { createVisualizerPlugin } from "./plugins/visualizer";
-export { getCommonPlugins } from "./plugins/common";
-
 export { getTerserOptions } from "./utils/terser";
 export { createManualChunks } from "./utils/chunks";
+export {
+  getAssetFileName,
+  DEFAULT_ASSETS_INCLUDE,
+  DEFAULT_INLINE_LIMIT,
+} from "./utils/assets";
+export {
+  getOptimizeDepsConfig,
+  getResolveConditions,
+  type OptimizeDepsConfig,
+} from "./utils/optimizeDeps";
 
 export type {
   LibraryOptions,

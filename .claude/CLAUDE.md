@@ -112,6 +112,7 @@ Packages are organized under `packages/@atomiton/`:
 - `packages/@atomiton/store` - State management
 - `packages/@atomiton/events` - Event system
 - `packages/@atomiton/di` - Dependency injection
+- `packages/@atomiton/vite-config` - Unified Vite configuration presets (library, react, app)
 - `packages/@atomiton/eslint-config` - Shared ESLint configuration
 - `packages/@atomiton/typescript-config` - Shared TypeScript configuration
 - `apps/client` - Main Vite React application (includes Playwright E2E tests)
