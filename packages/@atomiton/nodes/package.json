@@ -5,13 +5,17 @@
   "type": "module",
   "private": true,
   "sideEffects": false,
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/browser.js",
+  "module": "./dist/browser.js",
+  "types": "./dist/browser.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/browser.js",
+      "types": "./dist/browser.d.ts"
+    },
+    "./logic": {
+      "import": "./dist/logic.js",
+      "types": "./dist/logic.d.ts"
     },
     "./package.json": "./package.json"
   },
@@ -48,13 +52,11 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "rollup-plugin-visualizer": "catalog:",
-    "terser": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:",
     "vitest": "catalog:"
   }
 }
