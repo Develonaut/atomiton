@@ -19,22 +19,22 @@ export function gatherNodeInputs(
 
   // Find all connections that target this node
   const incomingConnections = composite.edges.filter(
-    (conn) => conn.target.nodeId === nodeId,
+    (conn) => conn.target === nodeId,
   );
 
   for (const connection of incomingConnections) {
-    executionStore.getExecution(executionId)?.nodeStates[
-      connection.source.nodeId
-    ];
+    executionStore.getExecution(executionId)?.nodeStates[connection.source];
 
     // Get results from the execution results map
     const executionResult = executionResults
       .get(executionId)
-      ?.get(connection.source.nodeId);
+      ?.get(connection.source);
 
     if (executionResult?.outputs) {
-      const outputValue = executionResult.outputs[connection.source.portId];
-      inputs[connection.target.portId] = outputValue;
+      const sourcePortId = connection.sourceHandle || "output";
+      const targetPortId = connection.targetHandle || "input";
+      const outputValue = executionResult.outputs[sourcePortId];
+      inputs[targetPortId] = outputValue;
     }
   }
 

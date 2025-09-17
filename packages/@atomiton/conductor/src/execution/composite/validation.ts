@@ -30,21 +30,17 @@ export function validateComposite(
 
   // Validate connections
   for (const connection of composite.edges) {
-    const sourceNode = composite.nodes.find(
-      (n) => n.id === connection.source.nodeId,
-    );
-    const targetNode = composite.nodes.find(
-      (n) => n.id === connection.target.nodeId,
-    );
+    const sourceNode = composite.nodes.find((n) => n.id === connection.source);
+    const targetNode = composite.nodes.find((n) => n.id === connection.target);
 
     if (!sourceNode) {
       errors.push(
-        `Connection references unknown source node: ${connection.source.nodeId}`,
+        `Connection references unknown source node: ${connection.source}`,
       );
     }
     if (!targetNode) {
       errors.push(
-        `Connection references unknown target node: ${connection.target.nodeId}`,
+        `Connection references unknown target node: ${connection.target}`,
       );
     }
   }
@@ -75,8 +71,8 @@ export function hasCircularDependencies(
 
     // Find all nodes that depend on this node
     const dependents = composite.edges
-      .filter((conn) => conn.source.nodeId === nodeId)
-      .map((conn) => conn.target.nodeId);
+      .filter((conn) => conn.source === nodeId)
+      .map((conn) => conn.target);
 
     for (const dependent of dependents) {
       if (hasCycle(dependent)) return true;

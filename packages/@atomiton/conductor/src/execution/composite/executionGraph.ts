@@ -18,9 +18,9 @@ export function buildExecutionGraph(
   nodeIds.forEach((nodeId) => dependencies.set(nodeId, new Set()));
 
   for (const connection of composite.edges) {
-    const deps = dependencies.get(connection.target.nodeId);
+    const deps = dependencies.get(connection.target);
     if (deps) {
-      deps.add(connection.source.nodeId);
+      deps.add(connection.source);
     }
   }
 

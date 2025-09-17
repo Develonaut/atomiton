@@ -22,13 +22,13 @@ export class DataRouter {
 
     // Find all connections targeting this node
     const targetConnections = connections.filter(
-      (conn) => conn.target.nodeId === nodeId,
+      (conn) => conn.target === nodeId,
     );
 
     for (const connection of targetConnections) {
-      const sourceNode = connection.source.nodeId;
-      const sourcePort = connection.source.portId;
-      const targetPort = connection.target.portId;
+      const sourceNode = connection.source;
+      const sourcePort = connection.sourceHandle || "output";
+      const targetPort = connection.targetHandle || "input";
 
       // Get output from source node
       const sourceOutputs = nodeOutputs.get(sourceNode);
@@ -52,13 +52,13 @@ export class DataRouter {
 
     // Find all connections targeting the output node
     const outputConnections = connections.filter(
-      (conn) => conn.target.nodeId === "output",
+      (conn) => conn.target === "output",
     );
 
     for (const connection of outputConnections) {
-      const sourceNode = connection.source.nodeId;
-      const sourcePort = connection.source.portId;
-      const targetPort = connection.target.portId;
+      const sourceNode = connection.source;
+      const sourcePort = connection.sourceHandle || "output";
+      const targetPort = connection.targetHandle || "output";
 
       // Get output from source node
       const sourceOutputs = nodeOutputs.get(sourceNode);
