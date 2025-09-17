@@ -49,10 +49,6 @@ export function defineReactLibraryConfig(
       ],
       resolve: {
         ...additionalConfig.resolve,
-        alias: {
-          "@": "./src",
-          ...additionalConfig.resolve?.alias,
-        },
       },
       optimizeDeps: optimizeDeps || additionalConfig.optimizeDeps,
     },

@@ -47,12 +47,12 @@
     "react-textarea-autosize": "^8.5.9",
     "react-tooltip": "^5.29.0",
     "react-use": "^17.6.0",
-    "swiper": "^11.2.8",
-    "zustand": "^5.0.2"
+    "swiper": "^11.2.8"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:^",
+    "@atomiton/vite-config": "workspace:*",
     "@playwright/test": "^1.55.0",
     "@tailwindcss/vite": "^4.1.12",
     "@testing-library/jest-dom": "^6.8.0",

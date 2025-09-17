@@ -43,6 +43,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@types/node": "catalog:",
     "@types/uuid": "^10.0.0",
     "eslint": "catalog:",

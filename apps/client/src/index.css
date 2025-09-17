@@ -1,6 +1,9 @@
 /* Import Google Fonts - Replace next/font/google functionality */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
+/* Import editor styles (includes React Flow CSS) */
+@import "@atomiton/editor/styles.css";
+
 /* Import Tailwind v4 with config - this brings in the extended theme values */
 @import "../tailwind.css";
 

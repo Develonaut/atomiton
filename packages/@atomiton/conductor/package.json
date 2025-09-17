@@ -46,6 +46,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@types/node": "catalog:",
     "electron": "^38.0.0",
     "eslint": "catalog:",

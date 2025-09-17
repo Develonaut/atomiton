@@ -55,6 +55,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@playwright/test": "^1.55.0",
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",

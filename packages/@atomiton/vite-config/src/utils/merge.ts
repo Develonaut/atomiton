@@ -47,10 +47,6 @@ export function mergeViteConfig(
         ...getAlias(additional.resolve?.alias),
       },
     },
-    test: {
-      ...base.test,
-      ...additional.test,
-    },
   };
 }
 

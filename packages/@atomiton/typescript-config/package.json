@@ -8,6 +8,7 @@
   "types": "./base.json",
   "exports": {
     "./base.json": "./base.json",
+    "./library.json": "./library.json",
     "./react-library.json": "./react-library.json",
     "./package.json": "./package.json"
   },

@@ -21,10 +21,6 @@
       "path": "packages/@atomiton",
     },
     {
-      "name": "⚡ Core",
-      "path": "packages/@atomiton/core",
-    },
-    {
       "name": "🌐 Nodes",
       "path": "packages/@atomiton/nodes",
     },
@@ -33,12 +29,32 @@
       "path": "packages/@atomiton/store",
     },
     {
+      "name": "🧭 Router",
+      "path": "packages/@atomiton/router",
+    },
+    {
+      "name": "🎨 Theme",
+      "path": "packages/@atomiton/theme",
+    },
+    {
       "name": "🧩 UI",
       "path": "packages/@atomiton/ui",
     },
     {
       "name": "✏️ Editor",
       "path": "packages/@atomiton/editor",
+    },
+    {
+      "name": "🔧 Utils",
+      "path": "packages/@atomiton/utils",
+    },
+    {
+      "name": "🪝 Hooks",
+      "path": "packages/@atomiton/hooks",
+    },
+    {
+      "name": "💾 Storage",
+      "path": "packages/@atomiton/storage",
     },
   ],
   "settings": {

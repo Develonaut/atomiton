@@ -3,22 +3,22 @@ import { HomePage, SignInPage, CreatePage } from "../pages";
 import { verifyBasicContent } from "../utils/test-helpers";
 
 /**
- * MINIMAL smoke tests - just verify pages load and show content
+ * MINIMAL basic route tests - just verify pages load and show content
  * These tests run FAST and focus on critical functionality only
  *
  * ✅ Tests page loads without errors
  * ✅ Tests basic content is present
  * ✅ Tests no JavaScript errors
  * ❌ NO visual snapshots (too slow/brittle)
- * ❌ NO comprehensive testing (just smoke)
+ * ❌ NO comprehensive testing (just basics)
  */
-test.describe("Smoke Tests - Critical Routes Only", () => {
+test.describe("Basic Route Tests - Critical Routes Only", () => {
   test("Home page loads and shows content", async ({ page }) => {
     const homePage = new HomePage(page);
 
     await homePage.visit();
 
-    // Basic smoke checks
+    // Basic checks
     expect(await homePage.isLoaded()).toBeTruthy();
     expect(await homePage.isHomePageLoaded()).toBeTruthy();
 
@@ -36,7 +36,7 @@ test.describe("Smoke Tests - Critical Routes Only", () => {
 
     await signInPage.visit();
 
-    // Basic smoke checks
+    // Basic checks
     expect(await signInPage.isLoaded()).toBeTruthy();
     expect(await signInPage.isSignInFormVisible()).toBeTruthy();
 
@@ -56,7 +56,7 @@ test.describe("Smoke Tests - Critical Routes Only", () => {
 
     await createPage.visit();
 
-    // Basic smoke checks
+    // Basic checks
     expect(await createPage.isLoaded()).toBeTruthy();
     expect(await createPage.isCreateInterfaceLoaded()).toBeTruthy();
 

@@ -7,9 +7,10 @@ Use these prompts with Claude Code to perform package migrations to @atomiton/vi
 Use this prompt for packages like `@atomiton/utils`, `@atomiton/events`, `@atomiton/yaml`, `@atomiton/storage`, `@atomiton/store`, `@atomiton/hooks`:
 
 ```
-Please migrate the @atomiton/[PACKAGE_NAME] package to use the shared @atomiton/vite-config package.
+Please migrate the following packages `@atomiton/utils`, `@atomiton/events`, `@atomiton/yaml`, `@atomiton/storage`, `@atomiton/store`, `@atomiton/hooks` to use the shared @atomiton/vite-config package.
 
 Steps to follow:
+0. Make a new worktree for this migration.
 1. Review the current vite.config.ts file and document the line count
 2. Add "@atomiton/vite-config": "workspace:*" to devDependencies in package.json
 3. Replace the entire vite.config.ts with a simplified version using defineLibraryConfig from @atomiton/vite-config
@@ -21,6 +22,8 @@ Steps to follow:
 5. Test the build by running: pnpm build
 6. Verify the output in the dist folder
 7. Document the new line count and calculate the reduction percentage
+8. Please review the VITE_CONFIG_MIGRATION_CHECKLIST.md for detailed steps and ensure all checklist items are completed for each package.
+9. Please ensure Vorhees and Karen review the migration changes for accuracy and completeness.
 
 Expected outcome: 70%+ reduction in config lines while maintaining all functionality.
 
@@ -32,7 +35,7 @@ If you encounter any special configurations that don't fit the preset, preserve 
 Use this prompt for packages like `@atomiton/ui`, `@atomiton/form`, `@atomiton/router`:
 
 ```
-Please migrate the @atomiton/[PACKAGE_NAME] package to use the shared @atomiton/vite-config package.
+Please migrate the @atomiton/editor package to use the shared @atomiton/vite-config package.
 
 This is a React library package, so use defineReactLibraryConfig.
 
@@ -145,7 +148,7 @@ This is a known issue when migrating to the shared config and is the standard fi
 After any migration:
 
 ```
-Please verify the @atomiton/[PACKAGE_NAME] migration to @atomiton/vite-config is complete and successful.
+Please verify the vite config migration to @atomiton/vite-config is complete and successful for every package and app
 
 Verification checklist:
 1. Run pnpm build and confirm it succeeds

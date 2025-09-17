@@ -26,7 +26,7 @@ export function defineAppConfig(options: AppOptions): UserConfig {
   } = options;
 
   const __dirname = dirname(fileURLToPath(import.meta.url));
-  const workspaceRoot = resolve(__dirname, "../..");
+  const workspaceRoot = resolve(__dirname, "../../../../..");
 
   const plugins = [react(), tsconfigPaths()];
 

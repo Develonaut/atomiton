@@ -1,9 +1,12 @@
 /**
  * Editor Package - Public CSS Exports
- * 
+ *
  * This file serves as the main CSS entry point for the @atomiton/editor package.
  * It imports and re-exports all the CSS that consumers might need.
  */
+
+/* React Flow styles - Required for proper node editor styling */
+@import "@xyflow/react/dist/style.css";
 
 /* Canvas Component Styles */
 @import "./components/Canvas/Canvas.css";

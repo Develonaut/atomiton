@@ -490,6 +490,52 @@ function displayDashboard(): void {
     console.log(`${icon} ${color}${alert.message}${colors.reset}`);
   });
 
+  // Test Count Statistics
+  console.log(colors.bold + "\n📊 Test Count Statistics" + colors.reset);
+  console.log("─".repeat(45));
+
+  try {
+    const unitTests = parseInt(
+      execSync(
+        "find . -name '*.test.*' -not -path '*/smoke/*' -not -path '*/e2e/*' -not -name '*integration*' | wc -l",
+        { encoding: "utf8" },
+      ).trim(),
+    );
+    const smokeTests = parseInt(
+      execSync(
+        "find . -path '*smoke*.test.*' -o -path '*/smoke/*' -name '*.test.*' | wc -l",
+        { encoding: "utf8" },
+      ).trim(),
+    );
+    const integrationTests = parseInt(
+      execSync("find . -name '*integration*.test.*' | wc -l", {
+        encoding: "utf8",
+      }).trim(),
+    );
+    const specFiles = parseInt(
+      execSync("find . -name '*.spec.*' | wc -l", { encoding: "utf8" }).trim(),
+    );
+    const totalTests = unitTests + smokeTests + integrationTests + specFiles;
+
+    console.log(
+      `📝 Unit Tests:        ${colors.green}${unitTests.toLocaleString()}${colors.reset}`,
+    );
+    console.log(
+      `🔥 Smoke Tests:       ${colors.green}${smokeTests.toLocaleString()}${colors.reset}`,
+    );
+    console.log(
+      `🔗 Integration Tests: ${colors.green}${integrationTests.toLocaleString()}${colors.reset}`,
+    );
+    console.log(
+      `📋 Spec Files:        ${colors.green}${specFiles.toLocaleString()}${colors.reset}`,
+    );
+    console.log(
+      `📦 Total Test Files:  ${colors.bold}${colors.green}${totalTests.toLocaleString()}${colors.reset}`,
+    );
+  } catch (error) {
+    console.log(`${colors.gray}Unable to count test files${colors.reset}`);
+  }
+
   // Test Organization Status
   console.log(colors.bold + "\n📁 Test Organization Status" + colors.reset);
   console.log("─".repeat(45));

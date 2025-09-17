@@ -59,3 +59,11 @@ yarn-error.log*
 # Script failures
 nul
 null
+
+# Vite cache and temporary files
+vite.config.ts.timestamp-*
+electron.vite.config.*.mjs
+**/*.timestamp-*.mjs
+*.timestamp-*.mjs
+node_modules/.vite-temp/
+**/.vite-temp/

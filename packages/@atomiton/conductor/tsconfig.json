@@ -1,7 +1,6 @@
 {
-  "extends": "@atomiton/typescript-config/base.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
-    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -9,9 +8,9 @@
   },
   "include": ["src/**/*"],
   "exclude": [
-    "node_modules", 
-    "dist", 
-    "**/*.test.ts", 
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
     "**/*.spec.ts",
     "**/*.bench.ts"
   ]

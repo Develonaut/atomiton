@@ -1,72 +1,32 @@
-import { resolve } from "path";
-import { visualizer } from "rollup-plugin-visualizer";
-import { defineConfig } from "vite";
-import dts from "vite-plugin-dts";
+import { defineLibraryConfig } from "@atomiton/vite-config";
 
-export default defineConfig({
-  plugins: [
-    dts({
-      insertTypesEntry: true,
-      include: ["src/**/*.ts", "src/**/*.tsx"],
-      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
-    }),
-  ],
-  build: {
-    target: "es2020",
-    lib: {
-      entry: resolve(__dirname, "src/index.ts"),
-      name: "AtomitonDI",
-      formats: ["es", "cjs"],
-      fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
-    },
-    rollupOptions: {
-      external: ["reflect-metadata", "tsyringe"],
-      output: {
-        // Enable manual chunks for better tree shaking
-        manualChunks(id) {
-          // Keep node modules as separate chunks
-          if (id.includes("node_modules")) {
-            return "vendor";
-          }
-
-          // Split DI functionality
-          if (id.includes("src/decorators/")) {
-            return "decorators";
-          }
-
-          if (id.includes("src/container/")) {
-            return "container";
-          }
-
-          if (id.includes("src/utils/")) {
-            return "utils";
-          }
+export default defineLibraryConfig({
+  name: "AtomitonDI",
+  entry: "./src/index.ts",
+  external: ["reflect-metadata", "tsyringe"],
+  formats: ["es", "cjs"],
+  chunks: {
+    vendor: ["node_modules"],
+    decorators: ["src/decorators/"],
+    container: ["src/container/"],
+    utils: ["src/utils/"],
+  },
+  enableVisualizer: true,
+  enableMinification: true,
+  enableSourceMap: true,
+  additionalConfig: {
+    build: {
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ["console.log", "console.debug"],
+        },
+        mangle: {
+          keep_classnames: true,
+          keep_fnames: true,
         },
       },
-      plugins: [
-        visualizer({
-          filename: "dist/stats.html",
-          open: false,
-          gzipSize: true,
-          brotliSize: true,
-        }),
-      ],
     },
-    // Enable minification and compression
-    minify: "terser",
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console.log in production
-        drop_debugger: true,
-        pure_funcs: ["console.log", "console.debug"],
-      },
-      mangle: {
-        keep_classnames: true, // Keep class names for reflection
-        keep_fnames: true, // Keep function names for debugging
-      },
-    },
-    sourcemap: true,
-    emptyOutDir: true,
-    reportCompressedSize: true,
   },
 });

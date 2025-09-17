@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Blueprint smoke tests - verify core blueprint functionality
+ * Blueprint core tests - verify core blueprint functionality
  * These tests cover the two critical user flows:
  * 1. Creating a new blueprint by clicking the Create button
  * 2. Loading an existing blueprint by clicking on a card

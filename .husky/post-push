@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🎯 Post-push: Displaying test dashboard..."
+pnpm tsx scripts/test-dashboard.ts
