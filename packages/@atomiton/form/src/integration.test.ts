@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { z } from "zod";
+import { z } from "@atomiton/validation";
 import { generateFieldsFromSchema, getDefaultValues } from "./utils/index";
 
 describe("Integration Tests", () => {

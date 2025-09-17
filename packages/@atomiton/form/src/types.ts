@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from "@atomiton/validation";
 
 export type AtomitonFieldValue =
   | string

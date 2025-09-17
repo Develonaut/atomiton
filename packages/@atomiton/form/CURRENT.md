@@ -2,7 +2,7 @@
 
 ## Overview
 
-Minimal form library for Atomiton providing React Hook Form + Zod integration with automatic field generation from schemas. Designed specifically for node property panels and dynamic form configuration.
+Minimal form library for Atomiton providing React Hook Form integration with automatic field generation from schemas. Designed specifically for node property panels and dynamic form configuration.
 
 ## Current Status: January 2025
 
@@ -12,15 +12,15 @@ The form package provides a complete foundation for dynamic form generation with
 
 ### 📊 Implementation Status
 
-| Component            | Status       | Implementation                        | Priority |
-| -------------------- | ------------ | ------------------------------------- | -------- |
-| **Core Hook**        | 🟢 Complete  | `useForm` with schema inference       | -        |
-| **Field Generation** | 🟢 Complete  | Automatic field config from Zod       | -        |
-| **Type System**      | 🟢 Complete  | Full TypeScript support               | -        |
-| **Validation**       | 🟢 Complete  | Zod schema validation                 | -        |
-| **Node Integration** | 🟢 Complete  | Direct compatibility with node fields | -        |
-| **Testing**          | 🟢 Complete  | Unit tests and smoke tests            | -        |
-| **Performance**      | 🟢 Optimized | Benchmarks and validation             | -        |
+| Component            | Status       | Implementation                             | Priority |
+| -------------------- | ------------ | ------------------------------------------ | -------- |
+| **Core Hook**        | 🟢 Complete  | `useForm` with schema inference            | -        |
+| **Field Generation** | 🟢 Complete  | Automatic field config from schemas        | -        |
+| **Type System**      | 🟢 Complete  | Full TypeScript support                    | -        |
+| **Validation**       | 🟢 Complete  | Schema validation via @atomiton/validation | -        |
+| **Node Integration** | 🟢 Complete  | Direct compatibility with node fields      | -        |
+| **Testing**          | 🟢 Complete  | Unit tests and smoke tests                 | -        |
+| **Performance**      | 🟢 Optimized | Benchmarks and validation                  | -        |
 
 ### 🚀 Current Capabilities
 
@@ -29,7 +29,7 @@ The form package provides a complete foundation for dynamic form generation with
 - ✅ Schema-to-form field generation
 - ✅ Type-safe form handling with TypeScript
 - ✅ All standard HTML input types supported
-- ✅ Automatic validation with Zod schemas
+- ✅ Automatic validation with schemas
 - ✅ Default value extraction from schemas
 - ✅ Field metadata override system
 - ✅ Direct React Hook Form integration
@@ -38,7 +38,7 @@ The form package provides a complete foundation for dynamic form generation with
 
 - ✅ Compatible with Atomiton node field configurations
 - ✅ Control type mapping (text, number, select, boolean, etc.)
-- ✅ Automatic inference from Zod schema types
+- ✅ Automatic inference from schema types
 - ✅ Custom field metadata support
 - ✅ Default value handling
 
@@ -74,8 +74,8 @@ Currently being used by:
 ### Core Dependencies
 
 - `react-hook-form`: Form state management and validation
-- `zod`: Schema validation and type inference
-- `@hookform/resolvers`: Zod resolver for React Hook Form
+- `@atomiton/validation`: Schema validation and type inference
+- `@hookform/resolvers`: Schema resolver for React Hook Form
 - `@atomiton/ui`: UI components (peer dependency)
 
 ### Development Dependencies

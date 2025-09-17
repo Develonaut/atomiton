@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { z } from "zod";
+import { z } from "@atomiton/validation";
 import { useForm } from "./hooks/useForm";
 import { generateFieldsFromSchema, getDefaultValues } from "./utils/index";
 
