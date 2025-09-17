@@ -24,7 +24,7 @@
     "typecheck": "tsc --noEmit",
     "kill": "echo 'No processes to kill for Storage package'",
     "test:unit": "vitest run --passWithNoTests",
-    "test:smoke": "mkdir -p test-results && vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
+    "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
     "test:benchmark": "vitest bench --run",
     "test:e2e": "echo \"No E2E tests for this package\"",
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",

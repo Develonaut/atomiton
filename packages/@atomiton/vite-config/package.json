@@ -27,7 +27,7 @@
     "clean": "rm -rf dist",
     "test": "pnpm test:unit",
     "test:unit": "vitest run",
-    "test:smoke": "mkdir -p test-results && vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
+    "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "test:benchmark": "vitest bench --run",
