@@ -28,7 +28,7 @@ describe("createNode Smoke Test", () => {
       const customMetadata = {
         variant: "csv-reader",
         tags: ["data", "import"],
-        icon: "FileText",
+        icon: "file" as const,
         color: "#10b981",
       };
 
@@ -49,7 +49,7 @@ describe("createNode Smoke Test", () => {
       expect(node.version).toBe("2.0.0");
       expect(node.metadata?.variant).toBe("csv-reader");
       expect(node.metadata?.tags).toEqual(["data", "import"]);
-      expect(node.metadata?.icon).toBe("FileText");
+      expect(node.metadata?.icon).toBe("file");
       expect(node.metadata?.color).toBe("#10b981");
       expect(node.metadata?.created).toBeDefined();
       expect(node.metadata?.modified).toBeDefined();
@@ -59,18 +59,35 @@ describe("createNode Smoke Test", () => {
 
     it("creates atomic node with ports", () => {
       const inputPorts = [
-        { id: "input", name: "Input Data", type: "any", required: true },
+        {
+          id: "input",
+          name: "Input Data",
+          type: "input" as const,
+          dataType: "any" as const,
+          required: true,
+        },
         {
           id: "config",
           name: "Configuration",
-          type: "object",
+          type: "input" as const,
+          dataType: "object" as const,
           required: false,
         },
       ];
 
       const outputPorts = [
-        { id: "output", name: "Processed Data", type: "any" },
-        { id: "error", name: "Error", type: "string" },
+        {
+          id: "output",
+          name: "Processed Data",
+          type: "output" as const,
+          dataType: "any" as const,
+        },
+        {
+          id: "error",
+          name: "Error",
+          type: "output" as const,
+          dataType: "string" as const,
+        },
       ];
 
       const node = createNode({
@@ -139,7 +156,7 @@ describe("createNode Smoke Test", () => {
       const customMetadata = {
         variant: "data-pipeline",
         tags: ["etl", "pipeline", "data"],
-        icon: "GitBranch",
+        icon: "git-branch" as const,
         color: "#f59e0b",
         source: "system" as const,
       };
@@ -161,7 +178,7 @@ describe("createNode Smoke Test", () => {
       expect(node.version).toBe("3.1.0");
       expect(node.metadata?.variant).toBe("data-pipeline");
       expect(node.metadata?.tags).toEqual(["etl", "pipeline", "data"]);
-      expect(node.metadata?.icon).toBe("GitBranch");
+      expect(node.metadata?.icon).toBe("git-branch");
       expect(node.metadata?.color).toBe("#f59e0b");
       expect(node.metadata?.source).toBe("system");
     });
@@ -170,14 +187,16 @@ describe("createNode Smoke Test", () => {
       const nodes = [
         {
           id: "node1",
-          type: "code",
-          position: { x: 100, y: 100 },
+          name: "Code Node",
+          category: "transform",
+          type: "atomic",
           data: { code: "return input * 2" },
         },
         {
           id: "node2",
-          type: "transform",
-          position: { x: 300, y: 100 },
+          name: "Transform Node",
+          category: "transform",
+          type: "atomic",
           data: { expression: "$.value" },
         },
       ];
@@ -235,12 +254,9 @@ describe("createNode Smoke Test", () => {
         runtime: {
           timeout: 60000,
           parallel: true,
-          maxConcurrency: 5,
         },
         ui: {
           color: "#ef4444",
-          icon: "Zap",
-          showMinimap: true,
         },
       };
 
@@ -253,10 +269,7 @@ describe("createNode Smoke Test", () => {
 
       expect(node.settings?.runtime?.timeout).toBe(60000);
       expect(node.settings?.runtime?.parallel).toBe(true);
-      expect(node.settings?.runtime?.maxConcurrency).toBe(5);
       expect(node.settings?.ui?.color).toBe("#ef4444");
-      expect(node.settings?.ui?.icon).toBe("Zap");
-      expect(node.settings?.ui?.showMinimap).toBe(true);
     });
 
     it("creates composite nodes with different variants", () => {
@@ -469,9 +482,13 @@ describe("createNode Smoke Test", () => {
       });
 
       expect(node.metadata?.variant).toBe("complex-node");
-      expect(node.metadata?.customData?.level1?.level2?.level3?.value).toBe(
-        "deep value",
-      );
+      expect(
+        (
+          node.metadata?.customData as {
+            level1?: { level2?: { level3?: { value?: string } } };
+          }
+        )?.level1?.level2?.level3?.value,
+      ).toBe("deep value");
     });
   });
 });

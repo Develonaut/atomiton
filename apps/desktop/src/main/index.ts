@@ -2,8 +2,10 @@ import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { join } from "path";
 
+let mainWindow: BrowserWindow | null = null;
+
 function createWindow(): void {
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     show: false,
@@ -19,7 +21,7 @@ function createWindow(): void {
   });
 
   mainWindow.on("ready-to-show", () => {
-    mainWindow.show();
+    mainWindow?.show();
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -53,10 +55,10 @@ function createWindow(): void {
           });
         }
 
-        mainWindow.webContents.openDevTools();
+        mainWindow?.webContents.openDevTools();
       } catch (error) {
         console.error("Failed to load Redux DevTools:", error);
-        mainWindow.webContents.openDevTools();
+        mainWindow?.webContents.openDevTools();
       }
     });
   }
@@ -66,7 +68,20 @@ function createWindow(): void {
     ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
     : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
 
-  mainWindow.loadURL(appUrl);
+  mainWindow?.loadURL(appUrl);
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
 }
 
 app.whenReady().then(async () => {

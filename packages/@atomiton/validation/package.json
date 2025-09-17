@@ -36,13 +36,14 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
-    "@types/node": "^20.0.0",
-    "@vitest/ui": "^2.1.8",
+    "@types/node": "catalog:",
+    "@vitest/ui": "catalog:",
     "eslint": "^8.57.0",
     "prettier": "^3.3.3",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.11",
-    "vitest": "^2.1.8"
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
   },
   "publishConfig": {
     "access": "restricted"

@@ -114,9 +114,10 @@
     },
     {
       "label": "🔌 kill-ports",
-      "detail": "Kill all processes on dev ports (5173, 5174, 5175, 3000, 8080)",
+      "detail": "Kill all processes on dev ports (cross-platform)",
       "type": "shell",
-      "command": "lsof -ti :5173 -ti :5174 -ti :5175 -ti :3000 -ti :8080 | xargs kill -9 2>/dev/null; echo '✅ All ports freed!'",
+      "command": "pnpm",
+      "args": ["kill:ports"],
       "group": "none",
       "problemMatcher": [],
       "presentation": {

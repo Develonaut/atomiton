@@ -116,6 +116,18 @@ export type NodeExecutionContext = {
 
   /** Abort signal for cancellation */
   signal?: AbortSignal;
+
+  /** Execution start time */
+  startTime?: Date;
+
+  /** Execution limits */
+  limits?: {
+    maxExecutionTimeMs?: number;
+    maxMemoryMB?: number;
+  };
+
+  /** Progress reporting function */
+  reportProgress?: (progress: number, message?: string) => void;
 };
 
 /**

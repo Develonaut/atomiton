@@ -39,36 +39,64 @@ export function createEventHandlers(
     events.createEventBus<EngineEvents>("conductor:engine");
 
   const setupQueueHandlers = (): void => {
-    queue.on("job:started", (data: any) => {
+    queue.on("job:started", (data: unknown) => {
       metricsManager.incrementActiveExecutions();
-      engineEventBus.emit("execution:started", {
-        executionId: data.jobData.executionId,
-        compositeId: data.jobData.blueprintId,
-      });
+      if (typeof data === "object" && data !== null && "jobData" in data) {
+        const jobData = (
+          data as { jobData: { executionId: string; blueprintId: string } }
+        ).jobData;
+        engineEventBus.emit("execution:started", {
+          executionId: jobData.executionId,
+          compositeId: jobData.blueprintId,
+        });
+      }
     });
 
-    queue.on("job:completed", (data: any) => {
+    queue.on("job:completed", (data: unknown) => {
       metricsManager.decrementActiveExecutions();
       metricsManager.incrementTotalExecutions();
-      if (data.result?.success) {
-        metricsManager.incrementSuccessfulExecutions();
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "result" in data &&
+        "jobId" in data
+      ) {
+        const typedData = data as {
+          jobId: string;
+          result: { success?: boolean };
+        };
+        if (typedData.result?.success) {
+          metricsManager.incrementSuccessfulExecutions();
+        }
+        engineEventBus.emit("execution:completed", {
+          jobId: typedData.jobId,
+          result: typedData.result,
+        });
       }
-      engineEventBus.emit("execution:completed", {
-        jobId: data.jobId,
-        result: data.result,
-      });
     });
 
-    queue.on("job:failed", (data: any) => {
+    queue.on("job:failed", (data: unknown) => {
       metricsManager.decrementActiveExecutions();
       metricsManager.incrementFailedExecutions();
-      engineEventBus.emit("execution:failed", {
-        jobId: data.jobId,
-        error: data.error,
-      });
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "jobId" in data &&
+        "error" in data
+      ) {
+        const typedData = data as { jobId: string; error: unknown };
+        const error =
+          typedData.error instanceof Error
+            ? typedData.error
+            : new Error(String(typedData.error));
+        engineEventBus.emit("execution:failed", {
+          jobId: typedData.jobId,
+          error,
+        });
+      }
     });
 
-    queue.on("webhook:response", (response: any) => {
+    queue.on("webhook:response", (response: unknown) => {
       webhookManager.emitWebhookReceived(response);
     });
   };

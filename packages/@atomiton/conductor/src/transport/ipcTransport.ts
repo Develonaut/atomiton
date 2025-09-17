@@ -26,7 +26,8 @@ export function createIPCTransport(): IExecutionTransport {
     // Listen for responses from main process
     window.electron.ipcRenderer.on(
       "conductor:result",
-      (_event, response: IPCResponse) => {
+      (_event: unknown, ...args: unknown[]) => {
+        const response = args[0] as IPCResponse;
         const pending = pendingRequests.get(response.id);
         if (pending) {
           pending.resolve(response.payload);
@@ -37,7 +38,8 @@ export function createIPCTransport(): IExecutionTransport {
 
     window.electron.ipcRenderer.on(
       "conductor:error",
-      (_event, { id, error }: { id: string; error: string }) => {
+      (_event: unknown, ...args: unknown[]) => {
+        const { id, error } = args[0] as { id: string; error: string };
         const pending = pendingRequests.get(id);
         if (pending) {
           pending.reject(new Error(error));

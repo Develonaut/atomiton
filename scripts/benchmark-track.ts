@@ -79,10 +79,10 @@ async function runPackageBenchmarks(packagePath: string): Promise<string> {
     }
 
     return stdout;
-  } catch (error: any) {
-    if (error.stdout) {
+  } catch (error: unknown) {
+    if (typeof error === "object" && error !== null && "stdout" in error) {
       // Some packages exit with error even when benchmarks run
-      return error.stdout;
+      return (error as { stdout: string }).stdout;
     }
     throw error;
   }

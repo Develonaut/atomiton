@@ -25,8 +25,7 @@ export function useField({
     error,
     touched,
     hasError: !!error,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue: (value: any) => {
+    setValue: (value: unknown) => {
       setValue(name, value);
       if (error) {
         clearErrors(name);

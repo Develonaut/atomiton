@@ -1,13 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { useForm as useHookForm } from "react-hook-form";
+import type { z } from "@atomiton/validation";
 import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types";
 import { generateFieldsFromSchema, getDefaultValues } from "../utils/index";
 
-export type UseFormOptions = {
-  schema: ZodSchema;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  defaultValues?: any;
+export type UseFormOptions<T extends ZodSchema = ZodSchema> = {
+  schema: T;
+  defaultValues?: Partial<z.infer<T>>;
   fields?: FieldsMetadata;
 };
 
@@ -17,8 +17,7 @@ export function useForm(options: UseFormOptions) {
   const resolvedDefaultValues = defaultValues ?? getDefaultValues(schema);
 
   const form = useHookForm({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(schema as any),
+    resolver: zodResolver(schema),
     defaultValues: resolvedDefaultValues,
   });
 

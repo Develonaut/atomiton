@@ -75,7 +75,7 @@ function getPerformanceGrade(percentage: number): string {
   return "🏆 Excellent";
 }
 
-function parseVitestReport(data: any): {
+function parseVitestReport(data: VitestReport): {
   totalDuration: number;
   tests: TestResult[];
 } {
