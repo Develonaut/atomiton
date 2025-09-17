@@ -351,12 +351,12 @@ function displayDashboard(): void {
 
   // ASCII chart for trends
   const chart = [
-    "100% │     ╭─╮",
-    " 95% │  ╭──╯ ╰─╮",
-    " 90% │ ─╯      ╰───────",
+    "100% │   ╭─╮",
+    " 95% │ ╭─╯ ╰─╮",
+    " 90% │─╯     ╰─────",
     " 85% │",
-    " 80% └──────────────────",
-    "     1w   2w   3w   4w",
+    " 80% └─────────────",
+    "     1d 2d 3d 4d 5d",
   ];
 
   chart.forEach((line) => console.log(colors.gray + line + colors.reset));
