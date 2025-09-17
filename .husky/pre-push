@@ -8,6 +8,14 @@ echo "📤 Pre-push validation..."
 REMOTE="${1:-origin}"
 URL="$2"
 
+# Run smoke tests first (fast validation)
+echo "🔥 Running smoke tests (must complete in <30 seconds)..."
+pnpm test:smoke || {
+  echo "❌ Smoke tests failed!"
+  echo "💡 Fix smoke tests before pushing"
+  exit 1
+}
+
 # Check for benchmark regressions (non-blocking warning)
 echo "📊 Checking for performance regressions..."
 
@@ -56,8 +64,7 @@ if [ ! -z "$CHANGED_PACKAGES" ]; then
   done
 fi
 
-# Run critical E2E tests using the standardized script
-# Note: test:e2e is required in packages but may echo 'No E2E tests' if not applicable
+# Run critical E2E tests (only for client app which has real E2E)
 echo "🎭 Checking critical E2E tests..."
 
 # Check for changed files in apps/client (main E2E location)
@@ -67,29 +74,13 @@ if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; t
   echo "Running smoke E2E tests for client..."
   # Run smoke tests from the smoke folder
   if [ -d "apps/client/src/__tests__/e2e/smoke" ]; then
-    timeout 120 pnpm test:e2e src/__tests__/e2e/smoke 2>&1 || {
+    (cd apps/client && pnpm test:e2e src/__tests__/e2e/smoke) 2>&1 || {
       echo "⚠️ Some smoke E2E tests failed (non-blocking)"
       echo "💡 Consider fixing before push"
     }
   else
     echo "ℹ️ No smoke E2E tests found in src/__tests__/e2e/smoke"
   fi
-fi
-
-# Also check other packages for E2E tests
-if [ ! -z "$CHANGED_PACKAGES" ]; then
-  for PACKAGE in $CHANGED_PACKAGES; do
-    if [ -f "$PACKAGE/package.json" ]; then
-      HAS_E2E=$(grep -q '"test:e2e"' "$PACKAGE/package.json" && echo "yes" || echo "no")
-
-      if [ "$HAS_E2E" = "yes" ] && [ -f "$PACKAGE/playwright.config.ts" ]; then
-        echo "Running E2E tests for $PACKAGE..."
-        (cd "$PACKAGE" && timeout 60 pnpm test:e2e) || {
-          echo "⚠️ E2E tests for $PACKAGE had issues (non-blocking)"
-        }
-      fi
-    fi
-  done
 fi
 
 # Show performance dashboard summary if available
