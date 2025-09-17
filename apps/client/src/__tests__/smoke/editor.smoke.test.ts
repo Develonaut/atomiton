@@ -7,7 +7,7 @@ describe("Editor Domain Smoke Tests", () => {
   });
 
   it("nodes package can be imported without errors", async () => {
-    const nodesModule = await import("@atomiton/nodes");
+    const nodesModule = await import("@atomiton/nodes/browser");
     expect(nodesModule).toBeDefined();
   });
 

@@ -1,6 +1,5 @@
 import { useNodes } from "@atomiton/editor";
-import type { INode } from "@atomiton/nodes";
-import { getNodesByCategory } from "@atomiton/nodes";
+import { getNodesByCategory } from "@atomiton/nodes/browser";
 import Accordion from "./Accordion";
 
 function Assets() {
@@ -13,9 +12,9 @@ function Assets() {
         <Accordion
           key={category.name}
           title={category.title}
-          items={category.items.map((item: INode, itemIndex: number) => ({
+          items={category.items.map((item, itemIndex: number) => ({
             id: index * 100 + itemIndex, // Generate unique numeric id for compatibility
-            nodeType: item.metadata.type, // Map type to nodeType for compatibility
+            nodeType: item.metadata.variant, // Use variant as the node type
             title: item.metadata.name, // Map name to title for display
             category: item.metadata.category, // Add required category property
             icon: item.metadata.icon || "zap", // Use icon name directly

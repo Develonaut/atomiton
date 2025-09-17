@@ -1,8 +1,7 @@
-import { toEditor } from "@/router/navigation";
-import Image from "@/components/Image";
 import Icon from "@/components/Icon";
-import { blueprintStore } from "@/stores/blueprint/store";
-import { selectBlueprintById } from "@/stores/blueprint/selectors";
+import Image from "@/components/Image";
+import { useLink } from "@/router";
+import { useBlueprints } from "@/stores/blueprint";
 
 type Props = {
   value: {
@@ -15,24 +14,27 @@ type Props = {
 };
 
 function Card({ value }: Props) {
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const { actions } = useBlueprints();
+  const blueprint = actions.findById(String(value.id));
+  const linkProps = useLink({
+    to: "/editor/$id",
+    params: { id: String(value.id) },
+    state: blueprint
+      ? {
+          defaultNodes: blueprint.nodes,
+          defaultEdges: blueprint.edges,
+          name: blueprint.name,
+          description: blueprint.description,
+        }
+      : undefined,
+  });
 
-    // If it's a blueprint type, load the blueprint and pass it to editor
-    if (value.type === "blueprint") {
-      const blueprint = selectBlueprintById(String(value.id))(
-        blueprintStore.getState(),
-      );
-      if (blueprint) {
-        toEditor(String(value.id), { blueprint });
-      }
-    }
-  };
+  const Component = value.type === "blueprint" ? "button" : "div";
 
   return (
-    <div
+    <Component
       className="group flex flex-col w-[calc(16.666%-0.75rem)] mt-3 mx-1.5 p-2 border border-s-01 bg-surface-01 rounded-3xl transition-shadow cursor-pointer hover:shadow-prompt-input max-[2200px]:w-[calc(20%-0.75rem)] max-[1940px]:w-[calc(25%-0.75rem)] max-xl:w-[calc(33.333%-0.75rem)] max-md:w-[calc(50%-0.75rem)]"
-      onClick={handleClick}
+      {...(value.type === "blueprint" ? linkProps : {})}
     >
       <div className="relative mb-2">
         <Image
@@ -50,7 +52,7 @@ function Card({ value }: Props) {
         <div className="mb-1 text-body-md-str">{value.title}</div>
         <div className="text-body-sm text-secondary">{value.category}</div>
       </div>
-    </div>
+    </Component>
   );
 }
 

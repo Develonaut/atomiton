@@ -1,33 +1,43 @@
+/**
+ * Blueprint Store
+ *
+ * Clean, modular store following Bento Box principles
+ */
+
 import { createStore } from "@atomiton/store";
-import { createCrudModule } from "./modules/crud";
-import type { BlueprintState, BlueprintStoreActions } from "./types";
-import { initializeTemplates } from "./utils/initializeTemplates";
+import { createCrudModule, type CrudActions } from "./modules/crud";
+import {
+  createTemplateModule,
+  type TemplateActions,
+} from "./modules/templates";
+import type { BlueprintState } from "./types";
 
 const initialState: BlueprintState = {
-  templates: initializeTemplates(),
-  userBlueprints: [],
+  templates: [],
+  blueprints: [],
   isLoading: false,
   error: null,
 };
 
-const store = createStore<BlueprintState>(() => initialState, {
+// Create the base store
+export const blueprintStore = createStore<BlueprintState>(() => initialState, {
   name: "blueprint",
   persist: {
     partialize: (state) => ({
-      userBlueprints: state.userBlueprints,
+      blueprints: state.blueprints,
     }),
   },
 });
 
-const crudModule = createCrudModule(store);
+// Create module instances
+const templateModule = createTemplateModule(blueprintStore);
+const crudModule = createCrudModule(blueprintStore);
 
-// ============================================================================
-// Exported Store
-// ============================================================================
+// Export combined actions interface
+export type BlueprintStoreActions = CrudActions & TemplateActions;
 
-export const blueprintStore: BlueprintStoreActions = {
-  ...store,
+// Export actions object combining all modules
+export const blueprintActions: BlueprintStoreActions = {
+  ...templateModule,
   ...crudModule,
 };
-
-export type BlueprintStore = typeof blueprintStore;

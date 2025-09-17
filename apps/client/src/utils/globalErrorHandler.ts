@@ -97,12 +97,6 @@ export function setupGlobalErrorHandlers() {
       delete extWindow.__lastError;
       console.log("✅ Error history cleared");
     };
-
-    console.log("🛠️ Debug helpers available:");
-    console.log("  - window.showErrorHistory() - Show all captured errors");
-    console.log("  - window.clearErrorHistory() - Clear error history");
-    console.log("  - window.__lastError - Last error caught by ErrorBoundary");
-    console.log("  - window.__errorHistory - Array of all captured errors");
   }
 }
 

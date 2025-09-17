@@ -1,79 +1,30 @@
 /**
  * Blueprint Store Types
  *
- * Blueprints are serializable representations of composite nodes.
- * We store only the data, not the full composite node with functions.
+ * Simple, clean types for blueprint management.
+ * Blueprint is just a CompositeDefinition with optional user-specific fields.
  */
 
-import type { ICompositeNode } from "@atomiton/nodes";
-import type { CrudActions } from "./modules/crud";
+import type { CompositeDefinition } from "@atomiton/nodes/browser";
 
 /**
- * Serializable Blueprint data
- * Contains only data fields, no functions
+ * Blueprint type - extends CompositeDefinition with user-specific fields
+ *
+ * A Blueprint IS a CompositeDefinition, not a separate shape.
+ * We only add user-specific fields for client-side management.
  */
-export type BlueprintData = {
-  id: string;
-  name: string;
-  type: string;
-  metadata: {
-    description?: string;
-    category?: string;
-    authorId?: string;
-    tags?: string[];
-    [key: string]: any;
-  };
-  inputPorts: any[];
-  outputPorts: any[];
-  nodes: any[];
-  edges: any[];
-  variables?: any;
-  settings?: any;
-  content?: string;
-  lastModified?: string;
-  author?: string;
-  isPublic?: boolean;
-  isTemplate?: boolean;
+export type Blueprint = CompositeDefinition & {
+  // User blueprint specific fields for client-side management
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-/**
- * A Blueprint is the serializable data
- */
-export type Blueprint = BlueprintData;
-
-/**
- * Blueprint state for the store
- * Separates templates (read-only) from user-created blueprints
- */
 export type BlueprintState = {
-  templates: Blueprint[]; // Read-only templates from @atomiton/nodes
-  userBlueprints: Blueprint[]; // User-created and editable blueprints
+  templates: Blueprint[];
+  blueprints: Blueprint[];
   isLoading: boolean;
   error: string | null;
 };
 
-export type BlueprintStoreActions = BaseStore & CrudActions;
-
-export type BaseStore = {
-  getState: () => BlueprintState;
-  setState: (updater: (state: BlueprintState) => void) => void;
-  subscribe: (listener: (state: BlueprintState) => void) => () => void;
-};
-
-/**
- * Helper to convert ICompositeNode to serializable BlueprintData
- */
-export function compositeNodeToBlueprint(node: ICompositeNode): Blueprint {
-  return {
-    id: node.id,
-    name: node.name,
-    type: node.type,
-    metadata: { ...node.metadata },
-    inputPorts: node.inputPorts || [],
-    outputPorts: node.outputPorts || [],
-    nodes: node.getChildNodes ? node.getChildNodes() : [],
-    edges: node.getExecutionFlow ? node.getExecutionFlow() : [],
-    variables: (node as any).variables,
-    settings: (node as any).settings,
-  };
-}
+// Note: BlueprintActions is now defined in store.ts as BlueprintStoreActions
+// combining CrudActions and TemplateActions for better modularity

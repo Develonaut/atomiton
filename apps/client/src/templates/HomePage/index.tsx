@@ -1,19 +1,20 @@
 import Catalog from "@/components/Catalog";
 import Layout from "@/components/Layout";
 import Templates from "@/components/Templates";
-import { useUserBlueprints } from "@/stores/blueprint/hooks";
+import { useBlueprints } from "@/stores/blueprint";
 import { titleCase } from "@atomiton/utils";
 import { useMemo } from "react";
 import { content as fakeContent } from "./content";
 
 function HomePage() {
-  const { blueprints, isLoading } = useUserBlueprints();
+  const { blueprints, isLoading } = useBlueprints();
+
   const blueprintsContent = useMemo(
     () =>
       blueprints.map((blueprint) => ({
         id: blueprint.id,
         title: blueprint.name,
-        category: titleCase(blueprint.metadata?.category || "Blueprint"),
+        category: titleCase("Blueprint"),
         image: "/images/scenes/12.jpg", // Default image for now
         type: "blueprint",
       })),

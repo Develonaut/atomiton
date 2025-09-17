@@ -1,19 +1,21 @@
 import Image from "@/components/Image";
 import { useLink } from "@/router";
 import type { Blueprint } from "@/stores/blueprint";
-import { useTemplateBlueprints } from "@/stores/blueprint/hooks";
+import { useBlueprints } from "@/stores/blueprint";
 
 type TemplateButtonProps = {
-  template: Blueprint[];
+  template: Blueprint;
+  index: number;
 };
 
 function TemplateButton({ template, index }: TemplateButtonProps) {
   const linkProps = useLink({
-    to: "/editor/$id",
-    params: { id: undefined },
+    to: "/editor/new",
     state: {
       defaultNodes: template.nodes || [],
       defaultEdges: template.edges || [],
+      name: template.name,
+      description: template.description,
     },
   });
 
@@ -26,7 +28,7 @@ function TemplateButton({ template, index }: TemplateButtonProps) {
       <div className="shrink-0 w-16 h-16">
         <Image
           className="rounded-xl w-full h-full object-cover"
-          src={`/images/scenes/${(index % 12) + 1}.jpg`} // Cycle through available images
+          src={`/images/scenes/${(index % 12) + 1}.jpg`}
           width={64}
           height={64}
           alt={template.name}
@@ -34,17 +36,17 @@ function TemplateButton({ template, index }: TemplateButtonProps) {
       </div>
       <div className="pl-4 w-[calc(100%-4rem)]">
         <div className="text-body-md-str">{template.name}</div>
-        <div className="mt-1 text-secondary">Templae</div>
+        <div className="mt-1 text-secondary">Template</div>
       </div>
     </button>
   );
 }
 
 function Templates() {
-  const { templates } = useTemplateBlueprints();
+  const { templates } = useBlueprints();
 
   return (
-    !!templates && (
+    !!templates.length && (
       <div className="flex gap-3 py-8 px-12 overflow-x-auto scrollbar-none max-2xl:px-5">
         {templates.map((template, index) => (
           <TemplateButton key={template.id} template={template} index={index} />

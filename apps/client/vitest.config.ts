@@ -27,6 +27,14 @@ export default defineConfig({
         __dirname,
         "../../packages/@atomiton/form/src",
       ),
+      "@atomiton/nodes/browser": path.resolve(
+        __dirname,
+        "../../packages/@atomiton/nodes/src/exports/browser",
+      ),
+      "@atomiton/nodes/executable": path.resolve(
+        __dirname,
+        "../../packages/@atomiton/nodes/src/exports/executable",
+      ),
       "@atomiton/nodes": path.resolve(
         __dirname,
         "../../packages/@atomiton/nodes/src",

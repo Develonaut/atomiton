@@ -26,7 +26,7 @@ function Header({ onOpen }: Props) {
     // TODO: Implement actual search functionality
   };
 
-  const createButtonProps = useLink({ to: "/editor/$id" });
+  const createButtonProps = useLink({ to: "/editor/new" });
 
   return (
     <div
