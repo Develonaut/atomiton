@@ -76,8 +76,23 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ errorInfo });
 
-    // Log error to console for development
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    // Always log errors to console with full details
+    console.group("🚨 ErrorBoundary caught an error");
+    console.error("Error:", error);
+    console.error("Error Info:", errorInfo);
+    console.error("Stack trace:", error.stack);
+    console.error("Component stack:", errorInfo.componentStack);
+    console.groupEnd();
+
+    // In development, also store error globally for debugging
+    if (import.meta.env.DEV) {
+      // Store on window for debugging access
+      const extWindow = window as Window & {
+        __lastError?: { error: Error; errorInfo: ErrorInfo; timestamp: Date };
+      };
+      extWindow.__lastError = { error, errorInfo, timestamp: new Date() };
+      console.warn("💡 Error stored in window.__lastError for debugging");
+    }
 
     // Call optional error handler
     this.props.onError?.(error, errorInfo);

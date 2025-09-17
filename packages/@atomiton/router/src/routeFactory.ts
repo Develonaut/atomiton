@@ -4,13 +4,15 @@ import {
   Outlet,
   lazyRouteComponent,
   type RouteComponent,
+  type ErrorRouteComponent,
 } from "@tanstack/react-router";
 import React, { type ComponentType } from "react";
 import type { RouteConfig } from "./types";
 
-export function createRootRouteInstance() {
+export function createRootRouteInstance(errorComponent?: ComponentType) {
   return createRootRoute({
     component: () => React.createElement(Outlet),
+    errorComponent: errorComponent as ErrorRouteComponent | undefined,
   });
 }
 

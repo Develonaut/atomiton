@@ -11,9 +11,9 @@ import { createRootRouteInstance, createTanStackRoutes } from "./routeFactory";
 import type { CreateRouterOptions } from "./types";
 
 export function createRouter(options: CreateRouterOptions) {
-  const { routes, defaultPendingComponent } = options;
+  const { routes, defaultPendingComponent, defaultErrorComponent } = options;
 
-  const rootRoute = createRootRouteInstance();
+  const rootRoute = createRootRouteInstance(defaultErrorComponent);
 
   const tanStackRoutes = createTanStackRoutes(
     routes,
@@ -37,9 +37,8 @@ export function createRouter(options: CreateRouterOptions) {
     useNavigate: () => router.navigate.bind(router),
     useCurrentRoute: () => {
       const routerInstance = useRouter();
-      return routerInstance.state.matches[
-        routerInstance.state.matches.length - 1
-      ];
+      const matches = routerInstance.state.matches;
+      return matches && matches.length > 0 ? matches[matches.length - 1] : null;
     },
     useParams: <T = Record<string, string>,>() =>
       useParams({ strict: false }) as T,
