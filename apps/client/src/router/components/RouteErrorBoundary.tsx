@@ -9,16 +9,8 @@ export function RouteErrorBoundary({
   reset?: () => void;
 }) {
   useEffect(() => {
-    // Log route errors
+    // Log route errors to global error handler
     if (error) {
-      // eslint-disable-next-line no-console -- Critical route error logging for debugging
-      console.group("🚨 Route Error Boundary");
-      console.error("Route error:", error);
-      console.error("Stack:", error.stack);
-      // eslint-disable-next-line no-console -- End of error group
-      console.groupEnd();
-
-      // Also log to global error handler
       logError(error, "RouteErrorBoundary");
     }
   }, [error]);

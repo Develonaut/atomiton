@@ -74,7 +74,10 @@ const baseConfig: Linter.Config[] = [
       "no-unused-vars": "off", // Use TypeScript's version instead
 
       // General rules
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-console": [
+        "warn",
+        { allow: ["warn", "error", "group", "groupEnd", "table", "log"] },
+      ],
       "prefer-const": "warn",
 
       // Dead code detection rules
