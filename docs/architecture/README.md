@@ -15,6 +15,11 @@ The conductor is Atomiton's unified execution engine that works consistently acr
 - **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Desktop application architecture and IPC flow
 - **[BENTO_BOX_IMPLEMENTATION](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity and efficiency principles in action
 
+### Storage & Security
+
+- **[Storage Architecture](./STORAGE.md)** - Universal storage abstraction and platform-specific implementations
+- **[Security Architecture](./SECURITY.md)** - Comprehensive security strategy for credentials and data protection
+
 ### Node System
 
 - **[Node Configuration System](./NODE_CONFIGURATION_SYSTEM.md)** - Configuration patterns for Blueprint nodes

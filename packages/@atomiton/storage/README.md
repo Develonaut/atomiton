@@ -1,134 +1,113 @@
 # @atomiton/storage
 
-> Universal storage abstraction for Blueprints and application data across platforms
+> Storage abstraction package for desktop Composite data (early development)
 
-## Overview
+## Current Status
 
-The storage package provides a unified API for storing and retrieving Blueprints and application data across different platforms and storage providers. Like a universal adapter, it presents the same interface whether you're running on desktop, in a browser, or connecting to cloud storage.
+🚧 **EARLY DEVELOPMENT** - Only basic filesystem storage implemented.
 
-## Key Features
+**What actually works:**
 
-- **Platform Agnostic**: Same API works on desktop, browser, and cloud
-- **Storage Flexibility**: File system, IndexedDB, cloud providers, or custom backends
-- **Cloud Integration**: Google Drive, OneDrive, Dropbox support
-- **Tier-Based**: Different features/limits based on subscription tier
-- **Format Support**: JSON and YAML serialization built-in
-- **Error Handling**: Comprehensive error types with context
+- TypeScript interfaces and types defined
+- `FileSystemStorage` class for desktop local file storage
+- JSON serialization only (YAML planned)
+- Basic CRUD operations (save/load/list/delete/exists)
 
-## MVP Approach
+**What doesn't exist yet:**
 
-### Why Storage Abstraction
+- `createStorage()` factory function
+- Platform auto-detection
+- Cloud storage providers (Google Drive, OneDrive, Dropbox)
+- Browser IndexedDB storage
+- YAML serialization
+- Multi-platform support
 
-Starting with a storage abstraction layer ensures:
+## What Actually Exists
 
-1. **Future Proof**: Easy to add new storage backends without changing app code
-2. **Platform Ready**: Same code works in desktop app and future browser version
-3. **Cloud Ready**: Built-in support for cloud storage providers
-4. **Testing**: Mock storage for reliable testing
-5. **Scalability**: Can optimize storage per platform/tier
+### FileSystemStorage
 
-### Supported Storage Types
+Currently the only implemented storage engine. Stores Composite data as JSON files in the local filesystem.
 
 ```typescript
-// Auto-detection based on environment
-const storage = await createStorage({ platform: "auto" });
+import { FileSystemStorage } from "@atomiton/storage";
 
-// Or specify explicitly
-const storage = await createStorage({
-  type: "filesystem", // Desktop file system
-  type: "indexeddb", // Browser storage
-  type: "google-drive", // Google Drive API
-  type: "onedrive", // Microsoft OneDrive
-  type: "dropbox", // Dropbox API
-  type: "cloud", // Atomiton cloud backend
+// Create filesystem storage (stores in ~/Atomiton/ by default)
+const storage = new FileSystemStorage();
+
+// Or specify custom directory
+const storage = new FileSystemStorage("/path/to/custom/dir");
+
+// Save data (JSON only, despite what options suggest)
+await storage.save("my-composite", compositeData, {
+  format: "yaml", // Ignored - always saves as JSON
+  metadata: { author: "user@example.com" },
 });
+
+// Load data
+const composite = await storage.load("my-composite");
+
+// List stored items
+const items = await storage.list("composites/");
+
+// Check if exists
+const exists = await storage.exists("my-composite");
+
+// Delete
+await storage.delete("my-composite");
+
+// Get storage info
+const info = storage.getInfo(); // Returns type: "filesystem", platform: "desktop"
 ```
 
-## Architecture
+### Type Definitions
 
-### Universal API
+Comprehensive TypeScript interfaces are defined but most storage engines don't exist yet:
 
 ```typescript
+// This interface is implemented by FileSystemStorage only
 interface IStorageEngine {
-  save(key: string, data: any, options?: StorageOptions): Promise<void>;
-  load(key: string): Promise<any>;
+  save(key: string, data: unknown, options?: StorageOptions): Promise<void>;
+  load(key: string): Promise<unknown>;
   list(prefix?: string): Promise<StorageItem[]>;
   delete(key: string): Promise<void>;
   exists(key: string): Promise<boolean>;
   getInfo(): StorageInfo;
 }
+
+// Comprehensive error handling
+class StorageError extends Error {
+  code: StorageErrorCode;
+  cause?: Error;
+  context?: Record<string, unknown>;
+}
 ```
 
-### Platform Routing
+### File Storage Details
 
-```
-┌──────────────┐     ┌─────────────────┐     ┌──────────────────┐
-│     App      │────▶│ Storage Package │────▶│ Platform Engine  │
-│  (Any Tier)  │     │  (Auto-Route)   │     │ (File/Cloud/DB)  │
-└──────────────┘     └─────────────────┘     └──────────────────┘
-```
+- **Storage Location**: `~/Atomiton/` directory by default
+- **File Format**: `.composite.json` files (despite YAML in variable names)
+- **Directory Structure**: Preserves key path as nested directories
+- **Metadata**: Extracted from Composite data when available
 
-### Storage Engines
+## Known Limitations
 
-- **FilesystemStorage**: Desktop local file system (`~/Atomiton/`)
-- **IndexedDBStorage**: Browser persistent storage
-- **GoogleDriveStorage**: Google Drive API integration
-- **OneDriveStorage**: Microsoft OneDrive API integration
-- **DropboxStorage**: Dropbox API integration
-- **CloudStorage**: Atomiton managed cloud backend
-- **MemoryStorage**: In-memory for testing
+1. **Format Support**: Only JSON serialization works (YAML hardcoded to JSON)
+2. **Platform Support**: Desktop filesystem only
+3. **No Factory Function**: Must instantiate `FileSystemStorage` directly
+4. **No Cloud Storage**: All cloud providers are unimplemented
+5. **No Browser Support**: IndexedDB storage doesn't exist
+6. **No Testing Storage**: MemoryStorage not implemented
 
-## Usage Examples
+## Planned Features
 
-### Basic Usage
+See [ROADMAP.md](./ROADMAP.md) for planned implementations including:
 
-```typescript
-import { createStorage } from "@atomiton/storage";
-
-// Auto-detect best storage for platform
-const storage = await createStorage({ platform: "auto" });
-
-// Save a Blueprint
-await storage.save("blueprints/my-workflow", blueprint, {
-  format: "yaml",
-  metadata: { author: "user@example.com" },
-});
-
-// Load Blueprint
-const blueprint = await storage.load("blueprints/my-workflow");
-
-// List all Blueprints
-const items = await storage.list("blueprints/");
-```
-
-### Cloud Storage
-
-```typescript
-// Connect to Google Drive
-const storage = await createStorage({
-  type: "google-drive",
-  options: {
-    credentials: googleCredentials,
-    folder: "Atomiton Blueprints",
-  },
-});
-
-// Same API works with any storage type
-await storage.save("blueprints/workflow", blueprint);
-```
-
-## Status
-
-🚧 **Package Structure Created** - Interfaces defined, implementations pending.
-
-See [ROADMAP.md](./ROADMAP.md) for detailed development timeline.
-
-## Documentation
-
-- [Storage Engines](./docs/STORAGE_ENGINES.md) - Platform-specific implementations
-- [Cloud Integration](./docs/CLOUD_INTEGRATION.md) - Cloud storage provider setup
-- [Migration Strategy](./docs/MIGRATION_STRATEGY.md) - Moving between storage types
-- [Testing Guide](./docs/TESTING_GUIDE.md) - Mock storage and testing patterns
+- Cloud storage providers (Google Drive, OneDrive, Dropbox)
+- Browser IndexedDB support
+- YAML serialization via @atomiton/nodes
+- Platform auto-detection
+- Storage factory function
+- In-memory storage for testing
 
 ## Development
 
@@ -136,15 +115,32 @@ See [ROADMAP.md](./ROADMAP.md) for detailed development timeline.
 # Install dependencies
 pnpm install
 
-# Build
+# Build package
 pnpm build
 
-# Run tests
-pnpm test
+# Type checking
+pnpm typecheck
 
-# Watch mode
-pnpm dev
+# Linting
+pnpm lint
+
+# Tests (currently no tests implemented)
+pnpm test
 ```
+
+## Documentation
+
+### Package-Specific
+
+- [ROADMAP.md](./ROADMAP.md) - Development timeline for planned features
+- [SECURITY.md](./SECURITY.md) - Planned security implementation for this package
+
+### Architecture Documentation
+
+- **[Storage Architecture](../../docs/architecture/STORAGE.md)** - Complete storage system design and cross-platform strategy
+- **[Security Architecture](../../docs/architecture/SECURITY.md)** - Project-wide security implementation
+
+**Note**: Package documentation reflects current implementation. Architecture documents describe the complete planned system.
 
 ## License
 
