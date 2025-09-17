@@ -196,6 +196,26 @@ class PackageValidator {
     }
   }
 
+  private hasSubpathExports(pkg: Package): boolean {
+    try {
+      const packageJson = JSON.parse(fs.readFileSync(pkg.packageJson, "utf8"));
+      const exports = packageJson.exports;
+
+      // Check if exports has multiple subpaths (not just main export)
+      if (exports && typeof exports === "object") {
+        const exportKeys = Object.keys(exports);
+        // If exports has keys other than "." (main export), it uses subpaths
+        return exportKeys.some(
+          (key) => key !== "." && key !== "./package.json",
+        );
+      }
+
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
   private validateDependencies(
     pkgName: string,
     packageData: PackageData,
@@ -226,12 +246,16 @@ class PackageValidator {
     // Config packages don't need vite.config.ts or doc files
     const isConfigPackage = pkg.name.includes("-config");
 
+    // Check if package uses subpath exports (like @atomiton/nodes)
+    const hasSubpathExports = this.hasSubpathExports(pkg);
+
     const requiredFiles = [
       "tsconfig.json",
       ...(!isConfigPackage ? ["vite.config.ts"] : []),
       "package.json",
       "README.md",
-      "src/index.ts",
+      // Only require src/index.ts if not using subpath exports
+      ...(!hasSubpathExports ? ["src/index.ts"] : []),
       ...(!isConfigPackage
         ? [
             "CURRENT.md",
