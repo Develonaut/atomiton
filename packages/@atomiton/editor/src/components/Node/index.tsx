@@ -1,4 +1,4 @@
-import { getNodeByType } from "@atomiton/nodes";
+import { getNodeByType } from "@atomiton/nodes/browser";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,

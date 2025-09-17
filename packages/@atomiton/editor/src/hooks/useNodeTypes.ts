@@ -1,4 +1,4 @@
-import { getNodes } from "@atomiton/nodes";
+import { getNodes } from "@atomiton/nodes/browser";
 import type { NodeTypes } from "@xyflow/react";
 import { useMemo } from "react";
 import Node from "../components/Node";
@@ -16,8 +16,8 @@ export function useNodeTypes(): NodeTypes {
     const reactFlowNodeTypes: NodeTypes = {};
 
     for (const node of nodeList) {
-      // Use the actual type from node metadata (e.g., "image-composite")
-      reactFlowNodeTypes[node.metadata.type] = Node;
+      // Use the variant from node metadata (e.g., "image-composite", "code", "transform")
+      reactFlowNodeTypes[node.metadata.variant] = Node;
     }
 
     // Add composite node type for blueprints
