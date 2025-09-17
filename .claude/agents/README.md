@@ -48,7 +48,7 @@ agents/
 
 ### Agent Coordination
 
-- **[Execution Plan](./coordination/AGENT_EXECUTION_PLAN.md)** - MVP implementation workflow
+- **[Execution Plan](../workflow/EXECUTION_PLAN.md)** - MVP implementation workflow
 - **[Guidelines](../../docs/guides/README.md)** - Development guides and standards
 
 ### Agent Personas
@@ -74,7 +74,7 @@ Use the Task tool with:
 
 #### Validation Pipeline
 
-**See `/.claude/agents/coordination/AGENT_EXECUTION_PLAN.md` for the complete workflow process.**
+**See `/.claude/workflow/EXECUTION_PLAN.md` for the complete workflow process.**
 
 All work must follow the mandatory workflow including:
 
@@ -223,7 +223,7 @@ This ensures:
 
 ---
 
-**Guidelines**: All agents must follow `/.claude/guidelines/` for environment restrictions and common standards.  
+**Guidelines**: All agents must follow `/docs/guides/` for environment restrictions and common standards.  
 **Authority**: Only Parker can modify environment/repository configurations. Only Barbara can modify .claude or /docs documentation.  
 **Documentation**: ALL agents must coordinate with Barbara before creating/moving/restructuring any .claude or project documentation.  
-**Last Updated**: 2025-08-29
+**Last Updated**: 2025-09-17

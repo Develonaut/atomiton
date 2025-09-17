@@ -42,15 +42,15 @@ atomiton/                       # Project root
 │   ├── settings.local.json    # Permissions and settings
 │   └── agents/                # Agent personas (Claude-specific)
 ├── docs/                       # General project documentation
-│   ├── TODO.md                # Centralized TODO list
-│   ├── guidelines/            # Document management & archiving
-│   ├── development/           # Code quality & standards
+│   ├── guides/                # Development principles and standards
 │   ├── architecture/          # System architecture docs
-│   ├── deployment/            # Production & operations
-│   ├── planning/              # Project planning docs
-│   ├── status/                # Project status and tracking
-│   ├── ui/                    # UI design and components
-│   └── reports/              # Analysis reports
+│   ├── development/           # Development tools and processes
+│   ├── project/               # Project overview and planning
+│   ├── research/              # Analysis and research
+│   ├── strategies/            # Implementation strategies
+│   ├── testing/               # Testing documentation and strategy
+│   ├── deployment/            # Deployment guides and procedures
+│   └── nodes/                 # Node development and documentation
 └── [workspace directories]
 ```
 
@@ -58,41 +58,52 @@ atomiton/                       # Project root
 
 ### 🚨 MANDATORY FOR ALL AGENTS
 
-- **BEFORE ANY WORK**: [Code Quality Requirements](../docs/development/README.md) - ALL agents MUST run format/lint/typecheck/build before completing work
+- **BEFORE ANY WORK**: [Code Quality Requirements](../docs/guides/CODE_STYLE.md) - ALL agents MUST run format/lint/typecheck/build before completing work
 - **Agent workflows**: [Agents Overview](./agents/README.md) - Team coordination and specific requirements
-- **Guidelines**: [Guidelines Index](../docs/guidelines/README.md) - Environment restrictions and development standards
+- **Guidelines**: [Guidelines Index](../docs/guides/README.md) - Environment restrictions and development standards
 
 ## 🔗 Essential Documentation Links
 
 ### Agent Management
 
 - [Agent Team Overview](./agents/README.md)
-- [Agent Execution Plan](./agents/coordination/AGENT_EXECUTION_PLAN.md)
+- [Agent Execution Plan](./workflow/EXECUTION_PLAN.md)
 - [Agent Personas](./agents/personas/AGENT_PERSONAS.md)
 
 ### Development Guidelines
 
-- [Development Overview](../docs/development/README.md)
-- [Development Process](../docs/development/archive/PROCESS.md)
-- [Core Values](../docs/development/archive/CORE_VALUES.md)
-- [TypeScript Guidelines](../docs/development/archive/TYPESCRIPT.md)
-- [Testing Strategy](../docs/development/archive/TESTING.md)
+- [Development Principles](../docs/guides/DEVELOPMENT_PRINCIPLES.md)
+- [Code Style Guidelines](../docs/guides/CODE_STYLE.md)
+- [Package Integration Guide](../docs/guides/PACKAGE_INTEGRATION.md)
 
 ### Technical Architecture
 
 - [Architecture Overview](../docs/architecture/README.md)
-- [Project Architecture](../docs/architecture/archive/SYSTEM.md)
-- [Technical Stack](../docs/architecture/archive/STACK.md)
-- [Navigation Structure](../docs/architecture/archive/NAVIGATION.md)
-- [Node System Integration](../docs/architecture/archive/INTEGRATION.md)
-- [Blueprint Guide](../docs/architecture/archive/BLUEPRINT_GUIDE.md)
+- [Blueprint Specification](../docs/architecture/BLUEPRINT_SPECIFICATION.md)
+- [API Architecture](../docs/architecture/API_ARCHITECTURE.md)
+- [Data Model](../docs/architecture/DATA_MODEL.md)
+- [Security Configuration](../docs/architecture/SECURITY.md)
+- [Storage Implementation](../docs/architecture/STORAGE.md)
+- [WebSocket Protocol](../docs/architecture/WEBSOCKET_PROTOCOL.md)
+- [Conductor API](../docs/architecture/CONDUCTOR_API.md)
+- [Transport Architecture](../docs/architecture/TRANSPORT_ARCHITECTURE.md)
+- [Electron Architecture](../docs/architecture/ELECTRON_ARCHITECTURE.md)
+- [BENTO BOX Implementation](../docs/architecture/BENTO_BOX_IMPLEMENTATION.md)
+- [Node Configuration System](../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)
+
+### Domain-Specific Documentation
+
+- [Node Development Guide](../docs/nodes/README.md) - Creating and testing custom nodes
+- [Testing Strategy](../docs/testing/README.md) - Comprehensive testing approach
+- [Deployment Guide](../docs/deployment/README.md) - Multi-environment deployment
 
 ### Migration Documentation
 
 Migration plans are documented in package-specific ROADMAP files:
 
-- UI Migration: `/packages/ui/ROADMAP.md`
-- Core Migration: `/packages/core/ROADMAP.md`
+- UI Migration: `/packages/@atomiton/ui/ROADMAP.md`
+- Nodes Development: `/packages/@atomiton/nodes/ROADMAP.md`
+- DI System: `/packages/@atomiton/di/ROADMAP.md`
 
 ## ✅ Permissions
 
@@ -136,5 +147,5 @@ Packages are organized under `packages/@atomiton/`:
 
 ---
 
-**Last Updated**: 2025-09-06
+**Last Updated**: 2025-09-17
 **Documentation Root**: `./docs/` (relative to project root)
