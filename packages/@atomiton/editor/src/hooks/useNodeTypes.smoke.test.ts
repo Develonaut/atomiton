@@ -7,7 +7,7 @@
  * 3. Maintains consistency between what nodes export and what editor expects
  */
 
-import { getNodes, getNodeTypes } from "@atomiton/nodes";
+import { getNodes } from "@atomiton/nodes";
 import { describe, expect, it, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useNodeTypes } from "./useNodeTypes";
@@ -23,7 +23,10 @@ describe("useNodeTypes smoke test", () => {
     const nodeTypes = result.current;
 
     // Get all registered node types from @atomiton/nodes
-    const registeredNodeTypes = getNodeTypes();
+    const registeredNodes = getNodes();
+    const registeredNodeTypes = registeredNodes.map(
+      (node) => node.metadata.type,
+    );
 
     // Verify all node types are present in the ReactFlow nodeTypes
     for (const nodeType of registeredNodeTypes) {

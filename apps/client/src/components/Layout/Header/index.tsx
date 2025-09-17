@@ -5,8 +5,7 @@ import Notifications from "@/components/Notifications";
 import Search from "@/components/Search";
 import User from "@/components/User";
 import { useScrollbarWidth } from "@/hooks";
-import { Link, usePathname } from "@/router";
-import { useEventCallback } from "@atomiton/hooks";
+import { Link, useLink, usePathname } from "@/router";
 import { Button } from "@atomiton/ui";
 import { useState } from "react";
 
@@ -27,9 +26,7 @@ function Header({ onOpen }: Props) {
     // TODO: Implement actual search functionality
   };
 
-  const handleOnCreateClick = useEventCallback(() => {
-    // TODO: Implement create blueprint functionality
-  });
+  const createButtonProps = useLink({ to: "/editor/$id" });
 
   return (
     <div
@@ -80,11 +77,7 @@ function Header({ onOpen }: Props) {
         {isActiveExplore && <Filters onlyBtnIcon />}
         <Notifications />
         {!isActiveExplore && (
-          <Button
-            isPrimary
-            onClick={handleOnCreateClick}
-            data-testid="create-button"
-          >
+          <Button isPrimary data-testid="create-button" {...createButtonProps}>
             Create
           </Button>
         )}

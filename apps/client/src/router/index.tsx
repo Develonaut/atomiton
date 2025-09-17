@@ -18,3 +18,6 @@ export const {
   defaultPendingComponent: LoadingFallback,
   defaultErrorComponent: RouteErrorBoundary,
 });
+
+export { useLink } from "./hooks/useLink";
+export type { UseLinkOptions } from "./hooks/useLink";

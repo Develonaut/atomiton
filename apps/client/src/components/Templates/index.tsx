@@ -1,85 +1,53 @@
 import Image from "@/components/Image";
-import { toEditor } from "@/router/navigation";
+import { useLink } from "@/router";
+import type { Blueprint } from "@/stores/blueprint";
 import { useTemplateBlueprints } from "@/stores/blueprint/hooks";
-import { blueprintStore } from "@/stores/blueprint/store";
-import { useMemo } from "react";
 
-function Templates() {
-  // Get template blueprints
-  const { templates } = useTemplateBlueprints();
+type TemplateButtonProps = {
+  template: Blueprint[];
+};
 
-  /**
-   * Handler for template clicks - creates a copy and navigates to editor
-   * @param e - Mouse event
-   * @param blueprintId - ID of the template blueprint to copy
-   */
-  const handleTemplateClick = (e: React.MouseEvent, blueprintId: string) => {
-    e.preventDefault();
-
-    if (!blueprintId) {
-      console.error("No blueprint ID provided");
-      return;
-    }
-
-    try {
-      // Create a copy of the template blueprint (not saved to store yet)
-      const copiedBlueprint = blueprintStore.createBlueprintCopy(blueprintId);
-
-      if (!copiedBlueprint) {
-        console.error("Failed to create blueprint copy");
-        return;
-      }
-
-      if (!copiedBlueprint.id) {
-        console.error("Copied blueprint has no ID");
-        return;
-      }
-
-      // Navigate to editor with nodes and edges passed in state
-      toEditor(copiedBlueprint.id, {
-        defaultNodes: copiedBlueprint.nodes || [],
-        defaultEdges: copiedBlueprint.edges || [],
-      });
-    } catch (error) {
-      console.error("Failed to handle template click:", error);
-    }
-  };
-
-  // Convert blueprints to project format
-  const templateProjects = useMemo(() => {
-    return templates.map((blueprint, index) => ({
-      id: `template-${blueprint.id}`,
-      title: blueprint.name,
-      description: "Template",
-      images: `/images/scenes/${(index % 12) + 1}.jpg`, // Cycle through available images
-      blueprintId: blueprint.id,
-    }));
-  }, [templates]);
+function TemplateButton({ template, index }: TemplateButtonProps) {
+  const linkProps = useLink({
+    to: "/editor/$id",
+    params: { id: undefined },
+    state: {
+      defaultNodes: template.nodes || [],
+      defaultEdges: template.edges || [],
+    },
+  });
 
   return (
-    templateProjects.length > 0 && (
+    <button
+      className="flex items-center shrink-0 w-59 p-2 bg-surface-02 rounded-[1.25rem] border border-s-01 transition-all hover:shadow-prompt-input hover:bg-surface-01 hover:border-s-02 text-left"
+      type="button"
+      {...linkProps}
+    >
+      <div className="shrink-0 w-16 h-16">
+        <Image
+          className="rounded-xl w-full h-full object-cover"
+          src={`/images/scenes/${(index % 12) + 1}.jpg`} // Cycle through available images
+          width={64}
+          height={64}
+          alt={template.name}
+        />
+      </div>
+      <div className="pl-4 w-[calc(100%-4rem)]">
+        <div className="text-body-md-str">{template.name}</div>
+        <div className="mt-1 text-secondary">Templae</div>
+      </div>
+    </button>
+  );
+}
+
+function Templates() {
+  const { templates } = useTemplateBlueprints();
+
+  return (
+    !!templates && (
       <div className="flex gap-3 py-8 px-12 overflow-x-auto scrollbar-none max-2xl:px-5">
-        {templateProjects.map((project) => (
-          <button
-            className="flex items-center shrink-0 w-59 p-2 bg-surface-02 rounded-[1.25rem] border border-s-01 transition-all hover:shadow-prompt-input hover:bg-surface-01 hover:border-s-02 text-left"
-            onClick={(e) => handleTemplateClick(e, project.blueprintId)}
-            key={project.id}
-            type="button"
-          >
-            <div className="shrink-0 w-16 h-16">
-              <Image
-                className="rounded-xl w-full h-full object-cover"
-                src={project.images}
-                width={64}
-                height={64}
-                alt={project.title}
-              />
-            </div>
-            <div className="pl-4 w-[calc(100%-4rem)]">
-              <div className="text-body-md-str">{project.title}</div>
-              <div className="mt-1 text-secondary">{project.description}</div>
-            </div>
-          </button>
+        {templates.map((template, index) => (
+          <TemplateButton key={template.id} template={template} index={index} />
         ))}
       </div>
     )

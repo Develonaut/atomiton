@@ -8,7 +8,11 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       include: ["src/**/*.ts"],
-      exclude: ["src/**/*.test.ts", "src/**/*.smoke.test.ts", "src/**/*.bench.ts"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/**/*.smoke.test.ts",
+        "src/**/*.bench.ts",
+      ],
     }),
   ],
   build: {

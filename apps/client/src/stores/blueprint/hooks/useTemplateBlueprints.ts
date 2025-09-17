@@ -1,11 +1,11 @@
 import type { Blueprint } from "..";
-import { selectTemplates, selectIsLoading } from "../selectors";
+import { selectIsLoading, selectTemplates } from "../selectors";
 import { useBlueprintStore } from "./useBlueprintStore";
 
-interface UseTemplateBlueprintsReturn {
+type UseTemplateBlueprintsReturn = {
   templates: Blueprint[];
   isLoading: boolean;
-}
+};
 
 /**
  * Hook for accessing template blueprints from the store

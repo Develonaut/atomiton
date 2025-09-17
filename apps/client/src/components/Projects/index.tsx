@@ -17,7 +17,7 @@ function Project({ projects }: Props) {
         {projects.map((project) => (
           <Link
             className="flex items-center shrink-0 w-59 p-2 bg-surface-02 rounded-[1.25rem] border border-s-01 transition-all hover:shadow-prompt-input hover:bg-surface-01 hover:border-s-02"
-            href="/explore/details"
+            to="/explore/details"
             key={project.id}
           >
             <div className="shrink-0">
