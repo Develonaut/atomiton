@@ -1,7 +1,7 @@
 {
   "name": "@atomiton/form",
   "version": "0.1.0",
-  "description": "Minimal form library for Atomiton - React Hook Form + Zod with automatic field generation",
+  "description": "Minimal form library for Atomiton - React Hook Form with automatic field generation",
   "type": "module",
   "private": true,
   "main": "./dist/index.js",
@@ -24,7 +24,6 @@
     "react",
     "forms",
     "validation",
-    "zod",
     "react-hook-form",
     "atomiton"
   ],
@@ -48,9 +47,9 @@
   },
   "dependencies": {
     "@atomiton/ui": "workspace:*",
+    "@atomiton/validation": "workspace:*",
     "@hookform/resolvers": "^3.3.4",
-    "react-hook-form": "^7.49.3",
-    "zod": "^3.25.3"
+    "react-hook-form": "^7.49.3"
   },
   "peerDependencies": {
     "react": "catalog:",

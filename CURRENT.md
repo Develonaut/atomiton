@@ -4,7 +4,7 @@
 
 This document aggregates current work across the entire monorepo. For detailed progress, see individual CURRENT.md files in each package and app.
 
-## Current Status: January 2025
+## Current Status: September 2025
 
 ### 🎯 Primary Focus
 
@@ -21,6 +21,7 @@ This document aggregates current work across the entire monorepo. For detailed p
 | **@atomiton/store**             | 🟢 Active | State management              | ✅ Passing   |
 | **@atomiton/events**            | 🟢 Active | Event system                  | ✅ Passing   |
 | **@atomiton/di**                | 🟢 Active | Dependency injection          | ✅ Passing   |
+| **@atomiton/validation**        | ✅ Stable | Centralized validation        | ✅ Passing   |
 | **@atomiton/eslint-config**     | ✅ Stable | Shared ESLint config          | ✅ Passing   |
 | **@atomiton/typescript-config** | ✅ Stable | Shared TypeScript config      | ✅ Passing   |
 
@@ -39,8 +40,9 @@ This document aggregates current work across the entire monorepo. For detailed p
 - ✅ Basic node addition and selection working
 - ✅ Left/Right sidebars integrated with placeholder content
 - ✅ All packages building successfully
-- ✅ **@atomiton/core testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Jan 13, 2025)
-- ✅ **@atomiton/events testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Jan 13, 2025)
+- ✅ **@atomiton/core testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Sep 13, 2025)
+- ✅ **@atomiton/events testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Sep 13, 2025)
+- ✅ **@atomiton/validation package created** - Centralized Zod dependency in a thin wrapper package, migrated all packages to use it (Sep 17, 2025)
 
 ### 📊 Current Priorities
 
@@ -230,10 +232,9 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    - Total smoke test suite: <15s (with 30s as hard limit)
 
 6. **🟢 Visual Feedback** - Show execution status on nodes
-7. **🟢 Validation Package** - Extract Zod usage into @atomiton/validation package
-8. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
-9. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
-10. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
+7. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
+8. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
+9. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
 
 ## 🚨 CRITICAL: Testing Infrastructure Remediation
 
@@ -243,7 +244,7 @@ Based on Karen's audit, **only 2 of 15 packages** meet our testing standards. Th
 
 #### 🔴 CRITICAL PRIORITY - Core API Packages (Missing Required Tests)
 
-**1. @atomiton/core** ✅ **COMPLETED (Jan 13, 2025)**
+**1. @atomiton/core** ✅ **COMPLETED (Sep 13, 2025)**
 
 ```
 COMPLETED: Fixed the @atomiton/core package to meet testing requirements:
@@ -253,7 +254,7 @@ COMPLETED: Fixed the @atomiton/core package to meet testing requirements:
 - ✅ Vitest configuration properly set up
 ```
 
-**2. @atomiton/events** ✅ **COMPLETED (Jan 13, 2025)**
+**2. @atomiton/events** ✅ **COMPLETED (Sep 13, 2025)**
 
 ```
 COMPLETED: Fixed the @atomiton/events package to meet testing requirements:
@@ -449,4 +450,4 @@ Create a url.ts file in apps/client/src/constants/ to centralize all important U
 
 ---
 
-**Last Updated**: 2025-01-15
+**Last Updated**: 2025-09-17

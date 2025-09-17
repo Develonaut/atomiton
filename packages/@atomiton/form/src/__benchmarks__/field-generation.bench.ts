@@ -1,5 +1,5 @@
 import { bench, describe } from "vitest";
-import { z } from "zod";
+import { z } from "@atomiton/validation";
 import {
   generateFieldsFromSchema,
   getDefaultValues,
