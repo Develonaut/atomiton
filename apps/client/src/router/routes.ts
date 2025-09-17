@@ -76,4 +76,9 @@ export const routes: RouteConfig[] = [
     path: "/assets/materials",
     component: () => import("../templates/Assets/MaterialsPage"),
   },
+  {
+    name: "notFound",
+    path: "*",
+    component: () => import("../templates/NotFoundPage"),
+  },
 ];

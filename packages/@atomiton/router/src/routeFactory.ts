@@ -1,18 +1,23 @@
 import {
   createRootRoute,
   createRoute,
-  Outlet,
   lazyRouteComponent,
-  type RouteComponent,
+  Outlet,
   type ErrorRouteComponent,
+  type RouteComponent,
+  type NotFoundRouteComponent,
 } from "@tanstack/react-router";
 import React, { type ComponentType } from "react";
 import type { RouteConfig } from "./types";
 
-export function createRootRouteInstance(errorComponent?: ComponentType) {
+export function createRootRouteInstance(
+  errorComponent?: ComponentType,
+  notFoundComponent?: NotFoundRouteComponent,
+) {
   return createRootRoute({
     component: () => React.createElement(Outlet),
     errorComponent: errorComponent as ErrorRouteComponent | undefined,
+    notFoundComponent: notFoundComponent,
   });
 }
 

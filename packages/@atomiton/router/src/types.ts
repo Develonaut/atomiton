@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { NotFoundRouteComponent } from "@tanstack/react-router";
 
 export type RouteComponent =
   | ComponentType
@@ -17,5 +18,6 @@ export type CreateRouterOptions = {
   basePath?: string;
   defaultPendingComponent?: ComponentType;
   defaultErrorComponent?: ComponentType;
+  defaultNotFoundComponent?: NotFoundRouteComponent;
   enableDevtools?: boolean;
 };

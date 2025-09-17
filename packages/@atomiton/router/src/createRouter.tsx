@@ -11,9 +11,17 @@ import { createRootRouteInstance, createTanStackRoutes } from "./routeFactory";
 import type { CreateRouterOptions } from "./types";
 
 export function createRouter(options: CreateRouterOptions) {
-  const { routes, defaultPendingComponent, defaultErrorComponent } = options;
+  const {
+    routes,
+    defaultPendingComponent,
+    defaultErrorComponent,
+    defaultNotFoundComponent,
+  } = options;
 
-  const rootRoute = createRootRouteInstance(defaultErrorComponent);
+  const rootRoute = createRootRouteInstance(
+    defaultErrorComponent,
+    defaultNotFoundComponent,
+  );
 
   const tanStackRoutes = createTanStackRoutes(
     routes,

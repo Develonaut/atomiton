@@ -1,43 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Atomiton</title>
     <!-- Include Inter font from Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Meta tags from layout.tsx -->
     <meta
       name="description"
       content="Fully coded Next.js UI kit with a complete design system, 3D visuals, dark mode, and AI-inspired components for modern web apps."
     />
-    <meta
-      name="product-name"
-      content="Brainwave 2.0 – AI-Powered 3D UI Kit"
-    />
-    
+    <meta name="product-name" content="Brainwave 2.0 – AI-Powered 3D UI Kit" />
+
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@ui8" />
-    <meta
-      name="twitter:title"
-      content="Brainwave 2.0 – AI-Powered 3D UI Kit"
-    />
+    <meta name="twitter:title" content="Brainwave 2.0 – AI-Powered 3D UI Kit" />
     <meta
       name="twitter:description"
       content="Fully coded Next.js UI kit with a complete design system, 3D visuals, dark mode, and AI-inspired components for modern web apps."
     />
     <meta name="twitter:creator" content="@ui8" />
     <meta name="twitter:image" content="%PUBLIC_URL%/twitter-card.png" />
-    
+
     <!-- Open Graph data -->
-    <meta
-      property="og:title"
-      content="Brainwave 2.0 – AI-Powered 3D UI Kit"
-    />
+    <meta property="og:title" content="Brainwave 2.0 – AI-Powered 3D UI Kit" />
     <meta property="og:type" content="Article" />
     <meta
       property="og:url"
@@ -53,39 +47,6 @@
       content="Brainwave 2.0 – AI-Powered 3D UI Kit"
     />
     <meta property="fb:admins" content="132951670226590" />
-
-    <!-- Inline styles to prevent white flash -->
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #0A0A0D; /* Dark background matching your theme */
-        color: #ffffff;
-        font-family: 'Inter', sans-serif;
-      }
-
-      /* Initial loading state */
-      #root:empty {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-      }
-
-      #root:empty::after {
-        content: "";
-        width: 48px;
-        height: 48px;
-        border: 3px solid rgba(255, 255, 255, 0.1);
-        border-top-color: #ffffff;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-    </style>
   </head>
   <body>
     <div id="root"></div>

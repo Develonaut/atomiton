@@ -1,6 +1,7 @@
 import { createRouter } from "@atomiton/router";
 import { LoadingFallback, RouteErrorBoundary } from "./components";
 import { routes } from "./routes";
+import NotFoundPage from "@/templates/NotFoundPage";
 import "./types"; // Import type augmentations
 
 export const {
@@ -18,6 +19,7 @@ export const {
   routes,
   defaultPendingComponent: LoadingFallback,
   defaultErrorComponent: RouteErrorBoundary,
+  defaultNotFoundComponent: NotFoundPage,
 });
 
 export { useLink } from "./hooks/useLink";
