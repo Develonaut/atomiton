@@ -7,6 +7,8 @@ type ErrorBoundaryState = {
   hasError: boolean;
   error: Error | null;
   errorInfo: ErrorInfo | null;
+  errorCount: number;
+  lastErrorTime: number;
 };
 
 type ErrorBoundaryProps = {
@@ -66,23 +68,73 @@ function ErrorDisplay({ error, onRetry, onDownloadReport }: ErrorDisplayProps) {
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false, error: null, errorInfo: null };
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+      errorCount: 0,
+      lastErrorTime: 0,
+    };
   }
 
+  private errorDisplayTimer: NodeJS.Timeout | null = null;
+  private autoRecoveryTimer: NodeJS.Timeout | null = null;
+
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
-    return { hasError: true, error };
+    // In development, check if this is a recoverable error
+    if (import.meta.env.DEV) {
+      // HMR errors or React Fast Refresh errors often contain these patterns
+      const isHMRError =
+        error.message?.includes('Failed to fetch dynamically imported module') ||
+        error.message?.includes('Unable to preload CSS') ||
+        error.stack?.includes('__vite') ||
+        error.stack?.includes('hot-update');
+
+      if (isHMRError) {
+        console.warn('Caught HMR/dev error, will attempt auto-recovery:', error.message);
+        return {
+          hasError: false, // Don't show error UI for HMR errors
+          error,
+          lastErrorTime: Date.now(),
+        };
+      }
+    }
+
+    return {
+      hasError: true,
+      error,
+      lastErrorTime: Date.now(),
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    this.setState({ errorInfo });
+    this.setState((prevState) => ({
+      errorInfo,
+      errorCount: prevState.errorCount + 1,
+    }));
 
-    // In development, store error globally for debugging
+    // In development, implement auto-recovery for transient errors
     if (import.meta.env.DEV) {
       // Store on window for debugging access
       const extWindow = window as Window & {
         __lastError?: { error: Error; errorInfo: ErrorInfo; timestamp: Date };
       };
       extWindow.__lastError = { error, errorInfo, timestamp: new Date() };
+
+      // If we're getting repeated errors, it's likely a real issue
+      if (this.state.errorCount > 3) {
+        console.error('Multiple errors detected, showing error UI');
+        return;
+      }
+
+      // For first few errors, try auto-recovery after a delay
+      if (this.state.hasError && !this.autoRecoveryTimer) {
+        console.warn('Will attempt auto-recovery in 3 seconds...');
+        this.autoRecoveryTimer = setTimeout(() => {
+          this.handleRetry();
+          this.autoRecoveryTimer = null;
+        }, 3000);
+      }
     }
 
     // Call optional error handler
@@ -90,7 +142,22 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   handleRetry = () => {
-    this.setState({ hasError: false, error: null, errorInfo: null });
+    // Clear any pending timers
+    if (this.errorDisplayTimer) {
+      clearTimeout(this.errorDisplayTimer);
+      this.errorDisplayTimer = null;
+    }
+    if (this.autoRecoveryTimer) {
+      clearTimeout(this.autoRecoveryTimer);
+      this.autoRecoveryTimer = null;
+    }
+
+    this.setState({
+      hasError: false,
+      error: null,
+      errorInfo: null,
+      errorCount: 0,
+    });
   };
 
   handleDownloadReport = async () => {
@@ -102,20 +169,44 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     errorReporter.generateDownloadableReport(error, errorInfo);
   };
 
+  componentWillUnmount() {
+    // Clean up timers
+    if (this.errorDisplayTimer) {
+      clearTimeout(this.errorDisplayTimer);
+    }
+    if (this.autoRecoveryTimer) {
+      clearTimeout(this.autoRecoveryTimer);
+    }
+  }
+
   render() {
     if (this.state.hasError && this.state.error && this.state.errorInfo) {
+      // In development, show a banner about auto-recovery if it's pending
+      const showAutoRecoveryBanner = import.meta.env.DEV &&
+                                     this.state.errorCount <= 3 &&
+                                     this.autoRecoveryTimer !== null;
+
       // Use custom fallback if provided
       if (this.props.fallback) {
         return this.props.fallback(this.state.error, this.state.errorInfo);
       }
 
-      // Default error display
+      // Default error display with auto-recovery banner
       return (
-        <ErrorDisplay
-          error={this.state.error}
-          onRetry={this.handleRetry}
-          onDownloadReport={this.handleDownloadReport}
-        />
+        <>
+          {showAutoRecoveryBanner && (
+            <Box className="fixed top-4 left-1/2 -translate-x-1/2 bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-2 z-50">
+              <p className="text-sm text-yellow-800">
+                🔄 Development error detected. Auto-recovery in progress...
+              </p>
+            </Box>
+          )}
+          <ErrorDisplay
+            error={this.state.error}
+            onRetry={this.handleRetry}
+            onDownloadReport={this.handleDownloadReport}
+          />
+        </>
       );
     }
 
