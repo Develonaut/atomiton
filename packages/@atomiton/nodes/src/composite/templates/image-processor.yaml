@@ -74,44 +74,24 @@ nodes:
 
 edges:
   - id: "source-to-loop"
-    source:
-      nodeId: "image-source"
-      portId: "files"
-    target:
-      nodeId: "image-loop"
-      portId: "collection"
+    source: "image-source"
+    target: "image-loop"
 
   - id: "loop-to-parallel"
-    source:
-      nodeId: "image-loop"
-      portId: "item"
-    target:
-      nodeId: "parallel-processor"
-      portId: "input"
+    source: "image-loop"
+    target: "parallel-processor"
 
   - id: "parallel-to-resize"
-    source:
-      nodeId: "parallel-processor"
-      portId: "output"
-    target:
-      nodeId: "image-resize"
-      portId: "image"
+    source: "parallel-processor"
+    target: "image-resize"
 
   - id: "resize-to-watermark"
-    source:
-      nodeId: "image-resize"
-      portId: "result"
-    target:
-      nodeId: "image-watermark"
-      portId: "image"
+    source: "image-resize"
+    target: "image-watermark"
 
   - id: "watermark-to-save"
-    source:
-      nodeId: "image-watermark"
-      portId: "result"
-    target:
-      nodeId: "save-processed"
-      portId: "data"
+    source: "image-watermark"
+    target: "save-processed"
 
 variables:
   inputFolder:

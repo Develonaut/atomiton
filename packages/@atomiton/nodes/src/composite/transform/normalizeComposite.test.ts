@@ -48,8 +48,10 @@ describe("normalizeComposite", () => {
     edges: [
       {
         id: "edge1",
-        source: { nodeId: "node1", portId: "output" },
-        target: { nodeId: "node1", portId: "input" },
+        source: "node1",
+        sourceHandle: "output",
+        target: "node1",
+        targetHandle: "input",
       },
     ],
   };

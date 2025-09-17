@@ -16,8 +16,17 @@ export function validateEdgeReferences(
   const nodeIds = new Set(nodes.map((node) => node.id));
 
   edges.forEach((edge, index) => {
-    const sourceNodeId = edge.source.nodeId;
-    const targetNodeId = edge.target.nodeId;
+    const sourceLastDot = edge.source.lastIndexOf(".");
+    const targetLastDot = edge.target.lastIndexOf(".");
+
+    const sourceNodeId =
+      sourceLastDot !== -1
+        ? edge.source.substring(0, sourceLastDot)
+        : edge.source;
+    const targetNodeId =
+      targetLastDot !== -1
+        ? edge.target.substring(0, targetLastDot)
+        : edge.target;
 
     if (!nodeIds.has(sourceNodeId)) {
       errors.push({

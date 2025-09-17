@@ -41,13 +41,21 @@ export type CompositeSettings = {
 
 /**
  * Child node specification within a composite
- * This is minimal - just what's needed to position and configure a child node
+ * Compatible with visual editor node format
  */
 export type CompositeNodeSpec = {
   id: string;
   type: string;
   position: CompositePosition;
   data?: Record<string, unknown>;
+
+  // Visual editor properties
+  width?: number;
+  height?: number;
+  parentId?: string;
+  dragHandle?: string;
+  style?: Record<string, unknown>;
+  className?: string;
 };
 
 /**

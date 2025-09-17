@@ -4,7 +4,7 @@
  * should be exposed from a composite node based on its child nodes
  */
 
-import type { INode, CompositeEdge } from "../../base/INode";
+import type { CompositeEdge, INode } from "../../base/INode";
 import type { NodePortDefinition } from "../../types";
 
 /**
@@ -52,7 +52,7 @@ export function collectUnconnectedInputPorts(
 ): NodePortDefinition[] {
   // Build a set of connected input ports (target ports in edges)
   const connectedInputs = new Set(
-    edges.map((edge) => `${edge.target.nodeId}.${edge.target.portId}`),
+    edges.map((edge) => `${edge.target}.${edge.targetHandle || "input"}`),
   );
 
   const ports: NodePortDefinition[] = [];
@@ -108,8 +108,8 @@ export function buildConnectedPortsMap(edges: CompositeEdge[]): {
   const outputs = new Set<string>();
 
   for (const edge of edges) {
-    inputs.add(`${edge.target.nodeId}.${edge.target.portId}`);
-    outputs.add(`${edge.source.nodeId}.${edge.source.portId}`);
+    inputs.add(`${edge.target}.${edge.targetHandle || "input"}`);
+    outputs.add(`${edge.source}.${edge.sourceHandle || "output"}`);
   }
 
   return { inputs, outputs };

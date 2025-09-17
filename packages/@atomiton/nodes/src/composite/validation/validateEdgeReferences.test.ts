@@ -51,8 +51,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "node1.output",
+          target: "node2.input",
         },
       ];
 
@@ -66,18 +66,18 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "node1.output",
+          target: "node2.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "node2", portId: "output" },
-          target: { nodeId: "node3", portId: "input" },
+          source: "node2.output",
+          target: "node3.input",
         },
         {
           id: "edge3",
-          source: { nodeId: "node3", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "node3.output",
+          target: "node1.input",
         },
       ];
 
@@ -91,8 +91,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "self-edge",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "node1.output",
+          target: "node1.input",
         },
       ];
 
@@ -106,8 +106,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "node1.output",
+          target: "node2.input",
           data: { sourceHandle: "output", targetHandle: "input" },
         },
       ];
@@ -122,8 +122,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "node1.output",
+          target: "node2.input",
           data: {
             label: "connection",
             weight: 1.5,
@@ -144,8 +144,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "nonexistent-source", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "nonexistent-source.output",
+          target: "node1.input",
         },
       ];
 
@@ -166,13 +166,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "invalid1", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "invalid1.output",
+          target: "node1.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "invalid2", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "invalid2.output",
+          target: "node2.input",
         },
       ];
 
@@ -197,8 +197,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "nonexistent-target", portId: "input" },
+          source: "node1.output",
+          target: "nonexistent-target.input",
         },
       ];
 
@@ -219,13 +219,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "invalid1", portId: "input" },
+          source: "node1.output",
+          target: "invalid1.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "node2", portId: "output" },
-          target: { nodeId: "invalid2", portId: "input" },
+          source: "node2.output",
+          target: "invalid2.input",
         },
       ];
 
@@ -250,8 +250,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "invalid-source", portId: "output" },
-          target: { nodeId: "invalid-target", portId: "input" },
+          source: "invalid-source.output",
+          target: "invalid-target.input",
         },
       ];
 
@@ -269,23 +269,23 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "valid-edge",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "node1.output",
+          target: "node2.input",
         },
         {
           id: "invalid-source-edge",
-          source: { nodeId: "invalid-source", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "invalid-source.output",
+          target: "node1.input",
         },
         {
           id: "invalid-target-edge",
-          source: { nodeId: "node2", portId: "output" },
-          target: { nodeId: "invalid-target", portId: "input" },
+          source: "node2.output",
+          target: "invalid-target.input",
         },
         {
           id: "another-valid-edge",
-          source: { nodeId: "node3", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "node3.output",
+          target: "node1.input",
         },
       ];
 
@@ -305,18 +305,18 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "node2", portId: "input" },
+          source: "node1.output",
+          target: "node2.input",
         }, // Index 0 - valid
         {
           id: "edge2",
-          source: { nodeId: "invalid", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "invalid.output",
+          target: "node1.input",
         }, // Index 1 - invalid source
         {
           id: "edge3",
-          source: { nodeId: "node2", portId: "output" },
-          target: { nodeId: "invalid", portId: "input" },
+          source: "node2.output",
+          target: "invalid.input",
         }, // Index 2 - invalid target
       ];
 
@@ -334,8 +334,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "my-edge-id",
-          source: { nodeId: "invalid-node", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: "invalid-node.output",
+          target: "node1.input",
         },
       ];
 
@@ -355,8 +355,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "missing-source", portId: "output" },
-          target: { nodeId: "missing-target", portId: "input" },
+          source: "missing-source.output",
+          target: "missing-target.input",
         },
       ];
 
@@ -403,13 +403,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node-with-dashes", portId: "output" },
-          target: { nodeId: "node_with_underscores", portId: "input" },
+          source: "node-with-dashes.output",
+          target: "node_with_underscores.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "node.with.dots", portId: "output" },
-          target: { nodeId: "node with spaces", portId: "input" },
+          source: "node.with.dots.output",
+          target: "node with spaces.input",
         },
       ];
 
@@ -429,13 +429,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "节点-1", portId: "output" },
-          target: { nodeId: "nœud-2", portId: "input" },
+          source: "节点-1.output",
+          target: "nœud-2.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "nœud-2", portId: "output" },
-          target: { nodeId: "узел-3", portId: "input" },
+          source: "nœud-2.output",
+          target: "узел-3.input",
         },
       ];
 
@@ -454,13 +454,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "", portId: "output" },
-          target: { nodeId: "node1", portId: "input" },
+          source: ".output",
+          target: "node1.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "node1", portId: "output" },
-          target: { nodeId: "", portId: "input" },
+          source: "node1.output",
+          target: ".input",
         },
       ];
 
@@ -480,8 +480,8 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: longId, portId: "output" },
-          target: { nodeId: "short", portId: "input" },
+          source: `${longId}.output`,
+          target: "short.input",
         },
       ];
 
@@ -501,13 +501,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "123", portId: "output" },
-          target: { nodeId: "456.789", portId: "input" },
+          source: "123.output",
+          target: "456.789.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "456.789", portId: "output" },
-          target: { nodeId: "0", portId: "input" },
+          source: "456.789.output",
+          target: "0.input",
         },
       ];
 
@@ -527,13 +527,13 @@ describe("validateEdgeReferences", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "Node", portId: "output" },
-          target: { nodeId: "node", portId: "input" },
+          source: "Node.output",
+          target: "node.input",
         },
         {
           id: "edge2",
-          source: { nodeId: "node", portId: "output" },
-          target: { nodeId: "invalid", portId: "input" },
+          source: "node.output",
+          target: "invalid.input",
         }, // Should fail
       ];
 
@@ -563,8 +563,8 @@ describe("validateEdgeReferences", () => {
         { length: 999 },
         (_, i) => ({
           id: `edge-${i}`,
-          source: { nodeId: `node-${i}`, portId: "output" },
-          target: { nodeId: `node-${i + 1}`, portId: "input" },
+          source: `node-${i}.output`,
+          target: `node-${i + 1}.input`,
         }),
       );
 
@@ -586,14 +586,8 @@ describe("validateEdgeReferences", () => {
         { length: 1000 },
         (_, i) => ({
           id: `edge-${i}`,
-          source: {
-            nodeId: i % 2 === 0 ? "node1" : `invalid-${i}`,
-            portId: "output",
-          },
-          target: {
-            nodeId: i % 3 === 0 ? "node1" : `invalid-${i}`,
-            portId: "input",
-          },
+          source: `${i % 2 === 0 ? "node1" : `invalid-${i}`}.output`,
+          target: `${i % 3 === 0 ? "node1" : `invalid-${i}`}.input`,
         }),
       );
 

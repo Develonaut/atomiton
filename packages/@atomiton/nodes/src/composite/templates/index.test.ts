@@ -62,15 +62,20 @@ describe("Composite Templates", () => {
       });
     });
 
-    it("should have valid edge format (nodeId/portId)", () => {
+    it("should have valid edge format (flat source/target)", () => {
       templates.forEach((template) => {
         template.definition.edges?.forEach((edge) => {
           expect(edge.source).toBeDefined();
-          expect(edge.source.nodeId).toBeDefined();
-          expect(edge.source.portId).toBeDefined();
+          expect(typeof edge.source).toBe("string");
           expect(edge.target).toBeDefined();
-          expect(edge.target.nodeId).toBeDefined();
-          expect(edge.target.portId).toBeDefined();
+          expect(typeof edge.target).toBe("string");
+          // sourceHandle and targetHandle are optional
+          if (edge.sourceHandle) {
+            expect(typeof edge.sourceHandle).toBe("string");
+          }
+          if (edge.targetHandle) {
+            expect(typeof edge.targetHandle).toBe("string");
+          }
         });
       });
     });
@@ -87,7 +92,7 @@ describe("Composite Templates", () => {
           nodes: template.definition.nodes || [],
           edges: template.definition.edges || [],
           variables: template.definition.variables,
-          settings: template.definition.settings,
+          settings: template.definition.settings?.runtime as any,
         });
 
         expect(node).toBeDefined();
@@ -119,7 +124,7 @@ describe("Composite Templates", () => {
           nodes: template.definition.nodes || [],
           edges: template.definition.edges || [],
           variables: template.definition.variables,
-          settings: template.definition.settings,
+          settings: template.definition.settings?.runtime as any,
         });
 
         // Test that we can iterate over ports

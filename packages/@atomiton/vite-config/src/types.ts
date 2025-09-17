@@ -11,7 +11,6 @@ export type LibraryOptions = {
   chunks?: ChunkMapping;
   enableVisualizer?: boolean;
   enableMinification?: boolean;
-  testEnvironment?: "node" | "jsdom" | "happy-dom";
   assetsInlineLimit?: number;
   enableSourceMap?: boolean;
 } & BaseOptions;

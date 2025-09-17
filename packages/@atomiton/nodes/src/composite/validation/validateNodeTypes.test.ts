@@ -101,6 +101,7 @@ describe("validateNodeTypes", () => {
         nodeId: "invalid-node",
         nodeType: "unknown-type",
         availableTypes: availableTypes,
+        suggestedType: null,
       });
     });
 

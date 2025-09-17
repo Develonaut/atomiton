@@ -43,11 +43,13 @@ export function createCompositeLogic(
 
           // Gather inputs from connected nodes
           for (const edge of input.edges) {
-            if (edge.target.nodeId === node.id) {
-              const sourceResult = results.get(edge.source.nodeId);
+            if (edge.target === node.id) {
+              const sourceResult = results.get(edge.source);
               if (sourceResult?.outputs) {
-                childContext.inputs[edge.target.portId] =
-                  sourceResult.outputs[edge.source.portId];
+                const targetHandle = edge.targetHandle || "input";
+                const sourceHandle = edge.sourceHandle || "output";
+                childContext.inputs[targetHandle] =
+                  sourceResult.outputs[sourceHandle];
               }
             }
           }

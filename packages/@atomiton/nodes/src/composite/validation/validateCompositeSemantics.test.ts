@@ -37,8 +37,8 @@ describe("validateCompositeSemantics", () => {
     edges: [
       {
         id: "edge1",
-        source: { nodeId: "node1", portId: "output" },
-        target: { nodeId: "node2", portId: "input" },
+        source: "node1.output",
+        target: "node2.input",
       },
     ],
   };
@@ -146,13 +146,13 @@ describe("validateCompositeSemantics", () => {
         edges: [
           {
             id: "edge1",
-            source: { nodeId: "nonexistent-source", portId: "output" },
-            target: { nodeId: "node1", portId: "input" },
+            source: "nonexistent-source.output",
+            target: "node1.input",
           },
           {
             id: "edge2",
-            source: { nodeId: "node1", portId: "output" },
-            target: { nodeId: "nonexistent-target", portId: "input" },
+            source: "node1.output",
+            target: "nonexistent-target.input",
           },
         ],
       };
@@ -175,8 +175,8 @@ describe("validateCompositeSemantics", () => {
         edges: [
           {
             id: "self-edge",
-            source: { nodeId: "node1", portId: "output" },
-            target: { nodeId: "node1", portId: "input" },
+            source: "node1.output",
+            target: "node1.input",
           },
         ],
       };
@@ -194,13 +194,13 @@ describe("validateCompositeSemantics", () => {
         edges: [
           {
             id: "duplicate-edge",
-            source: { nodeId: "node1", portId: "output" },
-            target: { nodeId: "node2", portId: "input" },
+            source: "node1.output",
+            target: "node2.input",
           },
           {
             id: "duplicate-edge", // Duplicate ID
-            source: { nodeId: "node2", portId: "output" },
-            target: { nodeId: "node1", portId: "input" },
+            source: "node2.output",
+            target: "node1.input",
           },
         ],
       };
@@ -376,13 +376,13 @@ describe("validateCompositeSemantics", () => {
         edges: [
           {
             id: "duplicate-edge",
-            source: { nodeId: "node1", portId: "output" },
-            target: { nodeId: "nonexistent", portId: "input" }, // Invalid target
+            source: "node1.output",
+            target: "nonexistent.input", // Invalid target
           },
           {
             id: "duplicate-edge", // Duplicate edge ID
-            source: { nodeId: "duplicate", portId: "output" },
-            target: { nodeId: "duplicate", portId: "input" },
+            source: "duplicate.output",
+            target: "duplicate.input",
           },
         ],
         metadata: {
@@ -454,8 +454,8 @@ describe("validateCompositeSemantics", () => {
         })),
         edges: Array.from({ length: 99 }, (_, i) => ({
           id: `edge-${i}`,
-          source: { nodeId: `node-${i}`, portId: "output" },
-          target: { nodeId: `node-${i + 1}`, portId: "input" },
+          source: `node-${i}.output`,
+          target: `node-${i + 1}.input`,
         })),
       };
 

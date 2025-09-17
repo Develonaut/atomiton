@@ -11,7 +11,6 @@ export function defineReactLibraryConfig(
   const {
     enableTailwind = false,
     enableTsconfigPaths = true,
-    testEnvironment = "jsdom",
     external = [],
     optimizeDeps,
     additionalConfig = {},
@@ -38,7 +37,6 @@ export function defineReactLibraryConfig(
   return defineLibraryConfig({
     ...libraryOptions,
     external: reactExternal,
-    testEnvironment,
     additionalConfig: {
       ...additionalConfig,
       plugins: [

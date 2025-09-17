@@ -83,8 +83,10 @@ describe("Port Collectors", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "out1" },
-          target: { nodeId: "node2", portId: "in2" },
+          source: "node1",
+          sourceHandle: "out1",
+          target: "node2",
+          targetHandle: "in2",
         },
       ];
 
@@ -176,13 +178,17 @@ describe("Port Collectors", () => {
       const edges: CompositeEdge[] = [
         {
           id: "edge1",
-          source: { nodeId: "node1", portId: "out1" },
-          target: { nodeId: "node2", portId: "in2" },
+          source: "node1",
+          sourceHandle: "out1",
+          target: "node2",
+          targetHandle: "in2",
         },
         {
           id: "edge2",
-          source: { nodeId: "node2", portId: "out2" },
-          target: { nodeId: "node3", portId: "in3" },
+          source: "node2",
+          sourceHandle: "out2",
+          target: "node3",
+          targetHandle: "in3",
         },
       ];
 

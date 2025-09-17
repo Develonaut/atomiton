@@ -53,8 +53,10 @@
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@atomiton/vite-config": "workspace:*",
+    "@types/glob": "^9.0.0",
     "@types/node": "catalog:",
     "eslint": "catalog:",
+    "glob": "^11.0.3",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"

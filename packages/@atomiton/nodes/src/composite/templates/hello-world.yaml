@@ -32,13 +32,9 @@ nodes:
       expression: "data.message.toUpperCase()"
 
 edges:
-  - id: "greeting-to-display"
-    source:
-      nodeId: "greeting-code"
-      portId: "output"
-    target:
-      nodeId: "display-transform"
-      portId: "input"
+  - id: "greeting-code-display-transform"
+    source: "greeting-code"
+    target: "display-transform"
 
 variables:
   greeting:

@@ -128,18 +128,22 @@ export type ICompositeNode = {
 
 /**
  * Execution flow edge for composite nodes
+ * Compatible with visual editor edge format (matches React Flow Edge type)
  */
 export type CompositeEdge = {
   id: string;
-  source: {
-    nodeId: string;
-    portId: string;
-  };
-  target: {
-    nodeId: string;
-    portId: string;
-  };
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+  type?: string;
   data?: Record<string, unknown>;
+  style?: Record<string, unknown>;
+  // Additional React Flow edge properties
+  animated?: boolean;
+  hidden?: boolean;
+  deletable?: boolean;
+  selectable?: boolean;
 };
 
 /**

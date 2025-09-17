@@ -15,6 +15,7 @@ import type {
   NodeExecutionResult,
   NodePortDefinition,
 } from "../types";
+import type { CompositeNodeSpec } from "./types";
 import { createCompositeGraph } from "./createCompositeGraph";
 import { createCompositeLogic } from "./createCompositeLogic";
 import { createCompositePorts } from "./createCompositePorts";
@@ -35,23 +36,56 @@ export type CompositeNodeInput = {
   };
 };
 
-export function createCompositeNode(input: CompositeNodeInput): ICompositeNode {
+export type CompositeTemplateInput = {
+  id?: string; // Optional - will be generated if not provided
+  name: string;
+  description: string;
+  category: string;
+  nodes?: CompositeNodeSpec[];
+  edges?: CompositeEdge[];
+  variables?: Record<string, unknown>;
+  settings?: {
+    timeout?: number;
+    retries?: number;
+    parallel?: boolean;
+  };
+};
+
+// Overloaded function signatures
+export function createCompositeNode(input: CompositeNodeInput): ICompositeNode;
+export function createCompositeNode(
+  input: CompositeTemplateInput,
+): ICompositeNode;
+export function createCompositeNode(
+  input: CompositeNodeInput | CompositeTemplateInput,
+): ICompositeNode {
   // Generate ID if not provided
   const id = input.id || generateNodeId();
 
-  // Validate all node types before creating the composite
+  // For template inputs with CompositeNodeSpec[], skip strict validation
+  // Runtime conversion will happen when the composite is executed
   if (input.nodes && input.nodes.length > 0) {
-    try {
-      validateNodeTypesStrict(input.nodes);
-    } catch (error) {
-      throw new Error(
-        `Failed to create composite node "${input.name}": ${error instanceof Error ? error.message : String(error)}`,
-      );
+    // Check if we have actual INode implementations
+    const hasFullNodes = input.nodes.every((node) => "execute" in node);
+
+    if (hasFullNodes) {
+      try {
+        validateNodeTypesStrict(input.nodes as INode[]);
+      } catch (error) {
+        throw new Error(
+          `Failed to create composite node "${input.name}": ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
     }
+    // For CompositeNodeSpec[], validation happens at execution time
   }
 
   // Create graph for child nodes and edges
-  const graph = createCompositeGraph(input.nodes || [], input.edges || []);
+  // Type assertion: CompositeNodeSpec[] can be treated as INode[] at runtime
+  const graph = createCompositeGraph(
+    (input.nodes || []) as INode[],
+    input.edges || [],
+  );
 
   // Create metadata for the composite
   const metadata = createNodeMetadata({

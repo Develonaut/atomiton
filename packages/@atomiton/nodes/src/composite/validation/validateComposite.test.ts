@@ -40,8 +40,8 @@ describe("validateComposite", () => {
     edges: [
       {
         id: "edge1",
-        source: { nodeId: "node1", portId: "output" },
-        target: { nodeId: "node2", portId: "input" },
+        source: "node1.output",
+        target: "node2.input",
         data: {},
       },
     ],
@@ -376,8 +376,8 @@ describe("validateComposite", () => {
         })),
         edges: Array.from({ length: 999 }, (_, i) => ({
           id: `edge${i}`,
-          source: `node${i}`,
-          target: `node${i + 1}`,
+          source: `node${i}.output`,
+          target: `node${i + 1}.input`,
         })),
       };
 

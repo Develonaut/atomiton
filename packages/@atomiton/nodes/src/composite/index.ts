@@ -5,7 +5,10 @@
  */
 
 export { createCompositeNode } from "./createCompositeNode";
-export type { CompositeNodeInput } from "./createCompositeNode";
+export type {
+  CompositeNodeInput,
+  CompositeTemplateInput,
+} from "./createCompositeNode";
 
 export { createCompositeLogic } from "./createCompositeLogic";
 export type { CompositeLogicInput } from "./createCompositeLogic";

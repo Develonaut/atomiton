@@ -10,7 +10,7 @@ describe("defineLibraryConfig", () => {
     expect(config).toBeDefined();
     expect(config.build).toBeDefined();
     expect(config.build?.lib).toBeDefined();
-    if (config.build?.lib && typeof config.build.lib === 'object') {
+    if (config.build?.lib && typeof config.build.lib === "object") {
       expect(config.build.lib.name).toBe("TestLibrary");
       expect(config.build.lib.formats).toEqual(["es", "cjs"]);
     } else {
@@ -24,7 +24,7 @@ describe("defineLibraryConfig", () => {
       entry: "./src/main.ts",
     });
 
-    if (config.build?.lib && typeof config.build.lib === 'object') {
+    if (config.build?.lib && typeof config.build.lib === "object") {
       expect(config.build.lib.entry).toContain("main.ts");
     } else {
       throw new Error("Expected lib configuration to be an object");
@@ -51,15 +51,6 @@ describe("defineLibraryConfig", () => {
 
     expect(config.build?.minify).toBe(false);
     expect(config.build?.terserOptions).toBeUndefined();
-  });
-
-  it("should set test environment", () => {
-    const config = defineLibraryConfig({
-      name: "TestLibrary",
-      testEnvironment: "jsdom",
-    });
-
-    expect(config.test?.environment).toBe("jsdom");
   });
 
   it("should merge additional config", () => {

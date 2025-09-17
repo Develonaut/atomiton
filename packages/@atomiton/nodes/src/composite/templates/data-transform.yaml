@@ -51,28 +51,16 @@ nodes:
 
 edges:
   - id: "csv-to-filter"
-    source:
-      nodeId: "csv-source"
-      portId: "data"
-    target:
-      nodeId: "filter-transform"
-      portId: "input"
+    source: "csv-source"
+    target: "filter-transform"
 
   - id: "filter-to-aggregate"
-    source:
-      nodeId: "filter-transform"
-      portId: "output"
-    target:
-      nodeId: "aggregate-code"
-      portId: "data"
+    source: "filter-transform"
+    target: "aggregate-code"
 
   - id: "aggregate-to-output"
-    source:
-      nodeId: "aggregate-code"
-      portId: "result"
-    target:
-      nodeId: "output-file"
-      portId: "data"
+    source: "aggregate-code"
+    target: "output-file"
 
 variables:
   inputPath:

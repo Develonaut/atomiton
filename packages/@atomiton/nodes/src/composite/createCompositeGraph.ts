@@ -46,8 +46,7 @@ export function createCompositeGraph(
           0,
           executionFlow.length,
           ...executionFlow.filter(
-            (edge) =>
-              edge.source.nodeId !== nodeId && edge.target.nodeId !== nodeId,
+            (edge) => edge.source !== nodeId && edge.target !== nodeId,
           ),
         );
         return true;
@@ -86,21 +85,17 @@ export function createCompositeGraph(
 
       // Validate edges reference existing nodes
       for (const edge of executionFlow) {
-        const sourceExists = childNodes.some(
-          (n) => n.id === edge.source.nodeId,
-        );
-        const targetExists = childNodes.some(
-          (n) => n.id === edge.target.nodeId,
-        );
+        const sourceExists = childNodes.some((n) => n.id === edge.source);
+        const targetExists = childNodes.some((n) => n.id === edge.target);
 
         if (!sourceExists) {
           errors.push(
-            `Edge references non-existent source node: ${edge.source.nodeId}`,
+            `Edge references non-existent source node: ${edge.source}`,
           );
         }
         if (!targetExists) {
           errors.push(
-            `Edge references non-existent target node: ${edge.target.nodeId}`,
+            `Edge references non-existent target node: ${edge.target}`,
           );
         }
       }

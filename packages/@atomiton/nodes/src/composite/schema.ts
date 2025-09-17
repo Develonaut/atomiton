@@ -35,19 +35,31 @@ const CompositeNodeSpecSchema = z.object({
   id: z.string().min(1),
   type: z.string().min(1),
   position: CompositePositionSchema,
-  data: CompositeNodeDataSchema,
-});
+  data: CompositeNodeDataSchema.optional(),
 
-const CompositeEdgePortSchema = z.object({
-  nodeId: z.string().min(1),
-  portId: z.string().min(1),
+  // Visual editor properties
+  width: z.number().optional(),
+  height: z.number().optional(),
+  parentId: z.string().optional(),
+  dragHandle: z.string().optional(),
+  style: z.record(z.unknown()).optional(),
+  className: z.string().optional(),
 });
 
 const CompositeEdgeSchema = z.object({
   id: z.string().min(1),
-  source: CompositeEdgePortSchema,
-  target: CompositeEdgePortSchema,
+  source: z.string().min(1),
+  target: z.string().min(1),
+  sourceHandle: z.string().optional(),
+  targetHandle: z.string().optional(),
+  type: z.string().optional(),
   data: CompositeEdgeDataSchema.optional(),
+  style: z.record(z.unknown()).optional(),
+  // Additional React Flow properties
+  animated: z.boolean().optional(),
+  hidden: z.boolean().optional(),
+  deletable: z.boolean().optional(),
+  selectable: z.boolean().optional(),
 });
 
 const NodePortDefinitionSchema = z.object({

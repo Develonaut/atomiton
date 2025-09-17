@@ -17,7 +17,6 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
     enableMinification = true,
     enableSourceMap = true,
     assetsInlineLimit = 4096,
-    testEnvironment = "node",
     additionalConfig = {},
   } = options;
 
@@ -66,10 +65,6 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
       sourcemap: enableSourceMap,
       reportCompressedSize: true,
       assetsInlineLimit,
-    },
-    test: {
-      environment: testEnvironment,
-      globals: true,
     },
   };
 
