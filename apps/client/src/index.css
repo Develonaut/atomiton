@@ -49,6 +49,9 @@
   body {
     padding: 0;
     margin: 0;
+    background-color: var(--color-surface-02, #0A0A0D);
+    color: var(--color-primary, #ffffff);
+    min-height: 100vh;
   }
 
   /* Form elements normalization - very selective */
