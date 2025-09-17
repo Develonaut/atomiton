@@ -268,7 +268,10 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
 
     // Event methods using @atomiton/events
     on: (event: string, listener: (...args: unknown[]) => void) => {
-      return queueEventBus.on(event as keyof QueueEvents, listener as any);
+      return queueEventBus.on(
+        event as keyof QueueEvents,
+        listener as (data: QueueEvents[keyof QueueEvents]) => void,
+      );
     },
     off: (event: string, listener: (...args: unknown[]) => void) => {
       // For backward compatibility, convert to proper unsubscribe
@@ -278,7 +281,10 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
         .unsubscribe();
     },
     emit: (event: string, ...args: unknown[]): void => {
-      queueEventBus.emit(event as keyof QueueEvents, args[0] as any);
+      queueEventBus.emit(
+        event as keyof QueueEvents,
+        args[0] as QueueEvents[keyof QueueEvents],
+      );
     },
   };
 }

@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from "react";
-import { useWindowScroll } from "react-use";
 import Filters from "@/components/Filters";
+import { useEffect, useRef, useState } from "react";
+import { useWindowScroll } from "react-use";
 import Card from "./Card";
 
 type Props = {
@@ -12,9 +12,11 @@ type Props = {
     image: string;
     type: string;
   }[];
+  loading?: boolean;
+  "data-testid"?: string;
 };
 
-function Catalog({ title, content }: Props) {
+function Catalog({ title, content, loading, ...props }: Props) {
   const scrollRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
   const { y } = useWindowScroll();
@@ -32,6 +34,7 @@ function Catalog({ title, content }: Props) {
           fixed ? "shadow-depth-01 bg-surface-01" : ""
         }`}
         ref={scrollRef}
+        data-testid={props["data-testid"]}
       >
         <div className="mr-auto text-[1.25rem] leading-8 font-medium">
           {title}

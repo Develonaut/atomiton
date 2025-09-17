@@ -77,11 +77,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     this.setState({ errorInfo });
 
     // Always log errors to console with full details
+    // eslint-disable-next-line no-console -- Critical React error boundary logging for production
     console.group("🚨 ErrorBoundary caught an error");
     console.error("Error:", error);
     console.error("Error Info:", errorInfo);
     console.error("Stack trace:", error.stack);
     console.error("Component stack:", errorInfo.componentStack);
+    // eslint-disable-next-line no-console -- End of error group
     console.groupEnd();
 
     // In development, also store error globally for debugging
@@ -91,6 +93,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         __lastError?: { error: Error; errorInfo: ErrorInfo; timestamp: Date };
       };
       extWindow.__lastError = { error, errorInfo, timestamp: new Date() };
+      // eslint-disable-next-line no-console -- Development-only error storage notification
       console.warn("💡 Error stored in window.__lastError for debugging");
     }
 

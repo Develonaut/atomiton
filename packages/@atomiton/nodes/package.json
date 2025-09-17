@@ -44,7 +44,7 @@
     "@atomiton/store": "workspace:*",
     "@atomiton/utils": "workspace:*",
     "@atomiton/yaml": "workspace:*",
-    "zod": "^3.25.3"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",

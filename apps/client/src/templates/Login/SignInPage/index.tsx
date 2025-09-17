@@ -49,7 +49,7 @@ function SignInPage() {
       <div className="mt-4 text-center">
         <Link
           className="text-body-sm text-secondary transition-colors hover:text-primary"
-          href="/create-account"
+          to="/create-account"
         >
           Need an account?
         </Link>

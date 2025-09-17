@@ -52,8 +52,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: ["@testing-library/jest-dom"],
+    setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    exclude: ["src/**/*.e2e.spec.ts", "src/__tests__/e2e/**"],
     testTimeout: 10000,
     hookTimeout: 10000,
   },

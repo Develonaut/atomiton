@@ -48,7 +48,7 @@ function CreateAccountPage() {
       <div className="mt-4 text-center">
         <Link
           className="text-body-sm text-secondary transition-colors hover:text-primary"
-          href="/sign-in"
+          to="/sign-in"
         >
           Already have an account?
         </Link>

@@ -63,6 +63,18 @@ export function createCrudModule(store: {
 
       const newBlueprint: Blueprint = {
         ...baseNode,
+        nodes: blueprint.nodes || [],
+        edges: blueprint.edges || [],
+        variables: blueprint.variables || {},
+        settings: blueprint.settings || {
+          runtime: {
+            timeout: 30000,
+            parallel: false,
+          },
+          ui: {
+            color: "#6366f1",
+          },
+        },
         createdAt: now,
         updatedAt: now,
       };

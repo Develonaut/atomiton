@@ -3,10 +3,10 @@ import helloWorldYaml from "./hello-world.yaml?raw";
 import imageProcessorYaml from "./image-processor.yaml?raw";
 import dataTransformYaml from "./data-transform.yaml?raw";
 
-export interface PredefinedBlueprint {
+export type PredefinedBlueprint = {
   id: string;
   yaml: string;
-}
+};
 
 export const predefinedBlueprints: PredefinedBlueprint[] = [
   {

@@ -4,7 +4,6 @@ import Toolbar from "@/components/Toolbar";
 import { useLocation, useParams } from "@/router";
 import { Canvas, Editor } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
-import { useCallback } from "react";
 
 function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();
@@ -18,28 +17,9 @@ function LayoutEditor() {
     ? locationState.defaultEdges
     : [];
 
-  /**
-   * Handles saving the editor state
-   * @param editorState - The current editor state to save
-   */
-  const onSave = useCallback(
-    (editorState: unknown) => {
-      if (!id) {
-        console.error("Cannot save: No blueprint ID provided");
-        return;
-      }
-
-      if (!editorState || typeof editorState !== "object") {
-        console.error("Cannot save: Invalid editor state");
-        return;
-      }
-
-      // TODO: Implement save functionality
-      // blueprintStore.updateBlueprint(id, editorState);
-      console.log("Save functionality not yet implemented");
-    },
-    [id],
-  );
+  // TODO: Implement save functionality
+  // Will need to connect to blueprintStore.updateBlueprint(id, editorState)
+  // once the Toolbar component is ready to handle saves
 
   // If no ID is provided, show an error message
   if (!id) {
@@ -73,7 +53,7 @@ function LayoutEditor() {
           </Box>
         </Box>
 
-        <Toolbar onSave={onSave} />
+        <Toolbar />
         <LeftSidebar />
         <RightSidebar />
       </Editor>

@@ -1,6 +1,7 @@
 import { createRouter } from "@atomiton/router";
 import { LoadingFallback, RouteErrorBoundary } from "./components";
 import { routes } from "./routes";
+import "./types"; // Import type augmentations
 
 export const {
   router,

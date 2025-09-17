@@ -12,19 +12,9 @@ describe("Hooks Package API Smoke Tests", () => {
     expect(typeof hooks.useEventCallback).toBe("function");
   });
 
-  it("should export useAsync hook", async () => {
-    expect(hooks.useAsync).toBeDefined();
-    expect(typeof hooks.useAsync).toBe("function");
-  });
-
-  it("should export useAsyncCallback hook", async () => {
-    expect(hooks.useAsyncCallback).toBeDefined();
-    expect(typeof hooks.useAsyncCallback).toBe("function");
-  });
-
-  it("should export createAsyncHook hook", async () => {
-    expect(hooks.createAsyncHook).toBeDefined();
-    expect(typeof hooks.createAsyncHook).toBe("function");
+  it("should export useHover hook", async () => {
+    expect(hooks.useHover).toBeDefined();
+    expect(typeof hooks.useHover).toBe("function");
   });
 
   it("should export core hooks", async () => {

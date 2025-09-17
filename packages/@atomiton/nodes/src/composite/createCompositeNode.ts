@@ -133,12 +133,13 @@ export function createCompositeNode(
   );
 
   // Create executable for execution (to be used in future implementation)
-  const compositeExecutable = createCompositeExecutable({
-    id,
-    nodes: graph.getChildNodes(),
-    edges: graph.getExecutionFlow(),
-    settings: input.settings,
-  });
+  // TODO: Enable when composite execution is fully implemented
+  // const compositeExecutable = createCompositeExecutable({
+  //   id,
+  //   nodes: graph.getChildNodes(),
+  //   edges: graph.getExecutionFlow(),
+  //   settings: input.settings,
+  // });
 
   // Create ports aggregation
   const ports = createCompositePorts({

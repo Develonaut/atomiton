@@ -11,9 +11,11 @@ export function RouteErrorBoundary({
   useEffect(() => {
     // Log route errors
     if (error) {
+      // eslint-disable-next-line no-console -- Critical route error logging for debugging
       console.group("🚨 Route Error Boundary");
       console.error("Route error:", error);
       console.error("Stack:", error.stack);
+      // eslint-disable-next-line no-console -- End of error group
       console.groupEnd();
 
       // Also log to global error handler

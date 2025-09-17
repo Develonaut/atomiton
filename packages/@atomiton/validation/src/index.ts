@@ -1,6 +1,6 @@
 // Re-export Zod directly - no wrapping needed
 export * from 'zod';
-export { z as default } from 'zod';
+export { z as default, z } from 'zod';
 
 // Essential validators only
 import { z } from 'zod';

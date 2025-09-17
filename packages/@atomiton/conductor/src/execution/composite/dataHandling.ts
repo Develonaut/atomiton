@@ -16,7 +16,7 @@ export function gatherNodeInputs(
   composite: CompositeDefinition,
   executionId: string,
   executionResults: Map<string, Map<string, NodeExecutionResult>>,
-  executionStore: ExecutionStore,
+  _executionStore: ExecutionStore,
 ): Record<string, unknown> {
   const inputs: Record<string, unknown> = {};
 
@@ -26,7 +26,8 @@ export function gatherNodeInputs(
   );
 
   for (const connection of incomingConnections) {
-    executionStore.getExecution(executionId)?.nodeStates[connection.source];
+    // TODO: Use node state when needed
+    // executionStore.getExecution(executionId)?.nodeStates[connection.source];
 
     // Get results from the execution results map
     const executionResult = executionResults

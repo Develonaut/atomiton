@@ -7,7 +7,7 @@
 
 import { yaml } from "@atomiton/yaml";
 import type { Node } from "../types";
-import type { ValidationError, ValidationResult } from "../validation/types";
+import type { ValidationError } from "../validation/types";
 
 export type TransformationOptions = {
   validateResult?: boolean;
@@ -25,10 +25,7 @@ export type TransformationResult<T> = {
  * Convert YAML string to Node data structure
  * Used when loading from storage for editing or execution
  */
-export function fromYaml(
-  yamlString: string,
-  options: TransformationOptions = {},
-): TransformationResult<Node> {
+export function fromYaml(yamlString: string): TransformationResult<Node> {
   const warnings: ValidationError[] = [];
 
   try {

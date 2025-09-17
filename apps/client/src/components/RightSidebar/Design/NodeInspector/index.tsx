@@ -2,7 +2,7 @@ import { useNodes } from "@atomiton/editor";
 import { Form } from "@atomiton/form";
 import { getNodeByType } from "@atomiton/nodes/browser";
 import { Box } from "@atomiton/ui";
-import { useCallback, useEffect, useState, Suspense } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 /**
@@ -39,7 +39,9 @@ function FormErrorFallback({
  */
 function NodeInspector() {
   const { nodes: flowNodes, selectedId, updateNodeData } = useNodes();
-  const [nodeConfig, setNodeConfig] = useState<any>(null);
+  const [nodeConfig, setNodeConfig] = useState<Record<string, unknown> | null>(
+    null,
+  );
   // const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(
     null,
@@ -69,8 +71,9 @@ function NodeInspector() {
             // Node config is missing parameters or schema
             setNodeConfig(null);
           }
-        } catch (error) {
-          console.error("Error loading node configuration:", error);
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_error) {
+          // Silently handle error - node config will be null
           setNodeConfig(null);
         }
       };

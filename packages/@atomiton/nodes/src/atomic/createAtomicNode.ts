@@ -2,10 +2,7 @@
  * Factory function for creating atomic nodes (runtime instances)
  */
 
-import type {
-  IExecutableNode,
-  IAtomicNode,
-} from "../interfaces/IExecutableNode";
+import type { IAtomicNode } from "../interfaces/IExecutableNode";
 import type { INodeParameters } from "../interfaces/INodeParameters";
 import type { INodeMetadata } from "../interfaces/INodeMetadata";
 import type { INodeExecutable } from "../interfaces/INodeExecutable";

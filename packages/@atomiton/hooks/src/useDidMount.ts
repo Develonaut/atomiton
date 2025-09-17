@@ -6,5 +6,6 @@ export function useDidMount(callback: () => void | (() => void)) {
     if (cleanup) {
       return cleanup;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

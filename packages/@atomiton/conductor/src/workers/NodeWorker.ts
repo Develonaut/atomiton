@@ -49,7 +49,7 @@ parentPort.on("message", async (message: WorkerMessage) => {
 
 async function executeNode(
   nodeId: string,
-  context: NodeExecutionContext,
+  _context: NodeExecutionContext,
 ): Promise<unknown> {
   // Placeholder implementation
   // In a real implementation, this would:

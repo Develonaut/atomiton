@@ -93,6 +93,7 @@ test.describe("Blueprint Creation and Loading", () => {
     const nodeCount = await nodes.count();
 
     // Log for debugging purposes
+    // eslint-disable-next-line no-console -- E2E test debugging output
     console.log(`Loaded blueprint with ${nodeCount} nodes`);
   });
 

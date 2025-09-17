@@ -114,6 +114,7 @@ export function createStore<T extends object>(
 // ============================================================================
 
 // Re-export Zustand's useStore hook for React integration
+// TODO: Add useStore as a return value from createStore to ensure type safety.
 export { useStore } from "zustand";
 
 // Re-export shallow for performance optimizations

@@ -88,11 +88,16 @@ export class ErrorReporter {
    * Log error details to console with formatting
    */
   private logToConsole(report: ErrorReport): void {
-    console.error("🚨 Application Error Report:");
-    console.error("Error:", report.error);
-    console.error("Component Stack:", report.errorInfo.componentStack);
-    console.error("Context:", report.context);
-    console.error("Full Report:", report);
+    try {
+      console.error("🚨 Application Error Report:");
+      console.error("Error:", report.error);
+      console.error("Component Stack:", report.errorInfo.componentStack);
+      console.error("Context:", report.context);
+      console.error("Full Report:", report);
+    } catch {
+      // Silently fail if console is not available or throws
+      // This prevents secondary errors from breaking error handling
+    }
   }
 
   /**
@@ -100,10 +105,14 @@ export class ErrorReporter {
    */
   private async sendToExternalService(_report: ErrorReport): Promise<void> {
     try {
+      // eslint-disable-next-line no-console -- Monitoring service notification for debugging
+      console.log("📤 Sending error report to monitoring service...");
       // In a real app, this would send to Sentry, LogRocket, etc.
       // For now, we'll just simulate the call
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 100));
+      // eslint-disable-next-line no-console -- Success feedback for monitoring service
+      console.log("✅ Error report sent successfully");
     } catch (sendError) {
       console.error("❌ Failed to send error report:", sendError);
       // Don't throw here to avoid secondary errors
@@ -156,8 +165,13 @@ export class ErrorReporter {
 
       return keys
         .map((key) => {
-          const report = localStorage.getItem(key);
-          return report ? JSON.parse(report) : null;
+          try {
+            const report = localStorage.getItem(key);
+            return report ? JSON.parse(report) : null;
+          } catch {
+            // Skip malformed JSON entries
+            return null;
+          }
         })
         .filter(Boolean);
     } catch (error) {

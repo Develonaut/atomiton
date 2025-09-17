@@ -15,3 +15,5 @@ export {
   Outlet,
   type LinkProps,
 } from "@tanstack/react-router";
+
+export type { NavigateOptions } from "@tanstack/react-router";

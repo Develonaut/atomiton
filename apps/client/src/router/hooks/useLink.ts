@@ -1,7 +1,7 @@
 import { useHover } from "@atomiton/hooks";
+import type { NavigateOptions } from "@atomiton/router";
 import { useCallback } from "react";
 import { useRouter } from "../index";
-import type { NavigateOptions } from "@atomiton/router";
 
 export type UseLinkOptions = {
   preloadDelay?: number;
@@ -14,7 +14,10 @@ export function useLink(to: NavigateOptions, options?: UseLinkOptions) {
   const { preloadDelay = 0, disabled = false, onClick } = options || {};
 
   const doPreload = useCallback(() => {
-    router.preloadRoute(to as any).catch(console.warn);
+    router.preloadRoute(to).catch(() => {
+      if (process.env.NODE_ENV !== "production")
+        console.warn(`Failed to preload route: ${to}`);
+    });
   }, [router, to]);
 
   const handleClick = useCallback(
@@ -26,7 +29,7 @@ export function useLink(to: NavigateOptions, options?: UseLinkOptions) {
       }
 
       if (!e.defaultPrevented) {
-        router.navigate(to as any);
+        router.navigate(to);
       }
     },
     [router, to, disabled, onClick],

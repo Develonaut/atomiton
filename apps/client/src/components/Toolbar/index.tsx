@@ -5,12 +5,7 @@ import { useUndoRedo } from "@atomiton/editor";
 import { Box, Button } from "@atomiton/ui";
 import { useState } from "react";
 
-type ToolbarProps = {
-  // Will be called to save the current blueprint.
-  onSave: (editorState?: any) => void;
-};
-
-function Toolbar({ onSave }: ToolbarProps) {
+function Toolbar() {
   const { canUndo, canRedo, undo, redo } = useUndoRedo();
   const [active, setActive] = useState<number | null>(0);
 

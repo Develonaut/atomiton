@@ -31,15 +31,15 @@
     "test:all": "vitest run && vitest bench"
   },
   "dependencies": {
-    "zod": "^3.22.4"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "@vitest/ui": "catalog:",
-    "eslint": "^8.57.0",
-    "prettier": "^3.3.3",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",

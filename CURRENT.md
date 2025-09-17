@@ -213,7 +213,26 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    Have Voorhees review the plan before execution. Follow the mandatory workflow and ensure all changes maintain functionality while improving performance.
    ```
 
-5. **🔴 Smoke Test Optimization** - Reduce smoke test execution time to maintain <30s limit (Currently: 17s)
+5. **🔴 Build Optimization** - Address build sizing and circular dependencies
+
+   **Current Issues:**
+   - Large bundle sizes in client build (vendor chunks >500KB)
+   - Circular dependency warnings between router exports and components
+   - React Flow externalization warnings for fs/promises and path modules
+
+   **Suggested Optimizations:**
+   - Implement code splitting for large vendor chunks
+   - Review and refactor circular dependencies in router/components
+   - Configure proper externalization for Node.js modules in browser builds
+   - Consider dynamic imports for heavy components (Gallery, Editor)
+   - Analyze bundle with rollup-plugin-visualizer to identify optimization opportunities
+
+   **Target Performance:**
+   - Reduce initial bundle size by 30-40%
+   - Eliminate circular dependency warnings
+   - Clean build output with no externalization warnings
+
+6. **🔴 Smoke Test Optimization** - Reduce smoke test execution time to maintain <30s limit (Currently: 17s)
 
    **Current Issues:**
    - Client smoke tests: 3.4s (template initialization takes 1.7s)
@@ -231,10 +250,10 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    - Individual package smoke tests: <2s
    - Total smoke test suite: <15s (with 30s as hard limit)
 
-6. **🟢 Visual Feedback** - Show execution status on nodes
-7. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
-8. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
-9. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
+7. **🟢 Visual Feedback** - Show execution status on nodes
+8. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
+9. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
+10. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
 
 ## 🚨 CRITICAL: Testing Infrastructure Remediation
 
@@ -447,6 +466,29 @@ Create a url.ts file in apps/client/src/constants/ to centralize all important U
 - Documentation: `https://docs.atomiton.com`
 - GitHub Issues: `https://github.com/anthropics/claude-code/issues`
 - Support: `https://support.atomiton.com`
+
+---
+
+## 📝 Technical Debt & TODOs
+
+### Code TODOs Added During Recent Work
+
+1. **@atomiton/conductor** - `src/execution/composite/dataHandling.ts`
+   - TODO: Use node state when needed (currently commented out)
+   - Location: Line 29-30
+   - Context: Placeholder for future node state implementation
+
+2. **@atomiton/nodes** - `src/composite/createCompositeNode.ts`
+   - TODO: Enable when composite execution is fully implemented
+   - Location: Line 136-142
+   - Context: `compositeExecutable` creation is commented out pending full implementation
+
+### Existing TODOs in Codebase
+
+- **@atomiton/storage** - Multiple YAML serialization TODOs pending stable nodes API
+- **@atomiton/form** - Fields refactoring TODO
+- **@atomiton/ui** - Button resolver cleanup TODO
+- **@atomiton/eslint-config** - Re-enable import plugin when added
 
 ---
 

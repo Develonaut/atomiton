@@ -43,19 +43,19 @@
     "validate:knip": "knip --config knip.packages.json"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "cross-env": "^10.0.0",
-    "eslint": "^9.34.0",
-    "husky": "^9.1.7",
-    "kill-port": "^2.0.1",
-    "knip": "^5.63.1",
-    "lint-staged": "^16.1.6",
-    "playwright": "^1.55.0",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.5",
-    "turbo": "^2.5.6",
-    "typescript": "5.9.2",
-    "vitest": "^2.0.0"
+    "@types/node": "catalog:",
+    "cross-env": "catalog:",
+    "eslint": "catalog:",
+    "husky": "catalog:",
+    "kill-port": "catalog:",
+    "knip": "catalog:",
+    "lint-staged": "catalog:",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@9.14.4",
   "engines": {

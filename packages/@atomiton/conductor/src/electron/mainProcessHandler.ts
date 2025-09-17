@@ -23,6 +23,8 @@ export function setupMainProcessHandler(config?: {
   // Handle execution requests from renderer
   ipcMain.on("conductor:execute", async (event, message: IPCMessage) => {
     try {
+      // Log execution for debugging
+      // eslint-disable-next-line no-console
       console.log(`[Main] Executing blueprint: ${message.payload.blueprintId}`);
 
       // Execute using local transport (full Node.js access)
