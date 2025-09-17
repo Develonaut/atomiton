@@ -4,51 +4,52 @@
  * Parameter schema for looping and iterating over data items
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const loopSchema = {
-  loopType: z
+  loopType: v
     .enum(["forEach", "forRange", "while", "until"])
     .default("forEach")
     .describe("Type of loop operation"),
 
-  batchSize: z
+  batchSize: v
     .number()
     .min(1)
     .max(1000)
     .default(1)
     .describe("Number of items to process in each batch"),
 
-  maxIterations: z
+  maxIterations: v
     .number()
     .min(1)
     .max(10000)
     .default(1000)
     .describe("Maximum number of iterations to prevent infinite loops"),
 
-  delay: z
+  delay: v
     .number()
     .min(0)
     .max(60000)
     .default(0)
     .describe("Delay between iterations in milliseconds"),
 
-  continueOnError: z
+  continueOnError: v
     .boolean()
     .default(true)
     .describe("Continue processing remaining items if an error occurs"),
 
-  condition: z
+  condition: v
     .string()
     .optional()
     .describe("JavaScript condition for while/until loops"),
 
-  startValue: z.number().default(0).describe("Starting value for range loops"),
+  startValue: v.number().default(0).describe("Starting value for range loops"),
 
-  endValue: z.number().default(10).describe("Ending value for range loops"),
+  endValue: v.number().default(10).describe("Ending value for range loops"),
 
-  stepSize: z.number().default(1).describe("Step size for range loops"),
+  stepSize: v.number().default(1).describe("Step size for range loops"),
 };
 
 export const loopParameters = createAtomicParameters(
@@ -133,4 +134,4 @@ export const loopParameters = createAtomicParameters(
   },
 );
 
-export type LoopParameters = z.infer<typeof loopParameters.schema>;
+export type LoopParameters = VInfer<typeof loopParameters.schema>;

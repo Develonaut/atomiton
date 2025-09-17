@@ -707,12 +707,12 @@ importers:
       '@atomiton/utils':
         specifier: workspace:*
         version: link:../utils
+      '@atomiton/validation':
+        specifier: workspace:*
+        version: link:../validation
       '@atomiton/yaml':
         specifier: workspace:*
         version: link:../yaml
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.76
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:*

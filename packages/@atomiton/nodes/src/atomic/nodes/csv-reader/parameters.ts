@@ -4,18 +4,19 @@
  * Parameter schema for reading CSV files and spreadsheet data
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const csvReaderSchema = {
-  filePath: z.string().optional().describe("Path to the CSV file to read"),
+  filePath: v.string().optional().describe("Path to the CSV file to read"),
 
-  hasHeaders: z
+  hasHeaders: v
     .boolean()
     .default(true)
     .describe("Whether the first row contains column headers"),
 
-  delimiter: z.string().default(",").describe("Field delimiter character"),
+  delimiter: v.string().default(",").describe("Field delimiter character"),
 };
 
 export const csvReaderParameters = createAtomicParameters(
@@ -50,4 +51,4 @@ export const csvReaderParameters = createAtomicParameters(
   },
 );
 
-export type CSVReaderParameters = z.infer<typeof csvReaderParameters.schema>;
+export type CSVReaderParameters = VInfer<typeof csvReaderParameters.schema>;

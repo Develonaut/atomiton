@@ -43,8 +43,8 @@
   "dependencies": {
     "@atomiton/store": "workspace:*",
     "@atomiton/utils": "workspace:*",
-    "@atomiton/yaml": "workspace:*",
-    "zod": "catalog:"
+    "@atomiton/validation": "workspace:*",
+    "@atomiton/yaml": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",

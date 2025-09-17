@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { z } from "@atomiton/validation";
+import v from "@atomiton/validation";
+import { describe, expect, it } from "vitest";
 import {
-  mapZodTypeToControl,
   generateFieldsFromSchema,
   getDefaultValues,
+  mapZodTypeToControl,
 } from "./utils/index";
 
 describe("mapZodTypeToControl", () => {

@@ -4,27 +4,28 @@
  * Parameter schema for HTTP/API request operations
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const httpRequestSchema = {
-  method: z
+  method: v
     .enum(["GET", "POST", "PUT", "DELETE", "PATCH"])
     .default("GET")
     .describe("HTTP method to use"),
 
-  url: z.string().url("Must be a valid URL").describe("Request URL"),
+  url: v.string().url("Must be a valid URL").describe("Request URL"),
 
-  headers: z.record(z.string()).default({}).describe("Request headers"),
+  headers: v.record(v.string()).default({}).describe("Request headers"),
 
-  body: z.string().optional().describe("Request body content"),
+  body: v.string().optional().describe("Request body content"),
 
-  followRedirects: z
+  followRedirects: v
     .boolean()
     .default(true)
     .describe("Whether to follow redirects"),
 
-  validateSSL: z
+  validateSSL: v
     .boolean()
     .default(true)
     .describe("Whether to validate SSL certificates"),
@@ -80,6 +81,4 @@ export const httpRequestParameters = createAtomicParameters(
   },
 );
 
-export type HttpRequestParameters = z.infer<
-  typeof httpRequestParameters.schema
->;
+export type HttpRequestParameters = VInfer<typeof httpRequestParameters.schema>;

@@ -2,54 +2,55 @@
  * Factory function for creating atomic node parameters
  */
 
-import { z } from "zod";
+import v from "@atomiton/validation";
+import type { VRawShape, VObject, VInfer } from "@atomiton/validation";
 import type {
-  INodeParameters,
   FieldsConfig,
+  INodeParameters,
 } from "../interfaces/INodeParameters";
 
 // Base schema that all nodes share
-const baseSchema = z.object({
-  enabled: z
+const baseSchema = v.object({
+  enabled: v
     .boolean()
     .default(true)
     .describe("Whether this node is enabled for execution"),
 
-  timeout: z
+  timeout: v
     .number()
     .positive()
     .default(30000)
     .describe("Maximum execution time in milliseconds"),
 
-  retries: z
+  retries: v
     .number()
     .int()
     .min(0)
     .default(1)
     .describe("Number of retry attempts on failure"),
 
-  label: z.string().optional().describe("Custom label for this node instance"),
+  label: v.string().optional().describe("Custom label for this node instance"),
 
-  description: z
+  description: v
     .string()
     .optional()
     .describe("Custom description for this node instance"),
 });
 
-export type NodeParametersInput<T extends z.ZodRawShape> = {
+export type NodeParametersInput<T extends VRawShape> = {
   nodeSchema: T;
-  defaults: z.infer<z.ZodObject<T>>;
+  defaults: VInfer<VObject<T>>;
   fields: FieldsConfig;
 };
 
-export function createAtomicParameters<T extends z.ZodRawShape>(
+export function createAtomicParameters<T extends VRawShape>(
   nodeSchema: T,
-  defaults: z.infer<z.ZodObject<T>>,
+  defaults: VInfer<VObject<T>>,
   fields: FieldsConfig,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Complex Zod type inference requires any for proper type composition
 ): INodeParameters<any> {
   const fullSchema = baseSchema.extend(nodeSchema);
-  type FullType = z.infer<typeof fullSchema>;
+  type FullType = VInfer<typeof fullSchema>;
 
   const fullDefaults: FullType = {
     enabled: true,

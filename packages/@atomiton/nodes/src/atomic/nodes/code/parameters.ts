@@ -4,26 +4,27 @@
  * Parameter schema for executing custom JavaScript code
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const codeSchema = {
-  code: z
+  code: v
     .string()
     .default("// Write your JavaScript code here\nreturn data;")
     .describe("JavaScript code to execute"),
 
-  inputParams: z
+  inputParams: v
     .string()
     .default("data")
     .describe("Comma-separated list of parameter names"),
 
-  returnType: z
+  returnType: v
     .enum(["any", "string", "number", "boolean", "object", "array"])
     .default("any")
     .describe("Expected return type"),
 
-  async: z.boolean().default(false).describe("Enable async/await support"),
+  async: v.boolean().default(false).describe("Enable async/await support"),
 };
 
 export const codeParameters = createAtomicParameters(
@@ -71,4 +72,4 @@ export const codeParameters = createAtomicParameters(
   },
 );
 
-export type CodeParameters = z.infer<typeof codeParameters.schema>;
+export type CodeParameters = VInfer<typeof codeParameters.schema>;

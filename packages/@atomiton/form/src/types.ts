@@ -1,4 +1,4 @@
-import type { z } from "@atomiton/validation";
+import type { ZodType } from "@atomiton/validation";
 
 export type AtomitonFieldValue =
   | string
@@ -95,4 +95,4 @@ export type FieldsMetadata = {
  */
 export type UIFieldMetadata = Partial<Omit<FieldConfig, "name">>;
 
-export type ZodSchema = z.ZodTypeAny;
+export type ZodSchema = ZodType;

@@ -1,5 +1,5 @@
+import v from "@atomiton/validation";
 import { bench, describe } from "vitest";
-import { z } from "@atomiton/validation";
 import {
   generateFieldsFromSchema,
   getDefaultValues,
@@ -7,36 +7,36 @@ import {
 } from "../index";
 
 describe("Field Generation Performance", () => {
-  const smallSchema = z.object({
-    name: z.string(),
-    age: z.number(),
-    email: z.string().email(),
+  const smallSchema = v.object({
+    name: v.string(),
+    age: v.number(),
+    email: v.string().email(),
   });
 
-  const mediumSchema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string().email(),
-    phone: z.string().optional(),
-    age: z.number().min(0).max(120),
-    birthDate: z.date(),
-    active: z.boolean(),
-    role: z.enum(["user", "admin", "moderator"]),
-    bio: z.string().optional(),
-    website: z.string().url().optional(),
+  const mediumSchema = v.object({
+    firstName: v.string(),
+    lastName: v.string(),
+    email: v.string().email(),
+    phone: v.string().optional(),
+    age: v.number().min(0).max(120),
+    birthDate: v.date(),
+    active: v.boolean(),
+    role: v.enum(["user", "admin", "moderator"]),
+    bio: v.string().optional(),
+    website: v.string().url().optional(),
   });
 
-  const largeSchema = z.object(
+  const largeSchema = v.object(
     Object.fromEntries(
       Array.from({ length: 100 }, (_, i) => [
         `field_${i}`,
         i % 4 === 0
-          ? z.string()
+          ? v.string()
           : i % 4 === 1
-            ? z.number()
+            ? v.number()
             : i % 4 === 2
-              ? z.boolean()
-              : z.string().optional(),
+              ? v.boolean()
+              : v.string().optional(),
       ]),
     ),
   );
@@ -76,16 +76,16 @@ describe("Field Generation Performance", () => {
   });
 
   bench("mapZodTypeToControl - string field", () => {
-    mapZodTypeToControl(z.string(), "test");
+    mapZodTypeToControl(v.string(), "test");
   });
 
   bench("mapZodTypeToControl - complex field", () => {
-    mapZodTypeToControl(z.number().min(0).max(100).optional(), "test");
+    mapZodTypeToControl(v.number().min(0).max(100).optional(), "test");
   });
 
   bench("mapZodTypeToControl - enum field", () => {
     mapZodTypeToControl(
-      z.enum(["option1", "option2", "option3", "option4", "option5"]),
+      v.enum(["option1", "option2", "option3", "option4", "option5"]),
       "test",
     );
   });

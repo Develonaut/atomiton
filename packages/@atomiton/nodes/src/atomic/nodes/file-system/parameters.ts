@@ -4,28 +4,29 @@
  * Parameter schema for file system operations
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const fileSystemSchema = {
-  operation: z
+  operation: v
     .enum(["read", "write", "create", "list"])
     .default("read")
     .describe("Operation to perform"),
 
-  path: z
+  path: v
     .string()
     .min(1, "Path is required")
     .describe("File or directory path"),
 
-  content: z.string().optional().describe("Content to write to file"),
+  content: v.string().optional().describe("Content to write to file"),
 
-  encoding: z
+  encoding: v
     .enum(["utf8", "base64", "binary"])
     .default("utf8")
     .describe("File encoding"),
 
-  createDirectories: z
+  createDirectories: v
     .boolean()
     .default(false)
     .describe("Create parent directories if they don't exist"),
@@ -80,4 +81,4 @@ export const fileSystemParameters = createAtomicParameters(
   },
 );
 
-export type FileSystemParameters = z.infer<typeof fileSystemParameters.schema>;
+export type FileSystemParameters = VInfer<typeof fileSystemParameters.schema>;

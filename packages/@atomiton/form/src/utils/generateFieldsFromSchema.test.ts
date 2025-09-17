@@ -1,14 +1,14 @@
-import { describe, it, expect } from "vitest";
-import { z } from "@atomiton/validation";
+import v from "@atomiton/validation";
+import { describe, expect, it } from "vitest";
 import { generateFieldsFromSchema } from "./generateFieldsFromSchema";
 
 describe("generateFieldsFromSchema", () => {
   describe("basic functionality", () => {
     it("generates fields from simple object schema", () => {
-      const schema = z.object({
-        name: z.string(),
-        age: z.number(),
-        active: z.boolean(),
+      const schema = v.object({
+        name: v.string(),
+        age: v.number(),
+        active: v.boolean(),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -65,11 +65,11 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("generates fields with proper labels from camelCase names", () => {
-      const schema = z.object({
-        firstName: z.string(),
-        lastName: z.string(),
-        dateOfBirth: z.date(),
-        phoneNumber: z.string(),
+      const schema = v.object({
+        firstName: v.string(),
+        lastName: v.string(),
+        dateOfBirth: v.date(),
+        phoneNumber: v.string(),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -81,7 +81,7 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles empty object schema", () => {
-      const schema = z.object({});
+      const schema = v.object({});
       const result = generateFieldsFromSchema(schema);
 
       expect(result).toHaveLength(0);
@@ -91,8 +91,8 @@ describe("generateFieldsFromSchema", () => {
 
   describe("field metadata merging", () => {
     it("merges custom labels", () => {
-      const schema = z.object({
-        name: z.string(),
+      const schema = v.object({
+        name: v.string(),
       });
 
       const fields = {
@@ -107,8 +107,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges control type overrides", () => {
-      const schema = z.object({
-        description: z.string(),
+      const schema = v.object({
+        description: v.string(),
       });
 
       const fields = {
@@ -123,8 +123,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges placeholder text", () => {
-      const schema = z.object({
-        email: z.string().email(),
+      const schema = v.object({
+        email: v.string().email(),
       });
 
       const fields = {
@@ -139,8 +139,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges help text", () => {
-      const schema = z.object({
-        password: z.string(),
+      const schema = v.object({
+        password: v.string(),
       });
 
       const fields = {
@@ -155,8 +155,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges custom options for select fields", () => {
-      const schema = z.object({
-        status: z.enum(["active", "inactive"]),
+      const schema = v.object({
+        status: v.enum(["active", "inactive"]),
       });
 
       const fields = {
@@ -177,8 +177,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("preserves inferred options when no custom options provided", () => {
-      const schema = z.object({
-        status: z.enum(["draft", "published"]),
+      const schema = v.object({
+        status: v.enum(["draft", "published"]),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -190,8 +190,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges number constraints", () => {
-      const schema = z.object({
-        score: z.number().min(0).max(100),
+      const schema = v.object({
+        score: v.number().min(0).max(100),
       });
 
       const fields = {
@@ -209,9 +209,9 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges required field overrides", () => {
-      const schema = z.object({
-        optional: z.string().optional(),
-        required: z.string(),
+      const schema = v.object({
+        optional: v.string().optional(),
+        required: v.string(),
       });
 
       const fields = {
@@ -230,8 +230,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges disabled state", () => {
-      const schema = z.object({
-        readOnly: z.string(),
+      const schema = v.object({
+        readOnly: v.string(),
       });
 
       const fields = {
@@ -246,9 +246,9 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges group information", () => {
-      const schema = z.object({
-        firstName: z.string(),
-        lastName: z.string(),
+      const schema = v.object({
+        firstName: v.string(),
+        lastName: v.string(),
       });
 
       const fields = {
@@ -267,10 +267,10 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("merges order information", () => {
-      const schema = z.object({
-        third: z.string(),
-        first: z.string(),
-        second: z.string(),
+      const schema = v.object({
+        third: v.string(),
+        first: v.string(),
+        second: v.string(),
       });
 
       const fields = {
@@ -293,10 +293,10 @@ describe("generateFieldsFromSchema", () => {
 
   describe("complex field types", () => {
     it("handles optional fields correctly", () => {
-      const schema = z.object({
-        required: z.string(),
-        optional: z.string().optional(),
-        nullable: z.string().nullable(),
+      const schema = v.object({
+        required: v.string(),
+        optional: v.string().optional(),
+        nullable: v.string().nullable(),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -307,9 +307,9 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles email and url fields", () => {
-      const schema = z.object({
-        email: z.string().email(),
-        website: z.string().url(),
+      const schema = v.object({
+        email: v.string().email(),
+        website: v.string().url(),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -319,10 +319,10 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles number fields with constraints", () => {
-      const schema = z.object({
-        age: z.number().min(18).max(120),
-        score: z.number().max(100),
-        rating: z.number().min(1),
+      const schema = v.object({
+        age: v.number().min(18).max(120),
+        score: v.number().max(100),
+        rating: v.number().min(1),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -343,9 +343,9 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles enum fields", () => {
-      const schema = z.object({
-        size: z.enum(["small", "medium", "large"]),
-        priority: z.enum(["low", "high"]),
+      const schema = v.object({
+        size: v.enum(["small", "medium", "large"]),
+        priority: v.enum(["low", "high"]),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -368,9 +368,9 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles date fields", () => {
-      const schema = z.object({
-        birthDate: z.date(),
-        createdAt: z.date().optional(),
+      const schema = v.object({
+        birthDate: v.date(),
+        createdAt: v.date().optional(),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -388,8 +388,8 @@ describe("generateFieldsFromSchema", () => {
 
   describe("comprehensive field merging", () => {
     it("merges all possible field metadata", () => {
-      const schema = z.object({
-        bio: z.string().optional(),
+      const schema = v.object({
+        bio: v.string().optional(),
       });
 
       const fields = {
@@ -425,8 +425,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles partial field metadata", () => {
-      const schema = z.object({
-        title: z.string(),
+      const schema = v.object({
+        title: v.string(),
       });
 
       const fields = {
@@ -458,7 +458,7 @@ describe("generateFieldsFromSchema", () => {
 
   describe("error handling", () => {
     it("throws error for non-object schemas", () => {
-      const stringSchema = z.string();
+      const stringSchema = v.string();
 
       expect(() => generateFieldsFromSchema(stringSchema)).toThrow(
         "Schema must be a ZodObject",
@@ -466,7 +466,7 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("throws error for array schemas", () => {
-      const arraySchema = z.array(z.string());
+      const arraySchema = v.array(v.string());
 
       expect(() => generateFieldsFromSchema(arraySchema)).toThrow(
         "Schema must be a ZodObject",
@@ -474,7 +474,7 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("throws error for number schemas", () => {
-      const numberSchema = z.number();
+      const numberSchema = v.number();
 
       expect(() => generateFieldsFromSchema(numberSchema)).toThrow(
         "Schema must be a ZodObject",
@@ -482,7 +482,7 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("throws error for union schemas", () => {
-      const unionSchema = z.union([z.string(), z.number()]);
+      const unionSchema = v.union([v.string(), v.number()]);
 
       expect(() => generateFieldsFromSchema(unionSchema)).toThrow(
         "Schema must be a ZodObject",
@@ -492,9 +492,9 @@ describe("generateFieldsFromSchema", () => {
 
   describe("edge cases", () => {
     it("handles fields with no metadata provided", () => {
-      const schema = z.object({
-        field1: z.string(),
-        field2: z.number(),
+      const schema = v.object({
+        field1: v.string(),
+        field2: v.number(),
       });
 
       const fields = {
@@ -511,8 +511,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles empty fields metadata object", () => {
-      const schema = z.object({
-        name: z.string(),
+      const schema = v.object({
+        name: v.string(),
       });
 
       const result = generateFieldsFromSchema(schema, {});
@@ -521,8 +521,8 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("handles undefined fields parameter", () => {
-      const schema = z.object({
-        name: z.string(),
+      const schema = v.object({
+        name: v.string(),
       });
 
       const result = generateFieldsFromSchema(schema);
@@ -531,10 +531,10 @@ describe("generateFieldsFromSchema", () => {
     });
 
     it("preserves field order from schema definition", () => {
-      const schema = z.object({
-        zulu: z.string(),
-        alpha: z.string(),
-        beta: z.string(),
+      const schema = v.object({
+        zulu: v.string(),
+        alpha: v.string(),
+        beta: v.string(),
       });
 
       const result = generateFieldsFromSchema(schema);

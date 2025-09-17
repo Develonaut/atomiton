@@ -4,35 +4,36 @@
  * Parameter schema for data transformation operations
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const transformSchema = {
-  operation: z
+  operation: v
     .enum(["map", "filter", "reduce", "sort", "group", "flatten"])
     .default("map")
     .describe("Type of transformation operation"),
 
-  transformFunction: z
+  transformFunction: v
     .string()
     .default("item => item")
     .describe("JavaScript function for transformation"),
 
-  filterCondition: z
+  filterCondition: v
     .string()
     .optional()
     .describe("Condition for filter operation"),
 
-  sortKey: z.string().optional().describe("Key to sort by"),
+  sortKey: v.string().optional().describe("Key to sort by"),
 
-  sortDirection: z
+  sortDirection: v
     .enum(["asc", "desc"])
     .default("asc")
     .describe("Sort direction"),
 
-  groupBy: z.string().optional().describe("Key to group by"),
+  groupBy: v.string().optional().describe("Key to group by"),
 
-  reduceInitial: z
+  reduceInitial: v
     .string()
     .default("0")
     .describe("Initial value for reduce operation"),
@@ -103,4 +104,4 @@ export const transformParameters = createAtomicParameters(
   },
 );
 
-export type TransformParameters = z.infer<typeof transformParameters.schema>;
+export type TransformParameters = VInfer<typeof transformParameters.schema>;

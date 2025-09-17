@@ -4,37 +4,38 @@
  * Parameter schema for image composition and manipulation operations
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const imageCompositeSchema = {
-  operation: z
+  operation: v
     .enum(["composite", "overlay", "merge", "blend"])
     .default("composite")
     .describe("Image composition operation type"),
 
-  outputFormat: z
+  outputFormat: v
     .enum(["png", "jpg", "webp", "bmp"])
     .default("png")
     .describe("Output image format"),
 
-  quality: z
+  quality: v
     .number()
     .min(1)
     .max(100)
     .default(90)
     .describe("Output image quality (1-100)"),
 
-  width: z.number().positive().optional().describe("Output image width"),
+  width: v.number().positive().optional().describe("Output image width"),
 
-  height: z.number().positive().optional().describe("Output image height"),
+  height: v.number().positive().optional().describe("Output image height"),
 
-  preserveAspectRatio: z
+  preserveAspectRatio: v
     .boolean()
     .default(true)
     .describe("Whether to preserve aspect ratio"),
 
-  backgroundColor: z
+  backgroundColor: v
     .string()
     .default("#FFFFFF")
     .describe("Background color for composition"),
@@ -109,6 +110,6 @@ export const imageCompositeParameters = createAtomicParameters(
   },
 );
 
-export type ImageCompositeParameters = z.infer<
+export type ImageCompositeParameters = VInfer<
   typeof imageCompositeParameters.schema
 >;

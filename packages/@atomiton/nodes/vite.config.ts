@@ -11,9 +11,8 @@ export default defineLibraryConfig({
     "child_process",
     "os",
     "util",
-    // Third-party libraries
-    "zod",
     // Internal packages
+    "@atomiton/validation",
     "@atomiton/yaml",
   ],
   chunks: {

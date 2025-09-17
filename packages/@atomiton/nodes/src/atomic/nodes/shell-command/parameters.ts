@@ -4,38 +4,39 @@
  * Parameter schema for executing shell commands
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const shellCommandSchema = {
-  command: z
+  command: v
     .string()
     .min(1, "Command is required")
     .describe("Shell command to execute"),
 
-  args: z.array(z.string()).default([]).describe("Command arguments"),
+  args: v.array(v.string()).default([]).describe("Command arguments"),
 
-  workingDirectory: z
+  workingDirectory: v
     .string()
     .optional()
     .describe("Working directory for command execution"),
 
-  environment: z
-    .record(z.string())
+  environment: v
+    .record(v.string())
     .default({})
     .describe("Environment variables"),
 
-  shell: z
+  shell: v
     .string()
     .default("/bin/bash")
     .describe("Shell to use for command execution"),
 
-  captureOutput: z
+  captureOutput: v
     .boolean()
     .default(true)
     .describe("Whether to capture stdout/stderr"),
 
-  inheritStdio: z
+  inheritStdio: v
     .boolean()
     .default(false)
     .describe("Whether to inherit stdio from parent process"),
@@ -96,6 +97,6 @@ export const shellCommandParameters = createAtomicParameters(
   },
 );
 
-export type ShellCommandParameters = z.infer<
+export type ShellCommandParameters = VInfer<
   typeof shellCommandParameters.schema
 >;

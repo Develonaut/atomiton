@@ -5,7 +5,7 @@
  */
 
 import { generateNodeId } from "@atomiton/utils";
-import { z } from "zod";
+import v from "@atomiton/validation";
 import { createAtomicMetadata } from "../atomic/createAtomicMetadata";
 import { createAtomicParameters } from "../atomic/createAtomicParameters";
 import type {
@@ -104,9 +104,9 @@ export function createCompositeNode(
   // Create parameters for composite settings
   const parameters = createAtomicParameters(
     {
-      timeout: z.number().default(30000),
-      retries: z.number().default(1),
-      parallel: z.boolean().default(false),
+      timeout: v.number().default(30000),
+      retries: v.number().default(1),
+      parallel: v.boolean().default(false),
     },
     {
       timeout: input.settings?.timeout ?? 30000,

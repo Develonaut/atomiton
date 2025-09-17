@@ -5,88 +5,88 @@
  * Used by both atomic and composite nodes.
  */
 
-import { z } from "zod";
+import v from "@atomiton/validation";
 
 /**
  * Node metadata schema
  */
-export const NodeMetadataSchema = z
+export const NodeMetadataSchema = v
   .object({
-    variant: z.string().optional(),
-    created: z.string().datetime().optional(),
-    modified: z.string().datetime().optional(),
-    author: z.string().optional(),
-    source: z
+    variant: v.string().optional(),
+    created: v.string().datetime().optional(),
+    modified: v.string().datetime().optional(),
+    author: v.string().optional(),
+    source: v
       .enum(["system", "user", "community", "organization", "marketplace"])
       .optional(),
-    tags: z.array(z.string()).optional(),
-    icon: z.string().optional(),
-    documentationUrl: z.string().url().optional(),
-    experimental: z.boolean().optional(),
-    deprecated: z.boolean().optional(),
+    tags: v.array(v.string()).optional(),
+    icon: v.string().optional(),
+    documentationUrl: v.string().url().optional(),
+    experimental: v.boolean().optional(),
+    deprecated: v.boolean().optional(),
   })
-  .catchall(z.unknown());
+  .catchall(v.unknown());
 
 /**
  * Node port definition schema
  */
-export const NodePortDefinitionSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  type: z.enum(["input", "output", "trigger", "error"]),
-  dataType: z.string().min(1),
-  required: z.boolean().optional(),
-  multiple: z.boolean().optional(),
-  description: z.string().optional(),
-  defaultValue: z.unknown().optional(),
+export const NodePortDefinitionSchema = v.object({
+  id: v.string().min(1),
+  name: v.string().min(1),
+  type: v.enum(["input", "output", "trigger", "error"]),
+  dataType: v.string().min(1),
+  required: v.boolean().optional(),
+  multiple: v.boolean().optional(),
+  description: v.string().optional(),
+  defaultValue: v.unknown().optional(),
 });
 
 /**
  * Node edge schema (for connecting nodes)
  */
-export const NodeEdgeSchema = z.object({
-  id: z.string().min(1),
-  source: z.string().min(1),
-  target: z.string().min(1),
-  sourceHandle: z.string().optional(),
-  targetHandle: z.string().optional(),
-  type: z.string().optional(),
-  data: z.record(z.unknown()).optional(),
-  style: z.record(z.unknown()).optional(),
+export const NodeEdgeSchema = v.object({
+  id: v.string().min(1),
+  source: v.string().min(1),
+  target: v.string().min(1),
+  sourceHandle: v.string().optional(),
+  targetHandle: v.string().optional(),
+  type: v.string().optional(),
+  data: v.record(v.unknown()).optional(),
+  style: v.record(v.unknown()).optional(),
   // React Flow properties
-  animated: z.boolean().optional(),
-  hidden: z.boolean().optional(),
-  deletable: z.boolean().optional(),
-  selectable: z.boolean().optional(),
+  animated: v.boolean().optional(),
+  hidden: v.boolean().optional(),
+  deletable: v.boolean().optional(),
+  selectable: v.boolean().optional(),
 });
 
 /**
  * Node position schema (for UI)
  */
-export const NodePositionSchema = z.object({
-  x: z.number(),
-  y: z.number(),
+export const NodePositionSchema = v.object({
+  x: v.number(),
+  y: v.number(),
 });
 
 /**
  * Node settings schema
  */
-export const NodeSettingsSchema = z.object({
-  runtime: z
+export const NodeSettingsSchema = v.object({
+  runtime: v
     .object({
-      timeout: z.number().optional(),
-      retries: z.number().optional(),
-      parallel: z.boolean().optional(),
+      timeout: v.number().optional(),
+      retries: v.number().optional(),
+      parallel: v.boolean().optional(),
     })
     .optional(),
-  ui: z
+  ui: v
     .object({
-      color: z.string().optional(),
+      color: v.string().optional(),
       position: NodePositionSchema.optional(),
-      size: z
+      size: v
         .object({
-          width: z.number(),
-          height: z.number(),
+          width: v.number(),
+          height: v.number(),
         })
         .optional(),
     })
@@ -96,13 +96,13 @@ export const NodeSettingsSchema = z.object({
 /**
  * Base node schema (shared by atomic and composite)
  */
-export const NodeSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
-  description: z.string().optional(),
-  category: z.string().min(1),
-  type: z.enum(["atomic", "composite"]),
-  version: z.string().optional(),
+export const NodeSchema = v.object({
+  id: v.string().min(1),
+  name: v.string().min(1),
+  description: v.string().optional(),
+  category: v.string().min(1),
+  type: v.enum(["atomic", "composite"]),
+  version: v.string().optional(),
   metadata: NodeMetadataSchema.optional(),
   settings: NodeSettingsSchema.optional(),
 });

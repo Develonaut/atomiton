@@ -4,42 +4,43 @@
  * Parameter schema for running multiple operations simultaneously
  */
 
-import { z } from "zod";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 import { createAtomicParameters } from "../../createAtomicParameters";
 
 const parallelSchema = {
-  concurrency: z
+  concurrency: v
     .number()
     .min(1)
     .max(50)
     .default(5)
     .describe("Maximum number of concurrent operations"),
 
-  strategy: z
+  strategy: v
     .enum(["all", "race", "allSettled"])
     .default("allSettled")
     .describe("Parallel execution strategy"),
 
-  operationTimeout: z
+  operationTimeout: v
     .number()
     .min(1000)
     .max(300000)
     .default(30000)
     .describe("Timeout for each individual operation in milliseconds"),
 
-  globalTimeout: z
+  globalTimeout: v
     .number()
     .min(5000)
     .max(600000)
     .default(120000)
     .describe("Global timeout for all parallel operations in milliseconds"),
 
-  failFast: z
+  failFast: v
     .boolean()
     .default(false)
     .describe("Stop all operations on first error"),
 
-  maintainOrder: z
+  maintainOrder: v
     .boolean()
     .default(true)
     .describe("Maintain input order in results"),
@@ -100,4 +101,4 @@ export const parallelParameters = createAtomicParameters(
   },
 );
 
-export type ParallelParameters = z.infer<typeof parallelParameters.schema>;
+export type ParallelParameters = VInfer<typeof parallelParameters.schema>;

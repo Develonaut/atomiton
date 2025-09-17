@@ -1,14 +1,14 @@
-import { describe, it, expect, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
-import { z } from "@atomiton/validation";
-import { useForm } from "./useForm";
+import v from "@atomiton/validation";
+import { act, renderHook } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { useField } from "./useField";
+import { useForm } from "./useForm";
 
 describe("useField", () => {
   it("returns field registration and state", () => {
-    const schema = z.object({
-      name: z.string(),
-      email: z.string().email(),
+    const schema = v.object({
+      name: v.string(),
+      email: v.string().email(),
     });
 
     const { result: formResult } = renderHook(() =>
@@ -27,8 +27,8 @@ describe("useField", () => {
   });
 
   it("tracks field value changes", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result: formResult } = renderHook(() =>
@@ -49,8 +49,8 @@ describe("useField", () => {
   });
 
   it("setValue function calls clearErrors when error exists", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result: formResult } = renderHook(() => useForm({ schema }));
@@ -83,8 +83,8 @@ describe("useField", () => {
   });
 
   it("tracks touched state correctly", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result: formResult } = renderHook(() =>
@@ -108,8 +108,8 @@ describe("useField", () => {
   });
 
   it("returns all register properties", () => {
-    const schema = z.object({
-      name: z.string().min(3),
+    const schema = v.object({
+      name: v.string().min(3),
     });
 
     const { result: formResult } = renderHook(() => useForm({ schema }));
@@ -126,9 +126,9 @@ describe("useField", () => {
   });
 
   it("handles multiple fields independently", () => {
-    const schema = z.object({
-      firstName: z.string(),
-      lastName: z.string(),
+    const schema = v.object({
+      firstName: v.string(),
+      lastName: v.string(),
     });
 
     const { result: formResult } = renderHook(() =>
@@ -159,10 +159,10 @@ describe("useField", () => {
   });
 
   it("properly handles nested field names", () => {
-    const schema = z.object({
-      user: z.object({
-        name: z.string(),
-        email: z.string(),
+    const schema = v.object({
+      user: v.object({
+        name: v.string(),
+        email: v.string(),
       }),
     });
 
@@ -188,8 +188,8 @@ describe("useField", () => {
   });
 
   it("returns undefined for non-existent fields", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result: formResult } = renderHook(() => useForm({ schema }));
@@ -205,8 +205,8 @@ describe("useField", () => {
   });
 
   it("updates when form values change externally", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result: formResult } = renderHook(() =>
@@ -229,8 +229,8 @@ describe("useField", () => {
   });
 
   it("handles clearing errors only when error exists", async () => {
-    const schema = z.object({
-      name: z.string().min(3),
+    const schema = v.object({
+      name: v.string().min(3),
     });
 
     const { result: formResult } = renderHook(() =>
