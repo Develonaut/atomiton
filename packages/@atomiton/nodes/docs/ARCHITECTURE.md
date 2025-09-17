@@ -4,36 +4,107 @@
 
 This package implements a unified node architecture where **everything that can execute is a node**. This creates a powerful composition pattern where atomic nodes (building blocks) and composite nodes (orchestrations) share the same interface.
 
+## Type Hierarchy
+
+The node system follows a clear separation between data structures and runtime instances:
+
+```
+                        Data vs Runtime
+                 ┌────────────┬────────────────┐
+                 │    Data    │    Runtime     │
+                 │ (Storage)  │  (Execution)   │
+                 └────────────┴────────────────┘
+                       │              │
+                       ▼              ▼
+                 ┌──────────┐  ┌──────────────┐
+                 │   Node    │  │IExecutableNode│
+                 │           │  │   execute()   │
+                 │  - id     │  │   validate()  │
+                 │  - name   │  │   metadata    │
+                 │  - type   │  │               │
+                 │  - nodes  │  └───────┬───────┘
+                 │  - edges  │          │
+                 └──────────┘      ┌────┴────┐
+                       │           │         │
+                       │    ┌──────────┐ ┌────────────┐
+                       │    │IAtomicNode│ │ICompositeNode│
+                       │    │ (single)  │ │(orchestrate) │
+                       │    └──────────┘ └────────────┘
+                       │
+                 ┌─────▼──────┐
+                 │ createNode()│
+                 │  (Factory)  │
+                 └─────────────┘
+                       │
+                   Returns Node
+              (hides implementation)
+
+    Legend:
+    • Node: Data structure for storage, editing, serialization
+    • IExecutableNode: Runtime interface for execution
+    • IAtomicNode/ICompositeNode: Runtime implementations (internal)
+    • createNode(): Public factory that returns Node data
+```
+
+### Mental Model
+
+**"A node is just data until you execute it"**
+
+1. **Node** - The data structure you create, store, and edit
+2. **IExecutableNode** - The runtime instance that actually executes
+3. **createNode()** - The simple factory that creates Node data
+
+The atomic/composite distinction is an internal implementation detail. From the outside:
+
+- You create a `Node` (data)
+- You store/edit/serialize that `Node`
+- The system converts it to an `IExecutableNode` when needed for execution
+
+### Key Principles
+
+1. **Data First**: Work with `Node` data structures, not runtime instances
+2. **Hidden Complexity**: The atomic/composite split is internal
+3. **Simple API**: One function (`createNode()`) creates all nodes
+4. **Clear Naming**: "Executable" in the name means runtime execution
+
 ## Folder Structure
 
 ```
 src/
-├── base/                    # Common base classes and interfaces
-│   ├── interfaces/
-│   │   ├── INode.ts        # Main node interfaces (INode, IAtomicNode, ICompositeNode)
-│   │   └── IExecutable.ts  # Legacy compatibility exports
-│   ├── BaseExecutable.ts   # Base implementation class
-│   └── ...
-├── atomic/                 # Atomic Nodes (Building Blocks)
-│   ├── csv-reader/         # Read CSV files
-│   ├── http-request/       # Make HTTP requests
-│   ├── file-system/        # File operations
-│   ├── shell-command/      # Execute shell commands
-│   ├── code/              # Execute JavaScript/TypeScript code
-│   ├── transform/         # Transform data
-│   ├── image-composite/   # Image manipulation
-│   ├── loop/             # Loop constructs
-│   ├── parallel/         # Parallel execution
-│   └── index.ts          # Exports all atomic nodes
-├── composite/            # Composite Nodes (Orchestrators)
-│   ├── CompositeNode.ts   # Main composite implementation
-│   ├── CompositeExecutor.ts # Execution engine
-│   ├── types.ts          # Composite-specific types
-│   ├── utils.ts          # Utility functions
-│   └── ...
-├── types.ts              # Shared types
-├── api.ts               # Main API
-└── index.ts             # Main exports
+├── interfaces/              # Pure interfaces (no implementations)
+│   ├── IExecutableNode.ts   # Runtime node interface (IExecutableNode, IAtomicNode, ICompositeNode)
+│   ├── INodeExecutable.ts   # Execution logic interface
+│   ├── INodeMetadata.ts    # Metadata interface
+│   ├── INodeParameters.ts  # Parameters interface
+│   └── INodePorts.ts       # Ports interface
+│
+├── atomic/                  # Atomic node implementations
+│   ├── createAtomicNode.ts # Factory for atomic runtime nodes
+│   ├── createNodeExecutable.ts # Creates execution logic
+│   ├── createNodeParameters.ts # Parameter factory
+│   ├── createNodeMetadata.ts   # Metadata factory
+│   ├── createNodePorts.ts      # Ports factory
+│   └── nodes/              # Actual node implementations
+│       ├── csv-reader/     # Read CSV files
+│       ├── http-request/   # Make HTTP requests
+│       ├── file-system/    # File operations
+│       ├── shell-command/  # Execute shell commands
+│       ├── code/          # Execute JavaScript/TypeScript code
+│       ├── transform/     # Transform data
+│       ├── image-composite/# Image manipulation
+│       ├── loop/          # Loop constructs
+│       └── parallel/      # Parallel execution
+│
+├── composite/              # Composite node implementations
+│   ├── createCompositeNode.ts  # Factory for composite runtime nodes
+│   ├── createCompositeExecutable.ts # Execution orchestration
+│   ├── createCompositeGraph.ts # Graph management
+│   ├── templates/          # Pre-built composite templates
+│   └── types.ts           # Composite-specific types
+│
+├── types.ts               # Public data types (Node, etc.)
+├── createNode.ts          # Public factory function
+└── index.ts               # Clean public exports
 ```
 
 ## Node Types

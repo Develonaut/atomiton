@@ -1,5 +1,5 @@
 import type { ValidationError, ValidationResult } from "../types";
-import { nodes } from "../../nodes";
+import { nodes } from "../../atomic/nodes";
 
 /**
  * Get the list of available node types from the registry

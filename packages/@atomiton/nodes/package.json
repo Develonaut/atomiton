@@ -5,17 +5,14 @@
   "type": "module",
   "private": true,
   "sideEffects": false,
-  "main": "./dist/browser.js",
-  "module": "./dist/browser.js",
-  "types": "./dist/browser.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/browser.js",
-      "types": "./dist/browser.d.ts"
+    "./browser": {
+      "import": "./dist/exports/browser/index.js",
+      "types": "./dist/exports/browser/index.d.ts"
     },
-    "./logic": {
-      "import": "./dist/logic.js",
-      "types": "./dist/logic.d.ts"
+    "./executable": {
+      "import": "./dist/exports/executable/index.js",
+      "types": "./dist/exports/executable/index.d.ts"
     },
     "./package.json": "./package.json"
   },

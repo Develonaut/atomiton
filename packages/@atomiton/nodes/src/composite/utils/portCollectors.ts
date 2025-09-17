@@ -4,7 +4,10 @@
  * should be exposed from a composite node based on its child nodes
  */
 
-import type { CompositeEdge, INode } from "../../base/INode";
+import type {
+  IExecutableNode,
+  CompositeEdge,
+} from "../../interfaces/IExecutableNode";
 import type { NodePortDefinition } from "../../types";
 
 /**
@@ -12,7 +15,7 @@ import type { NodePortDefinition } from "../../types";
  * This is the common logic shared between input and output ports
  */
 function createCompositePort(
-  node: INode,
+  node: IExecutableNode,
   port: NodePortDefinition,
 ): NodePortDefinition {
   return {
@@ -26,7 +29,7 @@ function createCompositePort(
  * Factory for creating a composite input port
  */
 export function createCompositeInputPort(
-  node: INode,
+  node: IExecutableNode,
   port: NodePortDefinition,
 ): NodePortDefinition {
   return createCompositePort(node, port);
@@ -36,7 +39,7 @@ export function createCompositeInputPort(
  * Factory for creating a composite output port
  */
 export function createCompositeOutputPort(
-  node: INode,
+  node: IExecutableNode,
   port: NodePortDefinition,
 ): NodePortDefinition {
   return createCompositePort(node, port);
@@ -47,7 +50,7 @@ export function createCompositeOutputPort(
  * These become the input ports of the composite node
  */
 export function collectUnconnectedInputPorts(
-  nodes: INode[],
+  nodes: IExecutableNode[],
   edges: CompositeEdge[],
 ): NodePortDefinition[] {
   // Build a set of connected input ports (target ports in edges)
@@ -80,7 +83,9 @@ export function collectUnconnectedInputPorts(
  * Collect all output ports from child nodes
  * These become the output ports of the composite node
  */
-export function collectOutputPorts(nodes: INode[]): NodePortDefinition[] {
+export function collectOutputPorts(
+  nodes: IExecutableNode[],
+): NodePortDefinition[] {
   const ports: NodePortDefinition[] = [];
 
   for (const node of nodes) {

@@ -5,62 +5,69 @@
  */
 
 import { describe, expect, it } from "vitest";
-import * as NodesAPI from "../../index";
+import * as BrowserAPI from "../../exports/browser";
+import * as ExecutableAPI from "../../exports/executable";
 
 describe("@atomiton/nodes API Smoke Tests", () => {
-  it("exports all node implementations", () => {
-    expect(NodesAPI.nodes).toBeDefined();
-    expect(NodesAPI.code).toBeDefined();
-    expect(NodesAPI.transform).toBeDefined();
-    expect(NodesAPI.parallel).toBeDefined();
-  });
-
-  it("exports composite functionality", () => {
-    expect(NodesAPI.createCompositeNode).toBeDefined();
-    expect(NodesAPI.fromYaml).toBeDefined();
-    expect(NodesAPI.toYaml).toBeDefined();
-    expect(NodesAPI.compositeTemplates).toBeDefined();
-  });
-
-  it("can create a composite node", () => {
-    const composite = NodesAPI.createCompositeNode({
-      name: "Test",
-      description: "Test",
-      category: "test",
-      nodes: [],
-      edges: [],
-    });
-    expect(composite.type).toBe("composite");
-  });
-
-  it("rejects invalid node types with helpful errors", () => {
-    // When using CompositeNodeSpec (template format), validation happens at execution time
-    // For strict validation at creation time, we need to use actual INode instances
-    // This test is checking template validation which may defer until execution
-    const composite = NodesAPI.createCompositeNode({
-      name: "Test",
-      description: "Test",
-      category: "test",
-      nodes: [
-        {
-          id: "n1",
-          type: "csvReader", // Wrong case
-          position: { x: 0, y: 0 },
-        } as any,
-      ],
-      edges: [],
+  describe("Browser Export", () => {
+    it("exports node utility functions", () => {
+      expect(BrowserAPI.getNodes).toBeDefined();
+      expect(BrowserAPI.getNodesByCategory).toBeDefined();
+      expect(BrowserAPI.getNodeByType).toBeDefined();
     });
 
-    // The composite is created successfully with template format
-    // Error would occur during execution when trying to resolve the node type
-    expect(composite).toBeDefined();
-    expect(composite.name).toBe("Test");
+    it("exports composite functionality", () => {
+      expect(BrowserAPI.createCompositeNode).toBeDefined();
+      expect(BrowserAPI.fromYaml).toBeDefined();
+      expect(BrowserAPI.toYaml).toBeDefined();
+      expect(BrowserAPI.compositeTemplates).toBeDefined();
+    });
+
+    it("exports validation utilities", () => {
+      expect(BrowserAPI.validateComposite).toBeDefined();
+      expect(typeof BrowserAPI.validateComposite).toBe("function");
+    });
+
+    it("can create a composite node", () => {
+      const composite = BrowserAPI.createCompositeNode({
+        name: "Test",
+        description: "Test",
+        category: "test",
+        nodes: [],
+        edges: [],
+      });
+      expect(composite.type).toBe("composite");
+    });
+
+    it("templates are valid", () => {
+      expect(BrowserAPI.compositeTemplates.length).toBeGreaterThan(0);
+      BrowserAPI.compositeTemplates.forEach((t) => {
+        expect(t.definition.name).toBeDefined();
+      });
+    });
   });
 
-  it("templates are valid", () => {
-    expect(NodesAPI.compositeTemplates.length).toBeGreaterThan(0);
-    NodesAPI.compositeTemplates.forEach((t) => {
-      expect(t.definition.name).toBeDefined();
+  describe("Executable Export", () => {
+    it("exports executable nodes collection", () => {
+      expect(ExecutableAPI.nodes).toBeDefined();
+      expect(typeof ExecutableAPI.nodes).toBe("object");
+    });
+
+    it("exports individual node executables", () => {
+      expect(ExecutableAPI.codeExecutable).toBeDefined();
+      expect(ExecutableAPI.transformExecutable).toBeDefined();
+      expect(ExecutableAPI.parallelExecutable).toBeDefined();
+    });
+
+    it("exports execution utilities", () => {
+      expect(ExecutableAPI.createSuccessResult).toBeDefined();
+      expect(ExecutableAPI.createErrorResult).toBeDefined();
+      expect(ExecutableAPI.validateRequiredInputs).toBeDefined();
+    });
+
+    it("exports node factory functions", () => {
+      expect(ExecutableAPI.createAtomicNode).toBeDefined();
+      expect(ExecutableAPI.createCompositeNode).toBeDefined();
     });
   });
 });

@@ -8,28 +8,13 @@
  * are just nodes that contain other nodes, not special cases.
  */
 
-import type { NodeDefinition } from "../types";
-import type { CompositeEdge } from "../base/INode";
+import type { Node, NodeEdge, NodePosition, NodeVariable } from "../types";
+import type { ValidationError } from "../validation/types";
 
-// Re-export CompositeEdge for convenience
-export type { CompositeEdge } from "../base/INode";
-
-/**
- * Position in the visual editor for child nodes
- */
-export type CompositePosition = {
-  x: number;
-  y: number;
-};
-
-/**
- * Variable definition for composite parameterization
- */
-export type CompositeVariable = {
-  type: string;
-  defaultValue?: unknown;
-  description?: string;
-};
+// Type aliases for composite-specific use
+export type CompositeEdge = NodeEdge;
+export type CompositePosition = NodePosition;
+export type CompositeVariable = NodeVariable;
 
 /**
  * Composite-specific settings
@@ -61,10 +46,10 @@ export type CompositeNodeSpec = {
 /**
  * Main Composite Definition
  *
- * Extends NodeDefinition with composite-specific fields.
+ * Extends Node with composite-specific fields.
  * A composite is just a node that happens to contain other nodes.
  */
-export type CompositeDefinition = NodeDefinition & {
+export type CompositeDefinition = Node & {
   // Composite-specific fields - the only things unique to composites
   nodes: CompositeNodeSpec[];
   edges: CompositeEdge[];
@@ -72,12 +57,8 @@ export type CompositeDefinition = NodeDefinition & {
   settings?: CompositeSettings;
 };
 
-export type ValidationError = {
-  path: string;
-  message: string;
-  code: string;
-  data?: unknown;
-};
+// Re-export ValidationError for convenience
+export type { ValidationError } from "../validation/types";
 
 export type ValidationResult<T = unknown> = {
   success: boolean;

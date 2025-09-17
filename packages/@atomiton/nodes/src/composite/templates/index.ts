@@ -128,3 +128,7 @@ export function getTemplatesByDifficulty(
     (template) => template.difficulty === difficulty,
   );
 }
+
+// Export aliases for simplified API
+export type Template = CompositeTemplate;
+export const getAllTemplates = getAllCompositeTemplates;

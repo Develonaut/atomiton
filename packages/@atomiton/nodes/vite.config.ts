@@ -28,13 +28,24 @@ export default defineLibraryConfig({
     build: {
       lib: {
         entry: {
-          browser: resolve(__dirname, "src/browser.ts"),
-          logic: resolve(__dirname, "src/logic.ts"),
-          index: resolve(__dirname, "src/index.ts"),
+          "exports/browser/index": resolve(
+            __dirname,
+            "src/exports/browser/index.ts",
+          ),
+          "exports/executable/index": resolve(
+            __dirname,
+            "src/exports/executable/index.ts",
+          ),
         },
         name: "AtomitonNodes",
         formats: ["es"],
-        fileName: (format, entryName) => `${entryName}.js`,
+        fileName: (format, entryName) => {
+          // Handle nested paths for exports
+          if (entryName.includes("/")) {
+            return entryName + ".js";
+          }
+          return `${entryName}.js`;
+        },
       },
       rollupOptions: {
         output: {

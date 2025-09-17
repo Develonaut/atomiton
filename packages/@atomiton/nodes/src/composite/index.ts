@@ -10,8 +10,8 @@ export type {
   CompositeTemplateInput,
 } from "./createCompositeNode";
 
-export { createCompositeLogic } from "./createCompositeLogic";
-export type { CompositeLogicInput } from "./createCompositeLogic";
+export { createCompositeExecutable } from "./createCompositeExecutable";
+export type { CompositeExecutableInput } from "./createCompositeExecutable";
 
 export { createCompositePorts } from "./createCompositePorts";
 export type { CompositePortsInput } from "./createCompositePorts";

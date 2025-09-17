@@ -1,98 +1,167 @@
 /**
- * Node Package Type Definitions
- * Central location for all node-related types
+ * Node Data Types
+ *
+ * Public types for node data structures, categories, and UI configuration.
+ * These types are used for storage, serialization, and editing.
  */
 
-export type NodeExecutionContext = {
-  /** Node instance ID */
-  nodeId: string;
+/**
+ * Node type classification
+ * Extensible for future node types beyond atomic and composite
+ */
+export type NodeType = "atomic" | "composite" | string;
 
-  /** Composite ID for context */
-  compositeId?: string;
+/**
+ * Source of a node definition
+ */
+export type NodeSource =
+  | "system"
+  | "user"
+  | "community"
+  | "organization"
+  | "marketplace";
 
-  /** Input data from connected ports */
-  inputs: Record<string, unknown>;
+/**
+ * Node categories for organization and UI grouping
+ */
+export type NodeCategory =
+  | "io" // Input/Output - file reading, HTTP, etc
+  | "data" // Data Processing - transform, filter, etc
+  | "logic" // Logic & Control - conditionals, loops, etc
+  | "media" // Media Processing - images, video, audio
+  | "system" // System Operations - shell commands, env vars
+  | "ai" // AI & ML operations
+  | "database" // Database operations
+  | "analytics" // Analytics & monitoring
+  | "communication" // Email, notifications, messaging
+  | "utility" // General utilities
+  | "user" // User-created nodes
+  | "composite"; // Composite/blueprint nodes
 
-  /** Node parameters */
-  parameters?: Record<string, unknown>;
+/**
+ * Runtime environments for nodes
+ */
+export type NodeRuntime = "typescript" | "python" | "rust" | "wasm" | "golang";
 
-  /** Workspace root directory */
-  workspaceRoot?: string;
+/**
+ * Icon identifiers for UI display
+ */
+export type NodeIcon =
+  | "file"
+  | "database"
+  | "cloud"
+  | "code-2"
+  | "wand-2"
+  | "zap"
+  | "cpu"
+  | "image"
+  | "mail"
+  | "message-square"
+  | "globe-2"
+  | "table-2"
+  | "terminal"
+  | "git-branch"
+  | "layers"
+  | "activity"
+  | "bar-chart"
+  | "lock"
+  | "unlock"
+  | "shield"
+  | "user"
+  | "users"
+  | "settings"
+  | "filter"
+  | "search"
+  | "plus"
+  | "minus"
+  | "check"
+  | "x"
+  | "alert-triangle"
+  | "info"
+  | "help-circle";
 
-  /** Temporary directory for execution */
-  tempDirectory?: string;
+/**
+ * Data types for node ports
+ */
+export type NodePortDataType =
+  | "string"
+  | "number"
+  | "boolean"
+  | "object"
+  | "array"
+  | "any"
+  | "buffer"
+  | "stream"
+  | "date"
+  | "regex"
+  | "json"
+  | "xml"
+  | "html"
+  | "markdown"
+  | "csv"
+  | "binary";
 
-  /** Execution start time */
-  startTime: Date;
+/**
+ * Node port types
+ */
+export type NodePortType =
+  | "input"
+  | "output"
+  | "trigger" // Special port type for event-driven nodes
+  | "error"; // Error output port
 
-  /** Execution limits and constraints */
-  limits: {
-    /** Maximum execution time in milliseconds */
-    maxExecutionTimeMs: number;
-    /** Maximum memory usage in MB */
-    maxMemoryMB?: number;
-    /** Maximum disk space in MB */
-    maxDiskSpaceMB?: number;
-  };
+/**
+ * UI control types for node parameter fields
+ */
+export type NodeFieldControlType =
+  | "text" // Text input
+  | "number" // Number input
+  | "boolean" // Checkbox/toggle
+  | "select" // Dropdown selection
+  | "textarea" // Multi-line text
+  | "file" // File picker
+  | "password" // Password input
+  | "email" // Email input
+  | "url" // URL input
+  | "date" // Date picker
+  | "datetime" // Date and time picker
+  | "color" // Color picker
+  | "range" // Range slider
+  | "json" // JSON editor
+  | "code" // Code editor with syntax highlighting
+  | "markdown" // Markdown editor
+  | "rich-text"; // Rich text editor
 
-  /** Progress reporting function */
-  reportProgress: (progress: number, message?: string) => void;
+// Re-export execution types for convenience
+export type {
+  NodeExecutionContext,
+  NodeExecutionResult,
+  NodeExecutionStatus,
+  NodeExecutionMode,
+  NodeInputs,
+  NodeOutputs,
+  NodeParameters,
+  NodeConfig,
+  PortData,
+  ExecutionMetadata,
+  ExecutionResultMetadata,
+} from "./exports/executable/execution-types";
 
-  /** Log message functions */
-  log: {
-    debug?: (message: string, data?: Record<string, unknown>) => void;
-    info?: (message: string, data?: Record<string, unknown>) => void;
-    warn?: (message: string, data?: Record<string, unknown>) => void;
-    error?: (message: string, data?: Record<string, unknown>) => void;
-  };
-
-  /** Whether to stop execution on first error (for composite nodes) */
-  stopOnError?: boolean;
-
-  /** Results from previously executed nodes (for composite nodes) */
-  previousResults?: Record<string, NodeExecutionResult>;
-
-  /** Abort signal for cancellation */
-  abortSignal?: AbortSignal;
-
-  /** Additional metadata */
-  metadata?: Record<string, unknown>;
-};
-
-export type NodeExecutionResult = {
-  /** Whether execution succeeded */
-  success: boolean;
-
-  /** Output data for connected ports */
-  outputs?: Record<string, unknown>;
-
-  /** Error message if execution failed */
-  error?: string;
-
-  /** Additional metadata about the execution */
-  metadata?: Record<string, unknown>;
-
-  /** Performance metrics */
-  metrics?: {
-    executionTime: number;
-    memoryUsed?: number;
-  };
-};
-
-import type { PortType, PortDataType } from "./base/types";
-
+/**
+ * Port definition for nodes
+ */
 export type NodePortDefinition = {
-  /** Unique port identifier */
+  /** Port identifier */
   id: string;
 
-  /** Display name for the port */
+  /** Display name */
   name: string;
 
-  /** Port type (input/output) */
-  type: PortType;
+  /** Port direction */
+  type: NodePortType;
 
-  /** Data type for this port */
-  dataType: PortDataType;
+  /** Expected data type */
+  dataType: NodePortDataType;
 
   /** Whether this port is required */
   required?: boolean;
@@ -107,8 +176,14 @@ export type NodePortDefinition = {
   defaultValue?: unknown;
 };
 
-export type NodeDefinition = {
-  /** Unique node type identifier */
+/**
+ * Node data structure for storage and editing
+ *
+ * This is the main type consumers work with.
+ * It represents a node's data, not its runtime instance.
+ */
+export type Node = {
+  /** Unique node identifier */
   id: string;
 
   /** Display name for the node */
@@ -120,33 +195,95 @@ export type NodeDefinition = {
   /** Node category for organization */
   category: string;
 
-  /** Node type for runtime identification */
-  type: string;
+  /** Node type (atomic/composite/custom) */
+  type: NodeType;
 
-  /** Version of this node definition */
+  /** Version of this node */
   version?: string;
 
-  /** Input port definitions */
+  /** Node metadata */
+  metadata?: {
+    /** The specific variant of this node (e.g., "csv-reader", "http-request") */
+    variant?: string;
+    /** Creation timestamp */
+    created?: string;
+    /** Last modified timestamp */
+    modified?: string;
+    /** Author of this node */
+    author?: string;
+    /** Source of this node (system/user/community) */
+    source?: NodeSource;
+    /** Tags for categorization */
+    tags?: string[];
+    /** Icon for UI display */
+    icon?: NodeIcon;
+    /** Documentation URL */
+    documentationUrl?: string;
+    /** Whether this node is experimental */
+    experimental?: boolean;
+    /** Whether this node is deprecated */
+    deprecated?: boolean;
+    /** Custom metadata */
+    [key: string]: unknown;
+  };
+
+  /** For atomic nodes: port definitions */
   inputPorts?: NodePortDefinition[];
-
-  /** Output port definitions */
   outputPorts?: NodePortDefinition[];
+  parameters?: Record<string, unknown>;
 
-  /** Icon identifier for UI */
-  icon?: string;
+  /** For composite nodes: child nodes and edges */
+  nodes?: Node[];
+  edges?: NodeEdge[];
+  variables?: Record<string, unknown>;
 
-  /** Default configuration for this node */
-  defaultConfig?: Record<string, unknown>;
+  /** Settings for execution and UI */
+  settings?: {
+    runtime?: {
+      timeout?: number;
+      retries?: number;
+      parallel?: boolean;
+    };
+    ui?: {
+      color?: string;
+      position?: { x: number; y: number };
+      size?: { width: number; height: number };
+    };
+  };
+};
 
-  /** Configuration schema for UI form generation */
-  configSchema?: Record<string, unknown>;
+/**
+ * Position in visual editor
+ */
+export type NodePosition = {
+  x: number;
+  y: number;
+};
 
-  /** Execute function for the node */
-  execute?: (
-    context: NodeExecutionContext,
-    config?: Record<string, unknown>,
-  ) => Promise<NodeExecutionResult>;
+/**
+ * Variable definition for parameterization
+ */
+export type NodeVariable = {
+  type: string;
+  defaultValue?: unknown;
+  description?: string;
+};
 
-  /** Additional metadata */
-  metadata?: Record<string, unknown>;
+/**
+ * Edge definition for connecting nodes
+ * Compatible with React Flow edge format
+ */
+export type NodeEdge = {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+  type?: string;
+  data?: Record<string, unknown>;
+  style?: Record<string, unknown>;
+  animated?: boolean;
+  hidden?: boolean;
+  deletable?: boolean;
+  selectable?: boolean;
 };

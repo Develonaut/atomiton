@@ -9,6 +9,7 @@ metadata:
   created: "2025-01-15T00:00:00Z"
   modified: "2025-01-15T00:00:00Z"
   author: "Atomiton Team"
+  source: "system"
   tags:
     - "data"
     - "transform"

@@ -6,18 +6,22 @@
 
 import { generateNodeId } from "@atomiton/utils";
 import { z } from "zod";
-import { createNodeMetadata } from "../base/createNodeMetadata";
-import { createNodeParameters } from "../base/createNodeParameters";
-import type { CompositeEdge, ICompositeNode, INode } from "../base/INode";
-import type { NodeCategory } from "../base/types";
+import { createAtomicMetadata } from "../atomic/createAtomicMetadata";
+import { createAtomicParameters } from "../atomic/createAtomicParameters";
+import type {
+  CompositeEdge,
+  ICompositeNode,
+  IExecutableNode,
+} from "../interfaces/IExecutableNode";
+import type { NodeCategory } from "../types";
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
-  NodePortDefinition,
-} from "../types";
+} from "../exports/executable/execution-types";
+import type { NodePortDefinition } from "../types";
 import type { CompositeNodeSpec } from "./types";
 import { createCompositeGraph } from "./createCompositeGraph";
-import { createCompositeLogic } from "./createCompositeLogic";
+import { createCompositeExecutable } from "./createCompositeExecutable";
 import { createCompositePorts } from "./createCompositePorts";
 import { validateNodeTypesStrict } from "./validation/validateNodeTypes";
 
@@ -26,7 +30,7 @@ export type CompositeNodeInput = {
   name: string;
   description: string;
   category: string;
-  nodes?: INode[];
+  nodes?: IExecutableNode[];
   edges?: CompositeEdge[];
   variables?: Record<string, unknown>;
   settings?: {
@@ -70,7 +74,7 @@ export function createCompositeNode(
 
     if (hasFullNodes) {
       try {
-        validateNodeTypesStrict(input.nodes as INode[]);
+        validateNodeTypesStrict(input.nodes as IExecutableNode[]);
       } catch (error) {
         throw new Error(
           `Failed to create composite node "${input.name}": ${error instanceof Error ? error.message : String(error)}`,
@@ -83,12 +87,12 @@ export function createCompositeNode(
   // Create graph for child nodes and edges
   // Type assertion: CompositeNodeSpec[] can be treated as INode[] at runtime
   const graph = createCompositeGraph(
-    (input.nodes || []) as INode[],
+    (input.nodes || []) as IExecutableNode[],
     input.edges || [],
   );
 
   // Create metadata for the composite
-  const metadata = createNodeMetadata({
+  const metadata = createAtomicMetadata({
     id,
     name: input.name,
     description: input.description,
@@ -98,7 +102,7 @@ export function createCompositeNode(
   });
 
   // Create parameters for composite settings
-  const parameters = createNodeParameters(
+  const parameters = createAtomicParameters(
     {
       timeout: z.number().default(30000),
       retries: z.number().default(1),
@@ -128,8 +132,8 @@ export function createCompositeNode(
     },
   );
 
-  // Create logic for execution (to be used in future implementation)
-  createCompositeLogic({
+  // Create executable for execution (to be used in future implementation)
+  const compositeExecutable = createCompositeExecutable({
     id,
     nodes: graph.getChildNodes(),
     edges: graph.getExecutionFlow(),
@@ -145,10 +149,9 @@ export function createCompositeNode(
   return {
     id,
     name: input.name,
-    type: "composite",
+    type: "composite" as const,
     metadata,
     parameters,
-    isComposite: true,
 
     get inputPorts(): NodePortDefinition[] {
       return ports.input;
@@ -159,15 +162,15 @@ export function createCompositeNode(
     },
 
     async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
-      // Refresh logic with current nodes and edges
-      const currentLogic = createCompositeLogic({
+      // Refresh executable with current nodes and edges
+      const currentExecutable = createCompositeExecutable({
         id,
         nodes: graph.getChildNodes(),
         edges: graph.getExecutionFlow(),
         settings: input.settings,
       });
 
-      return currentLogic.execute(context, parameters.withDefaults());
+      return currentExecutable.execute(context, parameters.withDefaults());
     },
 
     validate(): { valid: boolean; errors: string[] } {
@@ -200,11 +203,11 @@ export function createCompositeNode(
     // Delegate to graph
     getChildNodes: () => graph.getChildNodes(),
     getExecutionFlow: () => graph.getExecutionFlow(),
-    addChildNode: (node: INode) => graph.addChildNode(node),
+    addChildNode: (node: IExecutableNode) => graph.addChildNode(node),
     removeChildNode: (nodeId: string) => graph.removeChildNode(nodeId),
     connectNodes: (sourceId: string, targetId: string, edge: CompositeEdge) =>
       graph.connectNodes(sourceId, targetId, edge),
-    setChildNodes: (nodes: INode[]) => graph.setChildNodes(nodes),
+    setChildNodes: (nodes: IExecutableNode[]) => graph.setChildNodes(nodes),
     dispose: () => graph.dispose(),
   };
 }

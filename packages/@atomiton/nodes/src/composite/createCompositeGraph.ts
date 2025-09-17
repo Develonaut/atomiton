@@ -4,28 +4,29 @@
  * Manages the graph structure (nodes and edges) within a composite
  */
 
-import type { INode, CompositeEdge } from "../base/INode";
+import type { IExecutableNode } from "../interfaces/IExecutableNode";
+import type { CompositeEdge } from "../interfaces/IExecutableNode";
 
 export type CompositeGraph = {
-  getChildNodes(): INode[];
+  getChildNodes(): IExecutableNode[];
   getExecutionFlow(): CompositeEdge[];
-  addChildNode(node: INode): void;
+  addChildNode(node: IExecutableNode): void;
   removeChildNode(nodeId: string): boolean;
   connectNodes(sourceId: string, targetId: string, edge: CompositeEdge): void;
-  setChildNodes(nodes: INode[]): void;
+  setChildNodes(nodes: IExecutableNode[]): void;
   validate(): { valid: boolean; errors: string[] };
   dispose(): void;
 };
 
 export function createCompositeGraph(
-  initialNodes: INode[] = [],
+  initialNodes: IExecutableNode[] = [],
   initialEdges: CompositeEdge[] = [],
 ): CompositeGraph {
   const childNodes = [...initialNodes];
   const executionFlow = [...initialEdges];
 
   return {
-    getChildNodes(): INode[] {
+    getChildNodes(): IExecutableNode[] {
       return [...childNodes];
     },
 
@@ -33,7 +34,7 @@ export function createCompositeGraph(
       return [...executionFlow];
     },
 
-    addChildNode(node: INode): void {
+    addChildNode(node: IExecutableNode): void {
       childNodes.push(node);
     },
 
@@ -62,7 +63,7 @@ export function createCompositeGraph(
       executionFlow.push(edge);
     },
 
-    setChildNodes(nodes: INode[]): void {
+    setChildNodes(nodes: IExecutableNode[]): void {
       childNodes.splice(0, childNodes.length, ...nodes);
     },
 
