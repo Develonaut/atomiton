@@ -1,7 +1,7 @@
 import type {
   NodeExecutionContext,
   CompositeDefinition,
-} from "@atomiton/nodes";
+} from "@atomiton/nodes/executable";
 
 /**
  * Execution request with input data

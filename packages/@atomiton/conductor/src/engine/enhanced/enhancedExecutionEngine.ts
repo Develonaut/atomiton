@@ -2,7 +2,7 @@
  * Enhanced execution engine factory using functional approach
  */
 
-import type { CompositeDefinition } from "@atomiton/nodes";
+import type { CompositeDefinition } from "@atomiton/nodes/executable";
 import { generateExecutionId } from "@atomiton/utils";
 import {
   createCompositeRunner,

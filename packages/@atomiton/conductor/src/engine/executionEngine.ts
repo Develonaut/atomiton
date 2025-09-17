@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import type {
   NodeExecutionContext,
   CompositeDefinition,
-} from "@atomiton/nodes";
+} from "@atomiton/nodes/executable";
 import type {
   IExecutionEngine,
   ExecutionRequest,

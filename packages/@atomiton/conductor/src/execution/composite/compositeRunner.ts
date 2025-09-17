@@ -6,7 +6,7 @@ import type {
   CompositeDefinition,
   INode,
   NodeExecutionResult,
-} from "@atomiton/nodes";
+} from "@atomiton/nodes/executable";
 import type { ExecutionStatus } from "../../interfaces/IExecutionEngine";
 import PQueue from "p-queue";
 import { type ExecutionStore } from "../../store";

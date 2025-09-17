@@ -2,7 +2,7 @@ import type {
   INode,
   NodeExecutionContext,
   NodeExecutionResult,
-} from "@atomiton/nodes";
+} from "@atomiton/nodes/executable";
 import type { IRuntime, RuntimeLanguage } from "../interfaces/IRuntime";
 import { createTypeScriptRuntime } from "./typeScriptRuntime";
 

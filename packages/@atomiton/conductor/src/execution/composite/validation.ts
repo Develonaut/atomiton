@@ -2,7 +2,7 @@
  * Validation functions for composite definitions
  */
 
-import type { CompositeDefinition, INode } from "@atomiton/nodes";
+import type { CompositeDefinition, INode } from "@atomiton/nodes/executable";
 import type { CompositeValidationResult } from "./types";
 
 /**

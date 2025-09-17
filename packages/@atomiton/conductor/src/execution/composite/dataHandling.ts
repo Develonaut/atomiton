@@ -2,7 +2,10 @@
  * Data handling functions for composite execution
  */
 
-import type { CompositeDefinition, NodeExecutionResult } from "@atomiton/nodes";
+import type {
+  CompositeDefinition,
+  NodeExecutionResult,
+} from "@atomiton/nodes/executable";
 import type { ExecutionStore } from "../../store";
 
 /**

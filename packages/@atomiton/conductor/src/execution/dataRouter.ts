@@ -1,4 +1,4 @@
-import type { CompositeEdge } from "@atomiton/nodes";
+import type { CompositeEdge } from "@atomiton/nodes/executable";
 
 /**
  * Connection between nodes in a Blueprint

@@ -2,7 +2,7 @@
  * Execution graph building for composite workflows
  */
 
-import type { CompositeDefinition } from "@atomiton/nodes";
+import type { CompositeDefinition } from "@atomiton/nodes/executable";
 import type { ExecutionGraph } from "./types";
 
 /**
