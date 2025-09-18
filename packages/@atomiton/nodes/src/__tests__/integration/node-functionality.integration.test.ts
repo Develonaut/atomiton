@@ -103,7 +103,15 @@ describe("Node Functionality Integration", () => {
         name: "Node Composite",
         description: "Test with nodes",
         category: "test",
-        nodes: [{ id: "node1", type: "code", position: { x: 0, y: 0 } }],
+        nodes: [
+          {
+            id: "node1",
+            name: "Code Node",
+            category: "logic",
+            type: "code",
+            position: { x: 0, y: 0 },
+          },
+        ],
         edges: [],
       });
 

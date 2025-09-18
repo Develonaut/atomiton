@@ -7,8 +7,8 @@
 
 import { yaml } from "@atomiton/yaml";
 import type { Node } from "../types";
-import type { TransformationResult } from "./fromYaml";
 import type { ValidationError } from "../validation/types";
+import type { TransformationResult } from "./fromYaml";
 
 /**
  * Convert Node data structure to YAML string
@@ -51,8 +51,8 @@ export function toYaml(
 
     // Convert to YAML
     const yamlString = yaml.toYaml(node, {
-      indent: options.pretty ? 2 : undefined,
-      lineWidth: options.pretty ? 80 : undefined,
+      indent: options.pretty ? 2 : 2, // Default to 2 spaces
+      lineWidth: options.pretty ? 80 : 120,
     });
 
     return {

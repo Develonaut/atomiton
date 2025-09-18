@@ -20,7 +20,7 @@ describe("@atomiton/nodes API Smoke Tests", () => {
       expect(BrowserAPI.createCompositeNode).toBeDefined();
       expect(BrowserAPI.fromYaml).toBeDefined();
       expect(BrowserAPI.toYaml).toBeDefined();
-      expect(BrowserAPI.compositeTemplates).toBeDefined();
+      expect(BrowserAPI.templates).toBeDefined();
     });
 
     it("exports validation utilities", () => {
@@ -40,9 +40,9 @@ describe("@atomiton/nodes API Smoke Tests", () => {
     });
 
     it("templates are valid", () => {
-      expect(BrowserAPI.compositeTemplates.length).toBeGreaterThan(0);
-      BrowserAPI.compositeTemplates.forEach((t) => {
-        expect(t.definition.name).toBeDefined();
+      expect(BrowserAPI.templates.length).toBeGreaterThan(0);
+      BrowserAPI.templates.forEach((t) => {
+        expect(t.name).toBeDefined();
       });
     });
   });

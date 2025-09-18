@@ -9,33 +9,162 @@ metadata:
   created: "2025-01-15T00:00:00Z"
   modified: "2025-01-15T00:00:00Z"
   author: "Atomiton Team"
+  authorId: "atomiton-team"
   source: "system"
+  variant: "hello-world"
+  icon: "message-square"
   tags:
     - "example"
     - "beginner"
     - "text"
+  keywords:
+    - "hello"
+    - "world"
+    - "greeting"
+    - "starter"
+    - "tutorial"
+  runtime:
+    language: "typescript"
+  experimental: false
+  deprecated: false
+  documentationUrl: "https://docs.atomiton.com/nodes/hello-world"
 
 nodes:
   - id: "greeting-code"
     type: "code"
+    name: "Generate Greeting"
+    category: "logic"
+    version: "1.0.0"
+
+    metadata:
+      id: "code"
+      name: "Code"
+      variant: "code"
+      version: "1.0.0"
+      author: "Atomiton Core Team"
+      description: "Execute custom JavaScript/TypeScript code"
+      category: "logic"
+      icon: "code-2"
+      source: "system"
+      experimental: false
+      deprecated: false
+
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: false
+
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
+
+    parameters:
+      code:
+        type: "string"
+        default: "// Write your JavaScript code here\nreturn data;"
+        control: "code"
+      inputParams:
+        type: "string"
+        default: "data"
+      returnType:
+        type: "string"
+        default: "any"
+        options: ["any", "string", "number", "boolean", "object", "array"]
+      async:
+        type: "boolean"
+        default: false
+
+    data:
+      code: "// Greeting function\nconst greeting = 'Hello, World!';\nreturn { message: greeting };"
+      inputParams: "data"
+      returnType: "object"
+      async: false
+      customLabel: "Generate Greeting"
+      lastModified: "2025-01-15T10:00:00Z"
+
     position:
       x: 100
       y: 100
-    data:
-      code: "return { message: 'Hello, World!' };"
+
+    settings:
+      ui:
+        position:
+          x: 100
+          y: 100
 
   - id: "display-transform"
     type: "transform"
+    name: "Transform to Uppercase"
+    category: "data"
+    version: "1.0.0"
+
+    metadata:
+      id: "transform"
+      name: "Transform"
+      variant: "transform"
+      version: "1.0.0"
+      author: "Atomiton Core Team"
+      description: "Transform data using JavaScript expressions"
+      category: "data"
+      icon: "wand-2"
+      source: "system"
+      experimental: false
+      deprecated: false
+
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: true
+
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
+
+    parameters:
+      expression:
+        type: "string"
+        default: "return data;"
+        control: "code"
+      inputType:
+        type: "string"
+        default: "any"
+        options: ["any", "string", "number", "boolean", "object", "array"]
+      outputType:
+        type: "string"
+        default: "any"
+        options: ["any", "string", "number", "boolean", "object", "array"]
+
+    data:
+      expression: "// Transform to uppercase\nreturn data.message.toUpperCase();"
+      inputType: "object"
+      outputType: "string"
+      customLabel: "Transform to Uppercase"
+      lastModified: "2025-01-15T10:00:00Z"
+
     position:
       x: 400
       y: 100
-    data:
-      expression: "data.message.toUpperCase()"
+
+    settings:
+      ui:
+        position:
+          x: 400
+          y: 100
 
 edges:
   - id: "greeting-code-display-transform"
     source: "greeting-code"
     target: "display-transform"
+    sourceHandle: "output"
+    targetHandle: "input"
 
 variables:
   greeting:

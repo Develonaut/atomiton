@@ -30,69 +30,66 @@ export { validateComposite } from "../../composite/validation/validateComposite"
 // Data types (what you store and edit)
 export type {
   Node,
-  NodeType,
-  NodeEdge,
-  NodePosition,
-  NodeVariable,
   NodeCategory,
+  NodeEdge,
+  NodeFieldControlType,
   NodeIcon,
+  NodePortDataType,
+  NodePortDefinition,
+  NodePortType,
+  NodePosition,
   NodeRuntime,
   NodeSource,
-  NodePortType,
-  NodePortDataType,
-  NodeFieldControlType,
-  NodePortDefinition,
+  NodeType,
+  NodeVariable,
 } from "../../types";
 
 // Composite types
-export type { CompositeDefinition } from "../../composite/types";
+export type {
+  CompositeDefinition,
+  CompositeNodeSpec,
+} from "../../composite/types";
 
 // Validation utilities
 export {
-  validateMetadata,
   createValidationError,
   formatValidationErrors,
   hasCriticalErrors,
+  validateMetadata,
   type ValidationError,
   type ValidationResult,
   type ValidationSeverity,
 } from "../../validation";
 
-// Transformation utilities
+// Transformation utilities (use composite versions for resilience)
 export {
   fromYaml,
   toYaml,
   type TransformationOptions,
   type TransformationResult,
-} from "../../transform";
+} from "../../composite/transform";
 
 // Schema definitions
 export {
-  NodeSchema,
+  NodeEdgeSchema,
   NodeMetadataSchema,
   NodePortDefinitionSchema,
-  NodeEdgeSchema,
   NodePositionSchema,
+  NodeSchema,
   NodeSettingsSchema,
 } from "../../schemas/node-schema";
 
 // Node discovery utilities
 export {
-  getNodesByCategory,
-  getNodes,
   getNodeByType,
+  getNodes,
+  getNodesByCategory,
   getNodeTypes,
 } from "../../atomic/nodes/utils";
 
-// Template utilities
-export {
-  compositeTemplates,
-  getAllTemplates,
-  getTemplatesByDifficulty,
-  getTemplatesByTag,
-  type Template,
-  type CompositeTemplate,
-} from "../../composite/templates";
+// Templates
+export { getAllTemplates, templates } from "../../composite/templates";
+export type { TemplateWithDefinition } from "../../composite/templates";
 
 // Constants
 export {
@@ -102,10 +99,10 @@ export {
 
 // Utility functions (browser-safe subset)
 export {
-  createSuccessResult,
   createErrorResult,
-  getInputValue,
+  createSuccessResult,
   getAllInputValues,
+  getInputValue,
   validateRequiredInputs,
 } from "../../utils";
 
@@ -144,8 +141,8 @@ export { transformPorts } from "../../atomic/nodes/transform/ports";
 
 // Version management
 export {
-  updateNodeVersion,
   getVersionUpdateOptions,
+  updateNodeVersion,
 } from "../../updateNodeVersion";
 export type {
   UpdateNodeVersionInput,
@@ -153,12 +150,12 @@ export type {
   VersionUpdateType,
 } from "../../updateNodeVersion";
 export {
-  parseVersion,
   compareVersions,
-  isValidVersionUpgrade,
-  incrementVersion,
-  validateInitialVersion,
   getNextVersionOptions,
+  incrementVersion,
+  isValidVersionUpgrade,
+  parseVersion,
+  validateInitialVersion,
 } from "../../validation/version";
 export type {
   SemanticVersion,

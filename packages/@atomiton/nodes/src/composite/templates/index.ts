@@ -1,10 +1,3 @@
-/**
- * Composite Node Templates
- *
- * Predefined composite nodes (blueprints) that can be used as starting points
- * or examples. These are fully validated CompositeDefinitions.
- */
-
 import { fromYaml } from "../transform/fromYaml";
 import type { CompositeDefinition } from "../types";
 import { validateNodeTypesStrict } from "../validation/validateNodeTypes";
@@ -23,17 +16,6 @@ export const TEMPLATE_IDS = {
   DATA_TRANSFORM: "550e8400-e29b-41d4-a716-446655440002",
   IMAGE_PROCESSOR: "550e8400-e29b-41d4-a716-446655440003",
 } as const;
-
-/**
- * Composite template with metadata
- */
-export type CompositeTemplate = {
-  id: string;
-  definition: CompositeDefinition;
-  yaml: string;
-  tags: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
-};
 
 /**
  * Parse and validate template YAML
@@ -69,66 +51,25 @@ function parseTemplate(yaml: string, id: string): CompositeDefinition {
 /**
  * Predefined composite templates
  */
-export const compositeTemplates: CompositeTemplate[] = [
-  {
-    id: TEMPLATE_IDS.HELLO_WORLD,
-    definition: parseTemplate(helloWorldYaml, TEMPLATE_IDS.HELLO_WORLD),
-    yaml: helloWorldYaml,
-    tags: ["example", "beginner", "text"],
-    difficulty: "beginner",
-  },
-  {
-    id: TEMPLATE_IDS.DATA_TRANSFORM,
-    definition: parseTemplate(dataTransformYaml, TEMPLATE_IDS.DATA_TRANSFORM),
-    yaml: dataTransformYaml,
-    tags: ["data", "transform", "etl"],
-    difficulty: "intermediate",
-  },
-  {
-    id: TEMPLATE_IDS.IMAGE_PROCESSOR,
-    definition: parseTemplate(imageProcessorYaml, TEMPLATE_IDS.IMAGE_PROCESSOR),
-    yaml: imageProcessorYaml,
-    tags: ["image", "processing", "media"],
-    difficulty: "advanced",
-  },
+export const templates: CompositeDefinition[] = [
+  parseTemplate(helloWorldYaml, TEMPLATE_IDS.HELLO_WORLD),
+  parseTemplate(dataTransformYaml, TEMPLATE_IDS.DATA_TRANSFORM),
+  parseTemplate(imageProcessorYaml, TEMPLATE_IDS.IMAGE_PROCESSOR),
 ];
 
 /**
- * Get a composite template by ID
+ * Template wrapper type for testing and backwards compatibility
  */
-export function getCompositeTemplate(
-  id: string,
-): CompositeTemplate | undefined {
-  return compositeTemplates.find((template) => template.id === id);
-}
+export type TemplateWithDefinition = {
+  definition: CompositeDefinition;
+};
 
 /**
- * Get all composite templates
+ * Get all templates in the format expected by tests
+ * Returns templates wrapped with a definition property for compatibility
  */
-export function getAllCompositeTemplates(): CompositeTemplate[] {
-  return compositeTemplates;
+export function getAllTemplates(): TemplateWithDefinition[] {
+  return templates.map((template) => ({
+    definition: template,
+  }));
 }
-
-/**
- * Get templates by tag
- */
-export function getTemplatesByTag(tag: string): CompositeTemplate[] {
-  return compositeTemplates.filter((template) =>
-    template.tags.includes(tag.toLowerCase()),
-  );
-}
-
-/**
- * Get templates by difficulty
- */
-export function getTemplatesByDifficulty(
-  difficulty: CompositeTemplate["difficulty"],
-): CompositeTemplate[] {
-  return compositeTemplates.filter(
-    (template) => template.difficulty === difficulty,
-  );
-}
-
-// Export aliases for simplified API
-export type Template = CompositeTemplate;
-export const getAllTemplates = getAllCompositeTemplates;

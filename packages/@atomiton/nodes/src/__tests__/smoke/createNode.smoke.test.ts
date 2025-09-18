@@ -190,6 +190,7 @@ describe("createNode Smoke Test", () => {
           name: "Code Node",
           category: "transform",
           type: "atomic",
+          position: { x: 100, y: 100 },
           data: { code: "return input * 2" },
         },
         {
@@ -197,6 +198,7 @@ describe("createNode Smoke Test", () => {
           name: "Transform Node",
           category: "transform",
           type: "atomic",
+          position: { x: 300, y: 100 },
           data: { expression: "$.value" },
         },
       ];

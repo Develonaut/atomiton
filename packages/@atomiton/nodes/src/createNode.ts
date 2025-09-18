@@ -7,11 +7,12 @@
  */
 
 import { generateNodeId } from "@atomiton/utils";
-import type { Node } from "./types";
+import type { CompositeDefinition, CompositeNodeSpec } from "./composite/types";
+import type { Node, NodeEdge } from "./types";
 import {
+  createVersionLock,
   parseVersion,
   validateInitialVersion,
-  createVersionLock,
 } from "./validation/version";
 
 export type CreateNodeInput = {
@@ -26,9 +27,9 @@ export type CreateNodeInput = {
   type?: "atomic" | "composite";
 
   // For composite nodes
-  nodes?: Node["nodes"];
-  edges?: Node["edges"];
-  variables?: Node["variables"];
+  nodes?: CompositeNodeSpec[];
+  edges?: NodeEdge[];
+  variables?: Record<string, unknown>;
 
   // For atomic nodes
   inputPorts?: Node["inputPorts"];
@@ -39,11 +40,18 @@ export type CreateNodeInput = {
   metadata?: Partial<Node["metadata"]>;
 };
 
+// Function overloads for better type inference
+export function createNode(
+  input: CreateNodeInput & { type: "composite" },
+): CompositeDefinition;
+export function createNode(input: CreateNodeInput & { type: "atomic" }): Node;
+export function createNode(input: CreateNodeInput): CompositeDefinition; // Default case (type defaults to composite)
+
 /**
  * Create a node data structure
  *
  * @param input - Node configuration
- * @returns Node data structure for storage/editing
+ * @returns Node data structure for storage/editing (CompositeDefinition for composite nodes, Node for atomic)
  */
 export function createNode(input: CreateNodeInput): Node {
   const id = input.id || generateNodeId();

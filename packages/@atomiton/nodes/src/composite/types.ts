@@ -26,15 +26,12 @@ export type CompositeSettings = {
 
 /**
  * Child node specification within a composite
- * Compatible with visual editor node format
+ * A full Node with required position for visual editor
  */
-export type CompositeNodeSpec = {
-  id: string;
-  type: string;
+export type CompositeNodeSpec = Node & {
   position: CompositePosition;
-  data?: Record<string, unknown>;
 
-  // Visual editor properties
+  // Additional visual editor properties
   width?: number;
   height?: number;
   parentId?: string;
