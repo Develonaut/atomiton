@@ -204,11 +204,13 @@ export function createExecutionStore(storeId = "default") {
   const getExecution = (executionId: string): ExecutionRecord | undefined =>
     executionStore.getState().executions[executionId];
 
-  const getActiveExecutions = (): ExecutionRecord[] =>
-    Object.values(executionStore.getState().executions).filter(
-      (execution: ExecutionRecord) =>
+  const getActiveExecutions = (): ExecutionRecord[] => {
+    const executions = Object.values(executionStore.getState().executions) as ExecutionRecord[];
+    return executions.filter(
+      (execution) =>
         execution.status === "running" || execution.status === "pending",
-    ) as ExecutionRecord[];
+    );
+  };
 
   const getExecutionVariable = (executionId: string, key: string): unknown =>
     executionStore.getState().executions[executionId]?.variables[key];

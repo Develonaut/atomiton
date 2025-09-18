@@ -147,7 +147,7 @@ export function createTypeScriptRuntime(): TypeScriptRuntimeInstance {
       const executionContext = applyOptions(context, options);
 
       // Execute the node directly
-      const result = await executeWithTimeout(
+      const result: NodeExecutionResult = await executeWithTimeout(
         () => node.execute(executionContext),
         options?.timeout ?? context.limits?.maxExecutionTimeMs ?? 30000,
       );
