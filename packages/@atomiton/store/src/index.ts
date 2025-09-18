@@ -6,6 +6,7 @@
 
 import { kebabCase } from "@atomiton/utils";
 import { enableMapSet } from "immer";
+import type { StoreApi, UseBoundStore } from "zustand";
 import { create } from "zustand";
 import type { PersistOptions, PersistStorage } from "zustand/middleware";
 import { devtools, persist } from "zustand/middleware";
@@ -69,7 +70,7 @@ export type StoreConfig<T> = {
 export function createStore<T extends object>(
   initializer: StateCreator<T>,
   config: StoreConfig<T> = {},
-): Store<T> {
+): Store<T> & { useStore: UseBoundStore<StoreApi<T>> } {
   const { name = "Store", persist: persistConfig } = config;
 
   // Auto-format name: prefix with "atomiton-" and convert to kebab-case
@@ -78,44 +79,42 @@ export function createStore<T extends object>(
   // Create the basic store creator with Immer
   const storeCreator = immer<T>(() => initializer());
 
+  let zustandStore;
+
   // Non-persisted store
   if (!persistConfig) {
-    const store = create<T>()(
+    zustandStore = create<T>()(
       devtools(storeCreator, {
         name: formattedName,
         enabled: process.env.NODE_ENV === "development",
       }),
     );
-    return store as Store<T>;
+  } else {
+    // Persisted store
+    const { key = "persisted", ...restPersistConfig } = persistConfig;
+
+    const persistOptions: PersistOptions<T, T> = {
+      name: `store:${key}`,
+      ...restPersistConfig,
+    } as PersistOptions<T, T>;
+
+    const persistedStore = persist(storeCreator, persistOptions);
+
+    zustandStore = create<T>()(
+      devtools(persistedStore, {
+        name: `${formattedName}:${key}`,
+        enabled: process.env.NODE_ENV === "development",
+      }),
+    );
   }
 
-  // Persisted store
-  const { key = "persisted", ...restPersistConfig } = persistConfig;
+  // Create a vanilla store interface that also has the React hook
+  const store = {
+    getState: zustandStore.getState,
+    setState: zustandStore.setState,
+    subscribe: zustandStore.subscribe,
+    useStore: zustandStore,
+  };
 
-  const persistOptions: PersistOptions<T, T> = {
-    name: `store:${key}`, // Key prefix to avoid collisions
-    ...restPersistConfig,
-  } as PersistOptions<T, T>;
-
-  const persistedStore = persist(storeCreator, persistOptions);
-
-  const store = create<T>()(
-    devtools(persistedStore, {
-      name: `${formattedName}:${key}`,
-      enabled: process.env.NODE_ENV === "development",
-    }),
-  );
-
-  return store as Store<T>;
+  return store as Store<T> & { useStore: UseBoundStore<StoreApi<T>> };
 }
-
-// ============================================================================
-// Re-exports
-// ============================================================================
-
-// Re-export Zustand's useStore hook for React integration
-// TODO: Add useStore as a return value from createStore to ensure type safety.
-export { useStore } from "zustand";
-
-// Re-export shallow for performance optimizations
-export { shallow } from "zustand/shallow";
