@@ -81,6 +81,7 @@ export {
   getNodesByCategory,
   getNodes,
   getNodeByType,
+  getNodeTypes,
 } from "../../atomic/nodes/utils";
 
 // Template utilities

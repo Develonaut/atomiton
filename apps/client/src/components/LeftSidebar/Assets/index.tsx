@@ -1,9 +1,9 @@
-import { useNodes } from "@atomiton/editor";
+import { useAddNode } from "@atomiton/editor";
 import { getNodesByCategory } from "@atomiton/nodes/browser";
 import Accordion from "./Accordion";
 
 function Assets() {
-  const { addNode } = useNodes();
+  const { addNode } = useAddNode();
   const nodesByCategory = getNodesByCategory();
 
   return (

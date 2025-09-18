@@ -10,10 +10,10 @@ function LayoutEditor() {
   const { state: locationState } = useLocation();
 
   // Validate and sanitize location state
-  const initialNodes = Array.isArray(locationState?.defaultNodes)
+  const defaultNodes = Array.isArray(locationState?.defaultNodes)
     ? locationState.defaultNodes
     : [];
-  const initialEdges = Array.isArray(locationState?.defaultEdges)
+  const defaultEdges = Array.isArray(locationState?.defaultEdges)
     ? locationState.defaultEdges
     : [];
 
@@ -43,7 +43,7 @@ function LayoutEditor() {
       <Editor>
         <Box className="absolute inset-0">
           <Box className="relative w-full h-full">
-            <Canvas key={id} nodes={initialNodes} edges={initialEdges}>
+            <Canvas defaultNodes={defaultNodes} defaultEdges={defaultEdges}>
               <Canvas.Grid variant="dots" gap={12} size={1} />
               <Canvas.Minimap
                 placement="bottom-right"

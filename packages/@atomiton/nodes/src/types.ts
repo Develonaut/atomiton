@@ -232,7 +232,7 @@ export type Node = {
   outputPorts?: NodePortDefinition[];
   parameters?: Record<string, unknown>;
 
-  /** Node data for parameters */
+  /** Node data for parameters and runtime execution */
   data?: Record<string, unknown>;
 
   /** For composite nodes: child nodes and edges */

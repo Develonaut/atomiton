@@ -431,6 +431,9 @@ importers:
       '@atomiton/ui':
         specifier: workspace:*
         version: link:../ui
+      '@atomiton/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@xyflow/react':
         specifier: ^12.0.0
         version: 12.8.5(@types/react@19.1.13)(immer@10.1.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)

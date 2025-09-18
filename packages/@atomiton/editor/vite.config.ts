@@ -7,6 +7,7 @@ export default defineReactLibraryConfig({
     "@atomiton/hooks",
     "@atomiton/nodes",
     "@atomiton/store",
+    "@atomiton/utils",
     "@atomiton/ui",
     "@xyflow/react",
   ],

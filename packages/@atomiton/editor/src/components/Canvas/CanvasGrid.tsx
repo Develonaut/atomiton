@@ -1,7 +1,7 @@
 import { Background, BackgroundVariant } from "@xyflow/react";
 import { styled } from "@atomiton/ui";
 
-export type CanvasGridProps = {
+type CanvasGridProps = {
   className?: string;
   variant?: "dots" | "lines" | "cross";
   gap?: number;
@@ -23,7 +23,6 @@ export function CanvasGrid({
   color = "#e2e2e2",
   ...props
 }: CanvasGridProps) {
-  // Convert string variant to BackgroundVariant enum
   const bgVariant =
     variant === "dots"
       ? BackgroundVariant.Dots

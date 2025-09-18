@@ -1,5 +1,6 @@
 export { delay } from "./delay";
 export {
+  generateEdgeId,
   generateExecutionId,
   generateId,
   generateJobId,

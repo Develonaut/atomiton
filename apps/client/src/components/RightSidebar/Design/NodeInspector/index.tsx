@@ -1,4 +1,4 @@
-import { useNodes } from "@atomiton/editor";
+import { useEditorNodes } from "@atomiton/editor";
 import { Form } from "@atomiton/form";
 import { getNodeByType } from "@atomiton/nodes/browser";
 import { Box } from "@atomiton/ui";
@@ -38,7 +38,22 @@ function FormErrorFallback({
  * Uses the Form component with automatic field generation from node schemas.
  */
 function NodeInspector() {
-  const { nodes: flowNodes, selectedId, updateNodeData } = useNodes();
+  const { setNodes, nodes } = useEditorNodes();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // TODO: Implement proper node selection state management
+  const updateNodeData = useCallback(
+    (nodeId: string, data: Record<string, unknown>) => {
+      setNodes((nodes) =>
+        nodes.map((node) =>
+          node.id === nodeId
+            ? { ...node, data: { ...node.data, ...data } }
+            : node,
+        ),
+      );
+    },
+    [setNodes],
+  );
   const [nodeConfig, setNodeConfig] = useState<Record<string, unknown> | null>(
     null,
   );
@@ -49,7 +64,7 @@ function NodeInspector() {
 
   // Find the selected node
   const selectedNode = selectedId
-    ? flowNodes.find((node) => node.id === selectedId)
+    ? nodes.find((node) => node.id === selectedId)
     : null;
 
   // Load node configuration when selection changes

@@ -1,0 +1,156 @@
+:root {
+  --atomiton-node-width: 80px;
+  --atomiton-node-height: 80px;
+  --atomiton-node-border-radius: 1.25rem;
+  --atomiton-node-border-width: 1px;
+  --atomiton-node-border-default: var(--color-s-01);
+  --atomiton-node-border-hover: var(--color-s-02);
+  --atomiton-node-border-selected: var(--color-shade-06);
+  --atomiton-node-background: var(--color-surface-01);
+  --atomiton-node-shadow-hover: var(--box-shadow-prompt-input);
+  --atomiton-node-shadow-selected: var(--box-shadow-prompt-input);
+  --atomiton-node-inner-ring-color: var(--shade-02);
+  --atomiton-node-inner-ring-size: 4px;
+  --atomiton-handle-size: 12px;
+  --atomiton-handle-border-width: 2px;
+  --atomiton-handle-border-color: var(--shade-01);
+  --atomiton-handle-bg-default: var(--atomiton-node-border-default);
+  --atomiton-handle-bg-hover: var(--atomiton-node-border-hover);
+  --atomiton-handle-bg-selected: var(--atomiton-node-border-selected);
+  --atomiton-transition-duration: 0.2s;
+  --atomiton-transition-easing: ease;
+}
+
+.react-flow__node,
+.react-flow__node-input,
+.react-flow__node-default,
+.react-flow__node-output,
+.react-flow__node-group {
+  width: var(--atomiton-node-width);
+  height: var(--atomiton-node-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--atomiton-node-border-radius);
+  border: var(--atomiton-node-border-width) solid var(--atomiton-node-border-default);
+  background-color: var(--atomiton-node-background);
+  cursor: pointer;
+  transition: border-color var(--atomiton-transition-duration) var(--atomiton-transition-easing);
+}
+
+.react-flow__node,
+.react-flow__node-input,
+.react-flow__node-default,
+.react-flow__node-output,
+.react-flow__node-group,
+.react-flow__node .atomiton-node,
+.react-flow__node-input .atomiton-node,
+.react-flow__node-default .atomiton-node,
+.react-flow__node-output .atomiton-node,
+.react-flow__node-group .atomiton-node {
+  border-radius: var(--atomiton-node-border-radius);
+}
+
+.react-flow__node .atomiton-node,
+.react-flow__node-input .atomiton-node,
+.react-flow__node-default .atomiton-node,
+.react-flow__node-output .atomiton-node,
+.react-flow__node-group .atomiton-node {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: box-shadow var(--atomiton-transition-duration) var(--atomiton-transition-easing);
+}
+
+.react-flow__node.selectable:hover,
+.react-flow__node-input.selectable:hover,
+.react-flow__node-default.selectable:hover,
+.react-flow__node-output.selectable:hover,
+.react-flow__node-group.selectable:hover {
+  border-color: var(--atomiton-node-border-hover);
+  box-shadow: none;
+}
+
+.react-flow__node.selectable:hover .atomiton-node,
+.react-flow__node-input.selectable:hover .atomiton-node,
+.react-flow__node-default.selectable:hover .atomiton-node,
+.react-flow__node-output.selectable:hover .atomiton-node,
+.react-flow__node-group.selectable:hover .atomiton-node {
+  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size) var(--atomiton-node-inner-ring-color) inset;
+}
+
+.react-flow__node.selectable.selected,
+.react-flow__node.selectable:focus,
+.react-flow__node.selectable:focus-visible,
+.react-flow__node-input.selectable.selected,
+.react-flow__node-input.selectable:focus,
+.react-flow__node-input.selectable:focus-visible,
+.react-flow__node-default.selectable.selected,
+.react-flow__node-default.selectable:focus,
+.react-flow__node-default.selectable:focus-visible,
+.react-flow__node-output.selectable.selected,
+.react-flow__node-output.selectable:focus,
+.react-flow__node-output.selectable:focus-visible,
+.react-flow__node-group.selectable.selected,
+.react-flow__node-group.selectable:focus,
+.react-flow__node-group.selectable:focus-visible {
+  border-color: var(--atomiton-node-border-selected);
+  box-shadow: var(--atomiton-node-shadow-selected);
+}
+
+.react-flow__node.selectable.selected .atomiton-node,
+.react-flow__node.selectable:focus .atomiton-node,
+.react-flow__node.selectable:focus-visible .atomiton-node,
+.react-flow__node-input.selectable.selected .atomiton-node,
+.react-flow__node-input.selectable:focus .atomiton-node,
+.react-flow__node-input.selectable:focus-visible .atomiton-node,
+.react-flow__node-default.selectable.selected .atomiton-node,
+.react-flow__node-default.selectable:focus .atomiton-node,
+.react-flow__node-default.selectable:focus-visible .atomiton-node,
+.react-flow__node-output.selectable.selected .atomiton-node,
+.react-flow__node-output.selectable:focus .atomiton-node,
+.react-flow__node-output.selectable:focus-visible .atomiton-node,
+.react-flow__node-group.selectable.selected .atomiton-node,
+.react-flow__node-group.selectable:focus .atomiton-node,
+.react-flow__node-group.selectable:focus-visible .atomiton-node {
+  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size) var(--atomiton-node-inner-ring-color) inset;
+}
+
+.react-flow__handle {
+  width: var(--atomiton-handle-size);
+  height: var(--atomiton-handle-size);
+  border: var(--atomiton-handle-border-width) solid var(--atomiton-handle-border-color);
+  background-color: var(--atomiton-handle-bg-default);
+  border-radius: 50%;
+  transition: background-color var(--atomiton-transition-duration) var(--atomiton-transition-easing);
+}
+
+.react-flow__node.selectable:hover .react-flow__handle,
+.react-flow__node-input.selectable:hover .react-flow__handle,
+.react-flow__node-default.selectable:hover .react-flow__handle,
+.react-flow__node-output.selectable:hover .react-flow__handle,
+.react-flow__node-group.selectable:hover .react-flow__handle {
+  background-color: var(--atomiton-handle-bg-hover);
+}
+
+.react-flow__node.selectable.selected .react-flow__handle,
+.react-flow__node.selectable:focus .react-flow__handle,
+.react-flow__node.selectable:focus-visible .react-flow__handle,
+.react-flow__node-input.selectable.selected .react-flow__handle,
+.react-flow__node-input.selectable:focus .react-flow__handle,
+.react-flow__node-input.selectable:focus-visible .react-flow__handle,
+.react-flow__node-default.selectable.selected .react-flow__handle,
+.react-flow__node-default.selectable:focus .react-flow__handle,
+.react-flow__node-default.selectable:focus-visible .react-flow__handle,
+.react-flow__node-output.selectable.selected .react-flow__handle,
+.react-flow__node-output.selectable:focus .react-flow__handle,
+.react-flow__node-output.selectable:focus-visible .react-flow__handle,
+.react-flow__node-group.selectable.selected .react-flow__handle,
+.react-flow__node-group.selectable:focus .react-flow__handle,
+.react-flow__node-group.selectable:focus-visible .react-flow__handle {
+  background-color: var(--atomiton-handle-bg-selected);
+}

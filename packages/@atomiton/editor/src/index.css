@@ -8,5 +8,5 @@
 /* React Flow styles - Required for proper node editor styling */
 @import "@xyflow/react/dist/style.css";
 
-/* Canvas Component Styles */
-@import "./components/Canvas/Canvas.css";
+/* Canvas styles  */
+@import "./components/Canvas/styles.css";

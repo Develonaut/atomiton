@@ -1,12 +1,15 @@
 import Export from "@/components/Export";
 import Icon from "@/components/Icon";
 import Zoom from "@/components/Zoom";
-import { useUndoRedo } from "@atomiton/editor";
 import { Box, Button } from "@atomiton/ui";
 import { useState } from "react";
 
 function Toolbar() {
-  const { canUndo, canRedo, undo, redo } = useUndoRedo();
+  // TODO: Re-implement undo/redo functionality
+  const canUndo = false;
+  const canRedo = false;
+  const undo = () => {};
+  const redo = () => {};
   const [active, setActive] = useState<number | null>(0);
 
   const actions = [

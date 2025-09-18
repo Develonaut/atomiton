@@ -1,12 +1,13 @@
 import { styled } from "@atomiton/ui";
-import { MiniMap, type Node } from "@xyflow/react";
+import { MiniMap } from "@xyflow/react";
+import type { EditorNode } from "../../hooks/useEditorNodes";
 
-export type CanvasMinimapProps = {
+type CanvasMinimapProps = {
   className?: string;
   show?: boolean;
   placement?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-  nodeColor?: (node: Node) => string;
-  nodeStrokeColor?: (node: Node) => string;
+  nodeColor?: (node: EditorNode) => string;
+  nodeStrokeColor?: (node: EditorNode) => string;
   nodeBorderRadius?: number;
 };
 

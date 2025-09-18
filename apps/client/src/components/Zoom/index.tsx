@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import Icon from "@/components/Icon";
-import { useZoom } from "@atomiton/editor";
+import { useEditorViewport } from "@atomiton/editor";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { useRef, useState } from "react";
 
 import { zoomOptions } from "./items";
 
@@ -34,7 +34,8 @@ function Line({ title, keyName, onClick, active }: PropsLine) {
 }
 
 function Zoom() {
-  const { zoom, zoomIn, zoomOut, zoomTo, fitView } = useZoom();
+  const { zoomPercent, zoom, zoomIn, zoomOut, zoomTo, fitView } =
+    useEditorViewport();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [activeId, setActiveId] = useState(2);
@@ -58,7 +59,7 @@ function Zoom() {
   return (
     <Popover className="relative group">
       <PopoverButton className="flex justify-between items-center gap-2 min-w-22 h-10 px-3 rounded-xl border border-s-01 bg-surface-03 text-heading outline-0 transition hover:border-shade-09/10 data-open:border-shade-09/10 data-open:shadow-[0_0px_2px_2px_#FFF_inset]">
-        {Math.round(zoom)}%
+        {zoomPercent}
         <Icon
           className="!size-4 fill-secondary transition-transform group-[[data-open]]:rotate-180"
           name="chevron"
