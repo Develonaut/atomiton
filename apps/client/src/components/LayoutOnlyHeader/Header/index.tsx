@@ -6,7 +6,7 @@ import Notifications from "@/components/Notifications";
 import User from "@/components/User";
 import Search from "@/components/Search";
 import Icon from "@/components/Icon";
-import { useScrollbarWidth } from "@/hooks";
+import { useScrollbarWidth } from "@/hooks/useScrollbarWidth";
 
 type Props = {
   className?: string;

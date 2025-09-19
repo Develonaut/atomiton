@@ -23,9 +23,22 @@ vi.mock("@/components/Templates", () => ({
   default: () => <div data-testid="templates">Templates</div>,
 }));
 
-vi.mock("@/stores/blueprint/hooks", () => ({
-  useTemplateBlueprints: () => ({ templates: [] }),
-  useUserBlueprints: () => ({ blueprints: [] }),
+vi.mock("@/store/useComposites", () => ({
+  useComposites: () => ({
+    composites: [],
+    isLoading: false,
+    error: null,
+    actions: {},
+  }),
+}));
+
+vi.mock("@/store/useTemplates", () => ({
+  useTemplates: () => ({
+    templates: [],
+    isLoading: false,
+    error: null,
+    actions: {},
+  }),
 }));
 
 vi.mock("@/components/LayoutEditor", () => ({

@@ -7,31 +7,43 @@ vi.mock("@/components/Templates", () => ({
   default: () => <div data-testid="templates">Templates Component</div>,
 }));
 
-// Mock the blueprint store to avoid dependencies
-vi.mock("@/stores/blueprint/store", () => ({
-  blueprintStore: {
-    getBlueprint: vi.fn(() => ({
-      id: "test-id",
-      nodes: [],
-      edges: [],
-    })),
+// Mock the stores to avoid dependencies
+vi.mock("@/store/templates", () => ({
+  templateStore: {
+    getState: vi.fn(() => ({ templates: [], isLoading: false, error: null })),
   },
 }));
 
-// Mock the hooks to avoid store dependencies
-vi.mock("@/stores/blueprint/hooks", () => ({
-  useTemplateBlueprints: () => ({ templates: [] }),
-  useUserBlueprints: () => ({ blueprints: [] }),
+vi.mock("@/store/composites", () => ({
+  compositeStore: {
+    getState: vi.fn(() => ({ composites: [], isLoading: false, error: null })),
+  },
 }));
 
-// Mock the main blueprint store hooks
-vi.mock("@/stores/blueprint", () => ({
-  useBlueprints: () => ({
-    blueprints: [
-      { id: "test-1", name: "Test Blueprint 1" },
-      { id: "test-2", name: "Test Blueprint 2" },
+// Mock the hooks to avoid store dependencies (already handled above)
+
+// Mock the main store hooks
+vi.mock("@/store/useComposites", () => ({
+  useComposites: () => ({
+    composites: [
+      { id: "test-1", name: "Test Composite 1" },
+      { id: "test-2", name: "Test Composite 2" },
     ],
     isLoading: false,
+    error: null,
+    actions: {},
+  }),
+}));
+
+vi.mock("@/store/useTemplates", () => ({
+  useTemplates: () => ({
+    templates: [
+      { id: "template-1", name: "Test Template 1" },
+      { id: "template-2", name: "Test Template 2" },
+    ],
+    isLoading: false,
+    error: null,
+    actions: {},
   }),
 }));
 

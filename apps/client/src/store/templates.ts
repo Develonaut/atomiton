@@ -4,10 +4,7 @@
  * Manages system-provided composite templates (read-only)
  */
 
-import {
-  compositeTemplates,
-  type CompositeDefinition,
-} from "@atomiton/nodes/browser";
+import { templates, type CompositeDefinition } from "@atomiton/nodes/browser";
 import { createStore } from "@atomiton/store";
 
 // Types
@@ -40,16 +37,16 @@ export const templateStore = createStore<TemplateState>(() => initialState, {
 // Actions
 export const templateActions: TemplateActions = {
   loadTemplates: () => {
-    templateStore.setState((state) => {
+    templateStore.setState((state: TemplateState) => {
       state.isLoading = true;
       state.error = null;
     });
 
     try {
       // Load templates from @atomiton/nodes package
-      const allTemplates = compositeTemplates;
+      const allTemplates = templates;
 
-      templateStore.setState((state) => {
+      templateStore.setState((state: TemplateState) => {
         state.templates = allTemplates;
         state.isLoading = false;
         state.error = null;
@@ -58,7 +55,7 @@ export const templateActions: TemplateActions = {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to load templates";
 
-      templateStore.setState((state) => {
+      templateStore.setState((state: TemplateState) => {
         state.isLoading = false;
         state.error = errorMessage;
       });
@@ -67,6 +64,8 @@ export const templateActions: TemplateActions = {
 
   getTemplate: (id: string) => {
     const state = templateStore.getState();
-    return state.templates.find((template) => template.id === id);
+    return state.templates.find(
+      (template: CompositeDefinition) => template.id === id,
+    );
   },
 };

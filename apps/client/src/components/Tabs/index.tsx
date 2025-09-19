@@ -3,7 +3,7 @@ import TabsList from "./TabsList";
 import TabsRoot from "./TabsRoot";
 import TabsTrigger from "./TabsTrigger";
 import TabsLegacy from "./TabsLegacy";
-import type { TabItem } from "@/types";
+import type { TabItem } from "@/types/tabs";
 
 // Check if props match legacy API
 function isLegacyProps(props: unknown): props is {

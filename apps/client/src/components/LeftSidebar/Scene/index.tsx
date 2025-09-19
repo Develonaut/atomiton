@@ -6,8 +6,8 @@ function Scene() {
 
   return (
     <div className="flex flex-col gap-1 p-3">
-      {nodes.map((item) => (
-        <Item item={item} key={item.id} selected={item.selected} />
+      {nodes.map((node) => (
+        <Item key={node.id} nodeId={node.id} />
       ))}
     </div>
   );

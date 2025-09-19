@@ -6,7 +6,7 @@ import Card from "./Card";
 type Props = {
   title: string;
   content: {
-    id: string | number;
+    id: string;
     title: string;
     category: string;
     image: string;

@@ -1,29 +1,29 @@
 import Catalog from "@/components/Catalog";
 import Layout from "@/components/Layout";
 import Templates from "@/components/Templates";
-import { useBlueprints } from "@/stores/blueprint";
+import { useComposites } from "@/store/useComposites";
 import { titleCase } from "@atomiton/utils";
 import { useMemo } from "react";
 import { content as fakeContent } from "./content";
 
 function HomePage() {
-  const { blueprints, isLoading } = useBlueprints();
+  const { composites, isLoading } = useComposites();
 
-  const blueprintsContent = useMemo(
+  const compositesContent = useMemo(
     () =>
-      blueprints.map((blueprint) => ({
-        id: blueprint.id,
-        title: blueprint.name,
-        category: titleCase("Blueprint"),
+      composites.map((composite: { id: string; name: string }) => ({
+        id: composite.id,
+        title: composite.name,
+        category: titleCase("Composite"),
         image: "/images/scenes/12.jpg", // Default image for now
-        type: "blueprint",
+        type: "composite",
       })),
-    [blueprints],
+    [composites],
   );
 
   const combinedContent = useMemo(
-    () => [...blueprintsContent, ...fakeContent],
-    [blueprintsContent],
+    () => [...compositesContent, ...fakeContent],
+    [compositesContent],
   );
 
   return (
@@ -33,7 +33,7 @@ function HomePage() {
         title="My Scenes"
         content={combinedContent}
         loading={isLoading}
-        data-testid="blueprint-gallery"
+        data-testid="composite-gallery"
       />
     </Layout>
   );

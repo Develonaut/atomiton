@@ -6,7 +6,7 @@
 
 - **BREAKING**: Refactored blueprint store to use ICompositeNode directly instead of extended Blueprint type
 - Moved blueprint hooks to be co-located with store at `stores/blueprint/hooks/`
-- Simplified `useBlueprints` hook to only return blueprints and loading state for display
+- Replaced `useBlueprints` hook with separate `useComposites` and `useTemplates` hooks for better separation of concerns
 - Replaced template detection from keywords to ownership model using `authorId`
 
 ### Added

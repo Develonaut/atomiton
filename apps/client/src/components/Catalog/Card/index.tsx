@@ -1,11 +1,15 @@
 import Icon from "@/components/Icon";
 import Image from "@/components/Image";
-import { useLink } from "@/router";
-import { useBlueprints } from "@/stores/blueprint";
+import { useNavigate } from "@/router";
+import { useTemplates } from "@/store/useTemplates";
+import {
+  convertNodeToEditorNode,
+  convertEdgeToEditorEdge,
+} from "@/utils/editorConverters";
 
 type Props = {
   value: {
-    id: string | number;
+    id: string;
     title: string;
     category: string;
     image: string;
@@ -14,27 +18,36 @@ type Props = {
 };
 
 function Card({ value }: Props) {
-  const { actions } = useBlueprints();
-  const blueprint = actions.findById(String(value.id));
-  const linkProps = useLink({
-    to: "/editor/$id",
-    params: { id: String(value.id) },
-    state: blueprint
-      ? {
-          defaultNodes: blueprint.nodes,
-          defaultEdges: blueprint.edges,
-          name: blueprint.name,
-          description: blueprint.description,
-        }
-      : undefined,
-  });
+  const navigate = useNavigate();
+  const { actions } = useTemplates();
+  const template = actions.getTemplate(value.id);
 
-  const Component = value.type === "blueprint" ? "button" : "div";
+  const handleClick = () => {
+    if (value.type === "template" && template) {
+      const templateState = {
+        defaultNodes:
+          template.nodes?.map((node, nodeIndex) =>
+            convertNodeToEditorNode(node, nodeIndex),
+          ) || [],
+        defaultEdges: template.edges?.map(convertEdgeToEditorEdge) || [],
+        name: template.name,
+        description: template.description,
+      };
+
+      navigate({
+        to: "/editor/$id",
+        params: { id: value.id },
+        state: templateState,
+      });
+    }
+  };
+
+  const Component = value.type === "template" ? "button" : "div";
 
   return (
     <Component
       className="group flex flex-col w-[calc(16.666%-0.75rem)] mt-3 mx-1.5 p-2 border border-s-01 bg-surface-01 rounded-3xl transition-shadow cursor-pointer hover:shadow-prompt-input max-[2200px]:w-[calc(20%-0.75rem)] max-[1940px]:w-[calc(25%-0.75rem)] max-xl:w-[calc(33.333%-0.75rem)] max-md:w-[calc(50%-0.75rem)]"
-      {...(value.type === "blueprint" ? linkProps : {})}
+      {...(value.type === "template" ? { onClick: handleClick } : {})}
     >
       <div className="relative mb-2">
         <Image

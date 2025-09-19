@@ -195,7 +195,9 @@ describe("useLink", () => {
 
     // Wait for the promise to resolve
     setTimeout(() => {
-      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.any(Error));
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Failed to preload route"),
+      );
       consoleWarnSpy.mockRestore();
     }, 0);
   });

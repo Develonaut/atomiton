@@ -58,7 +58,7 @@ export const compositeActions: CompositeActions = {
       },
     });
 
-    compositeStore.setState((state) => {
+    compositeStore.setState((state: CompositeState) => {
       state.composites.push(newComposite);
       state.error = null;
     });
@@ -67,8 +67,10 @@ export const compositeActions: CompositeActions = {
   },
 
   update: (id: string, updates: Partial<CompositeDefinition>) => {
-    compositeStore.setState((state) => {
-      const index = state.composites.findIndex((comp) => comp.id === id);
+    compositeStore.setState((state: CompositeState) => {
+      const index = state.composites.findIndex(
+        (comp: CompositeDefinition) => comp.id === id,
+      );
       if (index === -1) {
         state.error = `Composite ${id} not found`;
         return;
@@ -89,8 +91,10 @@ export const compositeActions: CompositeActions = {
   },
 
   remove: (id: string) => {
-    compositeStore.setState((state) => {
-      const index = state.composites.findIndex((comp) => comp.id === id);
+    compositeStore.setState((state: CompositeState) => {
+      const index = state.composites.findIndex(
+        (comp: CompositeDefinition) => comp.id === id,
+      );
       if (index === -1) {
         state.error = `Composite ${id} not found`;
         return;
@@ -103,6 +107,6 @@ export const compositeActions: CompositeActions = {
 
   findById: (id: string) => {
     const state = compositeStore.getState();
-    return state.composites.find((comp) => comp.id === id);
+    return state.composites.find((comp: CompositeDefinition) => comp.id === id);
   },
 };
