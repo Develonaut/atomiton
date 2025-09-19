@@ -3,7 +3,7 @@ import createDesktopEventBus from "./createDesktopEventBus";
 
 /**
  * Global event bus singleton for desktop/Node.js environments
- * This is the only export from this module
+ * Automatically enables IPC for cross-process communication in Electron apps
  */
 export const events = createDesktopEventBus("global");
 

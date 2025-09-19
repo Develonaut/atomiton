@@ -1,3 +1,4 @@
+import { events } from "@atomiton/events/desktop";
 import { generateId } from "@atomiton/utils";
 import type {
   ExecutionRequest,
@@ -7,7 +8,7 @@ import type { IExecutionTransport, IPCMessage, IPCResponse } from "./types";
 
 /**
  * IPC Transport for Electron Renderer Process
- * Sends execution requests to the main process via IPC
+ * Sends execution requests to the main process via IPC using @atomiton/events
  */
 export function createIPCTransport(): IExecutionTransport {
   const pendingRequests = new Map<
@@ -19,40 +20,44 @@ export function createIPCTransport(): IExecutionTransport {
   >();
 
   const initialize = async (): Promise<void> => {
-    if (!window.electron?.ipcRenderer) {
+    if (
+      !events.ipc.isAvailable() ||
+      events.ipc.getEnvironment() !== "renderer"
+    ) {
       throw new Error("IPC transport requires Electron renderer context");
     }
 
-    // Listen for responses from main process
-    window.electron.ipcRenderer.on(
-      "conductor:result",
-      (_event: unknown, ...args: unknown[]) => {
-        const response = args[0] as IPCResponse;
-        const pending = pendingRequests.get(response.id);
-        if (pending) {
-          pending.resolve(response.payload);
-          pendingRequests.delete(response.id);
-        }
-      },
-    );
+    // Listen for responses from main process via global event bus
+    const resultHandler = (response: unknown) => {
+      const res = response as IPCResponse;
+      const pending = pendingRequests.get(res.id);
+      if (pending) {
+        pending.resolve(res.payload);
+        pendingRequests.delete(res.id);
+      }
+    };
 
-    window.electron.ipcRenderer.on(
-      "conductor:error",
-      (_event: unknown, ...args: unknown[]) => {
-        const { id, error } = args[0] as { id: string; error: string };
-        const pending = pendingRequests.get(id);
-        if (pending) {
-          pending.reject(new Error(error));
-          pendingRequests.delete(id);
-        }
-      },
-    );
+    const errorHandler = (data: unknown) => {
+      const { id, error } = data as { id: string; error: string };
+      const pending = pendingRequests.get(id);
+      if (pending) {
+        pending.reject(new Error(error));
+        pendingRequests.delete(id);
+      }
+    };
+
+    events.on("conductor:result", resultHandler);
+    events.on("conductor:error", errorHandler);
+
+    // Store handlers for cleanup
+    (events as any)._resultHandler = resultHandler;
+    (events as any)._errorHandler = errorHandler;
   };
 
   const execute = async (
     request: ExecutionRequest,
   ): Promise<ExecutionResult> => {
-    if (!window.electron?.ipcRenderer) {
+    if (!events.ipc.isAvailable()) {
       throw new Error("IPC transport requires Electron renderer context");
     }
 
@@ -67,8 +72,8 @@ export function createIPCTransport(): IExecutionTransport {
         id,
       };
 
-      // Send to main process
-      window.electron!.ipcRenderer.send("conductor:execute", message);
+      // Emit event - will automatically forward to main process via IPC
+      events.emit("conductor:execute", message);
 
       // Timeout after 5 minutes
       setTimeout(
@@ -84,9 +89,12 @@ export function createIPCTransport(): IExecutionTransport {
   };
 
   const shutdown = async (): Promise<void> => {
-    if (window.electron?.ipcRenderer) {
-      window.electron.ipcRenderer.removeAllListeners("conductor:result");
-      window.electron.ipcRenderer.removeAllListeners("conductor:error");
+    // Remove only conductor-specific listeners
+    if ((events as any)._resultHandler) {
+      events.off("conductor:result", (events as any)._resultHandler);
+    }
+    if ((events as any)._errorHandler) {
+      events.off("conductor:error", (events as any)._errorHandler);
     }
     pendingRequests.clear();
   };

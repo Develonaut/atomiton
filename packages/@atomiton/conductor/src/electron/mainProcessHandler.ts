@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { events } from "@atomiton/events/desktop";
 import { createLocalTransport } from "../transport/localTransport";
 import type { IPCMessage, IPCResponse } from "../transport/types";
 
@@ -20,10 +20,18 @@ export function setupMainProcessHandler(config?: {
   // Create local transport for actual execution
   const transport = createLocalTransport(config);
 
-  // Handle execution requests from renderer
-  ipcMain.on("conductor:execute", async (event, message: IPCMessage) => {
+  // Verify we're in main process
+  if (!events.ipc.isAvailable() || events.ipc.getEnvironment() !== "main") {
+    throw new Error(
+      "Main process handler requires Electron main process context",
+    );
+  }
+
+  // Listen for execution requests via global event bus
+  const executeHandler = async (data: unknown) => {
+    const message = data as IPCMessage;
     try {
-      console.log(`[Main] Executing blueprint: ${message.payload.blueprintId}`);
+      console.log(`[Main] Executing composite: ${message.payload.compositeId}`);
 
       // Execute using local transport (full Node.js access)
       const result = await transport.execute(message.payload);
@@ -34,21 +42,30 @@ export function setupMainProcessHandler(config?: {
         id: message.id,
       };
 
-      // Send result back to renderer
-      event.reply("conductor:result", response);
+      // Emit result - will automatically forward to renderer via IPC
+      events.emit("conductor:result", response);
     } catch (error) {
       console.error("[Main] Execution error:", error);
 
-      event.reply("conductor:error", {
+      // Emit error - will automatically forward to renderer via IPC
+      events.emit("conductor:error", {
         id: message.id,
         error: error instanceof Error ? error.message : String(error),
       });
     }
-  });
+  };
+
+  events.on("conductor:execute", executeHandler);
+
+  // Store handler for cleanup
+  (events as any)._executeHandler = executeHandler;
 
   // Cleanup handler
   const cleanup = () => {
-    ipcMain.removeAllListeners("conductor:execute");
+    // Remove only conductor-specific listeners
+    if ((events as any)._executeHandler) {
+      events.off("conductor:execute", (events as any)._executeHandler);
+    }
     if (transport.shutdown) {
       transport.shutdown();
     }

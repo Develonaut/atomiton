@@ -85,7 +85,7 @@ function findTestResults(rootDir: string = "."): TestResults {
     // Find all test result files
     const speedReports = execSync(
       `find ${rootDir} -path "*/test-results/*.json" -o -path "*/benchmarks/*.json" 2>/dev/null || true`,
-      { encoding: "utf-8" }
+      { encoding: "utf-8" },
     )
       .trim()
       .split("\n")
@@ -102,7 +102,7 @@ function findTestResults(rootDir: string = "."): TestResults {
     // Find packages with tests
     const packageJsons = execSync(
       `find ${rootDir} -name "package.json" -not -path "*/node_modules/*" 2>/dev/null || true`,
-      { encoding: "utf-8" }
+      { encoding: "utf-8" },
     )
       .trim()
       .split("\n")
@@ -135,7 +135,7 @@ function findTestResults(rootDir: string = "."): TestResults {
 function drawProgressBar(
   value: number,
   max: number,
-  width: number = 20
+  width: number = 20,
 ): string {
   const percentage = Math.min(value / max, 1);
   const filled = Math.round(percentage * width);
@@ -171,7 +171,7 @@ function getTestTypeIcon(type: string): string {
 }
 
 function parseVitestReport(
-  reportPath: string
+  reportPath: string,
 ): { totalDuration: number; avgDuration: number } | null {
   try {
     const report = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
@@ -216,7 +216,7 @@ function calculateTestAverages(packages: Package[]): TestAverages {
     const smokeReportPath = path.join(
       pkg.path,
       "test-results",
-      "speed-report.json"
+      "speed-report.json",
     );
     if (fs.existsSync(smokeReportPath)) {
       const smokeResult = parseVitestReport(smokeReportPath);
@@ -247,7 +247,7 @@ function displayDashboard(): void {
   console.log(
     colors.bold +
       colors.cyan +
-      "\n╔════════════════════════════════════════════╗"
+      "\n╔════════════════════════════════════════════╗",
   );
   console.log("║       TEST PERFORMANCE DASHBOARD           ║");
   console.log("╚════════════════════════════════════════════╝" + colors.reset);
@@ -274,13 +274,13 @@ function displayDashboard(): void {
 
     const name = pkg.name.padEnd(25);
     console.log(
-      `${name} Unit:${unit} Smoke:${smoke} Bench:${bench} E2E:${e2e}`
+      `${name} Unit:${unit} Smoke:${smoke} Bench:${bench} E2E:${e2e}`,
     );
   });
 
   // Smoke Test Performance (dynamically load from actual results if available)
   console.log(
-    colors.bold + "\n⏱️  Smoke Test Performance (5s limit)" + colors.reset
+    colors.bold + "\n⏱️  Smoke Test Performance (5s limit)" + colors.reset,
   );
   console.log("─".repeat(45));
 
@@ -292,7 +292,7 @@ function displayDashboard(): void {
       const reportPath = path.join(
         pkg.path,
         "test-results",
-        "speed-report.json"
+        "speed-report.json",
       );
       if (fs.existsSync(reportPath)) {
         const result = parseVitestReport(reportPath);
@@ -322,10 +322,10 @@ function displayDashboard(): void {
 
   if (smokeData.length === 0) {
     console.log(
-      colors.gray + "No smoke test timing data available yet" + colors.reset
+      colors.gray + "No smoke test timing data available yet" + colors.reset,
     );
     console.log(
-      colors.gray + "Run smoke tests to see performance data" + colors.reset
+      colors.gray + "Run smoke tests to see performance data" + colors.reset,
     );
     return;
   }
@@ -333,14 +333,14 @@ function displayDashboard(): void {
   smokeData.forEach((test) => {
     if (test.duration === 0) {
       console.log(
-        `${test.name.padEnd(20)} ${colors.gray}No timing data yet${colors.reset}`
+        `${test.name.padEnd(20)} ${colors.gray}No timing data yet${colors.reset}`,
       );
     } else {
       const bar = drawProgressBar(test.duration, test.limit);
       const duration = formatDuration(test.duration);
       const status = test.duration < test.limit ? "✅" : "❌";
       console.log(
-        `${test.name.padEnd(20)} ${bar} ${duration.padStart(6)} ${status}`
+        `${test.name.padEnd(20)} ${bar} ${duration.padStart(6)} ${status}`,
       );
     }
   });
@@ -386,7 +386,9 @@ function displayDashboard(): void {
 
   if (benchmarkData.length === 0) {
     console.log(colors.gray + "No benchmark data available yet" + colors.reset);
-    console.log(colors.gray + "Run benchmarks to see performance data" + colors.reset);
+    console.log(
+      colors.gray + "Run benchmarks to see performance data" + colors.reset,
+    );
   } else {
     benchmarkData.forEach((data) => {
       console.log(`\n${colors.cyan}${data.name}${colors.reset}`);
@@ -402,19 +404,27 @@ function displayDashboard(): void {
 
           if (data.baseline) {
             const baselineBench = data.baseline.benchmarks.find(
-              (b: any) => b.name === bench.name
+              (b: any) => b.name === bench.name,
             );
 
             if (baselineBench) {
-              const change = ((bench.hz - baselineBench.hz) / baselineBench.hz) * 100;
+              const change =
+                ((bench.hz - baselineBench.hz) / baselineBench.hz) * 100;
               const trend = change > 5 ? "📈" : change < -5 ? "📉" : "➡️";
-              const color = change > 5 ? colors.green : change < -5 ? colors.red : colors.yellow;
+              const color =
+                change > 5
+                  ? colors.green
+                  : change < -5
+                    ? colors.red
+                    : colors.yellow;
 
               console.log(
-                `  ${trend} ${name} ${ops.padStart(15)} ${mean.padStart(10)} ${color}${change > 0 ? "+" : ""}${change.toFixed(1)}%${colors.reset}`
+                `  ${trend} ${name} ${ops.padStart(15)} ${mean.padStart(10)} ${color}${change > 0 ? "+" : ""}${change.toFixed(1)}%${colors.reset}`,
               );
             } else {
-              console.log(`  🆕 ${name} ${ops.padStart(15)} ${mean.padStart(10)}`);
+              console.log(
+                `  🆕 ${name} ${ops.padStart(15)} ${mean.padStart(10)}`,
+              );
             }
           } else {
             console.log(`  • ${name} ${ops.padStart(15)} ${mean.padStart(10)}`);
@@ -425,7 +435,7 @@ function displayDashboard(): void {
           console.log(
             colors.gray +
               `  ... and ${data.report.benchmarks.length - 3} more benchmarks` +
-              colors.reset
+              colors.reset,
           );
         }
 
@@ -434,17 +444,19 @@ function displayDashboard(): void {
           const { improvements, degradations, stable } = data.report.trends;
           if (degradations > 0) {
             console.log(
-              `  ${colors.red}⚠️  ${degradations} benchmark(s) degraded${colors.reset}`
+              `  ${colors.red}⚠️  ${degradations} benchmark(s) degraded${colors.reset}`,
             );
           }
           if (improvements > 0) {
             console.log(
-              `  ${colors.green}✅ ${improvements} benchmark(s) improved${colors.reset}`
+              `  ${colors.green}✅ ${improvements} benchmark(s) improved${colors.reset}`,
             );
           }
         }
       } else if (data.report.error) {
-        console.log(`  ${colors.red}Error: ${data.report.error}${colors.reset}`);
+        console.log(
+          `  ${colors.red}Error: ${data.report.error}${colors.reset}`,
+        );
       }
     });
   }
@@ -502,11 +514,11 @@ function displayDashboard(): void {
 
       const bar = drawProgressBar(avg, limit, 15);
       console.log(
-        `${icon} ${name.padEnd(18)} ${bar} ${statusColor}${formatDuration(avg).padStart(8)} ${status}${colors.reset}`
+        `${icon} ${name.padEnd(18)} ${bar} ${statusColor}${formatDuration(avg).padStart(8)} ${status}${colors.reset}`,
       );
     } else {
       console.log(
-        `${icon} ${name.padEnd(18)} ${colors.gray}No data yet${colors.reset}`
+        `${icon} ${name.padEnd(18)} ${colors.gray}No data yet${colors.reset}`,
       );
     }
   });
@@ -515,10 +527,12 @@ function displayDashboard(): void {
   console.log(colors.bold + "\n🏃 Recent Test Runs" + colors.reset);
   console.log("─".repeat(45));
   console.log(
-    colors.gray + "Test run history tracking not yet implemented" + colors.reset
+    colors.gray +
+      "Test run history tracking not yet implemented" +
+      colors.reset,
   );
   console.log(
-    colors.gray + "Run tests manually to see current status" + colors.reset
+    colors.gray + "Run tests manually to see current status" + colors.reset,
   );
 
   // Alerts and Warnings
@@ -584,39 +598,39 @@ function displayDashboard(): void {
     const unitTests = parseInt(
       execSync(
         "find . -name '*.test.*' -not -path '*/smoke/*' -not -path '*/e2e/*' -not -name '*integration*' | wc -l",
-        { encoding: "utf8" }
-      ).trim()
+        { encoding: "utf8" },
+      ).trim(),
     );
     const smokeTests = parseInt(
       execSync(
         "find . -path '*smoke*.test.*' -o -path '*/smoke/*' -name '*.test.*' | wc -l",
-        { encoding: "utf8" }
-      ).trim()
+        { encoding: "utf8" },
+      ).trim(),
     );
     const integrationTests = parseInt(
       execSync("find . -name '*integration*.test.*' | wc -l", {
         encoding: "utf8",
-      }).trim()
+      }).trim(),
     );
     const specFiles = parseInt(
-      execSync("find . -name '*.spec.*' | wc -l", { encoding: "utf8" }).trim()
+      execSync("find . -name '*.spec.*' | wc -l", { encoding: "utf8" }).trim(),
     );
     const totalTests = unitTests + smokeTests + integrationTests + specFiles;
 
     console.log(
-      `📝 Unit Tests:        ${colors.green}${unitTests.toLocaleString()}${colors.reset}`
+      `📝 Unit Tests:        ${colors.green}${unitTests.toLocaleString()}${colors.reset}`,
     );
     console.log(
-      `🔥 Smoke Tests:       ${colors.green}${smokeTests.toLocaleString()}${colors.reset}`
+      `🔥 Smoke Tests:       ${colors.green}${smokeTests.toLocaleString()}${colors.reset}`,
     );
     console.log(
-      `🔗 Integration Tests: ${colors.green}${integrationTests.toLocaleString()}${colors.reset}`
+      `🔗 Integration Tests: ${colors.green}${integrationTests.toLocaleString()}${colors.reset}`,
     );
     console.log(
-      `📋 Spec Files:        ${colors.green}${specFiles.toLocaleString()}${colors.reset}`
+      `📋 Spec Files:        ${colors.green}${specFiles.toLocaleString()}${colors.reset}`,
     );
     console.log(
-      `📦 Total Test Files:  ${colors.bold}${colors.green}${totalTests.toLocaleString()}${colors.reset}`
+      `📦 Total Test Files:  ${colors.bold}${colors.green}${totalTests.toLocaleString()}${colors.reset}`,
     );
   } catch (error) {
     console.log(`${colors.gray}Unable to count test files${colors.reset}`);
@@ -637,13 +651,16 @@ function displayDashboard(): void {
     "Check test speed:     " +
       colors.cyan +
       "pnpm test:speed-check" +
-      colors.reset
+      colors.reset,
   );
   console.log(
-    "Run smoke tests:      " + colors.cyan + "pnpm test:smoke" + colors.reset
+    "Run smoke tests:      " + colors.cyan + "pnpm test:smoke" + colors.reset,
   );
   console.log(
-    "Run benchmarks:       " + colors.cyan + "pnpm test:benchmark" + colors.reset
+    "Run benchmarks:       " +
+      colors.cyan +
+      "pnpm test:benchmark" +
+      colors.reset,
   );
 
   console.log(
@@ -651,14 +668,14 @@ function displayDashboard(): void {
       colors.gray +
       "Last updated: " +
       new Date().toLocaleString() +
-      colors.reset
+      colors.reset,
   );
 
   if (process.argv.includes("--watch")) {
     console.log(
       colors.gray +
         "Refreshing every 30 seconds... Press Ctrl+C to exit" +
-        colors.reset
+        colors.reset,
     );
   }
 

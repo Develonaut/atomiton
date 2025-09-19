@@ -13,6 +13,7 @@ vi.mock("@atomiton/storage/desktop", () => ({
 
 vi.mock("@atomiton/conductor/desktop", () => ({
   createConductor: vi.fn(() => ({ execute: vi.fn() })),
+  setupMainProcessHandler: vi.fn(() => ({ cleanup: vi.fn() })),
 }));
 
 describe("Desktop Services Smoke Test", () => {

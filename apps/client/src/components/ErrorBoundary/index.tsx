@@ -1,7 +1,7 @@
-import { Component } from "react";
-import type { ErrorInfo, ReactNode } from "react";
-import { Box, Button } from "@atomiton/ui";
 import Icon from "@/components/Icon";
+import { Box, Button } from "@atomiton/ui";
+import type { ErrorInfo, ReactNode } from "react";
+import { Component } from "react";
 
 type ErrorBoundaryState = {
   hasError: boolean;
@@ -85,13 +85,18 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (import.meta.env.DEV) {
       // HMR errors or React Fast Refresh errors often contain these patterns
       const isHMRError =
-        error.message?.includes('Failed to fetch dynamically imported module') ||
-        error.message?.includes('Unable to preload CSS') ||
-        error.stack?.includes('__vite') ||
-        error.stack?.includes('hot-update');
+        error.message?.includes(
+          "Failed to fetch dynamically imported module",
+        ) ||
+        error.message?.includes("Unable to preload CSS") ||
+        error.stack?.includes("__vite") ||
+        error.stack?.includes("hot-update");
 
       if (isHMRError) {
-        console.warn('Caught HMR/dev error, will attempt auto-recovery:', error.message);
+        console.warn(
+          "Caught HMR/dev error, will attempt auto-recovery:",
+          error.message,
+        );
         return {
           hasError: false, // Don't show error UI for HMR errors
           error,
@@ -123,13 +128,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
       // If we're getting repeated errors, it's likely a real issue
       if (this.state.errorCount > 3) {
-        console.error('Multiple errors detected, showing error UI');
+        console.error("Multiple errors detected, showing error UI");
         return;
       }
 
       // For first few errors, try auto-recovery after a delay
       if (this.state.hasError && !this.autoRecoveryTimer) {
-        console.warn('Will attempt auto-recovery in 3 seconds...');
+        console.warn("Will attempt auto-recovery in 3 seconds...");
         this.autoRecoveryTimer = setTimeout(() => {
           this.handleRetry();
           this.autoRecoveryTimer = null;
@@ -182,9 +187,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   render() {
     if (this.state.hasError && this.state.error && this.state.errorInfo) {
       // In development, show a banner about auto-recovery if it's pending
-      const showAutoRecoveryBanner = import.meta.env.DEV &&
-                                     this.state.errorCount <= 3 &&
-                                     this.autoRecoveryTimer !== null;
+      const showAutoRecoveryBanner =
+        import.meta.env.DEV &&
+        this.state.errorCount <= 3 &&
+        this.autoRecoveryTimer !== null;
 
       // Use custom fallback if provided
       if (this.props.fallback) {
