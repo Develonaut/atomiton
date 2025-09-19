@@ -1,10 +1,10 @@
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider, useReactFlow } from "@xyflow/react";
 import React, { useEffect } from "react";
-import { describe, expect, it, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { useEditorNodes } from "../../../hooks/useEditorNodes";
-import { useSelectedNodes } from "../../../hooks/useSelectedNodes";
 import { useEditorViewport } from "../../../hooks/useEditorViewport";
+import { useSelectedNodes } from "../../../hooks/useSelectedNodes";
 import type { EditorNode } from "../../../types/EditorNode";
 
 /**
@@ -70,9 +70,17 @@ const renderCounter = new RenderCounter();
 
 // Test wrapper
 function TestWrapper({ children }: { children: React.ReactNode }) {
+  const initialNodes = [
+    { id: "0", position: { x: 0, y: 0 }, data: { label: "Node 0" } },
+    { id: "1", position: { x: 100, y: 0 }, data: { label: "Node 1" } },
+    { id: "2", position: { x: 200, y: 0 }, data: { label: "Node 2" } },
+  ];
+
   return (
     <ReactFlowProvider>
-      <ReactFlow fitView>{children}</ReactFlow>
+      <ReactFlow defaultNodes={initialNodes} fitView>
+        {children}
+      </ReactFlow>
     </ReactFlowProvider>
   );
 }
@@ -192,8 +200,8 @@ describe("Performance Contract Tests - Advanced Operations", () => {
       for (let i = 0; i < 10; i++) {
         act(() => {
           result.current.setNodes((nodes) =>
-            nodes.map((n, idx) =>
-              idx === 0 ? { ...n, position: { x: i * 10, y: i * 10 } } : n,
+            nodes.map((n) =>
+              n.id === "0" ? { ...n, position: { x: i * 10, y: i * 10 } } : n,
             ),
           );
         });
@@ -205,7 +213,7 @@ describe("Performance Contract Tests - Advanced Operations", () => {
       // Now change selection
       act(() => {
         result.current.setNodes((nodes) =>
-          nodes.map((n, idx) => (idx === 0 ? { ...n, selected: true } : n)),
+          nodes.map((n) => (n.id === "0" ? { ...n, selected: true } : n)),
         );
       });
 

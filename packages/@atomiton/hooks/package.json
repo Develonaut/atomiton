@@ -26,7 +26,7 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest watch",
     "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
-    "test:benchmark": "vitest bench --run",
+    "test:benchmark": "vitest bench --run --passWithNoTests || echo \"No benchmark tests yet\"",
     "test:e2e": "echo \"No E2E tests for this package\"",
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
   },

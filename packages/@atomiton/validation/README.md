@@ -17,13 +17,13 @@ pnpm add @atomiton/validation
 Use Zod directly through this package:
 
 ```typescript
-import { z, validators } from '@atomiton/validation';
+import { v, validators } from '@atomiton/validation';
 
 // Use Zod as normal
-const UserSchema = z.object({
-  name: z.string().min(1),
+const UserSchema = v.object({
+  name: v.string().min(1),
   email: validators.email, // Use pre-built validators
-  age: z.number().optional(),
+  age: v.number().optional(),
 });
 
 // Validate data using Zod's built-in methods

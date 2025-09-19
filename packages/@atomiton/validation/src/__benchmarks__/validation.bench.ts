@@ -1,11 +1,11 @@
 import { bench, describe } from 'vitest';
-import { z, validators } from '../index.js';
+import { v, validators } from '../index.js';
 
 describe('Validation Benchmarks', () => {
-  const UserSchema = z.object({
-    name: z.string(),
+  const UserSchema = v.object({
+    name: v.string(),
     email: validators.email,
-    age: z.number().optional(),
+    age: v.number().optional(),
   });
 
   const validData = {
