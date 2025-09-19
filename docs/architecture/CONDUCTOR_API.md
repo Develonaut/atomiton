@@ -184,12 +184,21 @@ The conductor has been benchmarked against competitors with measurable results:
 
 ```typescript
 // main.ts - Electron main process
+import { app } from 'electron';
+import { createStorage } from '@atomiton/storage';
 import { setupMainProcessHandler } from '@atomiton/conductor';
+import path from 'path';
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // Initialize filesystem storage in userData directory
+  const storage = await createStorage({
+    type: 'filesystem',
+    basePath: path.join(app.getPath('userData'), 'atomiton-data')
+  });
+
   setupMainProcessHandler({
     concurrency: 4,
-    storage: storageEngine
+    storage // Configured storage instance
   });
 });
 

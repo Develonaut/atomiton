@@ -315,13 +315,22 @@ conductor.configureTransport("local", {
 
 ```typescript
 import { setupMainProcessHandler } from "@atomiton/conductor";
-import { ipcMain } from "electron";
+import { createStorage } from "@atomiton/storage";
+import { app, ipcMain } from "electron";
+import path from "path";
 
-// Registers IPC handlers for conductor requests
-setupMainProcessHandler({
-  concurrency: 4,
-  storage: myStorage,
-  timeout: 60000,
+// Initialize storage and register IPC handlers for conductor requests
+app.whenReady().then(async () => {
+  const storage = await createStorage({
+    type: "filesystem",
+    basePath: path.join(app.getPath("userData"), "atomiton-data"),
+  });
+
+  setupMainProcessHandler({
+    concurrency: 4,
+    storage,
+    timeout: 60000,
+  });
 });
 ```
 

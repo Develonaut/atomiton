@@ -118,3 +118,10 @@ export function createStore<T extends object>(
 
   return store as Store<T> & { useStore: UseBoundStore<StoreApi<T>> };
 }
+
+// ============================================================================
+// Re-exports
+// ============================================================================
+
+// Export zustand's shallow comparison for use in other packages
+export { shallow } from "zustand/shallow";

@@ -1,193 +1,283 @@
 # Storage Package Roadmap
 
-## Overview
+## Current State Summary
 
-**CURRENT STATUS: Only basic filesystem storage implemented**
+**✅ Phase 0 Complete** - Storage factory with functional programming pattern
 
-Development roadmap for the @atomiton/storage package - planned universal storage abstraction for cross-platform Composite and application data storage.
+The @atomiton/storage package now provides a robust foundation for universal storage abstraction across platforms using functional programming patterns.
 
-## Phase 1: Foundation (Partially Complete)
+### Current Implementation (Phase 0)
 
-### Week 1: Core Implementation
+**Completed Features:**
 
-- [x] Create FileSystemStorage class (desktop file system) - **IMPLEMENTED**
-- [ ] Implement createStorage factory with platform detection - **NOT IMPLEMENTED**
-- [ ] Add AbstractStorageEngine base class - **NOT IMPLEMENTED**
-- [x] Create comprehensive error handling - **BASIC VERSION IMPLEMENTED**
-- [ ] Set up testing infrastructure with mock storage - **NOT IMPLEMENTED**
+- ✅ **Functional Programming Pattern** - Clean factory functions following FP principles
+- ✅ **Core Storage Types** - `memory` (testing), `filesystem` (desktop production)
+- ✅ **Factory Functions** - `createInMemoryStorage()`, `createFileSystemStorage()`, `createStorage()`
+- ✅ **Universal Interface** - `IStorageEngine` with save/load/delete/exists/list/getInfo methods
+- ✅ **Type Safety** - Comprehensive TypeScript definitions for all storage operations
+- ✅ **Error Handling** - Robust error management with StorageError class and specific error codes
+- ✅ **Platform Detection** - Automatic platform detection for appropriate storage backend selection
 
-### Week 2: Integration & Migration
+**API Usage (Phase 0):**
 
-- [ ] Move BlueprintStorage from conductor package - **NOT IMPLEMENTED**
-- [ ] Update conductor to use storage abstraction - **NOT IMPLEMENTED**
-- [ ] Add IndexedDBStorage class (browser support) - **NOT IMPLEMENTED**
-- [ ] Implement storage migration utilities - **NOT IMPLEMENTED**
-- [ ] Add serialization format support (YAML/JSON) - **JSON ONLY, YAML NOT IMPLEMENTED**
+```typescript
+import {
+  createStorage,
+  createFileSystemStorage,
+  createInMemoryStorage,
+} from "@atomiton/storage";
 
-**PLANNED Deliverable**: Universal storage working on desktop and browser
-**ACTUAL Deliverable**: Basic desktop filesystem storage only
+// Factory with automatic selection
+const storage = await createStorage({ type: "filesystem" });
 
-## Phase 2: Cloud Integration (NOT IMPLEMENTED)
+// Direct factory functions
+const fileStorage = await createFileSystemStorage({ basePath: "./data" });
+const memoryStorage = createInMemoryStorage();
 
-### Week 3: Cloud Foundation
+// Universal interface
+await storage.save("blueprint-123", compositeData);
+const data = await storage.load("blueprint-123");
+const items = await storage.list("blueprint-");
+```
 
-- [ ] Design OAuth authentication flows
-- [ ] Create cloud provider base classes
-- [ ] Implement GoogleDriveStorage
-- [ ] Add rate limiting and quota management
-- [ ] Create sync strategies for offline/online
+## Future Storage Types
 
-### Week 4: Multi-Provider Support
+The functional programming architecture will scale to support additional storage backends:
 
-- [ ] Implement OneDriveStorage
-- [ ] Add DropboxStorage
-- [ ] Create provider selection UI integration
-- [ ] Add cloud storage configuration management
-- [ ] Implement backup and restore across providers
+### Phase 1: Browser Support
 
-**Deliverable**: Full cloud storage provider integration
+- **`createIndexedDBStorage()`** - Browser IndexedDB for client-side applications
+- **`createBrowserStorage()`** - Automatic IndexedDB + localStorage fallback
 
-## Phase 3: Advanced Features (Week 5-6)
+### Phase 2: Cloud Integration
 
-### Week 5: Enterprise & Performance
+- **`createGoogleDriveStorage()`** - Google Drive API integration
+- **`createOneDriveStorage()`** - Microsoft OneDrive API integration
+- **`createDropboxStorage()`** - Dropbox API integration
+- **`createCloudStorage()`** - Atomiton managed cloud backend
 
-- [ ] Add CloudStorage (Atomiton managed backend)
-- [ ] Implement tier-based storage limits
-- [ ] **Add secure credential storage for API keys and sensitive data**
-- [ ] Create storage analytics and usage tracking
-- [ ] Add batch operations for performance
+### Phase 3: Advanced & Testing
 
-### Week 6: Production Ready
+- **`createMockStorage()`** - Advanced testing with configurable behavior
+- **`createEncryptedStorage()`** - Wrapper for encryption over any storage type
+- **`createCachedStorage()`** - Performance wrapper with caching layer
 
-- [ ] Comprehensive error recovery strategies
-- [ ] Add storage health monitoring
-- [ ] Implement automatic failover between providers
-- [ ] Create migration tools between storage types
-- [ ] Complete test coverage and documentation
+## Implementation Phases
 
-**Deliverable**: Production-ready universal storage
+### Phase 1: Browser Support (Weeks 1-2)
 
-## Phase 4: Future Features (Post-MVP)
+**Goals:**
 
-### Mobile Support
+- Enable browser-based applications to store Composites and application data
+- Seamless platform switching between desktop and browser
+- Progressive Web App (PWA) support
 
-- [ ] Add mobile-specific storage engines
-- [ ] Implement offline-first synchronization
-- [ ] Add mobile cloud provider integrations
-- [ ] Create cross-device sync capabilities
+**Deliverables:**
 
-### Enterprise Features
+```typescript
+// Phase 1 API additions
+const browserStorage = await createIndexedDBStorage({
+  dbName: "atomiton-storage",
+  version: 1,
+});
 
-- [ ] Add enterprise cloud backends (AWS S3, Azure)
-- [ ] Implement team/organization storage sharing
-- [ ] Add audit logging and compliance features
-- [ ] Create backup and disaster recovery
+// Auto-detection for browser
+const storage = await createStorage(); // Automatically uses IndexedDB in browser
+```
 
-## Success Metrics
-
-### Phase 1
+**Success Metrics:**
 
 - Same API works across desktop and browser
 - < 50ms storage operation latency
 - Zero data loss during platform switches
 - 95% test coverage
 
-### Phase 2
+### Phase 2: Cloud Integrations (Weeks 3-6)
+
+**Goals:**
+
+- Multi-provider cloud storage support
+- OAuth authentication flows
+- Offline sync with conflict resolution
+- User choice of storage provider
+
+**Deliverables:**
+
+```typescript
+// Phase 2 API additions
+const googleStorage = await createGoogleDriveStorage({
+  clientId: "your-client-id",
+  scopes: ["drive.file"],
+});
+
+const oneDriveStorage = await createOneDriveStorage({
+  clientId: "your-client-id",
+  redirectUri: "your-redirect-uri",
+});
+
+const dropboxStorage = await createDropboxStorage({
+  appKey: "your-app-key",
+});
+
+// Managed cloud backend
+const cloudStorage = await createCloudStorage({
+  apiKey: "your-api-key",
+  endpoint: "https://api.atomiton.com",
+});
+```
+
+**Success Metrics:**
 
 - Support 3+ cloud storage providers
 - Offline sync with conflict resolution
 - < 5MB storage footprint
 - OAuth flows work seamlessly
 
-### Phase 3
+### Phase 3: Enterprise Features (Weeks 7-10)
+
+**Goals:**
+
+- Enterprise-grade security and compliance
+- Advanced testing capabilities
+- Performance optimization
+- Multi-provider failover
+
+**Deliverables:**
+
+```typescript
+// Phase 3 API additions
+const encryptedStorage = await createEncryptedStorage({
+  underlying: await createFileSystemStorage({ basePath: "./secure" }),
+  encryption: { algorithm: "AES-256-GCM", keyDerivation: "PBKDF2" },
+});
+
+const cachedStorage = await createCachedStorage({
+  underlying: await createGoogleDriveStorage({ clientId: "id" }),
+  cacheSize: 100,
+  ttl: 300000, // 5 minutes
+});
+
+const mockStorage = await createMockStorage({
+  latency: 100,
+  failureRate: 0.1,
+  quotaLimit: 1000000,
+});
+```
+
+**Success Metrics:**
 
 - Handle 10,000+ Blueprints per user
 - Multi-provider failover < 2 seconds
 - Encryption/decryption < 100ms overhead
 - Enterprise-grade security compliance
 
-## Technical Architecture
+## Architecture Evolution
 
-### Storage Engine Hierarchy
+### Functional Programming Scalability
 
-```
-IStorageEngine (interface)
-├── AbstractStorageEngine (base class)
-│   ├── FilesystemStorage (desktop)
-│   ├── IndexedDBStorage (browser)
-│   ├── CloudProviderStorage (base)
-│   │   ├── GoogleDriveStorage
-│   │   ├── OneDriveStorage
-│   │   └── DropboxStorage
-│   └── CloudStorage (Atomiton managed)
-└── MemoryStorage (testing)
-```
-
-### Platform Detection
+The current functional approach will scale elegantly as new storage types are added:
 
 ```typescript
-// Auto-detection logic
-function detectPlatform(): Platform {
-  if (typeof window === "undefined") return "desktop";
-  if (typeof indexedDB !== "undefined") return "browser";
-  return "cloud";
-}
+// Core factory signature remains consistent
+type StorageFactory<T extends StorageType> = (
+  config: StorageConfig<T>,
+) => Promise<IStorageEngine>;
+
+// Each storage type has its own factory
+const storageFactories = {
+  memory: createInMemoryStorage,
+  filesystem: createFileSystemStorage,
+  indexeddb: createIndexedDBStorage, // Phase 1
+  "google-drive": createGoogleDriveStorage, // Phase 2
+  onedrive: createOneDriveStorage, // Phase 2
+  dropbox: createDropboxStorage, // Phase 2
+  cloud: createCloudStorage, // Phase 2
+  mock: createMockStorage, // Phase 3
+} as const;
+
+// Main factory delegates to type-specific factories
+export const createStorage = async (config: StorageConfig = {}) => {
+  const type = config.type || detectOptimalStorageType();
+  const factory = storageFactories[type];
+  return await factory(config);
+};
 ```
 
-## Dependencies
+### Composition Patterns
 
-### Required Packages
+Advanced storage features will use composition:
 
-- yaml (serialization)
-- Platform-specific cloud SDKs (Google Drive, OneDrive, Dropbox)
-- IndexedDB wrapper (browser storage)
-
-### Development
-
-- vitest (testing)
-- @atomiton/typescript-config
-- @atomiton/eslint-config
-
-## Risk Analysis
-
-| Risk                         | Impact | Mitigation                                    |
-| ---------------------------- | ------ | --------------------------------------------- |
-| Cloud provider API changes   | High   | Abstract APIs, version pinning, fallbacks     |
-| Authentication complexity    | High   | OAuth libraries, comprehensive error handling |
-| Cross-platform compatibility | Medium | Extensive testing, feature detection          |
-| Performance with large files | Medium | Streaming, chunking, lazy loading             |
-| Storage quota limits         | Medium | Quota monitoring, user notifications          |
+```typescript
+// Layered storage with encryption and caching
+const storage = await createCachedStorage({
+  underlying: await createEncryptedStorage({
+    underlying: await createGoogleDriveStorage({ clientId: "id" }),
+    encryption: { algorithm: "AES-256-GCM" },
+  }),
+  cacheSize: 50,
+});
+```
 
 ## Migration Strategy
 
-### v1.0: Desktop Foundation
+### From Phase 0 to Phase 1
 
-- Filesystem storage
-- Basic abstraction layer
-- Testing infrastructure
+- **Backward Compatibility** - All existing factory functions remain unchanged
+- **API Extension** - New factories added without breaking changes
+- **Auto-Detection** - Enhanced platform detection for browser environments
+- **Testing** - Comprehensive test suite for cross-platform compatibility
 
-### v2.0: Multi-Platform
+### From Phase 1 to Phase 2
 
-- Browser IndexedDB support
-- Platform auto-detection
-- Storage migration tools
+- **Cloud Provider Registration** - New cloud factories added to factory registry
+- **Authentication Flow** - OAuth integration without changing core API
+- **Migration Tools** - Utilities to transfer data between storage types
+- **Conflict Resolution** - Automatic sync strategies for cloud storage
 
-### v3.0: Cloud Integration
+### From Phase 2 to Phase 3
 
-- Major cloud provider support
-- OAuth authentication flows
-- Sync and backup features
+- **Enterprise Wrappers** - Composition-based advanced features
+- **Security Enhancements** - Encryption and audit logging layers
+- **Performance Optimization** - Caching and batch operation wrappers
+- **Monitoring Integration** - Health checks and analytics collection
 
 ## Benefits
 
-1. **Platform Freedom**: Same code works everywhere
-2. **User Choice**: Multiple storage options per user preference
-3. **Scalability**: Easy to add new storage backends
-4. **Reliability**: Multi-provider failover and backup
-5. **Future Proof**: Ready for any platform or hosting model
+### Developer Experience
+
+- **Consistent API** - Same interface across all storage types
+- **Functional Composition** - Clean, testable factory functions
+- **Type Safety** - Full TypeScript support with platform-specific configurations
+- **Easy Testing** - Mock and memory storage for reliable unit tests
+
+### User Experience
+
+- **Platform Freedom** - Same application works desktop, browser, and cloud
+- **Storage Choice** - Users can choose their preferred cloud provider
+- **Offline Support** - Local storage with optional cloud sync
+- **Data Portability** - Easy migration between storage providers
+
+### Architecture Benefits
+
+- **Scalability** - Easy to add new storage backends
+- **Maintainability** - Clean separation of concerns
+- **Future Proof** - Ready for any platform or hosting model
+- **Performance** - Platform-optimized storage implementations
+
+## Risk Mitigation
+
+| Risk                         | Impact | Mitigation Strategy                                        |
+| ---------------------------- | ------ | ---------------------------------------------------------- |
+| Cloud provider API changes   | High   | Abstract APIs, version pinning, fallback strategies        |
+| Authentication complexity    | High   | OAuth libraries, comprehensive error handling              |
+| Cross-platform compatibility | Medium | Extensive testing, feature detection, graceful degradation |
+| Performance with large files | Medium | Streaming, chunking, lazy loading, progress callbacks      |
+| Storage quota limits         | Medium | Quota monitoring, user notifications, tier management      |
+| Data migration complexity    | Medium | Automated migration tools, validation, rollback support    |
 
 ---
 
-**Last Updated**: 2025-09-17
-**Owner**: @atomiton/storage
-**Status**: MINIMAL IMPLEMENTATION - Only FileSystemStorage exists, most features are planned only
+**Last Updated**: 2025-09-18
+**Current Phase**: Phase 0 Complete ✅
+**Next Phase**: Phase 1 - Browser Support
+**Owner**: @atomiton/storage team

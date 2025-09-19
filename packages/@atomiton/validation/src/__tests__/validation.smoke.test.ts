@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { z, validators } from '../index.js';
+import { v, validators } from '../index.js';
 
 describe('Validation Package Smoke Tests', () => {
   it('should export zod', () => {
-    expect(z).toBeDefined();
-    expect(z.string).toBeDefined();
-    expect(z.object).toBeDefined();
+    expect(v).toBeDefined();
+    expect(v.string).toBeDefined();
+    expect(v.object).toBeDefined();
   });
 
   it('should validate with essential validators', () => {
@@ -20,8 +20,8 @@ describe('Validation Package Smoke Tests', () => {
   });
 
   it('should use zod directly for schemas', () => {
-    const UserSchema = z.object({
-      name: z.string(),
+    const UserSchema = v.object({
+      name: v.string(),
       email: validators.email,
     });
 
