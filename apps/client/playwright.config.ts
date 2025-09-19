@@ -20,14 +20,17 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173",
 
+    /* Run headless in CI/hooks to avoid opening browser windows */
+    headless: !!process.env.CI || !!process.env.HUSKY,
+
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
 
     /* Take screenshot on failure */
     screenshot: "only-on-failure",
 
-    /* Record video on retry */
-    video: "retain-on-failure",
+    /* Record video for all tests to review user journeys - disabled in CI/hooks */
+    video: process.env.CI || process.env.HUSKY ? "off" : "on",
   },
 
   /* Snapshot directory */

@@ -74,7 +74,8 @@ if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; t
   echo "Running smoke E2E tests for client..."
   # Run smoke tests from the smoke folder
   if [ -d "apps/client/src/__tests__/e2e/smoke" ]; then
-    (cd apps/client && pnpm test:e2e src/__tests__/e2e/smoke) 2>&1 || {
+    # Set HUSKY env var to trigger headless mode in Playwright
+    (cd apps/client && HUSKY=1 pnpm test:e2e src/__tests__/e2e/smoke) 2>&1 || {
       echo "⚠️ Some smoke E2E tests failed (non-blocking)"
       echo "💡 Consider fixing before push"
     }
