@@ -1,12 +1,17 @@
-/**
- * @atomiton/events - Main Package Exports
- *
- * Clean API surface - all functionality accessed through events singleton
- */
+export { createEventBus } from "./exports/desktop";
+export type { EventBus, EventBusConfig } from "./types";
 
-// Main API export (follows core package pattern with api.ts)
-export { events } from "./api";
+// Backward compatibility - provide a default event bus instance
+import { createEventBus } from "./exports/desktop";
 
-// Types consumers need
-export type { EventsAPI } from "./api";
-export type * from "./types";
+const defaultBus = createEventBus<Record<string, any>>("default");
+
+export const events = {
+  emit: defaultBus.emit.bind(defaultBus),
+  on: defaultBus.on.bind(defaultBus),
+  once: defaultBus.once.bind(defaultBus),
+  off: defaultBus.off.bind(defaultBus),
+  removeAllListeners: defaultBus.removeAllListeners.bind(defaultBus),
+  listenerCount: defaultBus.listenerCount.bind(defaultBus),
+  createEventBus,
+};

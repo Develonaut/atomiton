@@ -1,280 +1,135 @@
-/**
- * IPC Support for Event System
- *
- * Provides Inter-Process Communication capabilities for Electron apps,
- * allowing seamless event communication between renderer and main processes.
- */
+import type { IPCBridge, IPCEvent } from "./types";
 
-import type { SystemEvent, EventSubscription, IPCEventHandler } from "./types";
-
-// Type definitions for Electron IPC interfaces
-type IpcRenderer = {
-  on: (
-    channel: string,
-    listener: (event: unknown, data: string) => void,
-  ) => void;
-  send: (channel: string, ...args: unknown[]) => void;
-};
-
-type IpcMain = {
-  on: (
-    channel: string,
-    listener: (event: { sender: { id: number } }, data: string) => void,
-  ) => void;
-};
-
-type WebContents = {
-  id: number;
-  send: (channel: string, ...args: unknown[]) => void;
-};
-
-type ElectronWebContents = {
-  getAllWebContents: () => WebContents[];
-};
-
-// Type guards for Electron environment
-function isElectronRenderer(): boolean {
-  return (
-    typeof window !== "undefined" &&
-    typeof process !== "undefined" &&
-    (process as unknown as { type: string }).type === "renderer"
-  );
-}
-
-function isElectronMain(): boolean {
-  return (
-    typeof window === "undefined" &&
-    typeof process !== "undefined" &&
-    (process as unknown as { type: string }).type === "browser"
-  );
-}
-
-/**
- * IPC Bridge - Handles cross-process event communication
- */
-class IPCBridge {
-  private handlers = new Map<string, Set<IPCEventHandler>>();
-  private ipcRenderer?: IpcRenderer;
-  private ipcMain?: IpcMain;
-  private initialized = false;
-
-  constructor() {
-    this.initialize();
-  }
-
-  private initialize(): void {
-    if (this.initialized) return;
-
-    try {
-      if (isElectronRenderer()) {
-        // Dynamic import to avoid errors in non-Electron environments
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const electron = require("electron") as { ipcRenderer: IpcRenderer };
-        this.ipcRenderer = electron.ipcRenderer;
-        this.setupRendererHandlers();
-      } else if (isElectronMain()) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const electron = require("electron") as { ipcMain: IpcMain };
-        this.ipcMain = electron.ipcMain;
-        this.setupMainHandlers();
-      }
-      this.initialized = true;
-    } catch {
-      // Not in Electron environment, IPC features disabled
-    }
-  }
-
-  private setupRendererHandlers(): void {
-    if (!this.ipcRenderer) return;
-
-    // Listen for events from main process
-    this.ipcRenderer.on("events:broadcast", (_event: unknown, data: string) => {
-      const systemEvent = this.deserialize(data);
-      this.emit(systemEvent);
-    });
-  }
-
-  private setupMainHandlers(): void {
-    if (!this.ipcMain) return;
-
-    // Listen for events from renderer processes
-    this.ipcMain.on(
-      "events:broadcast",
-      (event: { sender: { id: number } }, data: string) => {
-        const systemEvent = this.deserialize(data);
-
-        // Broadcast to all renderer processes
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { webContents } = require("electron") as {
-          webContents: ElectronWebContents;
-        };
-        webContents.getAllWebContents().forEach((contents) => {
-          if (contents.id !== event.sender.id) {
-            contents.send("events:broadcast", data);
-          }
-        });
-
-        // Also emit locally in main process
-        this.emit(systemEvent);
-      },
-    );
-  }
-
-  /**
-   * Send event across IPC boundary
-   */
-  sendToOtherProcess(event: SystemEvent): void {
-    if (!this.initialized) return;
-
-    const serialized = this.serialize(event);
-
-    if (this.ipcRenderer) {
-      // Send from renderer to main
-      this.ipcRenderer.send("events:broadcast", serialized);
-    } else if (this.ipcMain) {
-      // Send from main to all renderers
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { webContents } = require("electron") as {
-        webContents: ElectronWebContents;
-      };
-      webContents.getAllWebContents().forEach((contents) => {
-        contents.send("events:broadcast", serialized);
-      });
-    }
-  }
-
-  /**
-   * Register handler for IPC events
-   */
-  on(channel: string, handler: IPCEventHandler): EventSubscription {
-    if (!this.handlers.has(channel)) {
-      this.handlers.set(channel, new Set());
-    }
-    this.handlers.get(channel)!.add(handler);
-
-    return {
-      unsubscribe: () => {
-        const handlers = this.handlers.get(channel);
-        if (handlers) {
-          handlers.delete(handler);
-          if (handlers.size === 0) {
-            this.handlers.delete(channel);
-          }
-        }
-      },
-    };
-  }
-
-  /**
-   * Emit event to local handlers
-   */
-  private emit(event: SystemEvent): void {
-    const handlers = this.handlers.get(event.type);
-    if (handlers) {
-      handlers.forEach((handler) => {
-        try {
-          handler(event);
-        } catch (error) {
-          console.error("IPC handler error:", error, "Event:", event);
-        }
-      });
-    }
-
-    // Also emit wildcard handlers
-    const wildcardHandlers = this.handlers.get("*");
-    if (wildcardHandlers) {
-      wildcardHandlers.forEach((handler) => {
-        try {
-          handler(event);
-        } catch (error) {
-          console.error("IPC wildcard handler error:", error, "Event:", event);
-        }
-      });
-    }
-  }
-
-  /**
-   * Serialize event for IPC transport
-   */
-  private serialize(event: SystemEvent): string {
-    return JSON.stringify(event, (key, value) => {
-      // Handle special types that don't serialize well
-      if (value instanceof Date) {
-        return { __type: "Date", value: value.toISOString() };
-      }
-      if (value instanceof Error) {
-        return {
-          __type: "Error",
-          message: value.message,
-          stack: value.stack,
-          name: value.name,
-        };
-      }
-      if (value instanceof RegExp) {
-        return {
-          __type: "RegExp",
-          source: value.source,
-          flags: value.flags,
-        };
-      }
-      if (typeof value === "undefined") {
-        return { __type: "undefined" };
-      }
-      if (typeof value === "function") {
-        // Functions can't be serialized across IPC
-        return { __type: "function", name: value.name };
-      }
-      return value;
-    });
-  }
-
-  /**
-   * Deserialize event from IPC transport
-   */
-  private deserialize(data: string): SystemEvent {
-    return JSON.parse(data, (key, value) => {
-      if (value && typeof value === "object" && value.__type) {
-        switch (value.__type) {
-          case "Date":
-            return new Date(value.value);
-          case "Error": {
-            const error = new Error(value.message);
-            error.stack = value.stack;
-            error.name = value.name;
-            return error;
-          }
-          case "RegExp":
-            return new RegExp(value.source, value.flags);
-          case "undefined":
-            return undefined;
-          case "function":
-            // Can't reconstruct functions, return placeholder
-            return `[Function: ${value.name || "anonymous"}]`;
-          default:
-            return value;
-        }
-      }
-      return value;
-    });
-  }
-
-  /**
-   * Check if IPC is available
-   */
-  isAvailable(): boolean {
-    return this.initialized && (!!this.ipcRenderer || !!this.ipcMain);
-  }
-
-  /**
-   * Get current process type
-   */
-  getProcessType(): "renderer" | "main" | "browser" | null {
-    if (isElectronRenderer()) return "renderer";
-    if (isElectronMain()) return "main";
-    if (typeof window !== "undefined") return "browser";
+function detectElectronEnvironment(): "renderer" | "main" | null {
+  if (typeof process === "undefined") return null;
+  if (!process || typeof process !== "object" || !("type" in process))
     return null;
+
+  const electronProcess = process as typeof process & { type?: string };
+  if (electronProcess.type === "renderer") return "renderer";
+  if (electronProcess.type === "browser") return "main";
+  return null;
+}
+
+type IPCContext = {
+  environment: "renderer" | "main" | null;
+  handlers: Map<string, Set<(event: IPCEvent) => void>>;
+  ipcRenderer?: {
+    send: (channel: string, data: unknown) => void;
+    on: (
+      channel: string,
+      listener: (event: unknown, data: unknown) => void,
+    ) => void;
+  };
+  ipcMain?: {
+    on: (
+      channel: string,
+      listener: (event: unknown, data: unknown) => void,
+    ) => void;
+  };
+  webContents?: {
+    getAllWebContents: () => Array<{
+      id: number;
+      send: (channel: string, data: unknown) => void;
+    }>;
+  };
+};
+
+function loadRendererIPC(ctx: IPCContext): void {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    ctx.ipcRenderer = require("electron").ipcRenderer;
+  } catch {}
+}
+
+function loadMainIPC(ctx: IPCContext): void {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const electron = require("electron");
+    ctx.ipcMain = electron.ipcMain;
+    ctx.webContents = electron.webContents;
+  } catch {}
+}
+
+function initializeIPC(): IPCContext {
+  const environment = detectElectronEnvironment();
+  const ctx: IPCContext = { environment, handlers: new Map() };
+
+  if (environment === "renderer") loadRendererIPC(ctx);
+  if (environment === "main") loadMainIPC(ctx);
+
+  return ctx;
+}
+
+function createSend(ctx: IPCContext) {
+  return (channel: string, data: unknown): void => {
+    if (ctx.environment === "renderer" && ctx.ipcRenderer) {
+      ctx.ipcRenderer.send(channel, data);
+    } else if (ctx.environment === "main" && ctx.webContents) {
+      ctx.webContents.getAllWebContents().forEach((contents) => {
+        contents.send(channel, data);
+      });
+    }
+  };
+}
+
+function setupChannelHandler(
+  ctx: IPCContext,
+  channel: string,
+  handler: (event: IPCEvent) => void,
+): void {
+  if (ctx.environment === "renderer" && ctx.ipcRenderer) {
+    ctx.ipcRenderer.on(channel, (_: unknown, data: unknown) => {
+      handler({ channel, data });
+    });
+  } else if (ctx.environment === "main" && ctx.ipcMain) {
+    ctx.ipcMain.on(channel, (_: unknown, data: unknown) => {
+      handler({ channel, data });
+    });
   }
 }
 
-// Export singleton instance
-export const ipcBridge = new IPCBridge();
+function createCleanupFn(
+  ctx: IPCContext,
+  channel: string,
+  handler: (event: IPCEvent) => void,
+) {
+  return () => {
+    const channelHandlers = ctx.handlers.get(channel);
+    if (channelHandlers) {
+      channelHandlers.delete(handler);
+      if (channelHandlers.size === 0) {
+        ctx.handlers.delete(channel);
+      }
+    }
+  };
+}
+
+function createOn(ctx: IPCContext) {
+  return (channel: string, handler: (event: IPCEvent) => void) => {
+    if (!ctx.handlers.has(channel)) {
+      ctx.handlers.set(channel, new Set());
+    }
+    ctx.handlers.get(channel)!.add(handler);
+
+    setupChannelHandler(ctx, channel, handler);
+    return createCleanupFn(ctx, channel, handler);
+  };
+}
+
+function createIsAvailable(ctx: IPCContext) {
+  return (): boolean => {
+    return ctx.environment !== null && (!!ctx.ipcRenderer || !!ctx.ipcMain);
+  };
+}
+
+export function createIPCBridge(): IPCBridge {
+  const ctx = initializeIPC();
+
+  return {
+    send: createSend(ctx),
+    on: createOn(ctx),
+    isAvailable: createIsAvailable(ctx),
+    getEnvironment: () => ctx.environment,
+  };
+}

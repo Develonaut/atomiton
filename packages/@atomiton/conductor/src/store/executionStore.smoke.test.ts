@@ -147,7 +147,7 @@ describe("Execution Store Smoke Tests", () => {
       await new Promise((resolve) => setTimeout(resolve, 10));
 
       expect(eventFired).toBe(true);
-      subscription.unsubscribe();
+      subscription();
     });
   });
 });
