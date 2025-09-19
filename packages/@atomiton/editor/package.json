@@ -32,8 +32,7 @@
     "test:benchmark": "tsx scripts/run-benchmarks.ts",
     "test:e2e": "echo \"No E2E tests for this package\"",
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
-    "test:pre-push": "pnpm test:benchmark",
-    "test:coverage": "vitest run --coverage"
+    "test:pre-push": "pnpm test:benchmark"
   },
   "keywords": [
     "editor",
