@@ -2,6 +2,9 @@
 
 # Husky pre-commit hook - Run formatting, linting, and smoke tests
 
+# Set environment variable to disable TUI when running in git hooks
+export TURBO_UI="stream"
+
 echo "🔍 Running pre-commit checks..."
 
 # Validate package consistency first
@@ -40,7 +43,6 @@ DURATION=$((END_TIME - START_TIME))
 if [ $SMOKE_EXIT_CODE -ne 0 ]; then
   echo "❌ Smoke tests failed!"
   echo "💡 Fix failing tests before committing"
-  echo "📊 Run 'pnpm test:dashboard' to see test status"
   exit 1
 fi
 
@@ -48,7 +50,6 @@ fi
 if [ $DURATION -gt 30 ]; then
   echo "❌ Smoke tests took ${DURATION}s (limit: 30s)"
   echo "💡 Move slow tests to integration suite or optimize them"
-  echo "📊 Run 'pnpm test:dashboard' to identify slow tests"
 
   # Use TypeScript speed checker if available for detailed analysis
   if [ -f "scripts/test-speed-check.ts" ]; then

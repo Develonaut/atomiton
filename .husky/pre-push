@@ -2,6 +2,9 @@
 
 # Husky pre-push hook - Performance warnings and critical tests
 
+# Set environment variable to disable TUI when running in git hooks
+export TURBO_UI="stream"
+
 echo "📤 Pre-push validation..."
 
 # Get the remote we're pushing to (usually origin)
@@ -84,13 +87,5 @@ if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; t
   fi
 fi
 
-# Show performance dashboard summary if available
-if [ -f "scripts/test-dashboard.ts" ]; then
-  echo ""
-  echo "📊 Performance Summary:"
-  tsx scripts/test-dashboard.ts 2>/dev/null | grep -A 5 "Alerts & Warnings" || true
-fi
-
 echo ""
 echo "✅ Pre-push checks complete - ready to push!"
-echo "💡 Run 'pnpm test:dashboard' for detailed performance report"
