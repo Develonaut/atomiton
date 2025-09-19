@@ -4,9 +4,9 @@
 
 import type {
   CompositeDefinition,
-  INode,
   NodeExecutionResult,
 } from "@atomiton/nodes/executable";
+import { nodes } from "@atomiton/nodes/executable";
 import type { ExecutionStatus } from "../../interfaces/IExecutionEngine";
 import PQueue from "p-queue";
 import { type ExecutionStore } from "../../store";
@@ -27,24 +27,12 @@ export function createCompositeRunner(
   options: { maxConcurrency?: number } = {},
 ): CompositeRunnerInstance {
   // Private state using closures
-  const nodeRegistry = new Map<string, INode>();
   const executionQueue = new PQueue({
     concurrency: options.maxConcurrency || 4,
   });
   const executionResults = new Map<string, Map<string, NodeExecutionResult>>();
 
-  const registerNode = (nodeType: string, node: INode): void => {
-    nodeRegistry.set(nodeType, node);
-  };
-
-  const execute = (
-    composite: CompositeDefinition,
-    options: CompositeExecutionOptions = {},
-  ): Promise<CompositeExecutionResult> => {
-    return executeComposite(composite, options);
-  };
-
-  const executeComposite = async (
+  const execute = async (
     composite: CompositeDefinition,
     options: CompositeExecutionOptions = {},
   ): Promise<CompositeExecutionResult> => {
@@ -56,7 +44,7 @@ export function createCompositeRunner(
 
     try {
       // Validate composite
-      const validation = validateComposite(composite, nodeRegistry);
+      const validation = validateComposite(composite, nodes);
       if (!validation.valid) {
         throw new Error(
           `Composite validation failed: ${validation.errors.join(", ")}`,
@@ -93,7 +81,7 @@ export function createCompositeRunner(
           options,
           nodeResults,
           executionTimes,
-          nodeRegistry,
+          nodes,
           executionResults,
           executionStore,
           nodeExecutor,
@@ -110,7 +98,7 @@ export function createCompositeRunner(
           options,
           nodeResults,
           executionTimes,
-          nodeRegistry,
+          nodes,
           executionResults,
           executionStore,
           nodeExecutor,
@@ -178,8 +166,6 @@ export function createCompositeRunner(
 
   // Return public API
   return {
-    registerNode,
     execute,
-    executeComposite,
   };
 }

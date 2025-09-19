@@ -2,7 +2,7 @@
  * Types for composite execution system
  */
 
-import type { INode, CompositeDefinition } from "@atomiton/nodes/executable";
+import type { CompositeDefinition } from "@atomiton/nodes/executable";
 
 export type CompositeExecutionOptions = {
   maxConcurrency?: number;
@@ -28,12 +28,7 @@ export type CompositeExecutionResult = {
 };
 
 export type CompositeRunnerInstance = {
-  registerNode: (nodeType: string, node: INode) => void;
   execute: (
-    composite: CompositeDefinition,
-    options?: CompositeExecutionOptions,
-  ) => Promise<CompositeExecutionResult>;
-  executeComposite: (
     composite: CompositeDefinition,
     options?: CompositeExecutionOptions,
   ) => Promise<CompositeExecutionResult>;

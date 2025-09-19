@@ -10,7 +10,7 @@ import type { CompositeValidationResult } from "./types";
  */
 export function validateComposite(
   composite: CompositeDefinition,
-  nodeRegistry: Map<string, INode>,
+  nodes: Record<string, INode>,
 ): CompositeValidationResult {
   const errors: string[] = [];
 
@@ -23,7 +23,7 @@ export function validateComposite(
 
   // Validate node types exist
   for (const node of composite.nodes) {
-    if (!nodeRegistry.has(node.type)) {
+    if (!nodes[node.type]) {
       errors.push(`Unknown node type: ${node.type}`);
     }
   }

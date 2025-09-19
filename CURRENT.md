@@ -363,14 +363,22 @@ Fix the @atomiton/form package to meet our testing requirements:
 - Create comprehensive test suite
 ```
 
-**10. @atomiton/conductor**
+**10. @atomiton/conductor** ✅ **UPDATED (Sep 18, 2025)**
 
 ```
-Fix the @atomiton/conductor package to meet our testing requirements:
-- Add smoke tests for workflow execution
+UPDATED: Node Registry Elimination Implementation:
+- ✅ Eliminated node registry Map completely - no manual registration required
+- ✅ Replaced with direct import from @atomiton/nodes/executable
+- ✅ Simplified CompositeRunnerInstance interface from 3 functions to 1
+- ✅ Updated all validation and execution logic to use nodes object
+- ✅ All existing tests pass (17/17)
+- ✅ Package builds successfully
+- ✅ No TypeScript errors
+
+Still needs testing infrastructure improvements:
+- Add smoke tests for composite workflow execution
 - Add benchmarks for execution performance
-- Create actual test files (currently has none)
-- Ensure all test scripts are functional
+- Expand test coverage beyond simpleExecutor tests
 ```
 
 **11. @atomiton/yaml**
