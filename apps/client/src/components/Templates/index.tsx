@@ -1,19 +1,30 @@
 import Image from "@/components/Image";
 import { useLink } from "@/router";
-import type { Blueprint } from "@/stores/blueprint";
-import { useBlueprints } from "@/stores/blueprint";
+import { useTemplates } from "@/store/useTemplates";
+import {
+  convertNodeToEditorNode,
+  convertEdgeToEditorEdge,
+} from "@/utils/editorConverters";
+import type { CompositeDefinition } from "@atomiton/nodes/browser";
 
 type TemplateButtonProps = {
-  template: Blueprint;
+  template: CompositeDefinition;
   index: number;
 };
 
 function TemplateButton({ template, index }: TemplateButtonProps) {
+  const defaultNodes =
+    template.nodes?.map((node, nodeIndex) =>
+      convertNodeToEditorNode(node, nodeIndex),
+    ) || [];
+
+  const defaultEdges = template.edges?.map(convertEdgeToEditorEdge) || [];
+
   const linkProps = useLink({
     to: "/editor/new",
     state: {
-      defaultNodes: template.nodes || [],
-      defaultEdges: template.edges || [],
+      defaultNodes,
+      defaultEdges,
       name: template.name,
       description: template.description,
     },
@@ -21,9 +32,10 @@ function TemplateButton({ template, index }: TemplateButtonProps) {
 
   return (
     <button
+      {...linkProps}
+      data-testid={`template-button-${template.id}`}
       className="flex items-center shrink-0 w-59 p-2 bg-surface-02 rounded-[1.25rem] border border-s-01 transition-all hover:shadow-prompt-input hover:bg-surface-01 hover:border-s-02 text-left"
       type="button"
-      {...linkProps}
     >
       <div className="shrink-0 w-16 h-16">
         <Image
@@ -43,12 +55,15 @@ function TemplateButton({ template, index }: TemplateButtonProps) {
 }
 
 function Templates() {
-  const { templates } = useBlueprints();
+  const { templates } = useTemplates();
 
   return (
     !!templates.length && (
-      <div className="flex gap-3 py-8 px-12 overflow-x-auto scrollbar-none max-2xl:px-5">
-        {templates.map((template, index) => (
+      <div
+        data-testid="templates-container"
+        className="flex gap-3 py-8 px-12 overflow-x-auto scrollbar-none max-2xl:px-5"
+      >
+        {templates.map((template: CompositeDefinition, index: number) => (
           <TemplateButton key={template.id} template={template} index={index} />
         ))}
       </div>
