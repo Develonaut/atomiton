@@ -17,7 +17,7 @@ Editor (@atomiton/editor)
     ↓
 State Management (@atomiton/store)
     ↓
-Storage Layer (@atomiton/storage) [BROKEN]
+Storage Layer (@atomiton/storage) [COMPLETE]
     ↓
 Execution Layer (@atomiton/conductor)
     ↓
@@ -30,13 +30,13 @@ Event System (@atomiton/events) [NOT INTEGRATED]
 
 #### Core Execution Packages
 
-| Package                 | Purpose                            | Status      | Implementation Level                                         |
-| ----------------------- | ---------------------------------- | ----------- | ------------------------------------------------------------ |
-| **@atomiton/conductor** | Orchestrates node execution        | ✅ Good     | 85% - Storage integration complete, node registry simplified |
-| **@atomiton/nodes**     | Node definitions & implementations | ✅ Good     | 90% - Nodes exist but aren't registered                      |
-| **@atomiton/events**    | Event system for state sync        | ✅ Complete | 100% - Built but not integrated                              |
-| **@atomiton/storage**   | Composite persistence              | ✅ Complete | 100% - Factory implemented, desktop integration done         |
-| **@atomiton/store**     | State management                   | ✅ Good     | 100% - Working properly                                      |
+| Package                 | Purpose                            | Status      | Implementation Level                                                      |
+| ----------------------- | ---------------------------------- | ----------- | ------------------------------------------------------------------------- |
+| **@atomiton/conductor** | Orchestrates node execution        | ✅ Good     | 85% - Storage integration complete, node registry simplified              |
+| **@atomiton/nodes**     | Node definitions & implementations | ✅ Good     | 90% - Nodes exist but aren't registered                                   |
+| **@atomiton/events**    | Event system for state sync        | ✅ Complete | 100% - Built but not integrated                                           |
+| **@atomiton/storage**   | Composite persistence              | ✅ Complete | 100% - Split exports with functional factories, desktop/browser optimized |
+| **@atomiton/store**     | State management                   | ✅ Good     | 100% - Working properly                                                   |
 
 #### UI & Editor Packages
 
@@ -59,8 +59,8 @@ Event System (@atomiton/events) [NOT INTEGRATED]
 
 **Status**: ✅ **COMPLETED** - Storage factory implemented and integrated
 
-- Location: `/packages/@atomiton/storage/src/index.ts`
-- ✅ Implemented: `createStorage()` factory function with memory and filesystem support
+- Location: `/packages/@atomiton/storage/src/` (split exports)
+- ✅ Implemented: Split exports pattern with `createStorage()`, `createFileSystem()`, `createMemory()`
 - ✅ Integration: Desktop app uses filesystem storage in userData directory
 - ✅ Unblocked: All composite loading and persistence now functional
 
@@ -122,26 +122,32 @@ Event System (@atomiton/events) [NOT INTEGRATED]
 
 ## Implementation Strategy
 
-### Phase 0: Quick Wins (2-4 hours)
+### Phase 0: Quick Wins (2-4 hours) ✅ **COMPLETED**
 
 **Goal**: Unblock basic development and testing
 
 #### Tasks:
 
-1. **Create Storage Factory**
+1. **✅ Create Storage Factory** - COMPLETED
 
    ```typescript
-   // packages/@atomiton/storage/src/index.ts
-   export function createStorage(config: StorageConfig): IStorageEngine {
-     switch (config.type) {
-       case "memory":
-         return new InMemoryStorage();
-       case "filesystem":
-         return new FileSystemStorage(config);
-       default:
-         throw new Error(`Unknown storage type: ${config.type}`);
-     }
-   }
+   // Modern split exports pattern (Phase 0 Complete)
+   // @atomiton/storage/desktop - includes filesystem + memory
+   import {
+     createStorage,
+     createFileSystem,
+     createMemory,
+   } from "@atomiton/storage/desktop";
+
+   // @atomiton/storage/browser - memory only (IndexedDB in Phase 1)
+   import { createStorage, createMemory } from "@atomiton/storage/browser";
+
+   // Smart factory with platform defaults
+   const storage = createStorage(); // Filesystem on desktop, memory on browser
+
+   // Direct engine creation
+   const fileStorage = createFileSystem({ baseDir: "./data" });
+   const memoryStorage = createMemory();
    ```
 
    **Implementation Prompt:**
@@ -200,7 +206,7 @@ Event System (@atomiton/events) [NOT INTEGRATED]
    5. Unit tests for storage factory
    ```
 
-2. **Eliminate Node Registry (Use Nodes Package Directly)**
+2. **✅ Eliminate Node Registry (Use Nodes Package Directly)** - COMPLETED
 
    ```typescript
    // packages/@atomiton/conductor/src/execution/composite/compositeRunner.ts
@@ -285,18 +291,20 @@ Event System (@atomiton/events) [NOT INTEGRATED]
    This eliminates unnecessary complexity while maintaining all functionality.
    ```
 
-3. **✅ Storage-Conductor Wiring Complete**
+3. **✅ Storage-Conductor Wiring** - COMPLETED
 
    ```typescript
    // ✅ IMPLEMENTED in apps/desktop/src/main/index.ts
    import { app } from "electron";
-   import { createStorage } from "@atomiton/storage";
+   import { createStorage, createFileSystem } from "@atomiton/storage/desktop";
    import { createConductor } from "@atomiton/conductor";
    import path from "path";
 
-   const storage = await createStorage({
-     type: "filesystem",
-     basePath: path.join(app.getPath("userData"), "atomiton-data"),
+   // Using split exports - desktop-specific import
+   const storage = createStorage({
+     engine: createFileSystem({
+       baseDir: path.join(app.getPath("userData"), "atomiton-data"),
+     }),
    });
 
    const conductor = createConductor({ storage });
@@ -339,14 +347,18 @@ Event System (@atomiton/events) [NOT INTEGRATED]
    1. **Update Electron Main Process** (`apps/desktop/src/main/`):
 
       ```typescript
-      import { createStorage } from "@atomiton/storage";
+      import {
+        createStorage,
+        createFileSystem,
+      } from "@atomiton/storage/desktop";
       import { createConductor } from "@atomiton/conductor";
       import { app } from "electron";
       import path from "path";
 
       const storage = createStorage({
-        type: "filesystem",
-        path: path.join(app.getPath("userData"), "atomiton-data"),
+        engine: createFileSystem({
+          baseDir: path.join(app.getPath("userData"), "atomiton-data"),
+        }),
       });
 
       const conductor = createConductor({ storage });
@@ -378,13 +390,13 @@ Event System (@atomiton/events) [NOT INTEGRATED]
 
    ```
 
-### Phase 1: Enable Basic Execution (1-2 days)
+### Phase 1: Enable Basic Execution (1-2 days) 🟡 **IN PROGRESS**
 
 **Goal**: Execute a single node end-to-end through the desktop app
 
 #### Tasks:
 
-4. **Fix Electron IPC Bridge (Events-Based Approach)**
+4. **⏳ Fix Electron IPC Bridge (Events-Based Approach)** - READY TO START
 
    ```typescript
    // Use @atomiton/events for cross-process communication
@@ -518,6 +530,7 @@ Event System (@atomiton/events) [NOT INTEGRATED]
       ```
 
    5. **Update Nodes Package Exports (Consistency)**
+
       ```json
       // Also update @atomiton/nodes package.json exports
       "exports": {
@@ -568,87 +581,224 @@ Event System (@atomiton/events) [NOT INTEGRATED]
 
    ```
 
-5. **Initialize Conductor in Main Process**
+5. **⏳ Initialize Conductor in Main Process** - WAITING FOR TASK 4
 
    ```typescript
    // apps/desktop/src/main/conductor.ts
    import { createConductor } from "@atomiton/conductor";
-   import { createStorage } from "@atomiton/storage";
-   import { registerBuiltinNodes } from "./nodes";
+   import { createStorage, createFileSystem } from "@atomiton/storage/desktop";
+   import { createEventManager } from "@atomiton/events/desktop";
+   import { app } from "electron";
+   import path from "path";
 
    export async function setupConductor() {
-     const storage = createStorage({ type: "filesystem", path: "./data" });
+     const storage = createStorage({
+       engine: createFileSystem({
+         baseDir: path.join(app.getPath("userData"), "atomiton-data"),
+       }),
+     });
+
      const conductor = createConductor({ storage });
 
-     registerBuiltinNodes();
+     // Setup event-based communication
+     const events = createEventManager();
+     const conductorBus = events.createBus("conductor");
 
-     ipcMain.handle("conductor:execute", async (event, request) => {
-       return conductor.execute(request);
+     conductorBus.on("execute", async (data) => {
+       const result = await conductor.execute(data);
+       return result; // Auto-responds via events
      });
    }
    ```
 
-6. **Add Execute Button to UI**
+   **Implementation Prompt:**
+
+   ````markdown
+   TASK: Initialize Conductor in Main Process
+
+   OVERVIEW:
+   Set up the conductor in Electron's main process with proper storage integration and event-based IPC communication. This builds on the modernized events package to enable cross-process execution requests.
+
+   WORKFLOW REQUIREMENTS:
+
+   1. Create new worktree: `wtnew conductor-main-process-setup`
+   2. Work in worktree: `cd ../atomiton-conductor-main-process-setup`
+   3. Follow .claude/workflow/EXECUTION_PLAN.md
+   4. Get Karen's approval before completing
+
+   PREREQUISITES:
+
+   - ✅ Storage factory implemented and integrated
+   - ✅ Node registry eliminated (using nodes package directly)
+   - ✅ Events package modernized with async support
+   - ✅ Storage-conductor wiring complete
+
+   CURRENT STATE:
+
+   - Conductor exists but not initialized in Electron main process
+   - Storage is configured but conductor needs event-based IPC setup
+   - No bridge between renderer requests and main process execution
+
+   TECHNICAL CHANGES:
+
+   1. **Create Main Process Conductor Setup** (`apps/desktop/src/main/conductor.ts`):
+
+      ```typescript
+      import { createConductor } from "@atomiton/conductor";
+      import {
+        createStorage,
+        createFileSystem,
+      } from "@atomiton/storage/desktop";
+      import { createEventManager } from "@atomiton/events/desktop";
+      import { app } from "electron";
+      import path from "path";
+
+      export async function setupConductor() {
+        // Initialize storage (using split exports)
+        const storage = createStorage({
+          engine: createFileSystem({
+            baseDir: path.join(app.getPath("userData"), "atomiton-data"),
+          }),
+        });
+
+        // Create conductor with storage
+        const conductor = createConductor({ storage });
+
+        // Setup event-based communication
+        const events = createEventManager();
+        const conductorBus = events.createBus("conductor");
+
+        // Handle execution requests from renderer
+        conductorBus.on("execute", async (data) => {
+          try {
+            const result = await conductor.execute(data);
+            return result; // Auto-responds to caller via events
+          } catch (error) {
+            throw new Error(`Execution failed: ${error.message}`);
+          }
+        });
+
+        // Handle status requests
+        conductorBus.on("getStatus", async (executionId) => {
+          return conductor.getStatus?.(executionId) || { status: "unknown" };
+        });
+
+        return { conductor, events };
+      }
+      ```
+   ````
+
+   2. **Update Main Process Initialization** (`apps/desktop/src/main/index.ts`):
+
+      ```typescript
+      import { setupConductor } from "./conductor";
+
+      app.whenReady().then(async () => {
+        // Initialize conductor
+        await setupConductor();
+
+        // Continue with window creation...
+      });
+      ```
+
+   3. **Error Handling & Logging**:
+      - Add structured error handling for conductor failures
+      - Log execution requests and results for debugging
+      - Handle storage initialization errors gracefully
+
+   SUCCESS CRITERIA:
+   - Conductor properly initialized in main process
+   - Event-based IPC communication working
+   - Storage integration functional
+   - Error handling for execution failures
+   - Ready to receive execution requests from renderer
+
+   AGENT COORDINATION:
+   - Parker: Electron main process setup and IPC configuration
+   - Michael: Conductor integration and architecture validation
+   - Karen: End-to-end testing of main process conductor setup
+
+   DELIVERABLES:
+   1. Conductor setup function in main process
+   2. Event-based IPC handlers for execution requests
+   3. Proper error handling and logging
+   4. Integration with existing storage setup
+   5. All tests passing
+   6. Ready for renderer-side execution triggers
+
+   This enables the main process to handle execution requests via the modernized events system.
+
+   ```
+
+   ```
+
+6. **⏳ Add Execute Button to UI** - WAITING FOR TASKS 4 & 5
    - Create execution trigger in editor toolbar
    - Display basic execution results
 
-### Phase 2: Real-time Feedback (2-3 days)
+### Phase 2: Real-time Feedback (2-3 days) ⏸️ **BLOCKED**
 
 **Goal**: Provide execution progress and live updates
 
+**Status**: Waiting for Phase 1 completion
+
 #### Tasks:
 
-7. **Integrate Events Package**
+7. **⏸️ Integrate Events Package** - BLOCKED
    - Emit events from conductor during execution
    - Create event bus for cross-process communication
    - Subscribe to events in UI for progress updates
 
-8. **Implement WebSocket Transport**
+8. **⏸️ Implement WebSocket Transport** - BLOCKED
    - Enable real-time communication for external integrations
    - Stream execution progress to connected clients
 
-9. **Error Handling & Recovery**
+9. **⏸️ Error Handling & Recovery** - BLOCKED
    - Structured error types for different failure modes
    - Retry mechanisms for transient failures
    - User-friendly error messages
 
-### Phase 3: Production Features (1 week)
+### Phase 3: Production Features (1 week) ⏸️ **BLOCKED**
 
 **Goal**: Make the system robust and production-ready
 
+**Status**: Waiting for Phase 1 & 2 completion
+
 #### Tasks:
 
-10. **Resource Management**
+10. **⏸️ Resource Management** - BLOCKED
     - Memory usage monitoring and limits
     - CPU throttling for intensive operations
     - Timeout handling for long-running nodes
     - Process isolation for dangerous operations
 
-11. **Advanced Node Types**
+11. **⏸️ Advanced Node Types** - BLOCKED
     - Platform-specific nodes (Windows, macOS, Linux)
     - Cloud service integrations (AWS, Azure, GCP)
     - Database connectors
     - ML/AI nodes
 
-12. **Testing Infrastructure**
+12. **⏸️ Testing Infrastructure** - BLOCKED
     - Mock nodes for deterministic testing
     - End-to-end execution test suite
     - Performance benchmarks
     - Load testing for concurrent executions
 
-### Phase 4: Developer Experience (Ongoing)
+### Phase 4: Developer Experience (Ongoing) ⏸️ **BLOCKED**
 
 **Goal**: Polish the system and improve developer productivity
 
+**Status**: Waiting for core execution to be functional
+
 #### Tasks:
 
-13. **Debugging Tools**
+13. **⏸️ Debugging Tools** - BLOCKED
     - Execution timeline visualization
     - Node performance profiling
     - Step-through debugging
     - Execution replay from logs
 
-14. **Documentation & Guides**
+14. **⏸️ Documentation & Guides** - BLOCKED
     - Node development guide
     - Execution architecture documentation
     - API reference

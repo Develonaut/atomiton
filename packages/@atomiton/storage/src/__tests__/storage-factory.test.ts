@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { createStorage } from "../index";
 import { createInMemoryStorage } from "../factories/createInMemoryStorage";
 import { createFileSystemStorage } from "../factories/createFileSystemStorage";
 import { StorageError } from "../types";
@@ -8,21 +7,39 @@ import * as path from "path";
 import * as os from "os";
 
 describe("Storage Factory", () => {
-  describe("createStorage", () => {
-    it("creates memory storage when type is 'memory'", () => {
-      const storage = createStorage({ type: "memory" });
+  describe("Desktop createStorage", () => {
+    it("creates memory storage when using createMemory", async () => {
+      const { createStorage, createMemory } = await import("../desktop");
+      const storage = createStorage({ engine: createMemory() });
       expect(storage.getInfo().type).toBe("memory");
     });
 
-    it("creates filesystem storage when type is 'filesystem'", () => {
-      const storage = createStorage({ type: "filesystem" });
+    it("creates filesystem storage when using createFileSystem", async () => {
+      const { createStorage, createFileSystem } = await import("../desktop");
+      const storage = createStorage({
+        engine: createFileSystem({ baseDir: os.tmpdir() }),
+      });
       expect(storage.getInfo().type).toBe("filesystem");
     });
 
-    it("throws error for unknown storage type", () => {
-      expect(() => {
-        createStorage({ type: "unknown" as "memory" | "filesystem" });
-      }).toThrow("Unknown storage type: unknown");
+    it("creates default filesystem storage when no engine provided", async () => {
+      const { createStorage } = await import("../desktop");
+      const storage = createStorage();
+      expect(storage.getInfo().type).toBe("filesystem");
+    });
+  });
+
+  describe("Browser createStorage", () => {
+    it("creates memory storage when using createMemory", async () => {
+      const { createStorage, createMemory } = await import("../browser");
+      const storage = createStorage({ engine: createMemory() });
+      expect(storage.getInfo().type).toBe("memory");
+    });
+
+    it("creates default memory storage when no engine provided", async () => {
+      const { createStorage } = await import("../browser");
+      const storage = createStorage();
+      expect(storage.getInfo().type).toBe("memory");
     });
   });
 

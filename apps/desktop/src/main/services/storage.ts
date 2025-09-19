@@ -1,9 +1,17 @@
+import {
+  createStorage,
+  createFileSystemEngine,
+} from "@atomiton/storage/desktop";
 import { app } from "electron";
-import { createFileSystemStorage } from "@atomiton/storage";
+import path from "path";
 
 export function initializeStorage() {
   try {
-    return createFileSystemStorage({ baseDir: app.getPath("userData") });
+    return createStorage({
+      engine: createFileSystemEngine({
+        baseDir: path.join(app.getPath("userData"), "atomiton-data"),
+      }),
+    });
   } catch (error) {
     console.error("Failed to initialize storage:", error);
     app.quit();

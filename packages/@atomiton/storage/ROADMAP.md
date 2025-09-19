@@ -8,31 +8,37 @@ The @atomiton/storage package now provides a robust foundation for universal sto
 
 ### Current Implementation (Phase 0)
 
-**Completed Features:**
+**✅ Completed Features:**
 
+- ✅ **Split Exports Pattern** - Browser/desktop optimized bundles with platform-specific capabilities
 - ✅ **Functional Programming Pattern** - Clean factory functions following FP principles
-- ✅ **Core Storage Types** - `memory` (testing), `filesystem` (desktop production)
-- ✅ **Factory Functions** - `createInMemoryStorage()`, `createFileSystemStorage()`, `createStorage()`
+- ✅ **Core Storage Types** - `memory` (all platforms), `filesystem` (desktop only)
+- ✅ **Factory Functions** - `createMemory()`, `createFileSystem()`, `createStorage()` with smart defaults
 - ✅ **Universal Interface** - `IStorageEngine` with save/load/delete/exists/list/getInfo methods
 - ✅ **Type Safety** - Comprehensive TypeScript definitions for all storage operations
 - ✅ **Error Handling** - Robust error management with StorageError class and specific error codes
 - ✅ **Platform Detection** - Automatic platform detection for appropriate storage backend selection
+- ✅ **Bundle Optimization** - No main export to prevent bloated bundles
 
-**API Usage (Phase 0):**
+**Split Exports API (Phase 0):**
 
 ```typescript
+// Browser usage - optimized bundle size
+import { createStorage, createMemory } from "@atomiton/storage/browser";
+
+// Desktop usage - includes filesystem support
 import {
   createStorage,
-  createFileSystemStorage,
-  createInMemoryStorage,
-} from "@atomiton/storage";
+  createFileSystem,
+  createMemory,
+} from "@atomiton/storage/desktop";
 
-// Factory with automatic selection
-const storage = await createStorage({ type: "filesystem" });
+// Smart factory with automatic selection
+const storage = createStorage(); // Filesystem on desktop, memory on browser
 
 // Direct factory functions
-const fileStorage = await createFileSystemStorage({ basePath: "./data" });
-const memoryStorage = createInMemoryStorage();
+const fileStorage = createFileSystem({ baseDir: "./data" });
+const memoryStorage = createMemory();
 
 // Universal interface
 await storage.save("blueprint-123", compositeData);
@@ -46,21 +52,22 @@ The functional programming architecture will scale to support additional storage
 
 ### Phase 1: Browser Support
 
-- **`createIndexedDBStorage()`** - Browser IndexedDB for client-side applications
-- **`createBrowserStorage()`** - Automatic IndexedDB + localStorage fallback
+- **`createIndexedDB()`** - Browser IndexedDB for client-side persistence (added to `/browser` export)
+- **`createLocalStorage()`** - localStorage fallback for simple data (added to `/browser` export)
+- **Enhanced browser detection** - Automatic IndexedDB + localStorage fallback in `createStorage()`
 
 ### Phase 2: Cloud Integration
 
-- **`createGoogleDriveStorage()`** - Google Drive API integration
-- **`createOneDriveStorage()`** - Microsoft OneDrive API integration
-- **`createDropboxStorage()`** - Dropbox API integration
-- **`createCloudStorage()`** - Atomiton managed cloud backend
+- **`createGoogleDrive()`** - Google Drive API integration (both exports)
+- **`createOneDrive()`** - Microsoft OneDrive API integration (both exports)
+- **`createDropbox()`** - Dropbox API integration (both exports)
+- **`createCloud()`** - Atomiton managed cloud backend (both exports)
 
 ### Phase 3: Advanced & Testing
 
-- **`createMockStorage()`** - Advanced testing with configurable behavior
-- **`createEncryptedStorage()`** - Wrapper for encryption over any storage type
-- **`createCachedStorage()`** - Performance wrapper with caching layer
+- **`createMock()`** - Advanced testing with configurable behavior (both exports)
+- **`createEncrypted()`** - Wrapper for encryption over any storage type (both exports)
+- **`createCached()`** - Performance wrapper with caching layer (both exports)
 
 ## Implementation Phases
 
@@ -75,14 +82,23 @@ The functional programming architecture will scale to support additional storage
 **Deliverables:**
 
 ```typescript
-// Phase 1 API additions
-const browserStorage = await createIndexedDBStorage({
+// Phase 1 API additions to /browser export
+import {
+  createStorage,
+  createIndexedDB,
+  createLocalStorage,
+} from "@atomiton/storage/browser";
+
+const browserStorage = createIndexedDB({
   dbName: "atomiton-storage",
   version: 1,
 });
 
-// Auto-detection for browser
-const storage = await createStorage(); // Automatically uses IndexedDB in browser
+// Enhanced auto-detection for browser
+const storage = createStorage(); // Automatically uses IndexedDB (instead of memory warning)
+
+// Fallback chain for browser environments
+const storage = createStorage(); // IndexedDB -> localStorage -> memory
 ```
 
 **Success Metrics:**
@@ -104,23 +120,37 @@ const storage = await createStorage(); // Automatically uses IndexedDB in browse
 **Deliverables:**
 
 ```typescript
-// Phase 2 API additions
-const googleStorage = await createGoogleDriveStorage({
+// Phase 2 API additions (available in both /browser and /desktop exports)
+import {
+  createGoogleDrive,
+  createOneDrive,
+  createDropbox,
+  createCloud,
+} from "@atomiton/storage/desktop";
+// OR
+import {
+  createGoogleDrive,
+  createOneDrive,
+  createDropbox,
+  createCloud,
+} from "@atomiton/storage/browser";
+
+const googleStorage = createGoogleDrive({
   clientId: "your-client-id",
   scopes: ["drive.file"],
 });
 
-const oneDriveStorage = await createOneDriveStorage({
+const oneDriveStorage = createOneDrive({
   clientId: "your-client-id",
   redirectUri: "your-redirect-uri",
 });
 
-const dropboxStorage = await createDropboxStorage({
+const dropboxStorage = createDropbox({
   appKey: "your-app-key",
 });
 
 // Managed cloud backend
-const cloudStorage = await createCloudStorage({
+const cloudStorage = createCloud({
   apiKey: "your-api-key",
   endpoint: "https://api.atomiton.com",
 });
@@ -145,19 +175,25 @@ const cloudStorage = await createCloudStorage({
 **Deliverables:**
 
 ```typescript
-// Phase 3 API additions
-const encryptedStorage = await createEncryptedStorage({
-  underlying: await createFileSystemStorage({ basePath: "./secure" }),
+// Phase 3 API additions (available in both exports)
+import {
+  createEncrypted,
+  createCached,
+  createMock,
+} from "@atomiton/storage/desktop";
+
+const encryptedStorage = createEncrypted({
+  underlying: createFileSystem({ baseDir: "./secure" }),
   encryption: { algorithm: "AES-256-GCM", keyDerivation: "PBKDF2" },
 });
 
-const cachedStorage = await createCachedStorage({
-  underlying: await createGoogleDriveStorage({ clientId: "id" }),
+const cachedStorage = createCached({
+  underlying: createGoogleDrive({ clientId: "id" }),
   cacheSize: 100,
   ttl: 300000, // 5 minutes
 });
 
-const mockStorage = await createMockStorage({
+const mockStorage = createMock({
   latency: 100,
   failureRate: 0.1,
   quotaLimit: 1000000,
@@ -173,34 +209,44 @@ const mockStorage = await createMockStorage({
 
 ## Architecture Evolution
 
-### Functional Programming Scalability
+### Split Exports Scalability
 
-The current functional approach will scale elegantly as new storage types are added:
+The split exports pattern scales elegantly as new storage types are added:
 
 ```typescript
-// Core factory signature remains consistent
-type StorageFactory<T extends StorageType> = (
-  config: StorageConfig<T>,
-) => Promise<IStorageEngine>;
+// Split exports prevent bundle bloat
+// /browser export
+export {
+  createMemory,
+  createIndexedDB, // Phase 1
+  createLocalStorage, // Phase 1
+  createGoogleDrive, // Phase 2
+  createOneDrive, // Phase 2
+  createDropbox, // Phase 2
+  createCloud, // Phase 2
+  createMock, // Phase 3
+  createEncrypted, // Phase 3
+  createCached, // Phase 3
+} from "./index";
 
-// Each storage type has its own factory
-const storageFactories = {
-  memory: createInMemoryStorage,
-  filesystem: createFileSystemStorage,
-  indexeddb: createIndexedDBStorage, // Phase 1
-  "google-drive": createGoogleDriveStorage, // Phase 2
-  onedrive: createOneDriveStorage, // Phase 2
-  dropbox: createDropboxStorage, // Phase 2
-  cloud: createCloudStorage, // Phase 2
-  mock: createMockStorage, // Phase 3
-} as const;
+// /desktop export
+export {
+  createMemory,
+  createFileSystem,
+  createIndexedDB, // Phase 1 (for Electron apps)
+  createGoogleDrive, // Phase 2
+  createOneDrive, // Phase 2
+  createDropbox, // Phase 2
+  createCloud, // Phase 2
+  createMock, // Phase 3
+  createEncrypted, // Phase 3
+  createCached, // Phase 3
+} from "./index";
 
-// Main factory delegates to type-specific factories
-export const createStorage = async (config: StorageConfig = {}) => {
-  const type = config.type || detectOptimalStorageType();
-  const factory = storageFactories[type];
-  return await factory(config);
-};
+// Smart createStorage() in each export
+export function createStorage(config: { engine?: IStorageEngine } = {}) {
+  return config.engine || getDefaultEngine();
+}
 ```
 
 ### Composition Patterns
@@ -209,9 +255,9 @@ Advanced storage features will use composition:
 
 ```typescript
 // Layered storage with encryption and caching
-const storage = await createCachedStorage({
-  underlying: await createEncryptedStorage({
-    underlying: await createGoogleDriveStorage({ clientId: "id" }),
+const storage = createCached({
+  underlying: createEncrypted({
+    underlying: createGoogleDrive({ clientId: "id" }),
     encryption: { algorithm: "AES-256-GCM" },
   }),
   cacheSize: 50,

@@ -1,70 +1,147 @@
 # @atomiton/storage
 
-> Storage abstraction package for desktop Composite data (early development)
+Universal storage abstraction for Composites and application data across platforms. Features split exports for optimized bundle sizes and platform-specific capabilities.
 
-## Current Status
+## 📊 Current Status
 
-🚧 **EARLY DEVELOPMENT** - Only basic filesystem storage implemented.
+✅ **Phase 0 Complete** - Functional programming pattern with split exports
 
-**What actually works:**
+**Implemented Features:**
 
-- TypeScript interfaces and types defined
-- `FileSystemStorage` class for desktop local file storage
-- JSON serialization only (YAML planned)
-- Basic CRUD operations (save/load/list/delete/exists)
+- Split exports pattern for browser/desktop bundle optimization
+- Factory functions: `createStorage()`, `createFileSystem()`, `createMemory()`
+- Type-safe storage operations with comprehensive TypeScript support
+- Memory storage for testing and browser fallback
+- Filesystem storage for desktop environments
+- Automatic platform detection with smart defaults
+- Robust error handling with `StorageError` class
 
-**What doesn't exist yet:**
+## 📦 Split Exports Pattern
 
-- `createStorage()` factory function
-- Platform auto-detection
-- Cloud storage providers (Google Drive, OneDrive, Dropbox)
-- Browser IndexedDB storage
-- YAML serialization
-- Multi-platform support
+The storage package uses split exports to optimize bundle sizes and provide platform-specific functionality:
 
-## What Actually Exists
-
-### FileSystemStorage
-
-Currently the only implemented storage engine. Stores Composite data as JSON files in the local filesystem.
+### Available Exports
 
 ```typescript
-import { FileSystemStorage } from "@atomiton/storage";
+// Browser export - optimized for web environments
+import { createStorage, createMemory } from "@atomiton/storage/browser";
 
-// Create filesystem storage (stores in ~/Atomiton/ by default)
-const storage = new FileSystemStorage();
+// Desktop export - includes filesystem support
+import {
+  createStorage,
+  createFileSystem,
+  createMemory,
+} from "@atomiton/storage/desktop";
 
-// Or specify custom directory
-const storage = new FileSystemStorage("/path/to/custom/dir");
-
-// Save data (JSON only, despite what options suggest)
-await storage.save("my-composite", compositeData, {
-  format: "yaml", // Ignored - always saves as JSON
-  metadata: { author: "user@example.com" },
-});
-
-// Load data
-const composite = await storage.load("my-composite");
-
-// List stored items
-const items = await storage.list("composites/");
-
-// Check if exists
-const exists = await storage.exists("my-composite");
-
-// Delete
-await storage.delete("my-composite");
-
-// Get storage info
-const info = storage.getInfo(); // Returns type: "filesystem", platform: "desktop"
+// Note: No main export to prevent bloated bundles
 ```
 
-### Type Definitions
+### Why Split Exports?
 
-Comprehensive TypeScript interfaces are defined but most storage engines don't exist yet:
+- **Bundle Optimization**: Browser builds exclude Node.js filesystem dependencies
+- **Platform Safety**: Prevents importing incompatible engines
+- **Future-Proof**: Easy to add new platform-specific engines
+- **Consistent with Ecosystem**: Follows same pattern as `@atomiton/nodes`
+
+## 🚀 Quick Start
+
+### Browser Usage
 
 ```typescript
-// This interface is implemented by FileSystemStorage only
+import { createStorage, createMemory } from "@atomiton/storage/browser";
+
+// Automatic storage selection (currently defaults to memory with warning)
+const storage = createStorage();
+
+// Explicit memory storage (recommended for browser)
+const memoryStorage = createStorage({ engine: createMemory() });
+
+// Direct memory storage creation
+const directMemory = createMemory();
+```
+
+### Desktop Usage
+
+```typescript
+import {
+  createStorage,
+  createFileSystem,
+  createMemory,
+} from "@atomiton/storage/desktop";
+
+// Automatic storage selection (defaults to filesystem in user home)
+const storage = createStorage();
+
+// Explicit filesystem storage
+const fileStorage = createStorage({
+  engine: createFileSystem({ baseDir: "./my-data" }),
+});
+
+// Direct filesystem storage creation
+const directFileSystem = createFileSystem({ baseDir: "~/.atomiton" });
+
+// Memory storage for testing
+const testStorage = createMemory();
+```
+
+## 🎯 Factory Functions
+
+### `createStorage(config?)`
+
+Smart factory that creates appropriate storage based on context:
+
+```typescript
+// Browser context - uses memory with persistence warning
+const browserStorage = createStorage();
+
+// Desktop context - uses filesystem in user home directory
+const desktopStorage = createStorage();
+
+// Explicit engine selection
+const customStorage = createStorage({
+  engine: createFileSystem({ baseDir: "./custom" }),
+});
+```
+
+### `createFileSystem(config?)`
+
+Creates filesystem storage (desktop only):
+
+```typescript
+// Default location (~/.atomiton)
+const defaultFS = createFileSystem();
+
+// Custom directory
+const customFS = createFileSystem({ baseDir: "./data" });
+
+// Full configuration
+const configuredFS = createFileSystem({
+  baseDir: "/usr/local/atomiton",
+  createDirectories: true,
+  permissions: 0o755,
+});
+```
+
+### `createMemory(config?)`
+
+Creates in-memory storage (all platforms):
+
+```typescript
+// Basic memory storage
+const memory = createMemory();
+
+// With configuration
+const configuredMemory = createMemory({
+  maxItems: 1000,
+  maxSizeBytes: 10 * 1024 * 1024, // 10MB
+});
+```
+
+## 🔧 Universal Storage Interface
+
+All storage engines implement the same interface:
+
+```typescript
 interface IStorageEngine {
   save(key: string, data: unknown, options?: StorageOptions): Promise<void>;
   load(key: string): Promise<unknown>;
@@ -73,43 +150,185 @@ interface IStorageEngine {
   exists(key: string): Promise<boolean>;
   getInfo(): StorageInfo;
 }
+```
 
-// Comprehensive error handling
+### Basic Operations
+
+```typescript
+// Save data
+await storage.save("blueprint-123", compositeData);
+
+// Load data
+const composite = await storage.load("blueprint-123");
+
+// Check existence
+const exists = await storage.exists("blueprint-123");
+
+// List items with prefix
+const blueprints = await storage.list("blueprint-");
+
+// Delete item
+await storage.delete("blueprint-123");
+
+// Get storage information
+const info = storage.getInfo(); // { type: "filesystem", platform: "desktop" }
+```
+
+### Storage Options
+
+```typescript
+await storage.save("key", data, {
+  format: "json" | "yaml",
+  metadata: { author: "user@example.com", version: "1.0" },
+  // Future options: encrypt, compress, expiration
+});
+```
+
+## 📊 Platform Capabilities
+
+### Desktop (filesystem)
+
+- **Location**: `~/.atomiton` by default
+- **Format**: JSON files with `.json` extension
+- **Features**: Directory structure, atomic writes, metadata support
+- **Performance**: Fast local access, suitable for large datasets
+
+### Browser (memory)
+
+- **Location**: In-memory only (non-persistent)
+- **Format**: Native JavaScript objects
+- **Features**: Fast access, perfect for testing and temporary data
+- **Limitations**: Data lost on page refresh (IndexedDB coming in Phase 1)
+
+## ⚡ Error Handling
+
+Comprehensive error handling with specific error types:
+
+```typescript
+import { StorageError, StorageErrorCode } from "@atomiton/storage/desktop";
+
+try {
+  await storage.save("key", data);
+} catch (error) {
+  if (error instanceof StorageError) {
+    switch (error.code) {
+      case StorageErrorCode.NOT_FOUND:
+        console.log("Item not found");
+        break;
+      case StorageErrorCode.PERMISSION_DENIED:
+        console.log("Permission denied");
+        break;
+      case StorageErrorCode.QUOTA_EXCEEDED:
+        console.log("Storage quota exceeded");
+        break;
+      default:
+        console.log("Storage error:", error.message);
+    }
+  }
+}
+```
+
+## 🔮 Future Engines (Roadmap)
+
+### Phase 1: Browser Support
+
+- **IndexedDB storage** - Persistent browser storage
+- **localStorage fallback** - Simple key-value storage
+- **Smart browser detection** - Automatic engine selection
+
+### Phase 2: Cloud Integration
+
+- **Google Drive storage** - Direct cloud storage
+- **OneDrive storage** - Microsoft cloud integration
+- **Dropbox storage** - Cross-platform sync
+- **Atomiton Cloud** - Managed backend service
+
+### Phase 3: Advanced Features
+
+- **Encrypted storage** - Wrapper for any engine with encryption
+- **Cached storage** - Performance wrapper with caching
+- **Replicated storage** - Multi-backend redundancy
+
+## 📚 API Reference
+
+### Types
+
+```typescript
+// Core interfaces
+interface IStorageEngine {
+  /* ... */
+}
+interface StorageOptions {
+  /* ... */
+}
+interface StorageItem {
+  /* ... */
+}
+interface StorageInfo {
+  /* ... */
+}
+
+// Configuration types
+interface FileSystemStorageConfig {
+  baseDir?: string;
+  createDirectories?: boolean;
+  permissions?: number;
+}
+
+interface InMemoryStorageConfig {
+  maxItems?: number;
+  maxSizeBytes?: number;
+}
+
+// Error handling
 class StorageError extends Error {
   code: StorageErrorCode;
   cause?: Error;
   context?: Record<string, unknown>;
 }
+
+enum StorageErrorCode {
+  NOT_FOUND = "NOT_FOUND",
+  PERMISSION_DENIED = "PERMISSION_DENIED",
+  QUOTA_EXCEEDED = "QUOTA_EXCEEDED",
+  INVALID_KEY = "INVALID_KEY",
+  SERIALIZATION_ERROR = "SERIALIZATION_ERROR",
+  UNKNOWN = "UNKNOWN",
+}
 ```
 
-### File Storage Details
+## 🚀 Migration Guide
 
-- **Storage Location**: `~/Atomiton/` directory by default
-- **File Format**: `.composite.json` files (despite YAML in variable names)
-- **Directory Structure**: Preserves key path as nested directories
-- **Metadata**: Extracted from Composite data when available
+### From Legacy Storage
 
-## Known Limitations
+If migrating from the old `FileSystemStorage` class:
 
-1. **Format Support**: Only JSON serialization works (YAML hardcoded to JSON)
-2. **Platform Support**: Desktop filesystem only
-3. **No Factory Function**: Must instantiate `FileSystemStorage` directly
-4. **No Cloud Storage**: All cloud providers are unimplemented
-5. **No Browser Support**: IndexedDB storage doesn't exist
-6. **No Testing Storage**: MemoryStorage not implemented
+```typescript
+// Old approach (deprecated)
+import { FileSystemStorage } from "@atomiton/storage";
+const storage = new FileSystemStorage("/path");
 
-## Planned Features
+// New approach (recommended)
+import { createFileSystem } from "@atomiton/storage/desktop";
+const storage = createFileSystem({ baseDir: "/path" });
+```
 
-See [ROADMAP.md](./ROADMAP.md) for planned implementations including:
+### Platform-Specific Migration
 
-- Cloud storage providers (Google Drive, OneDrive, Dropbox)
-- Browser IndexedDB support
-- YAML serialization via @atomiton/nodes
-- Platform auto-detection
-- Storage factory function
-- In-memory storage for testing
+```typescript
+// Detect environment and use appropriate import
+if (typeof window !== "undefined") {
+  // Browser environment
+  const { createStorage } = await import("@atomiton/storage/browser");
+  const storage = createStorage();
+} else {
+  // Node.js/desktop environment
+  const { createStorage } = await import("@atomiton/storage/desktop");
+  const storage = createStorage();
+}
+```
 
-## Development
+## 🔧 Development
 
 ```bash
 # Install dependencies
@@ -124,24 +343,33 @@ pnpm typecheck
 # Linting
 pnpm lint
 
-# Tests (currently no tests implemented)
+# Run tests
 pnpm test
+
+# Build in watch mode
+pnpm dev
 ```
 
-## Documentation
+## 📖 Documentation
 
 ### Package-Specific
 
-- [ROADMAP.md](./ROADMAP.md) - Development timeline for planned features
-- [SECURITY.md](./SECURITY.md) - Planned security implementation for this package
+- [ROADMAP.md](./ROADMAP.md) - Development phases and planned features
+- [SECURITY.md](./SECURITY.md) - Security implementation for storage
 
 ### Architecture Documentation
 
-- **[Storage Architecture](../../docs/architecture/STORAGE.md)** - Complete storage system design and cross-platform strategy
-- **[Security Architecture](../../docs/architecture/SECURITY.md)** - Project-wide security implementation
+- **[Storage Architecture](../../docs/architecture/STORAGE.md)** - Complete system design and cross-platform strategy
+- **[Package Integration Guide](../../docs/guides/PACKAGE_INTEGRATION.md)** - Using storage in your applications
 
-**Note**: Package documentation reflects current implementation. Architecture documents describe the complete planned system.
+## 🤝 Contributing
+
+1. Focus on platform compatibility and performance
+2. Maintain the universal interface contract
+3. Include comprehensive tests for new engines
+4. Update documentation for new features
+5. Follow the existing factory function patterns
 
 ## License
 
-MIT
+MIT - See [LICENSE](../../LICENSE) for details

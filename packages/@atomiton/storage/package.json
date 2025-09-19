@@ -8,9 +8,13 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "./browser": {
+      "import": "./dist/browser.js",
+      "types": "./dist/browser.d.ts"
+    },
+    "./desktop": {
+      "import": "./dist/desktop.js",
+      "types": "./dist/desktop.d.ts"
     },
     "./package.json": "./package.json"
   },

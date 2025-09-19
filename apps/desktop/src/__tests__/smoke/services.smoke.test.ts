@@ -4,8 +4,11 @@ import { initializeStorage } from "../../main/services/storage";
 import { initializeConductor } from "../../main/services/conductor";
 
 // Mock Electron and dependencies for smoke test
-vi.mock("@atomiton/storage", () => ({
-  createFileSystemStorage: vi.fn(() => ({ save: vi.fn(), load: vi.fn() })),
+vi.mock("@atomiton/storage/desktop", () => ({
+  createFileSystemEngine: vi.fn(() => ({ save: vi.fn(), load: vi.fn() })),
+  createStorage: vi.fn(
+    (config) => config?.engine || { save: vi.fn(), load: vi.fn() },
+  ),
 }));
 
 vi.mock("@atomiton/conductor", () => ({

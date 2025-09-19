@@ -15,30 +15,46 @@ Atomiton's storage architecture provides a unified abstraction for storing and r
 - Progressive enhancement from simple to advanced features
 - Future-proof design for new storage providers
 
-### Platform Optimization
+### Split Exports Optimization
 
-**Environment-Specific Features:**
+**Bundle-Aware Architecture:**
 
-- Desktop: File system with OS keychain integration
-- Browser: IndexedDB with Web Crypto API encryption
-- Cloud: Distributed storage with sync capabilities
-- Development: Local files with environment variable fallbacks
+- Separate `/browser` and `/desktop` exports prevent dependency bloat
+- Platform-specific engines only included where they can run
+- No main export to force explicit platform selection
+- Consistent with ecosystem patterns (`@atomiton/nodes`)
+
+**Current Platform Support:**
+
+- **Desktop**: FileSystem storage with Memory fallback
+- **Browser**: Memory storage with IndexedDB planned (Phase 1)
+- **Testing**: Memory storage available on both platforms
+- **Future**: Cloud storage planned for both platforms
 
 ## Architecture Overview
 
-### Storage Factory Pattern
+### Split Exports Factory Pattern
+
+The storage package uses split exports to optimize bundle sizes and provide platform-specific capabilities:
 
 ```typescript
-// Auto-detection creates appropriate storage engine
-const storage = await createStorage({ platform: "auto" });
+// Browser usage - optimized bundle without Node.js dependencies
+import { createStorage, createMemory } from "@atomiton/storage/browser";
+const storage = createStorage(); // Memory with persistence warning (Phase 0)
 
-// Or specify explicitly for specific needs
-const storage = await createStorage({
-  type: "filesystem", // Desktop local storage
-  type: "indexeddb", // Browser persistent storage
-  type: "cloud", // Atomiton cloud backend
-  type: "memory", // Testing and development
+// Desktop usage - includes filesystem support
+import {
+  createStorage,
+  createFileSystem,
+  createMemory,
+} from "@atomiton/storage/desktop";
+const storage = createStorage(); // Filesystem in user home directory
+
+// Explicit engine selection (recommended)
+const fileStorage = createStorage({
+  engine: createFileSystem({ baseDir: "./data" }),
 });
+const memoryStorage = createStorage({ engine: createMemory() });
 ```
 
 ### Storage Engine Hierarchy
@@ -52,14 +68,18 @@ const storage = await createStorage({
         ┌────────────────────┼────────────────────┐
         │                    │                    │
 ┌───────▼────────┐  ┌────────▼────────┐  ┌───────▼────────┐
-│  FilesystemStorage │  │  IndexedDBStorage │  │   CloudStorage   │
-│    (Desktop)      │  │    (Browser)      │  │   (Supabase)     │
+│ FileSystemStorage │  │  MemoryStorage   │  │   Future: Cloud  │
+│  (/desktop only)  │  │ (both exports)   │  │  IndexedDB, etc  │
 └───────────────────┘  └───────────────────┘  └──────────────────┘
         │                    │                    │
 ┌───────▼────────┐  ┌────────▼────────┐  ┌───────▼────────┐
-│  OS File System│  │   Browser APIs   │  │  HTTP/WebSocket│
-│   + Keychain   │  │  + Web Crypto    │  │   + Database   │
+│  OS File System│  │  Native Objects  │  │  Platform APIs  │
+│   + Atomic IO  │  │  + Fast Access   │  │  + Persistence  │
 └────────────────┘  └─────────────────┘  └────────────────┘
+
+Split Exports Pattern:
+@atomiton/storage/browser  ← Memory (+ future IndexedDB)
+@atomiton/storage/desktop  ← Memory + FileSystem
 ```
 
 ## Core Storage Interface
@@ -99,73 +119,93 @@ interface StorageOptions {
 
 ## Storage Engine Implementations
 
-### FilesystemStorage (Desktop)
+### FileSystemStorage (Desktop Only)
 
-**Location Strategy:**
+Created via `createFileSystem()` from `@atomiton/storage/desktop`:
 
-- **Blueprints**: `~/Documents/Atomiton/Blueprints/`
-- **Application Data**: OS-specific app data directory
-- **Credentials**: OS keychain integration
-- **Cache**: Temporary directory with auto-cleanup
+**Current Implementation:**
 
-**Features:**
+- **Default Location**: `~/.atomiton/` directory
+- **File Format**: JSON files with configurable extensions
+- **Organization**: Key paths become nested directories
+- **Operations**: Atomic writes with directory creation
 
-- File watching for external changes
-- Atomic write operations with backup
-- Directory-based organization
-- Metadata stored in companion files
-
-**File Organization:**
-
-```
-~/Documents/Atomiton/
-├── Blueprints/
-│   ├── personal/
-│   │   ├── workflow-1.blueprint.yaml
-│   │   └── workflow-1.blueprint.meta.json
-│   └── shared/
-│       └── team-process.blueprint.yaml
-├── Templates/
-├── Exports/
-└── .atomiton/
-    ├── config.json
-    └── cache/
-```
-
-### IndexedDBStorage (Browser)
-
-**Database Schema:**
-
-- **Blueprints**: Structured storage with indexing
-- **Metadata**: Searchable fields and tags
-- **Credentials**: Encrypted storage with Web Crypto API
-- **Cache**: Temporary data with TTL
-
-**Features:**
-
-- Offline-first capabilities
-- Background synchronization
-- Quota management and cleanup
-- Full-text search indexing
-
-**Storage Structure:**
+**Usage:**
 
 ```typescript
-// IndexedDB object stores
-{
-  blueprints: {
-    keyPath: 'id',
-    indexes: ['name', 'created', 'tags', 'author']
-  },
-  credentials: {
-    keyPath: 'service',
-    encrypted: true
-  },
-  metadata: {
-    keyPath: 'path',
-    indexes: ['type', 'modified']
-  }
-}
+import { createFileSystem } from "@atomiton/storage/desktop";
+
+// Default configuration
+const storage = createFileSystem(); // Uses ~/.atomiton
+
+// Custom configuration
+const storage = createFileSystem({
+  baseDir: "~/Documents/Atomiton",
+  createDirectories: true,
+  permissions: 0o755,
+});
+```
+
+**File Organization Example:**
+
+```
+~/.atomiton/
+├── blueprints/
+│   ├── workflow-1.json
+│   └── data-pipeline.json
+├── templates/
+│   └── starter-template.json
+└── user-preferences.json
+```
+
+### MemoryStorage (All Platforms)
+
+Created via `createMemory()` from both exports:
+
+**Current Implementation:**
+
+- **Storage**: In-memory JavaScript objects
+- **Performance**: Fastest possible access
+- **Persistence**: None (data lost on restart)
+- **Use Cases**: Testing, temporary data, browser fallback
+
+**Usage:**
+
+```typescript
+import { createMemory } from "@atomiton/storage/browser";
+// OR
+import { createMemory } from "@atomiton/storage/desktop";
+
+// Basic memory storage
+const storage = createMemory();
+
+// With configuration
+const storage = createMemory({
+  maxItems: 1000,
+  maxSizeBytes: 10 * 1024 * 1024, // 10MB limit
+});
+```
+
+### Future: IndexedDBStorage (Browser - Phase 1)
+
+**Planned Implementation:**
+
+- **Database**: IndexedDB with structured storage
+- **Persistence**: Survives browser restarts
+- **Features**: Offline-first, quota management
+- **Export**: Added to `@atomiton/storage/browser`
+
+**Planned Structure:**
+
+```typescript
+// Future IndexedDB implementation
+import { createIndexedDB } from "@atomiton/storage/browser";
+
+const storage = createIndexedDB({
+  dbName: "atomiton-storage",
+  version: 1,
+  stores: ["blueprints", "templates", "preferences"],
+});
 ```
 
 ### CloudStorage (Distributed)
@@ -244,37 +284,42 @@ interface BlueprintMeta {
 
 ## Platform-Specific Features
 
-### Desktop Capabilities
+### Desktop Capabilities (Current)
 
-**Advanced Features:**
+**Available via `@atomiton/storage/desktop`:**
 
-- File system watching for external changes
-- OS keychain integration for credentials
-- Native file dialogs for import/export
-- Background sync with cloud storage
+- **FileSystem Storage**: Direct file system access with atomic operations
+- **Memory Storage**: Fast in-memory operations for testing
+- **Smart Defaults**: Automatic ~/.atomiton directory selection
+- **Cross-Platform**: Works on Windows, macOS, and Linux
 
-**Performance Optimizations:**
+**Current Features:**
 
-- File-based caching strategies
-- Lazy loading for large blueprints
-- Incremental sync algorithms
-- Local search indexing
+- JSON serialization with configurable file extensions
+- Directory-based organization following key paths
+- Atomic write operations with error handling
+- Platform-specific home directory detection
 
-### Browser Capabilities
+### Browser Capabilities (Current)
 
-**Web-Specific Features:**
+**Available via `@atomiton/storage/browser`:**
 
-- Offline-first storage with service workers
-- Background synchronization
-- Progressive Web App support
-- Share API integration
+- **Memory Storage**: In-memory operations with optional size limits
+- **Bundle Optimization**: No Node.js dependencies included
+- **Future-Ready**: Prepared for IndexedDB implementation
 
-**Limitations & Workarounds:**
+**Current Limitations:**
 
-- Storage quota management
-- No direct file system access
-- CORS restrictions for external APIs
-- Security context requirements
+- Memory storage only (data lost on refresh)
+- No persistent storage until Phase 1 (IndexedDB)
+- Warning message for non-persistent storage
+
+**Planned Browser Features (Phase 1):**
+
+- IndexedDB for persistent storage
+- localStorage fallback for simple data
+- Offline-first capabilities
+- Web Crypto API integration
 
 ### Cloud Capabilities
 
