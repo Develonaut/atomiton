@@ -36,7 +36,7 @@ export type NodeCategory =
   | "communication" // Email, notifications, messaging
   | "utility" // General utilities
   | "user" // User-created nodes
-  | "composite"; // Composite/blueprint nodes
+  | "composite"; // Composite nodes
 
 /**
  * Runtime environments for nodes
@@ -134,17 +134,17 @@ export type NodeFieldControlType =
 
 // Re-export execution types for convenience
 export type {
+  ExecutionMetadata,
+  ExecutionResultMetadata,
+  NodeConfig,
   NodeExecutionContext,
+  NodeExecutionMode,
   NodeExecutionResult,
   NodeExecutionStatus,
-  NodeExecutionMode,
   NodeInputs,
   NodeOutputs,
   NodeParameters,
-  NodeConfig,
   PortData,
-  ExecutionMetadata,
-  ExecutionResultMetadata,
 } from "./exports/executable/execution-types";
 
 /**

@@ -1,11 +1,13 @@
-/**
- * Execution state store using @atomiton/store (zustand)
- */
-
-import { createStore } from "@atomiton/store";
-import { events } from "@atomiton/events";
+import type { EventBus } from "@atomiton/events/desktop";
+import { events } from "@atomiton/events/desktop";
+import {
+  createStore,
+  type Store,
+  type StoreApi,
+  type UseBoundStore,
+} from "@atomiton/store";
 import type { ExecutionStatus } from "../interfaces/IExecutionEngine";
-import type { ExecutionState, NodeState, Checkpoint } from "./types";
+import type { Checkpoint, ExecutionState, NodeState } from "./types";
 
 /**
  * Record types for storage (using plain objects instead of Maps)
@@ -28,22 +30,53 @@ export type ExecutionStoreState = {
 };
 
 /**
- * Store events
+ * Execution store return type
  */
-type StoreEvents = {
-  "state:persisted": { count: number };
-  "execution:initialized": { executionId: string; blueprintId: string };
-  "execution:updated": { executionId: string };
-  "node:updated": { executionId: string; nodeId: string };
-  "variable:set": { executionId: string; key: string; value: unknown };
-  "checkpoint:created": { executionId: string; nodeId: string };
+export type ExecutionStore = {
+  store: Store<ExecutionStoreState> & {
+    useStore: UseBoundStore<StoreApi<ExecutionStoreState>>;
+  };
+  eventBus: EventBus<Record<string, unknown>>;
+
+  initializeExecution: (executionId: string, compositeId: string) => void;
+  updateExecutionState: (
+    executionId: string,
+    updates: Partial<Pick<ExecutionRecord, "status" | "endTime">>,
+  ) => void;
+  updateNodeState: (
+    executionId: string,
+    nodeId: string,
+    nodeStatus: ExecutionStatus,
+  ) => void;
+  recordNodeError: (executionId: string, nodeId: string, error: string) => void;
+  setVariable: (executionId: string, key: string, value: unknown) => void;
+  createCheckpoint: (executionId: string, nodeId: string) => void;
+  restoreCheckpoint: (executionId: string, checkpointIndex: number) => void;
+  clearExecutionState: (executionId: string) => void;
+  clearCompletedExecutions: () => number;
+
+  getExecution: (executionId: string) => ExecutionRecord | undefined;
+  getActiveExecutions: () => ExecutionRecord[];
+  getExecutionVariable: (executionId: string, key: string) => unknown;
+  getAllExecutions: () => ExecutionRecord[];
+  getNodeState: (executionId: string, nodeId: string) => NodeState | undefined;
+
+  subscribe: (
+    listener: (
+      state: ExecutionStoreState,
+      prevState: ExecutionStoreState,
+    ) => void,
+  ) => () => void;
+  getState: () => ExecutionStoreState;
+
+  shutdown: () => void;
 };
 
 /**
  * Create an execution store instance
+ * @returns Store instance with execution management methods
  */
-export function createExecutionStore(storeId = "default") {
-  // Create the zustand store
+export function createExecutionStore(storeId = "default"): ExecutionStore {
   const executionStore = createStore<ExecutionStoreState>(
     () => ({
       executions: {},
@@ -53,17 +86,11 @@ export function createExecutionStore(storeId = "default") {
     },
   );
 
-  // Event bus for state changes
-  const stateEventBus = events.createEventBus<StoreEvents>(
-    `conductor:store:${storeId}`,
-  );
-
-  // Actions
-  const initializeExecution = (executionId: string, blueprintId: string) => {
+  const initializeExecution = (executionId: string, compositeId: string) => {
     executionStore.setState((state: ExecutionStoreState) => {
       const execution: ExecutionRecord = {
         executionId,
-        blueprintId,
+        compositeId,
         status: "pending" as ExecutionStatus,
         startTime: new Date(),
         nodeStates: {},
@@ -72,7 +99,7 @@ export function createExecutionStore(storeId = "default") {
       };
 
       state.executions[executionId] = execution;
-      stateEventBus.emit("execution:initialized", { executionId, blueprintId });
+      events.emit("execution:initialized", { executionId, compositeId });
     });
   };
 
@@ -85,7 +112,7 @@ export function createExecutionStore(storeId = "default") {
       if (!execution) return;
 
       Object.assign(execution, updates);
-      stateEventBus.emit("execution:updated", { executionId });
+      events.emit("execution:updated", { executionId });
     });
   };
 
@@ -114,7 +141,7 @@ export function createExecutionStore(storeId = "default") {
         }
       }
 
-      stateEventBus.emit("node:updated", { executionId, nodeId });
+      events.emit("node:updated", { executionId, nodeId });
     });
   };
 
@@ -129,7 +156,7 @@ export function createExecutionStore(storeId = "default") {
 
       execution.nodeStates[nodeId].lastError = error;
       execution.nodeStates[nodeId].retryCount += 1;
-      stateEventBus.emit("node:updated", { executionId, nodeId });
+      events.emit("node:updated", { executionId, nodeId });
     });
   };
 
@@ -139,7 +166,7 @@ export function createExecutionStore(storeId = "default") {
       if (!execution) return;
 
       execution.variables[key] = value;
-      stateEventBus.emit("variable:set", { executionId, key, value });
+      events.emit("variable:set", { executionId, key, value });
     });
   };
 
@@ -155,7 +182,7 @@ export function createExecutionStore(storeId = "default") {
       };
 
       execution.checkpoints.push(checkpoint);
-      stateEventBus.emit("checkpoint:created", { executionId, nodeId });
+      events.emit("checkpoint:created", { executionId, nodeId });
     });
   };
 
@@ -200,12 +227,13 @@ export function createExecutionStore(storeId = "default") {
     return clearedCount;
   };
 
-  // Selectors
   const getExecution = (executionId: string): ExecutionRecord | undefined =>
     executionStore.getState().executions[executionId];
 
   const getActiveExecutions = (): ExecutionRecord[] => {
-    const executions = Object.values(executionStore.getState().executions) as ExecutionRecord[];
+    const executions = Object.values(
+      executionStore.getState().executions,
+    ) as ExecutionRecord[];
     return executions.filter(
       (execution) =>
         execution.status === "running" || execution.status === "pending",
@@ -225,11 +253,9 @@ export function createExecutionStore(storeId = "default") {
     executionStore.getState().executions[executionId]?.nodeStates[nodeId];
 
   return {
-    // Store instance
     store: executionStore,
-    eventBus: stateEventBus,
+    eventBus: events,
 
-    // Actions
     initializeExecution,
     updateExecutionState,
     updateNodeState,
@@ -240,23 +266,15 @@ export function createExecutionStore(storeId = "default") {
     clearExecutionState,
     clearCompletedExecutions,
 
-    // Selectors
     getExecution,
     getActiveExecutions,
     getExecutionVariable,
     getAllExecutions,
     getNodeState,
 
-    // Subscribe to store changes
     subscribe: executionStore.subscribe,
     getState: executionStore.getState,
 
-    // Shutdown method
-    shutdown: () => {
-      // Event bus cleanup would go here if needed
-      // Currently @atomiton/events doesn't expose removeAllListeners
-    },
+    shutdown: () => {},
   };
 }
-
-export type ExecutionStore = ReturnType<typeof createExecutionStore>;

@@ -1,15 +1,10 @@
 {
   "name": "@atomiton/events",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Event system for Atomiton workflow automation",
   "type": "module",
   "private": true,
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
     "./browser": {
       "types": "./dist/exports/browser/index.d.ts",
       "import": "./dist/browser.js",
@@ -23,16 +18,16 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build",
     "dev": "vite build --watch",
+    "build": "vite build",
     "clean": "rm -rf dist",
-    "test": "vitest",
-    "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "pnpm test:unit",
     "test:unit": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
     "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
     "test:benchmark": "vitest bench --run",
     "test:e2e": "echo \"No E2E tests for this package\"",

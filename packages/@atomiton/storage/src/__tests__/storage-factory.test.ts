@@ -8,16 +8,18 @@ import * as os from "os";
 
 describe("Storage Factory", () => {
   describe("Desktop createStorage", () => {
-    it("creates memory storage when using createMemory", async () => {
-      const { createStorage, createMemory } = await import("../desktop");
-      const storage = createStorage({ engine: createMemory() });
+    it("creates memory storage when using createMemoryEngine", async () => {
+      const { createStorage, createMemoryEngine } = await import("../desktop");
+      const storage = createStorage({ engine: createMemoryEngine() });
       expect(storage.getInfo().type).toBe("memory");
     });
 
-    it("creates filesystem storage when using createFileSystem", async () => {
-      const { createStorage, createFileSystem } = await import("../desktop");
+    it("creates filesystem storage when using createFileSystemEngine", async () => {
+      const { createStorage, createFileSystemEngine } = await import(
+        "../desktop"
+      );
       const storage = createStorage({
-        engine: createFileSystem({ baseDir: os.tmpdir() }),
+        engine: createFileSystemEngine({ baseDir: os.tmpdir() }),
       });
       expect(storage.getInfo().type).toBe("filesystem");
     });
@@ -30,9 +32,9 @@ describe("Storage Factory", () => {
   });
 
   describe("Browser createStorage", () => {
-    it("creates memory storage when using createMemory", async () => {
-      const { createStorage, createMemory } = await import("../browser");
-      const storage = createStorage({ engine: createMemory() });
+    it("creates memory storage when using createMemoryEngine", async () => {
+      const { createStorage, createMemoryEngine } = await import("../browser");
+      const storage = createStorage({ engine: createMemoryEngine() });
       expect(storage.getInfo().type).toBe("memory");
     });
 

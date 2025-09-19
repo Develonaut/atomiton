@@ -1,8 +1,7 @@
-import { createConductor } from "@atomiton/conductor";
-import type { IStorageEngine } from "@atomiton/storage";
+import { createConductor } from "@atomiton/conductor/desktop";
+import type { IStorageEngine } from "@atomiton/storage/desktop";
 
 export function initializeConductor(storage: IStorageEngine) {
   const conductor = createConductor({ storage });
-  console.log("Conductor initialized with storage successfully");
   return conductor;
 }

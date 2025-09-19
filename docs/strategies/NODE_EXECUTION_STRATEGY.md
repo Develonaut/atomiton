@@ -2,908 +2,101 @@
 
 ## Executive Summary
 
-This document outlines the strategy for enabling node execution in the Atomiton platform. While the core architecture is well-designed with strong package separation, critical integration points are missing that prevent actual workflow execution. This strategy provides a phased approach to connect the existing components and enable production-ready node execution.
+Strategy for enabling node execution in the Atomiton platform. Phase 0 complete - storage package modernized with split exports. Phase 1 focuses on events package and conductor integration.
 
-## Current State Assessment
+## ✅ Completed Work
 
-### Architecture Overview
+**Phase 0:**
 
-The system follows a clean separation of concerns with specialized packages:
+1. **Storage Factory** - Split exports with `createStorage()`, `createFileSystemEngine()`, `createMemoryEngine()`
+2. **Node Registry** - Direct usage of @atomiton/nodes package
+3. **Storage-Conductor** - Desktop app persists to `{userData}/atomiton-data`
 
-```
-UI Layer (apps/client)
-    ↓
-Editor (@atomiton/editor)
-    ↓
-State Management (@atomiton/store)
-    ↓
-Storage Layer (@atomiton/storage) [COMPLETE]
-    ↓
-Execution Layer (@atomiton/conductor)
-    ↓
-Node Implementation (@atomiton/nodes)
-    ↓
-Event System (@atomiton/events) [NOT INTEGRATED]
-```
+**Phase 1:** 4. **Events Package** - Split exports with `createEventBus()`, IPC integration, functional factories
 
-### Package Status Matrix
+## 🟡 Active: Phase 1 - Enable Basic Execution
 
-#### Core Execution Packages
+### ✅ Task 4: Modernize Events Package (COMPLETED)
 
-| Package                 | Purpose                            | Status      | Implementation Level                                                      |
-| ----------------------- | ---------------------------------- | ----------- | ------------------------------------------------------------------------- |
-| **@atomiton/conductor** | Orchestrates node execution        | ✅ Good     | 85% - Storage integration complete, node registry simplified              |
-| **@atomiton/nodes**     | Node definitions & implementations | ✅ Good     | 90% - Nodes exist but aren't registered                                   |
-| **@atomiton/events**    | Event system for state sync        | ✅ Complete | 100% - Built but not integrated                                           |
-| **@atomiton/storage**   | Composite persistence              | ✅ Complete | 100% - Split exports with functional factories, desktop/browser optimized |
-| **@atomiton/store**     | State management                   | ✅ Good     | 100% - Working properly                                                   |
+- Replace singleton EventsAPI with `createEventManager()` ✅
+- Add browser/desktop split exports ✅
+- Consider async-first patterns (validate necessity) ✅
 
-#### UI & Editor Packages
+### Task 5: Initialize Conductor in Main Process (READY TO START)
 
-| Package              | Purpose                 | Status  | Implementation Level    |
-| -------------------- | ----------------------- | ------- | ----------------------- |
-| **@atomiton/editor** | Blueprint visual editor | ✅ Good | 100% - Fully functional |
-| **@atomiton/ui**     | Component library       | ✅ Good | 100% - Complete         |
-| **@atomiton/form**   | Dynamic forms           | ✅ Good | 100% - Working          |
+- Setup conductor with storage integration
+- Event-based IPC communication
+- Error handling and logging
 
-#### Applications
+**🚀 PROMPT FOR TASK 5 - Initialize Conductor in Electron Main Process**
 
-| App              | Purpose          | Status  | Implementation Level                                           |
-| ---------------- | ---------------- | ------- | -------------------------------------------------------------- |
-| **apps/client**  | React UI         | ✅ Good | 95% - Can't trigger execution                                  |
-| **apps/desktop** | Electron wrapper | ✅ Good | 80% - Storage-conductor wiring complete, IPC needs enhancement |
+When ready to start this task, use this prompt:
 
-## Critical Gaps Analysis
+> **"Implement Task 5 from the node execution strategy: Initialize Conductor in Main Process. This involves migrating the conductor package from raw Electron IPC to use @atomiton/events package, then setting up conductor initialization in the desktop app's main process. Please review the implementation guides in CONDUCTOR_INTEGRATION.md and DESKTOP_EVENT_BUS_USAGE.md, then follow the complete workflow in .claude/workflow/EXECUTION_PLAN.md to implement this integration."**
 
-### 1. ✅ Storage Factory Complete
+**Success Criteria:**
 
-**Status**: ✅ **COMPLETED** - Storage factory implemented and integrated
+- [ ] Conductor package migrated to use @atomiton/events
+- [ ] Desktop app initializes conductor in main process
+- [ ] IPC communication replaced with event-based system
+- [ ] All tests pass and functionality verified
+- [ ] Ready for Task 6 (Execute Button in UI)
 
-- Location: `/packages/@atomiton/storage/src/` (split exports)
-- ✅ Implemented: Split exports pattern with `createStorage()`, `createFileSystem()`, `createMemory()`
-- ✅ Integration: Desktop app uses filesystem storage in userData directory
-- ✅ Unblocked: All composite loading and persistence now functional
+**Key Documents:**
 
-### 2. Node Registry Overcomplicated
+- `/CONDUCTOR_INTEGRATION.md` - Complete migration guide
+- `/DESKTOP_EVENT_BUS_USAGE.md` - Event bus patterns
+- `/docs/architecture/ELECTRON_ARCHITECTURE.md` - Architecture context
 
-**Impact**: Composite runner has empty registry and requires manual registration
+### Task 6: Create Contract Verification Tests (BLOCKED)
 
-- Location: `/packages/@atomiton/conductor/src/execution/composite/compositeRunner.ts` (line 30)
-- Problem: Manual registry when @atomiton/nodes package IS the registry
-- Solution: Use nodes package directly instead of separate registry
-- Blocks: Node validation and instantiation
+- Main process execution contract tests
+- Event bus integration contract tests
+- End-to-end node execution validation
+- Cross-environment contract verification
 
-### 3. Electron IPC Bridge Incomplete
+**🚀 PROMPT FOR TASK 6 - Contract Verification Integration Tests**
 
-**Impact**: Renderer process cannot communicate with main process conductor
+When ready to start this task, use this prompt:
 
-- Location: `/apps/desktop/src/preload/`
-- Missing: Conductor-specific IPC methods
-- Blocks: UI-triggered execution
+> **"Implement Task 6 from the node execution strategy: Create Contract Verification Tests. This involves creating integration tests that verify both sides of the execution contract work independently - main process can execute nodes correctly, and renderer can send/receive proper requests. Focus on contract verification rather than IPC communication itself. Please follow the complete workflow in .claude/workflow/EXECUTION_PLAN.md to implement comprehensive integration tests."**
 
-### 4. ✅ Main Process Storage Integration Complete
+**Success Criteria:**
 
-**Status**: ✅ **COMPLETED** - Desktop app now has persistent storage
+- [ ] Main process contract tests (can execute nodes and return results)
+- [ ] Renderer process contract tests (can create requests and handle responses)
+- [ ] Event bus integration tests (conductor events work properly)
+- [ ] End-to-end node execution without IPC (local execution validation)
+- [ ] All tests pass and contracts are verified
+- [ ] Ready for Task 7 (Execute Button in UI)
 
-- Location: `/apps/desktop/src/main/index.ts`
-- ✅ Implemented: Storage initialization with filesystem backend
-- ✅ Path: `{userData}/atomiton-data` directory structure
-- ✅ Integration: Conductor receives configured storage instance
-- ⚠️ Remaining: IPC handlers for renderer communication still needed
+### Task 7: Add Execute Button to UI (BLOCKED)
 
-### 5. Events Not Integrated
+- Create execution trigger in editor toolbar
+- Display basic execution results
 
-**Impact**: No real-time execution feedback or progress monitoring
+## 📋 Roadmap
 
-- Location: Integration points throughout conductor
-- Missing: Event emission during execution lifecycle
-- Blocks: User visibility into execution progress
+| Phase   | Goal                  | Duration | Status     |
+| ------- | --------------------- | -------- | ---------- |
+| Phase 0 | Storage modernization | Complete | ✅ DONE    |
+| Phase 1 | Basic node execution  | 1-2 days | 🟡 ACTIVE  |
+| Phase 2 | Real-time feedback    | 2-3 days | ⏸️ BLOCKED |
+| Phase 3 | Production features   | 1 week   | ⏸️ BLOCKED |
+| Phase 4 | Developer experience  | Ongoing  | ⏸️ BLOCKED |
 
-## Storage Strategy
+## Critical Gaps
 
-### Environment-Based Storage Selection
+1. **Conductor Integration** - Not using @atomiton/events package
+2. **Electron IPC** - Renderer can't trigger conductor
 
-**Desktop App (MVP)**:
+## Next Steps
 
-- `filesystem` storage in user's app data directory
-- No cloud costs, user owns their data locally
-- Full persistence across app restarts
-
-**Storage Layer Separation**:
-
-- **App State**: Zustand + localStorage (UI preferences, window state)
-- **User Content**: @atomiton/storage (YAML files, composite definitions)
-
-**Future Premium Features** (documented in storage package roadmap):
-
-- Cloud storage integration (Google Drive, Dropbox, OneDrive)
-- Cross-device sync capabilities
-- Team collaboration storage
-
-## Implementation Strategy
-
-### Phase 0: Quick Wins (2-4 hours) ✅ **COMPLETED**
-
-**Goal**: Unblock basic development and testing
-
-#### Tasks:
-
-1. **✅ Create Storage Factory** - COMPLETED
-
-   ```typescript
-   // Modern split exports pattern (Phase 0 Complete)
-   // @atomiton/storage/desktop - includes filesystem + memory
-   import {
-     createStorage,
-     createFileSystem,
-     createMemory,
-   } from "@atomiton/storage/desktop";
-
-   // @atomiton/storage/browser - memory only (IndexedDB in Phase 1)
-   import { createStorage, createMemory } from "@atomiton/storage/browser";
-
-   // Smart factory with platform defaults
-   const storage = createStorage(); // Filesystem on desktop, memory on browser
-
-   // Direct engine creation
-   const fileStorage = createFileSystem({ baseDir: "./data" });
-   const memoryStorage = createMemory();
-   ```
-
-   **Implementation Prompt:**
-
-   ```markdown
-   TASK: Implement Storage Factory for Universal Data Layer
-
-   OVERVIEW:
-   Create a storage factory that serves as the one-stop-shop for all data persistence in the Atomiton platform. This factory must follow core development principles: abstraction, encapsulation, extensibility, single responsibility principle.
-
-   CURRENT STATE:
-
-   - FileSystemStorage class exists in @atomiton/storage
-   - No factory function to create storage instances
-   - Conductor expects storage but can't instantiate it
-   - Blocking node execution (see NODE_EXECUTION_STRATEGY.md)
-
-   REQUIREMENTS:
-
-   Phase 0 Implementation:
-
-   1. Create createStorage() factory function
-   2. Implement InMemoryStorage class for testing
-   3. Create ROADMAP.md documenting future storage types
-   4. Wire existing FileSystemStorage into factory
-   5. Ensure async-first design for future extensibility
-
-   Technical Specifications:
-
-   - Single entry point: createStorage(config: StorageConfig)
-   - Unified interface: load(), save(), delete() methods
-   - Support 'memory' and 'filesystem' types initially
-   - Abstract interface supports future: databases, cloud storage, browser APIs
-   - Follow existing package patterns in the monorepo
-
-   Success Criteria:
-
-   - Conductor can create storage instances
-   - In-memory storage works for testing
-   - FileSystem storage accessible via factory
-   - Clean abstraction ready for future storage types
-
-   AGENT COORDINATION:
-
-   - Michael: Design storage interface and factory architecture
-   - Voorhees: Review for complexity and ensure clean abstractions
-   - Karen: Validate storage instances work with conductor
-   - Barbara: Create ROADMAP.md documentation
-
-   DELIVERABLES:
-
-   1. Updated @atomiton/storage/src/index.ts with createStorage()
-   2. InMemoryStorage implementation
-   3. ROADMAP.md in storage package
-   4. Working integration with conductor
-   5. Unit tests for storage factory
-   ```
-
-2. **✅ Eliminate Node Registry (Use Nodes Package Directly)** - COMPLETED
-
-   ```typescript
-   // packages/@atomiton/conductor/src/execution/composite/compositeRunner.ts
-   import { nodes } from "@atomiton/nodes/executable";
-
-   // Remove: const nodeRegistry = new Map<string, INode>();
-   // Remove: registerNode() function
-
-   // In validation:
-   if (!nodes[nodeType]) throw new Error(`Unknown node type: ${nodeType}`);
-
-   // In execution:
-   const node = nodes[nodeType](config);
-   ```
-
-   **Implementation Prompt:**
-
-   ```markdown
-   TASK: Eliminate Node Registry - Use Nodes Package Directly
-
-   OVERVIEW:
-   Remove the unnecessary node registry system and use the @atomiton/nodes package as the single source of truth for available nodes. This simplifies the architecture and eliminates manual registration.
-
-   WORKFLOW REQUIREMENTS:
-
-   1. Create new worktree: `wtnew node-registry-elimination`
-   2. Work in worktree: `cd ../atomiton-node-registry-elimination`
-   3. Follow .claude/workflow/EXECUTION_PLAN.md
-   4. Get Karen's approval before completing
-
-   CURRENT PROBLEM:
-
-   - Composite runner has empty node registry Map
-   - Nodes must be manually registered
-   - Validation fails: "Unknown node type"
-   - @atomiton/nodes package already exports all nodes
-
-   SOLUTION:
-   Replace registry with direct node package imports
-
-   TECHNICAL CHANGES:
-
-   1. **Update Composite Runner** (`packages/@atomiton/conductor/src/execution/composite/compositeRunner.ts`):
-      - Remove: `const nodeRegistry = new Map<string, INode>()`
-      - Remove: `registerNode()` function
-      - Add: `import { nodes } from '@atomiton/nodes/executable'`
-      - Update validation call to pass nodes object instead of registry
-
-   2. **Update Validation** (`packages/@atomiton/conductor/src/execution/composite/validation.ts`):
-      - Change parameter from `nodeRegistry: Map<string, INode>` to `nodes: Record<string, any>`
-      - Update check from `nodeRegistry.has(node.type)` to `nodes[node.type]`
-
-   3. **Update Node Execution**:
-      - Find where nodes are instantiated
-      - Replace registry lookup with `nodes[nodeType](config)`
-
-   4. **Update Tests**:
-      - Remove registry-related test setup
-      - Update mocks to use nodes object
-
-   SUCCESS CRITERIA:
-
-   - Composite validation works without registry
-   - Nodes can be instantiated by type string
-   - All existing tests pass
-   - Registry Map completely removed
-
-   AGENT COORDINATION:
-
-   - Megamind: Analyze complex integration points and dependencies
-   - Voorhees: Simplify architecture by removing unnecessary abstractions
-   - Karen: Validate that node execution still works end-to-end
-
-   DELIVERABLES:
-
-   1. Updated composite runner without registry
-   2. Updated validation to use nodes directly
-   3. Working node instantiation
-   4. All tests passing
-   5. Clean commit with descriptive message
-
-   This eliminates unnecessary complexity while maintaining all functionality.
-   ```
-
-3. **✅ Storage-Conductor Wiring** - COMPLETED
-
-   ```typescript
-   // ✅ IMPLEMENTED in apps/desktop/src/main/index.ts
-   import { app } from "electron";
-   import { createStorage, createFileSystem } from "@atomiton/storage/desktop";
-   import { createConductor } from "@atomiton/conductor";
-   import path from "path";
-
-   // Using split exports - desktop-specific import
-   const storage = createStorage({
-     engine: createFileSystem({
-       baseDir: path.join(app.getPath("userData"), "atomiton-data"),
-     }),
-   });
-
-   const conductor = createConductor({ storage });
-   ```
-
-   - ✅ Desktop app uses filesystem storage by default
-   - ✅ User data persists in userData directory (free, local)
-   - ✅ Clear separation from app state (Zustand + localStorage)
-   - ✅ Error handling for storage initialization failures
-
-   **Implementation Prompt:**
-
-   ````markdown
-   TASK: Wire Storage to Conductor - Desktop MVP Implementation
-
-   OVERVIEW:
-   Connect the storage factory to conductor so user-created composites persist to the filesystem in Electron's userData directory. This completes Phase 0 and enables basic node execution.
-
-   WORKFLOW REQUIREMENTS:
-
-   1. Create new worktree: `wtnew storage-conductor-integration`
-   2. Work in worktree: `cd ../atomiton-storage-conductor-integration`
-   3. Follow .claude/workflow/EXECUTION_PLAN.md
-   4. Get Karen's approval before completing
-
-   IMPLEMENTATION COMPLETED:
-
-   - ✅ Conductor receives properly configured filesystem storage
-   - ✅ User composites persist in `{userData}/atomiton-data` directory
-   - ✅ Desktop filesystem storage fully initialized with error handling
-
-   STORAGE STRATEGY (Desktop-First MVP):
-
-   - Use filesystem storage in app.getPath('userData')/atomiton-data
-   - Clear separation from app state (Zustand + localStorage)
-   - Local storage only (no cloud costs)
-
-   TECHNICAL CHANGES:
-
-   1. **Update Electron Main Process** (`apps/desktop/src/main/`):
-
-      ```typescript
-      import {
-        createStorage,
-        createFileSystem,
-      } from "@atomiton/storage/desktop";
-      import { createConductor } from "@atomiton/conductor";
-      import { app } from "electron";
-      import path from "path";
-
-      const storage = createStorage({
-        engine: createFileSystem({
-          baseDir: path.join(app.getPath("userData"), "atomiton-data"),
-        }),
-      });
-
-      const conductor = createConductor({ storage });
-      ```
-   ````
-
-   2. **Ensure Storage Directory Creation**:
-      - Handle directory creation if it doesn't exist
-      - Add error handling for filesystem permissions
-
-   3. **Test Storage Integration**:
-      - Verify conductor can save/load composites
-      - Test persistence across app restarts
-
-   SUCCESS CRITERIA:
-   - Conductor initializes with filesystem storage
-   - User data persists in userData/atomiton-data directory
-   - Composites can be loaded for execution
-   - Storage initialization errors are handled gracefully
-
-   AGENT COORDINATION:
-   - Parker: Electron integration and filesystem setup
-   - Michael: Conductor configuration and storage integration
-   - Karen: Validate end-to-end storage persistence
-
-   This completes Phase 0, enabling the conductor to load and execute user-created composites.
-
-   ```
-
-   ```
-
-### Phase 1: Enable Basic Execution (1-2 days) 🟡 **IN PROGRESS**
-
-**Goal**: Execute a single node end-to-end through the desktop app
-
-#### Tasks:
-
-4. **⏳ Fix Electron IPC Bridge (Events-Based Approach)** - READY TO START
-
-   ```typescript
-   // Use @atomiton/events for cross-process communication
-   import { createEventManager } from "@atomiton/events/desktop";
-   import { createEventManager } from "@atomiton/events/browser";
-
-   // UI side - trigger execution and wait for result
-   const events = createEventManager();
-   const conductorBus = events.createBus<ConductorEvents>("conductor");
-
-   const result = await conductorBus.emit("execute", { compositeId, inputs });
-   console.log("Execution completed:", result);
-
-   // Main process - handle execution asynchronously
-   conductorBus.on("execute", async (data) => {
-     const result = await conductor.execute(data);
-     return result; // Auto-emits response back to caller
-   });
-   ```
-
-   **PREREQUISITE: Modernize Events Package First**
-
-   **Implementation Prompt:**
-
-   ````markdown
-   TASK: Modernize Events Package - Functional Architecture
-
-   OVERVIEW:
-   Modernize the @atomiton/events package from class-based singletons to functional factory patterns with environment-specific exports, following the same patterns as @atomiton/nodes and @atomiton/storage.
-
-   WORKFLOW REQUIREMENTS:
-
-   1. Create new worktree: `wtnew events-modernization`
-   2. Work in worktree: `cd ../atomiton-events-modernization`
-   3. Follow .claude/workflow/EXECUTION_PLAN.md
-   4. Get Karen's approval before completing
-
-   CURRENT PROBLEMS:
-
-   - Mixed architecture patterns (class + functional)
-   - Singleton EventsAPI instance
-   - No environment-specific exports
-   - No legacy concerns (nobody using this yet)
-
-   MODERNIZATION GOALS:
-
-   1. **Functional Factory Pattern**
-      - Replace EventsAPI singleton with createEventManager()
-      - Replace UnifiedEmitter class with factory functions
-      - Follow @atomiton/storage pattern
-
-   2. **Environment-Specific Exports**
-
-      ```typescript
-      // Browser environment (EventEmitter3)
-      packages/@atomiton/events/src/exports/browser/index.ts
-
-      // Desktop environment (Node EventEmitter + IPC)
-      packages/@atomiton/events/src/exports/desktop/index.ts
-      ```
-   ````
-
-   3. **Clean API Surface (Async-First)**
-
-      ```typescript
-      import { createEventManager } from "@atomiton/events/browser";
-      import { createEventManager } from "@atomiton/events/desktop";
-
-      const events = createEventManager(config);
-
-      // Typed event buses with async support
-      const conductorBus = events.createBus<ConductorEvents>("conductor");
-
-      // Async event emission and handling
-      const result = await conductorBus.emit("execute", { compositeId });
-
-      conductorBus.on("execute", async (data) => {
-        const result = await conductor.execute(data);
-        await conductorBus.emit("complete", result);
-      });
-      ```
-
-   TECHNICAL CHANGES:
-   1. **Create Factory Functions (Async-First)**
-      - `createEventManager()` - Main factory with async event emission
-      - `createBrowserEventManager()` - EventEmitter3 based with Promise support
-      - `createDesktopEventManager()` - Node.js EventEmitter + IPC with async handling
-
-      ```typescript
-      // Core async patterns to implement (extend EventEmitter3):
-      // Note: EventEmitter3 supports async handlers but not awaitable emission
-
-      // 1. Promise-based event emission (NEW - build on top of EventEmitter3)
-      const result = await eventBus.emit("execute", data, { timeout: 30000 });
-
-      // 2. Async event handlers with auto-response (extend existing async support)
-      eventBus.on("execute", async (data) => {
-        const result = await someAsyncOperation(data);
-        return result; // NEW: Return value becomes emit() promise result
-      });
-
-      // 3. Implementation strategy:
-      // - Use correlation IDs for request/response pairing
-      // - Build promise resolution layer on top of EventEmitter3
-      // - Mirror this behavior for Node.js EventEmitter in desktop export
-      // - Handle cross-process async via IPC correlation
-      ```
-
-   2. **Environment Detection & Exports**
-      - `/browser` export - Pure EventEmitter3, no IPC
-      - `/desktop` export - Node EventEmitter + IPC bridge
-      - Main export - Auto-detection wrapper
-
-   3. **Preserve Existing Features + Add Async Support**
-      - IPC cross-process communication
-      - Event filtering and subscriptions
-      - Typed event buses
-      - Error handling
-      - **NEW: Async-first event emission and handling**
-      - **NEW: Promise-based event responses**
-      - **NEW: Timeout support for async operations**
-
-   4. **Update Package.json Exports**
-
-      ```json
-      "exports": {
-        "./browser": { "import": "./dist/exports/browser/index.js" },
-        "./desktop": { "import": "./dist/exports/desktop/index.js" },
-        ".": { "import": "./dist/index.js" }
-      }
-      ```
-
-   5. **Update Nodes Package Exports (Consistency)**
-
-      ```json
-      // Also update @atomiton/nodes package.json exports
-      "exports": {
-        "./browser": { "import": "./dist/exports/browser/index.js" },
-        "./desktop": { "import": "./dist/exports/desktop/index.js" },
-        ".": { "import": "./dist/index.js" }
-      }
-      ```
-
-      - Rename `/executable` export to `/desktop` for consistency
-      - Update any existing imports (minimal since Electron side not using yet)
-
-   SUCCESS CRITERIA:
-   - Functional factory pattern throughout
-   - Clean browser/desktop environment splits
-   - Existing IPC functionality preserved
-   - Same API capabilities as before
-   - **Async-first event emission and handling**
-   - **Promise-based responses with timeout support**
-   - Ready for conductor integration
-
-   AGENT COORDINATION:
-   - **Voorhees**: Review async-await emission pattern - is this over-engineering?
-   - **Michael**: Validate if request/response pattern is architecturally sound
-   - **Alternative approaches**: Standard emit/on vs manual promise handling vs correlation IDs
-   - Parker: Ensure IPC functionality works in desktop environment
-   - Karen: Validate that modernized events work as expected
-
-   **VALIDATION QUESTIONS FOR VOORHEES & MICHAEL:**
-   1. Is `await eventBus.emit('execute', data)` actually needed?
-   2. Would simple `eventBus.emit()` + `eventBus.on()` be sufficient?
-   3. Are we over-complicating with correlation IDs and promise layers?
-   4. Could we handle request/response manually in conductor instead?
-
-   DELIVERABLES:
-   1. Functional event manager factories
-   2. Browser/desktop environment exports (same API)
-   3. Async-first event emission and handling
-   4. Promise-based event responses with timeout support
-   5. Updated package.json exports
-   6. Working IPC cross-process communication
-   7. All tests passing
-   8. Ready for conductor integration
-
-   This modernization enables clean conductor event integration in Phase 1.
-
-   ```
-
-   ```
-
-5. **⏳ Initialize Conductor in Main Process** - WAITING FOR TASK 4
-
-   ```typescript
-   // apps/desktop/src/main/conductor.ts
-   import { createConductor } from "@atomiton/conductor";
-   import { createStorage, createFileSystem } from "@atomiton/storage/desktop";
-   import { createEventManager } from "@atomiton/events/desktop";
-   import { app } from "electron";
-   import path from "path";
-
-   export async function setupConductor() {
-     const storage = createStorage({
-       engine: createFileSystem({
-         baseDir: path.join(app.getPath("userData"), "atomiton-data"),
-       }),
-     });
-
-     const conductor = createConductor({ storage });
-
-     // Setup event-based communication
-     const events = createEventManager();
-     const conductorBus = events.createBus("conductor");
-
-     conductorBus.on("execute", async (data) => {
-       const result = await conductor.execute(data);
-       return result; // Auto-responds via events
-     });
-   }
-   ```
-
-   **Implementation Prompt:**
-
-   ````markdown
-   TASK: Initialize Conductor in Main Process
-
-   OVERVIEW:
-   Set up the conductor in Electron's main process with proper storage integration and event-based IPC communication. This builds on the modernized events package to enable cross-process execution requests.
-
-   WORKFLOW REQUIREMENTS:
-
-   1. Create new worktree: `wtnew conductor-main-process-setup`
-   2. Work in worktree: `cd ../atomiton-conductor-main-process-setup`
-   3. Follow .claude/workflow/EXECUTION_PLAN.md
-   4. Get Karen's approval before completing
-
-   PREREQUISITES:
-
-   - ✅ Storage factory implemented and integrated
-   - ✅ Node registry eliminated (using nodes package directly)
-   - ✅ Events package modernized with async support
-   - ✅ Storage-conductor wiring complete
-
-   CURRENT STATE:
-
-   - Conductor exists but not initialized in Electron main process
-   - Storage is configured but conductor needs event-based IPC setup
-   - No bridge between renderer requests and main process execution
-
-   TECHNICAL CHANGES:
-
-   1. **Create Main Process Conductor Setup** (`apps/desktop/src/main/conductor.ts`):
-
-      ```typescript
-      import { createConductor } from "@atomiton/conductor";
-      import {
-        createStorage,
-        createFileSystem,
-      } from "@atomiton/storage/desktop";
-      import { createEventManager } from "@atomiton/events/desktop";
-      import { app } from "electron";
-      import path from "path";
-
-      export async function setupConductor() {
-        // Initialize storage (using split exports)
-        const storage = createStorage({
-          engine: createFileSystem({
-            baseDir: path.join(app.getPath("userData"), "atomiton-data"),
-          }),
-        });
-
-        // Create conductor with storage
-        const conductor = createConductor({ storage });
-
-        // Setup event-based communication
-        const events = createEventManager();
-        const conductorBus = events.createBus("conductor");
-
-        // Handle execution requests from renderer
-        conductorBus.on("execute", async (data) => {
-          try {
-            const result = await conductor.execute(data);
-            return result; // Auto-responds to caller via events
-          } catch (error) {
-            throw new Error(`Execution failed: ${error.message}`);
-          }
-        });
-
-        // Handle status requests
-        conductorBus.on("getStatus", async (executionId) => {
-          return conductor.getStatus?.(executionId) || { status: "unknown" };
-        });
-
-        return { conductor, events };
-      }
-      ```
-   ````
-
-   2. **Update Main Process Initialization** (`apps/desktop/src/main/index.ts`):
-
-      ```typescript
-      import { setupConductor } from "./conductor";
-
-      app.whenReady().then(async () => {
-        // Initialize conductor
-        await setupConductor();
-
-        // Continue with window creation...
-      });
-      ```
-
-   3. **Error Handling & Logging**:
-      - Add structured error handling for conductor failures
-      - Log execution requests and results for debugging
-      - Handle storage initialization errors gracefully
-
-   SUCCESS CRITERIA:
-   - Conductor properly initialized in main process
-   - Event-based IPC communication working
-   - Storage integration functional
-   - Error handling for execution failures
-   - Ready to receive execution requests from renderer
-
-   AGENT COORDINATION:
-   - Parker: Electron main process setup and IPC configuration
-   - Michael: Conductor integration and architecture validation
-   - Karen: End-to-end testing of main process conductor setup
-
-   DELIVERABLES:
-   1. Conductor setup function in main process
-   2. Event-based IPC handlers for execution requests
-   3. Proper error handling and logging
-   4. Integration with existing storage setup
-   5. All tests passing
-   6. Ready for renderer-side execution triggers
-
-   This enables the main process to handle execution requests via the modernized events system.
-
-   ```
-
-   ```
-
-6. **⏳ Add Execute Button to UI** - WAITING FOR TASKS 4 & 5
-   - Create execution trigger in editor toolbar
-   - Display basic execution results
-
-### Phase 2: Real-time Feedback (2-3 days) ⏸️ **BLOCKED**
-
-**Goal**: Provide execution progress and live updates
-
-**Status**: Waiting for Phase 1 completion
-
-#### Tasks:
-
-7. **⏸️ Integrate Events Package** - BLOCKED
-   - Emit events from conductor during execution
-   - Create event bus for cross-process communication
-   - Subscribe to events in UI for progress updates
-
-8. **⏸️ Implement WebSocket Transport** - BLOCKED
-   - Enable real-time communication for external integrations
-   - Stream execution progress to connected clients
-
-9. **⏸️ Error Handling & Recovery** - BLOCKED
-   - Structured error types for different failure modes
-   - Retry mechanisms for transient failures
-   - User-friendly error messages
-
-### Phase 3: Production Features (1 week) ⏸️ **BLOCKED**
-
-**Goal**: Make the system robust and production-ready
-
-**Status**: Waiting for Phase 1 & 2 completion
-
-#### Tasks:
-
-10. **⏸️ Resource Management** - BLOCKED
-    - Memory usage monitoring and limits
-    - CPU throttling for intensive operations
-    - Timeout handling for long-running nodes
-    - Process isolation for dangerous operations
-
-11. **⏸️ Advanced Node Types** - BLOCKED
-    - Platform-specific nodes (Windows, macOS, Linux)
-    - Cloud service integrations (AWS, Azure, GCP)
-    - Database connectors
-    - ML/AI nodes
-
-12. **⏸️ Testing Infrastructure** - BLOCKED
-    - Mock nodes for deterministic testing
-    - End-to-end execution test suite
-    - Performance benchmarks
-    - Load testing for concurrent executions
-
-### Phase 4: Developer Experience (Ongoing) ⏸️ **BLOCKED**
-
-**Goal**: Polish the system and improve developer productivity
-
-**Status**: Waiting for core execution to be functional
-
-#### Tasks:
-
-13. **⏸️ Debugging Tools** - BLOCKED
-    - Execution timeline visualization
-    - Node performance profiling
-    - Step-through debugging
-    - Execution replay from logs
-
-14. **⏸️ Documentation & Guides** - BLOCKED
-    - Node development guide
-    - Execution architecture documentation
-    - API reference
-    - Example workflows
-
-## Testing Strategy
-
-### Unit Testing
-
-- Test each component in isolation
-- Mock dependencies for focused testing
-- Achieve >80% code coverage
-
-### Integration Testing
-
-1. Test storage ↔ conductor integration
-2. Test IPC communication flow
-3. Test composite execution end-to-end
-4. Test event propagation across processes
-
-### Mock Strategy
-
-- Create `InMemoryStorage` for testing without filesystem
-- Create deterministic mock nodes with predictable behavior
-- Mock IPC layer for renderer testing
-- Create test harness for execution scenarios
-
-### Performance Testing
-
-- Benchmark node execution overhead
-- Test concurrent execution limits
-- Measure memory usage patterns
-- Profile CPU utilization
-
-## Risk Mitigation
-
-### Technical Risks
-
-| Risk                                    | Impact | Mitigation                                             |
-| --------------------------------------- | ------ | ------------------------------------------------------ |
-| Memory leaks in long-running executions | High   | Implement proper cleanup, use WeakMaps, add monitoring |
-| Deadlocks in parallel execution         | High   | Use dependency graph analysis, add timeout detection   |
-| IPC message saturation                  | Medium | Implement batching, use compression, add backpressure  |
-| Infinite loops in user code             | High   | Add execution time limits, implement kill switches     |
-| State corruption across processes       | Medium | Use event sourcing, implement state snapshots          |
-
-### Architecture Risks
-
-| Risk                            | Impact | Mitigation                                          |
-| ------------------------------- | ------ | --------------------------------------------------- |
-| Tight coupling between packages | Medium | Maintain clean interfaces, use dependency injection |
-| Platform-specific code in core  | High   | Abstract platform features, use adapter pattern     |
-| Scalability limitations         | Medium | Design for horizontal scaling, use worker pools     |
-
-## Success Metrics
-
-### Phase 0 Success Criteria
-
-- [ ] Storage factory creates instances (memory + filesystem)
-- [ ] Nodes package used directly (no separate registry)
-- [ ] Conductor can load composites from storage
-
-### Phase 1 Success Criteria
-
-- [ ] Execute button triggers conductor
-- [ ] Single node executes successfully
-- [ ] Results display in UI
-
-### Phase 2 Success Criteria
-
-- [ ] Real-time progress updates work
-- [ ] Errors display with clear messages
-- [ ] WebSocket transport functional
-
-### Phase 3 Success Criteria
-
-- [ ] System handles 100+ concurrent executions
-- [ ] Memory usage stays within limits
-- [ ] All node types execute correctly
-
-### Phase 4 Success Criteria
-
-- [ ] Developer documentation complete
-- [ ] Debugging tools functional
-- [ ] Performance meets benchmarks
-
-## Timeline
-
-| Phase   | Duration  | Dependencies | Team            |
-| ------- | --------- | ------------ | --------------- |
-| Phase 0 | 2-4 hours | None         | Michael, Parker |
-| Phase 1 | 1-2 days  | Phase 0      | Parker, Michael |
-| Phase 2 | 2-3 days  | Phase 1      | Michael, Ryan   |
-| Phase 3 | 1 week    | Phase 2      | Full team       |
-| Phase 4 | Ongoing   | Phase 3      | Brian, Barbara  |
-
-## Conclusion
-
-The Atomiton node execution architecture has a solid foundation with well-designed packages and clean separation of concerns. The critical missing pieces are integration points between packages rather than fundamental architectural flaws. By following this phased approach, we can quickly enable basic execution and progressively add production features while maintaining system stability.
-
-The key to success is maintaining discipline in the implementation order - fixing the critical blockers first before adding advanced features. With the Phase 0 quick wins, we can unblock development in just a few hours and have a working execution system within days.
+**Immediate**: Initialize Conductor in Main Process (Phase 1, Task 5)
+**Then**: Create Contract Verification Tests (Phase 1, Task 6)
+**Finally**: Add Execute Button to UI (Phase 1, Task 7)
 
 ---
 
-**Document Version**: 1.0.0
-**Last Updated**: 2025-09-18
-**Status**: Active Strategy
-**Owner**: Architecture Team
+**Last Updated**: 2025-09-19
+**Status**: Phase 1 In Progress

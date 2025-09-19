@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { initializeServices } from "../../main/services";
-import { initializeStorage } from "../../main/services/storage";
 import { initializeConductor } from "../../main/services/conductor";
+import { initializeStorage } from "../../main/services/storage";
 
 // Mock Electron and dependencies for smoke test
 vi.mock("@atomiton/storage/desktop", () => ({
@@ -11,7 +11,7 @@ vi.mock("@atomiton/storage/desktop", () => ({
   ),
 }));
 
-vi.mock("@atomiton/conductor", () => ({
+vi.mock("@atomiton/conductor/desktop", () => ({
   createConductor: vi.fn(() => ({ execute: vi.fn() })),
 }));
 

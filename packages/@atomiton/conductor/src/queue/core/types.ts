@@ -6,7 +6,6 @@ import type {
   ExecutionError,
   ExecutionResult,
 } from "../../interfaces/IExecutionEngine";
-import type { EventSubscription } from "@atomiton/events";
 
 export type JobData = {
   executionId: string;
@@ -93,12 +92,7 @@ export type QueueInstance = {
   decodeWebhookResponse: (response: WebhookResponse) => unknown;
   gracefulShutdown: () => Promise<void>;
   getMetrics: () => QueueMetrics;
-  on: (
-    event: string,
-    listener: (...args: unknown[]) => void,
-  ) => EventSubscription;
-  off: (event: string, listener: (...args: unknown[]) => void) => void;
-  emit: (event: string, ...args: unknown[]) => void;
+  eventBus: unknown; // Type-safe event bus for queue events
 };
 
 export type WorkerInfo = {

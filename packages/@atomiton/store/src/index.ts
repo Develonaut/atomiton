@@ -112,3 +112,4 @@ export function createStore<T extends object>(
 }
 
 export { shallow } from "zustand/shallow";
+export type { StoreApi, UseBoundStore } from "zustand";

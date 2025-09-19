@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { createEventBus } from "../exports/browser";
+import { describe, expect, it } from "vitest";
+import createDesktopEventBus from "../exports/desktop/createDesktopEventBus";
 
 type SmokeEvents = {
   test: { data: string };
@@ -9,7 +9,7 @@ type SmokeEvents = {
 
 describe("EventBus Smoke Tests", () => {
   it("should emit and receive events without errors", () => {
-    const eventBus = createEventBus<SmokeEvents>("smoke");
+    const eventBus = createDesktopEventBus<SmokeEvents>("smoke");
     let received = false;
 
     const unsubscribe = eventBus.on("test", () => {
@@ -22,7 +22,7 @@ describe("EventBus Smoke Tests", () => {
   });
 
   it("should broadcast events successfully", () => {
-    const eventBus = createEventBus<SmokeEvents>("smoke");
+    const eventBus = createDesktopEventBus<SmokeEvents>("smoke");
     let eventData: { test: boolean } | null = null;
 
     const unsubscribe = eventBus.on("broadcast", (data) => {
@@ -38,7 +38,7 @@ describe("EventBus Smoke Tests", () => {
   });
 
   it("should handle high-frequency events", () => {
-    const eventBus = createEventBus<SmokeEvents>("smoke");
+    const eventBus = createDesktopEventBus<SmokeEvents>("smoke");
     let count = 0;
 
     const unsubscribe = eventBus.on("rapid", () => {
@@ -55,7 +55,7 @@ describe("EventBus Smoke Tests", () => {
   });
 
   it("should track listener counts accurately", () => {
-    const eventBus = createEventBus<SmokeEvents>("smoke");
+    const eventBus = createDesktopEventBus<SmokeEvents>("smoke");
 
     expect(eventBus.listenerCount("test")).toBe(0);
 
@@ -73,7 +73,7 @@ describe("EventBus Smoke Tests", () => {
   });
 
   it("should clear all listeners properly", () => {
-    const eventBus = createEventBus<SmokeEvents>("smoke");
+    const eventBus = createDesktopEventBus<SmokeEvents>("smoke");
 
     eventBus.on("test", () => {});
     eventBus.on("broadcast", () => {});
@@ -88,7 +88,7 @@ describe("EventBus Smoke Tests", () => {
   });
 
   it("should return correct domain", () => {
-    const eventBus = createEventBus<SmokeEvents>("test-domain");
+    const eventBus = createDesktopEventBus<SmokeEvents>("test-domain");
     expect(eventBus.getDomain()).toBe("test-domain");
   });
 });

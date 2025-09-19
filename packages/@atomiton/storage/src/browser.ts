@@ -9,10 +9,6 @@ import { createMemoryEngine } from "./index";
 export * from "./types";
 export { createMemoryEngine, type InMemoryStorageConfig } from "./index";
 
-// Future browser-specific engines
-// export { createIndexedDBEngine } from "./index";
-// export { createLocalStorageEngine } from "./index";
-
 /**
  * Creates a storage instance for browser environments
  * @param config.engine - Optional storage engine. Defaults to memory storage with persistence warning

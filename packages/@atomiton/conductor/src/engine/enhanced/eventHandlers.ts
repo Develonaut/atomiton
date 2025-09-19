@@ -2,23 +2,18 @@
  * Event handling setup for enhanced execution engine
  */
 
-import { events } from "@atomiton/events";
+import { events } from "@atomiton/events/desktop";
 import type { ScalableQueueInstance } from "../../queue";
 
-type EngineEvents = {
-  "execution:started": { executionId: string; compositeId: string };
-  "execution:completed": { jobId: string; result: unknown };
-  "execution:failed": { jobId: string; error: Error };
-  "execution:paused": { executionId: string };
-  "execution:resumed": { executionId: string };
-  "execution:cancelled": { executionId: string };
-  "engine:shutting-down": void;
-  "engine:shutdown": void;
-  "metrics:update": {
-    queue: unknown;
-    workers: unknown;
-    execution: unknown;
-  };
+type EventHandlersReturn = {
+  setupQueueHandlers: () => void;
+  setupMetricsCollection: () => void;
+  emitExecutionPaused: (executionId: string) => void;
+  emitExecutionResumed: (executionId: string) => void;
+  emitExecutionCancelled: (executionId: string) => void;
+  emitEngineShuttingDown: () => void;
+  emitEngineShutdown: () => void;
+  eventBus: typeof events;
 };
 
 export function createEventHandlers(
@@ -34,25 +29,22 @@ export function createEventHandlers(
   webhookManager: {
     emitWebhookReceived: (response: unknown) => void;
   },
-) {
-  const engineEventBus =
-    events.createEventBus<EngineEvents>("conductor:engine");
-
+): EventHandlersReturn {
   const setupQueueHandlers = (): void => {
-    queue.on("job:started", (data: unknown) => {
+    events.on("job:started", (data: unknown) => {
       metricsManager.incrementActiveExecutions();
       if (typeof data === "object" && data !== null && "jobData" in data) {
         const jobData = (
           data as { jobData: { executionId: string; blueprintId: string } }
         ).jobData;
-        engineEventBus.emit("execution:started", {
+        events.emit("execution:started", {
           executionId: jobData.executionId,
           compositeId: jobData.blueprintId,
         });
       }
     });
 
-    queue.on("job:completed", (data: unknown) => {
+    events.on("job:completed", (data: unknown) => {
       metricsManager.decrementActiveExecutions();
       metricsManager.incrementTotalExecutions();
       if (
@@ -68,14 +60,14 @@ export function createEventHandlers(
         if (typedData.result?.success) {
           metricsManager.incrementSuccessfulExecutions();
         }
-        engineEventBus.emit("execution:completed", {
+        events.emit("execution:completed", {
           jobId: typedData.jobId,
           result: typedData.result,
         });
       }
     });
 
-    queue.on("job:failed", (data: unknown) => {
+    events.on("job:failed", (data: unknown) => {
       metricsManager.decrementActiveExecutions();
       metricsManager.incrementFailedExecutions();
       if (
@@ -89,14 +81,14 @@ export function createEventHandlers(
           typedData.error instanceof Error
             ? typedData.error
             : new Error(String(typedData.error));
-        engineEventBus.emit("execution:failed", {
+        events.emit("execution:failed", {
           jobId: typedData.jobId,
           error,
         });
       }
     });
 
-    queue.on("webhook:response", (response: unknown) => {
+    events.on("webhook:response", (response: unknown) => {
       webhookManager.emitWebhookReceived(response);
     });
   };
@@ -106,7 +98,7 @@ export function createEventHandlers(
       const queueMetrics = queue.getMetrics();
       const workerMetrics = queue.getWorkerMetrics();
 
-      engineEventBus.emit("metrics:update", {
+      events.emit("metrics:update", {
         queue: queueMetrics,
         workers: workerMetrics,
         execution: metricsManager.getMetrics(),
@@ -115,23 +107,23 @@ export function createEventHandlers(
   };
 
   const emitExecutionPaused = (executionId: string): void => {
-    engineEventBus.emit("execution:paused", { executionId });
+    events.emit("execution:paused", { executionId });
   };
 
   const emitExecutionResumed = (executionId: string): void => {
-    engineEventBus.emit("execution:resumed", { executionId });
+    events.emit("execution:resumed", { executionId });
   };
 
   const emitExecutionCancelled = (executionId: string): void => {
-    engineEventBus.emit("execution:cancelled", { executionId });
+    events.emit("execution:cancelled", { executionId });
   };
 
   const emitEngineShuttingDown = (): void => {
-    engineEventBus.emit("engine:shutting-down", undefined);
+    events.emit("engine:shutting-down", undefined);
   };
 
   const emitEngineShutdown = (): void => {
-    engineEventBus.emit("engine:shutdown", undefined);
+    events.emit("engine:shutdown", undefined);
   };
 
   return {
@@ -142,6 +134,6 @@ export function createEventHandlers(
     emitExecutionCancelled,
     emitEngineShuttingDown,
     emitEngineShutdown,
-    eventBus: engineEventBus,
+    eventBus: events,
   };
 }

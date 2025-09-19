@@ -1,9 +1,11 @@
 export { conductor, createConductor } from "./conductor";
 export type { ConductorConfig, ConductorInstance } from "./conductor";
 
-export * from "./transport";
-
-export { setupMainProcessHandler } from "./electron/mainProcessHandler";
+export {
+  createHTTPTransport,
+  createIPCTransport,
+  type IExecutionTransport,
+} from "./transport";
 
 export {
   createSimpleExecutor,
@@ -27,13 +29,11 @@ export {
 
 export {
   createQueue,
-  createScalableQueue,
   type JobData,
   type JobOptions,
   type JobResponse,
   type QueueInstance,
   type QueueOptions,
-  type ScalableQueueInstance,
   type WebhookData,
   type WebhookResponse,
 } from "./queue";
@@ -57,9 +57,4 @@ export {
   type CompositeRunnerInstance,
 } from "./execution";
 
-export {
-  createRuntimeRouter,
-  createTypeScriptRuntime,
-  type RuntimeRouterInstance,
-  type TypeScriptRuntimeInstance,
-} from "./runtime";
+export { createRuntimeRouter, type RuntimeRouterInstance } from "./runtime";

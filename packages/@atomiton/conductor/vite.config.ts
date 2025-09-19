@@ -1,4 +1,5 @@
 import { defineLibraryConfig } from "@atomiton/vite-config";
+import { resolve } from "path";
 
 export default defineLibraryConfig({
   name: "AtomitonConductor",
@@ -46,6 +47,14 @@ export default defineLibraryConfig({
   testEnvironment: "node",
   additionalConfig: {
     build: {
+      lib: {
+        entry: {
+          browser: resolve(__dirname, "src/browser.ts"),
+          desktop: resolve(__dirname, "src/desktop.ts"),
+        },
+        name: "AtomitonConductor",
+        formats: ["es", "cjs"],
+      },
       terserOptions: {
         compress: {
           drop_console: true,

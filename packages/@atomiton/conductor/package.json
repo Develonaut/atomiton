@@ -1,38 +1,35 @@
 {
   "name": "@atomiton/conductor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Blueprint and node execution orchestrator for Atomiton",
   "type": "module",
   "private": true,
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
     "./browser": {
       "import": "./dist/browser.js",
       "types": "./dist/browser.d.ts"
     },
+    "./desktop": {
+      "import": "./dist/desktop.js",
+      "types": "./dist/desktop.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "vite build",
     "dev": "vite build --watch",
-    "test": "vitest run --exclude src/__benchmarks__/**",
-    "test:coverage": "vitest run --coverage",
+    "build": "vite build",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit",
-    "kill": "echo 'No processes to kill for Conductor package'",
+    "test": "vitest run --exclude src/__benchmarks__/**",
     "test:unit": "vitest run --exclude src/__benchmarks__/**",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
     "test:smoke": "vitest run src/**/*.smoke.test.ts --passWithNoTests",
     "test:benchmark": "vitest bench --run",
     "test:e2e": "echo \"No E2E tests for this package\"",
-    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
-    "test:watch": "vitest watch"
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
   },
   "dependencies": {
     "@atomiton/events": "workspace:*",

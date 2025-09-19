@@ -5,7 +5,7 @@ import type { ExecutionStatus } from "../interfaces/IExecutionEngine";
  */
 export type ExecutionState = {
   executionId: string;
-  blueprintId: string;
+  compositeId: string;
   status: ExecutionStatus;
   startTime: Date;
   endTime?: Date;

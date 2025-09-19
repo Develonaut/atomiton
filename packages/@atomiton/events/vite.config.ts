@@ -1,5 +1,5 @@
-import { resolve } from "path";
 import { defineLibraryConfig } from "@atomiton/vite-config";
+import { resolve } from "path";
 
 export default defineLibraryConfig({
   name: "AtomitonEvents",
@@ -22,7 +22,6 @@ export default defineLibraryConfig({
     build: {
       lib: {
         entry: {
-          index: resolve(__dirname, "src/index.ts"),
           browser: resolve(__dirname, "src/exports/browser/index.ts"),
           desktop: resolve(__dirname, "src/exports/desktop/index.ts"),
         },

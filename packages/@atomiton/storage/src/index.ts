@@ -17,7 +17,3 @@ export {
   createInMemoryStorage as createMemoryEngine,
   type InMemoryStorageConfig,
 } from "./factories/createInMemoryStorage";
-
-// Future storage engines
-// export { createIndexedDBStorage as createIndexedDBEngine } from './factories/createIndexedDBStorage';
-// export { createLocalStorage as createLocalStorageEngine } from './factories/createLocalStorage';

@@ -1,5 +1,21 @@
 # Changelog - @atomiton/nodes
 
+## [0.2.0] - 2025-01-19
+
+### Changed
+
+- **BREAKING**: Updated imports to use new split export patterns from dependencies
+  - Must now import from `@atomiton/storage/browser` or `@atomiton/storage/desktop`
+  - Must now import from `@atomiton/events/browser` or `@atomiton/events/desktop`
+- Improved node validation with cleaner error handling
+- Enhanced type safety in composite node validation
+- Simplified atomic node exports by removing redundant re-exports
+
+### Fixed
+
+- Import path compatibility with updated dependency packages
+- Node creation type inference improvements
+
 ## [0.1.1] - 2025-01-15
 
 ### Changed

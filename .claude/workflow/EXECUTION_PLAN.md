@@ -109,7 +109,23 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 See [Development Process](../../../docs/development/archive/PROCESS.md) for complete technical requirements.
 
-**Work is NOT complete until ALL checks pass.**
+**MANDATORY - Package Version Management:**
+
+When making changes to any package (`packages/@atomiton/*` or `apps/*`):
+
+1. **Update CHANGELOG.md** in the package directory:
+   - Add changes under "Unreleased" section during development
+   - Follow [Keep a Changelog](https://keepachangelog.com/) format
+   - Include ALL changes: Added, Changed, Fixed, Removed
+
+2. **Bump package version** in package.json:
+   - Patch version (0.0.x) for bug fixes
+   - Minor version (0.x.0) for new features or breaking changes in pre-1.0
+   - Major version (x.0.0) for breaking changes after 1.0
+
+3. **Update CHANGELOG header** from "Unreleased" to version number with date
+
+**Work is NOT complete until ALL checks pass AND versioning is updated.**
 
 ### 4. Initial Code Review
 

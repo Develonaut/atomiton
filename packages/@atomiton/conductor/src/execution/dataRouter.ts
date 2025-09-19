@@ -1,18 +1,15 @@
 import type { CompositeEdge } from "@atomiton/nodes/executable";
 
 /**
- * Connection between nodes in a Blueprint
+ * Connection between nodes in a Composite
  */
 type Connection = CompositeEdge;
 
 /**
- * DataRouter manages data flow between nodes in a Blueprint
+ * DataRouter manages data flow between nodes in a Composite
  * Routes outputs from source nodes to inputs of target nodes
  */
 export class DataRouter {
-  /**
-   * Route inputs for a specific node based on connections
-   */
   routeInputs(
     nodeId: string,
     connections: Connection[],
@@ -20,7 +17,6 @@ export class DataRouter {
   ): Record<string, unknown> {
     const inputs: Record<string, unknown> = {};
 
-    // Find all connections targeting this node
     const targetConnections = connections.filter(
       (conn) => conn.target === nodeId,
     );
@@ -30,10 +26,8 @@ export class DataRouter {
       const sourcePort = connection.sourceHandle || "output";
       const targetPort = connection.targetHandle || "input";
 
-      // Get output from source node
       const sourceOutputs = nodeOutputs.get(sourceNode);
       if (sourceOutputs && sourcePort in sourceOutputs) {
-        // Map source output to target input
         inputs[targetPort] = sourceOutputs[sourcePort];
       }
     }
@@ -50,7 +44,6 @@ export class DataRouter {
   ): Record<string, unknown> {
     const outputs: Record<string, unknown> = {};
 
-    // Find all connections targeting the output node
     const outputConnections = connections.filter(
       (conn) => conn.target === "output",
     );
@@ -60,10 +53,8 @@ export class DataRouter {
       const sourcePort = connection.sourceHandle || "output";
       const targetPort = connection.targetHandle || "output";
 
-      // Get output from source node
       const sourceOutputs = nodeOutputs.get(sourceNode);
       if (sourceOutputs && sourcePort in sourceOutputs) {
-        // Map to Blueprint output
         outputs[targetPort] = sourceOutputs[sourcePort];
       }
     }
@@ -84,7 +75,6 @@ export class DataRouter {
       return value;
     }
 
-    // Handle common transformations
     switch (`${sourceType}->${targetType}`) {
       case "string->number":
         return Number(value);
@@ -135,12 +125,10 @@ export class DataRouter {
       return inputs[0];
     }
 
-    // If all inputs are arrays, concatenate them
     if (inputs.every(Array.isArray)) {
       return inputs.flat();
     }
 
-    // If all inputs are objects, merge them
     if (
       inputs.every(
         (i) => typeof i === "object" && i !== null && !Array.isArray(i),
@@ -149,7 +137,6 @@ export class DataRouter {
       return Object.assign({}, ...inputs);
     }
 
-    // Otherwise return as array
     return inputs;
   }
 
@@ -248,7 +235,6 @@ export class DataRouter {
     source: AsyncIterable<unknown> | Iterable<unknown>,
   ): AsyncGenerator<unknown> {
     for await (const chunk of source) {
-      // Process and yield each chunk
       yield chunk;
     }
   }

@@ -2,41 +2,22 @@
  * Main queue factory using modular components
  */
 
-import { events } from "@atomiton/events";
+import { events } from "@atomiton/events/desktop";
 import { delay, generateJobId } from "@atomiton/utils";
 import PQueue from "p-queue";
+import { calculateRetryDelay, processJob } from "./jobProcessing";
+import { createMetricsCalculator } from "./queueMetrics";
+import { createRateLimiter } from "./rateLimiting";
 import type {
-  QueueOptions,
-  JobOptions,
   JobData,
+  JobOptions,
   JobResponse,
   QueueInstance,
+  QueueOptions,
 } from "./types";
-import { createRateLimiter } from "./rateLimiting";
-import { processJob, calculateRetryDelay } from "./jobProcessing";
 import { createWebhookManager } from "./webhookHandling";
-import { createMetricsCalculator } from "./queueMetrics";
-
-type QueueEvents = {
-  "queue:active": { size: number };
-  "queue:idle": void;
-  "queue:paused": void;
-  "queue:resumed": void;
-  "queue:cleared": void;
-  "queue:shutting-down": void;
-  "queue:shutdown": void;
-  "job:started": { jobId: string; jobData: JobData };
-  "job:completed": { jobId: string; result: JobResponse };
-  "job:failed": { jobId: string; error: Error };
-};
 
 export function createQueue(options: QueueOptions = {}): QueueInstance {
-  // Private state using closures
-  const queueId = `queue_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
-  const queueEventBus = events.createEventBus<QueueEvents>(
-    `conductor:queue:${queueId}`,
-  );
-
   const resolvedOptions: Required<QueueOptions> = {
     concurrency: options.concurrency ?? 10,
     maxRetries: options.maxRetries ?? 3,
@@ -75,11 +56,11 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
   // Setup event handlers
   const setupEventHandlers = (): void => {
     jobQueue.on("active", () => {
-      queueEventBus.emit("queue:active", { size: jobQueue.size });
+      events.emit("queue:active", { size: jobQueue.size });
     });
 
     jobQueue.on("idle", () => {
-      queueEventBus.emit("queue:idle", undefined);
+      events.emit("queue:idle", undefined);
     });
   };
 
@@ -143,7 +124,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
     const job = async () => {
       try {
         activeJobs.set(jobId, jobData);
-        queueEventBus.emit("job:started", { jobId, jobData });
+        events.emit("job:started", { jobId, jobData });
 
         await delay(options.delay ?? 0);
 
@@ -153,7 +134,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
           jobResults.set(jobId, result);
         }
 
-        queueEventBus.emit("job:completed", { jobId, result });
+        events.emit("job:completed", { jobId, result });
 
         if (options.removeOnComplete) {
           activeJobs.delete(jobId);
@@ -176,7 +157,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
           jobResults.set(jobId, response);
         }
 
-        queueEventBus.emit("job:failed", { jobId, error: jobError });
+        events.emit("job:failed", { jobId, error: jobError });
 
         if (options.attempts && options.attempts > 1) {
           await retry(jobData, options, options.attempts - 1);
@@ -193,7 +174,6 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
       }
     };
 
-    // Add to queue with proper priority support
     const queueTask =
       resolvedOptions.enablePriority && options.priority !== undefined
         ? () => jobQueue.add(job, { priority: options.priority })
@@ -203,24 +183,23 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
     return jobId;
   };
 
-  // Return public API
   return {
     add,
 
     async pause(): Promise<void> {
       jobQueue.pause();
-      queueEventBus.emit("queue:paused", undefined);
+      events.emit("queue:paused", undefined);
     },
 
     async resume(): Promise<void> {
       jobQueue.start();
-      queueEventBus.emit("queue:resumed", undefined);
+      events.emit("queue:resumed", undefined);
     },
 
     async clear(): Promise<void> {
       jobQueue.clear();
       activeJobs.clear();
-      queueEventBus.emit("queue:cleared", undefined);
+      events.emit("queue:cleared", undefined);
     },
 
     async getJob(jobId: string): Promise<JobData | undefined> {
@@ -248,7 +227,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
     decodeWebhookResponse: webhookManager.decodeWebhookResponse,
 
     async gracefulShutdown(): Promise<void> {
-      queueEventBus.emit("queue:shutting-down", undefined);
+      events.emit("queue:shutting-down", undefined);
 
       jobQueue.pause();
       await jobQueue.onIdle();
@@ -261,30 +240,12 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
         clearInterval(cleanupInterval);
       }
 
-      queueEventBus.emit("queue:shutdown", undefined);
+      events.emit("queue:shutdown", undefined);
     },
 
     getMetrics: metricsCalculator.getMetrics,
 
-    // Event methods using @atomiton/events
-    on: (event: string, listener: (...args: unknown[]) => void) => {
-      return queueEventBus.on(
-        event as keyof QueueEvents,
-        listener as (data: QueueEvents[keyof QueueEvents]) => void,
-      );
-    },
-    off: (event: string, listener: (...args: unknown[]) => void) => {
-      // For backward compatibility, convert to proper unsubscribe
-      // Note: This is a simplified implementation
-      return queueEventBus
-        .on(event as keyof QueueEvents, listener as never)
-        .unsubscribe();
-    },
-    emit: (event: string, ...args: unknown[]): void => {
-      queueEventBus.emit(
-        event as keyof QueueEvents,
-        args[0] as QueueEvents[keyof QueueEvents],
-      );
-    },
+    // Direct event bus access for type-safe event handling
+    eventBus: events,
   };
 }

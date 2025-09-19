@@ -16,36 +16,30 @@ import {
 } from "./validation/version";
 
 export type CreateNodeInput = {
-  // Common fields for all nodes
   id?: string;
   name: string;
   description?: string;
   category?: string;
   version?: string;
 
-  // Type discriminator
   type?: "atomic" | "composite";
 
-  // For composite nodes
   nodes?: CompositeNodeSpec[];
   edges?: NodeEdge[];
   variables?: Record<string, unknown>;
 
-  // For atomic nodes
   inputPorts?: Node["inputPorts"];
   outputPorts?: Node["outputPorts"];
 
-  // Shared optional fields
   settings?: Node["settings"];
   metadata?: Partial<Node["metadata"]>;
 };
 
-// Function overloads for better type inference
 export function createNode(
   input: CreateNodeInput & { type: "composite" },
 ): CompositeDefinition;
 export function createNode(input: CreateNodeInput & { type: "atomic" }): Node;
-export function createNode(input: CreateNodeInput): CompositeDefinition; // Default case (type defaults to composite)
+export function createNode(input: CreateNodeInput): CompositeDefinition;
 
 /**
  * Create a node data structure
@@ -56,9 +50,8 @@ export function createNode(input: CreateNodeInput): CompositeDefinition; // Defa
 export function createNode(input: CreateNodeInput): Node {
   const id = input.id || generateNodeId();
   const now = new Date().toISOString();
-  const type = input.type || "composite"; // Default to composite for blueprints
+  const type = input.type || "composite";
 
-  // Validate version
   const version = input.version || "1.0.0";
   const versionValidation = parseVersion(version);
 
@@ -66,19 +59,15 @@ export function createNode(input: CreateNodeInput): Node {
     throw new Error(`Invalid version format: ${versionValidation.error}`);
   }
 
-  // For new nodes, validate it's a proper initial version
   if (!input.id) {
-    // If no ID provided, assume it's a new node
     const initialValidation = validateInitialVersion(version);
     if (!initialValidation.valid) {
       throw new Error(`Invalid initial version: ${initialValidation.reason}`);
     }
   }
 
-  // Create version lock for integrity
   const versionLock = createVersionLock(id, version, now);
 
-  // Base node structure
   const node: Node = {
     id,
     name: input.name,
@@ -96,9 +85,7 @@ export function createNode(input: CreateNodeInput): Node {
     },
   };
 
-  // Add type-specific fields
   if (type === "composite") {
-    // Composite nodes have nodes and edges
     return {
       ...node,
       nodes: input.nodes || [],
@@ -116,7 +103,6 @@ export function createNode(input: CreateNodeInput): Node {
       },
     };
   } else {
-    // Atomic nodes have ports
     return {
       ...node,
       inputPorts: input.inputPorts || [],

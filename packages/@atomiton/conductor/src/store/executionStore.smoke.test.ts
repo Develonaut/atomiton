@@ -17,20 +17,20 @@ describe("Execution Store Smoke Tests", () => {
   describe("Store Actions", () => {
     it("should initialize an execution", () => {
       const executionId = "test-exec-1";
-      const blueprintId = "test-blueprint-1";
+      const compositeId = "test-composite-1";
 
-      store.initializeExecution(executionId, blueprintId);
+      store.initializeExecution(executionId, compositeId);
 
       const execution = store.getExecution(executionId);
       expect(execution).toBeDefined();
       expect(execution?.executionId).toBe(executionId);
-      expect(execution?.blueprintId).toBe(blueprintId);
+      expect(execution?.compositeId).toBe(compositeId);
       expect(execution?.status).toBe("pending");
     });
 
     it("should update execution state", () => {
       const executionId = "test-exec-2";
-      store.initializeExecution(executionId, "blueprint-2");
+      store.initializeExecution(executionId, "composite-2");
 
       store.updateExecutionState(executionId, {
         status: "running",
@@ -44,7 +44,7 @@ describe("Execution Store Smoke Tests", () => {
       const executionId = "test-exec-3";
       const nodeId = "node-1";
 
-      store.initializeExecution(executionId, "blueprint-3");
+      store.initializeExecution(executionId, "composite-3");
       store.updateNodeState(executionId, nodeId, "running");
 
       const execution = store.getExecution(executionId);
@@ -55,7 +55,7 @@ describe("Execution Store Smoke Tests", () => {
     it("should set and get variables", () => {
       const executionId = "test-exec-4";
 
-      store.initializeExecution(executionId, "blueprint-4");
+      store.initializeExecution(executionId, "composite-4");
       store.setVariable(executionId, "testKey", "testValue");
 
       const value = store.getExecutionVariable(executionId, "testKey");
@@ -65,7 +65,7 @@ describe("Execution Store Smoke Tests", () => {
     it("should create and restore checkpoints", () => {
       const executionId = "test-exec-5";
 
-      store.initializeExecution(executionId, "blueprint-5");
+      store.initializeExecution(executionId, "composite-5");
       store.setVariable(executionId, "var1", "value1");
       store.createCheckpoint(executionId, "node-1");
 
@@ -80,9 +80,9 @@ describe("Execution Store Smoke Tests", () => {
 
     it("should clear completed executions", () => {
       // Create some executions
-      store.initializeExecution("exec-1", "bp-1");
-      store.initializeExecution("exec-2", "bp-2");
-      store.initializeExecution("exec-3", "bp-3");
+      store.initializeExecution("exec-1", "composite-1");
+      store.initializeExecution("exec-2", "composite-2");
+      store.initializeExecution("exec-3", "composite-3");
 
       // Mark some as completed
       store.updateExecutionState("exec-1", { status: "completed" });
@@ -100,9 +100,9 @@ describe("Execution Store Smoke Tests", () => {
 
   describe("Store Selectors", () => {
     it("should get active executions", () => {
-      store.initializeExecution("exec-1", "bp-1");
-      store.initializeExecution("exec-2", "bp-2");
-      store.initializeExecution("exec-3", "bp-3");
+      store.initializeExecution("exec-1", "composite-1");
+      store.initializeExecution("exec-2", "composite-2");
+      store.initializeExecution("exec-3", "composite-3");
 
       store.updateExecutionState("exec-1", { status: "running" });
       store.updateExecutionState("exec-2", { status: "completed" });
@@ -115,8 +115,8 @@ describe("Execution Store Smoke Tests", () => {
     });
 
     it("should get all executions", () => {
-      store.initializeExecution("exec-1", "bp-1");
-      store.initializeExecution("exec-2", "bp-2");
+      store.initializeExecution("exec-1", "composite-1");
+      store.initializeExecution("exec-2", "composite-2");
 
       const allExecutions = store.getAllExecutions();
       expect(allExecutions).toHaveLength(2);
@@ -127,21 +127,21 @@ describe("Execution Store Smoke Tests", () => {
     it("should emit events on state changes", async () => {
       let eventFired = false;
       const executionId = "test-exec-events";
-      const blueprintId = "test-blueprint-events";
+      const compositeId = "test-composite-events";
 
       const subscription = store.eventBus.on(
         "execution:initialized",
-        (data) => {
+        (data: { executionId: string; compositeId: string }) => {
           if (
             data.executionId === executionId &&
-            data.blueprintId === blueprintId
+            data.compositeId === compositeId
           ) {
             eventFired = true;
           }
         },
       );
 
-      store.initializeExecution(executionId, blueprintId);
+      store.initializeExecution(executionId, compositeId);
 
       // Give event time to propagate
       await new Promise((resolve) => setTimeout(resolve, 10));

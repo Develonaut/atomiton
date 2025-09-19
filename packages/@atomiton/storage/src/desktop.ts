@@ -4,7 +4,7 @@
  */
 
 import type { IStorageEngine } from "./types";
-import { createFileSystemEngine, createMemoryEngine } from "./index";
+import { createFileSystemEngine } from "./index";
 
 export * from "./types";
 export {

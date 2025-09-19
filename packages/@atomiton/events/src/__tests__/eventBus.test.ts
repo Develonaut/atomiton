@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { createEventBus } from "../exports/desktop";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import createDesktopEventBus from "../exports/desktop/createDesktopEventBus";
 
 type TestEvents = {
   "user:login": { userId: string; timestamp: number };
@@ -8,10 +8,10 @@ type TestEvents = {
 };
 
 describe("EventBus", () => {
-  let eventBus: ReturnType<typeof createEventBus<TestEvents>>;
+  let eventBus: ReturnType<typeof createDesktopEventBus<TestEvents>>;
 
   beforeEach(() => {
-    eventBus = createEventBus<TestEvents>("test");
+    eventBus = createDesktopEventBus<TestEvents>("test");
   });
 
   describe("Basic functionality", () => {
@@ -131,8 +131,8 @@ describe("EventBus", () => {
 
   describe("Domain isolation", () => {
     it("should isolate events by domain", () => {
-      const bus1 = createEventBus<TestEvents>("domain1");
-      const bus2 = createEventBus<TestEvents>("domain2");
+      const bus1 = createDesktopEventBus<TestEvents>("domain1");
+      const bus2 = createDesktopEventBus<TestEvents>("domain2");
 
       const listener1 = vi.fn();
       const listener2 = vi.fn();

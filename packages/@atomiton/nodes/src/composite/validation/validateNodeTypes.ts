@@ -1,13 +1,9 @@
-import type { ValidationError, ValidationResult } from "../types";
 import { nodes } from "../../atomic/nodes";
+import type { ValidationError, ValidationResult } from "../types";
 
-/**
- * Get the list of available node types from the registry
- */
 function getAvailableNodeTypes(): string[] {
   const nodeTypes: string[] = [];
 
-  // Get node types from the nodes export
   for (const node of Object.values(nodes)) {
     if (node && typeof node === "object" && "metadata" in node) {
       const metadata = node.metadata as { id?: string };
@@ -17,7 +13,6 @@ function getAvailableNodeTypes(): string[] {
     }
   }
 
-  // Always include composite type for blueprints
   if (!nodeTypes.includes("composite")) {
     nodeTypes.push("composite");
   }
@@ -25,9 +20,6 @@ function getAvailableNodeTypes(): string[] {
   return nodeTypes;
 }
 
-/**
- * Custom error class for node type validation
- */
 export class NodeTypeValidationError extends Error {
   constructor(
     public nodeType: string,
@@ -45,14 +37,10 @@ export class NodeTypeValidationError extends Error {
   }
 }
 
-/**
- * Find a suggested node type based on similarity
- */
 function findSuggestedType(
   invalidType: string,
   availableTypes: string[],
 ): string | null {
-  // Check for camelCase to kebab-case conversion
   const kebabCase = invalidType
     .replace(/([a-z])([A-Z])/g, "$1-$2")
     .toLowerCase();
@@ -60,15 +48,12 @@ function findSuggestedType(
     return kebabCase;
   }
 
-  // Check for common misspellings
   const lowerInvalid = invalidType.toLowerCase();
   for (const validType of availableTypes) {
-    // Exact match (case-insensitive)
     if (validType.toLowerCase() === lowerInvalid) {
       return validType;
     }
 
-    // Check if it's a pluralized version
     if (lowerInvalid === validType + "s" || lowerInvalid === validType + "es") {
       return validType;
     }
@@ -77,10 +62,6 @@ function findSuggestedType(
   return null;
 }
 
-/**
- * Validate that all node types are available/registered
- * If availableNodeTypes is not provided, it will be auto-detected from the registry
- */
 export function validateNodeTypes(
   nodes: Array<{ id: string; type: string }>,
   availableNodeTypes?: string[],
@@ -114,10 +95,6 @@ export function validateNodeTypes(
   };
 }
 
-/**
- * Validate node types with throwing behavior for factory functions
- * Throws NodeTypeValidationError if validation fails
- */
 export function validateNodeTypesStrict(
   nodes: Array<{ id: string; type: string }>,
 ): void {

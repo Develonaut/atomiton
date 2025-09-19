@@ -1,5 +1,5 @@
 import { bench, describe } from "vitest";
-import { createEventBus } from "../exports/browser";
+import createDesktopEventBus from "../exports/desktop/createDesktopEventBus";
 
 type BenchmarkEvents = {
   simple: { data: string };
@@ -10,35 +10,35 @@ type BenchmarkEvents = {
 
 describe("EventBus Performance", () => {
   bench("event bus creation", () => {
-    createEventBus<BenchmarkEvents>("benchmark");
+    createDesktopEventBus<BenchmarkEvents>("benchmark");
   });
 
   bench("simple event emission", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     eventBus.emit("simple", { data: "test" });
   });
 
   bench("subscribe and unsubscribe", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribe = eventBus.on("simple", () => {});
     unsubscribe();
   });
 
   bench("once subscription", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribe = eventBus.once("simple", () => {});
     unsubscribe();
   });
 
   bench("event with single listener", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribe = eventBus.on("simple", () => {});
     eventBus.emit("simple", { data: "test" });
     unsubscribe();
   });
 
   bench("event with multiple listeners (10)", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribers = Array.from({ length: 10 }, () =>
       eventBus.on("multi", () => {}),
     );
@@ -47,22 +47,22 @@ describe("EventBus Performance", () => {
   });
 
   bench("listener count check", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribe = eventBus.on("simple", () => {});
     eventBus.listenerCount("simple");
     unsubscribe();
   });
 
   bench("remove all listeners", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     // Setup some listeners first
     Array.from({ length: 5 }, () => eventBus.on("simple", () => {}));
     eventBus.removeAllListeners();
   });
 
   bench("domain isolation", () => {
-    const bus1 = createEventBus<BenchmarkEvents>("domain1");
-    const bus2 = createEventBus<BenchmarkEvents>("domain2");
+    const bus1 = createDesktopEventBus<BenchmarkEvents>("domain1");
+    const bus2 = createDesktopEventBus<BenchmarkEvents>("domain2");
 
     const unsub1 = bus1.on("simple", () => {});
     const unsub2 = bus2.on("simple", () => {});
@@ -75,7 +75,7 @@ describe("EventBus Performance", () => {
   });
 
   bench("error handling in listeners", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribe = eventBus.on("simple", () => {
       throw new Error("Test error");
     });
@@ -84,7 +84,7 @@ describe("EventBus Performance", () => {
   });
 
   bench("high frequency events (100)", () => {
-    const eventBus = createEventBus<BenchmarkEvents>("benchmark");
+    const eventBus = createDesktopEventBus<BenchmarkEvents>("benchmark");
     const unsubscribe = eventBus.on("benchmark", () => {
       // Handler for benchmarking
     });
