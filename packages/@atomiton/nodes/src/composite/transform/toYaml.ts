@@ -1,13 +1,20 @@
 import { yaml } from "@atomiton/yaml";
+import type { Node } from "../../types";
 import type {
   CompositeDefinition,
   CompositeValidationContext,
+  CompositeVariable,
   TransformationOptions,
   TransformationResult,
   ValidationError,
 } from "../types";
 import { validateComposite } from "../validation/index";
 import { DEFAULT_TRANSFORMATION_OPTIONS } from "./constants";
+import {
+  transformToCompositeEdges,
+  transformToCompositeNodeSpecs,
+} from "./transformers";
+import { isRecord, safeObject, safeString } from "./typeGuards";
 
 /**
  * Convert CompositeDefinition JSON to YAML string
@@ -28,61 +35,94 @@ export function toYaml(
   const warnings: ValidationError[] = [];
 
   try {
-    // Pick only the properties we care about, ignore everything else
-    const comp = composite as any;
-    const cleanComposite: CompositeDefinition = {
-      // Required Node fields
-      id: comp.id,
-      type: comp.type || "composite",
-      name: comp.name,
+    // Validate input is an object-like structure
+    if (!isRecord(composite)) {
+      return {
+        success: false,
+        errors: [
+          {
+            path: "root",
+            message: "Input must be an object",
+            code: "INVALID_INPUT_TYPE",
+            data: { composite, type: typeof composite },
+          },
+        ],
+      };
+    }
 
-      // Required fields with defaults if missing
-      category: comp.category || "user",
-      metadata: comp.metadata || {
-        source: "user",
-        created: new Date().toISOString(),
-        modified: new Date().toISOString(),
-      },
+    // Extract required fields with safe type checking
+    const id = safeString(composite.id);
+    const name = safeString(composite.name);
 
-      // Optional Node fields - only include if they exist
-      ...(comp.version && { version: comp.version }),
-      ...(comp.description && { description: comp.description }),
-      ...(comp.icon && { icon: comp.icon }),
-      ...(comp.parameters && { parameters: comp.parameters }),
-      ...(comp.inputs && { inputs: comp.inputs }),
-      ...(comp.outputs && { outputs: comp.outputs }),
+    if (!id || !name) {
+      return {
+        success: false,
+        errors: [
+          {
+            path: "root",
+            message:
+              "Missing required fields: id and name must be non-empty strings",
+            code: "MISSING_REQUIRED_FIELDS",
+            data: { id, name },
+          },
+        ],
+      };
+    }
 
-      // Clean nodes - pick only known properties
-      nodes: (comp?.nodes || []).map((node: any) => ({
-        id: node.id,
-        type: node.type,
-        position: node.position || { x: 0, y: 0 },
-        ...(node.data && { data: node.data }),
-        ...(node.width && { width: node.width }),
-        ...(node.height && { height: node.height }),
-        ...(node.parentId && { parentId: node.parentId }),
-        ...(node.dragHandle && { dragHandle: node.dragHandle }),
-        ...(node.style && { style: node.style }),
-        ...(node.className && { className: node.className }),
-      })),
+    // Build the clean composite with type safety
+    const type = safeString(composite.type, "composite");
+    const category = safeString(composite.category, "user");
 
-      // Clean edges - pick only known properties
-      edges: (comp?.edges || []).map((edge: any) => ({
-        id: edge.id,
-        source: edge.source,
-        target: edge.target,
-        ...(edge.sourceHandle && { sourceHandle: edge.sourceHandle }),
-        ...(edge.targetHandle && { targetHandle: edge.targetHandle }),
-        ...(edge.type && { type: edge.type }),
-        ...(edge.animated && { animated: edge.animated }),
-        ...(edge.style && { style: edge.style }),
-        ...(edge.data && { data: edge.data }),
-      })),
-
-      // Composite-specific fields
-      ...(comp.variables && { variables: comp.variables }),
-      ...(comp.settings && { settings: comp.settings }),
+    // Create default metadata if none provided
+    const defaultMetadata = {
+      source: "user" as const,
+      created: new Date().toISOString(),
+      modified: new Date().toISOString(),
     };
+    const metadata = safeObject(composite.metadata, defaultMetadata);
+
+    // Transform nodes and edges using type-safe transformers
+    const nodes = transformToCompositeNodeSpecs(composite.nodes);
+    const edges = transformToCompositeEdges(composite.edges);
+
+    // Build the clean composite definition
+    const cleanComposite: CompositeDefinition = {
+      id,
+      name,
+      type,
+      category,
+      metadata,
+      nodes,
+      edges,
+    };
+
+    // Add optional fields only if they exist and are valid
+    if (composite.description && typeof composite.description === "string") {
+      cleanComposite.description = composite.description;
+    }
+
+    if (composite.version && typeof composite.version === "string") {
+      cleanComposite.version = composite.version;
+    }
+
+    if (composite.inputPorts) {
+      cleanComposite.inputPorts = composite.inputPorts as Node["inputPorts"];
+    }
+
+    if (composite.outputPorts) {
+      cleanComposite.outputPorts = composite.outputPorts as Node["outputPorts"];
+    }
+
+    if (composite.variables) {
+      cleanComposite.variables = safeObject(composite.variables) as Record<
+        string,
+        CompositeVariable
+      >;
+    }
+
+    if (composite.settings) {
+      cleanComposite.settings = safeObject(composite.settings);
+    }
 
     // Validate if requested
     if (opts.validateResult) {

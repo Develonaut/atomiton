@@ -1,10 +1,11 @@
+import type { FieldPath, FieldValues } from "react-hook-form";
 import type { useForm } from "./useForm";
 
-export function useField({
+export function useField<TFieldValues extends FieldValues = FieldValues>({
   name,
   form,
 }: {
-  name: string;
+  name: FieldPath<TFieldValues>;
   form: ReturnType<typeof useForm>;
 }) {
   const {
@@ -15,20 +16,20 @@ export function useField({
     clearErrors,
   } = form;
 
-  const value = watch(name);
-  const error = errors[name];
-  const touched = touchedFields[name];
+  const value = watch(name as never);
+  const error = errors[name as keyof typeof errors];
+  const touched = touchedFields[name as keyof typeof touchedFields];
 
   return {
-    ...register(name),
+    ...register(name as never),
     value,
     error,
     touched,
     hasError: !!error,
     setValue: (value: unknown) => {
-      setValue(name, value);
+      setValue(name as never, value as never);
       if (error) {
-        clearErrors(name);
+        clearErrors(name as never);
       }
     },
   };

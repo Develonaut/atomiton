@@ -17,5 +17,9 @@
     "electron.vite.config.*",
     "src/main/**/*",
     "src/preload/**/*"
+  ],
+  "exclude": [
+    "src/main/**/__tests__/**/*",
+    "src/preload/**/__tests__/**/*"
   ]
 }

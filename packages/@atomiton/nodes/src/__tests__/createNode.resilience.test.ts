@@ -3,7 +3,10 @@
  */
 
 import { describe, expect, it } from "vitest";
+import type { CompositeNodeSpec } from "../composite/types";
+import type { CreateNodeInput } from "../createNode";
 import { createNode } from "../createNode";
+import type { Node, NodeEdge } from "../types";
 
 describe("createNode Resilience Tests", () => {
   describe("Handling undefined values", () => {
@@ -56,7 +59,7 @@ describe("createNode Resilience Tests", () => {
 
   describe("Handling extra/unknown properties", () => {
     it("ignores extra properties at root level", () => {
-      const input: any = {
+      const input: CreateNodeInput & Record<string, unknown> = {
         name: "Node with Extras",
         type: "composite",
         // Extra React Flow properties that should be ignored
@@ -102,7 +105,7 @@ describe("createNode Resilience Tests", () => {
     });
 
     it("handles nodes with React Flow properties", () => {
-      const messyNodes: any[] = [
+      const messyNodes: (Partial<Node> & Record<string, unknown>)[] = [
         {
           id: "node-1",
           name: "Node 1",
@@ -127,7 +130,7 @@ describe("createNode Resilience Tests", () => {
       const node = createNode({
         type: "composite",
         name: "Composite with Messy Nodes",
-        nodes: messyNodes,
+        nodes: messyNodes as unknown as CompositeNodeSpec[],
       });
 
       // Should pass through nodes as-is
@@ -135,7 +138,7 @@ describe("createNode Resilience Tests", () => {
     });
 
     it("handles edges with extra properties", () => {
-      const messyEdges: any[] = [
+      const messyEdges: (Partial<NodeEdge> & Record<string, unknown>)[] = [
         {
           id: "edge-1",
           source: "node-1",
@@ -151,7 +154,7 @@ describe("createNode Resilience Tests", () => {
       const node = createNode({
         type: "composite",
         name: "Composite with Messy Edges",
-        edges: messyEdges,
+        edges: messyEdges as unknown as NodeEdge[],
       });
 
       // Should pass through edges as-is
@@ -161,18 +164,18 @@ describe("createNode Resilience Tests", () => {
 
   describe("Handling null values", () => {
     it("treats null as undefined for optional fields", () => {
-      const input: any = {
+      const input = {
         name: "Null Fields Node",
-        id: null,
-        description: null,
-        category: null,
-        version: null,
-        nodes: null,
-        edges: null,
-        variables: null,
+        id: null as string | null,
+        description: null as string | null,
+        category: null as string | null,
+        version: null as string | null,
+        nodes: null as CompositeNodeSpec[] | null,
+        edges: null as NodeEdge[] | null,
+        variables: null as Record<string, unknown> | null,
       };
 
-      const node = createNode(input);
+      const node = createNode(input as unknown as CreateNodeInput);
 
       expect(node.id).toBeDefined(); // Should generate ID
       expect(node.description).toBe("");
@@ -186,15 +189,15 @@ describe("createNode Resilience Tests", () => {
 
   describe("Handling wrong types", () => {
     it("handles string values for array fields", () => {
-      const input: any = {
+      const input = {
         name: "Wrong Types Node",
         type: "composite",
-        nodes: "not-an-array",
-        edges: "also-not-an-array",
-        variables: "should-be-object",
+        nodes: "not-an-array" as unknown as CompositeNodeSpec[],
+        edges: "also-not-an-array" as unknown as NodeEdge[],
+        variables: "should-be-object" as unknown as Record<string, unknown>,
       };
 
-      const node = createNode(input);
+      const node = createNode(input as unknown as CreateNodeInput);
 
       // Should use defaults when wrong types are provided
       expect(Array.isArray(node.nodes)).toBe(false);
@@ -204,13 +207,13 @@ describe("createNode Resilience Tests", () => {
     });
 
     it("handles number values for string fields", () => {
-      const input: any = {
+      const input = {
         name: "Number Name Node",
-        description: 12345,
-        category: 999,
+        description: 12345 as unknown as string,
+        category: 999 as unknown as string,
       };
 
-      const node = createNode(input);
+      const node = createNode(input as unknown as CreateNodeInput);
 
       expect(node.description).toBe(12345); // Passes through as-is
       expect(node.category).toBe(999); // Passes through as-is
@@ -227,7 +230,7 @@ describe("createNode Resilience Tests", () => {
     });
 
     it("handles zero and false values", () => {
-      const input: any = {
+      const input: CreateNodeInput & { metadata?: Record<string, unknown> } = {
         name: "Falsy Values Node",
         metadata: {
           count: 0,
@@ -246,7 +249,7 @@ describe("createNode Resilience Tests", () => {
 
   describe("Real-world messy editor data", () => {
     it("handles typical editor state with React Flow properties", () => {
-      const editorState: any = {
+      const editorState: CreateNodeInput & Record<string, unknown> = {
         id: "composite-123",
         name: "My Blueprint",
         type: "composite",
@@ -279,7 +282,7 @@ describe("createNode Resilience Tests", () => {
             extent: "parent",
             expandParent: false,
             ariaLabel: "Code transformation node",
-          },
+          } as unknown as CompositeNodeSpec,
         ],
         edges: [
           {
@@ -301,7 +304,7 @@ describe("createNode Resilience Tests", () => {
             updatable: true,
             deletable: true,
             data: { onDelete: "function" },
-          },
+          } as unknown as NodeEdge,
         ],
         // UI state that might be present
         isLayoutReady: true,
@@ -309,7 +312,7 @@ describe("createNode Resilience Tests", () => {
         edgesInitialized: true,
       };
 
-      const node = createNode(editorState);
+      const node = createNode(editorState as unknown as CreateNodeInput);
 
       // Should create a valid node structure
       expect(node.id).toBe("composite-123");

@@ -1,13 +1,13 @@
+import v from "@atomiton/validation";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import v from "@atomiton/validation";
 import { useForm } from "./hooks/index";
 
 describe("useForm", () => {
   it("creates form with generated fields", () => {
-    const schema = z.object({
-      name: z.string(),
-      age: z.number(),
+    const schema = v.object({
+      name: v.string(),
+      age: v.number(),
     });
 
     const { result } = renderHook(() => useForm({ schema }));
@@ -24,8 +24,8 @@ describe("useForm", () => {
   });
 
   it("merges fields metadata", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const fields = {
@@ -42,8 +42,8 @@ describe("useForm", () => {
   });
 
   it("includes React Hook Form methods", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result } = renderHook(() => useForm({ schema }));
@@ -58,9 +58,9 @@ describe("useForm", () => {
   });
 
   it("handles default values", () => {
-    const schema = z.object({
-      name: z.string(),
-      age: z.number(),
+    const schema = v.object({
+      name: v.string(),
+      age: v.number(),
     });
 
     const defaultValues = { name: "John", age: 30 };
@@ -71,8 +71,8 @@ describe("useForm", () => {
   });
 
   it("handles empty fields parameter", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const { result } = renderHook(() => useForm({ schema, fields: {} }));
@@ -82,10 +82,10 @@ describe("useForm", () => {
   });
 
   it("handles complex schema with optional fields", () => {
-    const schema = z.object({
-      name: z.string(),
-      email: z.string().email().optional(),
-      age: z.number().min(18).max(100),
+    const schema = v.object({
+      name: v.string(),
+      email: v.string().email().optional(),
+      age: v.number().min(18).max(100),
       active: z.boolean(),
       role: z.enum(["user", "admin"]),
     });
@@ -120,7 +120,7 @@ describe("useForm", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     // Pass a non-ZodObject schema which will throw an error
-    const invalidSchema = z.string() as unknown;
+    const invalidSchema = v.string() as unknown;
 
     const { result } = renderHook(() => useForm({ schema: invalidSchema }));
 
@@ -138,7 +138,7 @@ describe("useForm", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     // Pass invalid schema
-    const invalidSchema = z.array(z.string()) as unknown;
+    const invalidSchema = v.array(v.string()) as unknown;
 
     const { result } = renderHook(() => useForm({ schema: invalidSchema }));
 

@@ -12,9 +12,9 @@ describe("Form Package Smoke Tests", () => {
   });
 
   it("creates form with basic schema", () => {
-    const schema = z.object({
-      name: z.string(),
-      age: z.number(),
+    const schema = v.object({
+      name: v.string(),
+      age: v.number(),
     });
 
     const { result } = renderHook(() => useForm({ schema }));
@@ -25,9 +25,9 @@ describe("Form Package Smoke Tests", () => {
   });
 
   it("generates fields from schema", () => {
-    const schema = z.object({
-      email: z.string().email(),
-      active: z.boolean(),
+    const schema = v.object({
+      email: v.string().email(),
+      active: v.boolean(),
     });
 
     const fields = generateFieldsFromSchema(schema);
@@ -38,10 +38,10 @@ describe("Form Package Smoke Tests", () => {
   });
 
   it("generates default values", () => {
-    const schema = z.object({
-      name: z.string(),
-      count: z.number(),
-      active: z.boolean(),
+    const schema = v.object({
+      name: v.string(),
+      count: v.number(),
+      active: v.boolean(),
     });
 
     const defaults = getDefaultValues(schema);
@@ -54,9 +54,9 @@ describe("Form Package Smoke Tests", () => {
   });
 
   it("handles optional fields correctly", () => {
-    const schema = z.object({
-      required: z.string(),
-      optional: z.string().optional(),
+    const schema = v.object({
+      required: v.string(),
+      optional: v.string().optional(),
     });
 
     const fields = generateFieldsFromSchema(schema);

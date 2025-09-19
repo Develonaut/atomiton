@@ -62,6 +62,7 @@ null
 
 # Vite cache and temporary files
 vite.config.ts.timestamp-*
+vitest.config.ts.timestamp-*
 electron.vite.config.*.mjs
 **/*.timestamp-*.mjs
 *.timestamp-*.mjs

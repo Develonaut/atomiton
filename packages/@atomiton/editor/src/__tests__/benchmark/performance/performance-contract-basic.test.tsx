@@ -1,10 +1,9 @@
-import { renderHook, act } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider, useReactFlow } from "@xyflow/react";
-import React, { useRef, useEffect } from "react";
-import { describe, expect, it, beforeEach } from "vitest";
+import React, { useEffect, useRef } from "react";
+import { beforeEach, describe, expect, it } from "vitest";
 import { useEditorNodes } from "../../../hooks/useEditorNodes";
 import { useEditorViewport } from "../../../hooks/useEditorViewport";
-import type { EditorNode } from "../../../types/EditorNode";
 
 /**
  * Performance Contract Tests - Basic Operations

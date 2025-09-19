@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { EditorNode } from "../../types/EditorNode";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { EditorEdge } from "../../hooks/useEditorEdges";
+import type { EditorNode } from "../../types/EditorNode";
 import {
   calculateNodePosition,
-  createNode,
-  createEdgeFromLastNode,
-  updateNodesWithNewNode,
-  updateEdgesWithNewEdge,
   createDefaultEditorNode,
+  createEdgeFromLastNode,
+  createNode,
+  updateEdgesWithNewEdge,
+  updateNodesWithNewNode,
 } from "../nodeCreation";
 
 vi.mock("@atomiton/nodes/browser", () => ({

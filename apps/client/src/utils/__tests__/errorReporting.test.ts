@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorReporter, errorReporter } from "../errorReporting";
 
 // Mock localStorage
@@ -66,12 +66,9 @@ beforeEach(() => {
 
   // Mock console
   console.error = mockConsoleError;
-  // eslint-disable-next-line no-console
   console.log = mockConsoleLog;
   console.warn = mockConsoleWarn;
-  // eslint-disable-next-line no-console
   console.group = mockConsoleGroup;
-  // eslint-disable-next-line no-console
   console.groupEnd = mockConsoleGroupEnd;
 
   // Mock DOM

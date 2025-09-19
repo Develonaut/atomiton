@@ -23,4 +23,5 @@ export const {
 });
 
 export { useLink } from "./hooks/useLink";
-export type { UseLinkOptions } from "./hooks/useLink";
+export type { UseLinkOptions, AppNavigateOptions } from "./hooks/useLink";
+export type { EditorRouteState, AppRouteState } from "./types";

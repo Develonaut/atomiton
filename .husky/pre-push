@@ -11,86 +11,35 @@ echo "📤 Pre-push validation..."
 REMOTE="${1:-origin}"
 URL="$2"
 
-# Run smoke tests first (fast validation)
+# Run smoke tests first (fast validation) - only for changed packages
 echo "🔥 Running smoke tests..."
-echo "   📦 Testing packages in parallel..."
-pnpm turbo run test:smoke --ui stream --output-logs=new-only --log-order=grouped || {
+echo "   📦 Testing changed packages in parallel..."
+# Use Turbo's filter to only test packages with changes
+pnpm turbo run test:smoke --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped || {
   echo "❌ Smoke tests failed!"
   echo "💡 Fix smoke tests before pushing"
   exit 1
 }
 
-# Check for benchmark regressions (non-blocking warning)
+# Check for benchmark regressions
 echo "📊 Checking for performance regressions..."
 
-# Run benchmark comparisons for packages with benchmarks
-echo "📈 Running benchmark comparisons..."
+# Run benchmarks for changed packages using turbo's built-in change detection
+echo "📊 Running benchmarks for changed packages..."
+# Turbo will automatically detect changed packages and skip unchanged ones
+pnpm turbo run test:benchmark --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped 2>&1 || {
+  echo "❌ Benchmark tests failed!"
+  echo "💡 Performance contracts must pass before pushing"
+  exit 1
+}
 
-# Detect what commits we're about to push
-# This gets the commits that are in HEAD but not in the remote
-CURRENT_BRANCH=$(git branch --show-current)
-REMOTE_REF="$REMOTE/$CURRENT_BRANCH"
-
-# Check if remote branch exists
-if git show-ref --verify --quiet "refs/remotes/$REMOTE_REF"; then
-  # Remote branch exists, find changes
-  CHANGED_FILES=$(git diff --name-only "$REMOTE_REF"...HEAD 2>/dev/null)
-else
-  # New branch, compare to main/master
-  MAIN_BRANCH=$(git remote show "$REMOTE" | grep 'HEAD branch' | cut -d' ' -f5)
-  MAIN_BRANCH=${MAIN_BRANCH:-main}
-  CHANGED_FILES=$(git diff --name-only "$REMOTE/$MAIN_BRANCH"...HEAD 2>/dev/null)
-fi
-
-# Extract changed packages
-CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E "packages/.*/" | cut -d'/' -f1-3 | sort -u)
-
-# Run benchmarks for changed packages using turbo
-if [ ! -z "$CHANGED_PACKAGES" ]; then
-  echo "📊 Running benchmarks for changed packages..."
-  pnpm turbo run test:benchmark --filter="...[HEAD^]" --ui stream --output-logs=new-only --log-order=grouped 2>&1 || {
-    echo "❌ Benchmark tests failed!"
-    echo "💡 Performance contracts must pass before pushing"
-    exit 1
-  }
-fi
-
-if [ ! -z "$CHANGED_PACKAGES" ]; then
-  for PACKAGE in $CHANGED_PACKAGES; do
-    # Check if this package has benchmark capability
-    if [ -f "$PACKAGE/package.json" ]; then
-      HAS_BENCHMARK=$(grep -q '"test:benchmark"' "$PACKAGE/package.json" && echo "yes" || echo "no")
-
-      if [ "$HAS_BENCHMARK" = "yes" ] && [ -f "$PACKAGE/benchmarks/baseline.json" ] && [ -f "$PACKAGE/benchmarks/latest.json" ]; then
-        echo "📊 Comparing benchmarks for $PACKAGE..."
-        tsx scripts/benchmark-compare.ts "$PACKAGE/benchmarks/baseline.json" "$PACKAGE/benchmarks/latest.json" || {
-          echo "⚠️ Performance changes detected in $PACKAGE (non-blocking)"
-          echo "💡 Review the comparison report before pushing"
-        }
-      fi
-    fi
-  done
-fi
-
-# Run critical E2E tests (only for client app which has real E2E)
-echo "🎭 Checking critical E2E tests..."
-
-# Check for changed files in apps/client (main E2E location)
-CLIENT_CHANGED=$(echo "$CHANGED_FILES" | grep -q "apps/client" && echo "yes" || echo "no")
-
-if [ "$CLIENT_CHANGED" = "yes" ] && [ -f "apps/client/playwright.config.ts" ]; then
-  echo "Running smoke E2E tests for client..."
-  # Run smoke tests from the smoke folder
-  if [ -d "apps/client/src/__tests__/e2e/smoke" ]; then
-    # Set HUSKY env var to trigger headless mode in Playwright
-    (cd apps/client && HUSKY=1 pnpm test:e2e src/__tests__/e2e/smoke) 2>&1 || {
-      echo "⚠️ Some smoke E2E tests failed (non-blocking)"
-      echo "💡 Consider fixing before push"
-    }
-  else
-    echo "ℹ️ No smoke E2E tests found in src/__tests__/e2e/smoke"
-  fi
-fi
+# Run critical E2E tests if client app changed
+echo "🎭 Checking for E2E tests..."
+# Use turbo to detect if client app changed and run E2E tests
+pnpm turbo run test:e2e --filter="@atomiton/client...[origin/main]" --ui stream --output-logs=new-only 2>&1 || {
+  echo "⚠️ Some E2E tests failed (non-blocking)"
+  echo "💡 Consider fixing before push"
+}
 
 echo ""
 echo "✅ Pre-push checks complete - ready to push!"

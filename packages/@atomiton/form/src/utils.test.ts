@@ -8,7 +8,7 @@ import {
 
 describe("mapZodTypeToControl", () => {
   it("maps string to text input", () => {
-    const schema = z.string();
+    const schema = v.string();
     const result = mapZodTypeToControl(schema, "test");
 
     expect(result).toEqual({
@@ -19,7 +19,7 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("maps email string to email input", () => {
-    const schema = z.string().email();
+    const schema = v.string().email();
     const result = mapZodTypeToControl(schema, "email");
 
     expect(result).toEqual({
@@ -30,7 +30,7 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("maps url string to url input", () => {
-    const schema = z.string().url();
+    const schema = v.string().url();
     const result = mapZodTypeToControl(schema, "website");
 
     expect(result).toEqual({
@@ -41,7 +41,7 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("maps number to number input with min/max", () => {
-    const schema = z.number().min(1).max(10);
+    const schema = v.number().min(1).max(10);
     const result = mapZodTypeToControl(schema, "count");
 
     expect(result).toEqual({
@@ -54,7 +54,7 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("maps boolean to boolean input", () => {
-    const schema = z.boolean();
+    const schema = v.boolean();
     const result = mapZodTypeToControl(schema, "active");
 
     expect(result).toEqual({
@@ -65,7 +65,7 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("maps enum to select input", () => {
-    const schema = z.enum(["red", "green", "blue"]);
+    const schema = v.enum(["red", "green", "blue"]);
     const result = mapZodTypeToControl(schema, "color");
 
     expect(result).toEqual({
@@ -81,7 +81,7 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("maps date to date input", () => {
-    const schema = z.date();
+    const schema = v.date();
     const result = mapZodTypeToControl(schema, "birthday");
 
     expect(result).toEqual({
@@ -92,14 +92,14 @@ describe("mapZodTypeToControl", () => {
   });
 
   it("handles optional fields", () => {
-    const schema = z.string().optional();
+    const schema = v.string().optional();
     const result = mapZodTypeToControl(schema, "optional");
 
     expect(result.required).toBe(false);
   });
 
   it("handles nullable fields", () => {
-    const schema = z.string().nullable();
+    const schema = v.string().nullable();
     const result = mapZodTypeToControl(schema, "nullable");
 
     expect(result.required).toBe(false);
@@ -108,10 +108,10 @@ describe("mapZodTypeToControl", () => {
 
 describe("generateFieldsFromSchema", () => {
   it("generates fields from object schema", () => {
-    const schema = z.object({
-      name: z.string(),
-      age: z.number().min(0),
-      email: z.string().email().optional(),
+    const schema = v.object({
+      name: v.string(),
+      age: v.number().min(0),
+      email: v.string().email().optional(),
     });
 
     const result = generateFieldsFromSchema(schema);
@@ -133,8 +133,8 @@ describe("generateFieldsFromSchema", () => {
   });
 
   it("merges fields metadata", () => {
-    const schema = z.object({
-      name: z.string(),
+    const schema = v.object({
+      name: v.string(),
     });
 
     const fields = {
@@ -155,7 +155,7 @@ describe("generateFieldsFromSchema", () => {
   });
 
   it("throws error for non-object schemas", () => {
-    const schema = z.string();
+    const schema = v.string();
 
     expect(() => generateFieldsFromSchema(schema)).toThrow(
       "Schema must be a ZodObject",
@@ -165,12 +165,12 @@ describe("generateFieldsFromSchema", () => {
 
 describe("getDefaultValues", () => {
   it("generates default values for object schema", () => {
-    const schema = z.object({
-      name: z.string(),
-      age: z.number(),
-      active: z.boolean(),
-      email: z.string().optional(),
-      birthdate: z.date().nullable(),
+    const schema = v.object({
+      name: v.string(),
+      age: v.number(),
+      active: v.boolean(),
+      email: v.string().optional(),
+      birthdate: v.date().nullable(),
     });
 
     const result = getDefaultValues(schema);
@@ -185,7 +185,7 @@ describe("getDefaultValues", () => {
   });
 
   it("returns empty object for non-object schemas", () => {
-    const schema = z.string();
+    const schema = v.string();
     const result = getDefaultValues(schema);
 
     expect(result).toEqual({});

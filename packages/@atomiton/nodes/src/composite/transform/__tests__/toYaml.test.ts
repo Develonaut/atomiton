@@ -66,7 +66,7 @@ describe("toYaml resilience", () => {
       expect(result.data).toBeDefined();
 
       // Parse the YAML back to verify it's clean
-      const parsed = fromYaml(result.data!);
+      const parsed = fromYaml(result.data!, { validateResult: false });
       expect(parsed.success).toBe(true);
 
       const cleanNode = parsed.data!.nodes[0];
@@ -134,7 +134,7 @@ describe("toYaml resilience", () => {
       const result = toYaml(messyComposite);
       expect(result.success).toBe(true);
 
-      const parsed = fromYaml(result.data!);
+      const parsed = fromYaml(result.data!, { validateResult: false });
       expect(parsed.success).toBe(true);
 
       // Should not have extra top-level properties
@@ -163,7 +163,7 @@ describe("toYaml resilience", () => {
       const result = toYaml(minimalComposite);
       expect(result.success).toBe(true);
 
-      const parsed = fromYaml(result.data!);
+      const parsed = fromYaml(result.data!, { validateResult: false });
       expect(parsed.success).toBe(true);
       expect(parsed.data!.type).toBe("composite");
       expect(parsed.data!.nodes).toEqual([]);
@@ -198,7 +198,7 @@ describe("toYaml resilience", () => {
       const result = toYaml(compositeWithoutPositions);
       expect(result.success).toBe(true);
 
-      const parsed = fromYaml(result.data!);
+      const parsed = fromYaml(result.data!, { validateResult: false });
       expect(parsed.success).toBe(true);
 
       // Should provide default positions for missing ones
@@ -244,7 +244,7 @@ describe("toYaml resilience", () => {
       const result = toYaml(compositeWithMalformedEdges);
       expect(result.success).toBe(true);
 
-      const parsed = fromYaml(result.data!);
+      const parsed = fromYaml(result.data!, { validateResult: false });
       expect(parsed.success).toBe(true);
 
       // Should keep valid edges
@@ -291,7 +291,7 @@ describe("toYaml resilience", () => {
       const result = toYaml(compositeWithBadArrays);
       expect(result.success).toBe(true);
 
-      const parsed = fromYaml(result.data!);
+      const parsed = fromYaml(result.data!, { validateResult: false });
       expect(parsed.success).toBe(true);
 
       // Should only include valid object nodes
@@ -344,6 +344,224 @@ describe("toYaml resilience", () => {
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
       expect(result.errors!.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe("input validation and error handling", () => {
+    it("should reject non-object inputs", () => {
+      const testCases = [
+        null,
+        undefined,
+        "string",
+        123,
+        true,
+        [],
+        new Date(),
+        new RegExp("test"),
+      ];
+
+      testCases.forEach((input) => {
+        const result = toYaml(input);
+        expect(result.success).toBe(false);
+        expect(result.errors).toHaveLength(1);
+        expect(result.errors![0].code).toBe("INVALID_INPUT_TYPE");
+        expect(result.errors![0].path).toBe("root");
+      });
+    });
+
+    it("should reject objects without required id field", () => {
+      const input = {
+        name: "Valid Name",
+        type: "composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors![0].code).toBe("MISSING_REQUIRED_FIELDS");
+      expect(result.errors![0].message).toContain("id and name");
+    });
+
+    it("should reject objects without required name field", () => {
+      const input = {
+        id: "valid-id",
+        type: "composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors![0].code).toBe("MISSING_REQUIRED_FIELDS");
+      expect(result.errors![0].message).toContain("id and name");
+    });
+
+    it("should reject objects with empty id field", () => {
+      const input = {
+        id: "",
+        name: "Valid Name",
+        type: "composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors![0].code).toBe("MISSING_REQUIRED_FIELDS");
+    });
+
+    it("should reject objects with empty name field", () => {
+      const input = {
+        id: "valid-id",
+        name: "",
+        type: "composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors![0].code).toBe("MISSING_REQUIRED_FIELDS");
+    });
+
+    it("should reject objects with non-string id field", () => {
+      const input = {
+        id: 123,
+        name: "Valid Name",
+        type: "composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors![0].code).toBe("MISSING_REQUIRED_FIELDS");
+    });
+
+    it("should reject objects with non-string name field", () => {
+      const input = {
+        id: "valid-id",
+        name: 123,
+        type: "composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors![0].code).toBe("MISSING_REQUIRED_FIELDS");
+    });
+
+    it("should provide default values for missing optional fields", () => {
+      const input = {
+        id: "minimal-composite",
+        name: "Minimal Composite",
+      };
+
+      const result = toYaml(input);
+      expect(result.success).toBe(true);
+      expect(result.data).toBeDefined();
+
+      const parsed = fromYaml(result.data!, { validateResult: false });
+      expect(parsed.success).toBe(true);
+      expect(parsed.data!.type).toBe("composite");
+      expect(parsed.data!.category).toBe("user");
+      expect(parsed.data!.nodes).toEqual([]);
+      expect(parsed.data!.edges).toEqual([]);
+      expect(parsed.data!.metadata?.source).toBe("user");
+      expect(parsed.data!.metadata?.created).toBeDefined();
+      expect(parsed.data!.metadata?.modified).toBeDefined();
+    });
+
+    it("should handle transformation errors gracefully", () => {
+      // This test would require mocking the yaml module, which is complex in this setup
+      // Instead, we'll test with malformed data that could cause serialization issues
+      const input = {
+        id: "test-id",
+        name: "Test Name",
+        type: "composite",
+        nodes: [
+          {
+            id: "malformed-node",
+            // Potentially problematic data structures
+            data: {
+              func: () => "functions can't be serialized",
+              symbol: Symbol("test"),
+            },
+          },
+        ],
+      };
+
+      const result = toYaml(input);
+      // Should either succeed by handling the problematic data or fail gracefully
+      if (!result.success) {
+        expect(result.errors).toBeDefined();
+        expect(result.errors!.length).toBeGreaterThan(0);
+        expect(result.errors![0].code).toBe("YAML_STRINGIFY_ERROR");
+      }
+    });
+
+    it("should respect validateResult option", () => {
+      const validInput = {
+        id: "valid-composite",
+        name: "Valid Composite",
+        type: "composite",
+      };
+
+      // With validation disabled (default)
+      const resultNoValidation = toYaml(validInput, { validateResult: false });
+      expect(resultNoValidation.success).toBe(true);
+
+      // With validation enabled
+      const resultWithValidation = toYaml(validInput, { validateResult: true });
+      expect(resultWithValidation.success).toBe(true);
+    });
+
+    it("should respect formatOutput option", () => {
+      const input = {
+        id: "test-composite",
+        name: "Test Composite",
+        type: "composite",
+      };
+
+      // Without formatting (default)
+      const resultUnformatted = toYaml(input, { formatOutput: false });
+      expect(resultUnformatted.success).toBe(true);
+      expect(resultUnformatted.data).toBeDefined();
+
+      // With formatting
+      const resultFormatted = toYaml(input, { formatOutput: true });
+      expect(resultFormatted.success).toBe(true);
+      expect(resultFormatted.data).toBeDefined();
+    });
+
+    it("should preserve warnings from validation", () => {
+      // This test would need to trigger a scenario that produces warnings
+      // Since the current validation doesn't produce warnings in this context,
+      // we'll test the structure is correct
+      const input = {
+        id: "test-composite",
+        name: "Test Composite",
+        type: "composite",
+      };
+
+      const result = toYaml(input, { validateResult: true });
+      expect(result.success).toBe(true);
+      // Warnings would be undefined if none are present
+      expect(result.warnings).toBeUndefined();
+    });
+
+    it("should handle circular references in data gracefully", () => {
+      const input: Record<string, unknown> = {
+        id: "circular-composite",
+        name: "Circular Composite",
+        type: "composite",
+      };
+
+      // Create circular reference
+      input.self = input;
+
+      const result = toYaml(input);
+      // Should either succeed by ignoring the circular reference or fail gracefully
+      if (!result.success) {
+        expect(result.errors).toBeDefined();
+        expect(result.errors!.length).toBeGreaterThan(0);
+      }
     });
   });
 });

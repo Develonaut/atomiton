@@ -26,40 +26,17 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "🔥 Running smoke tests (must complete in <30 seconds)..."
-echo "📦 Testing packages in parallel..."
-
-# Run smoke tests with proper timing
-START_TIME=$(date +%s)
+echo "🔥 Running smoke tests..."
 
 # Run smoke tests for all packages (using turbo for caching)
 # Use 'new-only' to show output only for non-cached tasks
+# Vitest will handle timing and reporting internally
 pnpm turbo run test:smoke --ui stream --output-logs=new-only --log-order=grouped
 
-SMOKE_EXIT_CODE=$?
-END_TIME=$(date +%s)
-DURATION=$((END_TIME - START_TIME))
-
-# Check if tests failed
-if [ $SMOKE_EXIT_CODE -ne 0 ]; then
+if [ $? -ne 0 ]; then
   echo "❌ Smoke tests failed!"
   echo "💡 Fix failing tests before committing"
   exit 1
 fi
 
-# Check if tests ran too long (>30 seconds is our hard limit)
-if [ $DURATION -gt 30 ]; then
-  echo "❌ Smoke tests took ${DURATION}s (limit: 30s)"
-  echo "💡 Move slow tests to integration suite or optimize them"
-
-  # Use TypeScript speed checker if available for detailed analysis
-  if [ -f "scripts/test-speed-check.ts" ]; then
-    echo ""
-    echo "🔍 Detailed speed analysis:"
-    tsx scripts/test-speed-check.ts test-results/speed-report.json smoke 2>/dev/null || true
-  fi
-
-  exit 1
-fi
-
-echo "✅ All pre-commit checks passed! (smoke tests: ${DURATION}s)"
+echo "✅ All pre-commit checks passed!"

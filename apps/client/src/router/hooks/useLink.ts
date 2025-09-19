@@ -2,6 +2,7 @@ import { useHover } from "@atomiton/hooks";
 import type { NavigateOptions } from "@atomiton/router";
 import { useCallback } from "react";
 import { useRouter } from "../index";
+import type { AppRouteState } from "../types";
 
 export type UseLinkOptions = {
   preloadDelay?: number;
@@ -9,14 +10,21 @@ export type UseLinkOptions = {
   onClick?: (e: React.MouseEvent) => void | Promise<void>;
 };
 
-export function useLink(to: NavigateOptions, options?: UseLinkOptions) {
+// Extend NavigateOptions to include our custom state
+export type AppNavigateOptions = NavigateOptions & {
+  state?: AppRouteState;
+};
+
+export function useLink(to: AppNavigateOptions, options?: UseLinkOptions) {
   const router = useRouter();
   const { preloadDelay = 0, disabled = false, onClick } = options || {};
 
   const doPreload = useCallback(() => {
     router.preloadRoute(to).catch(() => {
       if (process.env.NODE_ENV !== "production")
-        console.warn(`Failed to preload route: ${to}`);
+        console.warn(
+          `Failed to preload route: ${typeof to === "string" ? to : to.to}`,
+        );
     });
   }, [router, to]);
 

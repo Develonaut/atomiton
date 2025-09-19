@@ -1,8 +1,8 @@
 import js from "@eslint/js";
+import type { Linter } from "eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 import turboPlugin from "eslint-plugin-turbo";
 import tseslint from "typescript-eslint";
-import type { Linter } from "eslint";
 
 /**
  * Base ESLint configuration for the repository
@@ -10,18 +10,18 @@ import type { Linter } from "eslint";
  */
 const baseConfig: Linter.Config[] = [
   // JavaScript recommended rules
-  js.configs.recommended as Linter.Config,
+  js.configs.recommended,
 
   // Disable rules that conflict with Prettier
-  eslintConfigPrettier as Linter.Config,
+  eslintConfigPrettier,
 
   // TypeScript recommended rules
-  ...(tseslint.configs.recommended as Linter.Config[]),
+  ...tseslint.configs.recommended,
 
   // Turbo plugin for monorepo-specific rules
   {
     plugins: {
-      turbo: turboPlugin as any,
+      turbo: turboPlugin,
     },
     rules: {
       "turbo/no-undeclared-env-vars": "warn",
@@ -40,6 +40,10 @@ const baseConfig: Linter.Config[] = [
       ".next/**",
       ".turbo/**",
       "coverage/**",
+      // Vite temporary files
+      "**/*.timestamp-*.mjs",
+      "**/*.timestamp-*.js",
+      "**/vite.config.*.timestamp-*",
     ],
   } satisfies Linter.Config,
 

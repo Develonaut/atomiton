@@ -4,13 +4,13 @@ import { generateFieldsFromSchema, getDefaultValues } from "./utils/index";
 
 describe("Integration Tests", () => {
   it("generates working field configurations", () => {
-    const schema = z.object({
-      name: z.string(),
-      email: z.string().email(),
-      age: z.number().min(18),
-      active: z.boolean(),
-      role: z.enum(["user", "admin"]),
-      bio: z.string().optional(),
+    const schema = v.object({
+      name: v.string(),
+      email: v.string().email(),
+      age: v.number().min(18),
+      active: v.boolean(),
+      role: v.enum(["user", "admin"]),
+      bio: v.string().optional(),
     });
 
     const fields = generateFieldsFromSchema(schema);
@@ -35,10 +35,10 @@ describe("Integration Tests", () => {
   });
 
   it("generates correct default values", () => {
-    const schema = z.object({
-      name: z.string(),
-      age: z.number(),
-      active: z.boolean(),
+    const schema = v.object({
+      name: v.string(),
+      age: v.number(),
+      active: v.boolean(),
     });
 
     const defaults = getDefaultValues(schema);
@@ -51,8 +51,8 @@ describe("Integration Tests", () => {
   });
 
   it("supports field metadata overrides", () => {
-    const schema = z.object({
-      description: z.string(),
+    const schema = v.object({
+      description: v.string(),
     });
 
     const fieldsMetadata = {

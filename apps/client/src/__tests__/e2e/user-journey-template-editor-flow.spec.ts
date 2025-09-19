@@ -65,7 +65,7 @@ test.describe("User Journey: Template to Editor Data Flow", () => {
     const linkCount = await templateLinks.count();
 
     if (linkCount === 0) {
-      test.skip("No templates loaded from store");
+      test.skip(linkCount === 0, "No templates loaded from store");
       return;
     }
 
@@ -220,7 +220,7 @@ test.describe("User Journey: Template to Editor Data Flow", () => {
     const linkCount = await templateLinks.count();
 
     if (linkCount === 0) {
-      test.skip("No templates loaded - store may be empty");
+      test.skip(linkCount === 0, "No templates loaded - store may be empty");
       return;
     }
 

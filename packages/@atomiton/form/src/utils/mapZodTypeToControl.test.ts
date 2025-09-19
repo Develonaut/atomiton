@@ -5,7 +5,7 @@ import { mapZodTypeToControl } from "./mapZodTypeToControl";
 describe("mapZodTypeToControl", () => {
   describe("basic types", () => {
     it("maps string to text input", () => {
-      const schema = z.string();
+      const schema = v.string();
       const result = mapZodTypeToControl(schema, "test");
 
       expect(result).toEqual({
@@ -16,7 +16,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps number to number input", () => {
-      const schema = z.number();
+      const schema = v.number();
       const result = mapZodTypeToControl(schema, "count");
 
       expect(result).toEqual({
@@ -27,7 +27,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps boolean to boolean input", () => {
-      const schema = z.boolean();
+      const schema = v.boolean();
       const result = mapZodTypeToControl(schema, "active");
 
       expect(result).toEqual({
@@ -38,7 +38,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps date to date input", () => {
-      const schema = z.date();
+      const schema = v.date();
       const result = mapZodTypeToControl(schema, "birthday");
 
       expect(result).toEqual({
@@ -50,7 +50,7 @@ describe("mapZodTypeToControl", () => {
 
     it("maps unknown types to text input", () => {
       // Create a custom schema that doesn't match known types
-      const schema = z.any();
+      const schema = v.any();
       const result = mapZodTypeToControl(schema, "unknown");
 
       expect(result).toEqual({
@@ -63,7 +63,7 @@ describe("mapZodTypeToControl", () => {
 
   describe("string validations", () => {
     it("maps email string to email input", () => {
-      const schema = z.string().email();
+      const schema = v.string().email();
       const result = mapZodTypeToControl(schema, "email");
 
       expect(result).toEqual({
@@ -74,7 +74,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps url string to url input", () => {
-      const schema = z.string().url();
+      const schema = v.string().url();
       const result = mapZodTypeToControl(schema, "website");
 
       expect(result).toEqual({
@@ -85,21 +85,21 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("prioritizes email over other validations", () => {
-      const schema = z.string().email().min(5);
+      const schema = v.string().email().min(5);
       const result = mapZodTypeToControl(schema, "contact");
 
       expect(result.type).toBe("email");
     });
 
     it("prioritizes url over other validations except email", () => {
-      const schema = z.string().url().min(5);
+      const schema = v.string().url().min(5);
       const result = mapZodTypeToControl(schema, "link");
 
       expect(result.type).toBe("url");
     });
 
     it("handles string with only length validations", () => {
-      const schema = z.string().min(3).max(50);
+      const schema = v.string().min(3).max(50);
       const result = mapZodTypeToControl(schema, "title");
 
       expect(result).toEqual({
@@ -112,7 +112,7 @@ describe("mapZodTypeToControl", () => {
 
   describe("number validations", () => {
     it("maps number with min constraint", () => {
-      const schema = z.number().min(1);
+      const schema = v.number().min(1);
       const result = mapZodTypeToControl(schema, "count");
 
       expect(result).toEqual({
@@ -124,7 +124,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps number with max constraint", () => {
-      const schema = z.number().max(100);
+      const schema = v.number().max(100);
       const result = mapZodTypeToControl(schema, "percentage");
 
       expect(result).toEqual({
@@ -136,7 +136,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps number with min and max constraints", () => {
-      const schema = z.number().min(18).max(120);
+      const schema = v.number().min(18).max(120);
       const result = mapZodTypeToControl(schema, "age");
 
       expect(result).toEqual({
@@ -149,7 +149,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles number with no constraints", () => {
-      const schema = z.number();
+      const schema = v.number();
       const result = mapZodTypeToControl(schema, "value");
 
       expect(result).toEqual({
@@ -160,7 +160,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles number with step validation", () => {
-      const schema = z.number().step(0.01);
+      const schema = v.number().step(0.01);
       const result = mapZodTypeToControl(schema, "price");
 
       expect(result).toEqual({
@@ -173,7 +173,7 @@ describe("mapZodTypeToControl", () => {
 
   describe("enum types", () => {
     it("maps string enum to select input", () => {
-      const schema = z.enum(["red", "green", "blue"]);
+      const schema = v.enum(["red", "green", "blue"]);
       const result = mapZodTypeToControl(schema, "color");
 
       expect(result).toEqual({
@@ -189,7 +189,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("maps number enum to select input", () => {
-      const schema = z.enum(["1", "2", "3"]);
+      const schema = v.enum(["1", "2", "3"]);
       const result = mapZodTypeToControl(schema, "rating");
 
       expect(result).toEqual({
@@ -205,7 +205,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles single value enum", () => {
-      const schema = z.enum(["only"]);
+      const schema = v.enum(["only"]);
       const result = mapZodTypeToControl(schema, "single");
 
       expect(result).toEqual({
@@ -219,7 +219,7 @@ describe("mapZodTypeToControl", () => {
 
   describe("optional and nullable types", () => {
     it("handles optional string", () => {
-      const schema = z.string().optional();
+      const schema = v.string().optional();
       const result = mapZodTypeToControl(schema, "optional");
 
       expect(result.required).toBe(false);
@@ -228,7 +228,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles nullable string", () => {
-      const schema = z.string().nullable();
+      const schema = v.string().nullable();
       const result = mapZodTypeToControl(schema, "nullable");
 
       expect(result.required).toBe(false);
@@ -237,7 +237,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles optional email", () => {
-      const schema = z.string().email().optional();
+      const schema = v.string().email().optional();
       const result = mapZodTypeToControl(schema, "email");
 
       expect(result.required).toBe(false);
@@ -245,7 +245,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles optional number with constraints", () => {
-      const schema = z.number().min(1).max(10).optional();
+      const schema = v.number().min(1).max(10).optional();
       const result = mapZodTypeToControl(schema, "score");
 
       expect(result).toEqual({
@@ -258,7 +258,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles optional enum", () => {
-      const schema = z.enum(["a", "b"]).optional();
+      const schema = v.enum(["a", "b"]).optional();
       const result = mapZodTypeToControl(schema, "choice");
 
       expect(result.required).toBe(false);
@@ -270,7 +270,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles nullable boolean", () => {
-      const schema = z.boolean().nullable();
+      const schema = v.boolean().nullable();
       const result = mapZodTypeToControl(schema, "flag");
 
       expect(result.required).toBe(false);
@@ -278,7 +278,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles nullable date", () => {
-      const schema = z.date().nullable();
+      const schema = v.date().nullable();
       const result = mapZodTypeToControl(schema, "expiry");
 
       expect(result.required).toBe(false);
@@ -288,7 +288,7 @@ describe("mapZodTypeToControl", () => {
 
   describe("nested optional/nullable combinations", () => {
     it("handles optional nullable", () => {
-      const schema = z.string().nullable().optional();
+      const schema = v.string().nullable().optional();
       const result = mapZodTypeToControl(schema, "field");
 
       expect(result.required).toBe(false);
@@ -296,7 +296,7 @@ describe("mapZodTypeToControl", () => {
     });
 
     it("handles nullable optional", () => {
-      const schema = z.string().optional().nullable();
+      const schema = v.string().optional().nullable();
       const result = mapZodTypeToControl(schema, "field");
 
       expect(result.required).toBe(false);
@@ -306,21 +306,21 @@ describe("mapZodTypeToControl", () => {
 
   describe("edge cases", () => {
     it("handles empty field name", () => {
-      const schema = z.string();
+      const schema = v.string();
       const result = mapZodTypeToControl(schema, "");
 
       expect(result.name).toBe("");
     });
 
     it("handles field name with spaces", () => {
-      const schema = z.string();
+      const schema = v.string();
       const result = mapZodTypeToControl(schema, "field with spaces");
 
       expect(result.name).toBe("field with spaces");
     });
 
     it("handles field name with special characters", () => {
-      const schema = z.string();
+      const schema = v.string();
       const result = mapZodTypeToControl(schema, "field-name_123");
 
       expect(result.name).toBe("field-name_123");

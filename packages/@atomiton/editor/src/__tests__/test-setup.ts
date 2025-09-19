@@ -24,24 +24,29 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 // ReactFlow needs DOMRect for bounding box calculations
-global.DOMRect = vi.fn().mockImplementation(() => ({
-  bottom: 0,
-  height: 0,
-  left: 0,
-  right: 0,
-  top: 0,
-  width: 0,
-  x: 0,
-  y: 0,
-  toJSON: vi.fn(),
-}));
+global.DOMRect = class MockDOMRect implements DOMRect {
+  bottom = 0;
+  height = 0;
+  left = 0;
+  right = 0;
+  top = 0;
+  width = 0;
+  x = 0;
+  y = 0;
 
-// Add the static fromRect method that DOMRect requires
-global.DOMRect.fromRect = vi
-  .fn()
-  .mockImplementation(
-    (rect) => new global.DOMRect(rect?.x, rect?.y, rect?.width, rect?.height),
-  );
+  constructor(x = 0, y = 0, width = 0, height = 0) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+
+  toJSON = vi.fn();
+
+  static fromRect(other?: DOMRectInit): DOMRect {
+    return new MockDOMRect(other?.x, other?.y, other?.width, other?.height);
+  }
+} as unknown as typeof DOMRect;
 
 // ReactFlow needs getBoundingClientRect
 Element.prototype.getBoundingClientRect = vi.fn().mockReturnValue({

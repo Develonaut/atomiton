@@ -105,13 +105,11 @@ export class ErrorReporter {
    */
   private async sendToExternalService(_report: ErrorReport): Promise<void> {
     try {
-      // eslint-disable-next-line no-console -- Monitoring service notification for debugging
       console.log("📤 Sending error report to monitoring service...");
       // In a real app, this would send to Sentry, LogRocket, etc.
       // For now, we'll just simulate the call
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 100));
-      // eslint-disable-next-line no-console -- Success feedback for monitoring service
       console.log("✅ Error report sent successfully");
     } catch (sendError) {
       console.error("❌ Failed to send error report:", sendError);

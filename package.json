@@ -29,8 +29,6 @@
     "test:e2e": "cd apps/client && pnpm test:e2e",
     "test:all": "turbo run test:all && pnpm test:e2e",
     "test:dashboard": "tsx scripts/test-dashboard.ts",
-    "test:speed-check": "tsx scripts/test-speed-check.ts",
-    "benchmark:compare": "tsx scripts/benchmark-compare.ts",
     "typecheck": "turbo run typecheck",
     "knip": "knip",
     "knip:fix": "knip --fix",

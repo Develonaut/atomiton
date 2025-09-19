@@ -11,7 +11,6 @@ import {
   selectNode,
   panCanvas,
   zoomCanvas,
-  openTemplate,
   waitForEditor,
 } from "./utils";
 
