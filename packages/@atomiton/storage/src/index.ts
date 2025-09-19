@@ -4,10 +4,7 @@
  * Universal storage abstraction for Composites and application data across platforms
  */
 
-// Re-export all types
 export * from "./types";
-
-// Factory function exports
 export {
   createFileSystemStorage,
   type FileSystemStorageConfig,
@@ -16,12 +13,6 @@ export {
   createInMemoryStorage,
   type InMemoryStorageConfig,
 } from "./factories/createInMemoryStorage";
-
-// Legacy class exports (for backwards compatibility)
-export { FileSystemStorage } from "./engines/FilesystemStorage";
-export { InMemoryStorage } from "./engines/InMemoryStorage";
-
-// Main storage factory
 import { type IStorageEngine, type StorageConfig } from "./types";
 import { createFileSystemStorage } from "./factories/createFileSystemStorage";
 import { createInMemoryStorage } from "./factories/createInMemoryStorage";
