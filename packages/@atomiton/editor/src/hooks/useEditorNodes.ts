@@ -1,27 +1,27 @@
-import type { Node } from "@xyflow/react";
-import { useReactFlow, useNodes as useReactFlowNodes } from "@xyflow/react";
-import { useCallback, useMemo } from "react";
-
-export type EditorNode = Node;
+import type { Node as ReactFlowNode } from "@xyflow/react";
+import { useReactFlow, useNodes } from "@xyflow/react";
+import { useCallback } from "react";
+import type { EditorNode } from "../types/EditorNode";
 
 export function useEditorNodes() {
-  const nodes = useReactFlowNodes();
   const { setNodes, getNodes } = useReactFlow();
-
-  const typedNodes = useMemo(() => nodes, [nodes]);
+  const nodes = useNodes() as EditorNode[];
 
   const setTypedNodes = useCallback(
-    (updater: Node[] | ((nodes: EditorNode[]) => EditorNode[])) => {
-      setNodes(updater);
+    (updater: ReactFlowNode[] | ((nodes: EditorNode[]) => EditorNode[])) => {
+      setNodes(
+        updater as
+          | ReactFlowNode[]
+          | ((nodes: ReactFlowNode[]) => ReactFlowNode[]),
+      );
     },
     [setNodes],
   );
 
-  const getTypedNodes = useCallback(() => getNodes(), [getNodes]);
+  const getTypedNodes = useCallback(
+    () => getNodes() as EditorNode[],
+    [getNodes],
+  );
 
-  return {
-    nodes: typedNodes,
-    setNodes: setTypedNodes,
-    getNodes: getTypedNodes,
-  };
+  return { nodes, setNodes: setTypedNodes, getNodes: getTypedNodes };
 }

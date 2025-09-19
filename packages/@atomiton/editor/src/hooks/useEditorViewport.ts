@@ -1,6 +1,7 @@
 import type { FitViewOptions, Viewport } from "@xyflow/react";
-import { useReactFlow, useViewport } from "@xyflow/react";
+import { useReactFlow } from "@xyflow/react";
 import { useMemo } from "react";
+import { useEditorStore } from "./useEditorStore";
 
 export type ViewportOptions = Viewport;
 
@@ -17,24 +18,33 @@ export type EditorViewportHook = {
   fitView: (options?: FitViewOptions) => Promise<boolean>;
 };
 
+/**
+ * Hook to efficiently manage viewport state in the editor.
+ * Uses React Flow's internal store for optimal performance.
+ *
+ * @performance
+ * - Uses `useStore` to only subscribe to zoom changes
+ * - Memoizes zoom percentage calculation
+ * - Avoids unnecessary re-renders from viewport x/y changes when only zoom is needed
+ */
 export function useEditorViewport(): EditorViewportHook {
   const { getZoom, zoomIn, zoomOut, zoomTo, fitView } = useReactFlow();
-  const { zoom } = useViewport();
+
+  // Only subscribe to zoom changes, not x/y position changes
+  const zoom = useEditorStore((state) => state.transform[2]);
 
   const zoomPercent = useMemo(() => {
     return `${Math.round(zoom * 100)}%`;
   }, [zoom]);
 
-  return useMemo(
-    () => ({
-      zoom,
-      zoomPercent,
-      getZoom,
-      zoomIn,
-      zoomOut,
-      zoomTo,
-      fitView,
-    }),
-    [zoom, zoomPercent, getZoom, zoomIn, zoomOut, zoomTo, fitView],
-  );
+  // These functions are stable references from useReactFlow, no need to memoize
+  return {
+    zoom,
+    zoomPercent,
+    getZoom,
+    zoomIn,
+    zoomOut,
+    zoomTo,
+    fitView,
+  };
 }

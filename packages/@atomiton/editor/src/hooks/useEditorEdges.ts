@@ -1,14 +1,13 @@
 import type { Edge } from "@xyflow/react";
-import { useReactFlow, useEdges as useReactFlowEdges } from "@xyflow/react";
-import { useCallback, useMemo } from "react";
+import { useReactFlow } from "@xyflow/react";
+import { useCallback } from "react";
+import { useEditorStore } from "./useEditorStore";
 
 export type EditorEdge = Edge;
 
 export function useEditorEdges() {
-  const edges = useReactFlowEdges();
   const { setEdges, getEdges } = useReactFlow();
-
-  const typedEdges = useMemo(() => edges, [edges]);
+  const edges = useEditorStore((state) => state.edges);
 
   const setTypedEdges = useCallback(
     (updater: EditorEdge[] | ((edges: EditorEdge[]) => EditorEdge[])) => {
@@ -17,11 +16,10 @@ export function useEditorEdges() {
     [setEdges],
   );
 
-  const getTypedEdges = useCallback(() => getEdges(), [getEdges]);
+  const getTypedEdges = useCallback(
+    () => getEdges() as EditorEdge[],
+    [getEdges],
+  );
 
-  return {
-    edges: typedEdges,
-    setEdges: setTypedEdges,
-    getEdges: getTypedEdges,
-  };
+  return { edges, setEdges: setTypedEdges, getEdges: getTypedEdges };
 }

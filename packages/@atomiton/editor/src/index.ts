@@ -3,9 +3,23 @@ export { default as Editor } from "./components/Editor";
 
 export { useAddNode } from "./hooks/useAddNode";
 export { useEditorEdges } from "./hooks/useEditorEdges";
+export { useEditorNode } from "./hooks/useEditorNode";
 export { useEditorNodes } from "./hooks/useEditorNodes";
+export { useEditorStore } from "./hooks/useEditorStore";
 export { useEditorViewport } from "./hooks/useEditorViewport";
+export { useSelectedNode } from "./hooks/useSelectedNode";
+export { useSelectedNodes } from "./hooks/useSelectedNodes";
 
 export type { EditorEdge } from "./hooks/useEditorEdges";
-export type { EditorNode } from "./hooks/useEditorNodes";
 export type { ViewportOptions } from "./hooks/useEditorViewport";
+export type { EditorNode, NodePosition } from "./types/EditorNode";
+
+// Node creation utilities
+export {
+  calculateNodePosition,
+  createDefaultEditorNode,
+  createEdgeFromLastNode,
+  createNode,
+  updateEdgesWithNewEdge,
+  updateNodesWithNewNode,
+} from "./utils/nodeCreation";
