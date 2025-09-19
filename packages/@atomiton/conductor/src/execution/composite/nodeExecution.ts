@@ -22,7 +22,7 @@ export async function executeNode(
   composite: CompositeDefinition,
   executionId: string,
   options: CompositeExecutionOptions,
-  nodeRegistry: Map<string, INode>,
+  nodes: Record<string, INode>,
   executionResults: Map<string, Map<string, NodeExecutionResult>>,
   executionStore: ExecutionStore,
   nodeExecutor: NodeExecutorInstance,
@@ -32,9 +32,9 @@ export async function executeNode(
     throw new Error(`Node not found in composite: ${nodeId}`);
   }
 
-  const node = nodeRegistry.get(compositeNode.type);
+  const node = nodes[compositeNode.type];
   if (!node) {
-    throw new Error(`Node type not registered: ${compositeNode.type}`);
+    throw new Error(`Node type not found: ${compositeNode.type}`);
   }
 
   // Gather inputs from connected nodes
@@ -93,7 +93,7 @@ export async function executeNodesInParallel(
   options: CompositeExecutionOptions,
   results: Record<string, NodeExecutionResult>,
   times: Record<string, number>,
-  nodeRegistry: Map<string, INode>,
+  nodes: Record<string, INode>,
   executionResults: Map<string, Map<string, NodeExecutionResult>>,
   executionStore: ExecutionStore,
   nodeExecutor: NodeExecutorInstance,
@@ -107,7 +107,7 @@ export async function executeNodesInParallel(
         composite,
         executionId,
         options,
-        nodeRegistry,
+        nodes,
         executionResults,
         executionStore,
         nodeExecutor,
@@ -132,7 +132,7 @@ export async function executeNodeLevel(
   options: CompositeExecutionOptions,
   results: Record<string, NodeExecutionResult>,
   times: Record<string, number>,
-  nodeRegistry: Map<string, INode>,
+  nodes: Record<string, INode>,
   executionResults: Map<string, Map<string, NodeExecutionResult>>,
   executionStore: ExecutionStore,
   nodeExecutor: NodeExecutorInstance,
@@ -144,7 +144,7 @@ export async function executeNodeLevel(
       composite,
       executionId,
       options,
-      nodeRegistry,
+      nodes,
       executionResults,
       executionStore,
       nodeExecutor,
