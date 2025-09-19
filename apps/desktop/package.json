@@ -10,14 +10,31 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
+    "test:unit:main": "vitest run --config vitest.main.config.ts",
+    "test:integration": "vitest run src/__tests__/integration",
+    "test:smoke": "vitest run src/__tests__/smoke",
+    "test:benchmark": "vitest bench --run || echo 'No benchmarks yet'",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:all": "pnpm test:unit && pnpm test:integration && pnpm test:smoke && pnpm test:e2e",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
     "kill": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\"",
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
+  },
+  "dependencies": {
+    "@atomiton/conductor": "workspace:^",
+    "@atomiton/storage": "workspace:^"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
     "@atomiton/typescript-config": "workspace:^",
+    "@atomiton/vite-config": "workspace:^",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@playwright/test": "^1.55.0",
     "@types/node": "catalog:",
     "cross-env": "^10.0.0",
     "electron": "^38.0.0",
@@ -25,6 +42,7 @@
     "electron-vite": "^4.0.0",
     "typescript": "catalog:",
     "vite": "catalog:",
+    "vitest": "catalog:",
     "wait-on": "^8.0.4"
   }
 }

@@ -278,6 +278,13 @@ importers:
         version: 3.2.4(@types/node@20.19.16)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
 
   apps/desktop:
+    dependencies:
+      '@atomiton/conductor':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/conductor
+      '@atomiton/storage':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/storage
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:^
@@ -285,12 +292,18 @@ importers:
       '@atomiton/typescript-config':
         specifier: workspace:^
         version: link:../../packages/@atomiton/typescript-config
+      '@atomiton/vite-config':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/vite-config
       '@electron-toolkit/preload':
         specifier: ^3.0.2
         version: 3.0.2(electron@38.1.2)
       '@electron-toolkit/utils':
         specifier: ^4.0.0
         version: 4.0.0(electron@38.1.2)
+      '@playwright/test':
+        specifier: ^1.55.0
+        version: 1.55.0
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.16
@@ -312,6 +325,9 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 7.1.5(@types/node@20.19.16)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/node@20.19.16)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
       wait-on:
         specifier: ^8.0.4
         version: 8.0.5
