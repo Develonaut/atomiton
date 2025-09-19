@@ -33,9 +33,8 @@ type QueueEvents = {
 export function createQueue(options: QueueOptions = {}): QueueInstance {
   // Private state using closures
   const queueId = `queue_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
-  const queueEventBus = events.createEventBus<QueueEvents>(
-    `conductor:queue:${queueId}`,
-  );
+  // Use the simplified events API
+  const queueEventBus = events;
 
   const resolvedOptions: Required<QueueOptions> = {
     concurrency: options.concurrency ?? 10,

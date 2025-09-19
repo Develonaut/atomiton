@@ -1,30 +1,15 @@
-import { EventEmitter as EventEmitter3 } from "eventemitter3";
-import type { EventBus, EventBusConfig } from "../../types";
-import type { EventContext } from "../../shared";
-import { createEventBusImpl } from "../../shared";
+import { Events, events } from "../../events";
+import type { EventManager } from "../../events";
+import type { EventRegistry } from "../../registry";
 
+// Re-export the browser-specific version
+export { Events, events };
+export type { EventManager, EventRegistry };
+
+// Legacy compatibility
 export function createEventBus<T extends Record<string, unknown>>(
-  domain: string,
-  _config?: EventBusConfig,
-): EventBus<T> {
-  const emitter = new EventEmitter3();
-
-  const ctx: EventContext = {
-    emit: (eventName: string, data: unknown) => emitter.emit(eventName, data),
-    on: (eventName: string, listener: (...args: unknown[]) => void) => {
-      emitter.on(eventName, listener);
-    },
-    once: (eventName: string, listener: (...args: unknown[]) => void) => {
-      emitter.once(eventName, listener);
-    },
-    off: (eventName: string, listener: (...args: unknown[]) => void) => {
-      emitter.off(eventName, listener);
-    },
-    removeAllListeners: () => emitter.removeAllListeners(),
-    listenerCount: (eventName: string) => emitter.listenerCount(eventName),
-    listenerMap: new WeakMap(),
-    domain,
-  };
-
-  return createEventBusImpl<T>(ctx);
+  _domain?: string,
+  _config?: any,
+): EventManager<T> {
+  return Events<T>({ browser: true });
 }

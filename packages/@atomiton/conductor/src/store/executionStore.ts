@@ -53,10 +53,8 @@ export function createExecutionStore(storeId = "default") {
     },
   );
 
-  // Event bus for state changes
-  const stateEventBus = events.createEventBus<StoreEvents>(
-    `conductor:store:${storeId}`,
-  );
+  // Use the simplified events API - no need for domain or types
+  const stateEventBus = events;
 
   // Actions
   const initializeExecution = (executionId: string, blueprintId: string) => {
@@ -205,7 +203,9 @@ export function createExecutionStore(storeId = "default") {
     executionStore.getState().executions[executionId];
 
   const getActiveExecutions = (): ExecutionRecord[] => {
-    const executions = Object.values(executionStore.getState().executions) as ExecutionRecord[];
+    const executions = Object.values(
+      executionStore.getState().executions,
+    ) as ExecutionRecord[];
     return executions.filter(
       (execution) =>
         execution.status === "running" || execution.status === "pending",

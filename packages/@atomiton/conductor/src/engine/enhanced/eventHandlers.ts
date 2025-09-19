@@ -35,8 +35,8 @@ export function createEventHandlers(
     emitWebhookReceived: (response: unknown) => void;
   },
 ) {
-  const engineEventBus =
-    events.createEventBus<EngineEvents>("conductor:engine");
+  // Use the simplified events API
+  const engineEventBus = events;
 
   const setupQueueHandlers = (): void => {
     queue.on("job:started", (data: unknown) => {

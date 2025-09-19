@@ -13,8 +13,8 @@ type WebhookEvents = {
 
 export function createWebhookManager() {
   const webhookHandlers = new Map<string, WebhookHandler>();
-  const webhookEventBus =
-    events.createEventBus<WebhookEvents>("conductor:webhooks");
+  // Use the simplified events API
+  const webhookEventBus = events;
 
   const registerWebhook = async (
     webhookId: string,

@@ -1,17 +1,21 @@
+// Main exports - clean and simple API
+export { Events, events } from "./events";
+export type { EventManager, EventHandler } from "./events";
+
+// Export the centralized event registry
+export type {
+  EventRegistry,
+  UIEvents,
+  ConductorEvents,
+  StorageEvents,
+  SystemEvents,
+  EditorEvents,
+  IPCEvents,
+  EventName,
+  EventData,
+  EventsOfDomain,
+} from "./registry";
+
+// Legacy compatibility (deprecated - will remove in next major version)
 export { createEventBus } from "./exports/desktop";
 export type { EventBus, EventBusConfig } from "./types";
-
-// Backward compatibility - provide a default event bus instance
-import { createEventBus } from "./exports/desktop";
-
-const defaultBus = createEventBus<Record<string, any>>("default");
-
-export const events = {
-  emit: defaultBus.emit.bind(defaultBus),
-  on: defaultBus.on.bind(defaultBus),
-  once: defaultBus.once.bind(defaultBus),
-  off: defaultBus.off.bind(defaultBus),
-  removeAllListeners: defaultBus.removeAllListeners.bind(defaultBus),
-  listenerCount: defaultBus.listenerCount.bind(defaultBus),
-  createEventBus,
-};
