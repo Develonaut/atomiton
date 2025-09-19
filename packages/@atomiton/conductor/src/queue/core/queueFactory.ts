@@ -34,7 +34,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
   // Private state using closures
   const queueId = `queue_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   // Use the simplified events API
-  const queueEventBus = events;
+  const queueEvents = events;
 
   const resolvedOptions: Required<QueueOptions> = {
     concurrency: options.concurrency ?? 10,
@@ -74,11 +74,11 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
   // Setup event handlers
   const setupEventHandlers = (): void => {
     jobQueue.on("active", () => {
-      queueEventBus.emit("queue:active", { size: jobQueue.size });
+      queueEvents.emit("queue:active", { size: jobQueue.size });
     });
 
     jobQueue.on("idle", () => {
-      queueEventBus.emit("queue:idle", undefined);
+      queueEvents.emit("queue:idle", undefined);
     });
   };
 
@@ -142,7 +142,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
     const job = async () => {
       try {
         activeJobs.set(jobId, jobData);
-        queueEventBus.emit("job:started", { jobId, jobData });
+        queueEvents.emit("job:started", { jobId, jobData });
 
         await delay(options.delay ?? 0);
 
@@ -152,7 +152,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
           jobResults.set(jobId, result);
         }
 
-        queueEventBus.emit("job:completed", { jobId, result });
+        queueEvents.emit("job:completed", { jobId, result });
 
         if (options.removeOnComplete) {
           activeJobs.delete(jobId);
@@ -175,7 +175,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
           jobResults.set(jobId, response);
         }
 
-        queueEventBus.emit("job:failed", { jobId, error: jobError });
+        queueEvents.emit("job:failed", { jobId, error: jobError });
 
         if (options.attempts && options.attempts > 1) {
           await retry(jobData, options, options.attempts - 1);
@@ -208,18 +208,18 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
 
     async pause(): Promise<void> {
       jobQueue.pause();
-      queueEventBus.emit("queue:paused", undefined);
+      queueEvents.emit("queue:paused", undefined);
     },
 
     async resume(): Promise<void> {
       jobQueue.start();
-      queueEventBus.emit("queue:resumed", undefined);
+      queueEvents.emit("queue:resumed", undefined);
     },
 
     async clear(): Promise<void> {
       jobQueue.clear();
       activeJobs.clear();
-      queueEventBus.emit("queue:cleared", undefined);
+      queueEvents.emit("queue:cleared", undefined);
     },
 
     async getJob(jobId: string): Promise<JobData | undefined> {
@@ -247,7 +247,7 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
     decodeWebhookResponse: webhookManager.decodeWebhookResponse,
 
     async gracefulShutdown(): Promise<void> {
-      queueEventBus.emit("queue:shutting-down", undefined);
+      queueEvents.emit("queue:shutting-down", undefined);
 
       jobQueue.pause();
       await jobQueue.onIdle();
@@ -260,14 +260,14 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
         clearInterval(cleanupInterval);
       }
 
-      queueEventBus.emit("queue:shutdown", undefined);
+      queueEvents.emit("queue:shutdown", undefined);
     },
 
     getMetrics: metricsCalculator.getMetrics,
 
     // Event methods using @atomiton/events
     on: (event: string, listener: (...args: unknown[]) => void) => {
-      return queueEventBus.on(
+      return queueEvents.on(
         event as keyof QueueEvents,
         listener as (data: QueueEvents[keyof QueueEvents]) => void,
       );
@@ -275,12 +275,12 @@ export function createQueue(options: QueueOptions = {}): QueueInstance {
     off: (event: string, listener: (...args: unknown[]) => void) => {
       // For backward compatibility, convert to proper unsubscribe
       // Note: This is a simplified implementation
-      return queueEventBus
+      return queueEvents
         .on(event as keyof QueueEvents, listener as never)
         .unsubscribe();
     },
     emit: (event: string, ...args: unknown[]): void => {
-      queueEventBus.emit(
+      queueEvents.emit(
         event as keyof QueueEvents,
         args[0] as QueueEvents[keyof QueueEvents],
       );

@@ -15,7 +15,3 @@ export type {
   EventData,
   EventsOfDomain,
 } from "./registry";
-
-// Legacy compatibility (deprecated - will remove in next major version)
-export { createEventBus } from "./exports/desktop";
-export type { EventBus, EventBusConfig } from "./types";

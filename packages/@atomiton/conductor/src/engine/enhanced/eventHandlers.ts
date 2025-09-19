@@ -36,7 +36,7 @@ export function createEventHandlers(
   },
 ) {
   // Use the simplified events API
-  const engineEventBus = events;
+  const engineEvents = events;
 
   const setupQueueHandlers = (): void => {
     queue.on("job:started", (data: unknown) => {
@@ -45,7 +45,7 @@ export function createEventHandlers(
         const jobData = (
           data as { jobData: { executionId: string; blueprintId: string } }
         ).jobData;
-        engineEventBus.emit("execution:started", {
+        engineEvents.emit("execution:started", {
           executionId: jobData.executionId,
           compositeId: jobData.blueprintId,
         });
@@ -68,7 +68,7 @@ export function createEventHandlers(
         if (typedData.result?.success) {
           metricsManager.incrementSuccessfulExecutions();
         }
-        engineEventBus.emit("execution:completed", {
+        engineEvents.emit("execution:completed", {
           jobId: typedData.jobId,
           result: typedData.result,
         });
@@ -89,7 +89,7 @@ export function createEventHandlers(
           typedData.error instanceof Error
             ? typedData.error
             : new Error(String(typedData.error));
-        engineEventBus.emit("execution:failed", {
+        engineEvents.emit("execution:failed", {
           jobId: typedData.jobId,
           error,
         });
@@ -106,7 +106,7 @@ export function createEventHandlers(
       const queueMetrics = queue.getMetrics();
       const workerMetrics = queue.getWorkerMetrics();
 
-      engineEventBus.emit("metrics:update", {
+      engineEvents.emit("metrics:update", {
         queue: queueMetrics,
         workers: workerMetrics,
         execution: metricsManager.getMetrics(),
@@ -115,23 +115,23 @@ export function createEventHandlers(
   };
 
   const emitExecutionPaused = (executionId: string): void => {
-    engineEventBus.emit("execution:paused", { executionId });
+    engineEvents.emit("execution:paused", { executionId });
   };
 
   const emitExecutionResumed = (executionId: string): void => {
-    engineEventBus.emit("execution:resumed", { executionId });
+    engineEvents.emit("execution:resumed", { executionId });
   };
 
   const emitExecutionCancelled = (executionId: string): void => {
-    engineEventBus.emit("execution:cancelled", { executionId });
+    engineEvents.emit("execution:cancelled", { executionId });
   };
 
   const emitEngineShuttingDown = (): void => {
-    engineEventBus.emit("engine:shutting-down", undefined);
+    engineEvents.emit("engine:shutting-down", undefined);
   };
 
   const emitEngineShutdown = (): void => {
-    engineEventBus.emit("engine:shutdown", undefined);
+    engineEvents.emit("engine:shutdown", undefined);
   };
 
   return {
@@ -142,6 +142,6 @@ export function createEventHandlers(
     emitExecutionCancelled,
     emitEngineShuttingDown,
     emitEngineShutdown,
-    eventBus: engineEventBus,
+    events: engineEvents,
   };
 }

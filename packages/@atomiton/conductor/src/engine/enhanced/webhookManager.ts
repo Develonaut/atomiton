@@ -14,14 +14,14 @@ type WebhookEvents = {
 export function createWebhookManager() {
   const webhookHandlers = new Map<string, WebhookHandler>();
   // Use the simplified events API
-  const webhookEventBus = events;
+  const webhookEvents = events;
 
   const registerWebhook = async (
     webhookId: string,
     handler: WebhookHandler,
   ): Promise<void> => {
     webhookHandlers.set(webhookId, handler);
-    webhookEventBus.emit("webhook:registered", { webhookId });
+    webhookEvents.emit("webhook:registered", { webhookId });
   };
 
   const handleWebhook = async (
@@ -49,11 +49,11 @@ export function createWebhookManager() {
   };
 
   const onWebhookReceived = (callback: (response: unknown) => void) => {
-    return webhookEventBus.on("webhook:received", callback);
+    return webhookEvents.on("webhook:received", callback);
   };
 
   const emitWebhookReceived = (response: unknown): void => {
-    webhookEventBus.emit("webhook:received", response);
+    webhookEvents.emit("webhook:received", response);
   };
 
   return {

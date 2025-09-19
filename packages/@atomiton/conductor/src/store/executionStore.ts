@@ -54,7 +54,7 @@ export function createExecutionStore(storeId = "default") {
   );
 
   // Use the simplified events API - no need for domain or types
-  const stateEventBus = events;
+  const stateEvents = events;
 
   // Actions
   const initializeExecution = (executionId: string, blueprintId: string) => {
@@ -70,7 +70,7 @@ export function createExecutionStore(storeId = "default") {
       };
 
       state.executions[executionId] = execution;
-      stateEventBus.emit("execution:initialized", { executionId, blueprintId });
+      stateEvents.emit("execution:initialized", { executionId, blueprintId });
     });
   };
 
@@ -83,7 +83,7 @@ export function createExecutionStore(storeId = "default") {
       if (!execution) return;
 
       Object.assign(execution, updates);
-      stateEventBus.emit("execution:updated", { executionId });
+      stateEvents.emit("execution:updated", { executionId });
     });
   };
 
@@ -112,7 +112,7 @@ export function createExecutionStore(storeId = "default") {
         }
       }
 
-      stateEventBus.emit("node:updated", { executionId, nodeId });
+      stateEvents.emit("node:updated", { executionId, nodeId });
     });
   };
 
@@ -127,7 +127,7 @@ export function createExecutionStore(storeId = "default") {
 
       execution.nodeStates[nodeId].lastError = error;
       execution.nodeStates[nodeId].retryCount += 1;
-      stateEventBus.emit("node:updated", { executionId, nodeId });
+      stateEvents.emit("node:updated", { executionId, nodeId });
     });
   };
 
@@ -137,7 +137,7 @@ export function createExecutionStore(storeId = "default") {
       if (!execution) return;
 
       execution.variables[key] = value;
-      stateEventBus.emit("variable:set", { executionId, key, value });
+      stateEvents.emit("variable:set", { executionId, key, value });
     });
   };
 
@@ -153,7 +153,7 @@ export function createExecutionStore(storeId = "default") {
       };
 
       execution.checkpoints.push(checkpoint);
-      stateEventBus.emit("checkpoint:created", { executionId, nodeId });
+      stateEvents.emit("checkpoint:created", { executionId, nodeId });
     });
   };
 
@@ -227,7 +227,7 @@ export function createExecutionStore(storeId = "default") {
   return {
     // Store instance
     store: executionStore,
-    eventBus: stateEventBus,
+    events: stateEvents,
 
     // Actions
     initializeExecution,

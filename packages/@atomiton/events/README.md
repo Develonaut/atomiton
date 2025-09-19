@@ -248,19 +248,23 @@ events.emit("ui:node:selected", { nodeId: "123" });
 //                               ^^^^^^^^^^^^^^^^ Missing position
 ```
 
-## Migration from Old API
+## Migration Guide
 
-The old `createEventBus` API is still available for backward compatibility:
+If you're using an older version:
 
 ```typescript
-// Old way (deprecated but still works)
-import { createEventBus } from "@atomiton/events";
-const bus = createEventBus<MyEvents>("domain");
-bus.on("event", handler);
+// Old way (no longer supported)
+// import { createEventBus } from "@atomiton/events";
+// const bus = createEventBus<MyEvents>("domain");
+// bus.on("event", handler);
 
-// New way (recommended)
+// New way - just use the singleton
 import { events } from "@atomiton/events";
 events.on("event", handler);
+
+// Or create your own instance
+import { Events } from "@atomiton/events";
+const myEvents = Events<MyCustomEvents>();
 ```
 
 ## Development

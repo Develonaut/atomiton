@@ -129,17 +129,14 @@ describe("Execution Store Smoke Tests", () => {
       const executionId = "test-exec-events";
       const blueprintId = "test-blueprint-events";
 
-      const subscription = store.eventBus.on(
-        "execution:initialized",
-        (data) => {
-          if (
-            data.executionId === executionId &&
-            data.blueprintId === blueprintId
-          ) {
-            eventFired = true;
-          }
-        },
-      );
+      const subscription = store.events.on("execution:initialized", (data) => {
+        if (
+          data.executionId === executionId &&
+          data.blueprintId === blueprintId
+        ) {
+          eventFired = true;
+        }
+      });
 
       store.initializeExecution(executionId, blueprintId);
 
