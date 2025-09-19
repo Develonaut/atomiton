@@ -2,6 +2,9 @@
 
 # Husky pre-commit hook - Run formatting, linting, and smoke tests
 
+# Set HUSKY env var to reduce verbosity
+export HUSKY=1
+
 echo "🔍 Running pre-commit checks..."
 
 # Validate package consistency first

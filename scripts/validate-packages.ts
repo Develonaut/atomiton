@@ -339,16 +339,20 @@ class PackageValidator {
     }
 
     // Summary
-    console.log("\n📊 Validation Summary:");
-    this.log(`Packages validated: ${this.packages.length}`, "info");
-    this.log(
-      `Errors found: ${this.errors.length}`,
-      this.errors.length > 0 ? "error" : "success",
-    );
-    this.log(
-      `Warnings: ${this.warnings.length}`,
-      this.warnings.length > 0 ? "warning" : "info",
-    );
+    const isGitHook = process.env.HUSKY === "1";
+
+    if (!isGitHook) {
+      console.log("\n📊 Validation Summary:");
+      this.log(`Packages validated: ${this.packages.length}`, "info");
+      this.log(
+        `Errors found: ${this.errors.length}`,
+        this.errors.length > 0 ? "error" : "success",
+      );
+      this.log(
+        `Warnings: ${this.warnings.length}`,
+        this.warnings.length > 0 ? "warning" : "info",
+      );
+    }
 
     if (this.errors.length > 0) {
       console.log("\n❌ Critical Issues:");

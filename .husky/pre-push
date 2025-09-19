@@ -2,6 +2,9 @@
 
 # Husky pre-push hook - Performance warnings and critical tests
 
+# Set HUSKY env var to reduce verbosity and trigger headless mode
+export HUSKY=1
+
 echo "📤 Pre-push validation..."
 
 # Get the remote we're pushing to (usually origin)
