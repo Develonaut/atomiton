@@ -267,8 +267,6 @@ class PackageValidator {
         : []),
     ];
 
-    const optionalFiles = ["LICENSE", ".npmignore", "CONTRIBUTING.md"];
-
     requiredFiles.forEach((file) => {
       const filePath = path.join(pkg.path, file);
       if (!fs.existsSync(filePath)) {
@@ -289,13 +287,6 @@ class PackageValidator {
         }
       }
     }
-
-    optionalFiles.forEach((file) => {
-      const filePath = path.join(pkg.path, file);
-      if (!fs.existsSync(filePath)) {
-        this.addWarning(pkg.name, `Consider adding: ${file}`);
-      }
-    });
 
     // Check for src directory
     const srcPath = path.join(pkg.path, "src");
