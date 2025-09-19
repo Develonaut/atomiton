@@ -93,7 +93,7 @@ async function main() {
     console.log("\n🔒 Validating performance contracts...");
     try {
       execSync(
-        "npx vitest run src/__tests__/benchmark/performance/performance-contract.test.tsx",
+        "npx vitest run src/__tests__/benchmark/performance/performance-contract-*.test.tsx",
         {
           encoding: "utf-8",
           stdio: "inherit", // Show output directly

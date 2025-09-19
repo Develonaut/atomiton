@@ -2,9 +2,6 @@
 
 # Husky pre-push hook - Performance warnings and critical tests
 
-# Set environment variable to disable TUI when running in git hooks
-export TURBO_UI="stream"
-
 echo "📤 Pre-push validation..."
 
 # Get the remote we're pushing to (usually origin)
@@ -13,7 +10,7 @@ URL="$2"
 
 # Run smoke tests first (fast validation)
 echo "🔥 Running smoke tests (must complete in <30 seconds)..."
-pnpm test:smoke || {
+pnpm turbo run test:smoke --ui stream || {
   echo "❌ Smoke tests failed!"
   echo "💡 Fix smoke tests before pushing"
   exit 1
@@ -47,7 +44,7 @@ CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E "packages/.*/" | cut -d'/' -f
 # Run benchmarks for changed packages using turbo
 if [ ! -z "$CHANGED_PACKAGES" ]; then
   echo "Running benchmarks for changed packages..."
-  pnpm turbo run test:benchmark --filter="...[HEAD^]" 2>&1 || true
+  pnpm turbo run test:benchmark --filter="...[HEAD^]" --ui stream 2>&1 || true
 fi
 
 if [ ! -z "$CHANGED_PACKAGES" ]; then
