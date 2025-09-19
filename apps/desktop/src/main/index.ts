@@ -1,6 +1,7 @@
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { join } from "path";
+import { initializeServices } from "./services";
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -86,6 +87,9 @@ if (!gotTheLock) {
 
 app.whenReady().then(async () => {
   electronApp.setAppUserModelId("com.electron");
+
+  // Initialize application services
+  initializeServices();
 
   // Set a proper CSP for development that allows DevTools but maintains security
   if (is.dev) {
