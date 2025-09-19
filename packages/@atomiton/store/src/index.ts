@@ -15,10 +15,6 @@ import { immer } from "zustand/middleware/immer";
 // Enable Map/Set support in Immer on module load
 enableMapSet();
 
-// ============================================================================
-// Types
-// ============================================================================
-
 /**
  * Function that creates initial state
  */
@@ -58,10 +54,6 @@ export type StoreConfig<T> = {
   name?: string;
   persist?: PersistConfig<T>;
 };
-
-// ============================================================================
-// Core Function
-// ============================================================================
 
 /**
  * Creates a Zustand store with Immer for immutability and optional persistence
@@ -119,9 +111,4 @@ export function createStore<T extends object>(
   return store as Store<T> & { useStore: UseBoundStore<StoreApi<T>> };
 }
 
-// ============================================================================
-// Re-exports
-// ============================================================================
-
-// Export zustand's shallow comparison for use in other packages
 export { shallow } from "zustand/shallow";

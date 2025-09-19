@@ -17,10 +17,6 @@ export type SelectOption = {
   value?: unknown;
 };
 
-// ============================================================================
-// Root Select Component
-// ============================================================================
-
 type SelectRootProps<T = SelectOption | null> = {
   value: T;
   onChange: (value: T) => void;
@@ -48,10 +44,6 @@ function SelectRoot<T = SelectOption | null>({
     </Listbox>
   );
 }
-
-// ============================================================================
-// Select Trigger/Button Component
-// ============================================================================
 
 type SelectTriggerProps = {
   children: ReactNode;
@@ -101,10 +93,6 @@ const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
 
 SelectTrigger.displayName = "SelectTrigger";
 
-// ============================================================================
-// Select Value Component (displays current selection)
-// ============================================================================
-
 type SelectValueProps = {
   placeholder?: string;
   children?: ReactNode;
@@ -120,10 +108,6 @@ function SelectValue({ placeholder, children, className }: SelectValueProps) {
     </div>
   );
 }
-
-// ============================================================================
-// Select Icon Component
-// ============================================================================
 
 type SelectIconProps = {
   children: ReactNode;
@@ -142,10 +126,6 @@ function SelectIcon({ children, className }: SelectIconProps) {
     </div>
   );
 }
-
-// ============================================================================
-// Select Indicator (chevron) Component
-// ============================================================================
 
 type SelectIndicatorProps = {
   className?: string;
@@ -174,10 +154,6 @@ function SelectIndicator({ className, children }: SelectIndicatorProps) {
     </svg>
   );
 }
-
-// ============================================================================
-// Select Options Container Component
-// ============================================================================
 
 type SelectOptionsProps = {
   children: ReactNode;
@@ -211,10 +187,6 @@ const SelectOptions = forwardRef<HTMLDivElement, SelectOptionsProps>(
 
 SelectOptions.displayName = "SelectOptions";
 
-// ============================================================================
-// Select Option Item Component
-// ============================================================================
-
 type SelectOptionProps = {
   children: ReactNode;
   className?: string;
@@ -246,10 +218,6 @@ const SelectOption = forwardRef<HTMLDivElement, SelectOptionProps>(
 
 SelectOption.displayName = "SelectOption";
 
-// ============================================================================
-// Select Label Component
-// ============================================================================
-
 type SelectLabelProps = {
   children: ReactNode;
   className?: string;
@@ -263,10 +231,6 @@ function SelectLabel({ children, className }: SelectLabelProps) {
   );
 }
 
-// ============================================================================
-// Export compound components
-// ============================================================================
-
 export const Select = {
   Root: SelectRoot,
   Trigger: SelectTrigger,
@@ -277,10 +241,6 @@ export const Select = {
   Option: SelectOption,
   Label: SelectLabel,
 };
-
-// ============================================================================
-// Legacy/Convenience wrapper for backward compatibility
-// ============================================================================
 
 type LegacySelectProps = {
   className?: string;

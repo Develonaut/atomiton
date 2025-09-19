@@ -18,17 +18,19 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
+    "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/",
-    "format": "prettier --write src/",
-    "test": "vitest run",
-    "test:unit": "vitest run **/*.test.ts",
-    "test:watch": "vitest watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "pnpm test:unit",
+    "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
     "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
-    "test:benchmark": "vitest bench",
-    "test:e2e": "echo 'No E2E tests'",
-    "test:all": "vitest run && vitest bench"
+    "test:benchmark": "vitest bench --run",
+    "test:e2e": "echo \"No E2E tests for this package\"",
+    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "zod": "catalog:"

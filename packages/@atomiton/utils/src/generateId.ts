@@ -33,14 +33,14 @@ export function generateWorkerId(index: number, prefix?: string): string {
 }
 
 /**
- * Generates a unique node ID (for composite nodes/blueprints)
+ * Generates a unique node ID (for composite nodes)
  */
 export function generateNodeId(prefix?: string): string {
   return generateId(prefix ? `node_${prefix}` : "node");
 }
 
 /**
- * Generates a unique edge ID (for composite nodes/blueprints)
+ * Generates a unique edge ID (for composite nodes)
  * */
 export function generateEdgeId(prefix?: string): string {
   return generateId(prefix ? `edge_${prefix}` : "edge");
