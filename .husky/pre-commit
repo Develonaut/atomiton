@@ -24,13 +24,14 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "🔥 Running smoke tests (must complete in <30 seconds)..."
+echo "📦 Testing packages in parallel..."
 
 # Run smoke tests with proper timing
 START_TIME=$(date +%s)
 
 # Run smoke tests for all packages (using turbo for caching)
-# Note: test:smoke script must exist in all packages per our standards
-pnpm turbo run test:smoke --ui stream --output-logs=errors-only --log-order=grouped
+# Use 'new-only' to show output only for non-cached tasks
+pnpm turbo run test:smoke --ui stream --output-logs=new-only --log-order=grouped
 
 SMOKE_EXIT_CODE=$?
 END_TIME=$(date +%s)

@@ -10,7 +10,8 @@ URL="$2"
 
 # Run smoke tests first (fast validation)
 echo "🔥 Running smoke tests..."
-pnpm turbo run test:smoke --ui stream --output-logs=errors-only --log-order=grouped || {
+echo "   📦 Testing packages in parallel..."
+pnpm turbo run test:smoke --ui stream --output-logs=new-only --log-order=grouped || {
   echo "❌ Smoke tests failed!"
   echo "💡 Fix smoke tests before pushing"
   exit 1
@@ -43,8 +44,8 @@ CHANGED_PACKAGES=$(echo "$CHANGED_FILES" | grep -E "packages/.*/" | cut -d'/' -f
 
 # Run benchmarks for changed packages using turbo
 if [ ! -z "$CHANGED_PACKAGES" ]; then
-  echo "Running benchmarks for changed packages..."
-  pnpm turbo run test:benchmark --filter="...[HEAD^]" --ui stream --output-logs=errors-only --log-order=grouped 2>&1 || {
+  echo "📊 Running benchmarks for changed packages..."
+  pnpm turbo run test:benchmark --filter="...[HEAD^]" --ui stream --output-logs=new-only --log-order=grouped 2>&1 || {
     echo "❌ Benchmark tests failed!"
     echo "💡 Performance contracts must pass before pushing"
     exit 1
