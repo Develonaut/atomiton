@@ -29,9 +29,10 @@
     "kill": "echo 'No processes to kill for Editor package'",
     "test:unit": "vitest run",
     "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
-    "test:benchmark": "vitest bench --run",
+    "test:benchmark": "tsx scripts/run-benchmarks.ts",
     "test:e2e": "echo \"No E2E tests for this package\"",
     "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e",
+    "test:pre-push": "pnpm test:benchmark",
     "test:coverage": "vitest run --coverage"
   },
   "keywords": [
@@ -46,8 +47,8 @@
     "@atomiton/hooks": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/store": "workspace:*",
-    "@atomiton/utils": "workspace:*",
     "@atomiton/ui": "workspace:*",
+    "@atomiton/utils": "workspace:*",
     "@xyflow/react": "^12.0.0",
     "react": "catalog:",
     "react-dom": "catalog:"
