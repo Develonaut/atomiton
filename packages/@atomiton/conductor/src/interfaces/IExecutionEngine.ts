@@ -1,13 +1,13 @@
 import type {
-  NodeExecutionContext,
   CompositeDefinition,
+  NodeExecutionContext,
 } from "@atomiton/nodes/executable";
 
 /**
  * Execution request with input data
  */
 export type ExecutionRequest = {
-  blueprintId: string;
+  compositeId: string;
   inputs?: Record<string, unknown>;
   config?: ExecutionConfig;
   context?: Partial<NodeExecutionContext>;
@@ -30,7 +30,7 @@ export type ExecutionConfig = {
  */
 export type ExecutionResult = {
   executionId: string;
-  blueprintId: string;
+  compositeId: string;
   status: ExecutionStatus;
   startTime: Date;
   endTime?: Date;
@@ -129,7 +129,7 @@ export type IExecutionEngine = {
    */
   listExecutions(filter?: {
     status?: ExecutionStatus;
-    blueprintId?: string;
+    compositeId?: string;
     startDate?: Date;
     endDate?: Date;
   }): Promise<ExecutionResult[]>;

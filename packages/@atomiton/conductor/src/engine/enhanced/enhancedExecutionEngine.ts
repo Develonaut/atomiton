@@ -8,31 +8,31 @@ import {
   createCompositeRunner,
   type CompositeRunnerInstance,
 } from "../../execution";
-import type {
-  ExecutionResult,
-  ExecutionStatus,
-  ExecutionRequest,
-} from "../../interfaces/IExecutionEngine";
-import {
-  createScalableQueue,
-  type ScalableQueueInstance,
-  type JobData,
-  type JobOptions,
-} from "../../queue";
 import {
   createNodeExecutor,
   type NodeExecutorInstance,
 } from "../../execution/nodeExecutor";
-import { createExecutionStore, type ExecutionStore } from "../../store";
 import type {
-  EnhancedExecutionOptions,
+  ExecutionRequest,
+  ExecutionResult,
+  ExecutionStatus,
+} from "../../interfaces/IExecutionEngine";
+import {
+  createScalableQueue,
+  type JobData,
+  type JobOptions,
+  type ScalableQueueInstance,
+} from "../../queue";
+import { createExecutionStore, type ExecutionStore } from "../../store";
+import { createEventHandlers } from "./eventHandlers";
+import { createMetricsManager } from "./metricsManager";
+import type {
   EnhancedEngineInstance,
+  EnhancedExecutionOptions,
   ExecutionContext,
   ExecutionHistoryEntry,
 } from "./types";
-import { createMetricsManager } from "./metricsManager";
 import { createWebhookManager } from "./webhookManager";
-import { createEventHandlers } from "./eventHandlers";
 
 export function createEnhancedExecutionEngine(
   options: EnhancedExecutionOptions = {},
@@ -79,7 +79,7 @@ export function createEnhancedExecutionEngine(
   const execute = async (
     request: ExecutionRequest,
   ): Promise<ExecutionResult> => {
-    const compositeId = request.blueprintId;
+    const compositeId = request.compositeId;
     const input = request.inputs;
     const options = {
       priority: request.config?.parallel ? 10 : 5,
@@ -102,7 +102,7 @@ export function createEnhancedExecutionEngine(
 
     const jobData: JobData = {
       executionId,
-      blueprintId: compositeId,
+      compositeId: compositeId,
       input,
       loadStaticData: true,
     };
@@ -160,7 +160,7 @@ export function createEnhancedExecutionEngine(
 
       return {
         executionId: result.executionId,
-        blueprintId: composite.id,
+        compositeId: composite.id,
         status: result.success
           ? ("completed" as ExecutionStatus)
           : ("failed" as ExecutionStatus),
@@ -255,7 +255,7 @@ export function createEnhancedExecutionEngine(
 
     return {
       executionId,
-      blueprintId: state.blueprintId,
+      compositeId: state.compositeId,
       status: state.status,
       startTime: state.startTime,
       endTime: state.endTime,
@@ -272,7 +272,7 @@ export function createEnhancedExecutionEngine(
 
   const listExecutions = async (_filter?: {
     status?: ExecutionStatus;
-    blueprintId?: string;
+    compositeId?: string;
     startDate?: Date;
     endDate?: Date;
   }): Promise<ExecutionResult[]> => {
@@ -313,9 +313,9 @@ export function createEnhancedExecutionEngine(
     gracefulShutdown,
     registerWebhook: webhookManager.registerWebhook,
     handleWebhook: (webhookId: string, data: unknown) =>
-      webhookManager.handleWebhook(webhookId, data, (blueprintId, inputs) =>
+      webhookManager.handleWebhook(webhookId, data, (compositeId, inputs) =>
         execute({
-          blueprintId,
+          compositeId,
           inputs,
           config: { debugMode: true },
         }),
