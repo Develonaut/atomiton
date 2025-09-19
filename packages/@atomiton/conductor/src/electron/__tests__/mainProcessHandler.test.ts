@@ -79,14 +79,13 @@ describe("Main Process Handler", () => {
   });
 
   describe("Request handling", () => {
-    let handler: ReturnType<typeof setupMainProcessHandler>;
     let executeHandler: (data: unknown) => Promise<void>;
 
     beforeEach(() => {
       mockEvents.ipc.isAvailable.mockReturnValue(true);
       mockEvents.ipc.getEnvironment.mockReturnValue("main");
 
-      handler = setupMainProcessHandler();
+      setupMainProcessHandler();
 
       // Extract the execute handler
       executeHandler = mockEvents.on.mock.calls.find(
@@ -228,9 +227,8 @@ describe("Main Process Handler", () => {
 
       setupMainProcessHandler(config);
 
-      const {
-        createLocalTransport,
-      } = require("../../transport/localTransport");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { createLocalTransport } = require("../../transport/localTransport");
       expect(createLocalTransport).toHaveBeenCalledWith(config);
     });
 
@@ -240,9 +238,8 @@ describe("Main Process Handler", () => {
 
       setupMainProcessHandler();
 
-      const {
-        createLocalTransport,
-      } = require("../../transport/localTransport");
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { createLocalTransport } = require("../../transport/localTransport");
       expect(createLocalTransport).toHaveBeenCalledWith(undefined);
     });
   });
@@ -291,14 +288,13 @@ describe("Main Process Handler", () => {
   });
 
   describe("Multiple concurrent executions", () => {
-    let handler: ReturnType<typeof setupMainProcessHandler>;
     let executeHandler: (data: unknown) => Promise<void>;
 
     beforeEach(() => {
       mockEvents.ipc.isAvailable.mockReturnValue(true);
       mockEvents.ipc.getEnvironment.mockReturnValue("main");
 
-      handler = setupMainProcessHandler();
+      setupMainProcessHandler();
       executeHandler = mockEvents.on.mock.calls.find(
         (call) => call[0] === "conductor:execute",
       )?.[1];

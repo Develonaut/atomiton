@@ -17,12 +17,12 @@ export async function processJob(
 
   const mockResult: ExecutionResult = {
     executionId: jobData.executionId,
-    blueprintId: jobData.blueprintId,
+    compositeId: jobData.compositeId,
     status: "completed",
     startTime: new Date(Date.now() - 100),
     endTime: new Date(),
     outputs: {
-      result: `Processed ${jobData.blueprintId}`,
+      result: `Processed ${jobData.compositeId}`,
     },
     metrics: {
       executionTimeMs: 100,

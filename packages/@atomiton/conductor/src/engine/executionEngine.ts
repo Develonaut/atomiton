@@ -142,7 +142,7 @@ export function createExecutionEngine(config?: {
     // Create initial execution result
     const execution: ExecutionResult = {
       executionId,
-      blueprintId: request.blueprintId,
+      compositeId: request.compositeId,
       status: "pending",
       startTime,
       nodeResults: new Map(),
@@ -151,7 +151,7 @@ export function createExecutionEngine(config?: {
     executions.set(executionId, execution);
     eventEmitter.emit("execution:started", {
       executionId,
-      blueprintId: request.blueprintId,
+      compositeId: request.compositeId,
     });
 
     try {
@@ -160,11 +160,11 @@ export function createExecutionEngine(config?: {
       if (storage) {
         const data = await (
           storage as { load: (id: string) => Promise<unknown> }
-        ).load(request.blueprintId);
+        ).load(request.compositeId);
         composite = data as CompositeDefinition;
       } else {
         throw new Error(
-          `No storage configured, cannot load Composite ${request.blueprintId}`,
+          `No storage configured, cannot load Composite ${request.compositeId}`,
         );
       }
 
@@ -222,7 +222,7 @@ export function createExecutionEngine(config?: {
 
     const execution: ExecutionResult = {
       executionId,
-      blueprintId: composite.id,
+      compositeId: composite.id,
       status: "running",
       startTime,
       nodeResults: new Map(),
@@ -339,7 +339,7 @@ export function createExecutionEngine(config?: {
       }
       if (filter.compositeId) {
         executionList = executionList.filter(
-          (e) => e.blueprintId === filter.compositeId,
+          (e) => e.compositeId === filter.compositeId,
         );
       }
       if (filter.startDate) {

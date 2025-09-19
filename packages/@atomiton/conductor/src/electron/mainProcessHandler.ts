@@ -21,7 +21,7 @@ export function setupMainProcessHandler(config?: {
   const transport = createLocalTransport(config);
 
   // Verify we're in main process
-  if (!events.ipc.isAvailable() || events.ipc.getEnvironment() !== "main") {
+  if (!events.ipc?.isAvailable() || events.ipc?.getEnvironment() !== "main") {
     throw new Error(
       "Main process handler requires Electron main process context",
     );
@@ -58,12 +58,15 @@ export function setupMainProcessHandler(config?: {
   events.on("conductor:execute", executeHandler);
 
   // Store handler for cleanup
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (events as any)._executeHandler = executeHandler;
 
   // Cleanup handler
   const cleanup = () => {
     // Remove only conductor-specific listeners
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((events as any)._executeHandler) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       events.off("conductor:execute", (events as any)._executeHandler);
     }
     if (transport.shutdown) {

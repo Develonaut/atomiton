@@ -21,7 +21,7 @@ export function createWebhookManager() {
     webhookId: string,
     data: unknown,
     executeCallback: (
-      blueprintId: string,
+      compositeId: string,
       inputs: Record<string, unknown>,
     ) => Promise<ExecutionResult>,
   ): Promise<ExecutionResult> => {

@@ -35,11 +35,11 @@ export function createEventHandlers(
       metricsManager.incrementActiveExecutions();
       if (typeof data === "object" && data !== null && "jobData" in data) {
         const jobData = (
-          data as { jobData: { executionId: string; blueprintId: string } }
+          data as { jobData: { executionId: string; compositeId: string } }
         ).jobData;
         events.emit("execution:started", {
           executionId: jobData.executionId,
-          compositeId: jobData.blueprintId,
+          compositeId: jobData.compositeId,
         });
       }
     });

@@ -1,11 +1,11 @@
-import { createExecutionRouter } from "./transport/executionRouter";
-import { createIPCTransport } from "./transport/ipcTransport";
-import { createHTTPTransport } from "./transport/httpTransport";
-import { createLocalTransport } from "./transport/localTransport";
 import type {
   ExecutionRequest,
   ExecutionResult,
 } from "./interfaces/IExecutionEngine";
+import { createExecutionRouter } from "./transport/executionRouter";
+import { createHTTPTransport } from "./transport/httpTransport";
+import { createIPCTransport } from "./transport/ipcTransport";
+import { createLocalTransport } from "./transport/localTransport";
 import type { TransportType } from "./transport/types";
 
 export type ConductorConfig = {
@@ -39,7 +39,7 @@ export type ConductorInstance = {
  *
  * // Same API everywhere!
  * const result = await conductor.execute({
- *   blueprintId: 'my-workflow',
+ *   compositeId: 'my-workflow',
  *   inputs: { data: 'test' }
  * });
  * ```
@@ -115,7 +115,7 @@ export function createConductor(config?: ConductorConfig): ConductorInstance {
             transportConfig as {
               apiUrl: string;
               headers?: Record<string, string>;
-            },
+            }
           );
           router.registerTransport(httpTransport);
           activeTransport = httpTransport;
@@ -127,7 +127,7 @@ export function createConductor(config?: ConductorConfig): ConductorInstance {
               concurrency?: number;
               storage?: unknown;
               timeout?: number;
-            },
+            }
           );
           router.registerTransport(localTransport);
           activeTransport = localTransport;

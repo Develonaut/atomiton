@@ -9,7 +9,7 @@ import type {
 
 export type JobData = {
   executionId: string;
-  blueprintId: string;
+  compositeId: string;
   input?: unknown;
   loadStaticData?: boolean;
   retryOf?: string;
@@ -87,7 +87,7 @@ export type QueueInstance = {
   getPendingCount: () => Promise<number>;
   addWebhookResponse: (response: WebhookResponse) => Promise<void>;
   getWebhookResponse: (
-    executionId: string,
+    executionId: string
   ) => Promise<WebhookResponse | undefined>;
   decodeWebhookResponse: (response: WebhookResponse) => unknown;
   gracefulShutdown: () => Promise<void>;

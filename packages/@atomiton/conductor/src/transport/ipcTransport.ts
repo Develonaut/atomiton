@@ -21,8 +21,8 @@ export function createIPCTransport(): IExecutionTransport {
 
   const initialize = async (): Promise<void> => {
     if (
-      !events.ipc.isAvailable() ||
-      events.ipc.getEnvironment() !== "renderer"
+      !events.ipc?.isAvailable() ||
+      events.ipc?.getEnvironment() !== "renderer"
     ) {
       throw new Error("IPC transport requires Electron renderer context");
     }
@@ -50,14 +50,16 @@ export function createIPCTransport(): IExecutionTransport {
     events.on("conductor:error", errorHandler);
 
     // Store handlers for cleanup
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (events as any)._resultHandler = resultHandler;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (events as any)._errorHandler = errorHandler;
   };
 
   const execute = async (
     request: ExecutionRequest,
   ): Promise<ExecutionResult> => {
-    if (!events.ipc.isAvailable()) {
+    if (!events.ipc?.isAvailable()) {
       throw new Error("IPC transport requires Electron renderer context");
     }
 
@@ -90,10 +92,14 @@ export function createIPCTransport(): IExecutionTransport {
 
   const shutdown = async (): Promise<void> => {
     // Remove only conductor-specific listeners
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((events as any)._resultHandler) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       events.off("conductor:result", (events as any)._resultHandler);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((events as any)._errorHandler) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       events.off("conductor:error", (events as any)._errorHandler);
     }
     pendingRequests.clear();
