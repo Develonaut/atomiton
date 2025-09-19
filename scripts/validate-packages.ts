@@ -222,8 +222,10 @@ class PackageValidator {
   ): void {
     const devDeps = packageData.devDependencies || {};
 
-    // Check for shared configs
+    // Check for shared configs (but not for config packages themselves)
+    const configPackages = ["eslint-config", "typescript-config"];
     if (
+      !configPackages.includes(pkgName) &&
       !devDeps["@atomiton/eslint-config"] &&
       !devDeps["@atomiton/typescript-config"]
     ) {

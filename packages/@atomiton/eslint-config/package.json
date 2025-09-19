@@ -23,10 +23,8 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
     "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "echo 'No TypeScript to check for config-only package'",
     "lint": "echo 'Linting eslint-config itself'",
     "lint:fix": "echo 'Linting eslint-config itself with fix'",
     "test": "pnpm test:unit",

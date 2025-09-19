@@ -30,7 +30,7 @@ START_TIME=$(date +%s)
 
 # Run smoke tests for all packages (using turbo for caching)
 # Note: test:smoke script must exist in all packages per our standards
-pnpm turbo run test:smoke --ui stream
+pnpm turbo run test:smoke --ui stream --output-logs=errors-only --log-order=grouped
 
 SMOKE_EXIT_CODE=$?
 END_TIME=$(date +%s)
