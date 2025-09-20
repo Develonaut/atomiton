@@ -15,6 +15,7 @@ agents/
 │   └── AGENT_EXECUTION_PLAN.md  # Step-by-step MVP implementation plan
 ├── Barbara.md                   # Individual agent files (to be simplified)
 ├── Brian.md
+├── Hudson.md
 ├── Karen.md
 ├── Megamind.md
 ├── Michael.md

@@ -10,7 +10,7 @@ This directory contains the complete team of specialized agents for the Atomiton
 - **[Michael](../Michael.md)** - Lead Systems Architect
 - **[Voorhees](../Voorhees.md)** - Implementation Strategy & Optimization
 - **[Brian](../Brian.md)** - Testing & Quality Assurance Specialist
-- **[Hudson](./hudson.md)** - Standards & Simplicity Guardian
+- **[Hudson](../Hudson.md)** - Standards & Simplicity Guardian
 
 ### Specialized Roles
 
