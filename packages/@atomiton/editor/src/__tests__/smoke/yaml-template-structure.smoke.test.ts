@@ -66,9 +66,11 @@ describe("YAML Template Structure Debug", () => {
     expect(greetingCodeNode).toHaveProperty("type");
     // Position is optional on template nodes
 
-    // CompositeNodeSpec should NOT have inputPorts/outputPorts as top-level props
-    expect(greetingCodeNode).not.toHaveProperty("inputPorts");
-    expect(greetingCodeNode).not.toHaveProperty("outputPorts");
+    // CompositeNodeSpec DOES have inputPorts/outputPorts as they are complete node specifications
+    expect(greetingCodeNode).toHaveProperty("inputPorts");
+    expect(greetingCodeNode).toHaveProperty("outputPorts");
+    expect(Array.isArray(greetingCodeNode.inputPorts)).toBe(true);
+    expect(Array.isArray(greetingCodeNode.outputPorts)).toBe(true);
   });
 
   it("compares CompositeNodeSpec vs AtomitonNode structure", () => {
@@ -95,19 +97,15 @@ describe("YAML Template Structure Debug", () => {
       compositeNodeSpec.data ? Object.keys(compositeNodeSpec.data) : "no data",
     );
 
-    // The issue: CompositeNodeSpec is NOT the same as an AtomitonNode
-    // CompositeNodeSpec is just a reference to a node type with position and data
-    // We need to resolve it to the actual AtomitonNode to get inputPorts/outputPorts
+    // The structure: CompositeNodeSpec includes full node definitions
+    // These are complete node specifications with ports included
+    // Editor can use them directly after converting to EditorNode format
 
-    console.log("\nThis reveals the problem:");
+    console.log("\nThis reveals the structure:");
+    console.log("- Templates contain complete node specifications with ports");
+    console.log("- These are fully-formed nodes ready for use in the editor");
     console.log(
-      "- Templates contain CompositeNodeSpec objects (just references)",
-    );
-    console.log(
-      "- Not AtomitonNode objects (full node definitions with ports)",
-    );
-    console.log(
-      "- Editor needs to resolve CompositeNodeSpec -> AtomitonNode -> EditorNode",
+      "- Editor converts CompositeNodeSpec -> EditorNode for ReactFlow",
     );
   });
 });

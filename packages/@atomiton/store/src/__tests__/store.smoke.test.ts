@@ -1,10 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { createStore, useStore, shallow } from "../index";
+import { createStore, shallow } from "../index";
 
 describe("Store Smoke Tests", () => {
   it("should expose core exports", () => {
     expect(createStore).toBeDefined();
-    expect(useStore).toBeDefined();
     expect(shallow).toBeDefined();
   });
 
@@ -17,6 +16,7 @@ describe("Store Smoke Tests", () => {
     expect(testStore.getState).toBeDefined();
     expect(testStore.setState).toBeDefined();
     expect(testStore.subscribe).toBeDefined();
+    expect(testStore.useStore).toBeDefined();
     expect(testStore.getState()).toEqual({ count: 0 });
   });
 

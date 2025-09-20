@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
-  createFileSystemStorage,
+  createFileSystemEngine as createFileSystemStorage,
   type IStorageEngine,
 } from "@atomiton/storage";
 import { promises as fs } from "fs";

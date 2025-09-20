@@ -18,6 +18,9 @@ vi.mock("electron", () => ({
     on: vi.fn(),
     handle: vi.fn(),
   },
+  webContents: {
+    getAllWebContents: vi.fn(() => []),
+  },
   session: {
     defaultSession: {
       webRequest: {
@@ -32,6 +35,13 @@ vi.mock("electron", () => ({
     openExternal: vi.fn(),
   },
 }));
+
+// Set process type to simulate Electron main process
+Object.defineProperty(process, "type", {
+  value: "browser",
+  writable: false,
+  configurable: true,
+});
 
 // Mock process.exit to prevent tests from actually exiting
 global.process.exit = vi.fn() as typeof process.exit;

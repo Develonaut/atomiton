@@ -19,14 +19,10 @@ vi.mock("@atomiton/events/desktop", () => ({
 }));
 
 // Mock the local transport
-vi.mock("../../transport/localTransport", () => ({
-  createLocalTransport: vi.fn(() => ({
-    execute: vi.fn(),
-    shutdown: vi.fn(),
-  })),
-}));
+vi.mock("../../transport/localTransport");
 
 import { setupMainProcessHandler } from "../mainProcessHandler";
+import { createLocalTransport } from "../../transport/localTransport";
 
 describe("Main Process Handler", () => {
   let mockEvents: any;
@@ -37,12 +33,18 @@ describe("Main Process Handler", () => {
 
     // Get the mocked modules
     const { events } = await import("@atomiton/events/desktop");
-    const { createLocalTransport } = await import(
-      "../../transport/localTransport"
-    );
 
     mockEvents = events;
-    mockLocalTransport = createLocalTransport();
+
+    // Create mock transport instance
+    mockLocalTransport = {
+      type: "local",
+      execute: vi.fn(),
+      shutdown: vi.fn(),
+    };
+
+    // Set up the mock to return our instance
+    vi.mocked(createLocalTransport).mockReturnValue(mockLocalTransport);
   });
 
   describe("Initialization", () => {
@@ -227,8 +229,6 @@ describe("Main Process Handler", () => {
 
       setupMainProcessHandler(config);
 
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { createLocalTransport } = require("../../transport/localTransport");
       expect(createLocalTransport).toHaveBeenCalledWith(config);
     });
 
@@ -238,8 +238,6 @@ describe("Main Process Handler", () => {
 
       setupMainProcessHandler();
 
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { createLocalTransport } = require("../../transport/localTransport");
       expect(createLocalTransport).toHaveBeenCalledWith(undefined);
     });
   });
@@ -274,12 +272,11 @@ describe("Main Process Handler", () => {
 
       // Mock transport without shutdown method
       const transportWithoutShutdown = {
+        type: "local",
         execute: vi.fn(),
       };
 
-      vi.doMock("../transport/localTransport", () => ({
-        createLocalTransport: vi.fn(() => transportWithoutShutdown),
-      }));
+      vi.mocked(createLocalTransport).mockReturnValue(transportWithoutShutdown);
 
       const handler = setupMainProcessHandler();
 

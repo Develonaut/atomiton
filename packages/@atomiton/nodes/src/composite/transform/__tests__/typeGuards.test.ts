@@ -44,11 +44,11 @@ describe("typeGuards", () => {
       expect(isRecord(function test() {})).toBe(false);
     });
 
-    it("should return true for built-in objects", () => {
-      expect(isRecord(new Date())).toBe(true);
-      expect(isRecord(new RegExp("test"))).toBe(true);
-      expect(isRecord(new Map())).toBe(true);
-      expect(isRecord(new Set())).toBe(true);
+    it("should return false for built-in objects (not plain objects)", () => {
+      expect(isRecord(new Date())).toBe(false);
+      expect(isRecord(new RegExp("test"))).toBe(false);
+      expect(isRecord(new Map())).toBe(false);
+      expect(isRecord(new Set())).toBe(false);
     });
 
     it("should return true for object instances", () => {
@@ -344,14 +344,14 @@ describe("typeGuards", () => {
       expect(safeObject([])).toEqual({});
     });
 
-    it("should return built-in objects as-is", () => {
+    it("should return default for built-in objects (not plain objects)", () => {
       const date = new Date();
       const regex = new RegExp("test");
       const map = new Map();
 
-      expect(safeObject(date)).toBe(date);
-      expect(safeObject(regex)).toBe(regex);
-      expect(safeObject(map)).toBe(map);
+      expect(safeObject(date)).toEqual({});
+      expect(safeObject(regex)).toEqual({});
+      expect(safeObject(map)).toEqual({});
     });
 
     it("should use custom default value", () => {

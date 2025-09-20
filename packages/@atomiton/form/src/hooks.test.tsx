@@ -86,8 +86,8 @@ describe("useForm", () => {
       name: v.string(),
       email: v.string().email().optional(),
       age: v.number().min(18).max(100),
-      active: z.boolean(),
-      role: z.enum(["user", "admin"]),
+      active: v.boolean(),
+      role: v.enum(["user", "admin"]),
     });
 
     const { result } = renderHook(() => useForm({ schema }));

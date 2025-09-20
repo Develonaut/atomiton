@@ -5,10 +5,15 @@
 import type { Node, NodeEdge, NodePosition } from "../../types";
 
 /**
- * Type guard to check if a value is a valid object
+ * Type guard to check if a value is a valid plain object (not Date, RegExp, etc.)
  */
 export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.prototype.toString.call(value) === "[object Object]"
+  );
 }
 
 /**

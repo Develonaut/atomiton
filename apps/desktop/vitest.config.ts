@@ -12,6 +12,7 @@ export default defineConfig({
       ".turbo",
       "src/**/*.main.{test,spec}.{js,ts}",
       "src/__tests__/e2e/**",
+      "src/__tests__/integration/**",
     ],
     setupFiles: ["src/__tests__/test-setup.ts"],
     coverage: {

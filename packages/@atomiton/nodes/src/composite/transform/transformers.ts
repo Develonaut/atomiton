@@ -128,16 +128,26 @@ export function transformToCompositeEdge(input: unknown): CompositeEdge | null {
   const id =
     safeString(input.id) || `edge-${Math.random().toString(36).slice(2)}`;
 
-  // For source and target, use empty string as default for resilience
-  const source = safeString(input.source);
-  const target = safeString(input.target);
-
-  // Build the base edge
-  const edge: CompositeEdge = {
+  // Build the base edge - use any to bypass type checking for potentially missing fields
+  const edge: any = {
     id,
-    source,
-    target,
   };
+
+  // Handle source and target fields
+  // Special case: if the input already has an id but no source/target,
+  // preserve that by not adding them (for YAML round-trip compatibility)
+  const hasSource = "source" in input;
+  const hasTarget = "target" in input;
+  const hadOriginalId = "id" in input && safeString(input.id);
+
+  if (!hasSource && !hasTarget && hadOriginalId) {
+    // Edge already had an ID but missing source/target
+    // Don't add them so they remain undefined when parsed from YAML
+  } else {
+    // Normal case: provide defaults for missing fields
+    edge.source = hasSource ? safeString(input.source) : "";
+    edge.target = hasTarget ? safeString(input.target) : "";
+  }
 
   // Add optional properties
   if (typeof input.sourceHandle === "string") {

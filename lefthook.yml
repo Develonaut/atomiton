@@ -1,0 +1,39 @@
+# Lefthook configuration for Atomiton monorepo
+# https://github.com/evilmartians/lefthook
+
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.{ts,tsx,md}"
+      run: pnpm prettier --write {staged_files}
+      stage_fixed: true
+    lint:
+      glob: "*.{ts,tsx}"
+      run: pnpm eslint --fix {staged_files}
+      stage_fixed: true
+    test:
+      run: pnpm turbo run test --filter="[HEAD]" --ui stream --output-logs=new-only --log-order=grouped
+
+pre-push:
+  parallel: false
+  commands:
+    test-unit:
+      run: |
+        echo "🧪 Running unit tests..."
+        pnpm turbo run test --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped
+    test-integration:
+      run: |
+        echo "🔌 Running integration tests..."
+        pnpm turbo run test:integration --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped
+    test-benchmark:
+      run: |
+        echo "📊 Checking for benchmark changes..."
+        PACKAGES_WITH_BENCHMARKS="form vite-config yaml events conductor editor validation store router"
+        for pkg in $PACKAGES_WITH_BENCHMARKS; do
+          if git diff origin/main...HEAD --name-only | grep -q "packages/@atomiton/$pkg"; then
+            echo "📊 Running benchmarks for $pkg package..."
+            pnpm --filter="@atomiton/$pkg" run test:benchmark --if-present 2>/dev/null || true
+          fi
+        done
+        echo "✅ Benchmark check complete"

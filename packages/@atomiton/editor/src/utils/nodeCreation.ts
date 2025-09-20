@@ -101,6 +101,10 @@ export function createNode(
     connectable: true,
     deletable: true,
     data: { ...baseNode.data, ...baseNode }, // Include node properties for ReactFlow
+    settings: {
+      ...baseNode.settings,
+      ui: { position },
+    },
   };
 
   // Add any additional editor-specific data
