@@ -16,7 +16,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "GIT_HOOKS"
+        "LEFTHOOK"
       ]
     },
     "lint": {
@@ -30,7 +30,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "GIT_HOOKS"
+        "LEFTHOOK"
       ]
     },
     "lint:fix": {
@@ -44,7 +44,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "GIT_HOOKS"
+        "LEFTHOOK"
       ]
     },
     "check-types": {
@@ -58,7 +58,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "GIT_HOOKS"
+        "LEFTHOOK"
       ]
     },
     "typecheck": {
@@ -72,7 +72,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "GIT_HOOKS"
+        "LEFTHOOK"
       ]
     },
     "test": {

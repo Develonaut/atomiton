@@ -57,13 +57,13 @@ function createWindow(): void {
         }
 
         // Only open dev tools when not running in CI/hooks (for snapshots/integration tests)
-        if (!process.env.CI && !process.env.GIT_HOOKS) {
+        if (!process.env.CI && !process.env.LEFTHOOK) {
           mainWindow?.webContents.openDevTools();
         }
       } catch (error) {
         console.error("Failed to load Redux DevTools:", error);
         // Only open dev tools when not running in CI/hooks (for snapshots/integration tests)
-        if (!process.env.CI && !process.env.GIT_HOOKS) {
+        if (!process.env.CI && !process.env.LEFTHOOK) {
           mainWindow?.webContents.openDevTools();
         }
       }
