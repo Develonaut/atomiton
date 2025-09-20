@@ -26,16 +26,16 @@ pre-push:
   commands:
     benchmark-tests:
       run: |
-        echo "📊 Checking for performance regressions..."
-        pnpm test:benchmark || {
+        echo "📊 Checking performance regressions in changed packages..."
+        pnpm turbo run test:benchmark --filter=[HEAD^] --output-logs=errors-only || {
           echo "❌ Benchmark tests failed!"
           echo "💡 Performance contracts must pass before pushing"
           exit 1
         }
     integration-tests:
       run: |
-        echo "🎭 Running integration tests..."
-        pnpm test:integration || {
+        echo "🎭 Running integration tests for changed packages..."
+        pnpm turbo run test:integration --filter=[HEAD^] --output-logs=errors-only || {
           echo "❌ Integration tests failed!"
           echo "💡 Fix integration tests before pushing"
           exit 1
