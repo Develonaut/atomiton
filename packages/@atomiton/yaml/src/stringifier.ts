@@ -1,5 +1,5 @@
 import { stringify, Document, parseDocument } from "yaml";
-import type { YamlStringifyOptions, YamlDocument } from "../types.js";
+import type { YamlStringifyOptions, YamlDocument } from "./types.js";
 
 export function stringifyYaml(
   value: unknown,

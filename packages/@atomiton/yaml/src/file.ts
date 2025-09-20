@@ -6,7 +6,7 @@ import type {
   YamlStringifyOptions,
   ParseResult,
   YamlDocument,
-} from "../types.js";
+} from "./types.js";
 
 export async function readYamlFile<T = YamlDocument>(
   filePath: string,
