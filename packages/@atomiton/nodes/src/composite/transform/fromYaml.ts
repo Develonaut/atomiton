@@ -1,4 +1,4 @@
-import { yaml } from "@atomiton/yaml";
+import { fromYaml as parseYaml } from "@atomiton/yaml";
 import type {
   CompositeDefinition,
   CompositeValidationContext,
@@ -23,7 +23,7 @@ export function fromYaml(
 
   try {
     // Parse YAML to JSON
-    const composite = yaml.fromYaml(yamlString) as CompositeDefinition;
+    const composite = parseYaml(yamlString) as CompositeDefinition;
 
     // Basic structure check
     if (!composite || typeof composite !== "object") {

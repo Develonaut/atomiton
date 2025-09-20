@@ -1,4 +1,4 @@
-import { yaml } from "@atomiton/yaml";
+import { toYaml as stringifyYaml, prettify } from "@atomiton/yaml";
 import type { Node } from "../../types";
 import type {
   CompositeDefinition,
@@ -145,12 +145,10 @@ export function toYaml(
     }
 
     // Convert to YAML using @atomiton/yaml
-    const yamlString = yaml.toYaml(cleanComposite, { indent: 2 });
+    const yamlString = stringifyYaml(cleanComposite, { indent: 2 });
 
     // Optionally format the output
-    const finalYaml = opts.formatOutput
-      ? yaml.prettify(yamlString)
-      : yamlString;
+    const finalYaml = opts.formatOutput ? prettify(yamlString) : yamlString;
 
     return {
       success: true,

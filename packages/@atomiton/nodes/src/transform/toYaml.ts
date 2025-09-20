@@ -5,7 +5,7 @@
  * Works for both atomic and composite nodes
  */
 
-import { yaml } from "@atomiton/yaml";
+import { toYaml as stringifyYaml } from "@atomiton/yaml";
 import type { Node } from "../types";
 import type { ValidationError } from "../validation/types";
 import type { TransformationResult } from "./fromYaml";
@@ -50,7 +50,7 @@ export function toYaml(
     }
 
     // Convert to YAML
-    const yamlString = yaml.toYaml(node, {
+    const yamlString = stringifyYaml(node, {
       indent: options.pretty ? 2 : 2, // Default to 2 spaces
       lineWidth: options.pretty ? 80 : 120,
     });

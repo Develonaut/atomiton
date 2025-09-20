@@ -5,7 +5,7 @@
  * Works for both atomic and composite nodes
  */
 
-import { yaml } from "@atomiton/yaml";
+import { fromYaml as parseYaml } from "@atomiton/yaml";
 import type { Node } from "../types";
 import type { ValidationError } from "../validation/types";
 
@@ -30,7 +30,7 @@ export function fromYaml(yamlString: string): TransformationResult<Node> {
 
   try {
     // Parse YAML to JSON
-    const node = yaml.fromYaml(yamlString) as Node;
+    const node = parseYaml(yamlString) as Node;
 
     // Basic structure check
     if (!node || typeof node !== "object") {

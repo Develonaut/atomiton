@@ -1,4 +1,4 @@
-import { yaml } from "@atomiton/yaml";
+import { fromYaml as parseYaml } from "@atomiton/yaml";
 
 /**
  * Extract metadata from a YAML string without full parsing
@@ -17,7 +17,7 @@ export function extractCompositeMetadata(yamlString: string): {
   }
 
   try {
-    const parsed = yaml.fromYaml<Record<string, unknown>>(yamlString);
+    const parsed = parseYaml<Record<string, unknown>>(yamlString);
     return {
       id: typeof parsed?.id === "string" ? parsed.id : undefined,
       name: typeof parsed?.name === "string" ? parsed.name : undefined,
