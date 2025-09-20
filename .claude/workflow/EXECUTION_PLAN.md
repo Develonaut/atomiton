@@ -72,6 +72,13 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **REQUIRED for ALL work:**
 
+- **Hudson**: Research existing tools BEFORE any custom implementation
+  - Check if framework/library already provides the solution
+  - Research standard approaches to the problem
+  - Document why custom solution is needed if no standard exists
+  - Block custom scripts/tools when built-in solutions exist
+  - Enforce: "The framework already solved this"
+
 - **Voorhees**: Cut through architectural complexity - find the SIMPLEST solution
   - Challenge every abstraction and pattern
   - Question if features are actually needed (YAGNI)
@@ -91,6 +98,12 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **REQUIRED checks during implementation:**
 
+- **Hudson**: Monitor for NIH (Not Invented Here) syndrome
+  - Stop custom implementations when discovering built-in solutions
+  - Audit package.json scripts for unnecessary complexity
+  - Ensure using tool features (Vitest projects, Playwright fixtures, etc.)
+  - Challenge: "Why are we writing this instead of using X?"
+
 - **Voorhees**: Ruthlessly slash complexity during implementation
   - Cut unnecessary abstractions
   - Remove clever code in favor of obvious code
@@ -98,6 +111,7 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
   - Challenge every design pattern - is it needed?
   - **Block unnecessary barrel exports** - direct imports for utils/types/services
   - Enforce: "Make it work, make it right, make it simple"
+
 - **Brian**: Determine testing requirements
   - Identify what tests are needed
   - Ensure test coverage is appropriate
