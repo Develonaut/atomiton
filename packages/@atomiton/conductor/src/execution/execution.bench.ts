@@ -4,9 +4,9 @@
  */
 
 import { bench, describe } from "vitest";
-import { createCompositeRunner } from "./execution/composite/compositeRunner";
-import { createExecutionStore } from "./store";
-import { createNodeExecutor } from "./execution/nodeExecutor";
+import { createCompositeRunner } from "./composite/compositeRunner";
+import { createExecutionStore } from "../store";
+import { createNodeExecutor } from "./nodeExecutor";
 import type { CompositeDefinition } from "@atomiton/nodes/executable";
 
 // Only run benchmarks in benchmark mode

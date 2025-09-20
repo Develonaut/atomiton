@@ -11,7 +11,7 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
-globalThis.ResizeObserver = ResizeObserverMock as any;
+globalThis.ResizeObserver = ResizeObserverMock as typeof ResizeObserver;
 
 // Mock IntersectionObserver for jsdom environment
 class IntersectionObserverMock {

@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider } from "@xyflow/react";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { describe, expect, it } from "vitest";
 import { useEditorNode } from "../hooks/useEditorNode";
 import type { EditorNode } from "../types/EditorNode";
