@@ -17,6 +17,11 @@
       "require": "./dist/vitest.cjs",
       "types": "./dist/vitest.d.ts"
     },
+    "./playwright": {
+      "import": "./dist/playwright.js",
+      "require": "./dist/playwright.cjs",
+      "types": "./dist/playwright.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -51,7 +56,8 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
-    "vite": "^7.0.0"
+    "vite": "^7.0.0",
+    "@playwright/test": "^1.40.0"
   },
   "keywords": [
     "vite",

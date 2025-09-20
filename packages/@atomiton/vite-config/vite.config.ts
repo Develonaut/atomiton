@@ -8,11 +8,7 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       include: ["src/**/*.ts"],
-      exclude: [
-        "src/**/*.test.ts",
-        "src/**/*.test.ts",
-        "src/**/*.bench.ts",
-      ],
+      exclude: ["src/**/*.test.ts", "src/**/*.test.ts", "src/**/*.bench.ts"],
     }),
   ],
   build: {
@@ -21,6 +17,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, "src/index.ts"),
         vitest: resolve(__dirname, "src/presets/vitest.ts"),
+        playwright: resolve(__dirname, "src/presets/playwright.ts"),
       },
       formats: ["es", "cjs"],
     },
@@ -34,6 +31,7 @@ export default defineConfig({
         "vite-plugin-dts",
         "vite-tsconfig-paths",
         "@tailwindcss/vite",
+        "@playwright/test",
         /^node:/,
       ],
       output: {

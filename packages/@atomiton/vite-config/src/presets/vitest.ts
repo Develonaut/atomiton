@@ -119,16 +119,18 @@ export function defineTestConfig(userConfig: UserConfig = {}): UserConfig {
       {
         test: {
           include: [
-            "src/**/*.test.{ts,tsx,js,jsx}",
-            "!src/**/*.int.test.{ts,tsx,js,jsx}",
+            "src/**/*.{test,spec}.{ts,tsx,js,jsx}",
+            "!src/**/*.int.{test,spec}.{ts,tsx,js,jsx}",
+            "!src/**/*.integration.{test,spec}.{ts,tsx,js,jsx}",
             "!src/**/*.bench.{ts,tsx,js,jsx}",
-            "!src/**/*.e2e.test.{ts,tsx,js,jsx}",
+            "!src/**/*.e2e.{test,spec}.{ts,tsx,js,jsx}",
           ],
           exclude: [
             "**/node_modules/**",
             "**/dist/**",
             "**/build/**",
             "**/*.int.*",
+            "**/*.integration.*",
             "**/*.benchmark.*",
             "**/*.e2e.*",
             "**/e2e/**",

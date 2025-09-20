@@ -14,7 +14,6 @@
     "test:unit:main": "vitest run --config vitest.main.config.ts",
     "test:integration": "vitest run src/__tests__/integration",
     "test:benchmark": "vitest bench --run || echo 'No benchmarks yet'",
-    "test:e2e:ui": "playwright test --ui",
     "kill": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\"",
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },
@@ -28,7 +27,6 @@
     "@atomiton/vite-config": "workspace:^",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
-    "@playwright/test": "^1.55.0",
     "@types/node": "catalog:",
     "cross-env": "^10.0.0",
     "electron": "^38.0.0",

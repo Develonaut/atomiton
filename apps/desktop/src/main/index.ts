@@ -56,10 +56,16 @@ function createWindow(): void {
           });
         }
 
-        mainWindow?.webContents.openDevTools();
+        // Only open dev tools when not running in CI/hooks (for snapshots/integration tests)
+        if (!process.env.CI && !process.env.GIT_HOOKS) {
+          mainWindow?.webContents.openDevTools();
+        }
       } catch (error) {
         console.error("Failed to load Redux DevTools:", error);
-        mainWindow?.webContents.openDevTools();
+        // Only open dev tools when not running in CI/hooks (for snapshots/integration tests)
+        if (!process.env.CI && !process.env.GIT_HOOKS) {
+          mainWindow?.webContents.openDevTools();
+        }
       }
     });
   }

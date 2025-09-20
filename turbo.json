@@ -15,7 +15,8 @@
         "JEST_WORKER_ID",
         "ELECTRON_RENDERER_URL",
         "CI",
-        "PLAYWRIGHT_BASE_URL"
+        "PLAYWRIGHT_BASE_URL",
+        "GIT_HOOKS"
       ]
     },
     "lint": {
@@ -28,7 +29,8 @@
         "JEST_WORKER_ID",
         "ELECTRON_RENDERER_URL",
         "CI",
-        "PLAYWRIGHT_BASE_URL"
+        "PLAYWRIGHT_BASE_URL",
+        "GIT_HOOKS"
       ]
     },
     "lint:fix": {
@@ -41,7 +43,8 @@
         "JEST_WORKER_ID",
         "ELECTRON_RENDERER_URL",
         "CI",
-        "PLAYWRIGHT_BASE_URL"
+        "PLAYWRIGHT_BASE_URL",
+        "GIT_HOOKS"
       ]
     },
     "check-types": {
@@ -54,7 +57,8 @@
         "JEST_WORKER_ID",
         "ELECTRON_RENDERER_URL",
         "CI",
-        "PLAYWRIGHT_BASE_URL"
+        "PLAYWRIGHT_BASE_URL",
+        "GIT_HOOKS"
       ]
     },
     "typecheck": {
@@ -67,7 +71,8 @@
         "JEST_WORKER_ID",
         "ELECTRON_RENDERER_URL",
         "CI",
-        "PLAYWRIGHT_BASE_URL"
+        "PLAYWRIGHT_BASE_URL",
+        "GIT_HOOKS"
       ]
     },
     "test": {

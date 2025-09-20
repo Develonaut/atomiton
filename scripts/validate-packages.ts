@@ -339,7 +339,7 @@ class PackageValidator {
     }
 
     // Summary
-    const isGitHook = process.env.HUSKY === "1";
+    const isGitHook = process.env.GIT_HOOKS === "1";
 
     if (!isGitHook) {
       console.log("\n📊 Validation Summary:");

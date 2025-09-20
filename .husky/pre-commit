@@ -2,8 +2,8 @@
 
 # Husky pre-commit hook - Run formatting, linting, and unit tests
 
-# Set HUSKY env var to reduce verbosity
-export HUSKY=1
+# Set env var to indicate running in git hooks (affects headless mode, dev tools, etc.)
+export GIT_HOOKS=1
 
 echo "🔍 Running pre-commit checks..."
 
