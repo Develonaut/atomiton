@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Husky pre-commit hook - Run formatting, linting, and smoke tests
+# Husky pre-commit hook - Run formatting, linting, and unit tests
 
 # Set HUSKY env var to reduce verbosity
 export HUSKY=1
@@ -26,15 +26,15 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "🔥 Running smoke tests..."
+echo "🧪 Running unit tests..."
 
-# Run smoke tests for all packages (using turbo for caching)
+# Run unit tests for all packages (using turbo for caching)
 # Use 'new-only' to show output only for non-cached tasks
 # Vitest will handle timing and reporting internally
-pnpm turbo run test:smoke --ui stream --output-logs=new-only --log-order=grouped
+pnpm turbo run test --ui stream --output-logs=new-only --log-order=grouped
 
 if [ $? -ne 0 ]; then
-  echo "❌ Smoke tests failed!"
+  echo "❌ Unit tests failed!"
   echo "💡 Fix failing tests before committing"
   exit 1
 fi

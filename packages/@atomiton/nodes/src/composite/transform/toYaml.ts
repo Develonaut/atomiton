@@ -20,6 +20,7 @@ import { isRecord, safeObject, safeString } from "./typeGuards";
  * Convert CompositeDefinition JSON to YAML string
  * Intelligently picks only the properties that belong in a CompositeDefinition
  * and ignores any extra properties (like React Flow props)
+ * REMOVE ME: Test change to trigger hooks and verify test execution
  */
 export function toYaml(
   composite: unknown,

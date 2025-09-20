@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Husky pre-push hook - Performance warnings and critical tests
+# Husky pre-push hook - Unit tests, integration tests, benchmarks, and E2E tests
 
 # Set HUSKY env var to reduce verbosity and trigger headless mode
 export HUSKY=1
@@ -11,23 +11,27 @@ echo "📤 Pre-push validation..."
 REMOTE="${1:-origin}"
 URL="$2"
 
-# Run smoke tests first (fast validation) - only for changed packages
-echo "🔥 Running smoke tests..."
+# Run unit tests first (fast validation) - only for changed packages
+echo "🧪 Running unit tests..."
 echo "   📦 Testing changed packages in parallel..."
 # Use Turbo's filter to only test packages with changes
-pnpm turbo run test:smoke --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped || {
-  echo "❌ Smoke tests failed!"
-  echo "💡 Fix smoke tests before pushing"
+pnpm turbo run test --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped || {
+  echo "❌ Unit tests failed!"
+  echo "💡 Fix unit tests before pushing"
+  exit 1
+}
+
+# Run integration tests
+echo "🔗 Running integration tests..."
+pnpm test:integration || {
+  echo "❌ Integration tests failed!"
+  echo "💡 Fix integration tests before pushing"
   exit 1
 }
 
 # Check for benchmark regressions
 echo "📊 Checking for performance regressions..."
-
-# Run benchmarks for changed packages using turbo's built-in change detection
-echo "📊 Running benchmarks for changed packages..."
-# Turbo will automatically detect changed packages and skip unchanged ones
-pnpm turbo run test:benchmark --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped 2>&1 || {
+pnpm test:benchmark || {
   echo "❌ Benchmark tests failed!"
   echo "💡 Performance contracts must pass before pushing"
   exit 1
