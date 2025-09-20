@@ -111,6 +111,11 @@
       "persistent": true,
       "env": ["NODE_ENV"]
     },
+    "test:integration": {
+      "dependsOn": ["^build"],
+      "outputs": ["test-results/**"],
+      "env": ["NODE_ENV", "CI"]
+    },
     "test:coverage": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**", ".nyc_output/**"],

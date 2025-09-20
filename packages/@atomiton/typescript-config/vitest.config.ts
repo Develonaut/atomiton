@@ -1,8 +1,7 @@
-import { defineConfig } from "vitest/config";
+import { defineTestConfig } from "@atomiton/vite-config/vitest";
 
-export default defineConfig({
+export default defineTestConfig({
   test: {
-    environment: "node",
     globals: true,
   },
 });

@@ -1,7 +1,14 @@
 export { defineLibraryConfig } from "./presets/library";
 export { defineReactLibraryConfig } from "./presets/react";
 export { defineAppConfig } from "./presets/app";
-export { defineVitestConfig, defineSmokeTestConfig } from "./presets/vitest";
+export {
+  defineVitestConfig,
+  defineTestConfig,
+  defineIntegrationTestConfig,
+  defineBenchmarkTestConfig,
+  defineUnitTestConfig,
+  defineSmokeTestConfig,
+} from "./presets/vitest";
 
 export { getTerserOptions } from "./utils/terser";
 export { createManualChunks } from "./utils/chunks";

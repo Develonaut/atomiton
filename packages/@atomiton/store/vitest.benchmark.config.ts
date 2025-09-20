@@ -1,3 +1,3 @@
-import { defineBenchmarkTestConfig } from "@atomiton/vite-config";
+import { defineBenchmarkTestConfig } from "@atomiton/vite-config/vitest";
 
 export default defineBenchmarkTestConfig();

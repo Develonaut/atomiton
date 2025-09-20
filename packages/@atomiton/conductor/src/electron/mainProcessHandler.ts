@@ -23,7 +23,7 @@ export function setupMainProcessHandler(config?: {
   // Verify we're in main process
   if (!events.ipc?.isAvailable() || events.ipc?.getEnvironment() !== "main") {
     throw new Error(
-      "Main process handler requires Electron main process context",
+      "Main process handler requires Electron main process context"
     );
   }
 

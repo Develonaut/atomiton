@@ -1,9 +1,8 @@
-/// <reference types="vitest" />
 import path from "path";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { defineConfig } from "vitest/config";
+import { defineTestConfig } from "@atomiton/vite-config/vitest";
 
-export default defineConfig({
+export default defineTestConfig({
   plugins: [tsconfigPaths()],
   resolve: {
     alias: {
@@ -51,11 +50,8 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
-    globals: true,
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     exclude: ["src/**/*.e2e.spec.ts", "src/__tests__/e2e/**"],
-    testTimeout: 10000,
-    hookTimeout: 10000,
   },
 });

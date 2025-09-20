@@ -2,7 +2,7 @@
  * Type-safe transformation functions for converting between node types
  */
 
-import type { Node } from "../../types";
+import type { Node, NodeEdge } from "../../types";
 import type { CompositeEdge, CompositeNodeSpec } from "../types";
 import {
   extractPosition,
@@ -128,8 +128,8 @@ export function transformToCompositeEdge(input: unknown): CompositeEdge | null {
   const id =
     safeString(input.id) || `edge-${Math.random().toString(36).slice(2)}`;
 
-  // Build the base edge - use any to bypass type checking for potentially missing fields
-  const edge: any = {
+  // Build the base edge - use Record to bypass type checking for potentially missing fields
+  const edge: Record<string, unknown> = {
     id,
   };
 
@@ -186,7 +186,7 @@ export function transformToCompositeEdge(input: unknown): CompositeEdge | null {
     edge.selectable = input.selectable;
   }
 
-  return edge;
+  return edge as NodeEdge;
 }
 
 /**

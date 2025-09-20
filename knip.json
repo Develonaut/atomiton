@@ -26,10 +26,6 @@
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]
     },
-    "packages/@atomiton/di": {
-      "entry": ["src/index.ts"],
-      "project": ["src/**/*.{ts,tsx}"]
-    },
     "packages/@atomiton/hooks": {
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]

@@ -85,7 +85,9 @@ export function defineVitestConfig(
               "**/*.spec.*",
             ],
           }
-        : undefined,
+        : {
+            enabled: false,
+          },
 
       // Fail fast in CI
       bail: isCI ? 1 : undefined,
@@ -104,25 +106,98 @@ export function defineVitestConfig(
 }
 
 /**
- * Smoke test preset - fast tests that should complete quickly
+ * Unit test configuration for co-located tests
+ * Finds test files next to their source files
  */
-export function defineSmokeTestConfig(userConfig: UserConfig = {}): UserConfig {
+export function defineTestConfig(userConfig: UserConfig = {}): UserConfig {
   return defineVitestConfig(
     {
-      coverage: false,
-      slowTestThreshold: 100, // Stricter for smoke tests
+      environment: "node",
+      slowTestThreshold: 300,
     },
     mergeConfig(
       {
         test: {
-          // Smoke test specific settings
-          bail: 1, // Stop on first failure
-          passWithNoTests: true,
-          testTimeout: 5000, // 5 second timeout for smoke tests
+          include: [
+            "src/**/*.test.{ts,tsx,js,jsx}",
+            "!src/**/*.int.test.{ts,tsx,js,jsx}",
+            "!src/**/*.bench.{ts,tsx,js,jsx}",
+            "!src/**/*.e2e.test.{ts,tsx,js,jsx}",
+          ],
+          exclude: [
+            "**/node_modules/**",
+            "**/dist/**",
+            "**/build/**",
+            "**/*.int.*",
+            "**/*.benchmark.*",
+            "**/*.e2e.*",
+            "**/e2e/**",
+            "**/integration/**",
+            "**/benchmark/**",
+          ],
+          testTimeout: 10000,
           hookTimeout: 10000,
+          passWithNoTests: true,
         },
       },
       userConfig,
     ),
   );
 }
+
+/**
+ * Integration test configuration for co-located tests
+ */
+export function defineIntegrationTestConfig(
+  userConfig: UserConfig = {},
+): UserConfig {
+  return defineVitestConfig(
+    {
+      environment: "node",
+      slowTestThreshold: 5000,
+    },
+    mergeConfig(
+      {
+        test: {
+          include: ["src/**/*.int.test.{ts,tsx,js,jsx}"],
+          exclude: ["**/node_modules/**", "**/dist/**", "**/build/**"],
+          testTimeout: 30000,
+          hookTimeout: 30000,
+          passWithNoTests: true,
+          pool: "forks",
+          poolOptions: {
+            forks: {
+              singleFork: true,
+            },
+          },
+        },
+      },
+      userConfig,
+    ),
+  );
+}
+
+/**
+ * Benchmark test configuration for co-located tests
+ */
+export function defineBenchmarkTestConfig(
+  userConfig: UserConfig = {},
+): UserConfig {
+  return mergeConfig(
+    defineConfig({
+      test: {
+        includeSource: [],
+        include: ["src/**/*.bench.{ts,tsx,js,jsx}"],
+        exclude: ["**/node_modules/**", "**/dist/**", "**/build/**"],
+        passWithNoTests: true,
+      },
+    }),
+    userConfig,
+  );
+}
+
+/**
+ * Aliases for backwards compatibility
+ */
+export const defineUnitTestConfig = defineTestConfig;
+export const defineSmokeTestConfig = defineTestConfig;

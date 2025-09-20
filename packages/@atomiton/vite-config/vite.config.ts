@@ -10,7 +10,7 @@ export default defineConfig({
       include: ["src/**/*.ts"],
       exclude: [
         "src/**/*.test.ts",
-        "src/**/*.smoke.test.ts",
+        "src/**/*.test.ts",
         "src/**/*.bench.ts",
       ],
     }),
@@ -18,10 +18,11 @@ export default defineConfig({
   build: {
     target: "es2020",
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
-      name: "AtomitonViteConfig",
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+        vitest: resolve(__dirname, "src/presets/vitest.ts"),
+      },
       formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: [

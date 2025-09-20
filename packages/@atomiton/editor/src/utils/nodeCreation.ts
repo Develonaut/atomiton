@@ -1,7 +1,7 @@
 import {
   createNode as createAtomitonNode,
   getNodeByType,
-} from "@atomiton/nodes/browser";
+} from "@atomiton/nodes";
 import { generateEdgeId, generateNodeId } from "@atomiton/utils";
 import type { EditorEdge } from "../hooks/useEditorEdges";
 import type { EditorNode, NodePosition } from "../types/EditorNode";

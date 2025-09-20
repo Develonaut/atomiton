@@ -1,10 +1,8 @@
-/// <reference types="vitest" />
-import { defineConfig } from "vitest/config";
+import { defineTestConfig } from "@atomiton/vite-config/vitest";
 
-export default defineConfig({
+export default defineTestConfig({
   test: {
     environment: "jsdom",
-    globals: true,
     setupFiles: ["@testing-library/jest-dom"],
   },
 });

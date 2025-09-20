@@ -1,4 +1,4 @@
-import { defineTestConfig } from "@atomiton/vite-config";
+import { defineTestConfig } from "@atomiton/vite-config/vitest";
 
 export default defineTestConfig({
   test: {

@@ -27,7 +27,7 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
       exclude: [
         "src/**/*.test.ts",
         "src/**/*.test.tsx",
-        "src/**/*.smoke.test.ts",
+        "src/**/*.test.ts",
         "src/**/*.bench.ts",
       ],
     }),

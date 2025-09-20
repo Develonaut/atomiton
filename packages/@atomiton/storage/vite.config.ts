@@ -21,8 +21,8 @@ export default defineLibraryConfig({
       lib: {
         entry: {
           index: resolve(__dirname, "src/index.ts"),
-          browser: resolve(__dirname, "src/browser.ts"),
-          desktop: resolve(__dirname, "src/desktop.ts"),
+          "exports/browser/index": resolve(__dirname, "src/exports/browser/index.ts"),
+          "exports/desktop/index": resolve(__dirname, "src/exports/desktop/index.ts"),
         },
         name: "AtomitonStorage",
         formats: ["es", "cjs"],

@@ -1,30 +1,18 @@
-import { defineConfig } from "vitest/config";
+import { defineTestConfig } from "@atomiton/vite-config/vitest";
 
-export default defineConfig({
+export default defineTestConfig({
   test: {
     globals: true,
-    environment: "node",
     testTimeout: 10000,
-    include: ["src/**/*.{test,spec}.{js,ts}"],
     exclude: [
       "node_modules",
       "out",
       ".turbo",
       "src/**/*.main.{test,spec}.{js,ts}",
+      "src/**/*.int.test.{ts,tsx}",
+      "src/**/*.int.{ts,tsx}",
       "src/__tests__/e2e/**",
-      "src/__tests__/integration/**",
     ],
     setupFiles: ["src/__tests__/test-setup.ts"],
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "json", "html"],
-      exclude: [
-        "node_modules/",
-        "src/__tests__/",
-        "**/*.d.ts",
-        "**/*.config.*",
-        "out/",
-      ],
-    },
   },
 });

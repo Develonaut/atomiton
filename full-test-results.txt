@@ -1,0 +1,195 @@
+
+> @atomiton/root@ test /Users/Ryan/Code/atomiton
+> turbo run test
+
+turbo 2.5.6
+
+• Packages in scope: @atomiton/client, @atomiton/conductor, @atomiton/desktop, @atomiton/editor, @atomiton/eslint-config, @atomiton/events, @atomiton/form, @atomiton/hooks, @atomiton/nodes, @atomiton/router, @atomiton/storage, @atomiton/store, @atomiton/typescript-config, @atomiton/ui, @atomiton/utils, @atomiton/validation, @atomiton/vite-config, @atomiton/yaml
+• Running test in 18 packages
+• Remote caching disabled
+@atomiton/typescript-config:test: cache hit, replaying logs efe690358ba7cf9b
+@atomiton/typescript-config:test: 
+@atomiton/typescript-config:test: > @atomiton/typescript-config@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/typescript-config
+@atomiton/typescript-config:test: > echo 'No tests for config package'
+@atomiton/typescript-config:test: 
+@atomiton/typescript-config:test: No tests for config package
+@atomiton/eslint-config:test: cache hit, replaying logs 00a7247645ab128a
+@atomiton/eslint-config:test: 
+@atomiton/eslint-config:test: > @atomiton/eslint-config@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/eslint-config
+@atomiton/eslint-config:test: > echo 'No tests for config package'
+@atomiton/eslint-config:test: 
+@atomiton/eslint-config:test: No tests for config package
+@atomiton/vite-config:test: cache hit, replaying logs 8b704465426e80e4
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test: > @atomiton/vite-config@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/vite-config
+@atomiton/vite-config:test: > vitest run
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test: ▲ [WARNING] The condition "types" here will never be used as it comes after both "import" and "require" [package.json]
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:     package.json:18:6:
+@atomiton/vite-config:test:       18 │       "types": "./dist/vitest.d.ts"
+@atomiton/vite-config:test:          ╵       ~~~~~~~
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:   The "import" condition comes earlier and will be used for all "import" statements:
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:     package.json:16:6:
+@atomiton/vite-config:test:       16 │       "import": "./dist/vitest.js",
+@atomiton/vite-config:test:          ╵       ~~~~~~~~
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:   The "require" condition comes earlier and will be used for all "require" calls:
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:     package.json:17:6:
+@atomiton/vite-config:test:       17 │       "require": "./dist/vitest.cjs",
+@atomiton/vite-config:test:          ╵       ~~~~~~~~~
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/vite-config
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:  ✓ src/utils.test.ts (6 tests) 2ms
+@atomiton/vite-config:test:  ✓ src/library.test.ts (5 tests) 3ms
+@atomiton/vite-config:test:  ✓ src/presets.test.ts (6 tests) 3ms
+@atomiton/vite-config:test: 
+@atomiton/vite-config:test:  Test Files  3 passed (3)
+@atomiton/vite-config:test:       Tests  17 passed (17)
+@atomiton/vite-config:test:    Start at  08:59:18
+@atomiton/vite-config:test:    Duration  1.44s (transform 98ms, setup 0ms, collect 2.09s, tests 8ms, environment 0ms, prepare 295ms)
+@atomiton/vite-config:test: 
+@atomiton/ui:test: cache miss, executing 7edb6ca447bf0c46
+@atomiton/hooks:test: cache miss, executing 8a338fc9f13ffa53
+@atomiton/validation:test: cache miss, executing 36872ef34bfab1c0
+@atomiton/yaml:test: cache miss, executing c2502d9a9ae730e5
+@atomiton/events:test: cache miss, executing f041fa0120fea3f4
+@atomiton/storage:test: cache miss, executing d83eff64ee924c64
+@atomiton/utils:test: cache miss, executing 5fea2d9e67ecad10
+@atomiton/hooks:test: 
+@atomiton/hooks:test: > @atomiton/hooks@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/hooks
+@atomiton/hooks:test: > vitest run
+@atomiton/hooks:test: 
+@atomiton/validation:test: 
+@atomiton/validation:test: > @atomiton/validation@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/validation
+@atomiton/validation:test: > vitest run
+@atomiton/validation:test: 
+@atomiton/yaml:test: 
+@atomiton/yaml:test: > @atomiton/yaml@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/yaml
+@atomiton/yaml:test: > vitest run
+@atomiton/yaml:test: 
+@atomiton/ui:test: 
+@atomiton/ui:test: > @atomiton/ui@0.1.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/ui
+@atomiton/ui:test: > vitest run
+@atomiton/ui:test: 
+@atomiton/events:test: 
+@atomiton/events:test: > @atomiton/events@0.2.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/events
+@atomiton/events:test: > vitest run
+@atomiton/events:test: 
+@atomiton/utils:test: 
+@atomiton/utils:test: > @atomiton/utils@0.1.1 test /Users/Ryan/Code/atomiton/packages/@atomiton/utils
+@atomiton/utils:test: > vitest run
+@atomiton/utils:test: 
+@atomiton/storage:test: 
+@atomiton/storage:test: > @atomiton/storage@0.2.0 test /Users/Ryan/Code/atomiton/packages/@atomiton/storage
+@atomiton/storage:test: > vitest run
+@atomiton/storage:test: 
+@atomiton/events:test: 
+@atomiton/events:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/events
+@atomiton/storage:test: 
+@atomiton/events:test: 
+@atomiton/storage:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/storage
+@atomiton/storage:test: 
+@atomiton/yaml:test: 
+@atomiton/yaml:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/yaml
+@atomiton/yaml:test: 
+@atomiton/validation:test: 
+@atomiton/validation:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/validation
+@atomiton/validation:test: 
+@atomiton/utils:test: 
+@atomiton/utils:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/utils
+@atomiton/utils:test: 
+@atomiton/hooks:test: 
+@atomiton/hooks:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/hooks
+@atomiton/hooks:test: 
+@atomiton/ui:test: 
+@atomiton/ui:test:  RUN  v3.2.4 /Users/Ryan/Code/atomiton/packages/@atomiton/ui
+@atomiton/ui:test: 
+@atomiton/events:test:  ✓ src/eventBus.test.ts (6 tests) 3ms
+@atomiton/events:test:  ✓ src/ipc.test.ts (9 tests) 123ms
+@atomiton/events:test: 
+@atomiton/events:test: ⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+@atomiton/events:test: 
+@atomiton/events:test:  FAIL  src/exports/desktop/createDesktopEventBus.test.ts [ src/exports/desktop/createDesktopEventBus.test.ts ]
+@atomiton/events:test: Error: Cannot find module './exports/desktop/createDesktopEventBus' imported from '/Users/Ryan/Code/atomiton/packages/@atomiton/events/src/exports/desktop/createDesktopEventBus.test.ts'
+@atomiton/events:test:  ❯ src/exports/desktop/createDesktopEventBus.test.ts:2:1
+@atomiton/events:test:       1| import { beforeEach, describe, expect, it, vi } from "vitest";
+@atomiton/events:test:       2| import createDesktopEventBus from "./exports/desktop/createDesktopEven…
+@atomiton/events:test:        | ^
+@atomiton/events:test:       3| 
+@atomiton/events:test:       4| // Mock the IPC bridge
+@atomiton/events:test: 
+@atomiton/events:test: Caused by: Error: Failed to load url ./exports/desktop/createDesktopEventBus (resolved id: ./exports/desktop/createDesktopEventBus) in /Users/Ryan/Code/atomiton/packages/@atomiton/events/src/exports/desktop/createDesktopEventBus.test.ts. Does the file exist?
+@atomiton/events:test:  ❯ loadAndTransform ../../../node_modules/.pnpm/vite@7.1.5_@types+node@20.19.16_jiti@2.5.1_lightningcss@1.30.1_terser@5.44.0_tsx@4.20.5_yaml@2.8.1/node_modules/vite/dist/node/chunks/dep-M_KD0XSK.js:26400:33
+@atomiton/events:test: 
+@atomiton/events:test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+@atomiton/events:test: 
+@atomiton/events:test: 
+@atomiton/events:test:  Test Files  1 failed | 2 passed (3)
+@atomiton/events:test:       Tests  15 passed (15)
+@atomiton/events:test:    Start at  08:59:52
+@atomiton/events:test:    Duration  1.86s (transform 184ms, setup 0ms, collect 309ms, tests 126ms, environment 0ms, prepare 2.01s)
+@atomiton/events:test: 
+@atomiton/storage:test: stderr | src/storageFactory.test.ts > Storage Factory > Browser createStorage > creates default memory storage when no engine provided
+@atomiton/storage:test: Browser storage: Using in-memory storage (data will not persist). IndexedDB support coming soon. To suppress this warning, explicitly pass createMemoryEngine() as the engine.
+@atomiton/storage:test: 
+@atomiton/utils:test:  ✓ src/changeCase/kebabCase.test.ts (13 tests) 3ms
+@atomiton/storage:test:  ✓ src/storageFactory.test.ts (22 tests) 343ms
+@atomiton/storage:test: 
+@atomiton/storage:test:  Test Files  1 passed (1)
+@atomiton/storage:test:       Tests  22 passed (22)
+@atomiton/storage:test:    Start at  08:59:52
+@atomiton/storage:test:    Duration  2.21s (transform 197ms, setup 0ms, collect 330ms, tests 343ms, environment 0ms, prepare 720ms)
+@atomiton/storage:test: 
+@atomiton/utils:test:  ✓ src/changeCase/titleCase.test.ts (7 tests) 2ms
+@atomiton/yaml:test:  ✓ src/utils/parser.test.ts (14 tests) 14ms
+@atomiton/utils:test:  ✓ src/index.contract.test.ts (1 test) 2ms
+@atomiton/utils:test:  ✓ src/generateId.test.ts (13 tests) 3ms
+@atomiton/utils:test:  ✓ src/delay.test.ts (4 tests) 15ms
+@atomiton/yaml:test:  ✓ src/utils/stringifier.test.ts (10 tests) 10ms
+@atomiton/events:test:  ELIFECYCLE  Test failed. See above for more details.
+@atomiton/utils:test:  ✓ src/changeCase/capitalize.test.ts (10 tests) 3ms
+@atomiton/events:test: ERROR: command finished with error: command (/Users/Ryan/Code/atomiton/packages/@atomiton/events) /Users/Ryan/Library/pnpm/.tools/pnpm/9.14.4/bin/pnpm run test exited (1)
+@atomiton/validation:test:  ✓ src/validation.test.ts (4 tests) 4ms
+@atomiton/utils:test: 
+@atomiton/utils:test:  Test Files  6 passed (6)
+@atomiton/utils:test:       Tests  48 passed (48)
+@atomiton/utils:test:    Start at  08:59:52
+@atomiton/utils:test:    Duration  2.99s (transform 197ms, setup 0ms, collect 664ms, tests 28ms, environment 1ms, prepare 2.51s)
+@atomiton/utils:test: 
+@atomiton/validation:test: 
+@atomiton/validation:test:  Test Files  1 passed (1)
+@atomiton/validation:test:       Tests  4 passed (4)
+@atomiton/validation:test:    Start at  08:59:52
+@atomiton/validation:test:    Duration  3.00s (transform 68ms, setup 0ms, collect 161ms, tests 4ms, environment 0ms, prepare 349ms)
+@atomiton/validation:test: 
+@atomiton/ui:test:  ELIFECYCLE  Test failed. See above for more details.
+@atomiton/validation:test: node:events:967
+@atomiton/validation:test:       emitter.removeListener(name, resolver);
+@atomiton/validation:test:               ^
+@atomiton/validation:test: 
+@atomiton/validation:test: TypeError: emitter.removeListener is not a function
+@atomiton/validation:test:     at ChildProcess.errorListener (node:events:967:15)
+@atomiton/validation:test:     at Object.onceWrapper (node:events:622:26)
+@atomiton/validation:test:     at ChildProcess.emit (node:events:519:35)
+@atomiton/validation:test:     at node:internal/child_process:881:39
+@atomiton/validation:test:     at process.processTicksAndRejections (node:internal/process/task_queues:85:11)
+@atomiton/validation:test: 
+@atomiton/validation:test: Node.js v23.11.0
+@atomiton/hooks:test:  ELIFECYCLE  Test failed. See above for more details.
+@atomiton/yaml:test:  ELIFECYCLE  Test failed. See above for more details.
+@atomiton/validation:test:  ELIFECYCLE  Test failed. See above for more details.
+@atomiton/events#test: command (/Users/Ryan/Code/atomiton/packages/@atomiton/events) /Users/Ryan/Library/pnpm/.tools/pnpm/9.14.4/bin/pnpm run test exited (1)
+
+ Tasks:    4 successful, 10 total
+Cached:    3 cached, 10 total
+  Time:    4.168s 
+Failed:    @atomiton/events#test
+
+ ERROR  run failed: command  exited (1)
+ ELIFECYCLE  Test failed. See above for more details.

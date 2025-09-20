@@ -1,12 +1,10 @@
-import { defineConfig } from "vitest/config";
+import { defineTestConfig } from "@atomiton/vite-config/vitest";
 import path from "path";
 
-export default defineConfig({
+export default defineTestConfig({
   test: {
     environment: "jsdom",
-    globals: true,
     setupFiles: ["./src/test-setup.ts"],
-    exclude: ["**/tests/**", "**/node_modules/**", "**/*.spec.ts"],
   },
   resolve: {
     alias: {

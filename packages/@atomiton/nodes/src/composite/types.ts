@@ -16,6 +16,9 @@ export type CompositeEdge = NodeEdge;
 export type CompositePosition = NodePosition;
 export type CompositeVariable = NodeVariable;
 
+// Re-export base types for convenience
+export type { NodeEdge } from "../types";
+
 /**
  * Composite-specific settings
  */

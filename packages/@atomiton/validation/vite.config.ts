@@ -7,7 +7,7 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       include: ['src/**/*.ts'],
-      exclude: ['src/**/*.test.ts', 'src/**/*.smoke.test.ts', 'src/**/*.bench.ts'],
+      exclude: ['src/**/*.test.ts', 'src/**/*.test.ts', 'src/**/*.bench.ts'],
     }),
   ],
   build: {
@@ -30,7 +30,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.{test,spec}.ts', 'src/**/*.smoke.test.ts'],
+    include: ['src/**/*.{test,spec}.ts', 'src/**/*.test.ts'],
     exclude: ['node_modules', 'dist'],
     coverage: {
       provider: 'v8',

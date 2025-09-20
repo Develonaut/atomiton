@@ -21,14 +21,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "pnpm test:unit",
-    "test:unit": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "test:watch": "vitest watch",
-    "test:smoke": "mkdir -p test-results && vitest run 'smoke' --passWithNoTests --reporter=json > test-results/speed-report.json || echo \"No smoke tests yet\"",
-    "test:benchmark": "vitest bench --run",
-    "test:e2e": "echo \"No E2E tests for this package\"",
-    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:benchmark": "vitest bench --config vitest.benchmark.config.ts"
   },
   "keywords": [
     "store",
