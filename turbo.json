@@ -100,7 +100,7 @@
       "env": ["NODE_ENV", "CI"]
     },
     "test:benchmark": {
-      "dependsOn": ["^build"],
+      "dependsOn": [],
       "inputs": ["src/**", "package.json", "tsconfig.json", "vitest.config.ts", "vitest.benchmark.config.ts"],
       "outputs": ["benchmark-results/**"],
       "env": ["NODE_ENV", "CI"]

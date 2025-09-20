@@ -34,8 +34,8 @@ pre-push:
         }
     integration-tests:
       run: |
-        echo "🎭 Running integration tests for changed packages..."
-        pnpm turbo run test:integration --filter=[HEAD^] --output-logs=errors-only || {
+        echo "🎭 Running integration tests for apps and changed packages..."
+        pnpm turbo run test:integration --filter=@atomiton/client --filter=@atomiton/desktop --filter=[HEAD^] --output-logs=errors-only || {
           echo "❌ Integration tests failed!"
           echo "💡 Fix integration tests before pushing"
           exit 1
