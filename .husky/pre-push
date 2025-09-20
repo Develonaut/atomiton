@@ -11,11 +11,11 @@ echo "📤 Pre-push validation..."
 REMOTE="${1:-origin}"
 URL="$2"
 
-# Run unit tests first (fast validation) - only for changed packages
-echo "🧪 Running unit tests..."
-echo "   📦 Testing changed packages in parallel..."
-# Use Turbo's filter to only test packages with changes
-pnpm turbo run test --filter="...[origin/main]" --ui stream --output-logs=new-only --log-order=grouped || {
+# Run ALL unit tests - comprehensive final validation before push
+echo "🧪 Running ALL unit tests..."
+echo "   📦 Testing all packages - final guard before push..."
+# Run all unit tests without filtering - this is our final safety check
+pnpm turbo run test --ui stream --output-logs=new-only --log-order=grouped || {
   echo "❌ Unit tests failed!"
   echo "💡 Fix unit tests before pushing"
   exit 1
@@ -37,13 +37,26 @@ pnpm test:benchmark || {
   exit 1
 }
 
-# Run critical E2E tests if client app changed
-echo "🎭 Checking for E2E tests..."
-# Use turbo to detect if client app changed and run E2E tests
-pnpm turbo run test:e2e --filter="@atomiton/client...[origin/main]" --ui stream --output-logs=new-only 2>&1 || {
-  echo "⚠️ Some E2E tests failed (non-blocking)"
-  echo "💡 Consider fixing before push"
+# Run critical user journey tests using Playwright (apps only)
+echo "🎭 Running user journey tests (critical paths)..."
+# Run Playwright tests for apps that have them - these are blocking and mandatory
+echo "   📱 Running client user journey tests..."
+cd apps/client && pnpm playwright test --config playwright.config.ts || {
+  echo "❌ Client user journey tests failed!"
+  echo "💡 Critical user journeys must pass before pushing"
+  echo "🚨 User journey test failures are BLOCKING - fix before push"
+  exit 1
 }
+cd ../..
+
+echo "   🖥️  Running desktop user journey tests..."
+cd apps/desktop && pnpm playwright test --config playwright.config.ts || {
+  echo "❌ Desktop user journey tests failed!"
+  echo "💡 Critical user journeys must pass before pushing"
+  echo "🚨 User journey test failures are BLOCKING - fix before push"
+  exit 1
+}
+cd ../..
 
 echo ""
 echo "✅ Pre-push checks complete - ready to push!"
