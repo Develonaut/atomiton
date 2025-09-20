@@ -1,9 +1,3 @@
-# Code Review Checklist
-
-**PR/Task:** \***\*\*\*\*\***\_\***\*\*\*\*\***  
-**Reviewer:** \***\*\*\*\*\***\_\***\*\*\*\*\***  
-**Date:** \***\*\*\*\*\***\_\***\*\*\*\*\***
-
 ## 🚨 Critical (Must Pass)
 
 ### Type Safety & Build
@@ -12,15 +6,20 @@
 - [ ] `pnpm typecheck` - passes with no errors
 - [ ] `pnpm lint` - passes with no errors or warnings
 - [ ] `pnpm test` - all tests pass
+- [ ] `pnpm test:integration` - all integration tests pass
+- [ ] `pnpm test:bench` - all benchmark tests pass
 - [ ] `pnpm build` - builds successfully
 - [ ] `pnpm dev` - development servers start without errors
 
 ### Code Quality
 
-- [ ] **No redundant comments** (remove one-liners that just repeat code)
+- [ ] **No redundant or unnecessary comments** (remove one-liners that just repeat code or don't add value)
+- [ ] **No jsdocs for functions (unless public API or complex logic)** (use self-documenting code instead)
 - [ ] **No commented-out code** (use git history instead)
+- [ ] **No barreling for non component files** (import directly)
 - [ ] **Files < ~250 lines** (break up if larger)
 - [ ] **Functions < 20 lines** (refactor if larger)
+- [ ] **Meaningful test written for new code** (not just coverage)
 
 ## 🍱 Bento Box Compliance
 
@@ -38,6 +37,9 @@
 - [ ] **No large useEffects** - if useEffect is complex, extract to custom hook
 - [ ] **No inline handlers with logic** - handlers should call hook functions or actions
 - [ ] **Composable structure** - components composed of smaller, focused components
+- [ ] **Performance conscious** - avoid unnecessary re-renders, use memoization where needed
+- [ ] **Handlers delegate** - event handlers call hook functions, not implement logic
+- [ ] **Handler Naming** - use names that match the event and start with the word "handle" (e.g. `handleOnClick`, `handleOnChange`)
 
 ### Hook Best Practices
 
@@ -46,15 +48,6 @@
 - [ ] **Clear I/O** - util functions have predictable inputs/outputs
 - [ ] **Minimal hook logic** - hooks only handle state, effects, and calling utils
 - [ ] **Testable functions** - business logic can be tested without React
-
-### Component Checklist
-
-- [ ] **Single responsibility** - component does ONE thing (display a form, show a list, etc.)
-- [ ] **Props are minimal** - only pass what's needed, avoid prop drilling
-- [ ] **State is appropriate** - UI state in component, business state in stores
-- [ ] **Effects are simple** - complex effects extracted to custom hooks
-- [ ] **Handlers delegate** - event handlers call hook functions, not implement logic
-- [ ] **Handler Naming** - use names that match the event and start with the word "handle" (e.g. `handleOnClick`, `handleOnChange`)
 
 ## 📋 Additional Checks
 
@@ -70,6 +63,7 @@
 - [ ] Complex logic is explained
 - [ ] README updated if API changed
 - [ ] CHANGELOG updated if needed
+- [ ] Outstanding relating items in docs are removed or moved to reflect completion.
 
 ### Security
 
@@ -107,6 +101,9 @@
 
 - Any `any` types present
 - Build/lint/test failures
+- pnpm dev fails
+- Tests are failing or missing
+- Significant code quality issues
 - Files over or around 250 lines
 - Significant redundant comments
 - Security concerns
