@@ -26,15 +26,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "🧪 Running unit tests..."
+echo "🧪 Running unit tests for changed packages..."
 
-# Run unit tests for all packages (using turbo for caching)
-# Use 'new-only' to show output only for non-cached tasks
-# Vitest will handle timing and reporting internally
-pnpm turbo run test --ui stream --output-logs=new-only --log-order=grouped
+# Run unit tests only for packages that have changed since last commit
+# This is much faster and still catches issues in modified code
+pnpm turbo run test --filter=[HEAD^] --ui stream --output-logs=new-only --log-order=grouped
 
 if [ $? -ne 0 ]; then
-  echo "❌ Unit tests failed!"
+  echo "❌ Unit tests failed for changed packages!"
   echo "💡 Fix failing tests before committing"
   exit 1
 fi

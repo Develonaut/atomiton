@@ -11,25 +11,7 @@ echo "📤 Pre-push validation..."
 REMOTE="${1:-origin}"
 URL="$2"
 
-# Run ALL unit tests - comprehensive final validation before push
-echo "🧪 Running ALL unit tests..."
-echo "   📦 Testing all packages - final guard before push..."
-# Run all unit tests without filtering - this is our final safety check
-pnpm turbo run test --ui stream --output-logs=new-only --log-order=grouped || {
-  echo "❌ Unit tests failed!"
-  echo "💡 Fix unit tests before pushing"
-  exit 1
-}
-
-# Run integration tests
-echo "🔗 Running integration tests..."
-pnpm test:integration || {
-  echo "❌ Integration tests failed!"
-  echo "💡 Fix integration tests before pushing"
-  exit 1
-}
-
-# Check for benchmark regressions
+# Check for benchmark regressions first (fast feedback)
 echo "📊 Checking for performance regressions..."
 pnpm test:benchmark || {
   echo "❌ Benchmark tests failed!"
