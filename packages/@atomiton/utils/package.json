@@ -21,8 +21,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest run",
-    "test:benchmark": "vitest bench --run || echo 'No benchmark tests yet'"
+    "test": "vitest run"
   },
   "keywords": [
     "utils",

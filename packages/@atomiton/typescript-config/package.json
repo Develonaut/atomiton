@@ -27,8 +27,7 @@
     "lint": "echo 'No linting needed for config-only package'",
     "lint:fix": "echo 'No linting fixes needed for config-only package'",
     "typecheck": "echo 'No TypeScript to check for config-only package'",
-    "test": "echo 'No tests for config package'",
-    "test:benchmark": "vitest bench --run --passWithNoTests || echo \"No benchmark tests for config-only package\""
+    "test": "echo 'No tests for config package'"
   },
   "publishConfig": {
     "access": "public"

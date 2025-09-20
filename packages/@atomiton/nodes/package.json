@@ -28,8 +28,7 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:integration": "vitest run --config vitest.integration.config.ts",
-    "test:benchmark": "vitest bench --run --passWithNoTests || echo \"No benchmark tests yet\""
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "keywords": [
     "nodes",

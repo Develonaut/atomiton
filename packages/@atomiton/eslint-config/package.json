@@ -27,8 +27,7 @@
     "typecheck": "echo 'No TypeScript to check for config-only package'",
     "lint": "echo 'Linting eslint-config itself'",
     "lint:fix": "echo 'Linting eslint-config itself with fix'",
-    "test": "echo 'No tests for config package'",
-    "test:benchmark": "vitest bench --run --passWithNoTests || echo \"No benchmark tests for config-only package\""
+    "test": "echo 'No tests for config package'"
   },
   "keywords": [
     "eslint",
