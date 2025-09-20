@@ -19,29 +19,13 @@ pnpm test:benchmark || {
   exit 1
 }
 
-# Start dev environment for integration tests
-echo "🚀 Starting dev environment for integration tests..."
-pnpm dev &
-DEV_PID=$!
-
-echo "   ⏳ Waiting for dev environment to be ready..."
-npx wait-on http://localhost:5173 --timeout 60000
-sleep 3  # Brief pause for desktop to start after client
-
-# Run integration tests (includes critical user journeys)
-echo "🎭 Running integration tests (critical paths)..."
-echo "   🔗 Running all integration tests from root..."
+# Run integration tests (they will handle their own dev environment setup)
+echo "🎭 Running integration tests..."
 pnpm test:integration || {
   echo "❌ Integration tests failed!"
-  echo "💡 Critical user journeys must pass before pushing"
-  echo "🚨 Integration test failures are BLOCKING - fix before push"
-  kill $DEV_PID 2>/dev/null || true
+  echo "💡 Fix integration tests before pushing"
   exit 1
 }
-
-echo "   🧹 Cleaning up dev environment..."
-kill $DEV_PID 2>/dev/null || true
-pnpm kill && pnpm kill:electron
 
 echo ""
 echo "✅ Pre-push checks complete - ready to push!"
