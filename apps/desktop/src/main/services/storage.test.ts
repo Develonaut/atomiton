@@ -1,9 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { app } from "electron";
-import {
-  createFileSystemEngine,
-  type IStorageEngine,
-} from "@atomiton/storage";
+import { createFileSystemEngine, type IStorageEngine } from "@atomiton/storage";
 import { initializeStorage } from "../../main/services/storage";
 
 // Mock the storage factory

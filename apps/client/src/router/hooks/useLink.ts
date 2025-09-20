@@ -1,8 +1,8 @@
 import { useHover } from "@atomiton/hooks";
 import type { NavigateOptions } from "@atomiton/router";
 import { useCallback } from "react";
-import { useRouter } from "../index";
-import type { AppRouteState } from "../types";
+import { useRouter } from "@/router/index";
+import type { AppRouteState } from "@/router/types";
 
 export type UseLinkOptions = {
   preloadDelay?: number;

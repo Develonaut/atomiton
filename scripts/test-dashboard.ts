@@ -350,7 +350,23 @@ function displayDashboard(): void {
   console.log("─".repeat(45));
 
   // Load benchmark data from test-results
-  const benchmarkData: any[] = [];
+  interface BenchmarkResult {
+    name: string;
+    hz: number;
+    mean: number;
+  }
+
+  interface BenchmarkReport {
+    benchmarks: BenchmarkResult[];
+  }
+
+  interface BenchmarkData {
+    name: string;
+    report: BenchmarkReport;
+    baseline: BenchmarkReport | null;
+  }
+
+  const benchmarkData: BenchmarkData[] = [];
 
   sortedPackages.forEach((pkg) => {
     if (pkg.hasBenchmark) {
@@ -397,14 +413,14 @@ function displayDashboard(): void {
         // Show top 3 benchmarks
         const topBenchmarks = data.report.benchmarks.slice(0, 3);
 
-        topBenchmarks.forEach((bench: any) => {
+        topBenchmarks.forEach((bench: BenchmarkResult) => {
           const name = bench.name.substring(0, 25).padEnd(25);
           const ops = `${bench.hz.toLocaleString()} ops/s`;
           const mean = `${bench.mean.toFixed(4)}ms`;
 
           if (data.baseline) {
             const baselineBench = data.baseline.benchmarks.find(
-              (b: any) => b.name === bench.name,
+              (b: BenchmarkResult) => b.name === bench.name,
             );
 
             if (baselineBench) {

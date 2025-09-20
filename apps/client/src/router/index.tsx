@@ -1,8 +1,8 @@
 import { createRouter } from "@atomiton/router";
-import { LoadingFallback, RouteErrorBoundary } from "./components";
-import { routes } from "./routes";
+import { LoadingFallback, RouteErrorBoundary } from "@/router/components";
+import { routes } from "@/router/routes";
 import NotFoundPage from "@/templates/NotFoundPage";
-import "./types"; // Import type augmentations
+import "@/router/types"; // Import type augmentations
 
 export const {
   router,
@@ -22,6 +22,9 @@ export const {
   defaultNotFoundComponent: NotFoundPage,
 });
 
-export { useLink } from "./hooks/useLink";
-export type { UseLinkOptions, AppNavigateOptions } from "./hooks/useLink";
-export type { EditorRouteState, AppRouteState } from "./types";
+export { useLink } from "@/router/hooks/useLink";
+export type {
+  UseLinkOptions,
+  AppNavigateOptions,
+} from "@/router/hooks/useLink";
+export type { EditorRouteState, AppRouteState } from "@/router/types";

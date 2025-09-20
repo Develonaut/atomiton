@@ -307,7 +307,7 @@ After migrating components, remove dependencies that are now provided by @atomit
 ```json
 // apps/client/tsconfig.json
 {
-  "extends": "@atomiton/typescript-config/react.json",
+  "extends": "@atomiton/typescript-config/react-bundler.json",
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],

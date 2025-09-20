@@ -1,15 +1,8 @@
 {
-  "extends": "@atomiton/typescript-config/react-library.json",
+  "extends": "@atomiton/typescript-config/react-bundler.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["@testing-library/jest-dom/vitest"],
-    "paths": {
-      "@/*": ["./src/*", "./*"]
-    },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": ["@testing-library/jest-dom/vitest"]
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "dist"]

@@ -18,9 +18,10 @@ Based on analysis of 15 existing packages, the following patterns have been iden
    - Full export/import patterns
 
 2. **Configuration Packages** (`@atomiton/eslint-config`, `@atomiton/typescript-config`)
-   - Shared configuration files
+   - Shared configuration files with multiple presets
    - Minimal build requirements
    - Focus on reusable settings
+   - TypeScript config includes path alias support across all presets
 
 3. **Development Packages** (`@atomiton/hooks`, `@atomiton/form`)
    - Source-only packages (no build step)
@@ -86,7 +87,7 @@ Every package MUST include these files:
 
 ### 2. `tsconfig.json`
 
-**For React packages:**
+**For React packages using @/ path aliases:**
 
 ```json
 {
@@ -100,14 +101,39 @@ Every package MUST include these files:
     "sourceMap": true,
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "types": ["node", "vitest/globals"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*", "./*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
 ```
 
-**For Node packages:**
+**For Node packages using @/ path aliases:**
+
+```json
+{
+  "extends": "@atomiton/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "types": ["node", "vitest/globals"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*", "./*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+**For configuration packages (no @/ imports needed):**
 
 ```json
 {
@@ -143,6 +169,79 @@ export default config;
 ```
 
 ### 4. `vite.config.ts` (for library packages)
+
+**For packages using @/ path aliases:**
+
+```ts
+import { defineConfig } from "vite";
+import { resolve } from "path";
+import { visualizer } from "rollup-plugin-visualizer";
+import dts from "vite-plugin-dts";
+
+export default defineConfig({
+  plugins: [
+    dts({
+      insertTypesEntry: true,
+      include: ["src/**/*.ts", "src/**/*.tsx"],
+      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    }),
+  ],
+  build: {
+    target: "es2020",
+    lib: {
+      entry: resolve(__dirname, "src/index.ts"),
+      name: "AtomitonPackageName",
+      formats: ["es", "cjs"],
+      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
+    },
+    rollupOptions: {
+      external: [
+        // List external dependencies that shouldn't be bundled
+      ],
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
+        },
+      },
+      plugins: [
+        visualizer({
+          filename: "dist/stats.html",
+          open: false,
+          gzipSize: true,
+          brotliSize: true,
+        }),
+      ],
+    },
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ["console.log", "console.debug"],
+      },
+      mangle: {
+        keep_classnames: true,
+        keep_fnames: true,
+      },
+    },
+    sourcemap: true,
+    reportCompressedSize: true,
+  },
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src"),
+    },
+  },
+  test: {
+    environment: "node",
+    globals: true,
+  },
+});
+```
+
+**For simple packages without @/ aliases:**
 
 ```ts
 import { defineConfig } from "vite";

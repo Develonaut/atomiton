@@ -1,14 +1,8 @@
 {
-  "extends": "@atomiton/typescript-config/react-library.json",
+  "extends": "@atomiton/typescript-config/react-bundler.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
-    "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

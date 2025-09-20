@@ -1,8 +1,13 @@
 import { styled } from "@atomiton/ui";
 import type { ReactFlowProps } from "@xyflow/react";
 import { ReactFlow } from "@xyflow/react";
-import { DELETE_KEY_CODES, MAX_ZOOM, MIN_ZOOM, NODE_TYPES } from "./constants";
-import "./styles.css";
+import {
+  DELETE_KEY_CODES,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  NODE_TYPES,
+} from "@/components/Canvas/constants";
+import "@/components/Canvas/styles.css";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",

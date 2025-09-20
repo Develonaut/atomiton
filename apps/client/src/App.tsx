@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import ErrorBoundary from "./components/ErrorBoundary";
-import Providers from "./components/Providers";
-import { RouterProvider } from "./router";
-import { errorReporter } from "./utils/errorReporting";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import Providers from "@/components/Providers";
+import { RouterProvider } from "@/router";
+import { errorReporter } from "@/utils/errorReporting";
 import type { ErrorInfo } from "react";
 
 function AppContent() {

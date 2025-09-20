@@ -1,5 +1,5 @@
-import { router } from "./router";
-import { routes } from "./router/routes";
+import { router } from "@/router";
+import { routes } from "@/router/routes";
 import { describe, expect, it, vi } from "vitest";
 
 describe("Preloading and Lazy Loading Smoke Tests", () => {

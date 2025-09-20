@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ExecutionRequest } from "./interfaces/IExecutionEngine";
+import type { events } from "@atomiton/events/desktop";
 
 // Mock the events module
 vi.mock("@atomiton/events/desktop", () => ({
@@ -24,7 +24,7 @@ import { createIPCTransport } from "./ipcTransport";
 
 describe("IPC Transport", () => {
   let transport: ReturnType<typeof createIPCTransport>;
-  let mockEvents: any;
+  let mockEvents: typeof events;
 
   beforeEach(async () => {
     vi.clearAllMocks();

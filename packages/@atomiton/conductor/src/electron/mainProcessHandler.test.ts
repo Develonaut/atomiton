@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type {
   ExecutionRequest,
   ExecutionResult,
 } from "../interfaces/IExecutionEngine";
+import type { events } from "@atomiton/events/desktop";
 
 // Mock the events module
 vi.mock("@atomiton/events/desktop", () => ({
@@ -25,8 +25,8 @@ import { setupMainProcessHandler } from "./mainProcessHandler";
 import { createLocalTransport } from "../transport/localTransport";
 
 describe("Main Process Handler", () => {
-  let mockEvents: any;
-  let mockLocalTransport: any;
+  let mockEvents: typeof events;
+  let mockLocalTransport: ReturnType<typeof createLocalTransport>;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -58,7 +58,7 @@ describe("Main Process Handler", () => {
       expect(typeof handler.cleanup).toBe("function");
       expect(mockEvents.on).toHaveBeenCalledWith(
         "conductor:execute",
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -66,7 +66,7 @@ describe("Main Process Handler", () => {
       mockEvents.ipc.isAvailable.mockReturnValue(false);
 
       expect(() => setupMainProcessHandler()).toThrow(
-        "Main process handler requires Electron main process context"
+        "Main process handler requires Electron main process context",
       );
     });
 
@@ -75,7 +75,7 @@ describe("Main Process Handler", () => {
       mockEvents.ipc.getEnvironment.mockReturnValue("renderer");
 
       expect(() => setupMainProcessHandler()).toThrow(
-        "Main process handler requires Electron main process context"
+        "Main process handler requires Electron main process context",
       );
     });
   });
@@ -91,7 +91,7 @@ describe("Main Process Handler", () => {
 
       // Extract the execute handler
       executeHandler = mockEvents.on.mock.calls.find(
-        (call) => call[0] === "conductor:execute"
+        (call) => call[0] === "conductor:execute",
       )?.[1];
 
       expect(executeHandler).toBeDefined();
@@ -209,7 +209,7 @@ describe("Main Process Handler", () => {
       await executeHandler(message);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        "[Main] Executing composite: test-composite"
+        "[Main] Executing composite: test-composite",
       );
 
       consoleSpy.mockRestore();
@@ -252,7 +252,7 @@ describe("Main Process Handler", () => {
 
       expect(mockEvents.off).toHaveBeenCalledWith(
         "conductor:execute",
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -293,7 +293,7 @@ describe("Main Process Handler", () => {
 
       setupMainProcessHandler();
       executeHandler = mockEvents.on.mock.calls.find(
-        (call) => call[0] === "conductor:execute"
+        (call) => call[0] === "conductor:execute",
       )?.[1];
     });
 
@@ -339,13 +339,13 @@ describe("Main Process Handler", () => {
         "conductor:result",
         expect.objectContaining({
           id: "id-1",
-        })
+        }),
       );
       expect(mockEvents.emit).toHaveBeenCalledWith(
         "conductor:result",
         expect.objectContaining({
           id: "id-2",
-        })
+        }),
       );
     });
   });

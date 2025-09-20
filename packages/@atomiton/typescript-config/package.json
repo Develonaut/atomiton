@@ -10,6 +10,10 @@
     "./base.json": "./base.json",
     "./library.json": "./library.json",
     "./react-library.json": "./react-library.json",
+    "./bundler.json": "./bundler.json",
+    "./react-bundler.json": "./react-bundler.json",
+    "./development.json": "./development.json",
+    "./react-development.json": "./react-development.json",
     "./package.json": "./package.json"
   },
   "keywords": [
@@ -31,6 +35,11 @@
   },
   "files": [
     "base.json",
-    "react-library.json"
+    "library.json",
+    "react-library.json",
+    "bundler.json",
+    "react-bundler.json",
+    "development.json",
+    "react-development.json"
   ]
 }

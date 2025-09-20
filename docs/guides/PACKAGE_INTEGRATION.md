@@ -88,6 +88,44 @@ packages/[package-name]/
 
 ### 3. TypeScript Configuration
 
+**For React packages:**
+
+```json
+{
+  "extends": "@atomiton/typescript-config/react-library.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*", "./*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+**For Node packages:**
+
+```json
+{
+  "extends": "@atomiton/typescript-config/base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*", "./*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+**For configuration packages (no @/ imports needed):**
+
 ```json
 {
   "extends": "@atomiton/typescript-config/base.json",
@@ -101,6 +139,8 @@ packages/[package-name]/
 ```
 
 ### 4. Vite Configuration
+
+**For packages using @/ path aliases:**
 
 ```typescript
 import { defineConfig } from "vite";
@@ -120,6 +160,26 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
+    },
+  },
+});
+```
+
+**For simple packages without @/ aliases:**
+
+```typescript
+import { defineConfig } from "vite";
+import { resolve } from "path";
+
+export default defineConfig({
+  build: {
+    lib: {
+      entry: resolve(__dirname, "src/index.ts"),
+      formats: ["es"],
+      fileName: "index",
+    },
+    rollupOptions: {
+      external: ["react", "react-dom", /^node:/],
     },
   },
 });
@@ -145,7 +205,16 @@ Use workspace protocol for internal dependencies:
 All packages should extend shared configurations:
 
 - `@atomiton/eslint-config` - ESLint rules
-- `@atomiton/typescript-config` - TypeScript settings
+- `@atomiton/typescript-config` - TypeScript settings with path alias support
+
+**Available TypeScript configurations:**
+
+- `@atomiton/typescript-config/base.json` - Base configuration with @/ alias support
+- `@atomiton/typescript-config/react-library.json` - React library configuration
+- `@atomiton/typescript-config/bundler.json` - Bundler-specific configuration
+- `@atomiton/typescript-config/react-bundler.json` - React bundler configuration
+- `@atomiton/typescript-config/development.json` - Development configuration
+- `@atomiton/typescript-config/react-development.json` - React development configuration
 
 ## Build Pipeline
 
@@ -243,16 +312,28 @@ export * from "./types";
 
 ### Path Aliases
 
+**Use @/ for internal package imports (requires baseUrl configuration):**
+
 ```typescript
-// Use @ for internal package imports
+// Internal imports within the same package
 import { Component } from "@/components";
 import { util } from "@/utils";
+import { MyType } from "@/types";
 ```
+
+**Important: Packages using @/ imports must:**
+
+1. Include `"baseUrl": "."` in their tsconfig.json
+2. Include `"paths": { "@/*": ["src/*", "./*"] }` in their tsconfig.json
+3. Configure Vite alias if using a build step
 
 ### Workspace References
 
+**Cross-package imports remain unchanged:**
+
 ```typescript
-// Import from other workspace packages
+// Import from other workspace packages (unchanged)
 import { Theme } from "@atomiton/theme";
 import { Core } from "@atomiton/core";
+import { Button } from "@atomiton/ui";
 ```

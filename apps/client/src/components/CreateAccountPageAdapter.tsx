@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@/router";
-import ButtonAdapter from "./ButtonAdapter";
+import ButtonAdapter from "@/components/ButtonAdapter";
 import Login from "@/components/Login";
 import Image from "@/components/Image";
 import Field from "@/components/Field";

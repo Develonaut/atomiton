@@ -1,16 +1,8 @@
 {
-  "extends": "@atomiton/typescript-config/react-library.json",
+  "extends": "@atomiton/typescript-config/react-development.json",
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "types": ["node", "vitest/globals"],
-    "resolveJsonModule": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

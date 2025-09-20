@@ -35,10 +35,12 @@ describe("Services Integration", () => {
         cleanup: vi.fn(),
       };
 
-      vi.mocked(initializeStorage).mockReturnValue(
+      (initializeStorage as ReturnType<typeof vi.fn>).mockReturnValue(
         mockStorage as IStorageEngine,
       );
-      vi.mocked(initializeConductor).mockReturnValue(mockConductor);
+      (initializeConductor as ReturnType<typeof vi.fn>).mockReturnValue(
+        mockConductor,
+      );
 
       // Act
       const result = initializeServices();
@@ -68,10 +70,12 @@ describe("Services Integration", () => {
         cleanup: vi.fn(),
       };
 
-      vi.mocked(initializeStorage).mockReturnValue(
+      (initializeStorage as ReturnType<typeof vi.fn>).mockReturnValue(
         mockStorage as IStorageEngine,
       );
-      vi.mocked(initializeConductor).mockReturnValue(mockConductor);
+      (initializeConductor as ReturnType<typeof vi.fn>).mockReturnValue(
+        mockConductor,
+      );
 
       // Act
       initializeServices();

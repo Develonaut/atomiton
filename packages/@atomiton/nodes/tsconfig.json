@@ -1,14 +1,8 @@
 {
-  "extends": "@atomiton/typescript-config/library.json",
+  "extends": "@atomiton/typescript-config/development.json",
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "types": ["node", "vitest/globals"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
       "@/base/*": ["src/base/*"],
       "@/types": ["src/types"],
       "@/registry": ["src/registry"]

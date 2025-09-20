@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { router } from "./router";
-import { routes } from "./router/routes";
+import { router } from "@/router";
+import { routes } from "@/router/routes";
 
 describe("Router", () => {
   it("router package should be importable", async () => {
@@ -24,7 +24,7 @@ describe("Router", () => {
       expect(typeof route.component).toBe("function");
       const fnString = route.component.toString();
       expect(fnString).toMatch(
-        /import\(|import\("|__vite_ssr_dynamic_import__/
+        /import\(|import\("|__vite_ssr_dynamic_import__/,
       );
     });
   });

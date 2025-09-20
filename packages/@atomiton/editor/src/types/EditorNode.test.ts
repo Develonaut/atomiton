@@ -238,9 +238,12 @@ describe("EditorNode type guards", () => {
       });
 
       it("should handle circular references gracefully", () => {
-        const circular: any = {
+        const circular: EditorNode & { self?: unknown } = {
           id: "node-1",
           type: "test-node",
+          name: "Test Node",
+          category: "test",
+          data: {},
           position: { x: 100, y: 200 },
         };
         circular.self = circular;

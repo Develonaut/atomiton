@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import { setupGlobalErrorHandlers } from "./utils/globalErrorHandler";
+import App from "@/App";
+import { setupGlobalErrorHandlers } from "@/utils/globalErrorHandler";
 // Import UI theme variables first - must be before ReactFlow styles
 import "@atomiton/ui/theme/variables.css";
 // Import Vite-compatible CSS with Google Fonts

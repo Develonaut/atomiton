@@ -5,12 +5,12 @@
 
 import { describe, expect, it } from "vitest";
 // Import hooks directly to avoid component import issues in test environment
-import { useEditorNodes } from "./hooks/useEditorNodes";
-import { useEditorEdges } from "./hooks/useEditorEdges";
-import { useEditorViewport } from "./hooks/useEditorViewport";
-import { useEditorNode } from "./hooks/useEditorNode";
-import { useSelectedNode } from "./hooks/useSelectedNode";
-import { useAddNode } from "./hooks/useAddNode";
+import { useEditorNodes } from "@/hooks/useEditorNodes";
+import { useEditorEdges } from "@/hooks/useEditorEdges";
+import { useEditorViewport } from "@/hooks/useEditorViewport";
+import { useEditorNode } from "@/hooks/useEditorNode";
+import { useSelectedNode } from "@/hooks/useSelectedNode";
+import { useAddNode } from "@/hooks/useAddNode";
 import {
   calculateNodePosition,
   createDefaultEditorNode,
@@ -18,7 +18,7 @@ import {
   createNode,
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
-} from "./utils/nodeCreation";
+} from "@/utils/nodeCreation";
 
 describe("Editor Package Smoke Tests", () => {
   describe("Public API Exports", () => {
