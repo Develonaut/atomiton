@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { setupMainProcessHandler } from "@atomiton/conductor/desktop";
-import { initializeConductor } from "../../main/services/conductor";
+import { initializeConductor } from "@/main/services/conductor";
 import type { IStorageEngine } from "@atomiton/storage";
 
 // Mock the conductor factory
@@ -36,14 +36,18 @@ describe("Conductor Service", () => {
 
       // Assert
       expect(setupMainProcessHandler).toHaveBeenCalledWith({
+        concurrency: 4,
         storage: mockStorage,
+        timeout: 60000,
       });
       expect(result).toBe(mockConductor);
     });
 
-    it("When conductor is created, Then should log successful initialization", () => {
+    it("When conductor initialization fails outside Electron context, Then should log warning", () => {
       // Arrange
-      const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+      const consoleWarnSpy = vi
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
       const mockStorage: IStorageEngine = {
         save: vi.fn(),
         load: vi.fn(),
@@ -52,22 +56,23 @@ describe("Conductor Service", () => {
         exists: vi.fn(),
         getInfo: vi.fn(),
       };
-      const mockConductor = {
-        execute: vi.fn(),
-        configureTransport: vi.fn(),
-        cleanup: vi.fn(),
-      };
-      vi.mocked(setupMainProcessHandler).mockReturnValue(mockConductor);
+      const electronError = new Error(
+        "Main process handler requires Electron main process context",
+      );
+      vi.mocked(setupMainProcessHandler).mockImplementation(() => {
+        throw electronError;
+      });
 
       // Act
-      initializeConductor(mockStorage as IStorageEngine);
+      const result = initializeConductor(mockStorage as IStorageEngine);
 
       // Assert
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Conductor initialized with storage successfully",
+      expect(result).toBeNull();
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        "Conductor initialization skipped: Not in Electron context",
       );
 
-      consoleSpy.mockRestore();
+      consoleWarnSpy.mockRestore();
     });
   });
 });

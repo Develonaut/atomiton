@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { initializeServices } from "./main/services";
-import { initializeStorage } from "./main/services/storage";
-import { initializeConductor } from "./main/services/conductor";
+import { initializeServices } from "@/main/services";
+import { initializeStorage } from "@/main/services/storage";
+import { initializeConductor } from "@/main/services/conductor";
 import type { IStorageEngine } from "@atomiton/storage";
 
 // Integration tests for error handling - test real failure scenarios

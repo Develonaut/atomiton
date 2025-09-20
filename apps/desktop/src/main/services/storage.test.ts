@@ -1,11 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { app } from "electron";
-import { createFileSystemEngine, type IStorageEngine } from "@atomiton/storage";
-import { initializeStorage } from "../../main/services/storage";
+import {
+  createStorage,
+  createFileSystemEngine,
+  type IStorageEngine,
+} from "@atomiton/storage/desktop";
+import { initializeStorage } from "@/main/services/storage";
+import path from "path";
 
 // Mock the storage factory
-vi.mock("@atomiton/storage", () => ({
+vi.mock("@atomiton/storage/desktop", () => ({
   createFileSystemEngine: vi.fn(),
+  createStorage: vi.fn(),
 }));
 
 describe("Storage Service", () => {
@@ -27,6 +33,7 @@ describe("Storage Service", () => {
       vi.mocked(createFileSystemEngine).mockReturnValue(
         mockStorage as IStorageEngine,
       );
+      vi.mocked(createStorage).mockReturnValue(mockStorage as IStorageEngine);
 
       // Act
       const result = initializeStorage();
@@ -34,7 +41,10 @@ describe("Storage Service", () => {
       // Assert
       expect(app.getPath).toHaveBeenCalledWith("userData");
       expect(createFileSystemEngine).toHaveBeenCalledWith({
-        baseDir: "/tmp/electron-test-userData",
+        baseDir: path.join("/mock/userData", "atomiton-data"),
+      });
+      expect(createStorage).toHaveBeenCalledWith({
+        engine: mockStorage,
       });
       expect(result).toBe(mockStorage);
     });
@@ -42,7 +52,7 @@ describe("Storage Service", () => {
     it("When storage creation fails, Then should quit app gracefully", () => {
       // Arrange
       const mockError = new Error("Failed to create storage");
-      vi.mocked(createFileSystemEngine).mockImplementation(() => {
+      vi.mocked(createStorage).mockImplementation(() => {
         throw mockError;
       });
       const consoleSpy = vi

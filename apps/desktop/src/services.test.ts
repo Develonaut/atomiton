@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { initializeServices } from "./main/services";
-import { initializeConductor } from "./main/services/conductor";
-import { initializeStorage } from "./main/services/storage";
+import { initializeServices } from "@/main/services";
+import { initializeConductor } from "@/main/services/conductor";
+import { initializeStorage } from "@/main/services/storage";
 
 // Mock Electron and dependencies for smoke test
 vi.mock("@atomiton/storage/desktop", () => ({

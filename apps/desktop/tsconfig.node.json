@@ -11,7 +11,8 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "strict": true,
-    "types": ["node", "electron"]
+    "types": ["node", "electron"],
+    "baseUrl": "."
   },
   "include": [
     "electron.vite.config.*",

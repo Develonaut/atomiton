@@ -1,5 +1,5 @@
-import { initializeStorage } from "./storage";
-import { initializeConductor } from "./conductor";
+import { initializeStorage } from "@/main/services/storage";
+import { initializeConductor } from "@/main/services/conductor";
 
 export function initializeServices() {
   const storage = initializeStorage();

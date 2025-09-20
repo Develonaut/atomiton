@@ -1,6 +1,12 @@
 import { defineTestConfig } from "@atomiton/vite-config/vitest";
+import path from "path";
 
 export default defineTestConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   test: {
     globals: true,
     testTimeout: 10000,
