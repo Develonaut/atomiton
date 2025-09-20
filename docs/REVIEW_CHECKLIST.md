@@ -13,6 +13,7 @@
 - [ ] `pnpm lint` - passes with no errors or warnings
 - [ ] `pnpm test` - all tests pass
 - [ ] `pnpm build` - builds successfully
+- [ ] `pnpm dev` - development servers start without errors
 
 ### Code Quality
 
@@ -145,7 +146,7 @@ When using this checklist, agents should:
 1. **Run all commands first:**
 
    ```bash
-   pnpm typecheck && pnpm lint && pnpm test && pnpm build
+   pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm dev
    ```
 
 2. **Auto-fix before marking complete:**
@@ -161,6 +162,7 @@ When using this checklist, agents should:
    ✅ Lint: PASS - No errors or warnings
    ✅ Tests: PASS - All 47 tests passing
    ✅ Build: PASS - Built in 2.3s
+   ✅ Dev: PASS - All development servers start successfully
    ✅ File Size: PASS - Largest file is 234 lines
    ⚠️  Comments: FIXED - Removed 12 redundant comments
    ```
