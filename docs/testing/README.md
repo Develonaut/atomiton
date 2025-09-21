@@ -1,483 +1,355 @@
-# Testing Strategy - Atomiton Platform
+# Testing Philosophy - Atomiton
 
-## Overview
+## Core Principle: Test Like Users Use
 
-Atomiton implements a comprehensive testing strategy designed to ensure reliability, performance, and maintainability across the entire Blueprint automation platform. This strategy covers unit testing, integration testing, end-to-end testing, and performance benchmarking across all packages and applications.
+We test how users actually interact with our system, not implementation details.
 
-## Testing Philosophy
+## Testing Pyramid (Inverted)
 
-### Core Principles
+```
+┌─────────────────────────────────┐
+│   Playwright E2E Tests (60%)    │ ← User flows, real interactions
+├─────────────────────────────────┤
+│  API Contract Tests (30%)       │ ← Package personas, public APIs
+├─────────────────────────────────┤
+│   Unit Tests (10%)              │ ← Pure functions, critical logic
+└─────────────────────────────────┘
+```
 
-**Pyramid-First Approach:**
+## Test Types & When to Use Them
 
-- **Unit Tests (70%)**: Fast, isolated, comprehensive coverage of business logic
-- **Integration Tests (20%)**: Cross-component interactions and API contracts
-- **E2E Tests (10%)**: Critical user journeys and system-wide workflows
+### 🚀 Smoke Tests (Vitest) vs Critical User Flows (Playwright)
 
-**Quality Gates:**
+**Smoke Tests (Pre-commit):**
 
-- All tests must pass before merge
-- Code coverage minimum 80% for new code
-- Performance benchmarks must not regress >10%
-- Smoke tests complete in <5 seconds per package
+- **Purpose**: Quick verification that components render and basic interactions work
+- **Tool**: Vitest + React Testing Library
+- **Speed**: Must run in <5 seconds total
+- **Examples**: Page loads, button clicks work, navigation doesn't crash
+- **Rule**: NO Playwright allowed - must use jsdom only
 
-### Testing Standards
+**Critical User Flows (Pre-push/CI):**
 
-**Test Quality Requirements:**
+- **Purpose**: Verify complete user journeys in real browser
+- **Tool**: Playwright only
+- **Speed**: Can take up to 30 seconds
+- **Examples**: Creating a blueprint, loading from gallery, full workflows
+- **Rule**: Real browser required for accuracy
 
-- Tests are deterministic and repeatable
-- No external dependencies in unit tests
-- Descriptive test names following Given-When-Then pattern
-- Appropriate use of mocking and stubbing
-- Clean test data setup and teardown
+## Test Types & When to Use Them
 
-## Testing Approach by Layer
+### 1. 🎭 Playwright E2E Tests (Primary)
 
-### Unit Testing
+**Use For:**
 
-**Scope and Coverage:**
+- All user workflows
+- Feature functionality
+- Integration between systems
+- Smoke tests for CI/CD
+- Visual regression (snapshots) for design system
 
-- Pure functions and business logic
-- Component behavior in isolation
-- Edge cases and error conditions
-- Input validation and data transformation
-
-**Technologies:**
-
-- **Vitest**: Primary test runner for TypeScript/JavaScript
-- **@testing-library/react**: React component testing
-- **MSW (Mock Service Worker)**: API mocking
-- **vi.fn()**: Function mocking and spying
-
-**Unit Test Structure:**
+**Example:**
 
 ```typescript
-// Example: Node parameter validation
-describe("NodeParameterValidator", () => {
-  describe("Given a CSV reader node", () => {
-    it("When file path is missing, Then validation fails with specific error", () => {
-      // Arrange
-      const validator = new NodeParameterValidator();
-      const parameters = { headers: true }; // Missing file path
-
-      // Act
-      const result = validator.validate("csv-reader", parameters);
-
-      // Assert
-      expect(result.valid).toBe(false);
-      expect(result.errors).toContain("File path is required");
-    });
-  });
+test("user can create a workflow", async ({ page }) => {
+  // Real user actions
+  await page.click("text=Add Node");
+  await page.dragAndDrop(".node", ".canvas");
+  await expect(page.locator(".node-on-canvas")).toBeVisible();
 });
 ```
 
-### Integration Testing
+**Benefits:**
 
-**Cross-Component Testing:**
+- Tests actual user experience
+- Catches real bugs users would hit
+- No mocking = high confidence
+- Fast enough for pre-push hooks
 
-- Node execution engine with storage layer
-- UI components with state management
-- API endpoints with authentication middleware
-- Event system with subscribers
+### 2. 📦 API Contract Tests (Package Personas)
 
-**Integration Test Patterns:**
+**Use For:**
+
+- Public package APIs
+- Ensuring backwards compatibility
+- Package integration points
+- Developer experience testing
+
+**Example:**
 
 ```typescript
-// Example: Blueprint execution integration
-describe("Blueprint Execution Integration", () => {
-  it("Should execute multi-node Blueprint and persist results", async () => {
-    // Arrange: Create Blueprint with CSV → Transform → Database nodes
-    const blueprint = createTestBlueprint();
-    const executor = new BlueprintExecutor(storage, eventBus);
+test("editor package exposes correct API", () => {
+  const editor = require("@atomiton/editor");
 
-    // Act: Execute Blueprint
-    const execution = await executor.execute(blueprint);
-
-    // Assert: Verify execution state and side effects
-    expect(execution.status).toBe("completed");
-    expect(await storage.exists(`execution-${execution.id}`)).toBe(true);
-    expect(mockDatabase.insertedRecords.length).toBeGreaterThan(0);
-  });
+  // Test the contract we promise
+  expect(editor).toHaveProperty("Canvas");
+  expect(editor).toHaveProperty("useNodes");
+  expect(typeof editor.Canvas).toBe("function");
 });
 ```
 
-### End-to-End Testing
+**Benefits:**
 
-**Critical User Flows:**
+- Protects package consumers
+- Documents expected API
+- Prevents breaking changes
+- Acts like "E2E for packages"
 
-- Blueprint creation and editing workflow
-- Node parameter configuration and validation
-- Blueprint execution and monitoring
-- User authentication and authorization
-- File upload and processing workflows
+### 3. 🔧 Unit Tests (Minimal)
 
-**E2E Testing Tools:**
+**Use For:**
 
-- **Playwright**: Cross-browser automation for web application
-- **Electron Testing**: Custom testing for desktop application
-- **API Testing**: REST and WebSocket endpoint validation
+- Pure functions with complex logic
+- Critical algorithms
+- Data transformations
+- Error handling edge cases
 
-**E2E Test Structure:**
+**Example:**
 
 ```typescript
-// Example: Blueprint creation flow
-test("User can create and execute a data processing Blueprint", async ({
-  page,
-}) => {
-  // Given: User is logged in and on the Blueprint editor
-  await page.goto("/editor");
-  await page.waitForSelector('[data-testid="node-palette"]');
-
-  // When: User creates a CSV processing workflow
-  await dragNodeToCanvas(page, "csv-reader", { x: 100, y: 100 });
-  await configureNode(page, "csv-reader", { file: "test-data.csv" });
-  await dragNodeToCanvas(page, "data-transformer", { x: 300, y: 100 });
-  await connectNodes(page, "csv-reader", "data-transformer");
-
-  // And: User executes the Blueprint
-  await page.click('[data-testid="execute-button"]');
-
-  // Then: Execution completes successfully
-  await page.waitForSelector('[data-testid="execution-success"]');
-  const status = await page.textContent('[data-testid="execution-status"]');
-  expect(status).toBe("Completed");
+test("calculateNodePosition handles edge cases", () => {
+  expect(calculateNodePosition(null)).toEqual({ x: 0, y: 0 });
+  expect(calculateNodePosition({ x: -100 })).toEqual({ x: 0, y: 0 });
 });
 ```
 
-## Performance Testing
+**Benefits:**
 
-### Benchmarking Strategy
+- Fast feedback for logic bugs
+- Good for TDD of algorithms
+- Documents edge cases
 
-**Performance Metrics:**
+## What We DON'T Test
 
-- Node execution time per operation
-- Blueprint compilation and loading time
-- UI rendering performance and responsiveness
-- Memory usage during large dataset processing
-- Network latency for cloud storage operations
+### ❌ Component Unit Tests
 
-**Benchmark Implementation:**
+**Why Not:**
+
+- Not how users interact
+- High maintenance, low value
+- Playwright E2E covers actual usage
+- Testing implementation, not behavior
+
+**Instead of:**
 
 ```typescript
-// Example: Node execution benchmark
-import { bench, describe } from "vitest";
+// DON'T DO THIS
+test('Button component renders with props', () => {
+  const { getByText } = render(<Button label="Click" />);
+  expect(getByText('Click')).toBeInTheDocument();
+});
+```
 
-describe("CSV Reader Performance", () => {
-  bench(
-    "should process 10K rows within 500ms",
-    async () => {
-      const csvReader = new CsvReaderNode();
-      const largeDataset = generateCsvData(10000);
+**Do This:**
 
-      await csvReader.execute({
-        parameters: { data: largeDataset, headers: true },
-        inputs: {},
-        context: createExecutionContext(),
-      });
-    },
-    { time: 500 },
+```typescript
+// DO THIS
+test("user can click button to submit form", async ({ page }) => {
+  await page.click('button:has-text("Submit")');
+  await expect(page.locator(".success-message")).toBeVisible();
+});
+```
+
+### ❌ Mocked Integration Tests
+
+**Why Not:**
+
+- Mocks lie about reality
+- False confidence
+- Real integration issues missed
+
+## Testing Strategy by Package Type
+
+### Application Packages (apps/\*)
+
+- **Primary**: Playwright E2E
+- **Secondary**: Critical path unit tests
+- **Skip**: Component unit tests
+
+### UI Packages (@atomiton/ui)
+
+- **Primary**: Playwright visual snapshots
+- **Secondary**: Storybook for development
+- **Skip**: Component unit tests
+
+### Logic Packages (@atomiton/core, @atomiton/nodes)
+
+- **Primary**: API contract tests
+- **Secondary**: Logic unit tests
+- **Skip**: Internal implementation tests
+
+### Utility Packages (@atomiton/events, @atomiton/store)
+
+- **Primary**: API contract tests
+- **Secondary**: Behavior tests
+- **Skip**: Private method tests
+
+## Pre-commit/Push Strategy
+
+### Pre-commit (Fast) - Vitest Smoke Tests
+
+- **Tool**: Vitest with React Testing Library (NO Playwright)
+- **Speed**: ~1-3 seconds total
+- **Purpose**: Quick sanity check before commits
+- **Coverage**: Basic rendering, navigation, component mounting
+- **Location**: `src/__tests__/integration/smoke/`
+- Run tests for changed package only
+- Bail on first failure
+- No coverage collection
+
+### Pre-push (Thorough) - Critical User Flows
+
+- **Tool**: Playwright E2E tests
+- **Speed**: ~30 seconds max
+- **Purpose**: Verify complete user journeys work
+- **Coverage**: Full workflows from CRITICAL_USER_FLOWS.md
+- **Location**: `src/__tests__/e2e/`
+- Test critical user paths
+- Real browser testing
+
+### CI/CD (Complete)
+
+- Full Playwright suite
+- All package tests
+- Visual regression checks
+- Performance benchmarks
+
+## Key Principles
+
+1. **Test behavior, not implementation**
+2. **If it's not user-facing, question if it needs testing**
+3. **One E2E test is worth 10 unit tests**
+4. **Snapshots for design system only**
+5. **Fast tests get run, slow tests get skipped**
+6. **Real > Mocked every time**
+7. **ALWAYS use data-testid attributes, NEVER wild selectors**
+
+## Test ID Convention (MANDATORY)
+
+### Why data-testid?
+
+- **Explicit**: Makes it clear what elements are testable
+- **Stable**: Won't break when classes or text changes
+- **Searchable**: Easy to find test dependencies in code
+- **Intentional**: Forces developers to think about testability
+
+### Naming Convention
+
+```typescript
+// Component-Action-Element pattern
+data-testid="home-page"
+data-testid="create-button"
+data-testid="blueprint-card"
+data-testid="editor-canvas"
+data-testid="sidebar-navigation"
+data-testid="node-properties-panel"
+```
+
+### DO's and DON'Ts
+
+**✅ DO:**
+
+```typescript
+// Good - Explicit test ID
+<button data-testid="create-blueprint-button">Create</button>
+await screen.getByTestId('create-blueprint-button');
+```
+
+**❌ DON'T:**
+
+```typescript
+// Bad - Class selector
+<button className="btn-primary">Create</button>
+await page.locator('.btn-primary');
+
+// Bad - Text selector (fragile)
+await screen.getByText('Create');
+
+// Bad - Complex CSS selector
+await page.locator('div.sidebar > nav > ul > li:nth-child(2) > a');
+```
+
+### Implementation Example
+
+```typescript
+// Component
+export function HomePage() {
+  return (
+    <div data-testid="home-page">
+      <nav data-testid="main-navigation">
+        <a data-testid="create-button" href="/editor">Create</a>
+      </nav>
+      <main data-testid="blueprint-gallery">
+        {blueprints.map(bp => (
+          <div key={bp.id} data-testid={`blueprint-card-${bp.id}`}>
+            {bp.name}
+          </div>
+        ))}
+      </main>
+    </div>
   );
-
-  bench(
-    "should handle 1M rows within 5 seconds",
-    async () => {
-      const csvReader = new CsvReaderNode();
-      const massiveDataset = generateCsvData(1000000);
-
-      await csvReader.execute({
-        parameters: { data: massiveDataset, headers: true },
-        inputs: {},
-        context: createExecutionContext(),
-      });
-    },
-    { time: 5000 },
-  );
-});
-```
-
-### Performance Monitoring
-
-**Continuous Performance Tracking:**
-
-- Automated benchmark runs in CI/CD pipeline
-- Performance regression detection (>10% slowdown)
-- Memory leak detection in long-running processes
-- Database query performance monitoring
-
-**Performance Budgets:**
-
-- Node execution: <100ms for simple operations
-- Blueprint compilation: <2 seconds for complex workflows
-- UI interactions: <100ms response time
-- File processing: <1MB/second minimum throughput
-
-## Test Coverage Requirements
-
-### Coverage Targets
-
-**Overall Coverage:**
-
-- Line coverage: 80% minimum, 90% target
-- Branch coverage: 75% minimum, 85% target
-- Function coverage: 90% minimum, 95% target
-
-**Package-Specific Requirements:**
-
-- Core business logic packages: 90% coverage
-- UI component packages: 80% coverage
-- Utility packages: 95% coverage
-- Integration packages: 70% coverage
-
-### Coverage Enforcement
-
-**CI/CD Integration:**
-
-```bash
-# Coverage validation in CI pipeline
-pnpm test:coverage --reporter=lcov
-pnpm coverage:validate --threshold=80
-pnpm coverage:report --format=html
-```
-
-## CI/CD Test Automation
-
-### Automated Testing Pipeline
-
-**Pull Request Checks:**
-
-1. **Smoke Tests** (30 seconds): Fast validation of core functionality
-2. **Unit Tests** (2 minutes): Complete package test suites
-3. **Lint & TypeCheck** (1 minute): Code quality validation
-4. **Build Verification** (3 minutes): Ensure all packages build successfully
-
-**Merge to Main:**
-
-1. **Integration Tests** (5 minutes): Cross-package compatibility
-2. **E2E Tests** (10 minutes): Critical user journey validation
-3. **Performance Tests** (5 minutes): Benchmark regression detection
-4. **Security Scans** (3 minutes): Vulnerability assessment
-
-### Test Parallelization
-
-**Efficient Test Execution:**
-
-- Unit tests run in parallel across CPU cores
-- Integration tests grouped by dependency chains
-- E2E tests distributed across multiple browsers
-- Benchmarks isolated to prevent interference
-
-**Resource Optimization:**
-
-```yaml
-# GitHub Actions test matrix
-strategy:
-  matrix:
-    node-version: [18, 20]
-    test-type: [unit, integration, e2e]
-    os: [ubuntu-latest, windows-latest, macos-latest]
-```
-
-## Testing Tools and Configuration
-
-### Core Testing Stack
-
-**Primary Tools:**
-
-- **Vitest**: Fast unit and integration test runner
-- **Playwright**: Cross-browser E2E testing
-- **Testing Library**: React component testing utilities
-- **MSW**: API mocking for reliable tests
-
-**Configuration Standards:**
-
-```typescript
-// vitest.config.ts - Standard configuration
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: ["./src/test-setup.ts"],
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "html", "lcov"],
-      threshold: {
-        global: {
-          lines: 80,
-          branches: 75,
-          functions: 90,
-          statements: 80,
-        },
-      },
-    },
-    benchmark: {
-      include: ["**/*.bench.ts"],
-      reporters: ["verbose"],
-    },
-  },
-});
-```
-
-### Package-Specific Testing
-
-**Per-Package Test Scripts:**
-
-```json
-{
-  "scripts": {
-    "test": "vitest run",
-    "test:unit": "vitest run src/__tests__/unit",
-    "test:integration": "vitest run src/__tests__/integration",
-    "test:smoke": "vitest run src/__tests__/smoke",
-    "test:benchmark": "vitest bench --run",
-    "test:e2e": "playwright test || echo 'No E2E tests'",
-    "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage"
-  }
-}
-```
-
-## Quality Assurance Process
-
-### Test-Driven Development
-
-**TDD Workflow:**
-
-1. **Red**: Write failing test that describes desired behavior
-2. **Green**: Implement minimal code to make test pass
-3. **Refactor**: Improve code while maintaining green tests
-4. **Repeat**: Continue cycle for each new feature
-
-**Example TDD Cycle:**
-
-```typescript
-// 1. Red: Write failing test
-it("Should validate required node parameters", () => {
-  const validator = new NodeValidator();
-  const result = validator.validate({});
-  expect(result.errors).toContain("Name is required");
-});
-
-// 2. Green: Make test pass
-class NodeValidator {
-  validate(params: any) {
-    const errors = [];
-    if (!params.name) errors.push("Name is required");
-    return { errors };
-  }
 }
 
-// 3. Refactor: Improve implementation
-class NodeValidator {
-  validate(params: NodeParameters): ValidationResult {
-    return {
-      errors: this.validateRequired(params),
-    };
-  }
-
-  private validateRequired(params: NodeParameters): string[] {
-    // Improved validation logic
-  }
-}
+// Test
+test('user can navigate to editor', async () => {
+  render(<HomePage />);
+  const createButton = screen.getByTestId('create-button');
+  await userEvent.click(createButton);
+  expect(screen.getByTestId('editor-canvas')).toBeInTheDocument();
+});
 ```
 
-### Code Review Integration
+### Fallback Strategy for Smoke Tests
 
-**Test Review Checklist:**
-
-- [ ] Tests cover the main functionality and edge cases
-- [ ] Test names clearly describe the scenario
-- [ ] Tests are independent and don't rely on external state
-- [ ] Appropriate use of mocking and stubbing
-- [ ] Performance tests validate non-functional requirements
-
-## Troubleshooting Common Issues
-
-### Test Failures and Debugging
-
-**Common Test Issues:**
-
-- **Flaky Tests**: Timing issues, race conditions, external dependencies
-- **Slow Tests**: Heavy computation, excessive mocking, poor test design
-- **Memory Leaks**: Improper cleanup, event listener removal, resource disposal
-
-**Debugging Strategies:**
+When adding test IDs incrementally, use this pattern:
 
 ```typescript
-// Debug flaky tests with retry logic
-test.retry(3)("Should handle network timeouts gracefully", async () => {
-  // Test implementation with proper timeout handling
-});
-
-// Debug slow tests with performance monitoring
-beforeEach(() => {
-  performance.mark("test-start");
-});
-
-afterEach(() => {
-  performance.mark("test-end");
-  const duration = performance.measure(
-    "test-duration",
-    "test-start",
-    "test-end",
-  );
-  if (duration.duration > 1000) {
-    console.warn(`Slow test detected: ${duration.duration}ms`);
-  }
-});
+// Try test ID first, fallback to other selectors
+const element =
+  screen.queryByTestId("create-button") ||
+  screen.queryByRole("link", { name: /create/i });
 ```
 
-### Performance Test Optimization
+## Practical Examples
 
-**Benchmark Stability:**
-
-- Run benchmarks multiple times for statistical accuracy
-- Isolate benchmark runs from other system processes
-- Use consistent hardware for reliable comparisons
-- Monitor system resources during benchmark execution
-
-**Performance Regression Detection:**
+### Good Test
 
 ```typescript
-// Compare against baseline performance
-const baselineTime = 100; // milliseconds
-const currentTime = measureExecutionTime();
-const regression = (currentTime - baselineTime) / baselineTime;
-
-if (regression > 0.1) {
-  // 10% regression threshold
-  throw new Error(`Performance regression detected: ${regression * 100}%`);
-}
+// Tests actual user value
+test("user can save and reload their work", async ({ page }) => {
+  await createWorkflow(page);
+  await page.click('button:has-text("Save")');
+  await page.reload();
+  await expect(page.locator(".workflow")).toBeVisible();
+});
 ```
 
-## Metrics and Reporting
+### Bad Test
 
-### Test Metrics Dashboard
+```typescript
+// Tests implementation details
+test("useState hook updates state", () => {
+  const { result } = renderHook(() => useState(0));
+  act(() => result.current[1](1));
+  expect(result.current[0]).toBe(1);
+});
+```
 
-**Key Performance Indicators:**
+## Metrics That Matter
 
-- Test execution time trends
-- Coverage percentage over time
-- Flaky test identification and frequency
-- Build success rate and failure analysis
+- **User flows working**: 100%
+- **API contracts stable**: 100%
+- **Test execution time**: <30s for smoke
+- **False positives**: Near zero
+- **Test maintenance burden**: Minimal
 
-**Automated Reporting:**
+## Summary
 
-- Daily test summary emails
-- Weekly performance trend reports
-- Monthly coverage analysis
-- Quarterly testing strategy review
-
-### Continuous Improvement
-
-**Testing Strategy Evolution:**
-
-- Regular review of test effectiveness
-- Identification of testing gaps and blind spots
-- Adoption of new testing tools and techniques
-- Training and knowledge sharing within the team
+> "If a user wouldn't notice it breaking, don't test it.
+> If a developer would curse you for breaking it, test the contract.
+> Everything else is optional."
 
 ---
 
-**Last Updated**: 2025-09-17
-**Version Compatibility**: Atomiton Platform v1.0+
-**Review Schedule**: Monthly testing strategy review
+**Last Updated**: 2025-01-10
+**Philosophy Owner**: Engineering Team
