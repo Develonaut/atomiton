@@ -1,8 +1,8 @@
-# Hudson Workflow Triggers
+# Guilliman Workflow Triggers
 
-## When to Invoke Hudson
+## When to Invoke Guilliman
 
-Hudson should be invoked PROACTIVELY in these scenarios:
+Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ### 1. Pre-Implementation Review (MANDATORY)
 
@@ -14,12 +14,12 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 - "I'll create a utility to handle..."
 - "We should build our own..."
 
-**Hudson's Role:** Research and document existing solutions BEFORE any code is written
+**Guilliman's Role:** Research and document existing solutions BEFORE any code is written
 
 ### 2. Package.json Script Additions
 
 **When:** Adding or modifying any npm/pnpm scripts
-**Questions Hudson Asks:**
+**Questions Guilliman Asks:**
 
 - Does the tool already provide this command?
 - Can we use pnpm filtering instead of a custom script?
@@ -28,7 +28,7 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 ### 3. Testing Configuration Changes
 
 **When:** Modifying test setup or adding test utilities
-**Hudson Checks:**
+**Guilliman Checks:**
 
 - Are we using Vitest projects correctly?
 - Are we leveraging Playwright's built-in features?
@@ -37,7 +37,7 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 ### 4. Build/Dev Configuration
 
 **When:** Touching vite.config, tsconfig, or build scripts
-**Hudson Ensures:**
+**Guilliman Ensures:**
 
 - Using shared presets from @atomiton/vite-config
 - Not duplicating configuration across packages
@@ -46,7 +46,7 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 ### 5. CI/CD Pipeline Changes
 
 **When:** Modifying GitHub Actions or deployment scripts
-**Hudson Validates:**
+**Guilliman Validates:**
 
 - Using GitHub Actions features (matrices, caching, artifacts)
 - Not writing bash scripts for what Actions provides
@@ -54,38 +54,38 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 
 ## Integration with Other Agents
 
-### Hudson + Voorhees
+### Guilliman + Voorhees
 
-- **Hudson:** "Use the framework's solution"
+- **Guilliman:** "Use the framework's solution"
 - **Voorhees:** "Make the framework's solution simpler"
 - Together: Prevent both NIH and over-complexity
 
-### Hudson + Michael
+### Guilliman + Michael
 
 - **Michael:** Designs the architecture
-- **Hudson:** Ensures we use standard tools to implement it
+- **Guilliman:** Ensures we use standard tools to implement it
 - Result: Well-architected systems using proven tools
 
-### Hudson + Brian
+### Guilliman + Brian
 
 - **Brian:** Defines what needs testing
-- **Hudson:** Ensures we use testing framework features
+- **Guilliman:** Ensures we use testing framework features
 - Result: Comprehensive testing without custom test infrastructure
 
-## Red Flags That Trigger Hudson
+## Red Flags That Trigger Guilliman
 
 1. **Custom Scripts in package.json**
 
    ```json
    "scripts": {
-     "custom-test": "node scripts/runTests.js"  // 🚨 Hudson: "Use Vitest!"
+     "custom-test": "node scripts/runTests.js"  // 🚨 Guilliman: "Use Vitest!"
    }
    ```
 
 2. **Wrapper Functions Around Framework Features**
 
    ```typescript
-   // 🚨 Hudson: "Vitest already has this!"
+   // 🚨 Guilliman: "Vitest already has this!"
    export function customTestRunner() { ... }
    ```
 
@@ -93,16 +93,16 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 
    ```json
    "build:all": "npm run build:1 && npm run build:2 && ..."
-   // 🚨 Hudson: "Use Turbo/nx/pnpm -r!"
+   // 🚨 Guilliman: "Use Turbo/nx/pnpm -r!"
    ```
 
 4. **Reinventing Configuration**
    ```typescript
-   // 🚨 Hudson: "Use shared presets!"
+   // 🚨 Guilliman: "Use shared presets!"
    export const customViteConfig = { ... }
    ```
 
-## Hudson's Standard Responses
+## Guilliman's Standard Responses
 
 ### For Testing
 
@@ -124,19 +124,19 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 
 ### Stage 1: Planning & Architecture Review
 
-- **First:** Hudson researches existing solutions
+- **First:** Guilliman researches existing solutions
 - **Then:** Voorhees simplifies the approach
 - **Finally:** Michael validates architecture
 
 ### Stage 2: During Development
 
-- Hudson monitors for custom implementations
+- Guilliman monitors for custom implementations
 - Immediately stops work if standard solution found
 - Documents the standard approach
 
 ### Stage 3: Code Review
 
-- Hudson audits final implementation
+- Guilliman audits final implementation
 - Ensures no NIH crept in during development
 - Validates tool usage follows best practices
 
@@ -150,4 +150,4 @@ Hudson should be invoked PROACTIVELY in these scenarios:
 
 ---
 
-**Remember:** Hudson's job is to be the voice saying "The tool already does this" BEFORE we write code, not after.
+**Remember:** Guilliman's job is to be the voice saying "The tool already does this" BEFORE we write code, not after.

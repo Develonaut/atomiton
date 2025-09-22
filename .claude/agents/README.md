@@ -15,7 +15,7 @@ agents/
 │   └── AGENT_EXECUTION_PLAN.md  # Step-by-step MVP implementation plan
 ├── Barbara.md                   # Individual agent files (to be simplified)
 ├── Brian.md
-├── Hudson.md
+├── Guilliman.md
 ├── Karen.md
 ├── Megamind.md
 ├── Michael.md
@@ -33,7 +33,7 @@ agents/
 - **🏗️ Michael** - The System Architect - Backend architecture and APIs
 - **🔌 Parker** - The Integration Orchestrator - Platform integration and environment
 - **🚀 Jeeves** - The Software Development Systems Engineer - CI/CD and deployment pipelines
-- **🛡️ Hudson** - The Standards & Simplicity Guardian - Prevents reinventing wheels, ensures standard tool usage
+- **🛡️ Guilliman** - The Standards & Typescript Simplicity Guardian - Prevents reinventing wheels, ensures standard tool usage
 
 ### Quality & Validation Team
 
@@ -68,7 +68,7 @@ Use the Task tool with:
 - subagent_type: "blueprint-system-architect" (Michael)
 - subagent_type: "platform-integration-orchestrator" (Parker)
 - subagent_type: "devops-deployment-engineer" (Jeeves)
-- subagent_type: "standards-simplicity-guardian" (Hudson)
+- subagent_type: "standards-simplicity-guardian" (Guilliman)
 - subagent_type: "ui-comprehensive-tester" (Brian)
 - subagent_type: "task-completion-validator" (Karen)
 - subagent_type: "ultrathink-debugger" (Megamind)

@@ -2,16 +2,18 @@
 
 ## Background
 
-Based on Hudson's research into industry standards (Playwright, Vitest, MDN, W3C), we need to standardize our naming conventions across the Atomiton monorepo to align with industry best practices.
+Based on Guilliman's research into industry standards (Playwright, Vitest, MDN, W3C), we need to standardize our naming conventions across the Atomiton monorepo to align with industry best practices.
 
 ## Current State Analysis
 
 ### ✅ Already Correct
+
 - `@atomiton/testing/playwright/web` - Testing web applications ✓
 - `@atomiton/events/browser/createBrowserEventBus.ts` - Browser environment implementation ✓
 - Package structure: `./playwright/web` vs `./playwright/electron` ✓
 
 ### ❌ Needs Migration
+
 - `apps/desktop/tsconfig.web.json` → Should be `tsconfig.browser.json` (execution environment)
 - Any other "web" references that should be "browser" for execution context
 - Any inconsistent usage throughout the codebase
@@ -19,27 +21,32 @@ Based on Hudson's research into industry standards (Playwright, Vitest, MDN, W3C
 ## Migration Rules
 
 ### Use "Web" for Application Domain/Targets:
+
 - ✅ Web applications, web platform features, web development tools
 - ✅ Testing web applications, web components, web workflows
 - ✅ Standards/APIs: Web standards compliance, web technology usage
 - ✅ User-facing context: Web app testing, web platform features
 
 ### Use "Browser" for Execution Environment:
+
 - ✅ Browser-specific implementations, browser contexts, browser lifecycle
 - ✅ Platform differences: Cross-browser compatibility, browser-specific code
 - ✅ Technical infrastructure: Browser automation, browser execution
 
 ### Use "Desktop" for Application Domain/Targets:
+
 - ✅ Desktop applications, desktop workflows, desktop features
 - ✅ User-facing desktop context, desktop development tools
 
 ### Use "Electron" for Execution Environment:
+
 - ✅ Electron-specific implementations, Electron contexts, Electron lifecycle
 - ✅ Technical infrastructure: Electron automation, Electron execution
 
 ## Implementation Strategy
 
 ### Pattern Examples
+
 ```typescript
 // ✅ Correct Usage After Migration
 @atomiton/testing/playwright/web        // Testing web applications
@@ -90,7 +97,8 @@ tsconfig.node.json       // Node execution environment
 
 ## Research Reference
 
-This migration is based on Hudson's comprehensive research into:
+This migration is based on Guilliman's comprehensive research into:
+
 - Playwright official patterns and documentation
 - Vitest standard usage and conventions
 - Industry consensus from MDN, W3C, major browsers

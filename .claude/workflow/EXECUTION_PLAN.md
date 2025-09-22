@@ -72,7 +72,7 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **REQUIRED for ALL work:**
 
-- **Hudson**: Research existing tools BEFORE any custom implementation
+- **Guilliman**: Research existing tools BEFORE any custom implementation
   - Check if framework/library already provides the solution
   - Research standard approaches to the problem
   - Document why custom solution is needed if no standard exists
@@ -98,7 +98,7 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **REQUIRED checks during implementation:**
 
-- **Hudson**: Monitor for NIH (Not Invented Here) syndrome
+- **Guilliman**: Monitor for NIH (Not Invented Here) syndrome
   - Stop custom implementations when discovering built-in solutions
   - Audit package.json scripts for unnecessary complexity
   - Ensure using tool features (Vitest projects, Playwright fixtures, etc.)
