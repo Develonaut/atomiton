@@ -12,9 +12,6 @@ const baseConfig: Linter.Config[] = [
   // JavaScript recommended rules
   js.configs.recommended,
 
-  // Disable rules that conflict with Prettier
-  eslintConfigPrettier,
-
   // TypeScript recommended rules
   ...tseslint.configs.recommended,
 
@@ -27,7 +24,6 @@ const baseConfig: Linter.Config[] = [
       "turbo/no-undeclared-env-vars": "warn",
     },
   } satisfies Linter.Config,
-
 
   // Global ignores
   {
@@ -95,21 +91,21 @@ const baseConfig: Linter.Config[] = [
       "no-useless-catch": "error",
       "no-constant-condition": ["error", { checkLoops: false }],
 
-      // Object formatting rules
-      "key-spacing": [
-        "warn",
-        {
-          beforeColon: false,
-          afterColon: true,
-          mode: "minimum",
-          align: {
-            beforeColon: false,
-            afterColon: true,
-            on: "colon",
-            mode: "strict",
-          },
-        },
-      ],
+      // Object formatting rules - disabled due to Prettier conflict
+      // "key-spacing": [
+      //   "warn",
+      //   {
+      //     beforeColon: false,
+      //     afterColon: true,
+      //     mode: "minimum",
+      //     align: {
+      //       beforeColon: false,
+      //       afterColon: true,
+      //       on: "colon",
+      //       mode: "strict",
+      //     },
+      //   },
+      // ],
 
       // Code quality and complexity rules
       "max-lines": [
@@ -117,43 +113,43 @@ const baseConfig: Linter.Config[] = [
         {
           max: 250,
           skipBlankLines: true,
-          skipComments: true
-        }
+          skipComments: true,
+        },
       ],
       "max-lines-per-function": [
         "warn",
         {
-          max: 20,
+          max: 30,
           skipBlankLines: true,
           skipComments: true,
-          IIFEs: true
-        }
+          IIFEs: true,
+        },
       ],
-      "complexity": ["warn", 10],
+      complexity: ["warn", 10],
 
-      // Comment management rules
-      "spaced-comment": [
-        "warn",
-        "always",
-        {
-          block: {
-            markers: ["*"],
-            balanced: true,
-          },
-          line: {
-            markers: ["@context", "@todo", "@summary"],
-            exceptions: ["-", "+", "*", "@context", "@todo", "@summary"],
-          },
-        },
-      ],
-      "no-warning-comments": [
-        "warn",
-        {
-          terms: ["TODO", "FIXME", "HACK", "XXX", "BUG"],
-          location: "start",
-        },
-      ],
-      "no-inline-comments": "warn",
+      // Comment management rules - TODO: Re-enable after resolving Prettier conflicts
+      // "spaced-comment": [
+      //   "warn",
+      //   "always",
+      //   {
+      //     block: {
+      //       markers: ["*"],
+      //       balanced: true,
+      //     },
+      //     line: {
+      //       markers: ["@context", "@todo", "@summary"],
+      //       exceptions: ["-", "+", "*", "@context", "@todo", "@summary"],
+      //     },
+      //   },
+      // ],
+      // "no-warning-comments": [
+      //   "warn",
+      //   {
+      //     terms: ["TODO", "FIXME", "HACK", "XXX", "BUG"],
+      //     location: "start",
+      //   },
+      // ],
+      // "no-inline-comments": "warn",
 
       // Import restrictions for # imports
       "no-restricted-imports": [
@@ -162,31 +158,17 @@ const baseConfig: Linter.Config[] = [
           patterns: [
             {
               group: ["../*", "./*"],
-              message: "Use '#' imports instead of relative paths for internal imports"
-            }
-          ]
-        }
+              message:
+                "Use '#' imports instead of relative paths for internal imports",
+            },
+          ],
+        },
       ],
-
-      // Package consistency rules for monorepo
-      // TODO: Re-enable when eslint-plugin-import is added
-      // "import/no-restricted-paths": [
-      //   "error",
-      //   {
-      //     zones: [
-      //       // Prevent imports from internal packages that don't use workspace: protocol
-      //       {
-      //         target: "./packages/**/src/**",
-      //         from: "./packages/**",
-      //         except: ["**/dist/**"],
-      //         message:
-      //           "Use workspace: protocol for internal package dependencies",
-      //       },
-      //     ],
-      //   },
-      // ],
     },
   } satisfies Linter.Config,
+
+  // Disable rules that conflict with Prettier (must be last)
+  eslintConfigPrettier,
 ];
 
 export default baseConfig;

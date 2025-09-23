@@ -1,19 +1,62 @@
 {
+  // ESLint Configuration - Flat Config Support
+  "eslint.useFlatConfig": true,
   "eslint.workingDirectories": [
     {
       "mode": "auto"
     }
   ],
-  "eslint.run": "onSave",
-  "eslint.probe": [
+  "eslint.validate": [
     "javascript",
     "javascriptreact",
     "typescript",
-    "typescriptreact"
+    "typescriptreact",
+    "json"
   ],
+  "eslint.format.enable": false,
+  "eslint.lintTask.enable": true,
+
+  // Editor Actions and Formatting Configuration
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // File-specific formatters (Prettier for all supported types)
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // TypeScript Configuration
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.preferences.quoteStyle": "double",
+  "typescript.suggest.autoImports": true,
+  "typescript.suggest.includePackageJsonAutoImports": "auto",
+  "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.surveys.enabled": false,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+
+  // Performance Optimizations
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.git/objects/**": true,
@@ -28,7 +71,11 @@
     "**/apps/*/node_modules/**": true,
     "**/.git/**": true,
     "**/logs/**": true,
-    "**/*.log": true
+    "**/*.log": true,
+    "**/.vscode/**": true,
+    "**/.DS_Store": true,
+    "**/tmp/**": true,
+    "**/temp/**": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -37,6 +84,34 @@
     "**/.next": true,
     "**/coverage": true,
     "**/.turbo": true,
-    "**/.pnpm-store": true
+    "**/.pnpm-store": true,
+    "**/.vscode": true,
+    "**/.git": true,
+    "**/tmp": true,
+    "**/temp": true
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  },
+
+  // Editor Behavior
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+
+  // Git Integration
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+
+  // Extensions Settings
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html"
   }
 }
