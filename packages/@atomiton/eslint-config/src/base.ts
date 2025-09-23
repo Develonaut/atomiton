@@ -138,6 +138,7 @@ const baseConfig: Linter.Config[] = [
           location: "start"
         }
       ],
+      "no-inline-comments": "warn",
 
       // Import restrictions for # imports
       "no-restricted-imports": [
