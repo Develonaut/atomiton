@@ -1,19 +1,11 @@
 {
   "extends": "@atomiton/typescript-config/app.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/main/*": ["./src/main/*"],
       "@/preload/*": ["./src/preload/*"]
     }
   },
-  "include": [
-    "electron.vite.config.*",
-    "src/main/**/*",
-    "src/preload/**/*"
-  ],
-  "exclude": [
-    "src/main/**/__tests__/**/*",
-    "src/preload/**/__tests__/**/*"
-  ]
+  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/**/*"],
+  "exclude": ["src/main/**/__tests__/**/*", "src/preload/**/__tests__/**/*"]
 }

@@ -1,8 +1,8 @@
 import { useState, useId } from "react";
 import { Tooltip } from "react-tooltip";
-import Image from "@/components/Image";
-import Select from "@/components/form/Select";
-import Icon from "@/components/Icon";
+import Image from "#components/Image";
+import Select from "#components/form/Select";
+import Icon from "#components/Icon";
 
 type Props = {
   name: string;

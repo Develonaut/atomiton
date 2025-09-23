@@ -1,7 +1,7 @@
-import { useRouter } from "@/router";
-import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
-import Icon from "@/components/Icon";
-import VideoPlayer from "@/components/VideoPlayer";
+import { useRouter } from "#router";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
+import Icon from "#components/Icon";
+import VideoPlayer from "#components/VideoPlayer";
 import Slider from "./Slider";
 import Details from "./Details";
 import Report from "./Report";

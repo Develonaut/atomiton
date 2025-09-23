@@ -1,6 +1,6 @@
-import Image from "@/components/Image";
-import Button from "@/components/Button";
-import Icon from "@/components/Icon";
+import Image from "#components/Image";
+import Button from "#components/Button";
+import Icon from "#components/Icon";
 
 type Props = {
   item: {

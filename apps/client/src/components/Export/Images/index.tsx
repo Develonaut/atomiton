@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import Button from "#components/Button";
 import Settings from "./Settings";
 import Compression from "./Compression";
 

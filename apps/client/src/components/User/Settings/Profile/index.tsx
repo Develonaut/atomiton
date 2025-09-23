@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import Switch from "@/components/form/Switch";
-import Icon from "@/components/Icon";
-import Image from "@/components/Image";
+import Switch from "#components/form/Switch";
+import Icon from "#components/Icon";
+import Image from "#components/Image";
 import Title from "../Title";
 import Option from "../Option";
 import Field from "../Field";

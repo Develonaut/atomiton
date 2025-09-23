@@ -1,11 +1,11 @@
-import Icon from "@/components/Icon";
-import Image from "@/components/Image";
-import { useNavigate } from "@/router";
-import { useTemplates } from "@/store/useTemplates";
+import Icon from "#components/Icon";
+import Image from "#components/Image";
+import { useNavigate } from "#router";
+import { useTemplates } from "#store/useTemplates";
 import {
   convertNodeToEditorNode,
   convertEdgeToEditorEdge,
-} from "@/utils/editorConverters";
+} from "#utils/editorConverters";
 
 type Props = {
   value: {

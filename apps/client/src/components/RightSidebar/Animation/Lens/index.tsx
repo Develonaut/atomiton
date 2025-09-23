@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Select from "@/components/form/Select";
-import Icon from "@/components/Icon";
+import Select from "#components/form/Select";
+import Icon from "#components/Icon";
 import Group from "../../Group";
 
 import { lensFormats, zoomLevels, rotates } from "./content";

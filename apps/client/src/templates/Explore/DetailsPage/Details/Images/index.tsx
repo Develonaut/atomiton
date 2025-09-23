@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { Tooltip } from "react-tooltip";
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import Image from "#components/Image";
+import Icon from "#components/Icon";
 
 import { images } from "./content";
 

@@ -10,13 +10,13 @@ import { describe, it, expect } from "vitest";
 describe("Templates Integration Tests", () => {
   it("Templates component can be imported and is functional", async () => {
     // Heavy import moved from smoke test
-    const templatesModule = await import("@/components/Templates");
+    const templatesModule = await import("#components/Templates");
     expect(templatesModule.default).toBeDefined();
     expect(typeof templatesModule.default).toBe("function");
   });
 
   it("Templates component integrates with template store", async () => {
-    const { useTemplates } = await import("@/store/useTemplates");
+    const { useTemplates } = await import("#store/useTemplates");
     expect(useTemplates).toBeDefined();
     expect(typeof useTemplates).toBe("function");
   });
@@ -32,7 +32,7 @@ describe("Templates Integration Tests", () => {
       const source = fs.readFileSync(templatesPath, "utf-8");
 
       // Verify it imports useLink hook from router
-      expect(source).toContain('import { useLink } from "@/router"');
+      expect(source).toContain('import { useLink } from "#router"');
 
       // Verify it uses useLink hook
       expect(source).toContain("useLink(");
@@ -49,7 +49,7 @@ describe("Templates Integration Tests", () => {
 
   it("Template conversion utilities work correctly", async () => {
     const { convertNodeToEditorNode, convertEdgeToEditorEdge } = await import(
-      "@/utils/editorConverters"
+      "#utils/editorConverters"
     );
 
     expect(convertNodeToEditorNode).toBeDefined();

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { logError } from "@/utils/globalErrorHandler";
+import { logError } from "#utils/globalErrorHandler";
 
 export function RouteErrorBoundary({
   error,

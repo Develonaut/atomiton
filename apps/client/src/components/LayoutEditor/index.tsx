@@ -1,7 +1,7 @@
-import LeftSidebar from "@/components/LeftSidebar";
-import RightSidebar from "@/components/RightSidebar";
-import Toolbar from "@/components/Toolbar";
-import { useLocation, useParams } from "@/router";
+import LeftSidebar from "#components/LeftSidebar";
+import RightSidebar from "#components/RightSidebar";
+import Toolbar from "#components/Toolbar";
+import { useLocation, useParams } from "#router";
 import { Canvas, Editor, type EditorNode } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
 import { useMemo } from "react";

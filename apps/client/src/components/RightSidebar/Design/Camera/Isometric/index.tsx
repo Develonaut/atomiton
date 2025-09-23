@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Icon from "@/components/Icon";
-import { RangeSlider } from "@/components/form";
+import Icon from "#components/Icon";
+import { RangeSlider } from "#components/form";
 
 function Isometric() {
   const [range, setRange] = useState(0.283);

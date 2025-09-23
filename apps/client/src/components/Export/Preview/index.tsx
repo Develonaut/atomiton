@@ -1,5 +1,5 @@
-import Icon from "@/components/Icon";
-import Image from "@/components/Image";
+import Icon from "#components/Icon";
+import Image from "#components/Image";
 
 type Props = {
   video: boolean;

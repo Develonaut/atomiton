@@ -1,8 +1,8 @@
-import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
+import Image from "#components/Image";
+import Icon from "#components/Icon";
 import Contacts from "./Contacts";
-import Gallery from "@/components/Gallery";
+import Gallery from "#components/Gallery";
 
 import { gallery } from "./content";
 

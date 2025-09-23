@@ -1,5 +1,5 @@
-import { router } from "@/router";
-import { routes } from "@/router/routes";
+import { router } from "#router";
+import { routes } from "#router/routes";
 import { describe, expect, it, vi } from "vitest";
 
 describe("Preloading and Lazy Loading Smoke Tests", () => {
@@ -38,7 +38,7 @@ describe("Preloading and Lazy Loading Smoke Tests", () => {
 
   it("should have navigation utilities with preload functions", async () => {
     // Import navigation utilities to verify they exist
-    const navigation = await import("@/router/navigation");
+    const navigation = await import("#router/navigation");
 
     // Verify preload functions exist for main routes
     expect(navigation.preloadHome).toBeDefined();
@@ -73,7 +73,7 @@ describe("Preloading and Lazy Loading Smoke Tests", () => {
   });
 
   it("should have TanStack Router Link component with preloading support", async () => {
-    const { Link } = await import("@/router");
+    const { Link } = await import("#router");
 
     // Verify Link component exists
     expect(Link).toBeDefined();

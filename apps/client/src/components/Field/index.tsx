@@ -1,5 +1,5 @@
-import { Link } from "@/router";
-import Icon from "@/components/Icon";
+import { Link } from "#router";
+import Icon from "#components/Icon";
 
 type FieldProps = {
   className?: string;

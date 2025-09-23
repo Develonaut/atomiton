@@ -1,5 +1,5 @@
-import { Link } from "@/router";
-import { usePathname } from "@/router";
+import { Link } from "#router";
+import { usePathname } from "#router";
 
 type Props = {
   item: {

@@ -3,18 +3,18 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RouterProvider, router, usePathname } from "./index";
 
 // Mock the templates to avoid store dependencies
-vi.mock("@/components/Templates", () => ({
+vi.mock("#components/Templates", () => ({
   default: () => <div data-testid="templates">Templates Component</div>,
 }));
 
 // Mock the stores to avoid dependencies
-vi.mock("@/store/templates", () => ({
+vi.mock("#store/templates", () => ({
   templateStore: {
     getState: vi.fn(() => ({ templates: [], isLoading: false, error: null })),
   },
 }));
 
-vi.mock("@/store/composites", () => ({
+vi.mock("#store/composites", () => ({
   compositeStore: {
     getState: vi.fn(() => ({ composites: [], isLoading: false, error: null })),
   },
@@ -23,7 +23,7 @@ vi.mock("@/store/composites", () => ({
 // Mock the hooks to avoid store dependencies (already handled above)
 
 // Mock the main store hooks
-vi.mock("@/store/useComposites", () => ({
+vi.mock("#store/useComposites", () => ({
   useComposites: () => ({
     composites: [
       { id: "test-1", name: "Test Composite 1" },
@@ -35,7 +35,7 @@ vi.mock("@/store/useComposites", () => ({
   }),
 }));
 
-vi.mock("@/store/useTemplates", () => ({
+vi.mock("#store/useTemplates", () => ({
   useTemplates: () => ({
     templates: [
       { id: "template-1", name: "Test Template 1" },
@@ -48,19 +48,19 @@ vi.mock("@/store/useTemplates", () => ({
 }));
 
 // Mock LayoutEditor to avoid editor dependencies
-vi.mock("@/components/LayoutEditor", () => ({
+vi.mock("#components/LayoutEditor", () => ({
   default: () => <div data-testid="layout-editor">Layout Editor</div>,
 }));
 
 // Mock Layout component to avoid dependencies
-vi.mock("@/components/Layout", () => ({
+vi.mock("#components/Layout", () => ({
   default: ({ children, ...props }: React.ComponentProps<"div">) => (
     <div {...props}>{children}</div>
   ),
 }));
 
 // Mock Catalog component to avoid dependencies
-vi.mock("@/components/Catalog", () => ({
+vi.mock("#components/Catalog", () => ({
   default: ({
     title,
     ...props

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "@/components/Button";
-import Modal from "@/components/Modal";
+import Button from "#components/Button";
+import Modal from "#components/Modal";
 import Head from "./Head";
 import GeneralAccess from "./GeneralAccess";
 import Person from "./Person";

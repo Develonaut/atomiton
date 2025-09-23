@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 import { useEditorNode } from "@atomiton/editor";
 import { useState } from "react";
 import Action from "./Action";

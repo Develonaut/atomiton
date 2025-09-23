@@ -1,6 +1,6 @@
 import { useState } from "react";
-import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
-import Tabs from "@/components/Tabs";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
+import Tabs from "#components/Tabs";
 import Item from "./Item";
 
 import { pricing } from "./content";

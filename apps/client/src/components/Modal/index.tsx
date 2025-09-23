@@ -4,7 +4,7 @@ import {
   DialogBackdrop,
   CloseButton,
 } from "@headlessui/react";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 type ModalProps = {
   className?: string;

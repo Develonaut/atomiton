@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "@/router";
-import Button from "@/components/Button";
-import Login from "@/components/Login";
-import Field from "@/components/Field";
+import { Link } from "#router";
+import Button from "#components/Button";
+import Login from "#components/Login";
+import Field from "#components/Field";
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

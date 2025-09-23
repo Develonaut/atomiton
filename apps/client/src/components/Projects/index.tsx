@@ -1,5 +1,5 @@
-import { Link } from "@/router";
-import Image from "@/components/Image";
+import { Link } from "#router";
+import Image from "#components/Image";
 
 type Props = {
   projects: {

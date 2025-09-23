@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 import { Box, Button } from "@atomiton/ui";
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";

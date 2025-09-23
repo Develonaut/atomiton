@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Layout from "@/components/Layout";
-import Assets from "@/components/Assets";
+import Layout from "#components/Layout";
+import Assets from "#components/Assets";
 
 import { content } from "./content";
 

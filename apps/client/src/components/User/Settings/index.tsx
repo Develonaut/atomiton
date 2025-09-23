@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 import General from "./General";
 import Profile from "./Profile";
 import Security from "./Security";

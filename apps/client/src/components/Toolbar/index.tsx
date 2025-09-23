@@ -1,6 +1,6 @@
-import Export from "@/components/Export";
-import Icon from "@/components/Icon";
-import Zoom from "@/components/Zoom";
+import Export from "#components/Export";
+import Icon from "#components/Icon";
+import Zoom from "#components/Zoom";
 import { Box, Button } from "@atomiton/ui";
 import { useState } from "react";
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 function Compression() {
   const [range, setRange] = useState(80);

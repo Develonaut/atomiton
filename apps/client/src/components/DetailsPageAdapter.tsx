@@ -1,12 +1,12 @@
 // Vite-compatible adapter for DetailsPage
 
-import Icon from "@/components/Icon";
-import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
-import VideoPlayer from "@/components/VideoPlayer";
-import { toExplore } from "@/router/navigation";
-import Details from "@/templates/Explore/DetailsPage/Details";
-import Report from "@/templates/Explore/DetailsPage/Report";
-import Slider from "@/templates/Explore/DetailsPage/Slider";
+import Icon from "#components/Icon";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
+import VideoPlayer from "#components/VideoPlayer";
+import { toExplore } from "#router/navigation";
+import Details from "#templates/Explore/DetailsPage/Details";
+import Report from "#templates/Explore/DetailsPage/Report";
+import Slider from "#templates/Explore/DetailsPage/Slider";
 
 function DetailsPageAdapter() {
   return (

@@ -1,5 +1,5 @@
-import LayoutOnlyHeader from "@/components/LayoutOnlyHeader";
-import Image from "@/components/Image";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
+import Image from "#components/Image";
 
 import { content } from "./content";
 

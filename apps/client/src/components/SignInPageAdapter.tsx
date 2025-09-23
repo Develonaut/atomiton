@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Link } from "@/router";
+import { Link } from "#router";
 import ButtonAdapter from "./ButtonAdapter";
-import Login from "@/components/Login";
-import Image from "@/components/Image";
-import Field from "@/components/Field";
+import Login from "#components/Login";
+import Image from "#components/Image";
+import Field from "#components/Field";
 
 function SignInPageAdapter() {
   const [email, setEmail] = useState("");

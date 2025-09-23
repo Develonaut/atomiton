@@ -1,4 +1,4 @@
-import Filters from "@/components/Filters";
+import Filters from "#components/Filters";
 import { useEffect, useRef, useState } from "react";
 import { useWindowScroll } from "react-use";
 import Card from "./Card";

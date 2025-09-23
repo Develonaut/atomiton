@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
-import Image from "@/components/Image";
+import Image from "#components/Image";
 import "swiper/css";
 import { useRef } from "react";
 

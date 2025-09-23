@@ -1,6 +1,6 @@
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
-import PanelMessage from "@/components/PanelMessage";
+import Image from "#components/Image";
+import Icon from "#components/Icon";
+import PanelMessage from "#components/PanelMessage";
 
 type Props = {
   title: string;

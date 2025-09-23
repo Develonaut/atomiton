@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { router } from "@/router";
-import { routes } from "@/router/routes";
+import { router } from "#router";
+import { routes } from "#router/routes";
 
 describe("Router", () => {
   it("router package should be importable", async () => {
@@ -30,7 +30,7 @@ describe("Router", () => {
   });
 
   it("navigation utilities should have preload functions", async () => {
-    const navigation = await import("@/router/navigation");
+    const navigation = await import("#router/navigation");
     expect(navigation.preloadHome).toBeDefined();
     expect(navigation.preloadExplore).toBeDefined();
     expect(navigation.preloadEditor).toBeDefined();
@@ -42,7 +42,7 @@ describe("Router", () => {
   });
 
   it("TanStack Router Link component should be importable with preloading support", async () => {
-    const { Link } = await import("@/router");
+    const { Link } = await import("#router");
     expect(Link).toBeDefined();
     expect(["function", "object"]).toContain(typeof Link);
   });

@@ -1,6 +1,6 @@
-import { Link } from "@/router";
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import { Link } from "#router";
+import Image from "#components/Image";
+import Icon from "#components/Icon";
 import Menu from "./Menu";
 
 function Head() {

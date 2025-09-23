@@ -1,5 +1,5 @@
-import Layout from "@/components/Layout";
-import Catalog from "@/components/Catalog";
+import Layout from "#components/Layout";
+import Catalog from "#components/Catalog";
 
 import { content } from "./content";
 

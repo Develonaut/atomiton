@@ -5,8 +5,8 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import Icon from "@/components/Icon";
-import Modal from "@/components/Modal";
+import Icon from "#components/Icon";
+import Modal from "#components/Modal";
 import Folders from "../Folders";
 import DeleteFile from "../DeleteFile";
 

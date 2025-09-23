@@ -1,10 +1,10 @@
-import Image from "@/components/Image";
-import { useLink } from "@/router";
-import { useTemplates } from "@/store/useTemplates";
+import Image from "#components/Image";
+import { useLink } from "#router";
+import { useTemplates } from "#store/useTemplates";
 import {
   convertEdgeToEditorEdge,
   convertNodeToEditorNode,
-} from "@/utils/editorConverters";
+} from "#utils/editorConverters";
 import type { CompositeDefinition } from "@atomiton/nodes/browser";
 
 type TemplateButtonProps = {

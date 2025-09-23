@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Switch from "@/components/form/Switch";
+import Switch from "#components/form/Switch";
 
 function MotionBlur() {
   const [blur, setBlur] = useState(true);

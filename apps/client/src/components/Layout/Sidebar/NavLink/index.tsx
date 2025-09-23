@@ -1,5 +1,5 @@
-import Icon from "@/components/Icon";
-import { Link, usePathname } from "@/router";
+import Icon from "#components/Icon";
+import { Link, usePathname } from "#router";
 
 type NavLinkProps = {
   value: {

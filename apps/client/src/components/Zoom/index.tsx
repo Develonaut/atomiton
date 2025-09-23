@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 import { useEditorViewport } from "@atomiton/editor";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { useRef, useState } from "react";

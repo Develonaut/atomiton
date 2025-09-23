@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setScrollbarWidth, removeScrollbarWidth } from "@/utils/scrollbar";
+import { setScrollbarWidth, removeScrollbarWidth } from "#utils/scrollbar";
 
 /**
  * Hook for managing scrollbar width and overflow state

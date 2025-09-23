@@ -6,7 +6,7 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { motion } from "framer-motion";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 import Notification from "./Notification";
 import Details from "./Details";
 

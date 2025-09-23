@@ -115,7 +115,7 @@ import {
   ImageGrid,
   ColorDisplay,
   FormSubmitButton
-} from "@/components/form";
+} from "#components/form";
 
 // Example usage
 <NumberInput value={width} onChange={setWidth} prefix="W" />

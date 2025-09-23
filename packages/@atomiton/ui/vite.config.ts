@@ -1,5 +1,4 @@
 import { defineReactLibraryConfig } from "@atomiton/vite-config";
-import { resolve } from "path";
 
 export default defineReactLibraryConfig({
   name: "AtomitonUI",

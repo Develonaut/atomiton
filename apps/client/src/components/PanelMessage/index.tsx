@@ -1,9 +1,9 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import Icon from "@/components/Icon";
-import Select from "@/components/form/Select";
-import Button from "@/components/Button";
-import ViewController from "@/components/ViewController";
+import Icon from "#components/Icon";
+import Select from "#components/form/Select";
+import Button from "#components/Button";
+import ViewController from "#components/ViewController";
 import AddFiles from "./AddFiles";
 import SelectAi from "./SelectAi";
 import { Box } from "@atomiton/ui";

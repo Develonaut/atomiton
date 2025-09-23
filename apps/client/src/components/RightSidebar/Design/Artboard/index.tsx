@@ -1,6 +1,6 @@
-import { NumberInput } from "@/components/form";
-import Icon from "@/components/Icon";
-import Select from "@/components/form/Select";
+import { NumberInput } from "#components/form";
+import Icon from "#components/Icon";
+import Select from "#components/form/Select";
 import { useState } from "react";
 import Group from "../../Group";
 

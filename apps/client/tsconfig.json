@@ -1,12 +1,10 @@
 {
   "extends": "@atomiton/typescript-config/app.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "types": ["@testing-library/jest-dom/vitest"],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "#*": ["src/*"]
     }
-  },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "dist"]
+  }
 }

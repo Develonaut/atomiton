@@ -1,5 +1,5 @@
 import { ToastBar, Toaster } from "react-hot-toast";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 type Props = {
   children: React.ReactNode;

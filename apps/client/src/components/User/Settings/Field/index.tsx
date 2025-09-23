@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 type Props = {
   value: string;

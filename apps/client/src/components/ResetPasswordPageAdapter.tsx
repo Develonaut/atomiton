@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "@/router";
+import { Link } from "#router";
 import ButtonAdapter from "./ButtonAdapter";
-import Login from "@/components/Login";
-import Field from "@/components/Field";
+import Login from "#components/Login";
+import Field from "#components/Field";
 
 function ResetPasswordPageAdapter() {
   const [email, setEmail] = useState("");

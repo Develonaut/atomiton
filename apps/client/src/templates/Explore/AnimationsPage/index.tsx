@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout";
-import Projects from "@/components/Projects";
-import Gallery from "@/components/Gallery";
-import PanelMessage from "@/components/PanelMessage";
+import Layout from "#components/Layout";
+import Projects from "#components/Projects";
+import Gallery from "#components/Gallery";
+import PanelMessage from "#components/PanelMessage";
 
 import { projects, gallery } from "./content";
 

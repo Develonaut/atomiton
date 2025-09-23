@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { usePathname } from "@/router";
-import { Link } from "@/router";
+import { usePathname } from "#router";
+import { Link } from "#router";
 import AnimateHeight from "react-animate-height";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 type DropdownProps = {
   value: {

@@ -1,4 +1,4 @@
-import Tabs from "@/components/Tabs";
+import Tabs from "#components/Tabs";
 import { useState } from "react";
 import Assets from "./Assets";
 import Head from "./Head";

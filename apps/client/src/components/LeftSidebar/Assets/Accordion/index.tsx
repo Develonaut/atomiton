@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 import { Icon as UIIcon } from "@atomiton/ui";
 import { useState } from "react";
 import AnimateHeight from "react-animate-height";

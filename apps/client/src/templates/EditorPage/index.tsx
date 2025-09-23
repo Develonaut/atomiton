@@ -1,4 +1,4 @@
-import LayoutEditor from "@/components/LayoutEditor";
+import LayoutEditor from "#components/LayoutEditor";
 
 function EditorPage() {
   return <LayoutEditor />;

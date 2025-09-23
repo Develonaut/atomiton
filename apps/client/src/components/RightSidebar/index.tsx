@@ -1,5 +1,5 @@
-import Tabs from "@/components/Tabs";
-import ViewController from "@/components/ViewController";
+import Tabs from "#components/Tabs";
+import ViewController from "#components/ViewController";
 import { Box } from "@atomiton/ui";
 import { useState } from "react";
 import Animation from "./Animation";

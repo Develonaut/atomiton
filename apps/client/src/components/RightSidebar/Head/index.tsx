@@ -1,4 +1,4 @@
-import Image from "@/components/Image";
+import Image from "#components/Image";
 import Share from "./Share";
 
 const avatars = ["/images/avatars/1.png", "/images/avatars/2.png"];

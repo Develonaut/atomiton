@@ -1,7 +1,7 @@
 import { toast } from "react-hot-toast";
-import Button from "@/components/Button";
-import Icon from "@/components/Icon";
-import { useClipboard } from "@/utils/clipboard";
+import Button from "#components/Button";
+import Icon from "#components/Icon";
+import { useClipboard } from "#utils/clipboard";
 
 function Foot() {
   const link = "https://brainwave.co/file/k373nH";

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Icon from "@/components/Icon";
-import Tabs from "@/components/Tabs";
-import Image from "@/components/Image";
+import Icon from "#components/Icon";
+import Tabs from "#components/Tabs";
+import Image from "#components/Image";
 import Group from "../../Group";
-import { DualRangeSlider } from "@/components/form";
+import { DualRangeSlider } from "#components/form";
 
 const tabs = [
   { id: 0, name: "Short" },

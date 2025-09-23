@@ -6,7 +6,7 @@ import {
   MenuItems,
   MenuSeparator,
 } from "@headlessui/react";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 import { itemsType, itemsSort } from "./items";
 

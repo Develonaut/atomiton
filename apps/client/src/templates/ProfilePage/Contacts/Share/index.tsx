@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import Icon from "@/components/Icon";
-import Modal from "@/components/Modal";
-import Image from "@/components/Image";
-import Button from "@/components/Button";
-import { useClipboard } from "@/utils/clipboard";
+import Icon from "#components/Icon";
+import Modal from "#components/Modal";
+import Image from "#components/Image";
+import Button from "#components/Button";
+import { useClipboard } from "#utils/clipboard";
 
 const socials = [
   {

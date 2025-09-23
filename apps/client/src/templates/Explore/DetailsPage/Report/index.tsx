@@ -1,5 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import Icon from "@/components/Icon";
+import Icon from "#components/Icon";
 
 function Report() {
   const buttons = [

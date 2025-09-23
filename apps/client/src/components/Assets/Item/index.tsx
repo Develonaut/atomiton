@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
+import Image from "#components/Image";
+import Icon from "#components/Icon";
 import Share from "./Share";
 import ZoomIn from "./ZoomIn";
 

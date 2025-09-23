@@ -1,5 +1,5 @@
-import Button from "@/components/Button";
-import Image from "@/components/Image";
+import Button from "#components/Button";
+import Image from "#components/Image";
 
 function NotFoundPage() {
   return (

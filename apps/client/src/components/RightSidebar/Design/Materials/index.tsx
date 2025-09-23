@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Group from "../../Group";
-import { ImageGrid } from "@/components/form";
+import { ImageGrid } from "#components/form";
 
 import { content } from "./content";
 

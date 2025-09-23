@@ -2,10 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
     "noEmit": true,
-    "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "types": ["node", "electron", "@testing-library/jest-dom/vitest"]
   }

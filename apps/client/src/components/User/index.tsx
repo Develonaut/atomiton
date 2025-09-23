@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Link } from "@/router";
+import { Link } from "#router";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import Image from "@/components/Image";
-import Icon from "@/components/Icon";
-import Modal from "@/components/Modal";
+import Image from "#components/Image";
+import Icon from "#components/Icon";
+import Modal from "#components/Modal";
 import Settings from "./Settings";
 
 function User() {

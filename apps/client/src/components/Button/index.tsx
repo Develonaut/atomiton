@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "@/router";
-import Icon from "@/components/Icon";
+import { Link } from "#router";
+import Icon from "#components/Icon";
 
 type CommonProps = {
   className?: string;

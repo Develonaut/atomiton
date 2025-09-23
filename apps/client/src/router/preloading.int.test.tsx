@@ -19,11 +19,11 @@ vi.mock("../../index", async () => {
 });
 
 // Mock components to avoid dependencies
-vi.mock("@/components/Templates", () => ({
+vi.mock("#components/Templates", () => ({
   default: () => <div data-testid="templates">Templates</div>,
 }));
 
-vi.mock("@/store/useComposites", () => ({
+vi.mock("#store/useComposites", () => ({
   useComposites: () => ({
     composites: [],
     isLoading: false,
@@ -32,7 +32,7 @@ vi.mock("@/store/useComposites", () => ({
   }),
 }));
 
-vi.mock("@/store/useTemplates", () => ({
+vi.mock("#store/useTemplates", () => ({
   useTemplates: () => ({
     templates: [],
     isLoading: false,
@@ -41,7 +41,7 @@ vi.mock("@/store/useTemplates", () => ({
   }),
 }));
 
-vi.mock("@/components/LayoutEditor", () => ({
+vi.mock("#components/LayoutEditor", () => ({
   default: () => <div data-testid="layout-editor">Layout Editor</div>,
 }));
 

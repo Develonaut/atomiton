@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Group from "../../Group";
-import { ColorDisplay } from "@/components/form";
+import { ColorDisplay } from "#components/form";
 
 function Background() {
   const [color, setColor] = useState("F4F4F4");

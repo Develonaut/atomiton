@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "@/components/Button";
-import Select from "@/components/form/Select";
+import Button from "#components/Button";
+import Select from "#components/form/Select";
 
 const accesses = [
   { id: 0, name: "can view" },

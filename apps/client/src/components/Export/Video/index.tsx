@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Select from "@/components/form/Select";
-import Tabs from "@/components/Tabs";
-import Button from "@/components/Button";
-import Icon from "@/components/Icon";
+import Select from "#components/form/Select";
+import Tabs from "#components/Tabs";
+import Button from "#components/Button";
+import Icon from "#components/Icon";
 import Line from "../Line";
 
 import {

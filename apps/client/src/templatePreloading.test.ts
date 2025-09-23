@@ -23,7 +23,7 @@ describe("Template Preloading Smoke Tests", () => {
 
   it("should import Link from router successfully", async () => {
     // Verify Link is properly imported in Templates component
-    const routerModule = await import("@/router");
+    const routerModule = await import("#router");
     expect(routerModule.Link).toBeDefined();
 
     // Link might be a function or an object (React.forwardRef returns an object)
@@ -32,7 +32,7 @@ describe("Template Preloading Smoke Tests", () => {
 
   it("should have router configured with intent preloading", async () => {
     // Verify router configuration supports preloading
-    const routerModule = await import("@/router");
+    const routerModule = await import("#router");
     const router = routerModule.router;
 
     // Check router options for preloading configuration
@@ -49,7 +49,7 @@ describe("Template Preloading Smoke Tests", () => {
 
   it("should have useLink hook available for Create button", async () => {
     // Verify useLink hook is available for other components
-    const routerModule = await import("@/router");
+    const routerModule = await import("#router");
     expect(routerModule.useLink).toBeDefined();
     expect(typeof routerModule.useLink).toBe("function");
   });
