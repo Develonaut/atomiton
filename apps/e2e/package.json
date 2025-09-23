@@ -1,0 +1,26 @@
+{
+  "name": "@atomiton/e2e",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "test:chromium": "playwright test --project=chromium",
+    "test:desktop": "playwright test --project=desktop",
+    "test:snapshots": "playwright test --project=vite-desktop --project=vite-mobile",
+    "test:update-snapshots": "playwright test --update-snapshots",
+    "test:report": "playwright show-report",
+    "codegen": "playwright codegen",
+    "install": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@atomiton/typescript-config": "workspace:^",
+    "@atomiton/vite-config": "workspace:*",
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -323,6 +323,24 @@ importers:
         specifier: ^8.0.4
         version: 8.0.5
 
+  apps/e2e:
+    devDependencies:
+      '@atomiton/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/typescript-config
+      '@atomiton/vite-config':
+        specifier: workspace:*
+        version: link:../../packages/@atomiton/vite-config
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.55.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.19.16
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.2
+
   packages/@atomiton/conductor:
     dependencies:
       '@atomiton/events':
@@ -6017,7 +6035,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 20.19.16
+      '@types/node': 22.18.5
       '@types/responselike': 1.0.3
 
   '@types/chai@5.2.2':
@@ -6061,7 +6079,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 20.19.16
+      '@types/node': 22.18.5
 
   '@types/node@20.19.16':
     dependencies:
@@ -6081,13 +6099,13 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 20.19.16
+      '@types/node': 22.18.5
 
   '@types/uuid@10.0.0': {}
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 20.19.16
+      '@types/node': 22.18.5
     optional: true
 
   '@typescript-eslint/eslint-plugin@8.44.0(@typescript-eslint/parser@8.44.0(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2)':

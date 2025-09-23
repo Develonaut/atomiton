@@ -13,7 +13,7 @@ test.describe("Desktop App Lifecycle", () => {
   test("should launch app and initialize services without crashing", async () => {
     // Launch Electron app that loads the client UI
     const electronApp = await electron.launch({
-      args: [path.join(__dirname, "../../../desktop/out/main/index.js")],
+      args: [path.join(__dirname, "../../../../desktop/out/main/index.js")],
       timeout: 15000,
     });
 
@@ -39,7 +39,7 @@ test.describe("Desktop App Lifecycle", () => {
 
   test("should handle app quit gracefully", async () => {
     const electronApp = await electron.launch({
-      args: [path.join(__dirname, "../../../desktop/out/main/index.js")],
+      args: [path.join(__dirname, "../../../../desktop/out/main/index.js")],
       timeout: 15000,
     });
 
@@ -60,7 +60,7 @@ test.describe("Desktop App Lifecycle", () => {
 
     // First app instance
     const electronApp1 = await electron.launch({
-      args: [path.join(__dirname, "../../../desktop/out/main/index.js")],
+      args: [path.join(__dirname, "../../../../desktop/out/main/index.js")],
       timeout: 15000,
     });
 
@@ -74,7 +74,7 @@ test.describe("Desktop App Lifecycle", () => {
 
     // Second app instance - should reuse same storage
     const electronApp2 = await electron.launch({
-      args: [path.join(__dirname, "../../../desktop/out/main/index.js")],
+      args: [path.join(__dirname, "../../../../desktop/out/main/index.js")],
       timeout: 15000,
     });
 
@@ -89,7 +89,7 @@ test.describe("Desktop App Lifecycle", () => {
   test("should handle multiple rapid window operations", async () => {
     // Brian's "rapid clicking" test for Electron
     const electronApp = await electron.launch({
-      args: [path.join(__dirname, "../../../desktop/out/main/index.js")],
+      args: [path.join(__dirname, "../../../../desktop/out/main/index.js")],
       timeout: 15000,
     });
 
@@ -113,7 +113,7 @@ test.describe("Desktop App Lifecycle", () => {
   test("should maintain responsive UI during heavy operations", async () => {
     // Test app responsiveness under load
     const electronApp = await electron.launch({
-      args: [path.join(__dirname, "../../../desktop/out/main/index.js")],
+      args: [path.join(__dirname, "../../../../desktop/out/main/index.js")],
       timeout: 15000,
     });
 
