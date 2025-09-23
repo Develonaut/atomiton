@@ -3,13 +3,13 @@
  * Browser-safe configuration for CSV reading node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema
 const csvReaderSchema = {
@@ -89,63 +89,72 @@ export const csvReaderDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "filePath",
-        name: "File Path",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Path to the CSV file to read",
-      },
-      {
-        id: "data",
-        name: "CSV Data",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Raw CSV data as string",
-      },
-      {
-        id: "content",
-        name: "Content",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Alternative input for CSV content",
-      },
-    ],
-    output: [
-      {
-        id: "records",
-        name: "Records",
-        dataType: "array",
-        required: true,
-        multiple: false,
-        description: "Parsed CSV data as array of objects",
-      },
-      {
-        id: "headers",
-        name: "Headers",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "Column headers from CSV",
-      },
-      {
-        id: "rowCount",
-        name: "Row Count",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Number of data rows",
-      },
-    ],
-  }),
+  inputPorts: [
+    createNodePort("input", {
+      id: "filePath",
+      name: "File Path",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Path to the CSV file to read",
+    }),
+    createNodePort("input", {
+      id: "data",
+      name: "CSV Data",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Raw CSV data as string",
+    }),
+    createNodePort("input", {
+      id: "content",
+      name: "Content",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Alternative input for CSV content",
+    }),
+  ],
+  outputPorts: [
+    createNodePort("output", {
+      id: "records",
+      name: "Records",
+      dataType: "array",
+      required: true,
+      multiple: false,
+      description: "Parsed CSV data as array of objects",
+    }),
+    createNodePort("output", {
+      id: "headers",
+      name: "Headers",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "Column headers from CSV",
+    }),
+    createNodePort("output", {
+      id: "rowCount",
+      name: "Row Count",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Number of data rows",
+    }),
+  ],
 });
 
 export default csvReaderDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullCSVReaderSchema = v.object({
+  ...csvReaderSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type CSVReaderParameters = VInfer<typeof csvReaderDefinition.parameters.schema>;
+export type CSVReaderParameters = VInfer<typeof fullCSVReaderSchema>;

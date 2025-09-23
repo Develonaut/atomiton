@@ -1,82 +1,77 @@
 /**
- * createNode - Universal factory for creating node definitions
+ * createNodeDefinition - Universal factory for creating node definitions
  *
  * A node is a node is a node. This factory creates any node definition
  * by combining its parts (metadata, parameters, ports, etc).
  */
 
+import type {
+  NodeDefinition,
+  NodeEdge,
+  NodeMetadata,
+  NodeParameters,
+  NodePort,
+} from "#core/types/definition.js";
 import { generateNodeId } from "@atomiton/utils";
-
-function titleCase(str: string): string {
-  return str
-    .toLowerCase()
-    .split(/[\s-_]+/)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-import type { NodeMetadata, NodeParameters, Node } from "../types/definition.js";
 import createNodeMetadata, {
   type NodeMetadataInput,
 } from "./createNodeMetadata";
-import type { INodePorts } from "./createNodePorts";
+import createNodeParameters from "./createNodeParameters";
+import type { NodePortInput } from "./createNodePorts";
 import createNodePorts from "./createNodePorts";
 
 export type CreateNodeInput = {
-  // Basic info
   id?: string;
   type?: "atomic" | "composite";
   name?: string;
   position?: { x: number; y: number };
-
-  metadata?: NodeMetadata | Record<string, unknown>;
-  parameters?: NodeParameters | Record<string, unknown>;
-  ports?: INodePorts | Record<string, unknown>;
-
-  // Composite-specific
-  children?: Node[];
-  edges?: [];
+  metadata?: NodeMetadata | NodeMetadataInput;
+  parameters?: NodeParameters | Parameters<typeof createNodeParameters>[0];
+  inputPorts?: NodePort[] | NodePortInput[];
+  outputPorts?: NodePort[] | NodePortInput[];
+  children?: NodeDefinition[];
+  edges?: NodeEdge[];
 };
 
 /**
  * Create a node definition
  *
  * Simple factory that combines parts into a node.
- * No complex logic - just assembles the pieces.
+ * Delegates validation and creation to sub-factories.
  */
-function createNode(input: CreateNodeInput): Node {
+function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
   const id = input.id || generateNodeId();
-  const type = input.type || "composite";
-
-  // Extract name from metadata if not provided
-  const name: string =
+  const type = input.type || "atomic";
+  const name =
     input.name ||
-    (input.metadata as NodeMetadataInput)?.name ||
-    `${titleCase(type)} Node`;
-
-  // Ensure metadata has required fields, using appropriate default variant
-  const metadataWithDefaults: NodeMetadataInput = {
-    ...(input.metadata as NodeMetadataInput),
-    variant: (input.metadata as NodeMetadataInput)?.variant || "test",
-    name: name,
-    description:
-      (input.metadata as NodeMetadataInput)?.description || `${name} node`,
-    category: (input.metadata as NodeMetadataInput)?.category || "utility",
-    icon: (input.metadata as NodeMetadataInput)?.icon || "code-2",
-  };
+    (input.metadata && "name" in input.metadata
+      ? input.metadata.name
+      : undefined) ||
+    "Unnamed Node";
+  const position = input.position || { x: 0, y: 0 };
+  const metadata = createNodeMetadata(input.metadata || {});
+  const parameters = createNodeParameters(
+    input.parameters || {},
+    input.parameters && "defaults" in input.parameters
+      ? (input.parameters as NodeParameters).defaults
+      : undefined,
+    input.parameters && "fields" in input.parameters
+      ? (input.parameters as NodeParameters).fields
+      : undefined
+  );
 
   const ports = createNodePorts({
-    input: (input.ports as INodePorts)?.input || [],
-    output: (input.ports as INodePorts)?.output || [],
+    input: input.inputPorts,
+    output: input.outputPorts,
   });
 
-  // Simple assembly - a node is just its parts combined
-  const node: Node = {
+  const node: NodeDefinition = {
     id,
     name,
     type,
-    position: input.position || { x: 0, y: 0 },
-    metadata: createNodeMetadata(metadataWithDefaults),
-    parameters: (input.parameters as NodeParameters) || ({} as NodeParameters),
+    position,
+    metadata,
+    parameters,
     inputPorts: ports.input,
     outputPorts: ports.output,
   };
@@ -90,6 +85,6 @@ function createNode(input: CreateNodeInput): Node {
   return node;
 }
 
-export default createNode;
-export { createNode };
-export { createNode as createNodeDefinition };
+export { createNodeDefinition };
+
+export default createNodeDefinition;

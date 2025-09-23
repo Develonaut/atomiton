@@ -3,18 +3,18 @@
  * Node.js implementation with actual business logic
  */
 
+import { createNodeExecutable } from "../../core/factories/createNodeExecutable";
 import type {
   NodeExecutable,
   NodeExecutionContext,
-  NodeExecutionResult
-} from '../../core/types/executable';
-import { createNodeExecutable } from '../../core/factories/createNodeExecutable';
-import type { ParallelParameters } from '../../definitions/parallel';
+  NodeExecutionResult,
+} from "../../core/types/executable";
+import type { ParallelParameters } from "../../definitions/parallel";
 
 // Types for execution
 type OperationResult = {
   index: number;
-  status: 'fulfilled' | 'rejected';
+  status: "fulfilled" | "rejected";
   value?: unknown;
   reason?: string;
   duration: number;
@@ -34,12 +34,12 @@ export type ParallelOutput = {
 async function executeWithTimeout<T>(
   promise: Promise<T>,
   timeout: number,
-  timeoutMessage = "Operation timed out",
+  timeoutMessage = "Operation timed out"
 ): Promise<T> {
   return Promise.race([
     promise,
     new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error(timeoutMessage)), timeout),
+      setTimeout(() => reject(new Error(timeoutMessage)), timeout)
     ),
   ]);
 }
@@ -50,9 +50,14 @@ async function executeWithTimeout<T>(
 async function processInChunks<T>(
   operations: T[],
   processor: (item: T, index: number) => Promise<unknown>,
-  config: ParallelParameters,
+  config: ParallelParameters
 ): Promise<OperationResult[]> {
-  const { concurrency, maintainOrder, operationTimeout, failFast } = config;
+  const { concurrency, maintainOrder, operationTimeout, failFast } = config as {
+    concurrency: number;
+    maintainOrder: boolean;
+    operationTimeout: number;
+    failFast: boolean;
+  };
   const results: OperationResult[] = maintainOrder
     ? new Array(operations.length)
     : [];
@@ -78,7 +83,7 @@ async function processInChunks<T>(
       .then((value) => {
         const result: OperationResult = {
           index,
-          status: 'fulfilled',
+          status: "fulfilled",
           value,
           duration: Date.now() - startTime,
         };
@@ -92,7 +97,7 @@ async function processInChunks<T>(
       .catch((error) => {
         const result: OperationResult = {
           index,
-          status: 'rejected',
+          status: "rejected",
           reason: error instanceof Error ? error.message : String(error),
           duration: Date.now() - startTime,
         };
@@ -126,9 +131,12 @@ async function processInChunks<T>(
 async function executeStrategy(
   operations: unknown[],
   config: ParallelParameters,
-  context: NodeExecutionContext,
+  context: NodeExecutionContext
 ): Promise<OperationResult[]> {
-  const { strategy, globalTimeout } = config;
+  const { strategy, globalTimeout } = config as {
+    strategy: string;
+    globalTimeout: number;
+  };
 
   // For now, operations are just passed through
   // In a real implementation, operations would be functions or task definitions
@@ -137,7 +145,7 @@ async function executeStrategy(
 
     // Simulate async operation - in real implementation,
     // this would execute the actual operation
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+    await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
 
     // For MVP, just return processed indicator
     return {
@@ -150,27 +158,27 @@ async function executeStrategy(
 
   const executeOps = async () => {
     switch (strategy) {
-      case 'all': {
+      case "all": {
         // All must succeed
         const results = await processInChunks(operations, processor, {
           ...config,
           failFast: true,
         });
 
-        const hasFailure = results.some(r => r.status === 'rejected');
+        const hasFailure = results.some((r) => r.status === "rejected");
         if (hasFailure) {
-          throw new Error('One or more operations failed');
+          throw new Error("One or more operations failed");
         }
 
         return results;
       }
 
-      case 'race': {
+      case "race": {
         // Return first to complete
         const promises = operations.map((op, idx) =>
-          processor(op, idx).then(value => ({
+          processor(op, idx).then((value) => ({
             index: idx,
-            status: 'fulfilled' as const,
+            status: "fulfilled" as const,
             value,
             duration: 0,
           }))
@@ -180,7 +188,7 @@ async function executeStrategy(
         return [first];
       }
 
-      case 'allSettled':
+      case "allSettled":
       default: {
         // Complete all regardless of failures
         return processInChunks(operations, processor, config);
@@ -199,93 +207,106 @@ async function executeStrategy(
 /**
  * Parallel node executable
  */
-export const parallelExecutable: NodeExecutable<ParallelParameters> = createNodeExecutable({
-  async execute(
-    context: NodeExecutionContext,
-    config: ParallelParameters,
-  ): Promise<NodeExecutionResult> {
-    const startTime = Date.now();
+export const parallelExecutable: NodeExecutable<ParallelParameters> =
+  createNodeExecutable({
+    async execute(
+      context: NodeExecutionContext,
+      config: ParallelParameters
+    ): Promise<NodeExecutionResult> {
+      const startTime = Date.now();
 
-    try {
-      // Get input operations
-      const operations = context.inputs.operations as unknown[] || [];
+      try {
+        // Get input operations
+        const operations = (context.inputs.operations as unknown[]) || [];
 
-      context.log?.info?.(`Starting parallel execution of ${operations.length} operations`, {
-        strategy: config.strategy,
-        concurrency: config.concurrency,
-      });
+        context.log?.info?.(
+          `Starting parallel execution of ${operations.length} operations`,
+          {
+            strategy: config.strategy,
+            concurrency: config.concurrency,
+          }
+        );
 
-      if (operations.length === 0) {
+        if (operations.length === 0) {
+          return {
+            success: true,
+            outputs: {
+              results: [],
+              completed: 0,
+              failed: 0,
+              duration: 0,
+              success: true,
+            },
+          };
+        }
+
+        // Execute operations based on strategy
+        const operationResults = await executeStrategy(
+          operations,
+          config,
+          context
+        );
+
+        // Calculate statistics
+        const completed = operationResults.filter(
+          (r) => r.status === "fulfilled"
+        ).length;
+        const failed = operationResults.filter(
+          (r) => r.status === "rejected"
+        ).length;
+        const duration = Date.now() - startTime;
+
+        // Extract values from results
+        const results = operationResults.map((r) =>
+          r.status === "fulfilled" ? r.value : { error: r.reason }
+        );
+
+        const output: ParallelOutput = {
+          results,
+          completed,
+          failed,
+          duration,
+          success: failed === 0,
+        };
+
+        context.log?.info?.(`Parallel execution completed in ${duration}ms`, {
+          completed,
+          failed,
+          totalOperations: operations.length,
+        });
+
         return {
           success: true,
+          outputs: output,
+        };
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+
+        context.log?.error?.("Parallel execution failed", {
+          error: errorMessage,
+          config,
+        });
+
+        return {
+          success: false,
+          error: errorMessage,
           outputs: {
             results: [],
             completed: 0,
             failed: 0,
-            duration: 0,
-            success: true,
+            duration: Date.now() - startTime,
+            success: false,
           },
         };
       }
+    },
 
-      // Execute operations based on strategy
-      const operationResults = await executeStrategy(operations, config, context);
-
-      // Calculate statistics
-      const completed = operationResults.filter(r => r.status === 'fulfilled').length;
-      const failed = operationResults.filter(r => r.status === 'rejected').length;
-      const duration = Date.now() - startTime;
-
-      // Extract values from results
-      const results = operationResults.map(r =>
-        r.status === 'fulfilled' ? r.value : { error: r.reason }
-      );
-
-      const output: ParallelOutput = {
-        results,
-        completed,
-        failed,
-        duration,
-        success: failed === 0,
-      };
-
-      context.log?.info?.(`Parallel execution completed in ${duration}ms`, {
-        completed,
-        failed,
-        totalOperations: operations.length,
-      });
-
-      return {
-        success: true,
-        outputs: output,
-      };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-      context.log?.error?.('Parallel execution failed', {
-        error: errorMessage,
-        config,
-      });
-
-      return {
-        success: false,
-        error: errorMessage,
-        outputs: {
-          results: [],
-          completed: 0,
-          failed: 0,
-          duration: Date.now() - startTime,
-          success: false,
-        },
-      };
-    }
-  },
-
-  validateConfig(config: unknown): ParallelParameters {
-    // In a real implementation, this would validate using the schema
-    // For now, just cast it
-    return config as ParallelParameters;
-  },
-});
+    validateConfig(config: unknown): ParallelParameters {
+      // In a real implementation, this would validate using the schema
+      // For now, just cast it
+      return config as ParallelParameters;
+    },
+  });
 
 export default parallelExecutable;

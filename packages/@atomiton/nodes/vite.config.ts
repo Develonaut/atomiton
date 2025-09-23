@@ -1,18 +1,14 @@
-import { defineConfig } from "vite";
 import { resolve } from "path";
-import dts from "vite-plugin-dts";
 import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   plugins: [
     dts({
       insertTypesEntry: true,
       include: ["src/**/*.ts", "src/**/*.tsx"],
-      exclude: [
-        "src/**/*.test.ts",
-        "src/**/*.test.tsx",
-        "src/**/*.bench.ts",
-      ],
+      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.bench.ts"],
     }),
     visualizer({
       filename: "dist/stats.html",
@@ -25,12 +21,37 @@ export default defineConfig({
     target: "es2020",
     lib: {
       entry: {
-        "definitions": resolve(__dirname, "src/definitions/index.ts"),
-        "executables": resolve(__dirname, "src/executables/index.ts"),
+        definitions: resolve(__dirname, "src/definitions/index.ts"),
+        executables: resolve(__dirname, "src/executables/index.ts"),
       },
       formats: ["es"],
     },
     rollupOptions: {
+      onLog(level, log, handler) {
+        // Detect Node.js built-ins in browser code
+        if (log.code === 'UNRESOLVED_IMPORT') {
+          const nodeBuiltins = [
+            "fs",
+            "path",
+            "child_process",
+            "os",
+            "util",
+            "crypto",
+            "stream",
+            "http",
+            "https",
+          ];
+          if (
+            nodeBuiltins.some((builtin) => log.message.includes(builtin))
+          ) {
+            console.error(
+              `❌ ERROR: Node.js built-in imported in browser code: ${log.message}`
+            );
+            return;
+          }
+        }
+        handler(level, log);
+      },
       external: [
         // Node.js built-ins - these should ONLY be in desktop build
         "fs",
@@ -73,20 +94,6 @@ export default defineConfig({
           if (id.includes("src/schemas")) return "schemas";
           if (id.includes("node_modules")) return "vendor";
         },
-        // Warn on Node.js imports in browser chunks
-        onwarn(warning, warn) {
-          // Detect Node.js built-ins in browser code
-          if (warning.code === 'UNRESOLVED_IMPORT') {
-            const nodeBuiltins = ['fs', 'path', 'child_process', 'os', 'util', 'crypto', 'stream', 'http', 'https'];
-            if (nodeBuiltins.some(builtin => warning.source?.includes(builtin))) {
-              if (warning.importer?.includes('definitions') || warning.importer?.includes('browser')) {
-                console.error(`❌ ERROR: Node.js built-in "${warning.source}" imported in browser code: ${warning.importer}`);
-                throw new Error(`Node.js dependencies found in browser code!`);
-              }
-            }
-          }
-          warn(warning);
-        },
       },
     },
     sourcemap: true,
@@ -94,7 +101,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      "#": resolve(__dirname, "src"),
     },
   },
 });

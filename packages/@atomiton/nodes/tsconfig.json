@@ -1,12 +1,13 @@
 {
   "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
+    "rootDir": ".",
     "baseUrl": ".",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "paths": {
+      "#*": ["src/*"]
+    },
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

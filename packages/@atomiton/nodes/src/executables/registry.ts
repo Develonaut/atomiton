@@ -3,48 +3,50 @@
  * Central registry for all node executables (Node.js environment)
  */
 
-import type { NodeExecutable } from '../core/types/executable';
+import type { NodeExecutable } from "../core/types/executable";
 
 // Import all node executables
-import parallelExecutable from './parallel';
-import csvReaderExecutable from './csv-reader';
-import compositeExecutable from './composite';
-import imageCompositeExecutable from './image-composite';
-import httpRequestExecutable from './http-request';
-import fileSystemExecutable from './file-system';
-import transformExecutable from './transform';
-import shellCommandExecutable from './shell-command';
-import loopExecutable from './loop';
+import compositeExecutable from "./composite";
+import csvReaderExecutable from "./csv-reader";
+import fileSystemExecutable from "./file-system";
+import httpRequestExecutable from "./http-request";
+import imageCompositeExecutable from "./image-composite";
+import loopExecutable from "./loop";
+import parallelExecutable from "./parallel";
+import shellCommandExecutable from "./shell-command";
+import transformExecutable from "./transform";
 
 /**
  * Registry of all available node executables
  */
-export const nodeExecutableRegistry: Map<string, NodeExecutable<any>> = new Map([
-  ['parallel', parallelExecutable],
-  ['csv-reader', csvReaderExecutable],
-  ['composite', compositeExecutable],
-  ['image-composite', imageCompositeExecutable],
-  ['http-request', httpRequestExecutable],
-  ['file-system', fileSystemExecutable],
-  ['transform', transformExecutable],
-  ['shell-command', shellCommandExecutable],
-  ['loop', loopExecutable],
-]);
+export const nodeExecutableRegistry = new Map<string, NodeExecutable<unknown>>();
+
+// Register all executables
+nodeExecutableRegistry.set("parallel", parallelExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("csv-reader", csvReaderExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("composite", compositeExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("image-composite", imageCompositeExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("http-request", httpRequestExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("file-system", fileSystemExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("transform", transformExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("shell-command", shellCommandExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("loop", loopExecutable as NodeExecutable<unknown>);
 
 /**
  * Get a node executable by ID
  */
-export function getNodeExecutable(nodeId: string): NodeExecutable<any> | undefined {
+export function getNodeExecutable(
+  nodeId: string
+): NodeExecutable<unknown> | undefined {
   return nodeExecutableRegistry.get(nodeId);
 }
 
 /**
  * Get all node executables
  */
-export function getAllNodeExecutables(): NodeExecutable<any>[] {
+export function getAllNodeExecutables(): NodeExecutable<unknown>[] {
   return Array.from(nodeExecutableRegistry.values());
 }
-
 
 /**
  * Check if a node executable exists
@@ -62,13 +64,13 @@ export function getNodeExecutableIds(): string[] {
 
 // Export all executables for convenience
 export {
-  parallelExecutable,
-  csvReaderExecutable,
   compositeExecutable,
-  imageCompositeExecutable,
-  httpRequestExecutable,
+  csvReaderExecutable,
   fileSystemExecutable,
-  transformExecutable,
-  shellCommandExecutable,
+  httpRequestExecutable,
+  imageCompositeExecutable,
   loopExecutable,
+  parallelExecutable,
+  shellCommandExecutable,
+  transformExecutable,
 };

@@ -1,8 +1,9 @@
 /**
- * Factory function for creating atomic node ports
+ * Factory function for creating node ports
  */
 
-import type { NodePortDataType, NodePort } from "../types/definition.js";
+import type { NodePort, NodePortDataType } from "#core/types/definition.js";
+import { isNodePort } from "#core/utils/nodeUtils.js";
 
 export type NodePortInput = {
   id: string;
@@ -24,26 +25,39 @@ export type INodePorts = {
   output: NodePort[];
 };
 
-function createNodePorts(input: NodePortsInput): INodePorts {
-  const createPort = (
-    port: NodePortInput,
-    type: "input" | "output",
-  ): NodePort => ({
-    id: port.id,
-    name: port.name,
-    type,
-    dataType: port.dataType,
-    required: port.required ?? false,
-    multiple: port.multiple ?? false,
-    description: port.description,
-    defaultValue: port.defaultValue,
-  });
+/**
+ * Create a single node port
+ * @param type - The port type (input, output, trigger, error)
+ * @param options - The port configuration options or existing NodePort
+ */
+export function createNodePort(
+  type: "input" | "output" | "trigger" | "error",
+  options: NodePortInput | NodePort
+): NodePort {
+  // Short-circuit if already a NodePort
+  if (isNodePort(options)) {
+    return options;
+  }
 
   return {
-    input: (input.input || []).map((p) => createPort(p, "input")),
-    output: (input.output || []).map((p) => createPort(p, "output")),
+    id: options.id,
+    name: options.name,
+    type,
+    dataType: options.dataType,
+    required: options.required ?? false,
+    multiple: options.multiple ?? false,
+    description: options.description,
+    defaultValue: options.defaultValue,
   };
 }
 
-export { createNodePorts };
+/**
+ * Create input and output ports for a node
+ */
+export function createNodePorts(input: NodePortsInput): INodePorts {
+  return {
+    input: (input.input || []).map((p) => createNodePort("input", p)),
+    output: (input.output || []).map((p) => createNodePort("output", p)),
+  };
+}
 export default createNodePorts;

@@ -1,34 +1,58 @@
 /**
  * Node Utility Functions
- * Common utilities for working with nodes
+ * Common utilities for working with nodes and their components
  */
 
-import type { NodeDefinition } from '../types/definition';
+import type {
+  NodeMetadata,
+  NodeParameters,
+  NodePort,
+} from "#core/types/definition";
 
 /**
- * Type guard to check if a node is atomic
+ * Helper to check if an object is already a NodePort
  */
-export function isAtomicNode(node: NodeDefinition): boolean {
-  return node.type === 'atomic';
+export function isNodePort(obj: unknown): obj is NodePort {
+  return (
+    obj !== null &&
+    typeof obj === "object" &&
+    "type" in obj &&
+    "dataType" in obj &&
+    typeof (obj as Record<string, unknown>).type === "string" &&
+    typeof (obj as Record<string, unknown>).dataType === "string"
+  );
 }
 
 /**
- * Type guard to check if a node has children (composite behavior)
+ * Helper to check if an object is already a NodeMetadata
  */
-export function isCompositeNode(node: NodeDefinition): boolean {
-  return node.type === 'composite';
+export function isNodeMetadata(obj: unknown): obj is NodeMetadata {
+  return (
+    obj !== null &&
+    typeof obj === "object" &&
+    "id" in obj &&
+    "name" in obj &&
+    "variant" in obj &&
+    "version" in obj &&
+    typeof (obj as Record<string, unknown>).id === "string" &&
+    typeof (obj as Record<string, unknown>).name === "string" &&
+    typeof (obj as Record<string, unknown>).variant === "string" &&
+    typeof (obj as Record<string, unknown>).version === "string"
+  );
 }
 
 /**
- * Type guard to check if a node has children
+ * Helper to check if an object is already NodeParameters
  */
-export function hasChildren(node: NodeDefinition): boolean {
-  return Array.isArray(node.children) && node.children.length > 0;
-}
-
-/**
- * Type guard to check if a node has edges
- */
-export function hasEdges(node: NodeDefinition): boolean {
-  return Array.isArray(node.edges) && node.edges.length > 0;
+export function isNodeParameters(obj: unknown): obj is NodeParameters {
+  return (
+    obj !== null &&
+    typeof obj === "object" &&
+    "parse" in obj &&
+    "safeParse" in obj &&
+    "isValid" in obj &&
+    typeof (obj as Record<string, unknown>).parse === "function" &&
+    typeof (obj as Record<string, unknown>).safeParse === "function" &&
+    typeof (obj as Record<string, unknown>).isValid === "function"
+  );
 }

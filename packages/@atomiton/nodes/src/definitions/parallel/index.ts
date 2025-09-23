@@ -3,13 +3,13 @@
  * Browser-safe configuration for parallel execution node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema using validation library
 const parallelSchema = {
@@ -130,63 +130,72 @@ export const parallelDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "operations",
-        name: "Operations",
-        dataType: "array",
-        required: true,
-        multiple: false,
-        description: "Array of operations to run in parallel",
-      },
-    ],
-    output: [
-      {
-        id: "results",
-        name: "Results",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "Array of operation results",
-      },
-      {
-        id: "completed",
-        name: "Completed",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Number of operations completed",
-      },
-      {
-        id: "failed",
-        name: "Failed",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Number of operations failed",
-      },
-      {
-        id: "duration",
-        name: "Duration",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Total execution duration in milliseconds",
-      },
-      {
-        id: "success",
-        name: "Success",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Whether all operations completed successfully",
-      },
-    ],
-  }),
+  inputPorts: [
+    createNodePort("input", {
+      id: "operations",
+      name: "Operations",
+      dataType: "array",
+      required: true,
+      multiple: false,
+      description: "Array of operations to run in parallel",
+    }),
+  ],
+  outputPorts: [
+    createNodePort("output", {
+      id: "results",
+      name: "Results",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "Array of operation results",
+    }),
+    createNodePort("output", {
+      id: "completed",
+      name: "Completed",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Number of operations completed",
+    }),
+    createNodePort("output", {
+      id: "failed",
+      name: "Failed",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Number of operations failed",
+    }),
+    createNodePort("output", {
+      id: "duration",
+      name: "Duration",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Total execution duration in milliseconds",
+    }),
+    createNodePort("output", {
+      id: "success",
+      name: "Success",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Whether all operations completed successfully",
+    }),
+  ],
 });
 
 export default parallelDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullParallelSchema = v.object({
+  ...parallelSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type ParallelParameters = VInfer<typeof parallelDefinition.parameters.schema>;
+export type ParallelParameters = VInfer<typeof fullParallelSchema>;

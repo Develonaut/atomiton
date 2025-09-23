@@ -3,13 +3,13 @@
  * Browser-safe configuration for image composition node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema using validation library
 const imageCompositeSchema = {
@@ -53,7 +53,14 @@ const imageCompositeSchema = {
     .describe("Background color for composition (hex format)"),
 
   blendMode: v
-    .enum(["normal", "multiply", "screen", "overlay", "soft-light", "hard-light"])
+    .enum([
+      "normal",
+      "multiply",
+      "screen",
+      "overlay",
+      "soft-light",
+      "hard-light",
+    ])
     .default("normal")
     .describe("Blend mode for image composition"),
 };
@@ -84,7 +91,15 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
       "graphics",
       "manipulation",
     ],
-    tags: ["image", "composite", "overlay", "merge", "process", "render", "media"],
+    tags: [
+      "image",
+      "composite",
+      "overlay",
+      "merge",
+      "process",
+      "render",
+      "media",
+    ],
     experimental: false,
     deprecated: false,
   }),
@@ -171,95 +186,104 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "baseImage",
-        name: "Base Image",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Base image path or data",
-      },
-      {
-        id: "overlayImage",
-        name: "Overlay Image",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Overlay image path or data",
-      },
-      {
-        id: "images",
-        name: "Images",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "Array of image paths or data",
-      },
-    ],
-    output: [
-      {
-        id: "result",
-        name: "Result",
-        dataType: "string",
-        required: true,
-        multiple: false,
-        description: "Output image path or data",
-      },
-      {
-        id: "imagePath",
-        name: "Image Path",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Output image file path",
-      },
-      {
-        id: "width",
-        name: "Width",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Output image width in pixels",
-      },
-      {
-        id: "height",
-        name: "Height",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Output image height in pixels",
-      },
-      {
-        id: "format",
-        name: "Format",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Output image format",
-      },
-      {
-        id: "size",
-        name: "Size",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Output image file size in bytes",
-      },
-      {
-        id: "success",
-        name: "Success",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Operation success status",
-      },
-    ],
-  }),
+  inputPorts: [
+    createNodePort("input", {
+      id: "baseImage",
+      name: "Base Image",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Base image path or data",
+    }),
+    createNodePort("input", {
+      id: "overlayImage",
+      name: "Overlay Image",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Overlay image path or data",
+    }),
+    createNodePort("input", {
+      id: "images",
+      name: "Images",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "Array of image paths or data",
+    }),
+  ],
+  outputPorts: [
+    createNodePort("output", {
+      id: "result",
+      name: "Result",
+      dataType: "string",
+      required: true,
+      multiple: false,
+      description: "Output image path or data",
+    }),
+    createNodePort("output", {
+      id: "imagePath",
+      name: "Image Path",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Output image file path",
+    }),
+    createNodePort("output", {
+      id: "width",
+      name: "Width",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Output image width in pixels",
+    }),
+    createNodePort("output", {
+      id: "height",
+      name: "Height",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Output image height in pixels",
+    }),
+    createNodePort("output", {
+      id: "format",
+      name: "Format",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Output image format",
+    }),
+    createNodePort("output", {
+      id: "size",
+      name: "Size",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Output image file size in bytes",
+    }),
+    createNodePort("output", {
+      id: "success",
+      name: "Success",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Operation success status",
+    }),
+  ],
 });
 
 export default imageCompositeDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullImageCompositeSchema = v.object({
+  ...imageCompositeSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type ImageCompositeParameters = VInfer<typeof imageCompositeDefinition.parameters.schema>;
+export type ImageCompositeParameters = VInfer<typeof fullImageCompositeSchema>;

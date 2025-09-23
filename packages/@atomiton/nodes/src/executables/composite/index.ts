@@ -3,13 +3,13 @@
  * Node.js implementation with composite workflow execution logic
  */
 
+import { createNodeExecutable } from "#core/factories/createNodeExecutable";
 import type {
   NodeExecutable,
   NodeExecutionContext,
-  NodeExecutionResult
-} from '../../core/types/executable';
-import { createNodeExecutable } from '../../core/factories/createNodeExecutable';
-import type { CompositeParameters } from '../../definitions/composite';
+  NodeExecutionResult,
+} from "#core/types/executable";
+import type { CompositeParameters } from "#definitions/composite";
 
 // Types for composite execution
 type ExecutableNode = {
@@ -58,13 +58,17 @@ async function executeWithRetries(
     try {
       // Create timeout promise
       const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error(`Node execution timed out after ${timeout}ms`)), timeout)
+        setTimeout(
+          () =>
+            reject(new Error(`Node execution timed out after ${timeout}ms`)),
+          timeout
+        )
       );
 
       // Execute with timeout
       const result = await Promise.race([
         node.execute(context),
-        timeoutPromise
+        timeoutPromise,
       ]);
 
       if (result.success) {
@@ -77,11 +81,13 @@ async function executeWithRetries(
       }
 
       // Log retry attempt
-      context.log?.warn?.(`Node ${node.name} failed, retrying (attempt ${attempt + 1}/${retries})`, {
-        error: result.error,
-        nodeId: node.id,
-      });
-
+      context.log?.warn?.(
+        `Node ${node.name} failed, retrying (attempt ${attempt + 1}/${retries})`,
+        {
+          error: result.error,
+          nodeId: node.id,
+        }
+      );
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
 
@@ -103,11 +109,11 @@ async function executeWithRetries(
     // Wait before retry (exponential backoff)
     if (attempt < retries) {
       const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
-  throw lastError || new Error('Unknown error during node execution');
+  throw lastError || new Error("Unknown error during node execution");
 }
 
 /**
@@ -133,7 +139,15 @@ async function executeSequential(
 
     try {
       // Execute with retries and timeout
-      const result = await executeWithRetries(node, childContext, params.retries as number, params.timeout as number);
+      const retries = typeof params.retries === "number" ? params.retries : 0;
+      const timeout =
+        typeof params.timeout === "number" ? params.timeout : 30000;
+      const result = await executeWithRetries(
+        node,
+        childContext,
+        retries,
+        timeout
+      );
 
       totalExecutionTime += Date.now() - startTime;
 
@@ -158,7 +172,8 @@ async function executeSequential(
       previousResult = result;
     } catch (error) {
       totalExecutionTime += Date.now() - startTime;
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
 
       return {
         success: false,
@@ -212,7 +227,10 @@ async function executeParallel(
         inputs: context.inputs || {},
       };
 
-      return executeWithRetries(node, childContext, params.retries as number, params.timeout as number);
+      const retries = typeof params.retries === "number" ? params.retries : 0;
+      const timeout =
+        typeof params.timeout === "number" ? params.timeout : 30000;
+      return executeWithRetries(node, childContext, retries, timeout);
     });
 
     const results = await Promise.allSettled(promises);
@@ -221,13 +239,19 @@ async function executeParallel(
     // Check for failures
     const failures = results
       .map((result, index) => ({ result, node: graph.nodes[index] }))
-      .filter(({ result }) => result.status === 'rejected' || (result.status === 'fulfilled' && !result.value.success));
+      .filter(
+        ({ result }) =>
+          result.status === "rejected" ||
+          (result.status === "fulfilled" && !result.value.success)
+      );
 
     if (failures.length > 0) {
       const firstFailure = failures[0];
-      const errorMessage = firstFailure.result.status === 'rejected'
-        ? firstFailure.result.reason.message || String(firstFailure.result.reason)
-        : firstFailure.result.value.error;
+      const errorMessage =
+        firstFailure.result.status === "rejected"
+          ? firstFailure.result.reason.message ||
+            String(firstFailure.result.reason)
+          : firstFailure.result.value.error;
 
       return {
         success: false,
@@ -248,10 +272,11 @@ async function executeParallel(
 
     // Collect successful results
     const successfulResults = results
-      .filter((result): result is PromiseFulfilledResult<NodeExecutionResult> =>
-        result.status === 'fulfilled' && result.value.success
+      .filter(
+        (result): result is PromiseFulfilledResult<NodeExecutionResult> =>
+          result.status === "fulfilled" && result.value.success
       )
-      .map(result => result.value.outputs);
+      .map((result) => result.value.outputs);
 
     return {
       success: true,
@@ -290,24 +315,65 @@ async function executeParallel(
 /**
  * Composite node executable
  */
-export const compositeExecutable: NodeExecutable<CompositeParameters> = createNodeExecutable({
-  async execute(
-    context: NodeExecutionContext,
-    config: CompositeParameters,
-  ): Promise<NodeExecutionResult> {
-    const startTime = Date.now();
+export const compositeExecutable: NodeExecutable<CompositeParameters> =
+  createNodeExecutable({
+    async execute(
+      context: NodeExecutionContext,
+      config: CompositeParameters
+    ): Promise<NodeExecutionResult> {
+      const startTime = Date.now();
 
-    try {
-      // Get composite graph from context metadata
-      const graph = context.metadata?.graph as CompositeGraph | undefined;
+      try {
+        // Get composite graph from context metadata
+        const graph = context.metadata?.graph as CompositeGraph | undefined;
 
-      if (!graph || !graph.nodes || graph.nodes.length === 0) {
-        context.log?.info?.('Composite node has no child nodes to execute');
+        if (!graph || !graph.nodes || graph.nodes.length === 0) {
+          context.log?.info?.("Composite node has no child nodes to execute");
+
+          return {
+            success: true,
+            outputs: {
+              result: context.inputs,
+              metadata: {
+                executedAt: new Date().toISOString(),
+                nodeId: context.nodeId || "composite",
+                nodeType: "composite",
+                childNodesExecuted: 0,
+                totalExecutionTime: Date.now() - startTime,
+              },
+            },
+          };
+        }
+
+        context.log?.info?.(
+          `Executing composite with ${graph.nodes.length} child nodes`,
+          {
+            parallel: config.parallel,
+            timeout: config.timeout,
+            retries: config.retries,
+          }
+        );
+
+        // Execute based on parallel setting
+        if (config.parallel) {
+          return await executeParallel(graph, context, config);
+        } else {
+          return await executeSequential(graph, context, config);
+        }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+
+        context.log?.error?.("Composite execution failed", {
+          error: errorMessage,
+          config,
+        });
 
         return {
-          success: true,
+          success: false,
+          error: errorMessage,
           outputs: {
-            result: context.inputs,
+            result: undefined,
             metadata: {
               executedAt: new Date().toISOString(),
               nodeId: context.nodeId || "composite",
@@ -318,50 +384,13 @@ export const compositeExecutable: NodeExecutable<CompositeParameters> = createNo
           },
         };
       }
+    },
 
-      context.log?.info?.(`Executing composite with ${graph.nodes.length} child nodes`, {
-        parallel: config.parallel,
-        timeout: config.timeout,
-        retries: config.retries,
-      });
-
-      // Execute based on parallel setting
-      if (config.parallel) {
-        return await executeParallel(graph, context, config);
-      } else {
-        return await executeSequential(graph, context, config);
-      }
-
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-
-      context.log?.error?.('Composite execution failed', {
-        error: errorMessage,
-        config,
-      });
-
-      return {
-        success: false,
-        error: errorMessage,
-        outputs: {
-          result: undefined,
-          metadata: {
-            executedAt: new Date().toISOString(),
-            nodeId: context.nodeId || "composite",
-            nodeType: "composite",
-            childNodesExecuted: 0,
-            totalExecutionTime: Date.now() - startTime,
-          },
-        },
-      };
-    }
-  },
-
-  validateConfig(config: unknown): CompositeParameters {
-    // In a real implementation, this would validate using the schema
-    // For now, just cast it
-    return config as CompositeParameters;
-  },
-});
+    validateConfig(config: unknown): CompositeParameters {
+      // In a real implementation, this would validate using the schema
+      // For now, just cast it
+      return config as CompositeParameters;
+    },
+  });
 
 export default compositeExecutable;

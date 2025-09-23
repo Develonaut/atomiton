@@ -3,13 +3,13 @@
  * Browser-safe configuration for loop iteration node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema using validation library
 const loopSchema = {
@@ -49,20 +49,11 @@ const loopSchema = {
     .optional()
     .describe("JavaScript condition for while/until loops"),
 
-  startValue: v
-    .number()
-    .default(0)
-    .describe("Starting value for range loops"),
+  startValue: v.number().default(0).describe("Starting value for range loops"),
 
-  endValue: v
-    .number()
-    .default(10)
-    .describe("Ending value for range loops"),
+  endValue: v.number().default(10).describe("Ending value for range loops"),
 
-  stepSize: v
-    .number()
-    .default(1)
-    .describe("Step size for range loops"),
+  stepSize: v.number().default(1).describe("Step size for range loops"),
 
   times: v
     .number()
@@ -135,7 +126,10 @@ export const loopDefinition: NodeDefinition = createNodeDefinition({
         helpText: "Select the type of loop operation to perform",
         options: [
           { value: "forEach", label: "For Each - Iterate over array items" },
-          { value: "forRange", label: "For Range - Iterate over numeric range" },
+          {
+            value: "forRange",
+            label: "For Range - Iterate over numeric range",
+          },
           { value: "times", label: "Times - Repeat N times" },
           { value: "while", label: "While - Loop while condition is true" },
           { value: "until", label: "Until - Loop until condition is true" },
@@ -210,79 +204,88 @@ export const loopDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "items",
-        name: "Items",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "Array of items to iterate over (for forEach loops)",
-      },
-      {
-        id: "processor",
-        name: "Processor",
-        dataType: "function",
-        required: false,
-        multiple: false,
-        description: "Function to process each item",
-      },
-    ],
-    output: [
-      {
-        id: "result",
-        name: "Result",
-        dataType: "object",
-        required: true,
-        multiple: false,
-        description: "Loop execution result",
-      },
-      {
-        id: "results",
-        name: "Results",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "Array of processed results",
-      },
-      {
-        id: "iterationCount",
-        name: "Iteration Count",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Number of iterations completed",
-      },
-      {
-        id: "errors",
-        name: "Errors",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "Array of errors encountered",
-      },
-      {
-        id: "success",
-        name: "Success",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Whether the loop completed successfully",
-      },
-      {
-        id: "duration",
-        name: "Duration",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Total execution duration in milliseconds",
-      },
-    ],
-  }),
+  inputPorts: [
+    createNodePort("input", {
+      id: "items",
+      name: "Items",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "Array of items to iterate over (for forEach loops)",
+    }),
+    createNodePort("input", {
+      id: "processor",
+      name: "Processor",
+      dataType: "function",
+      required: false,
+      multiple: false,
+      description: "Function to process each item",
+    }),
+  ],
+  outputPorts: [
+    createNodePort("output", {
+      id: "result",
+      name: "Result",
+      dataType: "object",
+      required: true,
+      multiple: false,
+      description: "Loop execution result",
+    }),
+    createNodePort("output", {
+      id: "results",
+      name: "Results",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "Array of processed results",
+    }),
+    createNodePort("output", {
+      id: "iterationCount",
+      name: "Iteration Count",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Number of iterations completed",
+    }),
+    createNodePort("output", {
+      id: "errors",
+      name: "Errors",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "Array of errors encountered",
+    }),
+    createNodePort("output", {
+      id: "success",
+      name: "Success",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Whether the loop completed successfully",
+    }),
+    createNodePort("output", {
+      id: "duration",
+      name: "Duration",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Total execution duration in milliseconds",
+    }),
+  ],
 });
 
 export default loopDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullLoopSchema = v.object({
+  ...loopSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type LoopParameters = VInfer<typeof loopDefinition.parameters.schema>;
+export type LoopParameters = VInfer<typeof fullLoopSchema>;

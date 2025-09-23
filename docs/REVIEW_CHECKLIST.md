@@ -62,7 +62,7 @@
 - [ ] Public APIs have JSDoc comments
 - [ ] Complex logic is explained
 - [ ] README updated if API changed
-- [ ] CHANGELOG updated if needed
+- [ ] CHANGELOG updated
 - [ ] Outstanding relating items in docs are removed or moved to reflect completion.
 
 ### Security
@@ -80,6 +80,7 @@
 - [ ] Ensure consistent error handling
 - [ ] Verify proper async/await usage
 - [ ] Check for proper cleanup (subscriptions, timers)
+- [ ] Ensure use of "#" imports instead of relative paths
 
 ### Performance
 
@@ -92,7 +93,7 @@
 
 **Can approve when:**
 
-- All items in "Critical" section are checked
+- All items are checked
 - Bento Box principles are followed
 - No unresolved discussions
 - Changes match PR description

@@ -3,13 +3,13 @@
  * Node.js implementation with HTTP request logic
  */
 
+import { createNodeExecutable } from "#core/factories/createNodeExecutable";
 import type {
   NodeExecutable,
   NodeExecutionContext,
-  NodeExecutionResult
-} from '../../core/types/executable';
-import { createNodeExecutable } from '../../core/factories/createNodeExecutable';
-import type { HttpRequestParameters } from '../../definitions/http-request';
+  NodeExecutionResult,
+} from "#core/types/executable";
+import type { HttpRequestParameters } from "#definitions/http-request";
 
 // Types for HTTP request
 export type HttpRequestInput = {
@@ -43,7 +43,7 @@ export type HttpRequestOutput = {
  */
 function buildUrlWithParams(
   baseUrl: string,
-  params?: Record<string, string>,
+  params?: Record<string, string>
 ): string {
   if (!params || Object.keys(params).length === 0) {
     return baseUrl;
@@ -98,7 +98,7 @@ async function executeRequestWithRetries(
 ): Promise<Response> {
   let lastError: Error;
 
-  for (let attempt = 0; attempt <= config.retries; attempt++) {
+  for (let attempt = 0; attempt <= (config.retries as number); attempt++) {
     try {
       context.log?.debug?.(`HTTP request attempt ${attempt + 1}`, {
         url,
@@ -107,18 +107,22 @@ async function executeRequestWithRetries(
 
       const response = await fetch(url, options);
       return response;
-
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
 
-      if (attempt < config.retries) {
-        context.log?.warn?.(`HTTP request failed, retrying (attempt ${attempt + 1}/${config.retries})`, {
-          error: lastError.message,
-          retryDelay: config.retryDelay,
-        });
+      if (attempt < (config.retries as number)) {
+        context.log?.warn?.(
+          `HTTP request failed, retrying (attempt ${attempt + 1}/${config.retries as number})`,
+          {
+            error: lastError.message,
+            retryDelay: config.retryDelay,
+          }
+        );
 
         // Wait before retry
-        await new Promise(resolve => setTimeout(resolve, config.retryDelay));
+        await new Promise((resolve) =>
+          setTimeout(resolve, config.retryDelay as number)
+        );
       }
     }
   }
@@ -129,189 +133,195 @@ async function executeRequestWithRetries(
 /**
  * HTTP Request node executable
  */
-export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> = createNodeExecutable({
-  async execute(
-    context: NodeExecutionContext,
-    config: HttpRequestParameters,
-  ): Promise<NodeExecutionResult> {
-    const startTime = Date.now();
-    const inputs = context.inputs as HttpRequestInput;
+export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
+  createNodeExecutable({
+    async execute(
+      context: NodeExecutionContext,
+      config: HttpRequestParameters
+    ): Promise<NodeExecutionResult> {
+      const startTime = Date.now();
+      const inputs = context.inputs as HttpRequestInput;
 
-    try {
-      // Get parameters from inputs or config
-      const url = inputs?.url || config.url;
-      const method = inputs?.method || config.method;
-      const inputHeaders = inputs?.headers || {};
-      const body = inputs?.body || config.body;
-      const params = inputs?.params;
-      const auth = inputs?.auth;
-
-      if (!url) {
-        throw new Error("URL is required for HTTP requests");
-      }
-
-      // Validate URL
-      let validUrl: URL;
       try {
-        validUrl = new URL(url);
-      } catch {
-        throw new Error(`Invalid URL: ${url}`);
-      }
+        // Get parameters from inputs or config
+        const url = (inputs?.url || config.url) as string;
+        const method = (inputs?.method || config.method) as string;
+        const inputHeaders = inputs?.headers || {};
+        const body = inputs?.body || config.body;
+        const params = inputs?.params;
+        const auth = inputs?.auth;
 
-      context.log?.info?.(`Making ${method} request to ${validUrl.hostname}`, {
-        method,
-        path: validUrl.pathname,
-        hasBody: !!body,
-      });
-
-      // Build final URL with query parameters
-      const finalUrl = buildUrlWithParams(url, params);
-
-      // Prepare headers
-      const headers: Record<string, string> = {
-        ...config.headers,
-        ...inputHeaders,
-      };
-
-      // Handle authentication
-      if (auth) {
-        if (auth.type === "basic" && auth.username && auth.password) {
-          const credentials = Buffer.from(
-            `${auth.username}:${auth.password}`,
-          ).toString("base64");
-          headers["Authorization"] = `Basic ${credentials}`;
-        } else if (auth.type === "bearer" && auth.token) {
-          headers["Authorization"] = `Bearer ${auth.token}`;
+        if (!url) {
+          throw new Error("URL is required for HTTP requests");
         }
-      }
 
-      // Prepare request body
-      let requestBody: string | Buffer | undefined;
-      if (body && ["POST", "PUT", "PATCH"].includes(method)) {
-        if (typeof body === "object" && !(body instanceof Buffer)) {
-          requestBody = JSON.stringify(body);
-          if (!headers["Content-Type"]) {
-            headers["Content-Type"] = "application/json";
+        // Validate URL
+        let validUrl: URL;
+        try {
+          validUrl = new URL(url);
+        } catch {
+          throw new Error(`Invalid URL: ${url}`);
+        }
+
+        context.log?.info?.(
+          `Making ${method} request to ${validUrl.hostname}`,
+          {
+            method,
+            path: validUrl.pathname,
+            hasBody: !!body,
           }
-        } else {
-          requestBody = body as string | Buffer;
+        );
+
+        // Build final URL with query parameters
+        const finalUrl = buildUrlWithParams(url as string, params);
+
+        // Prepare headers
+        const headers: Record<string, string> = {
+          ...((config.headers as Record<string, string>) || {}),
+          ...inputHeaders,
+        };
+
+        // Handle authentication
+        if (auth) {
+          if (auth.type === "basic" && auth.username && auth.password) {
+            const credentials = Buffer.from(
+              `${auth.username}:${auth.password}`
+            ).toString("base64");
+            headers["Authorization"] = `Basic ${credentials}`;
+          } else if (auth.type === "bearer" && auth.token) {
+            headers["Authorization"] = `Bearer ${auth.token}`;
+          }
         }
-      }
 
-      // Prepare request options
-      const requestOptions: RequestInit = {
-        method,
-        headers,
-        signal: AbortSignal.timeout(config.timeout),
-        redirect: config.followRedirects ? "follow" : "manual",
-      };
+        // Prepare request body
+        let requestBody: string | Buffer | undefined;
+        if (body && ["POST", "PUT", "PATCH"].includes(method as string)) {
+          if (typeof body === "object" && !(body instanceof Buffer)) {
+            requestBody = JSON.stringify(body);
+            if (!headers["Content-Type"]) {
+              headers["Content-Type"] = "application/json";
+            }
+          } else {
+            requestBody = body as string | Buffer;
+          }
+        }
 
-      // Add body if present
-      if (requestBody) {
-        requestOptions.body = requestBody;
-      }
+        // Prepare request options
+        const requestOptions: RequestInit = {
+          method: method as string,
+          headers,
+          signal: AbortSignal.timeout(config.timeout as number),
+          redirect: (config.followRedirects as boolean) ? "follow" : "manual",
+        };
 
-      context.log?.debug?.("Sending HTTP request", {
-        url: finalUrl,
-        method,
-        hasBody: !!requestBody,
-        headerCount: Object.keys(headers).length,
-      });
+        // Add body if present
+        if (requestBody) {
+          requestOptions.body =
+            requestBody instanceof Buffer
+              ? requestBody.toString()
+              : (requestBody as string);
+        }
 
-      // Make the request with retries
-      const response = await executeRequestWithRetries(
-        finalUrl,
-        requestOptions,
-        config,
-        context
-      );
+        context.log?.debug?.("Sending HTTP request", {
+          url: finalUrl,
+          method,
+          hasBody: !!requestBody,
+          headerCount: Object.keys(headers).length,
+        });
 
-      const duration = Date.now() - startTime;
+        // Make the request with retries
+        const response = await executeRequestWithRetries(
+          finalUrl,
+          requestOptions,
+          config,
+          context
+        );
 
-      // Parse response data
-      const data = await parseResponse(response);
+        const duration = Date.now() - startTime;
 
-      // Extract response headers
-      const responseHeaders: Record<string, string> = {};
-      response.headers.forEach((value, key) => {
-        responseHeaders[key] = value;
-      });
+        // Parse response data
+        const data = await parseResponse(response);
 
-      const output: HttpRequestOutput = {
-        result: data,
-        data: data,
-        status: response.status,
-        statusText: response.statusText,
-        headers: responseHeaders,
-        success: response.ok,
-        duration,
-        url: finalUrl,
-        ok: response.ok,
-      };
+        // Extract response headers
+        const responseHeaders: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+          responseHeaders[key] = value;
+        });
 
-      context.log?.info?.(
-        `HTTP request completed: ${response.status} ${response.statusText}`,
-        {
+        const output: HttpRequestOutput = {
+          result: data,
+          data: data,
           status: response.status,
+          statusText: response.statusText,
+          headers: responseHeaders,
+          success: response.ok,
+          duration,
+          url: finalUrl,
           ok: response.ok,
+        };
+
+        context.log?.info?.(
+          `HTTP request completed: ${response.status} ${response.statusText}`,
+          {
+            status: response.status,
+            ok: response.ok,
+            duration,
+            contentType: response.headers.get("content-type"),
+          }
+        );
+
+        return {
+          success: true,
+          outputs: output,
+        };
+      } catch (error) {
+        const duration = Date.now() - startTime;
+        let errorMessage = "HTTP request failed";
+
+        if (error instanceof Error) {
+          if (error.name === "AbortError") {
+            errorMessage = `Request timeout after ${config.timeout}ms`;
+          } else if (error.message.includes("fetch")) {
+            errorMessage = `Network error: ${error.message}`;
+          } else {
+            errorMessage = error.message;
+          }
+        }
+
+        context.log?.error?.("HTTP request failed", {
+          error: errorMessage,
           duration,
-          contentType: response.headers.get("content-type"),
-        }
-      );
+          config: {
+            method: config.method,
+            url: config.url,
+            timeout: config.timeout,
+            retries: config.retries,
+          },
+        });
 
-      return {
-        success: true,
-        outputs: output,
-      };
-
-    } catch (error) {
-      const duration = Date.now() - startTime;
-      let errorMessage = "HTTP request failed";
-
-      if (error instanceof Error) {
-        if (error.name === "AbortError") {
-          errorMessage = `Request timeout after ${config.timeout}ms`;
-        } else if (error.message.includes("fetch")) {
-          errorMessage = `Network error: ${error.message}`;
-        } else {
-          errorMessage = error.message;
-        }
-      }
-
-      context.log?.error?.('HTTP request failed', {
-        error: errorMessage,
-        duration,
-        config: {
-          method: config.method,
-          url: config.url,
-          timeout: config.timeout,
-          retries: config.retries,
-        },
-      });
-
-      return {
-        success: false,
-        error: errorMessage,
-        outputs: {
-          result: null,
-          data: null,
-          status: 0,
-          statusText: '',
-          headers: {},
+        return {
           success: false,
-          duration,
-          url: '',
-          ok: false,
-        },
-      };
-    }
-  },
+          error: errorMessage,
+          outputs: {
+            result: null,
+            data: null,
+            status: 0,
+            statusText: "",
+            headers: {},
+            success: false,
+            duration,
+            url: "",
+            ok: false,
+          },
+        };
+      }
+    },
 
-  validateConfig(config: unknown): HttpRequestParameters {
-    // In a real implementation, this would validate using the schema
-    // For now, just cast it
-    return config as HttpRequestParameters;
-  },
-});
+    validateConfig(config: unknown): HttpRequestParameters {
+      // In a real implementation, this would validate using the schema
+      // For now, just cast it
+      return config as HttpRequestParameters;
+    },
+  });
 
 export default httpRequestExecutable;

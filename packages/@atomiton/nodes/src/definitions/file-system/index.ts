@@ -3,18 +3,27 @@
  * Browser-safe configuration for file system operations node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema using validation library
 const fileSystemSchema = {
   operation: v
-    .enum(["read", "write", "create", "list", "delete", "copy", "move", "exists"])
+    .enum([
+      "read",
+      "write",
+      "create",
+      "list",
+      "delete",
+      "copy",
+      "move",
+      "exists",
+    ])
     .default("read")
     .describe("File system operation to perform"),
 
@@ -23,10 +32,7 @@ const fileSystemSchema = {
     .min(1, "Path is required")
     .describe("File or directory path"),
 
-  content: v
-    .string()
-    .optional()
-    .describe("Content to write to file"),
+  content: v.string().optional().describe("Content to write to file"),
 
   encoding: v
     .enum(["utf8", "base64", "binary", "ascii", "hex"])
@@ -38,21 +44,35 @@ const fileSystemSchema = {
     .default(false)
     .describe("Create parent directories if they don't exist"),
 
-  overwrite: v
-    .boolean()
-    .default(false)
-    .describe("Overwrite existing files"),
+  overwrite: v.boolean().default(false).describe("Overwrite existing files"),
 
   recursive: v
     .boolean()
     .default(false)
     .describe("Perform recursive operations on directories"),
+
+  targetPath: v
+    .string()
+    .optional()
+    .describe("Target path for copy/move operations"),
+
+  fileFilter: v
+    .string()
+    .optional()
+    .describe("Regular expression to filter files in list operation"),
+
+  fullPaths: v
+    .boolean()
+    .default(false)
+    .describe("Return full paths in list operation"),
 };
 
 /**
  * File System node definition (browser-safe)
  */
 export const fileSystemDefinition: NodeDefinition = createNodeDefinition({
+  id: "file-system",
+  name: "File System",
   type: "atomic",
   metadata: createNodeMetadata({
     id: "file-system",
@@ -149,103 +169,114 @@ export const fileSystemDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "path",
-        name: "Path",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "File or directory path (overrides parameter)",
-      },
-      {
-        id: "content",
-        name: "Content",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Content to write to file (overrides parameter)",
-      },
-      {
-        id: "targetPath",
-        name: "Target Path",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Target path for copy/move operations",
-      },
-    ],
-    output: [
-      {
-        id: "result",
-        name: "Result",
-        dataType: "any",
-        required: true,
-        multiple: false,
-        description: "Operation result data",
-      },
-      {
-        id: "content",
-        name: "Content",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "File content (for read operations)",
-      },
-      {
-        id: "files",
-        name: "Files",
-        dataType: "array",
-        required: false,
-        multiple: false,
-        description: "List of files in directory (for list operations)",
-      },
-      {
-        id: "exists",
-        name: "Exists",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Whether the file/directory exists",
-      },
-      {
-        id: "success",
-        name: "Success",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Whether the operation was successful",
-      },
-      {
-        id: "path",
-        name: "Path",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "The processed file or directory path",
-      },
-      {
-        id: "size",
-        name: "Size",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "File size in bytes",
-      },
-      {
-        id: "modified",
-        name: "Modified",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Last modified timestamp",
-      },
-    ],
-  }),
+
+  inputPorts: [
+    createNodePort("input", {
+      id: "path",
+      name: "Path",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "File or directory path (overrides parameter)",
+    }),
+    createNodePort("input", {
+      id: "content",
+      name: "Content",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Content to write to file (overrides parameter)",
+    }),
+    createNodePort("input", {
+      id: "targetPath",
+      name: "Target Path",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Target path for copy/move operations",
+    }),
+  ],
+
+  outputPorts: [
+    createNodePort("output", {
+      id: "result",
+      name: "Result",
+      dataType: "any",
+      required: true,
+      multiple: false,
+      description: "Operation result data",
+    }),
+    createNodePort("output", {
+      id: "content",
+      name: "Content",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "File content (for read operations)",
+    }),
+    createNodePort("output", {
+      id: "files",
+      name: "Files",
+      dataType: "array",
+      required: false,
+      multiple: false,
+      description: "List of files in directory (for list operations)",
+    }),
+    createNodePort("output", {
+      id: "exists",
+      name: "Exists",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Whether the file/directory exists",
+    }),
+    createNodePort("output", {
+      id: "success",
+      name: "Success",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Whether the operation was successful",
+    }),
+    createNodePort("output", {
+      id: "path",
+      name: "Path",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "The processed file or directory path",
+    }),
+    createNodePort("output", {
+      id: "size",
+      name: "Size",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "File size in bytes",
+    }),
+    createNodePort("output", {
+      id: "modified",
+      name: "Modified",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Last modified timestamp",
+    }),
+  ],
 });
 
 export default fileSystemDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullFileSystemSchema = v.object({
+  ...fileSystemSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type FileSystemParameters = VInfer<typeof fileSystemDefinition.parameters.schema>;
+export type FileSystemParameters = VInfer<typeof fullFileSystemSchema>;

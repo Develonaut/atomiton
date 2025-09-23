@@ -1,10 +1,62 @@
 import yaml from 'js-yaml';
 import type { NodeDefinition, NodePort, NodeEdge } from '../core/types/definition.js';
 
+// YAML serialization types
+type YamlStructure = {
+  id: string;
+  name: string;
+  type: string;
+  version: string;
+  description: string;
+  category: string;
+  metadata: Record<string, unknown>;
+  nodes?: SerializedNode[];
+  edges?: SerializedEdge[];
+  inputPorts?: SerializedPort[];
+  outputPorts?: SerializedPort[];
+  parameters?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+type SerializedNode = {
+  id: string;
+  type: string;
+  name: string;
+  category?: string;
+  version?: string;
+  position?: { x: number; y: number };
+  data?: Record<string, unknown>;
+  settings?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+type SerializedPort = {
+  id: string;
+  name: string;
+  type: string;
+  dataType: string;
+  required?: boolean;
+  multiple?: boolean;
+  description?: string;
+  defaultValue?: unknown;
+};
+
+type SerializedEdge = {
+  id: string;
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+  type?: string;
+  animated?: boolean;
+  hidden?: boolean;
+  data?: Record<string, unknown>;
+};
+
 export function toYaml(definition: NodeDefinition): string {
   try {
     // Build YAML-friendly structure
-    const yamlStructure: any = {
+    const yamlStructure: YamlStructure = {
       // Core identification
       id: definition.id,
       name: definition.name,
@@ -47,8 +99,8 @@ export function toYaml(definition: NodeDefinition): string {
     // Add any additional fields
     const additionalFields = ['variables', 'settings', 'data'];
     for (const field of additionalFields) {
-      if ((definition as any)[field]) {
-        yamlStructure[field] = (definition as any)[field];
+      if (field in definition && (definition as Record<string, unknown>)[field]) {
+        yamlStructure[field] = (definition as Record<string, unknown>)[field];
       }
     }
 
@@ -67,8 +119,8 @@ export function toYaml(definition: NodeDefinition): string {
   }
 }
 
-function serializeNode(node: NodeDefinition): any {
-  const serialized: any = {
+function serializeNode(node: NodeDefinition): SerializedNode {
+  const serialized: SerializedNode = {
     id: node.id,
     type: node.metadata?.variant || node.type,
     name: node.name,
@@ -101,20 +153,20 @@ function serializeNode(node: NodeDefinition): any {
     serialized.position = node.position;
   }
 
-  // Add any data field
-  if ((node as any).data) {
-    serialized.data = (node as any).data;
+  // Add data field if present
+  if ('data' in node && (node as Record<string, unknown>).data) {
+    serialized.data = (node as Record<string, unknown>).data as Record<string, unknown>;
   }
 
   // Add settings if present
-  if ((node as any).settings) {
-    serialized.settings = (node as any).settings;
+  if ('settings' in node && (node as Record<string, unknown>).settings) {
+    serialized.settings = (node as Record<string, unknown>).settings as Record<string, unknown>;
   }
 
   return serialized;
 }
 
-function serializePort(port: NodePort): any {
+function serializePort(port: NodePort): SerializedPort {
   return {
     id: port.id,
     name: port.name,
@@ -127,7 +179,7 @@ function serializePort(port: NodePort): any {
   };
 }
 
-function serializeEdge(edge: NodeEdge): any {
+function serializeEdge(edge: NodeEdge): SerializedEdge {
   return {
     id: edge.id,
     source: edge.source,
@@ -141,8 +193,8 @@ function serializeEdge(edge: NodeEdge): any {
   };
 }
 
-function serializeParameters(parameters: NodeDefinition['parameters']): any {
-  const serialized: any = {};
+function serializeParameters(parameters: NodeDefinition['parameters']): Record<string, unknown> {
+  const serialized: Record<string, unknown> = {};
 
   // Extract from fields and defaults
   if (parameters.fields) {
@@ -163,9 +215,10 @@ function serializeParameters(parameters: NodeDefinition['parameters']): any {
       };
 
       // Remove undefined values for cleaner YAML
-      Object.keys(serialized[key]).forEach(k => {
-        if (serialized[key][k] === undefined) {
-          delete serialized[key][k];
+      const paramObj = serialized[key] as Record<string, unknown>;
+      Object.keys(paramObj).forEach(k => {
+        if (paramObj[k] === undefined) {
+          delete paramObj[k];
         }
       });
     }

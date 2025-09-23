@@ -3,13 +3,13 @@
  * Browser-safe configuration for HTTP request node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema using validation library
 const httpRequestSchema = {
@@ -18,10 +18,7 @@ const httpRequestSchema = {
     .default("GET")
     .describe("HTTP method to use"),
 
-  url: v
-    .string()
-    .url("Must be a valid URL")
-    .describe("Request URL"),
+  url: v.string().url("Must be a valid URL").describe("Request URL"),
 
   headers: v
     .record(v.string())
@@ -133,7 +130,8 @@ export const httpRequestDefinition: NodeDefinition = createNodeDefinition({
       headers: {
         controlType: "textarea",
         label: "Headers",
-        placeholder: '{"Content-Type": "application/json", "Authorization": "Bearer token"}',
+        placeholder:
+          '{"Content-Type": "application/json", "Authorization": "Bearer token"}',
         helpText: "HTTP headers as JSON object",
         rows: 3,
       },
@@ -179,127 +177,136 @@ export const httpRequestDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "url",
-        name: "URL",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Request URL (overrides parameter)",
-      },
-      {
-        id: "method",
-        name: "Method",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "HTTP method (overrides parameter)",
-      },
-      {
-        id: "headers",
-        name: "Headers",
-        dataType: "object",
-        required: false,
-        multiple: false,
-        description: "Request headers (merges with parameters)",
-      },
-      {
-        id: "body",
-        name: "Body",
-        dataType: "any",
-        required: false,
-        multiple: false,
-        description: "Request body (overrides parameter)",
-      },
-      {
-        id: "params",
-        name: "Query Parameters",
-        dataType: "object",
-        required: false,
-        multiple: false,
-        description: "URL query parameters",
-      },
-      {
-        id: "auth",
-        name: "Authentication",
-        dataType: "object",
-        required: false,
-        multiple: false,
-        description: "Authentication configuration",
-      },
-    ],
-    output: [
-      {
-        id: "result",
-        name: "Result",
-        dataType: "any",
-        required: true,
-        multiple: false,
-        description: "Response data",
-      },
-      {
-        id: "data",
-        name: "Data",
-        dataType: "any",
-        required: false,
-        multiple: false,
-        description: "Response data (alias for result)",
-      },
-      {
-        id: "status",
-        name: "Status",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "HTTP status code",
-      },
-      {
-        id: "statusText",
-        name: "Status Text",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "HTTP status text",
-      },
-      {
-        id: "headers",
-        name: "Response Headers",
-        dataType: "object",
-        required: false,
-        multiple: false,
-        description: "Response headers",
-      },
-      {
-        id: "success",
-        name: "Success",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Request success status",
-      },
-      {
-        id: "duration",
-        name: "Duration",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Request duration in milliseconds",
-      },
-      {
-        id: "url",
-        name: "Final URL",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Final URL after redirects",
-      },
-    ],
-  }),
+  inputPorts: [
+    createNodePort("input", {
+      id: "url",
+      name: "URL",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Request URL (overrides parameter)",
+    }),
+    createNodePort("input", {
+      id: "method",
+      name: "Method",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "HTTP method (overrides parameter)",
+    }),
+    createNodePort("input", {
+      id: "headers",
+      name: "Headers",
+      dataType: "object",
+      required: false,
+      multiple: false,
+      description: "Request headers (merges with parameters)",
+    }),
+    createNodePort("input", {
+      id: "body",
+      name: "Body",
+      dataType: "json",
+      required: false,
+      multiple: false,
+      description: "Request body (overrides parameter)",
+    }),
+    createNodePort("input", {
+      id: "params",
+      name: "Query Parameters",
+      dataType: "object",
+      required: false,
+      multiple: false,
+      description: "URL query parameters",
+    }),
+    createNodePort("input", {
+      id: "auth",
+      name: "Authentication",
+      dataType: "object",
+      required: false,
+      multiple: false,
+      description: "Authentication configuration",
+    }),
+  ],
+  outputPorts: [
+    createNodePort("output", {
+      id: "result",
+      name: "Result",
+      dataType: "json",
+      required: true,
+      multiple: false,
+      description: "Response data",
+    }),
+    createNodePort("output", {
+      id: "data",
+      name: "Data",
+      dataType: "json",
+      required: false,
+      multiple: false,
+      description: "Response data (alias for result)",
+    }),
+    createNodePort("output", {
+      id: "status",
+      name: "Status",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "HTTP status code",
+    }),
+    createNodePort("output", {
+      id: "statusText",
+      name: "Status Text",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "HTTP status text",
+    }),
+    createNodePort("output", {
+      id: "headers",
+      name: "Response Headers",
+      dataType: "object",
+      required: false,
+      multiple: false,
+      description: "Response headers",
+    }),
+    createNodePort("output", {
+      id: "success",
+      name: "Success",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Request success status",
+    }),
+    createNodePort("output", {
+      id: "duration",
+      name: "Duration",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Request duration in milliseconds",
+    }),
+    createNodePort("output", {
+      id: "url",
+      name: "Final URL",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Final URL after redirects",
+    }),
+  ],
 });
 
 export default httpRequestDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullHttpRequestSchema = v.object({
+  ...httpRequestSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type HttpRequestParameters = VInfer<typeof httpRequestDefinition.parameters.schema>;
+export type HttpRequestParameters = VInfer<typeof fullHttpRequestSchema>;

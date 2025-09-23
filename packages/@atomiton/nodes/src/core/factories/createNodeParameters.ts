@@ -1,10 +1,14 @@
 /**
- * Factory function for creating atomic node parameters
+ * Factory function for creating node parameters
  */
 
+import type {
+  NodeFieldsConfig,
+  NodeParameters,
+} from "#core/types/definition.js";
+import { isNodeParameters } from "#core/utils/nodeUtils.js";
 import type { VInfer, VObject, VRawShape } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import type { NodeFieldsConfig, NodeParameters } from "../types/definition.js";
 
 // Base schema that all nodes share
 const baseSchema = v.object({
@@ -41,11 +45,19 @@ export type NodeParametersInput<T extends VRawShape> = {
 };
 
 function createNodeParameters<T extends VRawShape>(
-  nodeSchema: T,
-  defaults: VInfer<VObject<T>>,
-  fields: NodeFieldsConfig,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Complex Zod type inference requires any for proper type composition
-): NodeParameters<any> {
+  nodeSchemaOrParams: T | NodeParameters,
+  defaults?: VInfer<VObject<T>>,
+  fields?: NodeFieldsConfig
+): NodeParameters<VInfer<VObject<T & typeof baseSchema.shape>>> {
+  if (isNodeParameters(nodeSchemaOrParams)) {
+    return nodeSchemaOrParams as NodeParameters<
+      VInfer<VObject<T & typeof baseSchema.shape>>
+    >;
+  }
+
+  const nodeSchema = nodeSchemaOrParams as T;
+  const defaultValues = defaults || ({} as VInfer<VObject<T>>);
+  const fieldConfig = fields || {};
   const fullSchema = baseSchema.extend(nodeSchema);
   type FullType = VInfer<typeof fullSchema>;
 
@@ -53,13 +65,13 @@ function createNodeParameters<T extends VRawShape>(
     enabled: true,
     timeout: 30000,
     retries: 1,
-    ...defaults,
+    ...defaultValues,
   } as FullType;
 
   return {
     schema: fullSchema,
     defaults: fullDefaults,
-    fields,
+    fields: fieldConfig,
 
     parse(params: unknown): FullType {
       return fullSchema.parse(params);

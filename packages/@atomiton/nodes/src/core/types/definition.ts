@@ -5,35 +5,35 @@ export type NodeEdgeType = "bezier" | "straight" | "step" | "smoothstep";
 export type NodeEdge = {
   /** Unique id of an edge */
   id: string;
-  
+
   /** Type of edge defined in `edgeTypes` */
   type?: NodeEdgeType;
-  
+
   /** Id of source node */
   source: string;
-  
+
   /** Id of target node */
   target: string;
-  
+
   /** Id of source handle (only needed if multiple handles per node) */
   sourceHandle?: string | null;
-  
+
   /** Id of target handle (only needed if multiple handles per node) */
   targetHandle?: string | null;
-  
+
   /** Visual and behavior properties */
   animated?: boolean;
   hidden?: boolean;
   deletable?: boolean;
   selectable?: boolean;
   selected?: boolean;
-  
+
   /** Z-index for layering */
   zIndex?: number;
-  
+
   /** Accessibility */
   ariaLabel?: string;
-  
+
   /** Arbitrary data passed to an edge */
   data?: Record<string, unknown>;
 };
@@ -46,28 +46,23 @@ export type NodeEdge = {
  * Node categories for organization and UI grouping
  */
 export type NodeCategory =
-  | "io"              // Input/Output - file reading, HTTP, etc
-  | "data"            // Data Processing - transform, filter, etc
-  | "logic"           // Logic & Control - conditionals, loops, etc
-  | "media"           // Media Processing - images, video, audio
-  | "system"          // System Operations - shell commands, env vars
-  | "ai"              // AI & ML operations
-  | "database"        // Database operations
-  | "analytics"       // Analytics & monitoring
-  | "communication"   // Email, notifications, messaging
-  | "utility"         // General utilities
-  | "user"            // User-created nodes
-  | "composite";      // Composite nodes
+  | "io" // Input/Output - file reading, HTTP, etc
+  | "data" // Data Processing - transform, filter, etc
+  | "logic" // Logic & Control - conditionals, loops, etc
+  | "media" // Media Processing - images, video, audio
+  | "system" // System Operations - shell commands, env vars
+  | "ai" // AI & ML operations
+  | "database" // Database operations
+  | "analytics" // Analytics & monitoring
+  | "communication" // Email, notifications, messaging
+  | "utility" // General utilities
+  | "user" // User-created nodes
+  | "composite"; // Composite nodes
 
 /**
  * Runtime environments for nodes
  */
-export type NodeRuntime = 
-  | "typescript" 
-  | "python" 
-  | "rust" 
-  | "wasm" 
-  | "golang";
+export type NodeRuntime = "typescript" | "python" | "rust" | "wasm" | "golang";
 
 /**
  * Icon identifiers for UI display
@@ -75,54 +70,56 @@ export type NodeRuntime =
 export type NodeIcon =
   // File & Data
   | "file"
+  | "folder"
   | "database"
   | "table-2"
-  
+
   // Network & Communication
   | "cloud"
   | "globe-2"
   | "mail"
   | "message-square"
-  
+
   // Code & System
   | "code-2"
   | "terminal"
   | "cpu"
   | "git-branch"
-  
+
   // Processing & Actions
   | "wand-2"
   | "zap"
   | "filter"
   | "search"
   | "transform"
-  
+  | "repeat"
+
   // Media
   | "image"
-  
+
   // Structure
   | "layers"
-  
+
   // Analytics
   | "activity"
   | "bar-chart"
-  
+
   // Security
   | "lock"
   | "unlock"
   | "shield"
-  
+
   // Users
   | "user"
   | "users"
-  
+
   // UI Controls
   | "settings"
   | "plus"
   | "minus"
   | "check"
   | "x"
-  
+
   // Status & Info
   | "alert-triangle"
   | "info"
@@ -141,6 +138,10 @@ export type NodeMetadataVariant =
   | "parallel"
   | "shell-command"
   | "transform"
+  | "workflow"
+  | "pipeline"
+  | "orchestrator"
+  | "template"
   | "test";
 
 /**
@@ -155,7 +156,7 @@ export type NodeMetadataSource =
 
 /**
  * Node Metadata Interface
- * 
+ *
  * Comprehensive metadata for node discovery, display, and documentation
  */
 export type NodeMetadata = {
@@ -164,28 +165,28 @@ export type NodeMetadata = {
   name: string;
   variant: NodeMetadataVariant;
   version: string;
-  
+
   // Attribution
   author: string;
   authorId?: string;
   source?: NodeMetadataSource;
-  
+
   // Categorization & Discovery
   description: string;
   category: NodeCategory;
   icon: NodeIcon;
   keywords?: string[];
   tags?: string[];
-  
+
   // Runtime information
   runtime?: {
     language: NodeRuntime;
   };
-  
+
   // Status flags
   experimental?: boolean;
   deprecated?: boolean;
-  
+
   // Documentation
   documentationUrl?: string;
   examples?: Array<{
@@ -204,33 +205,33 @@ export type NodeMetadata = {
  */
 export type NodeFieldControlType =
   // Text inputs
-  | "text"          // Single-line text
-  | "textarea"      // Multi-line text
-  | "password"      // Password input
-  | "email"         // Email input
-  | "url"           // URL input
-  
+  | "text" // Single-line text
+  | "textarea" // Multi-line text
+  | "password" // Password input
+  | "email" // Email input
+  | "url" // URL input
+
   // Numeric inputs
-  | "number"        // Number input
-  | "range"         // Range slider
-  
+  | "number" // Number input
+  | "range" // Range slider
+
   // Selection inputs
-  | "boolean"       // Checkbox/toggle
-  | "select"        // Dropdown selection
-  
+  | "boolean" // Checkbox/toggle
+  | "select" // Dropdown selection
+
   // Date/Time inputs
-  | "date"          // Date picker
-  | "datetime"      // Date and time picker
-  
+  | "date" // Date picker
+  | "datetime" // Date and time picker
+
   // Specialized inputs
-  | "file"          // File picker
-  | "color"         // Color picker
-  
+  | "file" // File picker
+  | "color" // Color picker
+
   // Code/Data inputs
-  | "json"          // JSON editor
-  | "code"          // Code editor with syntax highlighting
-  | "markdown"      // Markdown editor
-  | "rich-text";    // Rich text editor
+  | "json" // JSON editor
+  | "code" // Code editor with syntax highlighting
+  | "markdown" // Markdown editor
+  | "rich-text"; // Rich text editor
 
 /**
  * Configuration for a single form field
@@ -239,25 +240,25 @@ export type NodeFieldConfig = {
   // Core properties
   controlType: NodeFieldControlType;
   label: string;
-  
+
   // Help & hints
   placeholder?: string;
   helpText?: string;
-  
+
   // Validation
   required?: boolean;
-  
+
   // Numeric constraints
   min?: number;
   max?: number;
   step?: number;
-  
+
   // Text area configuration
   rows?: number;
-  
+
   // Select options
-  options?: Array<{ 
-    value: string; 
+  options?: Array<{
+    value: string;
     label: string;
   }>;
 };
@@ -303,8 +304,8 @@ export type NodeParameters<T = Record<string, unknown>> = {
 export type NodePortType =
   | "input"
   | "output"
-  | "trigger"    // Special port type for event-driven nodes
-  | "error";     // Error output port
+  | "trigger" // Special port type for event-driven nodes
+  | "error"; // Error output port
 
 /**
  * Data types for node ports
@@ -316,17 +317,18 @@ export type NodePortDataType =
   | "boolean"
   | "date"
   | "regex"
-  
+
   // Composite types
   | "object"
   | "array"
   | "any"
-  
+  | "function"
+
   // Binary types
   | "buffer"
   | "stream"
   | "binary"
-  
+
   // Document types
   | "json"
   | "xml"
@@ -376,7 +378,7 @@ export type NodeType = "atomic" | "composite";
 
 /**
  * Universal Node Definition
- * 
+ *
  * Static, serializable structure defining a node's configuration.
  * Both atomic and composite nodes share this interface.
  */

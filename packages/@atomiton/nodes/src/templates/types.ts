@@ -11,7 +11,7 @@ export type Template = NodeDefinition & {
 /**
  * Additional metadata interface for template information
  */
-export interface TemplateMetadata {
+export type TemplateMetadata = {
   name: string;
   description: string;
   author: string;

@@ -1,21 +1,16 @@
 /**
- * Factory function for creating atomic node metadata
+ * Factory function for creating node metadata
  */
 
-function titleCase(str: string): string {
-  return str
-    .toLowerCase()
-    .split(/[\s-_]+/)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
 import type {
-  NodeMetadata,
   NodeCategory,
   NodeIcon,
-  NodeRuntime,
+  NodeMetadata,
   NodeMetadataVariant,
-} from "../types/definition.js";
+  NodeRuntime,
+} from "#core/types/definition";
+import { isNodeMetadata } from "#core/utils/nodeUtils";
+import { titleCase } from "@atomiton/utils";
 
 export type NodeMetadataInput = {
   id?: string;
@@ -41,7 +36,13 @@ export type NodeMetadataInput = {
   }>;
 };
 
-function createNodeMetadata(input: NodeMetadataInput): NodeMetadata {
+function createNodeMetadata(
+  input: NodeMetadataInput | NodeMetadata
+): NodeMetadata {
+  if (isNodeMetadata(input)) {
+    return input;
+  }
+
   const id = input.id || "node";
   const name = input.name || "Node";
   const variant = input.variant || "test";

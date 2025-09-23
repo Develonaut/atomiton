@@ -3,18 +3,27 @@
  * Browser-safe configuration for data transformation node
  */
 
-import v from '@atomiton/validation';
-import type { VInfer } from '@atomiton/validation';
-import type { NodeDefinition } from '../../core/types/definition';
-import { createNodeDefinition } from '../../core/factories/createNodeDefinition';
-import createNodeMetadata from '../../core/factories/createNodeMetadata';
-import createNodeParameters from '../../core/factories/createNodeParameters';
-import createNodePorts from '../../core/factories/createNodePorts';
+import { createNodeDefinition } from "#core/factories/createNodeDefinition";
+import createNodeMetadata from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import { createNodePort } from "#core/factories/createNodePorts";
+import type { NodeDefinition } from "#core/types/definition";
+import type { VInfer } from "@atomiton/validation";
+import v from "@atomiton/validation";
 
 // Parameter schema using validation library
 const transformSchema = {
   operation: v
-    .enum(["map", "filter", "reduce", "sort", "group", "flatten", "unique", "reverse"])
+    .enum([
+      "map",
+      "filter",
+      "reduce",
+      "sort",
+      "group",
+      "flatten",
+      "unique",
+      "reverse",
+    ])
     .default("map")
     .describe("Type of transformation operation"),
 
@@ -28,20 +37,14 @@ const transformSchema = {
     .optional()
     .describe("Condition for filter operation"),
 
-  sortKey: v
-    .string()
-    .optional()
-    .describe("Property key to sort by"),
+  sortKey: v.string().optional().describe("Property key to sort by"),
 
   sortDirection: v
     .enum(["asc", "desc"])
     .default("asc")
     .describe("Sort direction"),
 
-  groupBy: v
-    .string()
-    .optional()
-    .describe("Property key to group by"),
+  groupBy: v.string().optional().describe("Property key to group by"),
 
   reduceFunction: v
     .string()
@@ -110,7 +113,10 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
         options: [
           { value: "map", label: "Map - Transform each item" },
           { value: "filter", label: "Filter - Keep items matching condition" },
-          { value: "reduce", label: "Reduce - Combine items into single value" },
+          {
+            value: "reduce",
+            label: "Reduce - Combine items into single value",
+          },
           { value: "sort", label: "Sort - Order items" },
           { value: "group", label: "Group - Group items by key" },
           { value: "flatten", label: "Flatten - Flatten nested arrays" },
@@ -156,7 +162,8 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
       reduceFunction: {
         controlType: "code",
         label: "Reduce Function",
-        placeholder: "(accumulator, currentItem, index) => accumulator + currentItem",
+        placeholder:
+          "(accumulator, currentItem, index) => accumulator + currentItem",
         helpText: "Function to combine array items",
         rows: 3,
       },
@@ -175,79 +182,88 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
       },
     }
   ),
-  ports: createNodePorts({
-    input: [
-      {
-        id: "data",
-        name: "Data",
-        dataType: "array",
-        required: true,
-        multiple: false,
-        description: "Array of data to transform",
-      },
-      {
-        id: "function",
-        name: "Function",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Transform function (overrides parameter)",
-      },
-    ],
-    output: [
-      {
-        id: "result",
-        name: "Result",
-        dataType: "any",
-        required: true,
-        multiple: false,
-        description: "Transformed data result",
-      },
-      {
-        id: "data",
-        name: "Data",
-        dataType: "any",
-        required: false,
-        multiple: false,
-        description: "Transformed data (alias for result)",
-      },
-      {
-        id: "inputCount",
-        name: "Input Count",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Number of input items",
-      },
-      {
-        id: "outputCount",
-        name: "Output Count",
-        dataType: "number",
-        required: false,
-        multiple: false,
-        description: "Number of output items",
-      },
-      {
-        id: "operation",
-        name: "Operation",
-        dataType: "string",
-        required: false,
-        multiple: false,
-        description: "Type of transformation performed",
-      },
-      {
-        id: "success",
-        name: "Success",
-        dataType: "boolean",
-        required: false,
-        multiple: false,
-        description: "Whether the transformation was successful",
-      },
-    ],
-  }),
+  inputPorts: [
+    createNodePort("input", {
+      id: "data",
+      name: "Data",
+      dataType: "array",
+      required: true,
+      multiple: false,
+      description: "Array of data to transform",
+    }),
+    createNodePort("input", {
+      id: "function",
+      name: "Function",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Transform function (overrides parameter)",
+    }),
+  ],
+  outputPorts: [
+    createNodePort("output", {
+      id: "result",
+      name: "Result",
+      dataType: "object",
+      required: true,
+      multiple: false,
+      description: "Transformed data result",
+    }),
+    createNodePort("output", {
+      id: "data",
+      name: "Data",
+      dataType: "object",
+      required: false,
+      multiple: false,
+      description: "Transformed data (alias for result)",
+    }),
+    createNodePort("output", {
+      id: "inputCount",
+      name: "Input Count",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Number of input items",
+    }),
+    createNodePort("output", {
+      id: "outputCount",
+      name: "Output Count",
+      dataType: "number",
+      required: false,
+      multiple: false,
+      description: "Number of output items",
+    }),
+    createNodePort("output", {
+      id: "operation",
+      name: "Operation",
+      dataType: "string",
+      required: false,
+      multiple: false,
+      description: "Type of transformation performed",
+    }),
+    createNodePort("output", {
+      id: "success",
+      name: "Success",
+      dataType: "boolean",
+      required: false,
+      multiple: false,
+      description: "Whether the transformation was successful",
+    }),
+  ],
 });
 
 export default transformDefinition;
 
+// Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fullTransformSchema = v.object({
+  ...transformSchema,
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
+  description: v.string().optional(),
+});
+
 // Export the parameter type for use in the executable
-export type TransformParameters = VInfer<typeof transformDefinition.parameters.schema>;
+export type TransformParameters = VInfer<typeof fullTransformSchema>;
