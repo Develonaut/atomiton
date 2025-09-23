@@ -48,6 +48,7 @@
     "kill-port": "catalog:",
     "knip": "catalog:",
     "lint-staged": "catalog:",
+    "markdown-table-prettify": "^3.7.0",
     "playwright": "catalog:",
     "prettier": "catalog:",
     "tsx": "catalog:",

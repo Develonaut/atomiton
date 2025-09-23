@@ -1,6 +1,9 @@
 module.exports = {
-  // Format all code and markdown files
-  "*.{ts,tsx,js,jsx,md}": ["prettier --write"],
+  // Format all code files
+  "*.{ts,tsx,js,jsx}": ["prettier --write"],
+
+  // Format markdown files with prettier, then prettify tables
+  "*.md": ["prettier --write", "npx markdown-table-prettify"],
 
   // Run ESLint on TypeScript/JavaScript files
   // Turbo will automatically detect which packages have changes and run in parallel
