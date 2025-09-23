@@ -15,14 +15,14 @@ import type {
   NodeRuntime,
   NodeType,
 } from "#core/types/definition.js";
-import v from "@atomiton/validation";
+import v, { type VType } from "@atomiton/validation";
 import yaml from "js-yaml";
 import type {
   YamlEdge,
   YamlNodeDefinition,
   YamlParameter,
   YamlPort,
-} from "./types.js";
+} from "#serialization/types";
 import {
   validateCategory,
   validateControlType,
@@ -31,7 +31,7 @@ import {
   validateRuntime,
   validateSource,
   validateVariant,
-} from "./validators.js";
+} from "#serialization/validators";
 
 /**
  * Convert YAML content to NodeDefinition
@@ -139,7 +139,7 @@ function parseParameters(params?: Record<string, YamlParameter>) {
   }
 
   // Build Valibot schema from YAML parameter definitions
-  const schemaShape: Record<string, any> = {};
+  const schemaShape: Record<string, VType> = {};
   const defaults: Record<string, unknown> = {};
   const fields: NodeFieldsConfig = {};
 
@@ -160,14 +160,14 @@ function parseParameters(params?: Record<string, YamlParameter>) {
         min: param.min,
         max: param.max,
         step: param.step,
-        options: param.options as any,
+        options: (param.options as Array<{ value: string; label: string }>) || [],
       };
     }
 
     // Build Valibot schema based on type
     // Since we're deserializing, we'll create a simple schema
     // In production, this would need more robust type mapping
-    schemaShape[key] = v.any().optional();
+    schemaShape[key] = v.unknown().optional();
   });
 
   return createNodeParameters(schemaShape, defaults, fields);
@@ -182,7 +182,7 @@ function parsePorts(ports: YamlPort[]): NodePort[] {
     return createNodePort(portType, {
       id: port.id,
       name: port.name,
-      dataType: (port.dataType || "any") as any,
+      dataType: (port.dataType || "any") as "string" | "number" | "boolean" | "object" | "array" | "any",
       required: port.required || false,
       multiple: port.multiple || false,
       description: port.description,

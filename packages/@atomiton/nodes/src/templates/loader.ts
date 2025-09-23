@@ -1,5 +1,5 @@
-import { fromYaml } from '../serialization/fromYaml.js';
-import type { NodeDefinition } from '../core/types/definition.js';
+import { fromYaml } from '#serialization/fromYaml';
+import type { NodeDefinition } from '#core/types/definition';
 
 /**
  * Load and validate a template from YAML content

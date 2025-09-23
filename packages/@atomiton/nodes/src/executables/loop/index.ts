@@ -17,7 +17,7 @@ import {
   executeTimesLoop,
   executeUntil,
   executeWhile,
-} from "./operations";
+} from "#executables/loop/operations";
 
 // Types for loop operations
 export type LoopOutput = {

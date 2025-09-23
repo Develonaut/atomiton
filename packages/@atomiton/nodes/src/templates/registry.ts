@@ -1,13 +1,13 @@
-import type { NodeDefinition } from '../core/types/definition.js';
-import { loadTemplate } from './loader.js';
+import type { NodeDefinition } from '#core/types/definition';
+import { loadTemplate } from '#templates/loader';
 
 // Import YAML content as strings (will be handled by build system)
 // @ts-expect-error - Vite will handle these raw imports
-import helloWorldYaml from './yaml/hello-world.yaml?raw';
+import helloWorldYaml from '#templates/yaml/hello-world.yaml?raw';
 // @ts-expect-error - Vite will handle these raw imports
-import dataTransformYaml from './yaml/data-transform.yaml?raw';
+import dataTransformYaml from '#templates/yaml/data-transform.yaml?raw';
 // @ts-expect-error - Vite will handle these raw imports
-import imageProcessorYaml from './yaml/image-processor.yaml?raw';
+import imageProcessorYaml from '#templates/yaml/image-processor.yaml?raw';
 
 /**
  * Template registry - simple array of templates

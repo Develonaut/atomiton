@@ -4,11 +4,11 @@
  */
 
 // Re-export everything from definitions (for convenience)
-export * from '../definitions';
+export * from '#definitions';
 
 // Export executable factory and types
-export { default as createNodeExecutable } from '../core/factories/createNodeExecutable';
-export * from '../core/types/executable';
+export { default as createNodeExecutable } from '#core/factories/createNodeExecutable';
+export * from '#core/types/executable';
 
 // Export the registry and all registry functions
 export {
@@ -17,21 +17,21 @@ export {
   getAllNodeExecutables,
   hasNodeExecutable,
   getNodeExecutableIds,
-} from './registry';
+} from '#executables/registry';
 
 // Export all individual node executables
-export { default as parallelExecutable } from './parallel';
-export { default as csvReaderExecutable } from './csv-reader';
-export { default as compositeExecutable } from './composite';
-export { default as imageCompositeExecutable } from './image-composite';
-export { default as httpRequestExecutable } from './http-request';
-export { default as fileSystemExecutable } from './file-system';
-export { default as transformExecutable } from './transform';
-export { default as shellCommandExecutable } from './shell-command';
-export { default as loopExecutable } from './loop';
+export { default as parallelExecutable } from '#executables/parallel';
+export { default as csvReaderExecutable } from '#executables/csv-reader';
+export { default as compositeExecutable } from '#executables/composite';
+export { default as imageCompositeExecutable } from '#executables/image-composite';
+export { default as httpRequestExecutable } from '#executables/http-request';
+export { default as fileSystemExecutable } from '#executables/file-system';
+export { default as transformExecutable } from '#executables/transform';
+export { default as shellCommandExecutable } from '#executables/shell-command';
+export { default as loopExecutable } from '#executables/loop';
 
 // Export output types
-export type { ParallelOutput } from './parallel';
-export type { ImageCompositeOutput } from './image-composite';
-export type { HttpRequestOutput } from './http-request';
-export type { FileSystemOutput } from './file-system';
+export type { ParallelOutput } from '#executables/parallel';
+export type { ImageCompositeOutput } from '#executables/image-composite';
+export type { HttpRequestOutput } from '#executables/http-request';
+export type { FileSystemOutput } from '#executables/file-system';

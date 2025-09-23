@@ -3,18 +3,18 @@
  * Central registry for all node definitions (browser-safe)
  */
 
-import type { NodeDefinition } from '../core/types/definition';
+import type { NodeDefinition } from '#core/types/definition';
 
 // Import all node definitions
-import parallelDefinition from './parallel';
-import csvReaderDefinition from './csv-reader';
-import compositeDefinition from './composite';
-import imageCompositeDefinition from './image-composite';
-import httpRequestDefinition from './http-request';
-import fileSystemDefinition from './file-system';
-import transformDefinition from './transform';
-import shellCommandDefinition from './shell-command';
-import loopDefinition from './loop';
+import parallelDefinition from '#definitions/parallel';
+import csvReaderDefinition from '#definitions/csv-reader';
+import compositeDefinition from '#definitions/composite';
+import imageCompositeDefinition from '#definitions/image-composite';
+import httpRequestDefinition from '#definitions/http-request';
+import fileSystemDefinition from '#definitions/file-system';
+import transformDefinition from '#definitions/transform';
+import shellCommandDefinition from '#definitions/shell-command';
+import loopDefinition from '#definitions/loop';
 
 /**
  * Registry of all available node definitions

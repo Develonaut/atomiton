@@ -4,9 +4,9 @@
  */
 
 // Re-export all operations
-export * from "./directoryOperations";
-export * from "./fileOperations";
-export * from "./utils";
+export * from "#executables/file-system/directoryOperations";
+export * from "#executables/file-system/fileOperations";
+export * from "#executables/file-system/utils";
 
 import type { NodeExecutionContext } from "#core/types/executable";
 import {
@@ -14,7 +14,7 @@ import {
   existsOperation as existsUtil,
   getPathStats,
   moveOperation as moveUtil,
-} from "./utils";
+} from "#executables/file-system/utils";
 
 /**
  * Delete operation wrapper

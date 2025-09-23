@@ -9,9 +9,9 @@ import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import { transformFields } from "./fields";
-import { transformInputPorts, transformOutputPorts } from "./ports";
-import { transformDefaults, transformSchema } from "./schema";
+import { transformFields } from "#definitions/transform/fields";
+import { transformInputPorts, transformOutputPorts } from "#definitions/transform/ports";
+import { transformDefaults, transformSchema } from "#definitions/transform/schema";
 
 /**
  * Transform node definition (browser-safe)
@@ -56,6 +56,7 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
 export default transformDefinition;
 
 // Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullTransformSchema = v.object({
   ...transformSchema,
   enabled    : v.boolean().default(true),

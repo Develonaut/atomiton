@@ -6,7 +6,7 @@
 import type { NodeExecutionContext } from "#core/types/executable";
 import * as fs from "fs/promises";
 import * as path from "path";
-import { getPathStats } from "./utils";
+import { getPathStats } from "#executables/file-system/utils";
 
 /**
  * Create directory operation

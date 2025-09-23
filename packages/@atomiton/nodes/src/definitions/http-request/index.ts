@@ -9,9 +9,9 @@ import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import { httpRequestFields } from "./fields";
-import { httpRequestInputPorts, httpRequestOutputPorts } from "./ports";
-import { httpRequestDefaults, httpRequestSchema } from "./schema";
+import { httpRequestFields } from "#definitions/http-request/fields";
+import { httpRequestInputPorts, httpRequestOutputPorts } from "#definitions/http-request/ports";
+import { httpRequestDefaults, httpRequestSchema } from "#definitions/http-request/schema";
 
 /**
  * HTTP Request node definition (browser-safe)
@@ -57,6 +57,7 @@ export const httpRequestDefinition: NodeDefinition = createNodeDefinition({
 export default httpRequestDefinition;
 
 // Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullHttpRequestSchema = v.object({
   ...httpRequestSchema,
   enabled    : v.boolean().default(true),

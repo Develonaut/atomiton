@@ -19,9 +19,9 @@ import {
   moveOperation,
   readFileOperation,
   writeFileOperation,
-} from "./operations";
+} from "#executables/file-system/operations";
 
-export type { FileSystemOutput } from "./operations";
+export type { FileSystemOutput } from "#executables/file-system/operations";
 
 /**
  * Get input value safely

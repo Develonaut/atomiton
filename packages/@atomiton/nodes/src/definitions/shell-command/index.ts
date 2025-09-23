@@ -9,9 +9,9 @@ import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import { shellCommandFields } from "./fields";
-import { shellCommandInputPorts, shellCommandOutputPorts } from "./ports";
-import { shellCommandDefaults, shellCommandSchema } from "./schema";
+import { shellCommandFields } from "#definitions/shell-command/fields";
+import { shellCommandInputPorts, shellCommandOutputPorts } from "#definitions/shell-command/ports";
+import { shellCommandDefaults, shellCommandSchema } from "#definitions/shell-command/schema";
 
 /**
  * Shell Command node definition (browser-safe)
@@ -55,6 +55,7 @@ export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
 export default shellCommandDefinition;
 
 // Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullShellCommandSchema = v.object({
   ...shellCommandSchema,
   enabled    : v.boolean().default(true),

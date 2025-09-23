@@ -17,10 +17,10 @@ export {
   loadBuiltInTemplates,
   removeTemplate,
   searchTemplates,
-} from './registry.js';
+} from '#templates/registry';
 
 // Loader functions
-export { loadTemplate, loadTemplateFromFile } from './loader.js';
+export { loadTemplate, loadTemplateFromFile } from '#templates/loader';
 
 // Types
-export type { Template, TemplateMetadata } from './types.js';
+export type { Template, TemplateMetadata } from '#templates/types';

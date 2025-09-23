@@ -4,15 +4,15 @@
  */
 
 // Re-export types from separate modules
-export * from "./edges.js";
-export * from "./metadata.js";
-export * from "./parameters.js";
-export * from "./ports.js";
+export * from "#core/types/edges";
+export * from "#core/types/metadata";
+export * from "#core/types/parameters";
+export * from "#core/types/ports";
 
-import type { NodeEdge } from "./edges.js";
-import type { NodeMetadata } from "./metadata.js";
-import type { NodeParameters } from "./parameters.js";
-import type { NodePort } from "./ports.js";
+import type { NodeEdge } from "#core/types/edges";
+import type { NodeMetadata } from "#core/types/metadata";
+import type { NodeParameters } from "#core/types/parameters";
+import type { NodePort } from "#core/types/ports";
 
 // ============================================================================
 // NODE DEFINITION TYPES

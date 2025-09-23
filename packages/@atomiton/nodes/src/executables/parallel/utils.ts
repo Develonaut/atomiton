@@ -3,7 +3,7 @@
  * Helper functions for parallel execution
  */
 
-import type { OperationResult } from "./operations";
+import type { OperationResult } from "#executables/parallel/operations";
 
 /**
  * Parallel execution output

@@ -18,7 +18,7 @@ function parseCSV(
   content: string,
   delimiter: string = ",",
   hasHeaders: boolean = true,
-  skipEmpty: boolean = true
+  skipEmpty: boolean = true,
 ): Record<string, string>[] | string[][] {
   const lines = content
     .split(/\r?\n/)
@@ -78,7 +78,7 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      params: CSVReaderParameters
+      params: CSVReaderParameters,
     ): Promise<NodeExecutionResult> {
       try {
         // Get file path from parameters or inputs
@@ -114,12 +114,12 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
             context.log?.debug?.("Using raw CSV data input");
           } else {
             throw new Error(
-              "Invalid input type. Expected string (CSV content)."
+              "Invalid input type. Expected string (CSV content).",
             );
           }
         } else {
           throw new Error(
-            "No CSV data provided. Please provide filePath or raw data."
+            "No CSV data provided. Please provide filePath or raw data.",
           );
         }
 
@@ -133,7 +133,7 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
           csvContent,
           delimiter,
           hasHeaders,
-          typeof params.skipEmpty === "boolean" ? params.skipEmpty : true
+          typeof params.skipEmpty === "boolean" ? params.skipEmpty : true,
         );
 
         // Extract headers if available
@@ -147,7 +147,7 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
           const firstRecord = records[0];
           if (firstRecord && Array.isArray(firstRecord)) {
             headers = (firstRecord as string[]).map(
-              (_, index) => `column_${index}`
+              (_, index) => `column_${index}`,
             );
             // Convert array records to objects with generated column names
             finalRecords = records.map((record) => {
@@ -161,13 +161,13 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
         }
 
         context.log?.info?.(
-          `Successfully parsed CSV: ${finalRecords.length} records`
+          `Successfully parsed CSV: ${finalRecords.length} records`,
         );
 
         return {
           success: true,
           outputs: {
-            records : finalRecords,
+            records: finalRecords,
             headers,
             rowCount: finalRecords.length,
           },
@@ -182,7 +182,7 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
         };
       }
     },

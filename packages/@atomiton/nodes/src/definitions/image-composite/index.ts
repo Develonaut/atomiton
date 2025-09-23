@@ -9,9 +9,9 @@ import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import { imageCompositeFields } from "./fields";
-import { imageCompositeInputPorts, imageCompositeOutputPorts } from "./ports";
-import { imageCompositeDefaults, imageCompositeSchema } from "./schema";
+import { imageCompositeFields } from "#definitions/image-composite/fields";
+import { imageCompositeInputPorts, imageCompositeOutputPorts } from "#definitions/image-composite/ports";
+import { imageCompositeDefaults, imageCompositeSchema } from "#definitions/image-composite/schema";
 
 /**
  * Image Composite node definition (browser-safe)
@@ -55,6 +55,7 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
 export default imageCompositeDefinition;
 
 // Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullImageCompositeSchema = v.object({
   ...imageCompositeSchema,
   enabled    : v.boolean().default(true),

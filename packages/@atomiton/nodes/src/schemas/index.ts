@@ -4,11 +4,11 @@
  */
 
 // Export base schemas
-export * from './node';
-export * from './nodeEdge';
-export * from './nodeMetadata';
-export * from './nodeParameters';
-export * from './nodePort';
-export * from './nodePosition';
-export * from './nodeType';
-export * from './nodeVariable';
+export * from '#schemas/node';
+export * from '#schemas/nodeEdge';
+export * from '#schemas/nodeMetadata';
+export * from '#schemas/nodeParameters';
+export * from '#schemas/nodePort';
+export * from '#schemas/nodePosition';
+export * from '#schemas/nodeType';
+export * from '#schemas/nodeVariable';

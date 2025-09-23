@@ -4,7 +4,7 @@
  */
 
 import type { NodeExecutionContext, NodeExecutionResult } from "#core/types/executable";
-import type { ExecutableNode, ExecutionMetadata } from "./types";
+import type { ExecutableNode, ExecutionMetadata } from "#executables/composite/types";
 
 /**
  * Execute a node with retry logic

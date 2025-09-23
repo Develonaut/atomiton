@@ -1,4 +1,4 @@
-import type { NodeDefinition } from '../core/types/definition.js';
+import type { NodeDefinition } from '#core/types/definition';
 
 /**
  * Templates are just composite node definitions

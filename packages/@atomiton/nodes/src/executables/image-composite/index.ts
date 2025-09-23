@@ -14,8 +14,8 @@ import {
   type ImageInput,
   getImageMetadata,
   performImageComposition,
-} from "./operations";
-import { createTempFilePath, validateImageInput } from "./utils";
+} from "#executables/image-composite/operations";
+import { createTempFilePath, validateImageInput } from "#executables/image-composite/utils";
 
 export type ImageCompositeOutput = {
   result: string;

@@ -5,8 +5,8 @@
 
 import type { NodeExecutionContext } from "#core/types/executable";
 import type { LoopParameters } from "#definitions/loop";
-import { executeConditionLoop, executeIterationLoop } from "./baseExecutor";
-import { type LoopResult, createIterationResult } from "./loopUtils";
+import { executeConditionLoop, executeIterationLoop } from "#executables/loop/baseExecutor";
+import { type LoopResult, createIterationResult } from "#executables/loop/loopUtils";
 
 /**
  * Execute forEach loop
@@ -74,7 +74,7 @@ export async function executeForRange(
     values,
     config,
     context,
-    (value, index) => ({
+    (value, _index) => ({
       result    : createIterationResult("index", value),
       logMessage: `For range loop iteration ${value}`,
     })

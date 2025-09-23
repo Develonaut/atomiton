@@ -1,5 +1,5 @@
-import type { NodeDefinition } from './definition';
-import type { NodeExecutable } from './executable';
+import type { NodeDefinition } from '#core/types/definition';
+import type { NodeExecutable } from '#core/types/executable';
 
 /**
  * Complete Node Type

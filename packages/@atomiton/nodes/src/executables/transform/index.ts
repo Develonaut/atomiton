@@ -11,14 +11,14 @@ import type {
 } from "#core/types/executable";
 import type { TransformParameters } from "#definitions/transform";
 import { transformDefinition } from "#definitions/transform";
-import { executeTransformation } from "./operations";
+import { executeTransformation } from "#executables/transform/operations";
 import {
   createErrorOutput,
   createTransformOutput,
   getInputValue,
   logTransformResult,
   type TransformOutput,
-} from "./utils";
+} from "#executables/transform/utils";
 
 export type { TransformOutput };
 

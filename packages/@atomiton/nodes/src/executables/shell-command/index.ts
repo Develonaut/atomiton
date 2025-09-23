@@ -3,20 +3,24 @@
  * Node.js implementation with shell command execution logic
  */
 
-import { createNodeExecutable } from "../../core/factories/createNodeExecutable";
+import { createNodeExecutable } from "#core/factories/createNodeExecutable";
 import type {
   NodeExecutable,
   NodeExecutionContext,
   NodeExecutionResult,
-} from "../../core/types/executable";
-import type { ShellCommandParameters } from "../../definitions/shell-command";
-import { executeCommand } from "./executor";
+} from "#core/types/executable";
+import type { ShellCommandParameters } from "#definitions/shell-command";
+import { executeCommand } from "#executables/shell-command/executor";
 import {
   createCommandOutput,
   createErrorOutput,
   type ShellCommandOutput,
-} from "./output";
-import { getInputValue, logExecutionResult, parseJSON } from "./utils";
+} from "#executables/shell-command/output";
+import {
+  getInputValue,
+  logExecutionResult,
+  parseJSON,
+} from "#executables/shell-command/utils";
 
 export type { ShellCommandOutput };
 
@@ -67,17 +71,17 @@ export const shellCommandExecutable: NodeExecutable<ShellCommandParameters> =
         context.log?.info?.(`Executing shell command: ${command}`, {
           args,
           workingDirectory,
-          shell  : config.shell,
+          shell: config.shell,
           timeout: config.timeout,
         });
 
         // Execute the command
         const result = await executeCommand(command, args, {
-          cwd       : workingDirectory as string,
-          env       : environment,
-          shell     : config.shell,
-          stdio     : config.inheritStdio ? "inherit" : "pipe",
-          timeout   : config.timeout,
+          cwd: workingDirectory as string,
+          env: environment,
+          shell: config.shell,
+          stdio: config.inheritStdio ? "inherit" : "pipe",
+          timeout: config.timeout,
           killSignal: config.killSignal,
         });
 
@@ -100,14 +104,14 @@ export const shellCommandExecutable: NodeExecutable<ShellCommandParameters> =
           error instanceof Error ? error.message : String(error);
 
         context.log?.error?.("Shell command execution failed", {
-          error  : errorMessage,
+          error: errorMessage,
           duration,
           command: config.command,
         });
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
           outputs: createErrorOutput(config.command, duration),
         };
       }

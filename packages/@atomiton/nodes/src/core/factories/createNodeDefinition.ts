@@ -5,6 +5,12 @@
  * by combining its parts (metadata, parameters, ports, etc).
  */
 
+import createNodeMetadata, {
+  type NodeMetadataInput,
+} from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import type { NodePortInput } from "#core/factories/createNodePorts";
+import createNodePorts from "#core/factories/createNodePorts";
 import type {
   NodeDefinition,
   NodeEdge,
@@ -13,12 +19,6 @@ import type {
   NodePort,
 } from "#core/types/definition.js";
 import { generateNodeId } from "@atomiton/utils";
-import createNodeMetadata, {
-  type NodeMetadataInput,
-} from "#core/factories/createNodeMetadata";
-import createNodeParameters from "#core/factories/createNodeParameters";
-import type { NodePortInput } from "#core/factories/createNodePorts";
-import createNodePorts from "#core/factories/createNodePorts";
 
 export type CreateNodeInput = {
   id?: string;
@@ -57,11 +57,11 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
       : undefined,
     input.parameters && "fields" in input.parameters
       ? (input.parameters as NodeParameters).fields
-      : undefined
+      : undefined,
   );
 
   const ports = createNodePorts({
-    input : input.inputPorts,
+    input: input.inputPorts,
     output: input.outputPorts,
   });
 
@@ -72,7 +72,7 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     position,
     metadata,
     parameters,
-    inputPorts : ports.input,
+    inputPorts: ports.input,
     outputPorts: ports.output,
   };
 

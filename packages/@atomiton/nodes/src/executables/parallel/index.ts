@@ -3,21 +3,21 @@
  * Node.js implementation with actual business logic
  */
 
-import { createNodeExecutable } from "../../core/factories/createNodeExecutable";
+import { createNodeExecutable } from "#core/factories/createNodeExecutable";
 import type {
   NodeExecutable,
   NodeExecutionContext,
   NodeExecutionResult,
-} from "../../core/types/executable";
-import type { ParallelParameters } from "../../definitions/parallel";
-import { executeStrategy } from "./operations";
+} from "#core/types/executable";
+import type { ParallelParameters } from "#definitions/parallel";
+import { executeStrategy } from "#executables/parallel/operations";
 import {
   calculateStats,
   createEmptyOutput,
   createErrorOutput,
   createParallelOutput,
   type ParallelOutput,
-} from "./utils";
+} from "#executables/parallel/utils";
 
 export type { ParallelOutput };
 

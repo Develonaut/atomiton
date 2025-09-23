@@ -4,7 +4,6 @@
  */
 
 import type { NodeExecutionContext } from "#core/types/executable";
-import type { LoopParameters } from "#definitions/loop";
 
 /**
  * Loop execution result
@@ -20,7 +19,7 @@ export type LoopResult = {
  */
 export type LoopContext = {
   iteration: number;
-  lastResult: any;
+  lastResult: unknown;
 };
 
 /**

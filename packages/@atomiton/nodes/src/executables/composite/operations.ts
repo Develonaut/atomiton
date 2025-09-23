@@ -13,10 +13,10 @@ import {
   createErrorResult,
   createExecutionMetadata,
   executeWithRetries,
-} from "./executionUtils";
-import type { CompositeGraph } from "./types";
+} from "#executables/composite/executionUtils";
+import type { CompositeGraph } from "#executables/composite/types";
 
-export type { CompositeGraph, ExecutableNode, NodeEdge } from "./types";
+export type { CompositeGraph, ExecutableNode, NodeEdge } from "#executables/composite/types";
 
 /**
  * Execute nodes in sequence
@@ -24,7 +24,7 @@ export type { CompositeGraph, ExecutableNode, NodeEdge } from "./types";
 export async function executeSequential(
   graph: CompositeGraph,
   context: NodeExecutionContext,
-  params: CompositeParameters
+  params: CompositeParameters,
 ): Promise<NodeExecutionResult> {
   let previousResult: NodeExecutionResult | undefined;
   let totalExecutionTime = 0;
@@ -41,7 +41,7 @@ export async function executeSequential(
         node,
         childContext,
         retries,
-        timeout
+        timeout,
       );
 
       totalExecutionTime += Date.now() - startTime;
@@ -51,20 +51,25 @@ export async function executeSequential(
           context,
           graph.nodes.indexOf(node),
           totalExecutionTime,
-          node.id
+          node.id,
         );
-        return createErrorResult(node.name, result.error || "Unknown error", metadata);
+        return createErrorResult(
+          node.name,
+          result.error || "Unknown error",
+          metadata,
+        );
       }
 
       previousResult = result;
     } catch (error) {
       totalExecutionTime += Date.now() - startTime;
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       const metadata = createExecutionMetadata(
         context,
         graph.nodes.indexOf(node),
         totalExecutionTime,
-        node.id
+        node.id,
       );
       return createErrorResult(node.name, errorMessage, metadata);
     }
@@ -73,7 +78,7 @@ export async function executeSequential(
   const metadata = createExecutionMetadata(
     context,
     graph.nodes.length,
-    totalExecutionTime
+    totalExecutionTime,
   );
 
   return {
@@ -91,7 +96,7 @@ export async function executeSequential(
 export async function executeParallel(
   graph: CompositeGraph,
   context: NodeExecutionContext,
-  params: CompositeParameters
+  params: CompositeParameters,
 ): Promise<NodeExecutionResult> {
   const startTime = Date.now();
 
@@ -100,7 +105,8 @@ export async function executeParallel(
     const promises = graph.nodes.map(async (node) => {
       const childContext = createChildContext(context, node.id);
       const retries = typeof params.retries === "number" ? params.retries : 0;
-      const timeout = typeof params.timeout === "number" ? params.timeout : 30000;
+      const timeout =
+        typeof params.timeout === "number" ? params.timeout : 30000;
       return executeWithRetries(node, childContext, retries, timeout);
     });
 
@@ -113,21 +119,22 @@ export async function executeParallel(
       .filter(
         ({ result }) =>
           result.status === "rejected" ||
-          (result.status === "fulfilled" && !result.value.success)
+          (result.status === "fulfilled" && !result.value.success),
       );
 
     if (failures.length > 0) {
       const firstFailure = failures[0];
       const errorMessage =
         firstFailure.result.status === "rejected"
-          ? firstFailure.result.reason.message || String(firstFailure.result.reason)
+          ? firstFailure.result.reason.message ||
+            String(firstFailure.result.reason)
           : firstFailure.result.value.error;
 
       const metadata = createExecutionMetadata(
         context,
         results.length - failures.length,
         totalExecutionTime,
-        firstFailure.node.id
+        firstFailure.node.id,
       );
 
       return createErrorResult(firstFailure.node.name, errorMessage, metadata);
@@ -137,14 +144,14 @@ export async function executeParallel(
     const successfulResults = results
       .filter(
         (result): result is PromiseFulfilledResult<NodeExecutionResult> =>
-          result.status === "fulfilled" && result.value.success
+          result.status === "fulfilled" && result.value.success,
       )
       .map((result) => result.value.outputs);
 
     const metadata = createExecutionMetadata(
       context,
       graph.nodes.length,
-      totalExecutionTime
+      totalExecutionTime,
     );
 
     return {

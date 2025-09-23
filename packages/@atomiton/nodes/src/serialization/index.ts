@@ -4,5 +4,5 @@
  * Convert NodeDefinitions to/from YAML for storage and portability
  */
 
-export { fromYaml } from './fromYaml.js';
-export { toYaml } from './toYaml.js';
+export { fromYaml } from '#serialization/fromYaml';
+export { toYaml } from '#serialization/toYaml';

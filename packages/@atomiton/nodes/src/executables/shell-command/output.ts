@@ -3,7 +3,7 @@
  * Output formatting and result handling
  */
 
-import type { CommandResult } from "./executor";
+import type { CommandResult } from "#executables/shell-command/executor";
 
 /**
  * Shell command output structure
@@ -38,18 +38,18 @@ export function createCommandOutput(
 
   return {
     result: {
-      stdout  : captureOutput ? result.stdout : "",
-      stderr  : captureOutput ? result.stderr : "",
+      stdout: captureOutput ? result.stdout : "",
+      stderr: captureOutput ? result.stderr : "",
       exitCode: result.exitCode,
-      command : result.command,
+      command: result.command,
       duration,
       success,
       timedOut: result.timedOut,
     },
-    stdout  : captureOutput ? result.stdout : "",
-    stderr  : captureOutput ? result.stderr : "",
+    stdout: captureOutput ? result.stdout : "",
+    stderr: captureOutput ? result.stderr : "",
     exitCode: result.exitCode,
-    command : result.command,
+    command: result.command,
     duration,
     success,
   };
@@ -64,19 +64,19 @@ export function createErrorOutput(
 ): ShellCommandOutput {
   return {
     result: {
-      stdout  : "",
-      stderr  : "",
+      stdout: "",
+      stderr: "",
       exitCode: -1,
       command,
       duration,
-      success : false,
+      success: false,
       timedOut: false,
     },
-    stdout  : "",
-    stderr  : "",
+    stdout: "",
+    stderr: "",
     exitCode: -1,
     command,
     duration,
-    success : false,
+    success: false,
   };
 }

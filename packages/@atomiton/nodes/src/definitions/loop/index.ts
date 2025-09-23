@@ -9,9 +9,9 @@ import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import { loopFields } from "./fields";
-import { loopInputPorts, loopOutputPorts } from "./ports";
-import { loopDefaults, loopSchema } from "./schema";
+import { loopFields } from "#definitions/loop/fields";
+import { loopInputPorts, loopOutputPorts } from "#definitions/loop/ports";
+import { loopDefaults, loopSchema } from "#definitions/loop/schema";
 
 /**
  * Loop node definition (browser-safe)
@@ -50,6 +50,7 @@ export const loopDefinition: NodeDefinition = createNodeDefinition({
 export default loopDefinition;
 
 // Create the full schema with base parameters
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullLoopSchema = v.object({
   ...loopSchema,
   enabled    : v.boolean().default(true),

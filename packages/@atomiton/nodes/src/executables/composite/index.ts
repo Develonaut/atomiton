@@ -14,7 +14,7 @@ import {
   type CompositeGraph,
   executeParallel,
   executeSequential,
-} from "./operations";
+} from "#executables/composite/operations";
 
 export type CompositeOutput = {
   result: unknown;

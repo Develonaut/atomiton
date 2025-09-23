@@ -16,8 +16,8 @@ import {
   extractResponseHeaders,
   parseResponse,
   prepareRequestBody,
-} from "./operations";
-import { buildUrlWithParams, parseErrorMessage, validateUrl } from "./utils";
+} from "#executables/http-request/operations";
+import { buildUrlWithParams, parseErrorMessage, validateUrl } from "#executables/http-request/utils";
 
 // Types for HTTP request
 export type HttpRequestInput = {

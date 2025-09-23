@@ -12,7 +12,7 @@ export type NodeExecutionStatus =
 
 /**
  * Node execution context
- * 
+ *
  * Runtime context passed to node execute functions
  */
 export type NodeExecutionContext = {
@@ -80,15 +80,15 @@ export type NodeExecutableInput<TConfig = unknown> = {
     context: NodeExecutionContext,
     config: TConfig,
   ) => Promise<NodeExecutionResult>;
-  
+
   validateConfig?: (config: unknown) => TConfig;
-  
+
   getValidatedParams?: (context: NodeExecutionContext) => TConfig;
 };
 
 /**
  * Node Executable
- * 
+ *
  * Defines the runtime execution logic for a node
  */
 export type NodeExecutable<TConfig = unknown> = {

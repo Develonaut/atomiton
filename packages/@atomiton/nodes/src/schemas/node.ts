@@ -1,11 +1,11 @@
 import type { VInfer, VType } from "@atomiton/validation";
 import v from "@atomiton/validation";
-import nodeEdgeSchema from "./nodeEdge";
-import nodeMetadataSchema from "./nodeMetadata";
-import nodeParametersSchema from "./nodeParameters";
-import nodePortSchema from "./nodePort";
-import nodePositionSchema from "./nodePosition";
-import nodeTypeSchema from "./nodeType";
+import nodeEdgeSchema from "#schemas/nodeEdge";
+import nodeMetadataSchema from "#schemas/nodeMetadata";
+import nodeParametersSchema from "#schemas/nodeParameters";
+import nodePortSchema from "#schemas/nodePort";
+import nodePositionSchema from "#schemas/nodePosition";
+import nodeTypeSchema from "#schemas/nodeType";
 
 // Create a base node schema without children for type inference
 const baseNodeSchema = v.object({

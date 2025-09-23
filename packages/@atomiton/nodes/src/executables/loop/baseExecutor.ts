@@ -13,7 +13,7 @@ import {
   evaluateCondition,
   handleIterationError,
   logIteration,
-} from "./loopUtils";
+} from "#executables/loop/loopUtils";
 
 /**
  * Base loop execution with common error handling and iteration management
@@ -89,20 +89,20 @@ export async function executeConditionLoop(
   // For doWhile, execute at least once
   let shouldExecute = options.type === "doWhile" ? true : checkCondition();
 
-  return executeBaseLoop(config, context, async (results, errors, iterationCount) => {
+  return executeBaseLoop(config, context, async (results, _errors, _iterationCount) => {
     if (!shouldExecute) {
       return { shouldContinue: false };
     }
 
-    const result = createIterationResult("iteration", iterationCount, {
+    const result = createIterationResult("iteration", _iterationCount, {
       condition: options.conditionValue ?? true,
     });
 
     results.push(result);
-    loopContext.iteration = iterationCount;
-    loopContext.lastResult = result as any;
+    loopContext.iteration = _iterationCount;
+    loopContext.lastResult = result;
 
-    logIteration(context, `${options.type} loop iteration ${iterationCount + 1}`);
+    logIteration(context, `${options.type} loop iteration ${_iterationCount + 1}`);
 
     // Check condition for next iteration
     shouldExecute = checkCondition();
@@ -122,7 +122,7 @@ export async function executeIterationLoop<T>(
 ): Promise<LoopResult> {
   let currentIndex = 0;
 
-  return executeBaseLoop(config, context, async (results, errors, iterationCount) => {
+  return executeBaseLoop(config, context, async (results, _errors, _iterationCount) => {
     if (currentIndex >= items.length) {
       return { shouldContinue: false };
     }
