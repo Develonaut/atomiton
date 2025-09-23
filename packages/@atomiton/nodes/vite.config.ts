@@ -88,7 +88,6 @@ export default defineConfig({
           if (id.includes("src/definitions")) return "definitions";
           if (id.includes("src/executables")) return "executables";
           if (id.includes("src/core/factories")) return "factories";
-          if (id.includes("src/core/types")) return "types";
           if (id.includes("src/schemas")) return "schemas";
           if (id.includes("node_modules")) return "vendor";
         },

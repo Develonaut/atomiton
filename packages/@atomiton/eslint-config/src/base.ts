@@ -91,6 +91,8 @@ const baseConfig: Linter.Config[] = [
       "no-useless-catch": "error",
       "no-constant-condition": ["error", { checkLoops: false }],
 
+      // Import/require rules
+      "no-inline-require": "error",
 
       // Import restrictions for # imports
       "no-restricted-imports": [

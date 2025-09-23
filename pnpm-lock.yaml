@@ -128,6 +128,9 @@ importers:
       lint-staged:
         specifier: 'catalog:'
         version: 16.1.6
+      markdown-table-prettify:
+        specifier: ^3.7.0
+        version: 3.7.0
       playwright:
         specifier: 'catalog:'
         version: 1.55.0
@@ -3830,6 +3833,11 @@ packages:
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
+
+  markdown-table-prettify@3.7.0:
+    resolution: {integrity: sha512-woZ1X+u0HsTygXL5kcptMSDwnjU//3UKTOH6fGdaABSSLOxTdWjr2P6i7dVrru5t/pxyEOT48/skv/8m8/VqdA==}
+    engines: {vscode: ^1.103.0}
+    hasBin: true
 
   matcher@3.0.0:
     resolution: {integrity: sha512-OkeDaAZ/bQCxeFAozM55PKcKU0yJMPGifLwV4Qgjitu+5MoAfSQN4lsLJeXZ1b8w0x+/Emda6MZgXS1jvsapng==}
@@ -8076,6 +8084,8 @@ snapshots:
   make-dir@4.0.0:
     dependencies:
       semver: 7.7.2
+
+  markdown-table-prettify@3.7.0: {}
 
   matcher@3.0.0:
     dependencies:

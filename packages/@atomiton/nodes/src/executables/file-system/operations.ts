@@ -9,6 +9,8 @@ export * from "#executables/file-system/fileOperations";
 export * from "#executables/file-system/utils";
 
 import type { NodeExecutionContext } from "#core/types/executable";
+import { copyDirectoryOperation } from "#executables/file-system/directoryOperations";
+import { copyFileOperation } from "#executables/file-system/fileOperations";
 import {
   deleteOperation as deleteUtil,
   existsOperation as existsUtil,
@@ -22,7 +24,7 @@ import {
 export async function deleteOperation(
   targetPath: string,
   recursive: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -35,9 +37,9 @@ export async function deleteOperation(
     if (!stats.exists) {
       context.log?.warn?.(`Path does not exist: ${targetPath}`);
       return {
-        result : `Path does not exist: ${targetPath}`,
+        result: `Path does not exist: ${targetPath}`,
         success: true,
-        path   : targetPath,
+        path: targetPath,
         deleted: false,
       };
     }
@@ -50,9 +52,9 @@ export async function deleteOperation(
     });
 
     return {
-      result : `Deleted: ${targetPath}`,
+      result: `Deleted: ${targetPath}`,
       success: true,
-      path   : targetPath,
+      path: targetPath,
       deleted: true,
     };
   } catch (error) {
@@ -71,7 +73,7 @@ export async function moveOperation(
   sourcePath: string,
   destPath: string,
   overwrite: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -85,9 +87,9 @@ export async function moveOperation(
     context.log?.info?.(`Moved from ${sourcePath} to ${destPath}`);
 
     return {
-      result : `Moved from ${sourcePath} to ${destPath}`,
+      result: `Moved from ${sourcePath} to ${destPath}`,
       success: true,
-      path   : destPath,
+      path: destPath,
       sourcePath,
       destPath,
     };
@@ -105,7 +107,7 @@ export async function moveOperation(
  */
 export async function existsOperation(
   targetPath: string,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   exists: boolean;
@@ -119,14 +121,14 @@ export async function existsOperation(
     context.log?.info?.(`Checked existence: ${targetPath}`, {
       exists,
       isDirectory: stats?.isDirectory,
-      isFile     : stats?.isFile,
+      isFile: stats?.isFile,
     });
 
     return {
-      result : exists,
+      result: exists,
       exists,
       success: true,
-      path   : targetPath,
+      path: targetPath,
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -144,7 +146,7 @@ export async function copyOperation(
   sourcePath: string,
   destPath: string,
   overwrite: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -152,8 +154,7 @@ export async function copyOperation(
   sourcePath: string;
   destPath: string;
 }> {
-  const { copyFileOperation } = await import("./fileOperations");
-  const { copyDirectoryOperation } = await import("./directoryOperations");
+  // Use the statically imported functions
 
   const sourceStats = await getPathStats(sourcePath);
 
