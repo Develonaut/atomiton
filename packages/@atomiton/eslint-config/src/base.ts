@@ -28,6 +28,7 @@ const baseConfig: Linter.Config[] = [
     },
   } satisfies Linter.Config,
 
+
   // Global ignores
   {
     ignores: [
@@ -130,13 +131,27 @@ const baseConfig: Linter.Config[] = [
       ],
       "complexity": ["warn", 10],
 
-      // Comment and TODO management
+      // Comment management rules
+      "spaced-comment": [
+        "warn",
+        "always",
+        {
+          block: {
+            markers: ["*"],
+            balanced: true,
+          },
+          line: {
+            markers: ["@context", "@todo", "@summary"],
+            exceptions: ["-", "+", "*", "@context", "@todo", "@summary"],
+          },
+        },
+      ],
       "no-warning-comments": [
         "warn",
         {
-          terms: ["TODO", "FIXME", "HACK", "XXX"],
-          location: "start"
-        }
+          terms: ["TODO", "FIXME", "HACK", "XXX", "BUG"],
+          location: "start",
+        },
       ],
       "no-inline-comments": "warn",
 
