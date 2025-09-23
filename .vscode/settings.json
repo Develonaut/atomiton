@@ -18,10 +18,7 @@
 
   // Editor Actions and Formatting Configuration
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
-  },
+  "editor.codeActionsOnSave": {},
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 
   // File-specific formatters (Prettier for all supported types)
