@@ -5,7 +5,7 @@ import {
   waitForEditor,
   openAssetPanel,
   getNodes,
-} from "./utils";
+} from "#utils";
 
 /**
  * Blueprint core tests - verify core blueprint functionality

@@ -11,7 +11,12 @@
     "esModuleInterop": true,
     "strict": true,
     "noEmit": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "paths": {
+      "#*": ["./*"]
+    }
   },
   "include": ["src/**/*", "playwright.config.ts"],
   "exclude": ["node_modules", "dist", "test-results"]

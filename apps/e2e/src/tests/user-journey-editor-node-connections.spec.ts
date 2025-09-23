@@ -12,7 +12,7 @@ import {
   panCanvas,
   zoomCanvas,
   waitForEditor,
-} from "./utils";
+} from "#utils";
 
 test.describe("User Journey: Creating Node Connections in Editor", () => {
   test.beforeEach(async ({ page }) => {

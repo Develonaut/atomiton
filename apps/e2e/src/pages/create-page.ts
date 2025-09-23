@@ -1,6 +1,6 @@
 import type { Page, Locator } from "@playwright/test";
-import { BasePage } from "./base-page";
-import { waitFor3DContent } from "../utils/test-helpers";
+import { BasePage } from "#pages/base-page";
+import { waitFor3DContent } from "#utils/test-helpers";
 
 /**
  * Create page object model

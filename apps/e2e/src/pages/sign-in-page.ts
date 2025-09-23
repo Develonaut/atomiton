@@ -1,5 +1,5 @@
 import type { Page, Locator } from "@playwright/test";
-import { BasePage } from "./base-page";
+import { BasePage } from "#pages/base-page";
 
 /**
  * Sign-in page object model

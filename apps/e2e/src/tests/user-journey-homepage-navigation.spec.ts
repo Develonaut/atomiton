@@ -6,7 +6,7 @@ import {
   waitForContent,
   createNewProject,
   openTemplate,
-} from "./utils";
+} from "#utils";
 
 test.describe("User Journey: First-Time User Homepage Navigation", () => {
   test("User lands on homepage and explores navigation", async ({ page }) => {

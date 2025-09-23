@@ -3,5 +3,5 @@
  * Central export for all test helper functions
  */
 
-export * from "./editor.utils";
-export * from "./navigation.utils";
+export * from "#utils/editor.utils";
+export * from "#utils/navigation.utils";

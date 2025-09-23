@@ -6,7 +6,7 @@ import {
   getEdges,
   setupConsoleErrorTracking,
   verifyNoReactFlowErrors,
-} from "./utils";
+} from "#utils";
 
 /**
  * User Journey: Template to Editor Flow

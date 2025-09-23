@@ -1,5 +1,5 @@
 import type { Page, Locator } from "@playwright/test";
-import { waitForPageLoad, checkNoErrors } from "../utils/test-helpers";
+import { waitForPageLoad, checkNoErrors } from "#utils/test-helpers";
 
 /**
  * Base page class with common functionality
