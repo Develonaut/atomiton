@@ -6,6 +6,7 @@
 import type { NodeDefinition } from '#core/types/definition';
 
 // Import all node definitions
+import codeDefinition from '#definitions/code';
 import parallelDefinition from '#definitions/parallel';
 import csvReaderDefinition from '#definitions/csv-reader';
 import compositeDefinition from '#definitions/composite';
@@ -20,6 +21,7 @@ import loopDefinition from '#definitions/loop';
  * Registry of all available node definitions
  */
 export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
+  ['code', codeDefinition],
   ['parallel', parallelDefinition],
   ['csv-reader', csvReaderDefinition],
   ['composite', compositeDefinition],
@@ -116,6 +118,7 @@ export function searchNodeDefinitions(query: string): NodeDefinition[] {
 
 // Export all definitions for convenience
 export {
+  codeDefinition,
   parallelDefinition,
   csvReaderDefinition,
   compositeDefinition,

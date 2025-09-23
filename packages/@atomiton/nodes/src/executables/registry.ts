@@ -6,6 +6,7 @@
 import type { NodeExecutable } from "#core/types/executable";
 
 // Import all node executables
+import codeExecutable from "#executables/code";
 import compositeExecutable from "#executables/composite";
 import csvReaderExecutable from "#executables/csv-reader";
 import fileSystemExecutable from "#executables/file-system";
@@ -25,6 +26,7 @@ export const nodeExecutableRegistry = new Map<
 >();
 
 // Register all executables
+nodeExecutableRegistry.set("code", codeExecutable as NodeExecutable<unknown>);
 nodeExecutableRegistry.set(
   "parallel",
   parallelExecutable as NodeExecutable<unknown>,
@@ -91,6 +93,7 @@ export function getNodeExecutableIds(): string[] {
 
 // Export all executables for convenience
 export {
+  codeExecutable,
   compositeExecutable,
   csvReaderExecutable,
   fileSystemExecutable,

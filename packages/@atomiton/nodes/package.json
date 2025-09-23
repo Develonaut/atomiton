@@ -1,6 +1,6 @@
 {
   "name": "@atomiton/nodes",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Atomiton Blueprint node implementations",
   "type": "module",
   "private": true,
@@ -44,6 +44,7 @@
     "@atomiton/validation": "workspace:*",
     "@atomiton/yaml": "workspace:*",
     "@types/js-yaml": "^4.0.9",
+    "isolated-vm": "^6.0.1",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {

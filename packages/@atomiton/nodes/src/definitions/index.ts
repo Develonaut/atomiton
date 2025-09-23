@@ -26,6 +26,7 @@ export {
 } from "#definitions/registry";
 
 // Export all individual node definitions
+export { default as codeDefinition } from "#definitions/code";
 export { default as compositeDefinition } from "#definitions/composite";
 export { default as csvReaderDefinition } from "#definitions/csv-reader";
 export { default as fileSystemDefinition } from "#definitions/file-system";
@@ -37,6 +38,7 @@ export { default as shellCommandDefinition } from "#definitions/shell-command";
 export { default as transformDefinition } from "#definitions/transform";
 
 // Export parameter types for each node
+export type { CodeParameters } from "#definitions/code";
 export type { CompositeParameters } from "#definitions/composite";
 export type { CSVReaderParameters } from "#definitions/csv-reader";
 export type { FileSystemParameters } from "#definitions/file-system";
