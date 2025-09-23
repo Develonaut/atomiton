@@ -1,7 +1,7 @@
 import { bench, describe } from "vitest";
-import { defineLibraryConfig } from "./presets/library";
-import { defineReactLibraryConfig } from "./presets/react";
-import { defineAppConfig } from "./presets/app";
+import { defineLibraryConfig } from "#presets/library";
+import { defineReactLibraryConfig } from "#presets/react";
+import { defineAppConfig } from "#presets/app";
 
 describe("Config Generation Performance", () => {
   bench("defineLibraryConfig - minimal", () => {

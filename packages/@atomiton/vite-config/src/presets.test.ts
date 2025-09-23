@@ -3,7 +3,7 @@ import {
   defineLibraryConfig,
   defineReactLibraryConfig,
   defineAppConfig,
-} from "./index";
+} from "#index";
 
 describe("Smoke Tests - Presets", () => {
   it("should export defineLibraryConfig", () => {

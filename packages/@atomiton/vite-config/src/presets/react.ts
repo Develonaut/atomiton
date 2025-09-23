@@ -2,8 +2,8 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
 import { type UserConfig, type PluginOption } from "vite";
-import { defineLibraryConfig } from "./library";
-import type { ReactLibraryOptions } from "../types";
+import { defineLibraryConfig } from "#presets/library";
+import type { ReactLibraryOptions } from "#types";
 
 export function defineReactLibraryConfig(
   options: ReactLibraryOptions,

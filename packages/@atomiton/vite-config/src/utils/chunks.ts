@@ -1,4 +1,4 @@
-import type { ChunkMapping } from "../types";
+import type { ChunkMapping } from "#types";
 
 export function createManualChunks(mapping: ChunkMapping = {}) {
   return (id: string) => {

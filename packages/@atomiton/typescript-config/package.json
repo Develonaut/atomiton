@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Shared TypeScript configuration for Atomiton packages",
   "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
     "./base.json": "./base.json",
     "./library.json": "./library.json",

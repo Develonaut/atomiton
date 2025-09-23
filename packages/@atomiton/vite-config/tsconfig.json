@@ -1,6 +1,12 @@
 {
   "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "#*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
 }

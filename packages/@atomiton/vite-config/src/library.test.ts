@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defineLibraryConfig } from "./presets/library";
+import { defineLibraryConfig } from "#presets/library";
 
 describe("defineLibraryConfig", () => {
   it("should create a basic library config", () => {

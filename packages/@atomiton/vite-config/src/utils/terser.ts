@@ -1,4 +1,4 @@
-import type { TerserConfig } from "../types";
+import type { TerserConfig } from "#types";
 
 export function getTerserOptions(config: TerserConfig = {}) {
   const {

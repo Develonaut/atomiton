@@ -2,10 +2,10 @@ import { resolve } from "path";
 import { defineConfig, type UserConfig } from "vite";
 import dts from "vite-plugin-dts";
 import { visualizer } from "rollup-plugin-visualizer";
-import { getTerserOptions } from "../utils/terser";
-import { createManualChunks } from "../utils/chunks";
-import { mergeViteConfig } from "../utils/merge";
-import type { LibraryOptions } from "../types";
+import { getTerserOptions } from "#utils/terser";
+import { createManualChunks } from "#utils/chunks";
+import { mergeViteConfig } from "#utils/merge";
+import type { LibraryOptions } from "#types";
 
 export function defineLibraryConfig(options: LibraryOptions): UserConfig {
   const {

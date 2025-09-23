@@ -4,14 +4,14 @@ import { defineConfig, type UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import tailwindcss from "@tailwindcss/vite";
-import type { AppOptions } from "../types";
+import type { AppOptions } from "#types";
 import {
   getAssetFileName,
   DEFAULT_ASSETS_INCLUDE,
   DEFAULT_INLINE_LIMIT,
-} from "../utils/assets";
-import { getOptimizeDepsConfig } from "../utils/optimizeDeps";
-import { mergeViteConfig } from "../utils/merge";
+} from "#utils/assets";
+import { getOptimizeDepsConfig } from "#utils/optimizeDeps";
+import { mergeViteConfig } from "#utils/merge";
 
 export function defineAppConfig(options: AppOptions): UserConfig {
   const {

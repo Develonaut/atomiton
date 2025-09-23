@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { getTerserOptions } from "./utils/terser";
-import { createManualChunks } from "./utils/chunks";
+import { getTerserOptions } from "#utils/terser";
+import { createManualChunks } from "#utils/chunks";
 
 describe("getTerserOptions", () => {
   it("should return default terser options", () => {

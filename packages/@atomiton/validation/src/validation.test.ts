@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { v, validators } from './index.js';
+import { v, validators } from '#index.js';
 
 describe('Validation Package Smoke Tests', () => {
   it('should export zod', () => {

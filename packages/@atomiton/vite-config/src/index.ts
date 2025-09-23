@@ -1,6 +1,6 @@
-export { defineLibraryConfig } from "./presets/library";
-export { defineReactLibraryConfig } from "./presets/react";
-export { defineAppConfig } from "./presets/app";
+export { defineLibraryConfig } from "#presets/library";
+export { defineReactLibraryConfig } from "#presets/react";
+export { defineAppConfig } from "#presets/app";
 export {
   defineVitestConfig,
   defineTestConfig,
@@ -8,20 +8,20 @@ export {
   defineBenchmarkTestConfig,
   defineUnitTestConfig,
   defineSmokeTestConfig,
-} from "./presets/vitest";
+} from "#presets/vitest";
 
-export { getTerserOptions } from "./utils/terser";
-export { createManualChunks } from "./utils/chunks";
+export { getTerserOptions } from "#utils/terser";
+export { createManualChunks } from "#utils/chunks";
 export {
   getAssetFileName,
   DEFAULT_ASSETS_INCLUDE,
   DEFAULT_INLINE_LIMIT,
-} from "./utils/assets";
+} from "#utils/assets";
 export {
   getOptimizeDepsConfig,
   getResolveConditions,
   type OptimizeDepsConfig,
-} from "./utils/optimizeDeps";
+} from "#utils/optimizeDeps";
 
 export type {
   LibraryOptions,
@@ -29,4 +29,4 @@ export type {
   AppOptions,
   ChunkMapping,
   TerserConfig,
-} from "./types";
+} from "#types";
