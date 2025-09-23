@@ -167,7 +167,7 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
         return {
           success: true,
           outputs: {
-            records: finalRecords,
+            records : finalRecords,
             headers,
             rowCount: finalRecords.length,
           },
@@ -182,7 +182,7 @@ export const csvReaderExecutable: NodeExecutable<CSVReaderParameters> =
 
         return {
           success: false,
-          error: errorMessage,
+          error  : errorMessage,
         };
       }
     },

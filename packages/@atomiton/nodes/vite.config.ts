@@ -29,7 +29,7 @@ export default defineConfig({
     rollupOptions: {
       onLog(level, log, handler) {
         // Detect Node.js built-ins in browser code
-        if (log.code === 'UNRESOLVED_IMPORT') {
+        if (log.code === "UNRESOLVED_IMPORT") {
           const nodeBuiltins = [
             "fs",
             "path",
@@ -41,11 +41,9 @@ export default defineConfig({
             "http",
             "https",
           ];
-          if (
-            nodeBuiltins.some((builtin) => log.message.includes(builtin))
-          ) {
+          if (nodeBuiltins.some((builtin) => log.message.includes(builtin))) {
             console.error(
-              `❌ ERROR: Node.js built-in imported in browser code: ${log.message}`
+              `❌ ERROR: Node.js built-in imported in browser code: ${log.message}`,
             );
             return;
           }

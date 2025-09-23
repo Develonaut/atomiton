@@ -1,469 +1,233 @@
+/**
+ * YAML to NodeDefinition converter
+ * Handles parsing and conversion of YAML content to strongly-typed node definitions
+ */
+
 import { createNodeDefinition } from "#core/factories/createNodeDefinition.js";
 import { createNodeMetadata } from "#core/factories/createNodeMetadata.js";
 import { createNodeParameters } from "#core/factories/createNodeParameters.js";
 import { createNodePort } from "#core/factories/createNodePorts.js";
 import type {
   NodeDefinition,
-  NodeMetadataVariant,
-  NodeMetadataSource,
-  NodeCategory,
-  NodeIcon,
-  NodeEdgeType,
-  NodeType,
   NodeEdge,
+  NodeFieldsConfig,
   NodePort,
   NodeRuntime,
-  NodeFieldsConfig,
-  NodeFieldControlType
+  NodeType,
 } from "#core/types/definition.js";
+import v from "@atomiton/validation";
 import yaml from "js-yaml";
-
-// Type definitions for YAML parsing
-type YamlNodeMetadata = {
-  id?: string;
-  name?: string;
-  variant?: string;
-  version?: string;
-  author?: string;
-  authorId?: string;
-  source?: string;
-  description?: string;
-  category?: string;
-  icon?: string;
-  keywords?: string[];
-  tags?: string[];
-  runtime?: unknown;
-  experimental?: boolean;
-  deprecated?: boolean;
-  documentationUrl?: string;
-  examples?: unknown;
-};
-
-type YamlPort = {
-  id: string;
-  name: string;
-  type: string;
-  dataType?: string;
-  required?: boolean;
-  multiple?: boolean;
-  description?: string;
-  defaultValue?: unknown;
-};
-
-type YamlEdge = {
-  id: string;
-  source: string;
-  target: string;
-  sourceHandle?: string;
-  targetHandle?: string;
-  type?: string;
-  animated?: boolean;
-  hidden?: boolean;
-  data?: unknown;
-};
-
-type YamlParameter = {
-  default?: unknown;
-  control?: string;
-  type?: string;
-  label?: string;
-  placeholder?: string;
-  helpText?: string;
-  required?: boolean;
-  min?: number;
-  max?: number;
-  step?: number;
-  options?: unknown[];
-};
-
-type YamlNodeDefinition = {
-  id: string;
-  name: string;
-  type?: string;
-  position?: { x: number; y: number };
-  metadata?: YamlNodeMetadata;
-  version?: string;
-  description?: string;
-  category?: string;
-  parameters?: Record<string, YamlParameter>;
-  inputPorts?: YamlPort[];
-  outputPorts?: YamlPort[];
-  nodes?: YamlNodeDefinition[];
-  edges?: YamlEdge[];
-  variables?: unknown;
-  settings?: unknown;
-  data?: unknown;
-};
+import type {
+  YamlEdge,
+  YamlNodeDefinition,
+  YamlParameter,
+  YamlPort,
+} from "./types.js";
+import {
+  validateCategory,
+  validateControlType,
+  validateEdgeType,
+  validateIcon,
+  validateRuntime,
+  validateSource,
+  validateVariant,
+} from "./validators.js";
 
 /**
  * Convert YAML content to NodeDefinition
  * Used for:
- * - Loading built-in templates
- * - Loading user-saved workflows from storage
- * - Importing shared workflows
+ * - Loading node templates
+ * - Importing node definitions
+ * - Parsing serialized Blueprints
  */
 export function fromYaml(yamlContent: string): NodeDefinition {
   try {
-    const parsed = yaml.load(yamlContent);
+    const data = yaml.load(yamlContent) as YamlNodeDefinition;
 
-    // Handle both file path and content
-    if (typeof parsed === "string") {
-      throw new Error("Invalid YAML: appears to be a string, not an object");
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid YAML structure");
     }
 
-    return parseYamlToDefinition(parsed as YamlNodeDefinition);
+    if (!data.id || !data.name) {
+      throw new Error("Node definition must have id and name");
+    }
+
+    return parseNodeDefinition(data);
   } catch (error) {
-    throw new Error(
-      `Failed to parse YAML: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Failed to parse YAML: ${message}`);
   }
 }
 
 /**
- * Load definitions from storage - for now returns built-in templates
- * TODO: Replace with actual storage service when available
+ * Parse a node definition from YAML data
  */
-export async function loadDefinitionFromStorage(): Promise<NodeDefinition[]> {
-  // For now, return the built-in templates as parsed definitions
-  // This will be replaced with actual storage integration later
-  const templates: NodeDefinition[] = [
-    // Built-in templates would be loaded here
-    // For now returning empty array until storage is implemented
-  ];
-  return templates;
-}
+function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
+  // Parse metadata
+  const metadata = parseMetadata(data);
 
-/**
- * Internal function to convert parsed YAML object to NodeDefinition
- */
-function parseYamlToDefinition(parsed: YamlNodeDefinition): NodeDefinition {
-  if (!parsed || typeof parsed !== "object") {
-    throw new Error("Invalid YAML content: must be an object");
-  }
+  // Parse parameters
+  const parameters = parseParameters(data.parameters);
 
-  // Validate required fields
-  if (!parsed.id || !parsed.name) {
-    throw new Error("YAML must contain id and name fields");
-  }
+  // Parse ports
+  const inputPorts = parsePorts(data.inputPorts || []);
+  const outputPorts = parsePorts(data.outputPorts || []);
 
-  // Use factories to create the NodeDefinition
-  const metadata = createNodeMetadata({
-    id: parsed.metadata?.id || parsed.id,
-    name: parsed.metadata?.name || parsed.name,
-    variant: validateVariant(parsed.metadata?.variant) || getVariantFromType(parsed.type),
-    version: parsed.metadata?.version || parsed.version || "1.0.0",
-    author: parsed.metadata?.author || "Unknown",
-    authorId: parsed.metadata?.authorId,
-    source: validateSource(parsed.metadata?.source),
-    description: parsed.metadata?.description || parsed.description || "",
-    category: validateCategory(parsed.metadata?.category || parsed.category),
-    icon: validateIcon(parsed.metadata?.icon) || "layers",
-    keywords: parsed.metadata?.keywords,
-    tags: parsed.metadata?.tags,
-    runtime: typeof parsed.metadata?.runtime === 'object' && parsed.metadata?.runtime ? parsed.metadata.runtime as { language: NodeRuntime } : undefined,
-    experimental: parsed.metadata?.experimental,
-    deprecated: parsed.metadata?.deprecated,
-    documentationUrl: parsed.metadata?.documentationUrl,
-    examples: Array.isArray(parsed.metadata?.examples) ? parsed.metadata.examples as Array<{name: string; description: string; config: Record<string, unknown>}> : undefined,
-  });
+  // Parse child nodes if composite
+  const children = data.nodes ? data.nodes.map(parseNodeDefinition) : undefined;
 
-  const parameters = parseParameters(parsed.parameters);
+  // Parse edges
+  const edges = data.edges ? parseEdges(data.edges) : undefined;
 
-  const inputPorts = (parsed.inputPorts || []).map((port) =>
-    createNodePort("input", parsePort(port))
-  );
-
-  const outputPorts = (parsed.outputPorts || []).map((port) =>
-    createNodePort("output", parsePort(port))
-  );
-
-  // Use createNodeDefinition factory
-  const definition = createNodeDefinition({
-    id: parsed.id,
-    name: parsed.name,
-    type: validateNodeType(parsed.type),
-    position: parsed.position || { x: 0, y: 0 },
+  // Create the node definition
+  return createNodeDefinition({
+    id: data.id,
+    name: data.name,
+    type: (data.type as NodeType) || "atomic",
+    position: data.position || { x: 0, y: 0 },
     metadata,
     parameters,
     inputPorts,
     outputPorts,
-    // Composite-specific fields
-    children: parsed.nodes ? parsed.nodes.map(parseChildNode) : [],
-    edges: (parsed.edges || []).map(parseEdge),
+    children,
+    edges,
   });
-
-  // Add any additional fields from YAML
-  const result: NodeDefinition & {
-    variables?: unknown;
-    settings?: unknown;
-    data?: unknown;
-  } = definition;
-
-  if (parsed.variables) result.variables = parsed.variables;
-  if (parsed.settings) result.settings = parsed.settings;
-  if (parsed.data) result.data = parsed.data;
-
-  return result;
 }
 
 /**
- * Parse a child node from YAML
+ * Parse metadata from YAML data
  */
-function parseChildNode(nodeYaml: YamlNodeDefinition): NodeDefinition {
-  const metadata = createNodeMetadata({
-    id: nodeYaml.metadata?.id || nodeYaml.id,
-    name: nodeYaml.metadata?.name || nodeYaml.name,
-    variant: validateVariant(nodeYaml.metadata?.variant || nodeYaml.type),
-    version: nodeYaml.metadata?.version || nodeYaml.version || "1.0.0",
-    author: nodeYaml.metadata?.author || "Unknown",
-    authorId: nodeYaml.metadata?.authorId,
-    source: validateSource(nodeYaml.metadata?.source),
-    description: nodeYaml.metadata?.description || "",
-    category: validateCategory(nodeYaml.metadata?.category || nodeYaml.category),
-    icon: validateIcon(nodeYaml.metadata?.icon) || "layers",
-    keywords: nodeYaml.metadata?.keywords,
-    tags: nodeYaml.metadata?.tags,
-    runtime: typeof nodeYaml.metadata?.runtime === 'object' && nodeYaml.metadata?.runtime ? nodeYaml.metadata.runtime as { language: NodeRuntime } : undefined,
-    experimental: nodeYaml.metadata?.experimental,
-    deprecated: nodeYaml.metadata?.deprecated,
-    documentationUrl: nodeYaml.metadata?.documentationUrl,
-    examples: Array.isArray(nodeYaml.metadata?.examples) ? nodeYaml.metadata.examples as Array<{name: string; description: string; config: Record<string, unknown>}> : undefined,
+function parseMetadata(data: YamlNodeDefinition) {
+  const yamlMeta = data.metadata || {};
+
+  return createNodeMetadata({
+    id: yamlMeta.id || data.id,
+    name: yamlMeta.name || data.name,
+    variant: validateVariant(yamlMeta.variant),
+    version: yamlMeta.version || data.version || "1.0.0",
+    author: yamlMeta.author,
+    authorId: yamlMeta.authorId,
+    source: validateSource(yamlMeta.source),
+    description: yamlMeta.description || data.description,
+    category: validateCategory(yamlMeta.category || data.category),
+    icon: validateIcon(yamlMeta.icon),
+    keywords: yamlMeta.keywords || [],
+    tags: yamlMeta.tags || [],
+    runtime: yamlMeta.runtime
+      ? { language: validateRuntime(yamlMeta.runtime) as NodeRuntime }
+      : undefined,
+    experimental: yamlMeta.experimental || false,
+    deprecated: yamlMeta.deprecated || false,
+    documentationUrl: yamlMeta.documentationUrl,
+    examples: yamlMeta.examples as
+      | Array<{
+          name: string;
+          description: string;
+          config: Record<string, unknown>;
+        }>
+      | undefined,
   });
-
-  const parameters = parseParameters(nodeYaml.parameters);
-
-  const inputPorts = (nodeYaml.inputPorts || []).map((port) =>
-    createNodePort("input", parsePort(port))
-  );
-
-  const outputPorts = (nodeYaml.outputPorts || []).map((port) =>
-    createNodePort("output", parsePort(port))
-  );
-
-  const baseDefinition = createNodeDefinition({
-    id: nodeYaml.id,
-    name: nodeYaml.name,
-    type: validateNodeType(nodeYaml.type),
-    position: nodeYaml.position || { x: 0, y: 0 },
-    metadata,
-    parameters,
-    inputPorts,
-    outputPorts,
-  });
-
-  // Add data and settings if present
-  const result: NodeDefinition & {
-    data?: unknown;
-    settings?: unknown;
-  } = baseDefinition;
-
-  if (nodeYaml.data && typeof nodeYaml.data === 'object') {
-    result.data = nodeYaml.data;
-  }
-  if (nodeYaml.settings && typeof nodeYaml.settings === 'object') {
-    result.settings = nodeYaml.settings;
-  }
-
-  return result;
 }
 
 /**
- * Parse parameters from YAML structure
+ * Parse parameters from YAML data
  */
-function parseParameters(
-  parametersYaml: Record<string, YamlParameter> | undefined
-): NodeDefinition["parameters"] {
-  if (!parametersYaml) {
-    // Return minimal parameters using factory
+function parseParameters(params?: Record<string, YamlParameter>) {
+  if (!params) {
+    // Return a minimal parameters object with empty schema
     return createNodeParameters({}, {}, {});
   }
 
+  // Build Valibot schema from YAML parameter definitions
+  const schemaShape: Record<string, any> = {};
   const defaults: Record<string, unknown> = {};
   const fields: NodeFieldsConfig = {};
 
-  // Extract from YAML parameter structure
-  for (const [key, paramObj] of Object.entries(parametersYaml)) {
-    defaults[key] = paramObj.default;
+  Object.entries(params).forEach(([key, param]) => {
+    // Store default value
+    if (param.default !== undefined) {
+      defaults[key] = param.default;
+    }
 
-    fields[key] = {
-      controlType: validateControlType(paramObj.control) || getControlTypeFromType(paramObj.type),
-      label: paramObj.label || key,
-      placeholder: paramObj.placeholder,
-      helpText: paramObj.helpText,
-      required: paramObj.required || false,
-      min: paramObj.min,
-      max: paramObj.max,
-      step: paramObj.step,
-      options: paramObj.options?.map((value) => ({
-        value: String(value),
-        label: String(value),
-      })),
-    };
+    // Create field configuration
+    if (param.control) {
+      fields[key] = {
+        controlType: validateControlType(param.control) || "text",
+        label: param.label || key,
+        placeholder: param.placeholder,
+        helpText: param.helpText,
+        required: param.required,
+        min: param.min,
+        max: param.max,
+        step: param.step,
+        options: param.options as any,
+      };
+    }
+
+    // Build Valibot schema based on type
+    // Since we're deserializing, we'll create a simple schema
+    // In production, this would need more robust type mapping
+    schemaShape[key] = v.any().optional();
+  });
+
+  return createNodeParameters(schemaShape, defaults, fields);
+}
+
+/**
+ * Parse ports from YAML data
+ */
+function parsePorts(ports: YamlPort[]): NodePort[] {
+  return ports.map((port) => {
+    const portType = port.type as "input" | "output" | "trigger" | "error";
+    return createNodePort(portType, {
+      id: port.id,
+      name: port.name,
+      dataType: (port.dataType || "any") as any,
+      required: port.required || false,
+      multiple: port.multiple || false,
+      description: port.description,
+      defaultValue: port.defaultValue,
+    });
+  });
+}
+
+/**
+ * Parse edges from YAML data
+ */
+function parseEdges(edges: YamlEdge[]): NodeEdge[] {
+  return edges.map((edge) => ({
+    id: edge.id,
+    source: edge.source,
+    target: edge.target,
+    sourceHandle: edge.sourceHandle,
+    targetHandle: edge.targetHandle,
+    type: validateEdgeType(edge.type),
+    animated: edge.animated || false,
+    hidden: edge.hidden || false,
+    data: edge.data as Record<string, unknown>,
+  }));
+}
+
+/**
+ * Parse multiple YAML documents
+ * Used for template files that contain multiple node definitions
+ */
+export function fromYamlDocuments(yamlContent: string): NodeDefinition[] {
+  try {
+    const documents = yaml.loadAll(yamlContent) as YamlNodeDefinition[];
+    return documents.map((doc) => {
+      if (!doc || typeof doc !== "object") {
+        throw new Error("Invalid YAML document structure");
+      }
+      if (!doc.id || !doc.name) {
+        throw new Error("Each document must have id and name");
+      }
+      return parseNodeDefinition(doc);
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Failed to parse YAML documents: ${message}`);
   }
-
-  // Use factory to create parameters with proper validation
-  // Note: Schema would need to be reconstructed from YAML for full validation
-  // Using empty schema since YAML doesn't provide validation rules
-  return createNodeParameters({}, defaults, fields);
 }
 
-/**
- * Parse port from YAML structure
- */
-function parsePort(portYaml: YamlPort): Omit<NodePort, 'type'> {
-  return {
-    id: portYaml.id,
-    name: portYaml.name,
-    dataType: (portYaml.dataType || "any") as NodePort['dataType'],
-    required: portYaml.required || false,
-    multiple: portYaml.multiple || false,
-    description: portYaml.description,
-    defaultValue: portYaml.defaultValue,
-  };
-}
-
-/**
- * Parse edge from YAML structure
- */
-function parseEdge(edgeYaml: YamlEdge): NodeEdge {
-  return {
-    id: edgeYaml.id,
-    source: edgeYaml.source,
-    target: edgeYaml.target,
-    sourceHandle: edgeYaml.sourceHandle,
-    targetHandle: edgeYaml.targetHandle,
-    type: validateEdgeType(edgeYaml.type),
-    animated: edgeYaml.animated,
-    hidden: edgeYaml.hidden,
-    data: edgeYaml.data && typeof edgeYaml.data === 'object' ? edgeYaml.data as Record<string, unknown> : undefined,
-  };
-}
-
-/**
- * Helper to get variant from type
- */
-function getVariantFromType(type: string | undefined): NodeMetadataVariant {
-  if (type === "composite") return "template";
-  return "test";
-}
-
-// Icon defaults are now handled by the createNodeMetadata factory
-
-/**
- * Helper to validate control type
- */
-function validateControlType(control: string | undefined): NodeFieldControlType | undefined {
-  if (!control) return undefined;
-  const validTypes: NodeFieldControlType[] = [
-    "text", "textarea", "password", "email", "url",
-    "number", "range", "boolean", "select",
-    "date", "datetime", "file", "color",
-    "json", "code", "markdown", "rich-text"
-  ];
-  if (validTypes.includes(control as NodeFieldControlType)) {
-    return control as NodeFieldControlType;
-  }
-  return undefined;
-}
-
-/**
- * Helper to get control type from parameter type
- */
-function getControlTypeFromType(type: string | undefined): NodeFieldControlType {
-  if (!type) return "text";
-  const controlMap: Record<string, NodeFieldControlType> = {
-    string: "text",
-    number: "number",
-    boolean: "boolean",
-    object: "json",
-    array: "json",
-  };
-  return controlMap[type] || "text";
-}
-
-/**
- * Helper to validate and convert string to NodeMetadataVariant
- */
-function validateVariant(variant: string | undefined): NodeMetadataVariant {
-  const validVariants: NodeMetadataVariant[] = [
-    "code", "csv-reader", "file-system", "http-request", "image-composite",
-    "loop", "parallel", "shell-command", "transform", "workflow",
-    "pipeline", "orchestrator", "template", "test"
-  ];
-
-  if (variant && validVariants.includes(variant as NodeMetadataVariant)) {
-    return variant as NodeMetadataVariant;
-  }
-  return "test";
-}
-
-/**
- * Helper to validate and convert string to NodeMetadataSource
- */
-function validateSource(source: string | undefined): NodeMetadataSource | undefined {
-  if (!source) return undefined;
-  const validSources: NodeMetadataSource[] = [
-    "system", "user", "community", "organization", "marketplace"
-  ];
-  if (validSources.includes(source as NodeMetadataSource)) {
-    return source as NodeMetadataSource;
-  }
-  return "user";
-}
-
-/**
- * Helper to validate and convert string to NodeCategory
- */
-function validateCategory(category: string | undefined): NodeCategory {
-  const validCategories: NodeCategory[] = [
-    "io", "data", "logic", "media", "system", "ai", "database",
-    "analytics", "communication", "utility", "user", "composite"
-  ];
-
-  if (category && validCategories.includes(category as NodeCategory)) {
-    return category as NodeCategory;
-  }
-  return "composite";
-}
-
-/**
- * Helper to validate and convert string to NodeIcon
- */
-function validateIcon(icon: string | undefined): NodeIcon | undefined {
-  if (!icon) return undefined;
-
-  const validIcons: NodeIcon[] = [
-    "file", "folder", "database", "table-2", "cloud", "globe-2", "mail",
-    "message-square", "code-2", "terminal", "cpu", "git-branch", "wand-2",
-    "zap", "filter", "search", "transform", "repeat", "image", "layers",
-    "activity", "bar-chart", "lock", "unlock", "shield", "user", "users",
-    "settings", "plus", "minus", "check", "x", "alert-triangle", "info", "help-circle"
-  ];
-
-  if (validIcons.includes(icon as NodeIcon)) {
-    return icon as NodeIcon;
-  }
-  return undefined;
-}
-
-/**
- * Helper to validate and convert string to NodeEdgeType
- */
-function validateEdgeType(type: string | undefined): NodeEdgeType | undefined {
-  if (!type) return undefined;
-  const validTypes: NodeEdgeType[] = ["bezier", "straight", "step", "smoothstep"];
-  if (validTypes.includes(type as NodeEdgeType)) {
-    return type as NodeEdgeType;
-  }
-  return undefined;
-}
-
-/**
- * Helper to validate and convert string to NodeType
- */
-function validateNodeType(type: string | undefined): NodeType {
-  if (type === "atomic" || type === "composite") {
-    return type;
-  }
-  return "composite";
-}
+export default fromYaml;

@@ -10,6 +10,14 @@ import type {
   NodeExecutionResult,
 } from "#core/types/executable";
 import type { LoopParameters } from "#definitions/loop";
+import {
+  executeDoWhile,
+  executeForEach,
+  executeForRange,
+  executeTimesLoop,
+  executeUntil,
+  executeWhile,
+} from "./operations";
 
 // Types for loop operations
 export type LoopOutput = {
@@ -40,244 +48,6 @@ function getInputValue<T>(
 }
 
 /**
- * Simple condition evaluator (simplified - in production, use a proper sandbox)
- */
-function evaluateCondition(
-  condition: string,
-  context: Record<string, unknown>
-): boolean {
-  try {
-    // Simple condition evaluation - in production, use a proper sandbox like vm2
-    const func = new Function(...Object.keys(context), `return ${condition}`);
-    return Boolean(func(...Object.values(context)));
-  } catch (error) {
-    throw new Error(
-      `Invalid condition: ${error instanceof Error ? error.message : String(error)}`
-    );
-  }
-}
-
-/**
- * Execute forEach loop
- */
-async function executeForEach(
-  items: unknown[],
-  config: LoopParameters,
-  context: NodeExecutionContext
-): Promise<{ results: unknown[]; errors: unknown[]; iterationCount: number }> {
-  const results: unknown[] = [];
-  const errors: unknown[] = [];
-  let iterationCount = 0;
-
-  for (
-    let i = 0;
-    i < items.length && iterationCount < (config.maxIterations as number);
-    i++
-  ) {
-    try {
-      if ((config.delay as number) > 0) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, config.delay as number)
-        );
-      }
-
-      // Simple processing - in a real implementation, this would execute a processor function
-      const processedItem = {
-        index: i,
-        item: items[i],
-        processed: true,
-        timestamp: new Date().toISOString(),
-      };
-
-      results.push(processedItem);
-      iterationCount++;
-
-      context.log?.debug?.(`Processed item ${i}`, { item: items[i] });
-    } catch (error) {
-      errors.push({
-        index: i,
-        item: items[i],
-        error: error instanceof Error ? error.message : String(error),
-      });
-
-      if (!(config.continueOnError as boolean)) {
-        break;
-      }
-    }
-  }
-
-  return { results, errors, iterationCount };
-}
-
-/**
- * Execute forRange loop
- */
-async function executeForRange(
-  config: LoopParameters,
-  context: NodeExecutionContext
-): Promise<{ results: unknown[]; errors: unknown[]; iterationCount: number }> {
-  const results: unknown[] = [];
-  const errors: unknown[] = [];
-  let iterationCount = 0;
-
-  for (
-    let i = config.startValue as number;
-    ((config.stepSize as number) > 0
-      ? i <= (config.endValue as number)
-      : i >= (config.endValue as number)) &&
-    iterationCount < (config.maxIterations as number);
-    i += config.stepSize as number
-  ) {
-    try {
-      if ((config.delay as number) > 0) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, config.delay as number)
-        );
-      }
-
-      results.push({
-        value: i,
-        iteration: iterationCount,
-        timestamp: new Date().toISOString(),
-      });
-      iterationCount++;
-
-      context.log?.debug?.(`Range iteration ${iterationCount}`, { value: i });
-    } catch (error) {
-      errors.push({
-        value: i,
-        iteration: iterationCount,
-        error: error instanceof Error ? error.message : String(error),
-      });
-
-      if (!(config.continueOnError as boolean)) {
-        break;
-      }
-    }
-  }
-
-  return { results, errors, iterationCount };
-}
-
-/**
- * Execute times loop
- */
-async function executeTimes(
-  config: LoopParameters,
-  context: NodeExecutionContext
-): Promise<{ results: unknown[]; errors: unknown[]; iterationCount: number }> {
-  const results: unknown[] = [];
-  const errors: unknown[] = [];
-  let iterationCount = 0;
-
-  for (
-    let i = 0;
-    i < (config.times as number) &&
-    iterationCount < (config.maxIterations as number);
-    i++
-  ) {
-    try {
-      if ((config.delay as number) > 0) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, config.delay as number)
-        );
-      }
-
-      results.push({
-        iteration: i,
-        timestamp: new Date().toISOString(),
-      });
-      iterationCount++;
-
-      context.log?.debug?.(
-        `Times iteration ${i + 1}/${config.times as number}`
-      );
-    } catch (error) {
-      errors.push({
-        iteration: i,
-        error: error instanceof Error ? error.message : String(error),
-      });
-
-      if (!(config.continueOnError as boolean)) {
-        break;
-      }
-    }
-  }
-
-  return { results, errors, iterationCount };
-}
-
-/**
- * Execute while/until loop
- */
-async function executeWhileUntil(
-  config: LoopParameters,
-  context: NodeExecutionContext
-): Promise<{ results: unknown[]; errors: unknown[]; iterationCount: number }> {
-  const results: unknown[] = [];
-  const errors: unknown[] = [];
-  let iterationCount = 0;
-
-  if (!config.condition) {
-    throw new Error(`Condition is required for ${config.loopType} loops`);
-  }
-
-  while (iterationCount < (config.maxIterations as number)) {
-    try {
-      if ((config.delay as number) > 0) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, config.delay as number)
-        );
-      }
-
-      // Evaluate condition
-      const conditionContext = {
-        iteration: iterationCount,
-        results,
-        errors,
-      };
-
-      const conditionResult = evaluateCondition(
-        config.condition as string,
-        conditionContext
-      );
-
-      // For while: continue if condition is true
-      // For until: continue if condition is false
-      const shouldContinue =
-        config.loopType === "while" ? conditionResult : !conditionResult;
-
-      if (!shouldContinue) {
-        break;
-      }
-
-      results.push({
-        iteration: iterationCount,
-        condition: conditionResult,
-        timestamp: new Date().toISOString(),
-      });
-      iterationCount++;
-
-      context.log?.debug?.(`${config.loopType} iteration ${iterationCount}`, {
-        condition: conditionResult,
-      });
-    } catch (error) {
-      errors.push({
-        iteration: iterationCount,
-        error: error instanceof Error ? error.message : String(error),
-      });
-
-      if (!(config.continueOnError as boolean)) {
-        break;
-      }
-      iterationCount++;
-    }
-  }
-
-  return { results, errors, iterationCount };
-}
-
-/**
  * Loop node executable
  */
 export const loopExecutable: NodeExecutable<LoopParameters> =
@@ -289,67 +59,87 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
       const startTime = Date.now();
 
       try {
-        // Get input data
-        const items = getInputValue<unknown[]>(context, "items") || [];
+        const loopType = config.loopType || "forEach";
+        let results: unknown[] = [];
+        let errors: unknown[] = [];
+        let iterationCount = 0;
 
-        context.log?.info?.("Starting loop operation", {
-          loopType: config.loopType,
+        context.log?.info?.(`Starting ${loopType} loop`, {
           maxIterations: config.maxIterations,
-          itemCount: items.length,
+          parallel     : config.parallel,
+          concurrency  : config.concurrency,
         });
 
-        let results: unknown[] = [];
-        let iterationCount = 0;
-        let errors: unknown[] = [];
-
-        // Execute based on loop type
-        switch (config.loopType) {
+        switch (loopType) {
           case "forEach": {
-            if (items.length === 0) {
-              context.log?.warn?.("No items provided for forEach loop");
-            }
-            const result = await executeForEach(items, config, context);
-            results = result.results;
-            errors = result.errors;
-            iterationCount = result.iterationCount;
+            const items = getInputValue<unknown[]>(context, "items") || [];
+            const loopResult = await executeForEach(items, config, context);
+            results = loopResult.results;
+            errors = loopResult.errors;
+            iterationCount = loopResult.iterationCount;
+            break;
+          }
+
+          case "while": {
+            const condition = (config.condition as string) || "false";
+            const loopResult = await executeWhile(condition, config, context);
+            results = loopResult.results;
+            errors = loopResult.errors;
+            iterationCount = loopResult.iterationCount;
+            break;
+          }
+
+          case "doWhile": {
+            const condition = (config.condition as string) || "false";
+            const loopResult = await executeDoWhile(condition, config, context);
+            results = loopResult.results;
+            errors = loopResult.errors;
+            iterationCount = loopResult.iterationCount;
             break;
           }
 
           case "forRange": {
-            const result = await executeForRange(config, context);
-            results = result.results;
-            errors = result.errors;
-            iterationCount = result.iterationCount;
+            const start = (config.startValue as number) || 0;
+            const end = (config.endValue as number) || 10;
+            const step = (config.stepSize as number) || 1;
+            const loopResult = await executeForRange(
+              start,
+              end,
+              step,
+              config,
+              context
+            );
+            results = loopResult.results;
+            errors = loopResult.errors;
+            iterationCount = loopResult.iterationCount;
+            break;
+          }
+
+          case "until": {
+            const condition = (config.condition as string) || "false";
+            const loopResult = await executeUntil(condition, config, context);
+            results = loopResult.results;
+            errors = loopResult.errors;
+            iterationCount = loopResult.iterationCount;
             break;
           }
 
           case "times": {
-            const result = await executeTimes(config, context);
-            results = result.results;
-            errors = result.errors;
-            iterationCount = result.iterationCount;
-            break;
-          }
-
-          case "while":
-          case "until": {
-            const result = await executeWhileUntil(config, context);
-            results = result.results;
-            errors = result.errors;
-            iterationCount = result.iterationCount;
+            const times = (config.times as number) || 1;
+            const loopResult = await executeTimesLoop(times, config, context);
+            results = loopResult.results;
+            errors = loopResult.errors;
+            iterationCount = loopResult.iterationCount;
             break;
           }
 
           default:
-            throw new Error(`Unknown loop type: ${config.loopType}`);
+            throw new Error(`Unknown loop type: ${loopType}`);
         }
 
         const duration = Date.now() - startTime;
-        const success =
-          errors.length === 0 || (config.continueOnError as boolean);
-        const completed =
-          iterationCount < (config.maxIterations as number) ||
-          config.loopType === "forEach";
+        const success = errors.length === 0;
+        const completed = iterationCount > 0;
 
         const output: LoopOutput = {
           result: {
@@ -359,7 +149,8 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
             success,
             duration,
             completed,
-            stopped: !completed,
+            stopped:
+              !completed && iterationCount < (config.maxIterations as number),
           },
           results,
           iterationCount,
@@ -368,12 +159,11 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
           duration,
         };
 
-        context.log?.info?.(`Loop completed: ${config.loopType}`, {
+        context.log?.info?.(`Loop completed`, {
+          loopType,
           iterationCount,
           errorCount: errors.length,
           duration,
-          success,
-          completed,
         });
 
         return {
@@ -385,29 +175,28 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
         const errorMessage =
           error instanceof Error ? error.message : String(error);
 
-        context.log?.error?.("Loop operation failed", {
-          error: errorMessage,
+        context.log?.error?.(`Loop execution failed`, {
+          error   : errorMessage,
           loopType: config.loopType,
-          duration,
         });
 
         return {
           success: false,
-          error: errorMessage,
+          error  : errorMessage,
           outputs: {
             result: {
-              results: [],
+              results       : [],
               iterationCount: 0,
-              errors: [{ error: errorMessage }],
-              success: false,
+              errors        : [errorMessage],
+              success       : false,
               duration,
-              completed: false,
-              stopped: true,
+              completed     : false,
+              stopped       : true,
             },
-            results: [],
+            results       : [],
             iterationCount: 0,
-            errors: [{ error: errorMessage }],
-            success: false,
+            errors        : [errorMessage],
+            success       : false,
             duration,
           },
         };
@@ -415,8 +204,7 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
     },
 
     validateConfig(config: unknown): LoopParameters {
-      // In a real implementation, this would validate using the schema
-      // For now, just cast it
+      // In a real implementation, validate using the schema
       return config as LoopParameters;
     },
   });

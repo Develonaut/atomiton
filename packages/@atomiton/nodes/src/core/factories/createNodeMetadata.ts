@@ -53,20 +53,20 @@ function createNodeMetadata(
 
   return {
     id,
-    name: formattedName,
+    name            : formattedName,
     variant,
-    version: input.version || "1.0.0",
-    author: input.author || "Atomiton Core Team",
+    version         : input.version || "1.0.0",
+    author          : input.author || "Atomiton Core Team",
     description,
     category,
     icon,
-    keywords: input.keywords || generateKeywords(id, formattedName),
-    tags: input.tags || generateTags(id, category),
-    runtime: input.runtime || { language: "typescript" },
-    experimental: input.experimental ?? false,
-    deprecated: input.deprecated ?? false,
+    keywords        : input.keywords || generateKeywords(id, formattedName),
+    tags            : input.tags || generateTags(id, category),
+    runtime         : input.runtime || { language: "typescript" },
+    experimental    : input.experimental ?? false,
+    deprecated      : input.deprecated ?? false,
     documentationUrl: input.documentationUrl,
-    examples: input.examples,
+    examples        : input.examples,
   };
 }
 

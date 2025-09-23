@@ -11,14 +11,14 @@ import type {
 } from "#core/types/executable";
 import type { FileSystemParameters } from "#definitions/file-system";
 import {
+  copyOperation,
+  createDirectoryOperation,
+  deleteOperation,
+  existsOperation,
+  listDirectoryOperation,
+  moveOperation,
   readFileOperation,
   writeFileOperation,
-  createDirectoryOperation,
-  listDirectoryOperation,
-  deleteOperation,
-  copyOperation,
-  moveOperation,
-  existsOperation,
 } from "./operations";
 
 export type { FileSystemOutput } from "./operations";
@@ -75,7 +75,8 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
             result = await writeFileOperation(
               filePath,
               content as string,
-              config,
+              config.encoding || "utf8",
+              config.createDirectories || false,
               context
             );
             break;
@@ -83,7 +84,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
           case "create":
             result = await createDirectoryOperation(
               filePath as string,
-              config,
+              config.recursive || false,
               context
             );
             break;
@@ -91,7 +92,8 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
           case "list":
             result = await listDirectoryOperation(
               filePath as string,
-              config,
+              config.recursive || false,
+              false, // includeHidden - not in current schema, default to false
               context
             );
             break;
@@ -99,7 +101,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
           case "delete":
             result = await deleteOperation(
               filePath as string,
-              config,
+              config.recursive || false,
               context
             );
             break;
@@ -111,7 +113,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
             result = await copyOperation(
               filePath as string,
               targetPath,
-              config,
+              config.overwrite || false,
               context
             );
             break;
@@ -123,7 +125,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
             result = await moveOperation(
               filePath as string,
               targetPath,
-              config,
+              config.overwrite || false,
               context
             );
             break;
@@ -145,18 +147,18 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
           error instanceof Error ? error.message : String(error);
 
         context.log?.error?.("File system operation failed", {
-          error: errorMessage,
+          error    : errorMessage,
           operation: config.operation,
-          path: config.path,
+          path     : config.path,
         });
 
         return {
           success: false,
-          error: errorMessage,
+          error  : errorMessage,
           outputs: {
-            result: null,
+            result : null,
             success: false,
-            path: config.path || "",
+            path   : config.path || "",
           },
         };
       }

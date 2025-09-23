@@ -40,13 +40,13 @@ export function createNodePort(
   }
 
   return {
-    id: options.id,
-    name: options.name,
+    id          : options.id,
+    name        : options.name,
     type,
-    dataType: options.dataType,
-    required: options.required ?? false,
-    multiple: options.multiple ?? false,
-    description: options.description,
+    dataType    : options.dataType,
+    required    : options.required ?? false,
+    multiple    : options.multiple ?? false,
+    description : options.description,
     defaultValue: options.defaultValue,
   };
 }
@@ -56,7 +56,7 @@ export function createNodePort(
  */
 export function createNodePorts(input: NodePortsInput): INodePorts {
   return {
-    input: (input.input || []).map((p) => createNodePort("input", p)),
+    input : (input.input || []).map((p) => createNodePort("input", p)),
     output: (input.output || []).map((p) => createNodePort("output", p)),
   };
 }

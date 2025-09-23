@@ -15,10 +15,10 @@ import type {
 import { generateNodeId } from "@atomiton/utils";
 import createNodeMetadata, {
   type NodeMetadataInput,
-} from "./createNodeMetadata";
-import createNodeParameters from "./createNodeParameters";
-import type { NodePortInput } from "./createNodePorts";
-import createNodePorts from "./createNodePorts";
+} from "#core/factories/createNodeMetadata";
+import createNodeParameters from "#core/factories/createNodeParameters";
+import type { NodePortInput } from "#core/factories/createNodePorts";
+import createNodePorts from "#core/factories/createNodePorts";
 
 export type CreateNodeInput = {
   id?: string;
@@ -61,7 +61,7 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
   );
 
   const ports = createNodePorts({
-    input: input.inputPorts,
+    input : input.inputPorts,
     output: input.outputPorts,
   });
 
@@ -72,7 +72,7 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     position,
     metadata,
     parameters,
-    inputPorts: ports.input,
+    inputPorts : ports.input,
     outputPorts: ports.output,
   };
 

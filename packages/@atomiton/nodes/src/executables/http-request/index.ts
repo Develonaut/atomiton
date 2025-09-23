@@ -10,6 +10,14 @@ import type {
   NodeExecutionResult,
 } from "#core/types/executable";
 import type { HttpRequestParameters } from "#definitions/http-request";
+import {
+  addAuthenticationHeaders,
+  executeRequestWithRetries,
+  extractResponseHeaders,
+  parseResponse,
+  prepareRequestBody,
+} from "./operations";
+import { buildUrlWithParams, parseErrorMessage, validateUrl } from "./utils";
 
 // Types for HTTP request
 export type HttpRequestInput = {
@@ -39,98 +47,6 @@ export type HttpRequestOutput = {
 };
 
 /**
- * Build URL with query parameters
- */
-function buildUrlWithParams(
-  baseUrl: string,
-  params?: Record<string, string>
-): string {
-  if (!params || Object.keys(params).length === 0) {
-    return baseUrl;
-  }
-
-  const url = new URL(baseUrl);
-  Object.entries(params).forEach(([key, value]) => {
-    url.searchParams.append(key, value);
-  });
-
-  return url.toString();
-}
-
-/**
- * Parse response based on content type
- */
-async function parseResponse(response: Response): Promise<unknown> {
-  const contentType = response.headers.get("content-type") || "";
-
-  try {
-    if (contentType.includes("application/json")) {
-      return await response.json();
-    } else if (
-      contentType.includes("text/") ||
-      contentType.includes("application/xml") ||
-      contentType.includes("application/xhtml")
-    ) {
-      return await response.text();
-    } else {
-      // For binary data, get as ArrayBuffer and convert to base64
-      const buffer = await response.arrayBuffer();
-      return Buffer.from(buffer).toString("base64");
-    }
-  } catch {
-    // If parsing fails, fall back to text
-    try {
-      return await response.text();
-    } catch {
-      return null;
-    }
-  }
-}
-
-/**
- * Execute HTTP request with retries
- */
-async function executeRequestWithRetries(
-  url: string,
-  options: RequestInit,
-  config: HttpRequestParameters,
-  context: NodeExecutionContext
-): Promise<Response> {
-  let lastError: Error;
-
-  for (let attempt = 0; attempt <= (config.retries as number); attempt++) {
-    try {
-      context.log?.debug?.(`HTTP request attempt ${attempt + 1}`, {
-        url,
-        method: options.method,
-      });
-
-      const response = await fetch(url, options);
-      return response;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-
-      if (attempt < (config.retries as number)) {
-        context.log?.warn?.(
-          `HTTP request failed, retrying (attempt ${attempt + 1}/${config.retries as number})`,
-          {
-            error: lastError.message,
-            retryDelay: config.retryDelay,
-          }
-        );
-
-        // Wait before retry
-        await new Promise((resolve) =>
-          setTimeout(resolve, config.retryDelay as number)
-        );
-      }
-    }
-  }
-
-  throw lastError!;
-}
-
-/**
  * HTTP Request node executable
  */
 export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
@@ -156,77 +72,51 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         }
 
         // Validate URL
-        let validUrl: URL;
-        try {
-          validUrl = new URL(url);
-        } catch {
-          throw new Error(`Invalid URL: ${url}`);
-        }
+        const validUrl = validateUrl(url);
 
         context.log?.info?.(
           `Making ${method} request to ${validUrl.hostname}`,
           {
             method,
-            path: validUrl.pathname,
+            path   : validUrl.pathname,
             hasBody: !!body,
           }
         );
 
         // Build final URL with query parameters
-        const finalUrl = buildUrlWithParams(url as string, params);
+        const finalUrl = buildUrlWithParams(url, params);
 
         // Prepare headers
-        const headers: Record<string, string> = {
+        let headers: Record<string, string> = {
           ...((config.headers as Record<string, string>) || {}),
           ...inputHeaders,
         };
 
         // Handle authentication
-        if (auth) {
-          if (auth.type === "basic" && auth.username && auth.password) {
-            const credentials = Buffer.from(
-              `${auth.username}:${auth.password}`
-            ).toString("base64");
-            headers["Authorization"] = `Basic ${credentials}`;
-          } else if (auth.type === "bearer" && auth.token) {
-            headers["Authorization"] = `Bearer ${auth.token}`;
-          }
-        }
+        headers = addAuthenticationHeaders(headers, auth);
 
         // Prepare request body
-        let requestBody: string | Buffer | undefined;
-        if (body && ["POST", "PUT", "PATCH"].includes(method as string)) {
-          if (typeof body === "object" && !(body instanceof Buffer)) {
-            requestBody = JSON.stringify(body);
-            if (!headers["Content-Type"]) {
-              headers["Content-Type"] = "application/json";
-            }
-          } else {
-            requestBody = body as string | Buffer;
-          }
-        }
+        const { body: requestBody, headers: finalHeaders } =
+          prepareRequestBody(body, method, headers);
 
         // Prepare request options
         const requestOptions: RequestInit = {
-          method: method as string,
-          headers,
-          signal: AbortSignal.timeout(config.timeout as number),
+          method,
+          headers : finalHeaders,
+          signal  : AbortSignal.timeout(config.timeout as number),
           redirect: (config.followRedirects as boolean) ? "follow" : "manual",
         };
 
         // Add body if present
         if (requestBody) {
-          requestOptions.body =
-            requestBody instanceof Buffer
-              ? requestBody.toString()
-              : (requestBody as string);
+          requestOptions.body = requestBody;
         }
 
         context.log?.debug?.("Sending HTTP request", {
-          url: finalUrl,
+          url        : finalUrl,
           method,
-          hasBody: !!requestBody,
-          headerCount: Object.keys(headers).length,
+          hasBody    : !!requestBody,
+          headerCount: Object.keys(finalHeaders).length,
         });
 
         // Make the request with retries
@@ -243,28 +133,25 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         const data = await parseResponse(response);
 
         // Extract response headers
-        const responseHeaders: Record<string, string> = {};
-        response.headers.forEach((value, key) => {
-          responseHeaders[key] = value;
-        });
+        const responseHeaders = extractResponseHeaders(response);
 
         const output: HttpRequestOutput = {
-          result: data,
-          data: data,
-          status: response.status,
+          result    : data,
+          data,
+          status    : response.status,
           statusText: response.statusText,
-          headers: responseHeaders,
-          success: response.ok,
+          headers   : responseHeaders,
+          success   : response.ok,
           duration,
-          url: finalUrl,
-          ok: response.ok,
+          url       : finalUrl,
+          ok        : response.ok,
         };
 
         context.log?.info?.(
           `HTTP request completed: ${response.status} ${response.statusText}`,
           {
-            status: response.status,
-            ok: response.ok,
+            status     : response.status,
+            ok         : response.ok,
             duration,
             contentType: response.headers.get("content-type"),
           }
@@ -276,24 +163,14 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         };
       } catch (error) {
         const duration = Date.now() - startTime;
-        let errorMessage = "HTTP request failed";
-
-        if (error instanceof Error) {
-          if (error.name === "AbortError") {
-            errorMessage = `Request timeout after ${config.timeout}ms`;
-          } else if (error.message.includes("fetch")) {
-            errorMessage = `Network error: ${error.message}`;
-          } else {
-            errorMessage = error.message;
-          }
-        }
+        const errorMessage = parseErrorMessage(error, config.timeout as number);
 
         context.log?.error?.("HTTP request failed", {
-          error: errorMessage,
+          error : errorMessage,
           duration,
           config: {
-            method: config.method,
-            url: config.url,
+            method : config.method,
+            url    : config.url,
             timeout: config.timeout,
             retries: config.retries,
           },
@@ -301,17 +178,17 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
 
         return {
           success: false,
-          error: errorMessage,
+          error  : errorMessage,
           outputs: {
-            result: null,
-            data: null,
-            status: 0,
+            result    : null,
+            data      : null,
+            status    : 0,
             statusText: "",
-            headers: {},
-            success: false,
+            headers   : {},
+            success   : false,
             duration,
-            url: "",
-            ok: false,
+            url       : "",
+            ok        : false,
           },
         };
       }

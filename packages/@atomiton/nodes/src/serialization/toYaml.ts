@@ -1,5 +1,9 @@
-import yaml from 'js-yaml';
-import type { NodeDefinition, NodePort, NodeEdge } from '../core/types/definition.js';
+import type {
+  NodeDefinition,
+  NodeEdge,
+  NodePort,
+} from "#core/types/definition.js";
+import yaml from "js-yaml";
 
 // YAML serialization types
 type YamlStructure = {
@@ -61,11 +65,11 @@ export function toYaml(definition: NodeDefinition): string {
       id: definition.id,
       name: definition.name,
       type: definition.type,
-      version: definition.metadata?.version || '1.0.0',
+      version: definition.metadata?.version || "1.0.0",
 
       // Description at top level for readability
-      description: definition.metadata?.description || '',
-      category: definition.metadata?.category || 'general',
+      description: definition.metadata?.description || "",
+      category: definition.metadata?.category || "general",
 
       // Full metadata
       metadata: {
@@ -97,9 +101,12 @@ export function toYaml(definition: NodeDefinition): string {
     }
 
     // Add any additional fields
-    const additionalFields = ['variables', 'settings', 'data'];
+    const additionalFields = ["variables", "settings", "data"];
     for (const field of additionalFields) {
-      if (field in definition && (definition as Record<string, unknown>)[field]) {
+      if (
+        field in definition &&
+        (definition as Record<string, unknown>)[field]
+      ) {
         yamlStructure[field] = (definition as Record<string, unknown>)[field];
       }
     }
@@ -113,9 +120,10 @@ export function toYaml(definition: NodeDefinition): string {
       quotingType: '"', // Use double quotes
       forceQuotes: false, // Only quote when necessary
     });
-
   } catch (error) {
-    throw new Error(`Failed to serialize to YAML: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to serialize to YAML: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 
@@ -154,13 +162,19 @@ function serializeNode(node: NodeDefinition): SerializedNode {
   }
 
   // Add data field if present
-  if ('data' in node && (node as Record<string, unknown>).data) {
-    serialized.data = (node as Record<string, unknown>).data as Record<string, unknown>;
+  if ("data" in node && (node as Record<string, unknown>).data) {
+    serialized.data = (node as Record<string, unknown>).data as Record<
+      string,
+      unknown
+    >;
   }
 
   // Add settings if present
-  if ('settings' in node && (node as Record<string, unknown>).settings) {
-    serialized.settings = (node as Record<string, unknown>).settings as Record<string, unknown>;
+  if ("settings" in node && (node as Record<string, unknown>).settings) {
+    serialized.settings = (node as Record<string, unknown>).settings as Record<
+      string,
+      unknown
+    >;
   }
 
   return serialized;
@@ -193,22 +207,28 @@ function serializeEdge(edge: NodeEdge): SerializedEdge {
   };
 }
 
-function serializeParameters(parameters: NodeDefinition['parameters']): Record<string, unknown> {
+function serializeParameters(
+  parameters: NodeDefinition["parameters"],
+): Record<string, unknown> {
   const serialized: Record<string, unknown> = {};
 
   // Extract from fields and defaults
   if (parameters.fields) {
     for (const [key, field] of Object.entries(parameters.fields)) {
       serialized[key] = {
-        type: field.controlType === 'number' ? 'number' :
-              field.controlType === 'boolean' ? 'boolean' : 'string',
+        type:
+          field.controlType === "number"
+            ? "number"
+            : field.controlType === "boolean"
+              ? "boolean"
+              : "string",
         default: parameters.defaults[key],
         control: field.controlType,
         required: field.required,
         label: field.label !== key ? field.label : undefined,
         placeholder: field.placeholder,
         helpText: field.helpText,
-        options: field.options?.map(o => o.value),
+        options: field.options?.map((o) => o.value),
         min: field.min,
         max: field.max,
         step: field.step,
@@ -216,7 +236,7 @@ function serializeParameters(parameters: NodeDefinition['parameters']): Record<s
 
       // Remove undefined values for cleaner YAML
       const paramObj = serialized[key] as Record<string, unknown>;
-      Object.keys(paramObj).forEach(k => {
+      Object.keys(paramObj).forEach((k) => {
         if (paramObj[k] === undefined) {
           delete paramObj[k];
         }

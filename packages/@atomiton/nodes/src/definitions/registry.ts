@@ -77,7 +77,7 @@ export function getNodeDefinitionsGroupedByCategory(): Array<{
 
   // Convert to the expected format
   return Array.from(categories.entries()).map(([categoryName, items]) => ({
-    name: categoryName,
+    name : categoryName,
     title: categoryName.charAt(0).toUpperCase() + categoryName.slice(1), // Capitalize first letter
     items,
   }));

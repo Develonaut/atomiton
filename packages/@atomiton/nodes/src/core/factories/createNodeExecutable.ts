@@ -6,7 +6,7 @@ import type {
   NodeExecutable,
   NodeExecutableInput,
   NodeExecutionContext,
-} from "../types/executable.js";
+} from "#core/types/executable";
 
 export function createNodeExecutable<TConfig = unknown>(
   input: NodeExecutableInput<TConfig>,

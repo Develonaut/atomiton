@@ -104,7 +104,7 @@ const nodeMetadataSchema = v.object({
         name: v.string(),
         description: v.string(),
         config: v.record(v.unknown()),
-      })
+      }),
     )
     .optional(),
 });

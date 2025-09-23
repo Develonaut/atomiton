@@ -69,9 +69,9 @@ function createNodeParameters<T extends VRawShape>(
   } as FullType;
 
   return {
-    schema: fullSchema,
+    schema  : fullSchema,
     defaults: fullDefaults,
-    fields: fieldConfig,
+    fields  : fieldConfig,
 
     parse(params: unknown): FullType {
       return fullSchema.parse(params);

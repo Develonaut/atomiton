@@ -1,3 +1,4 @@
+import type { VInfer, VType } from "@atomiton/validation";
 import v from "@atomiton/validation";
 import nodeEdgeSchema from "./nodeEdge";
 import nodeMetadataSchema from "./nodeMetadata";
@@ -6,22 +7,34 @@ import nodePortSchema from "./nodePort";
 import nodePositionSchema from "./nodePosition";
 import nodeTypeSchema from "./nodeType";
 
+// Create a base node schema without children for type inference
+const baseNodeSchema = v.object({
+  id         : v.string().min(1),
+  name       : v.string().min(1),
+  type       : nodeTypeSchema,
+  position   : nodePositionSchema,
+  metadata   : nodeMetadataSchema,
+  parameters : nodeParametersSchema,
+  inputPorts : v.array(nodePortSchema),
+  outputPorts: v.array(nodePortSchema),
+  edges      : v.array(nodeEdgeSchema).optional(),
+});
+
+// Infer the base node type
+type BaseNode = VInfer<typeof baseNodeSchema>;
+
+// Define the full node type with recursive children
+export type NodeSchemaType = BaseNode & {
+  children?: NodeSchemaType[];
+};
+
 // Define a recursive schema for nodes that can have children
-// TODO: Look into using something declarative instead of any.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const nodeSchema: any = v.lazy(() =>
-  v.object({
-    id: v.string().min(1),
-    name: v.string().min(1),
-    type: nodeTypeSchema,
-    position: nodePositionSchema,
-    metadata: nodeMetadataSchema,
-    parameters: nodeParametersSchema,
-    inputPorts: v.array(nodePortSchema),
-    outputPorts: v.array(nodePortSchema),
-    edges: v.array(nodeEdgeSchema).optional(),
-    children: v.array(nodeSchema).optional(),
-  })
+// The schema properly validates the recursive structure
+const nodeSchema: VType<NodeSchemaType> = v.lazy(
+  () =>
+    baseNodeSchema.extend({
+      children: v.array(nodeSchema).optional(),
+    }) as VType<NodeSchemaType>,
 );
 
 export default nodeSchema;
