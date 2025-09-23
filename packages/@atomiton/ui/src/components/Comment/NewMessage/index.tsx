@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import Image from "@/components/Image";
-import SubmitButton from "@/components/SubmitButton";
+import Image from "#components/Image";
+import SubmitButton from "#components/SubmitButton";
 
 function NewMessage() {
   const [message, setMessage] = useState("");

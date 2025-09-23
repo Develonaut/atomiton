@@ -1,9 +1,11 @@
 {
-  "extends": "@atomiton/typescript-config/react-bundler.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
-    "forceConsistentCasingInFileNames": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "paths": {
+      "@/*": ["src/*"],
+      "#*": ["src/*"]
+    }
+  }
 }

@@ -1,17 +1,6 @@
 {
-  "extends": "@atomiton/typescript-config/base.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "target": "ES2022",
-    "lib": ["ES2022"],
-    "declaration": true,
-    "declarationMap": true,
-    "types": ["node"],
     "allowImportingTsExtensions": false
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  }
 }

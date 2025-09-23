@@ -1,6 +1,6 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import Button from "@/components/Button";
-import Export from "@/components/Export";
+import Button from "#components/Button";
+import Export from "#components/Export";
 
 function ExportFiles() {
   return (

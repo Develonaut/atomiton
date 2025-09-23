@@ -1,15 +1,6 @@
 {
-  "extends": "@atomiton/typescript-config/base.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "types": ["node", "vitest/globals"],
     "resolveJsonModule": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  }
 }

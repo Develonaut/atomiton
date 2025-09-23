@@ -1,5 +1,5 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
 
 function TypographyPage() {
   const styles =

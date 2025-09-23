@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { zoomOptions } from "./items";
-import Field from "@/components/Field";
+import Field from "#components/Field";
 
 type PropsLine = {
   title: string;

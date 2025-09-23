@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
 
 function IconographyPage() {
   return (

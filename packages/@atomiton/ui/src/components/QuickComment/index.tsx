@@ -1,4 +1,4 @@
-import Image from "@/components/Image";
+import Image from "#components/Image";
 import Comment from "./Comment";
 
 function QuickComment() {

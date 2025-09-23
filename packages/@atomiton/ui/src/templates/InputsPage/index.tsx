@@ -1,14 +1,14 @@
 import { useState } from "react";
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import Field from "@/components/Field";
-import NewField from "@/components/NewField";
-import UploadAvatar from "@/components/UploadAvatar";
-import Invite from "@/components/Invite";
-import ColorPicker from "@/components/ColorPicker";
-import Search from "@/components/Search";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import Field from "#components/Field";
+import NewField from "#components/NewField";
+import UploadAvatar from "#components/UploadAvatar";
+import Invite from "#components/Invite";
+import ColorPicker from "#components/ColorPicker";
+import Search from "#components/Search";
 
 function InputsPage() {
   const [value, setValue] = useState("");

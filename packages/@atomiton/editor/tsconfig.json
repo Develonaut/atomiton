@@ -1,9 +1,11 @@
 {
-  "extends": "@atomiton/typescript-config/react-development.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "resolveJsonModule": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "resolveJsonModule": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "#*": ["src/*"]
+    }
+  }
 }

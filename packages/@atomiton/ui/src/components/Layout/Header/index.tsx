@@ -1,8 +1,8 @@
-import Button from "@/components/Button";
-import Logo from "@/components/Logo";
+import Button from "#components/Button";
+import Logo from "#components/Logo";
 import NotificationsDropdown from "./NotificationsDropdown";
 import UserDropdown from "./UserDropdown";
-import { useScrollbarWidth } from "@/hooks";
+import { useScrollbarWidth } from "#hooks";
 
 type Props = {
   onOpen: () => void;

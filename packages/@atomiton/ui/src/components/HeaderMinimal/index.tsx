@@ -1,5 +1,5 @@
-import Image from "@/components/Image";
-import Logo from "@/components/Logo";
+import Image from "#components/Image";
+import Logo from "#components/Logo";
 
 function HeaderMinimal() {
   const isNewNotification = true;

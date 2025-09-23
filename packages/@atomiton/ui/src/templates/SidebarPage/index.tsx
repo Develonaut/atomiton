@@ -1,11 +1,11 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import SceneAndAssetsSidebar from "@/components/SceneAndAssetsSidebar";
-import DesignAndAnimationSidebar from "@/components/DesignAndAnimationSidebar";
-import HomeSidebar from "@/components/HomeSidebar";
-import GuidelineSidebar from "@/components/GuidelineSidebar";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import SceneAndAssetsSidebar from "#components/SceneAndAssetsSidebar";
+import DesignAndAnimationSidebar from "#components/DesignAndAnimationSidebar";
+import HomeSidebar from "#components/HomeSidebar";
+import GuidelineSidebar from "#components/GuidelineSidebar";
 
 import { content } from "./content";
 

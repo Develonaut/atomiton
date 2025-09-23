@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Tabs from "@/components/Tabs";
+import Tabs from "#components/Tabs";
 import Head from "./Head";
 import Scene from "./Scene";
 import Assets from "./Assets";

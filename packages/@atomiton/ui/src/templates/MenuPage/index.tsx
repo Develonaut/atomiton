@@ -1,14 +1,14 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import Zoom from "@/components/Zoom";
-import FileMenu from "@/components/FileMenu";
-import Folders from "@/components/Folders";
-import SelectAI from "@/components/SelectAI";
-import Upload from "@/components/Upload";
-import FiltersMenu from "@/components/FiltersMenu";
-import ProfileMenu from "@/components/ProfileMenu";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import Zoom from "#components/Zoom";
+import FileMenu from "#components/FileMenu";
+import Folders from "#components/Folders";
+import SelectAI from "#components/SelectAI";
+import Upload from "#components/Upload";
+import FiltersMenu from "#components/FiltersMenu";
+import ProfileMenu from "#components/ProfileMenu";
 
 function MenuPage() {
   return (

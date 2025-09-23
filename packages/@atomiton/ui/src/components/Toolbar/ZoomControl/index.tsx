@@ -1,5 +1,5 @@
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import Zoom from "@/components/Zoom";
+import Zoom from "#components/Zoom";
 
 function ZoomControl() {
   return (

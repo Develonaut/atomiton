@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ElementType } from "react";
-import type { StyleProps } from "@/utils/extractStyleProps";
+import type { StyleProps } from "#utils/extractStyleProps";
 
 export type BoxOwnProps<T extends ElementType = "div"> = {
   as?: T;

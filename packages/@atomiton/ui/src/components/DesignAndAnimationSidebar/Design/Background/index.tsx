@@ -1,4 +1,4 @@
-import ColorPicker from "@/components/ColorPicker";
+import ColorPicker from "#components/ColorPicker";
 import Group from "../../Group";
 
 function Background() {

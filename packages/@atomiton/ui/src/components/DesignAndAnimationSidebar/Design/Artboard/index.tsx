@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { SelectOption } from "@/components/Select";
-import Select from "@/components/Select";
+import type { SelectOption } from "#components/Select";
+import Select from "#components/Select";
 import Group from "../../Group";
 
 function Artboard() {

@@ -1,15 +1,15 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import Variations from "@/components/Variations";
-import SharePost from "@/components/SharePost";
-import ShareProfile from "@/components/ShareProfile";
-import ShareFile from "@/components/ShareFile";
-import QuickComment from "@/components/QuickComment";
-import DeleteFile from "@/components/DeleteFile";
-import Export from "@/components/Export";
-import Settings from "@/components/Settings";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import Variations from "#components/Variations";
+import SharePost from "#components/SharePost";
+import ShareProfile from "#components/ShareProfile";
+import ShareFile from "#components/ShareFile";
+import QuickComment from "#components/QuickComment";
+import DeleteFile from "#components/DeleteFile";
+import Export from "#components/Export";
+import Settings from "#components/Settings";
 
 function ModalPage() {
   return (

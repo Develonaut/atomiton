@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Image from "@/components/Image";
-import type { SelectOption } from "@/components/Select";
-import Select from "@/components/Select";
+import Image from "#components/Image";
+import type { SelectOption } from "#components/Select";
+import Select from "#components/Select";
 
 type Props = {
   name: string;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Switch from "@/components/Switch";
+import Switch from "#components/Switch";
 import Group from "../../Group";
 
 function MotionBlur() {

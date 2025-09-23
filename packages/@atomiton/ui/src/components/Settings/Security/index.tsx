@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Switch from "@/components/Switch";
-import Button from "@/components/Button";
-import NewField from "@/components/NewField";
+import Switch from "#components/Switch";
+import Button from "#components/Button";
+import NewField from "#components/NewField";
 import Title from "../Title";
 import Option from "../Option";
 

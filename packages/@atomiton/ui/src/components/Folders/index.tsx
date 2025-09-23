@@ -1,6 +1,6 @@
 import { useState } from "react";
-import NewFolder from "@/components/NewFolder";
-import Folder from "@/components/Folder";
+import NewFolder from "#components/NewFolder";
+import Folder from "#components/Folder";
 import Search from "./Search";
 
 import { folders } from "./folders";

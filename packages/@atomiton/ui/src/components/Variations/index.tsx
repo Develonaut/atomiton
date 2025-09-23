@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Image from "@/components/Image";
+import Image from "#components/Image";
 
 import { content } from "./content";
 

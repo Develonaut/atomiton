@@ -1,11 +1,11 @@
-import Button from "@/components/Button";
-import Card from "@/components/Card";
-import Group from "@/components/Group";
-import Image from "@/components/Image";
-import Layout from "@/components/Layout";
-import RowCards from "@/components/RowCards";
-import SubmitButton from "@/components/SubmitButton";
-import Tooltip from "@/components/Tooltip";
+import Button from "#components/Button";
+import Card from "#components/Card";
+import Group from "#components/Group";
+import Image from "#components/Image";
+import Layout from "#components/Layout";
+import RowCards from "#components/RowCards";
+import SubmitButton from "#components/SubmitButton";
+import Tooltip from "#components/Tooltip";
 
 function ButtonsPage() {
   return (

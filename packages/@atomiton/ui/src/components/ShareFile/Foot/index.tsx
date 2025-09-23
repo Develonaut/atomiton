@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import Button from "#components/Button";
 
 function Foot() {
   const link = "https://atomiton.com/file/k373nH";

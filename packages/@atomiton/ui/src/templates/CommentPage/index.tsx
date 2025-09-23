@@ -1,11 +1,11 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import CommentCursor from "@/components/CommentCursor";
-import CommentPin from "@/components/CommentPin";
-import NewComment from "@/components/NewComment";
-import Comment from "@/components/Comment";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import CommentCursor from "#components/CommentCursor";
+import CommentPin from "#components/CommentPin";
+import NewComment from "#components/NewComment";
+import Comment from "#components/Comment";
 
 function HomePage() {
   return (

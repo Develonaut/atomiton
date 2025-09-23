@@ -1,9 +1,9 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import Notification from "@/components/Notification";
-import Notifications from "@/components/Notifications";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import Notification from "#components/Notification";
+import Notifications from "#components/Notifications";
 
 function MenuPage() {
   return (

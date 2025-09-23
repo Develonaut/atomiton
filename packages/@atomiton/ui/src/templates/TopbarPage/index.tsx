@@ -1,10 +1,10 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import HeaderSimple from "@/components/HeaderSimple";
-import HeaderAsset from "@/components/HeaderAsset";
-import HeaderMinimal from "@/components/HeaderMinimal";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import HeaderSimple from "#components/HeaderSimple";
+import HeaderAsset from "#components/HeaderAsset";
+import HeaderMinimal from "#components/HeaderMinimal";
 
 function TopbarPage() {
   return (

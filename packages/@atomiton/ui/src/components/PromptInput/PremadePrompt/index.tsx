@@ -1,4 +1,4 @@
-import Button from "@/components/Button";
+import Button from "#components/Button";
 
 const results = [
   "Create a 3D model of a sleek, futuristic car with neon accents.",

@@ -1,4 +1,4 @@
-import CommentPin from "@/components/CommentPin";
+import CommentPin from "#components/CommentPin";
 import Message from "./Message";
 import NewMessage from "./NewMessage";
 

@@ -1,5 +1,5 @@
-import Link from "@/components/Link";
-import Image from "@/components/Image";
+import Link from "#components/Link";
+import Image from "#components/Image";
 import NavLink from "./NavLink";
 import Dropdown from "./Dropdown";
 import Folders from "./Folders";

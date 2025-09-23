@@ -1,5 +1,5 @@
 {
-  "extends": "@atomiton/typescript-config/development.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -7,7 +7,5 @@
       "@/types": ["src/types"],
       "@/registry": ["src/registry"]
     }
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  }
 }

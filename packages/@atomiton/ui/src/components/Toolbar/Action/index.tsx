@@ -1,4 +1,4 @@
-import Tooltip from "@/components/Tooltip";
+import Tooltip from "#components/Tooltip";
 
 type Props = {
   classIcon?: string;

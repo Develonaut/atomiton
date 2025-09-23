@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Image from "@/components/Image";
-import Search from "@/components/Search";
-import Button from "@/components/Button";
-import Logo from "@/components/Logo";
+import Image from "#components/Image";
+import Search from "#components/Search";
+import Button from "#components/Button";
+import Logo from "#components/Logo";
 
 type Props = {
   className?: string;

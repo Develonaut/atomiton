@@ -4,7 +4,7 @@ import {
   PopoverButton,
   PopoverPanel,
 } from "@headlessui/react";
-import Notifications from "@/components/Notifications";
+import Notifications from "#components/Notifications";
 
 function NotificationsDropdown() {
   const isNewNotification = true;

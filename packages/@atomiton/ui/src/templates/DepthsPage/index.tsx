@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
 
 function DepthsPage() {
   const style = "size-32 rounded-3xl bg-[#FCFCFC] border border-[#ECECEC]";

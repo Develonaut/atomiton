@@ -6,8 +6,8 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
   NODE_TYPES,
-} from "@/components/Canvas/constants";
-import "@/components/Canvas/styles.css";
+} from "#components/Canvas/constants";
+import "#components/Canvas/styles.css";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",

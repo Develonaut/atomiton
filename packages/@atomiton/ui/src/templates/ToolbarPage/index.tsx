@@ -1,11 +1,11 @@
-import Image from "@/components/Image";
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import Toolbar from "@/components/Toolbar";
-import VideoPlayer from "@/components/VideoPlayer";
-import ViewController from "@/components/ViewController";
+import Image from "#components/Image";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import Toolbar from "#components/Toolbar";
+import VideoPlayer from "#components/VideoPlayer";
+import ViewController from "#components/ViewController";
 
 function ToolbarPage() {
   return (

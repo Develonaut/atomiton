@@ -1,4 +1,4 @@
-import type { StyleProps } from "@/utils/extractStyleProps";
+import type { StyleProps } from "#utils/extractStyleProps";
 import type { HTMLAttributes } from "react";
 
 export type FlexProps = {

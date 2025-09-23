@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Tabs from "@/components/Tabs";
-// import ViewController from "@/components/ViewController";
+import Tabs from "#components/Tabs";
+// import ViewController from "#components/ViewController";
 import Head from "./Head";
 import Design from "./Design";
 import Animation from "./Animation";

@@ -1,5 +1,5 @@
-import Folder from "@/components/Folder";
-import NewFolder from "@/components/NewFolder";
+import Folder from "#components/Folder";
+import NewFolder from "#components/NewFolder";
 
 type Props = {
   folders: {

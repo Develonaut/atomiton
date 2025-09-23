@@ -2,43 +2,20 @@
   "name": "@atomiton/typescript-config",
   "version": "0.1.0",
   "description": "Shared TypeScript configuration for Atomiton packages",
-  "type": "module",
   "private": true,
-  "main": "./base.json",
-  "types": "./base.json",
   "exports": {
     "./base.json": "./base.json",
     "./library.json": "./library.json",
-    "./react-library.json": "./react-library.json",
-    "./bundler.json": "./bundler.json",
-    "./react-bundler.json": "./react-bundler.json",
-    "./development.json": "./development.json",
-    "./react-development.json": "./react-development.json",
+    "./app.json": "./app.json",
     "./package.json": "./package.json"
+  },
+  "scripts": {
+    "typecheck": "echo 'No TypeScript to check for config-only package'"
   },
   "keywords": [
     "typescript",
     "config",
-    "shared"
+    "atomiton"
   ],
-  "author": "Atomiton",
-  "license": "MIT",
-  "scripts": {
-    "lint": "echo 'No linting needed for config-only package'",
-    "lint:fix": "echo 'No linting fixes needed for config-only package'",
-    "typecheck": "echo 'No TypeScript to check for config-only package'",
-    "test": "echo 'No tests for config package'"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "base.json",
-    "library.json",
-    "react-library.json",
-    "bundler.json",
-    "react-bundler.json",
-    "development.json",
-    "react-development.json"
-  ]
+  "license": "UNLICENSED"
 }

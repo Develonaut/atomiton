@@ -1,5 +1,5 @@
 import { useState } from "react";
-import GuidelineSidebar from "@/components/GuidelineSidebar";
+import GuidelineSidebar from "#components/GuidelineSidebar";
 import Header from "./Header";
 
 type Props = {

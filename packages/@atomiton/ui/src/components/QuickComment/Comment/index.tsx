@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Image from "@/components/Image";
+import Image from "#components/Image";
 import TextareaAutosize from "react-textarea-autosize";
-import Button from "@/components/Button";
+import Button from "#components/Button";
 
 function Comment() {
   const [message, setMessage] = useState("");

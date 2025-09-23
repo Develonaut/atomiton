@@ -24,6 +24,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
+    "build": "vite build",
     "typecheck": "echo 'No TypeScript to check for config-only package'",
     "lint": "echo 'Linting eslint-config itself'",
     "lint:fix": "echo 'Linting eslint-config itself with fix'",
@@ -50,6 +51,8 @@
     "globals": "^16.3.0",
     "typescript": "catalog:",
     "typescript-eslint": "^8.40.0",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
     "vitest": "catalog:"
   }
 }

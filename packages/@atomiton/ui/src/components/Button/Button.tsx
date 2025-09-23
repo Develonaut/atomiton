@@ -1,5 +1,5 @@
-import { Button as ButtonPrimitive } from "@/primitives";
-import { styled } from "@/system/styled";
+import { Button as ButtonPrimitive } from "#primitives";
+import { styled } from "#system/styled";
 import resolveButtonProps from "./Button.resolver";
 import {
   BUTTON_STYLES,

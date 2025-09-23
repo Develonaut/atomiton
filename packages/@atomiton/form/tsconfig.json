@@ -1,6 +1,3 @@
 {
-  "extends": "@atomiton/typescript-config/react-library.json",
-  "compilerOptions": {},
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "**/*.test.*", "**/*.spec.*"]
+  "extends": "@atomiton/typescript-config/library.json"
 }

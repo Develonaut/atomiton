@@ -1,6 +1,6 @@
-import Link from "@/components/Link";
-import Image from "@/components/Image";
-import { usePathname } from "@/hooks/usePathname";
+import Link from "#components/Link";
+import Image from "#components/Image";
+import { usePathname } from "#hooks/usePathname";
 
 type Props = {
   className?: string;

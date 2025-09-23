@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Layout from "@/components/Layout";
-import Group from "@/components/Group";
-import RowCards from "@/components/RowCards";
-import Card from "@/components/Card";
-import type { SelectOption } from "@/components/Select";
-import Select from "@/components/Select";
+import Layout from "#components/Layout";
+import Group from "#components/Group";
+import RowCards from "#components/RowCards";
+import Card from "#components/Card";
+import type { SelectOption } from "#components/Select";
+import Select from "#components/Select";
 
 const values = [
   { id: 0, name: "Value" },

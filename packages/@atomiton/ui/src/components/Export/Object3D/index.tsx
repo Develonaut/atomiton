@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { SelectOption } from "@/components/Select";
-import Select from "@/components/Select";
-import Tabs from "@/components/Tabs";
-import Button from "@/components/Button";
+import type { SelectOption } from "#components/Select";
+import Select from "#components/Select";
+import Tabs from "#components/Tabs";
+import Button from "#components/Button";
 import Line from "../Line";
 
 import { formats, cameraOptions, materialOptions } from "./content";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Notification from "@/components/Notification";
+import Notification from "#components/Notification";
 
 import { content } from "./content";
 

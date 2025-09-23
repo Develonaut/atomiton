@@ -1,12 +1,6 @@
 {
-  "extends": "@atomiton/typescript-config/react-library.json",
+  "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "types": ["node", "vitest/globals"],
     "resolveJsonModule": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  }
 }

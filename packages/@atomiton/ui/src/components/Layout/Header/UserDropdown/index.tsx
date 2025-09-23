@@ -1,4 +1,4 @@
-import Image from "@/components/Image";
+import Image from "#components/Image";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const navigation = [

@@ -1,4 +1,4 @@
-import { useClipboard } from "@/utils/clipboard";
+import { useClipboard } from "#utils/clipboard";
 
 type Props = {
   className?: string;

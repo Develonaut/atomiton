@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Switch from "@/components/Switch";
-import type { SelectOption } from "@/components/Select";
-import Select from "@/components/Select";
-import NewField from "@/components/NewField";
+import Switch from "#components/Switch";
+import type { SelectOption } from "#components/Select";
+import Select from "#components/Select";
+import NewField from "#components/NewField";
 import Title from "../Title";
 import Option from "../Option";
 

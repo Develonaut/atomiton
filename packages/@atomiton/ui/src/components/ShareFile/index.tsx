@@ -1,5 +1,5 @@
-import Invite from "@/components/Invite";
-import Button from "@/components/Button";
+import Invite from "#components/Invite";
+import Button from "#components/Button";
 import GeneralAccess from "./GeneralAccess";
 import Person from "./Person";
 import Foot from "./Foot";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Tabs from "@/components/Tabs";
+import Tabs from "#components/Tabs";
 import Group from "../../Group";
 import Isometric from "./Isometric";
 
