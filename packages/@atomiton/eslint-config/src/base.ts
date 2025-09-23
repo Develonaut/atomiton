@@ -94,6 +94,64 @@ const baseConfig: Linter.Config[] = [
       "no-useless-catch": "error",
       "no-constant-condition": ["error", { checkLoops: false }],
 
+      // Object formatting rules
+      "key-spacing": [
+        "warn",
+        {
+          beforeColon: false,
+          afterColon: true,
+          mode: "minimum",
+          align: {
+            beforeColon: false,
+            afterColon: true,
+            on: "colon",
+            mode: "strict",
+          },
+        },
+      ],
+
+      // Code quality and complexity rules
+      "max-lines": [
+        "warn",
+        {
+          max: 250,
+          skipBlankLines: true,
+          skipComments: true
+        }
+      ],
+      "max-lines-per-function": [
+        "warn",
+        {
+          max: 20,
+          skipBlankLines: true,
+          skipComments: true,
+          IIFEs: true
+        }
+      ],
+      "complexity": ["warn", 10],
+
+      // Comment and TODO management
+      "no-warning-comments": [
+        "warn",
+        {
+          terms: ["TODO", "FIXME", "HACK", "XXX"],
+          location: "start"
+        }
+      ],
+
+      // Import restrictions for # imports
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["../*", "./*"],
+              message: "Use '#' imports instead of relative paths for internal imports"
+            }
+          ]
+        }
+      ],
+
       // Package consistency rules for monorepo
       // TODO: Re-enable when eslint-plugin-import is added
       // "import/no-restricted-paths": [
