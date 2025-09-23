@@ -1,4 +1,4 @@
-import type { INode, NodeExecutionContext } from "@atomiton/nodes/executable";
+import type { INode, NodeExecutionContext } from "@atomiton/nodes/executables";
 import { pipeline, Readable, Writable } from "stream";
 import { promisify } from "util";
 import type { MemoryPool } from "./memoryPool";

@@ -1,4 +1,4 @@
-import type { INode } from "@atomiton/nodes/executable";
+import type { INode } from "@atomiton/nodes/executables";
 import type { ExecutionStrategy } from "./streamTypes";
 
 export class StrategyAnalyzer {

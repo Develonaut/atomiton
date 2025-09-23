@@ -5,17 +5,17 @@ import {
   convertEdgeToEditorEdge,
   convertNodeToEditorNode,
 } from "#utils/editorConverters";
-import type { CompositeDefinition } from "@atomiton/nodes/browser";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 type TemplateButtonProps = {
-  template: CompositeDefinition;
+  template: NodeDefinition;
   index: number;
 };
 
 function TemplateButton({ template, index }: TemplateButtonProps) {
   const defaultNodes =
-    template.nodes?.map((node, nodeIndex) =>
-      convertNodeToEditorNode(node, nodeIndex),
+    template.children?.map((node, nodeIndex) =>
+      convertNodeToEditorNode(node, nodeIndex)
     ) || [];
 
   const defaultEdges = template.edges?.map(convertEdgeToEditorEdge) || [];
@@ -26,7 +26,7 @@ function TemplateButton({ template, index }: TemplateButtonProps) {
       defaultNodes,
       defaultEdges,
       name: template.name,
-      description: template.description,
+      description: template.metadata.description,
     },
   });
 
@@ -63,7 +63,7 @@ function Templates() {
         data-testid="templates-container"
         className="flex gap-3 py-8 px-12 overflow-x-auto scrollbar-none max-2xl:px-5"
       >
-        {templates.map((template: CompositeDefinition, index: number) => (
+        {templates.map((template: NodeDefinition, index: number) => (
           <TemplateButton key={template.id} template={template} index={index} />
         ))}
       </div>

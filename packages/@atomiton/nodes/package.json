@@ -1,24 +1,21 @@
 {
   "name": "@atomiton/nodes",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Atomiton Blueprint node implementations",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
-  },  "sideEffects": false,
+  },
   "exports": {
-    ".": {
-      "import": "./dist/exports/browser/index.js",
-      "types": "./dist/exports/browser/index.d.ts"
+    "./definitions": {
+      "import": "./dist/definitions.js",
+      "types": "./dist/definitions.d.ts"
     },
-    "./browser": {
-      "import": "./dist/exports/browser/index.js",
-      "types": "./dist/exports/browser/index.d.ts"
-    },
-    "./executable": {
-      "import": "./dist/exports/executable/index.js",
-      "types": "./dist/exports/executable/index.d.ts"
+    "./executables": {
+      "import": "./dist/executables.js",
+      "types": "./dist/executables.d.ts"
     },
     "./package.json": "./package.json"
   },
@@ -30,7 +27,8 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:integration": "vitest run --config vitest.integration.config.ts"
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:benchmark": "vitest bench --run --passWithNoTests || echo \"No benchmark tests yet\""
   },
   "keywords": [
     "nodes",
@@ -44,7 +42,9 @@
     "@atomiton/store": "workspace:*",
     "@atomiton/utils": "workspace:*",
     "@atomiton/validation": "workspace:*",
-    "@atomiton/yaml": "workspace:*"
+    "@atomiton/yaml": "workspace:*",
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
@@ -54,8 +54,10 @@
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "glob": "^11.0.3",
+    "rollup-plugin-visualizer": "^6.0.3",
     "typescript": "catalog:",
     "vite": "catalog:",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "catalog:"
   }
 }

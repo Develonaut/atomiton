@@ -2,7 +2,7 @@ import type {
   INode,
   NodeExecutionContext,
   NodeExecutionResult,
-} from "@atomiton/nodes/executable";
+} from "@atomiton/nodes/executables";
 import type {
   IRuntime,
   RuntimeLanguage,

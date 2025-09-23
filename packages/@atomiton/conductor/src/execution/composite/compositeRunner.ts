@@ -5,8 +5,8 @@
 import type {
   CompositeDefinition,
   NodeExecutionResult,
-} from "@atomiton/nodes/executable";
-import { nodes } from "@atomiton/nodes/executable";
+} from "@atomiton/nodes/executables";
+import { nodeExecutableRegistry as nodes } from "@atomiton/nodes/executables";
 import type { ExecutionStatus } from "../../interfaces/IExecutionEngine";
 import PQueue from "p-queue";
 import { type ExecutionStore } from "../../store";

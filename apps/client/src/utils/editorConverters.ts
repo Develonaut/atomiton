@@ -1,7 +1,10 @@
-import type { Node, NodeEdge } from "@atomiton/nodes/browser";
-import type { EditorNode, EditorEdge } from "@atomiton/editor";
+import type { EditorEdge, EditorNode } from "@atomiton/editor";
+import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
 
-export function convertNodeToEditorNode(node: Node, index: number): EditorNode {
+export function convertNodeToEditorNode(
+  node: NodeDefinition,
+  index: number
+): EditorNode {
   return {
     ...node,
     position: {

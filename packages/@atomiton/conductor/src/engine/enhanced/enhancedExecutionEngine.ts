@@ -2,7 +2,7 @@
  * Enhanced execution engine factory using functional approach
  */
 
-import type { CompositeDefinition } from "@atomiton/nodes/executable";
+import type { NodeDefinition } from "@atomiton/nodes/executables";
 import { generateExecutionId } from "@atomiton/utils";
 import {
   createCompositeRunner,
@@ -35,7 +35,7 @@ import type {
 import { createWebhookManager } from "./webhookManager";
 
 export function createEnhancedExecutionEngine(
-  options: EnhancedExecutionOptions = {},
+  options: EnhancedExecutionOptions = {}
 ): EnhancedEngineInstance {
   // Private state using closures
   const queue: ScalableQueueInstance = createScalableQueue({
@@ -58,7 +58,7 @@ export function createEnhancedExecutionEngine(
   const nodeExecutor: NodeExecutorInstance = createNodeExecutor();
   const compositeRunner: CompositeRunnerInstance = createCompositeRunner(
     executionStore,
-    nodeExecutor,
+    nodeExecutor
   );
 
   const executionContexts = new Map<string, ExecutionContext>();
@@ -69,7 +69,7 @@ export function createEnhancedExecutionEngine(
   const eventHandlers = createEventHandlers(
     queue,
     metricsManager,
-    webhookManager,
+    webhookManager
   );
 
   // Setup event handling
@@ -77,7 +77,7 @@ export function createEnhancedExecutionEngine(
   eventHandlers.setupMetricsCollection();
 
   const execute = async (
-    request: ExecutionRequest,
+    request: ExecutionRequest
   ): Promise<ExecutionResult> => {
     const compositeId = request.compositeId;
     const input = request.inputs;
@@ -142,8 +142,8 @@ export function createEnhancedExecutionEngine(
   };
 
   const executeComposite = async (
-    composite: CompositeDefinition,
-    input?: unknown,
+    composite: NodeDefinition,
+    input?: unknown
   ): Promise<ExecutionResult> => {
     generateExecutionId();
 
@@ -225,7 +225,7 @@ export function createEnhancedExecutionEngine(
   };
 
   const getExecutionHistory = async (
-    limit: number = 100,
+    limit: number = 100
   ): Promise<ExecutionHistoryEntry[]> => {
     const history: ExecutionHistoryEntry[] = [];
 
@@ -248,7 +248,7 @@ export function createEnhancedExecutionEngine(
   };
 
   const getExecution = async (
-    executionId: string,
+    executionId: string
   ): Promise<ExecutionResult | null> => {
     const state = executionStore.getExecution(executionId);
     if (!state) return null;
@@ -318,7 +318,7 @@ export function createEnhancedExecutionEngine(
           compositeId,
           inputs,
           config: { debugMode: true },
-        }),
+        })
       ),
   };
 }

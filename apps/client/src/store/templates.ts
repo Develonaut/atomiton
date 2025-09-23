@@ -1,22 +1,23 @@
 /**
  * Template Store
  *
- * Manages system-provided composite templates (read-only)
+ * Manages system-provided node templates (read-only)
  */
 
-import { templates, type CompositeDefinition } from "@atomiton/nodes/browser";
+import { loadBuiltInTemplates, getAllTemplates, getTemplate } from "@atomiton/nodes/definitions";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { createStore } from "@atomiton/store";
 
 // Types
 export type TemplateState = {
-  templates: CompositeDefinition[];
+  templates: NodeDefinition[];
   isLoading: boolean;
   error: string | null;
 };
 
 export type TemplateActions = {
-  loadTemplates: () => void;
-  getTemplate: (id: string) => CompositeDefinition | undefined;
+  loadTemplates: () => Promise<void>;
+  getTemplate: (id: string) => NodeDefinition | undefined;
 };
 
 // Initial state
@@ -36,18 +37,25 @@ export const templateStore = createStore<TemplateState>(() => initialState, {
 
 // Actions
 export const templateActions: TemplateActions = {
-  loadTemplates: () => {
+  loadTemplates: async () => {
     templateStore.setState((state: TemplateState) => {
       state.isLoading = true;
       state.error = null;
     });
 
     try {
-      // Load templates from @atomiton/nodes package
-      const allTemplates = templates;
+      // Load built-in templates from YAML files
+      await loadBuiltInTemplates();
+
+      // Get all loaded templates and deduplicate by ID
+      const allTemplates = getAllTemplates();
+      const uniqueTemplates = allTemplates.filter(
+        (template, index, arr) =>
+          arr.findIndex(t => t.id === template.id) === index
+      );
 
       templateStore.setState((state: TemplateState) => {
-        state.templates = allTemplates;
+        state.templates = uniqueTemplates;
         state.isLoading = false;
         state.error = null;
       });
@@ -63,9 +71,7 @@ export const templateActions: TemplateActions = {
   },
 
   getTemplate: (id: string) => {
-    const state = templateStore.getState();
-    return state.templates.find(
-      (template: CompositeDefinition) => template.id === id,
-    );
+    // Use the registry function directly for most up-to-date data
+    return getTemplate(id);
   },
 };

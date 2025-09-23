@@ -2,7 +2,7 @@
  * Types for composite execution system
  */
 
-import type { CompositeDefinition } from "@atomiton/nodes/executable";
+import type { CompositeDefinition } from "@atomiton/nodes/executables";
 
 export type CompositeExecutionOptions = {
   maxConcurrency?: number;

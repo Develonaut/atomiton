@@ -7,7 +7,8 @@ export default defineLibraryConfig({
   external: [
     // External packages
     "@atomiton/events",
-    "@atomiton/nodes",
+    "@atomiton/nodes/definitions",
+    "@atomiton/nodes/executables",
     "@atomiton/storage",
     "@atomiton/store",
     "@atomiton/utils",

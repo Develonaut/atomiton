@@ -1,5 +1,5 @@
 import { parentPort } from "worker_threads";
-import type { NodeExecutionContext } from "@atomiton/nodes/executable";
+import type { NodeExecutionContext } from "@atomiton/nodes/executables";
 
 type WorkerMessage = {
   type: "execute";

@@ -2,10 +2,11 @@
   "extends": "@atomiton/typescript-config/library.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@/base/*": ["src/base/*"],
-      "@/types": ["src/types"],
-      "@/registry": ["src/registry"]
-    }
-  }
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

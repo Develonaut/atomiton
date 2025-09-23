@@ -26,7 +26,7 @@ export default defineTestConfig({
         __dirname,
         "../../packages/@atomiton/form/src",
       ),
-      "@atomiton/nodes/browser": path.resolve(
+      "@atomiton/nodes/definitions": path.resolve(
         __dirname,
         "../../packages/@atomiton/nodes/src/exports/browser",
       ),

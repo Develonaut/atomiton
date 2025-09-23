@@ -1,10 +1,10 @@
 import { useAddNode } from "@atomiton/editor";
-import { getNodesByCategory } from "@atomiton/nodes/browser";
+import { getNodeDefinitionsGroupedByCategory } from "@atomiton/nodes/definitions";
 import Accordion from "./Accordion";
 
 function Assets() {
   const { addNode } = useAddNode();
-  const nodesByCategory = getNodesByCategory();
+  const nodesByCategory = getNodeDefinitionsGroupedByCategory();
 
   return (
     <div data-testid="node-palette">

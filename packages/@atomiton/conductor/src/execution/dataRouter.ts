@@ -1,4 +1,4 @@
-import type { CompositeEdge } from "@atomiton/nodes/executable";
+import type { CompositeEdge } from "@atomiton/nodes/executables";
 
 /**
  * Connection between nodes in a Composite

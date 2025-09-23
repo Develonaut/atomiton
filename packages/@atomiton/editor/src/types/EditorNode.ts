@@ -1,4 +1,4 @@
-import type { Node as AtomitonNode } from "@atomiton/nodes/browser";
+import type { Node as AtomitonNode } from "@atomiton/nodes/definitions";
 import type { Node as ReactFlowNode } from "@xyflow/react";
 
 /**

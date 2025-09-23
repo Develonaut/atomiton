@@ -9,7 +9,7 @@ import { describe, expect, it } from "vitest";
 describe("Template Preloading Smoke Tests", () => {
   it("should verify templates are available as source of truth", async () => {
     // Lightweight check that templates can be imported from nodes package
-    const { templates } = await import("@atomiton/nodes/browser");
+    const { templates } = await import("@atomiton/nodes/definitions");
     expect(templates).toBeDefined();
     expect(Array.isArray(templates)).toBe(true);
     expect(templates.length).toBeGreaterThan(0);

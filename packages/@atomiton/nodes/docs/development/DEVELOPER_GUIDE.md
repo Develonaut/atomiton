@@ -335,7 +335,7 @@ Create the main Node class that combines everything:
 // TextTransformNode.ts
 import { Node } from "../../base/Node";
 import type { IAtomicNode } from "../../base/INode";
-import type { NodeDefinition, NodePortDefinition } from "../../types";
+import type { NodeDefinition, NodePort } from "../../types";
 import { TextTransformNodeLogic } from "./TextTransformNodeLogic";
 import {
   TextTransformNodeConfig,
@@ -358,7 +358,7 @@ export class TextTransformNode extends Node implements IAtomicNode {
     return false;
   }
 
-  get inputPorts(): NodePortDefinition[] {
+  get inputPorts(): NodePort[] {
     return [
       {
         id: "text",
@@ -371,7 +371,7 @@ export class TextTransformNode extends Node implements IAtomicNode {
     ];
   }
 
-  get outputPorts(): NodePortDefinition[] {
+  get outputPorts(): NodePort[] {
     return [
       {
         id: "text",

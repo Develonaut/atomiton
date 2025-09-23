@@ -1,24 +1,27 @@
 /**
- * Composite Store
+ * User-Created Nodes Store
  *
- * Manages user-created composite definitions (full CRUD operations)
+ * Manages user-created nodes with children (full CRUD operations)
  */
 
-import { createNode, type CompositeDefinition } from "@atomiton/nodes/browser";
+import {
+  createNodeDefinition,
+  type NodeDefinition,
+} from "@atomiton/nodes/definitions";
 import { createStore } from "@atomiton/store";
 
 // Types
 export type CompositeState = {
-  composites: CompositeDefinition[];
+  composites: NodeDefinition[];
   isLoading: boolean;
   error: string | null;
 };
 
 export type CompositeActions = {
-  create: (composite: Partial<CompositeDefinition>) => string;
-  update: (id: string, updates: Partial<CompositeDefinition>) => void;
+  create: (composite: Partial<NodeDefinition>) => string;
+  update: (id: string, updates: Partial<NodeDefinition>) => void;
   remove: (id: string) => void;
-  findById: (id: string) => CompositeDefinition | undefined;
+  findById: (id: string) => NodeDefinition | undefined;
 };
 
 // Initial state
@@ -38,23 +41,18 @@ export const compositeStore = createStore<CompositeState>(() => initialState, {
 
 // Actions
 export const compositeActions: CompositeActions = {
-  create: (composite: Partial<CompositeDefinition>) => {
-    // Use createNode to properly format the composite with all defaults
-    const newComposite = createNode({
+  create: (nodeDefinition: Partial<NodeDefinition>) => {
+    // Use createNode to properly format the node with all defaults
+    const newComposite = createNodeDefinition({
+      ...nodeDefinition,
       type: "composite",
-      name: composite.name || "Untitled Composite",
-      // Pass all available fields - createNode will handle defaults
-      id: composite.id,
-      description: composite.description,
-      category: composite.category,
-      version: composite.version,
-      nodes: composite.nodes,
-      edges: composite.edges,
-      variables: composite.variables,
-      settings: composite.settings,
+      name: nodeDefinition.name || "Untitled Node",
+      position: nodeDefinition.position || { x: 0, y: 0 },
+      children: nodeDefinition.children || [],
+      edges: nodeDefinition.edges || [],
       metadata: {
-        ...composite.metadata,
-        source: "user", // Override source to user for user-created composites
+        ...nodeDefinition.metadata,
+        source: "user", // Override source to user for user-created nodes
       },
     });
 
@@ -66,13 +64,13 @@ export const compositeActions: CompositeActions = {
     return newComposite.id;
   },
 
-  update: (id: string, updates: Partial<CompositeDefinition>) => {
+  update: (id: string, updates: Partial<NodeDefinition>) => {
     compositeStore.setState((state: CompositeState) => {
       const index = state.composites.findIndex(
-        (comp: CompositeDefinition) => comp.id === id,
+        (comp: NodeDefinition) => comp.id === id
       );
       if (index === -1) {
-        state.error = `Composite ${id} not found`;
+        state.error = `Node ${id} not found`;
         return;
       }
 
@@ -93,10 +91,10 @@ export const compositeActions: CompositeActions = {
   remove: (id: string) => {
     compositeStore.setState((state: CompositeState) => {
       const index = state.composites.findIndex(
-        (comp: CompositeDefinition) => comp.id === id,
+        (comp: NodeDefinition) => comp.id === id
       );
       if (index === -1) {
-        state.error = `Composite ${id} not found`;
+        state.error = `Node ${id} not found`;
         return;
       }
 
@@ -107,6 +105,6 @@ export const compositeActions: CompositeActions = {
 
   findById: (id: string) => {
     const state = compositeStore.getState();
-    return state.composites.find((comp: CompositeDefinition) => comp.id === id);
+    return state.composites.find((comp: NodeDefinition) => comp.id === id);
   },
 };

@@ -2,7 +2,7 @@ import type {
   INode,
   NodeExecutionContext,
   NodeExecutionResult,
-} from "@atomiton/nodes/executable";
+} from "@atomiton/nodes/executables";
 
 /**
  * Runtime language options

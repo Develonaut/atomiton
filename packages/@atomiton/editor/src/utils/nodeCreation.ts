@@ -1,7 +1,7 @@
 import {
-  createNode as createAtomitonNode,
-  getNodeByType,
-} from "@atomiton/nodes";
+  createNodeDefinition,
+  getNodeDefinition,
+} from "@atomiton/nodes/definitions";
 import { generateEdgeId, generateNodeId } from "@atomiton/utils";
 import type { EditorEdge } from "#hooks/useEditorEdges";
 import type { EditorNode, NodePosition } from "#types/EditorNode";
@@ -52,7 +52,7 @@ export function createNode(
   nodeId?: string,
 ): EditorNode {
   const id = nodeId || generateNodeId();
-  const nodeDefinition = getNodeByType(nodeType);
+  const nodeDefinition = getNodeDefinition(nodeType);
 
   if (!nodeDefinition) {
     // Create a basic editor node when type is unknown
@@ -79,7 +79,7 @@ export function createNode(
   }
 
   // Create the base node using the nodes package factory for domain logic
-  const baseNode = createAtomitonNode({
+  const baseNode = createNodeDefinition({
     id,
     name: nodeDefinition.metadata?.name || nodeType,
     description: nodeDefinition.metadata?.description,

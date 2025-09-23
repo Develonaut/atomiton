@@ -7,7 +7,7 @@ import { describe, it, expect } from "vitest";
 import { createCompositeRunner } from "./compositeRunner";
 import { createExecutionStore } from "../../store";
 import { createNodeExecutor } from "../nodeExecutor";
-import type { CompositeDefinition } from "@atomiton/nodes/executable";
+import type { CompositeDefinition } from "@atomiton/nodes/executables";
 
 describe("Composite Execution Smoke Tests", () => {
   const executionStore = createExecutionStore();

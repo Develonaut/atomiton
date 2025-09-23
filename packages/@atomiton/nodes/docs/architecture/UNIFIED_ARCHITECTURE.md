@@ -12,8 +12,8 @@ The `@atomiton/nodes` package implements a unified architecture where both atomi
 │  ┌─────────────────────────────────────────────────────────────┤
 │  │ + execute(context): Promise<NodeExecutionResult>             │
 │  │ + validate(): { valid: boolean; errors: string[] }          │
-│  │ + get inputPorts(): NodePortDefinition[]                    │
-│  │ + get outputPorts(): NodePortDefinition[]                   │
+│  │ + get inputPorts(): NodePort[]                    │
+│  │ + get outputPorts(): NodePort[]                   │
 │  │ + get metadata(): NodeMetadata                               │
 │  │ + isComposite(): boolean                                     │
 │  │ + dispose(): void                                            │

@@ -2,20 +2,17 @@ import { EventEmitter } from "events";
 import PQueue from "p-queue";
 import { v4 as uuidv4 } from "uuid";
 // import type { IStorageEngine } from "@atomiton/storage";
+import type { NodeExecutionContext } from "@atomiton/nodes/executables";
+import { createCompositeRunner } from "../execution";
+import { createNodeExecutor } from "../execution/nodeExecutor";
 import type {
-  NodeExecutionContext,
-  CompositeDefinition,
-} from "@atomiton/nodes/executable";
-import type {
-  IExecutionEngine,
+  ExecutionError,
+  ExecutionMetrics,
   ExecutionRequest,
   ExecutionResult,
   ExecutionStatus,
-  ExecutionError,
-  ExecutionMetrics,
+  IExecutionEngine,
 } from "../interfaces/IExecutionEngine";
-import { createCompositeRunner } from "../execution";
-import { createNodeExecutor } from "../execution/nodeExecutor";
 import { createExecutionStore } from "../store";
 
 export type ExecutionEngineInstance = IExecutionEngine & {
@@ -52,7 +49,7 @@ export function createExecutionEngine(config?: {
   const createExecutionContext = (
     executionId: string,
     composite: CompositeDefinition,
-    request: ExecutionRequest,
+    request: ExecutionRequest
   ): NodeExecutionContext => {
     return {
       nodeId: executionId,
@@ -134,7 +131,7 @@ export function createExecutionEngine(config?: {
    * Execute a Composite with given inputs
    */
   const execute = async (
-    request: ExecutionRequest,
+    request: ExecutionRequest
   ): Promise<ExecutionResult> => {
     const executionId = uuidv4();
     const startTime = new Date();
@@ -164,7 +161,7 @@ export function createExecutionEngine(config?: {
         composite = data as CompositeDefinition;
       } else {
         throw new Error(
-          `No storage configured, cannot load Composite ${request.compositeId}`,
+          `No storage configured, cannot load Composite ${request.compositeId}`
         );
       }
 
@@ -215,7 +212,7 @@ export function createExecutionEngine(config?: {
    */
   const executeComposite = async (
     composite: CompositeDefinition,
-    context: NodeExecutionContext,
+    context: NodeExecutionContext
   ): Promise<ExecutionResult> => {
     const executionId = uuidv4();
     const startTime = new Date();
@@ -317,7 +314,7 @@ export function createExecutionEngine(config?: {
    * Get execution status and results
    */
   const getExecution = async (
-    executionId: string,
+    executionId: string
   ): Promise<ExecutionResult | null> => {
     return executions.get(executionId) ?? null;
   };
@@ -339,17 +336,17 @@ export function createExecutionEngine(config?: {
       }
       if (filter.compositeId) {
         executionList = executionList.filter(
-          (e) => e.compositeId === filter.compositeId,
+          (e) => e.compositeId === filter.compositeId
         );
       }
       if (filter.startDate) {
         executionList = executionList.filter(
-          (e) => e.startTime >= filter.startDate!,
+          (e) => e.startTime >= filter.startDate!
         );
       }
       if (filter.endDate) {
         executionList = executionList.filter(
-          (e) => e.startTime <= filter.endDate!,
+          (e) => e.startTime <= filter.endDate!
         );
       }
     }

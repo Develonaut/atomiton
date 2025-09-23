@@ -1,4 +1,4 @@
-import { getNodeByType } from "@atomiton/nodes/browser";
+import { getNodeDefinition } from "@atomiton/nodes/definitions";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -52,7 +52,7 @@ function NodeComponent(props: ReactFlowNodeProps<EditorNode>) {
   const icon = useMemo(
     () =>
       data?.metadata?.icon ||
-      getNodeByType(props.type)?.metadata?.icon ||
+      getNodeDefinition(props.type)?.metadata?.icon ||
       "zap",
     [props.type, data?.metadata?.icon],
   );

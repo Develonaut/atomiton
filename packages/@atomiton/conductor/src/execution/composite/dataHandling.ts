@@ -5,7 +5,7 @@
 import type {
   CompositeDefinition,
   NodeExecutionResult,
-} from "@atomiton/nodes/executable";
+} from "@atomiton/nodes/executables";
 import type { ExecutionStore } from "../../store";
 
 /**

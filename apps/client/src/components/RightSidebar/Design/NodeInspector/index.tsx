@@ -1,6 +1,6 @@
 import { useEditorNodes } from "@atomiton/editor";
 import { Form, type ZodSchema, type FieldsMetadata } from "@atomiton/form";
-import { getNodeByType } from "@atomiton/nodes/browser";
+import { getNodeDefinition } from "@atomiton/nodes/definitions";
 import { Box } from "@atomiton/ui";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -9,7 +9,7 @@ function NodeInspector() {
   const { setNodes, nodes } = useEditorNodes();
   const [selectedId] = useState<string | null>(null);
   const [nodeConfig, setNodeConfig] = useState<ReturnType<
-    typeof getNodeByType
+    typeof getNodeDefinition
   > | null>(null);
 
   const selectedNode = selectedId
@@ -32,7 +32,7 @@ function NodeInspector() {
   useEffect(() => {
     if (selectedNode?.type) {
       try {
-        const config = getNodeByType(selectedNode.type);
+        const config = getNodeDefinition(selectedNode.type);
         setNodeConfig(config?.parameters?.schema ? config : null);
       } catch {
         setNodeConfig(null);

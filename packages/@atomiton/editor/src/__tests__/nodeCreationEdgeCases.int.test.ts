@@ -9,7 +9,33 @@ import {
   updateNodesWithNewNode,
 } from "#utils/nodeCreation";
 
-vi.mock("@atomiton/nodes/browser", () => ({
+vi.mock("@atomiton/nodes/definitions", () => ({
+  createNodeDefinition: vi.fn((input) => ({
+    id: input.id || "generated-id",
+    type: "atomic",
+    name: input.name || "Test Node",
+    description: input.description,
+    category: input.category || "test",
+    version: input.version || "1.0.0",
+    inputPorts: input.inputPorts || [],
+    outputPorts: input.outputPorts || [],
+    metadata: input.metadata || {},
+  })),
+  getNodeDefinition: vi.fn(() => ({
+    metadata: {
+      name: "Test Node",
+      category: "test",
+      version: "1.0.0",
+      description: "A test node",
+    },
+    inputPorts: [],
+    outputPorts: [],
+    parameters: {
+      schema: {},
+      defaults: {},
+    },
+  })),
+  // Aliases for backward compatibility
   createNode: vi.fn((input) => ({
     id: input.id || "generated-id",
     type: "atomic",
@@ -105,10 +131,10 @@ describe("node-creation utils - edge cases", () => {
 
   describe("createNode edge cases", () => {
     it("should handle nodes with complex metadata", async () => {
-      const { getNodeByType } = vi.mocked(
-        await import("@atomiton/nodes/browser")
+      const { getNodeDefinition } = vi.mocked(
+        await import("@atomiton/nodes/definitions")
       );
-      getNodeByType.mockReturnValueOnce({
+      getNodeDefinition.mockReturnValueOnce({
         metadata: {
           name: "Complex Node",
           category: "complex",
@@ -146,8 +172,8 @@ describe("node-creation utils - edge cases", () => {
     });
 
     it("should handle createAtomitonNode returning minimal data", async () => {
-      const { createNode: mockCreateNode } = vi.mocked(
-        await import("@atomiton/nodes/browser")
+      const { createNodeDefinition: mockCreateNode } = vi.mocked(
+        await import("@atomiton/nodes/definitions")
       );
       mockCreateNode.mockReturnValueOnce({
         id: "minimal-id",
@@ -168,8 +194,8 @@ describe("node-creation utils - edge cases", () => {
     });
 
     it("should override data with parameter defaults when available", async () => {
-      const { createNode: mockCreateNode, getNodeByType } = vi.mocked(
-        await import("@atomiton/nodes/browser")
+      const { createNodeDefinition: mockCreateNode, getNodeDefinition } = vi.mocked(
+        await import("@atomiton/nodes/definitions")
       );
       mockCreateNode.mockReturnValueOnce({
         id: "test-id",
@@ -185,7 +211,7 @@ describe("node-creation utils - edge cases", () => {
         settings: { existingSetting: true },
       });
 
-      getNodeByType.mockReturnValueOnce({
+      getNodeDefinition.mockReturnValueOnce({
         metadata: {
           name: "Test Node",
           category: "test",

@@ -1,4 +1,4 @@
-import { getNodeByType } from "@atomiton/nodes/browser";
+import { getNodeDefinition } from "@atomiton/nodes/definitions";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -17,7 +17,7 @@ function Node(props: ReactFlowNodeProps) {
   const nodes = useNodes();
   const isFirstNode = nodes.length > 0 && nodes[0].id === props.id;
 
-  const icon = getNodeByType(props.type)?.metadata.icon || "zap";
+  const icon = getNodeDefinition(props.type)?.metadata.icon || "zap";
 
   // Extract port definitions from node data
   const data = useMemo(() => props.data as EditorNode, [props.data]);
