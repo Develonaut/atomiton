@@ -91,65 +91,6 @@ const baseConfig: Linter.Config[] = [
       "no-useless-catch": "error",
       "no-constant-condition": ["error", { checkLoops: false }],
 
-      // Object formatting rules - disabled due to Prettier conflict
-      // "key-spacing": [
-      //   "warn",
-      //   {
-      //     beforeColon: false,
-      //     afterColon: true,
-      //     mode: "minimum",
-      //     align: {
-      //       beforeColon: false,
-      //       afterColon: true,
-      //       on: "colon",
-      //       mode: "strict",
-      //     },
-      //   },
-      // ],
-
-      // Code quality and complexity rules
-      "max-lines": [
-        "warn",
-        {
-          max: 250,
-          skipBlankLines: true,
-          skipComments: true,
-        },
-      ],
-      "max-lines-per-function": [
-        "warn",
-        {
-          max: 30,
-          skipBlankLines: true,
-          skipComments: true,
-          IIFEs: true,
-        },
-      ],
-      complexity: ["warn", 10],
-
-      // Comment management rules - TODO: Re-enable after resolving Prettier conflicts
-      // "spaced-comment": [
-      //   "warn",
-      //   "always",
-      //   {
-      //     block: {
-      //       markers: ["*"],
-      //       balanced: true,
-      //     },
-      //     line: {
-      //       markers: ["@context", "@todo", "@summary"],
-      //       exceptions: ["-", "+", "*", "@context", "@todo", "@summary"],
-      //     },
-      //   },
-      // ],
-      // "no-warning-comments": [
-      //   "warn",
-      //   {
-      //     terms: ["TODO", "FIXME", "HACK", "XXX", "BUG"],
-      //     location: "start",
-      //   },
-      // ],
-      // "no-inline-comments": "warn",
 
       // Import restrictions for # imports
       "no-restricted-imports": [
