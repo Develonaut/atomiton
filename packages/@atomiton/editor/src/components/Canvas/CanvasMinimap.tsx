@@ -1,7 +1,7 @@
+import type { CanvasMinimapProps } from "#components/Canvas/CanvasMinimap.types";
 import { styled } from "@atomiton/ui";
 import { MiniMap } from "@xyflow/react";
 import { memo } from "react";
-import type { CanvasMinimapProps } from "./CanvasMinimap.types";
 
 /**
  * Styled MiniMap using UI package's styled function
@@ -35,7 +35,7 @@ const StyledMiniMap = styled(MiniMap, { name: "CanvasMinimap" })(
       theme: "light",
       size: "md",
     },
-  },
+  }
 );
 
 /**

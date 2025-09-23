@@ -4,6 +4,9 @@
   "description": "Minimal form library for Atomiton - React Hook Form with automatic field generation",
   "type": "module",
   "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

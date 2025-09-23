@@ -4,7 +4,9 @@
   "description": "Universal storage abstraction for Composites and application data across platforms",
   "type": "module",
   "private": true,
-  "exports": {
+  "imports": {
+    "#*": "./src/*"
+  },  "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"

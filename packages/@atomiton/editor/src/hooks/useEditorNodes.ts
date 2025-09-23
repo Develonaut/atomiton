@@ -1,7 +1,7 @@
 import type { Node as ReactFlowNode } from "@xyflow/react";
 import { useReactFlow, useNodes } from "@xyflow/react";
 import { useCallback } from "react";
-import type { EditorNode } from "../types/EditorNode";
+import type { EditorNode } from "#types/EditorNode";
 
 export function useEditorNodes() {
   const { setNodes, getNodes } = useReactFlow();

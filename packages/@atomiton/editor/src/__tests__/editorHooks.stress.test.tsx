@@ -1,14 +1,14 @@
+import type { EditorEdge } from "#hooks/useEditorEdges";
+import { useEditorEdges } from "#hooks/useEditorEdges";
+import { useEditorNode } from "#hooks/useEditorNode";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useSelectedNode } from "#hooks/useSelectedNode";
+import { useSelectedNodes } from "#hooks/useSelectedNodes";
+import type { EditorNode } from "#types/EditorNode";
 import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import React from "react";
 import { describe, expect, it } from "vitest";
-import type { EditorEdge } from "../hooks/useEditorEdges";
-import { useEditorEdges } from "../hooks/useEditorEdges";
-import { useEditorNode } from "../hooks/useEditorNode";
-import type { EditorNode } from "../types/EditorNode";
-import { useEditorNodes } from "../hooks/useEditorNodes";
-import { useSelectedNode } from "../hooks/useSelectedNode";
-import { useSelectedNodes } from "../hooks/useSelectedNodes";
 
 /**
  * Stress tests for editor hooks with large datasets.
@@ -127,7 +127,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
         }),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       act(() => {
@@ -139,7 +139,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
 
       act(() => {
         result.current.nodes.setNodes((prev) =>
-          prev.map((n, i) => ({ ...n, selected: i === 500 })),
+          prev.map((n, i) => ({ ...n, selected: i === 500 }))
         );
       });
 
@@ -157,7 +157,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
         }),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       act(() => {
@@ -169,7 +169,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
 
       act(() => {
         result.current.nodes.setNodes((prev) =>
-          prev.map((n, i) => ({ ...n, selected: i % 10 === 0 })),
+          prev.map((n, i) => ({ ...n, selected: i % 10 === 0 }))
         );
       });
 
@@ -238,7 +238,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
               x: n.position.x + 100,
               y: n.position.y + 100,
             },
-          })),
+          }))
         );
       });
 
@@ -267,7 +267,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
             prev.map((n) => ({
               ...n,
               data: { ...n.data, updateCount: i },
-            })),
+            }))
           );
         });
       }
@@ -296,7 +296,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
       for (let i = 0; i < 100; i++) {
         act(() => {
           result.current.setNodes(
-            nodes.map((n) => ({ ...n, selected: i % 2 === 0 })),
+            nodes.map((n) => ({ ...n, selected: i % 2 === 0 }))
           );
         });
       }
@@ -326,7 +326,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
         }),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       expect(result.current.nodes.nodes).toHaveLength(0);
@@ -344,7 +344,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
         }),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       act(() => {
@@ -365,7 +365,7 @@ describe.skip("Editor Stress Tests - ReactFlow Store Integration (requires full 
         }),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       act(() => {

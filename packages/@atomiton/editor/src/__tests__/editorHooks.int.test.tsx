@@ -1,12 +1,12 @@
+import { useEditorNode } from "#hooks/useEditorNode";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useSelectedNode } from "#hooks/useSelectedNode";
+import { useSelectedNodes } from "#hooks/useSelectedNodes";
+import type { EditorNode } from "#types/EditorNode";
 import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import React, { useState } from "react";
 import { describe, expect, it } from "vitest";
-import { useEditorNode } from "../hooks/useEditorNode";
-import type { EditorNode } from "../types/EditorNode";
-import { useEditorNodes } from "../hooks/useEditorNodes";
-import { useSelectedNode } from "../hooks/useSelectedNode";
-import { useSelectedNodes } from "../hooks/useSelectedNodes";
 
 /**
  * Edge case analysis tests - specifically testing the issues found in stress tests
@@ -92,7 +92,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         () => useEditorNode("test-lookup"),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       act(() => {
@@ -141,7 +141,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         }),
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       act(() => {
@@ -152,7 +152,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       console.log("Selected nodes:", result.current.selectedNodes);
       console.log(
         "Selected nodes length:",
-        result.current.selectedNodes.length,
+        result.current.selectedNodes.length
       );
 
       // These are failing in stress tests
@@ -175,7 +175,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         },
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       const testNode: EditorNode = {

@@ -4,7 +4,9 @@
   "description": "Atomiton Blueprint node implementations",
   "type": "module",
   "private": true,
-  "sideEffects": false,
+  "imports": {
+    "#*": "./src/*"
+  },  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./dist/exports/browser/index.js",

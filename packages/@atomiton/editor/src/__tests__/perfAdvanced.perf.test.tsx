@@ -2,10 +2,10 @@ import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider, useReactFlow } from "@xyflow/react";
 import React, { useEffect } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { useEditorNodes } from "../hooks/useEditorNodes";
-import { useEditorViewport } from "../hooks/useEditorViewport";
-import { useSelectedNodes } from "../hooks/useSelectedNodes";
-import type { EditorNode } from "../types/EditorNode";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useEditorViewport } from "#hooks/useEditorViewport";
+import { useSelectedNodes } from "#hooks/useSelectedNodes";
+import type { EditorNode } from "#types/EditorNode";
 
 /**
  * Performance Contract Tests - Advanced Operations

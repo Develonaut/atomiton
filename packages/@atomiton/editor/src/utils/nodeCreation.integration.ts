@@ -13,7 +13,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { createEdgeFromLastNode, createNode } from "./nodeCreation";
+import { createEdgeFromLastNode, createNode } from "#utils/nodeCreation";
 
 describe("ReactFlow Integration Smoke Tests", () => {
   // Core smoke test: Can we create nodes that ReactFlow can use?

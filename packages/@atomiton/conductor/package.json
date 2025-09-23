@@ -4,6 +4,9 @@
   "description": "Blueprint and node execution orchestrator for Atomiton",
   "type": "module",
   "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
     "./browser": {
       "import": "./dist/exports/browser/index.js",

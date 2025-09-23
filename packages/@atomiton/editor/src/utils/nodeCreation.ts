@@ -3,12 +3,12 @@ import {
   getNodeByType,
 } from "@atomiton/nodes";
 import { generateEdgeId, generateNodeId } from "@atomiton/utils";
-import type { EditorEdge } from "../hooks/useEditorEdges";
-import type { EditorNode, NodePosition } from "../types/EditorNode";
+import type { EditorEdge } from "#hooks/useEditorEdges";
+import type { EditorNode, NodePosition } from "#types/EditorNode";
 // Note: nodeMapping is internal to editor package, not exported
 
 // Re-export NodePosition for external use
-export type { NodePosition } from "../types/EditorNode";
+export type { NodePosition } from "#types/EditorNode";
 
 /**
  * Calculate the position for a new node based on existing nodes

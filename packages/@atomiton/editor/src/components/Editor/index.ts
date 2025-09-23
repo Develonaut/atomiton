@@ -1,1 +1,1 @@
-export { default } from "./EditorRoot";
+export { default } from "#components/Editor/EditorRoot";

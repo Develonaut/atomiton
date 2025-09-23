@@ -1,5 +1,5 @@
-import { useEditorStore } from "./useEditorStore";
-import type { EditorNode } from "../types/EditorNode";
+import { useEditorStore } from "#hooks/useEditorStore";
+import type { EditorNode } from "#types/EditorNode";
 
 export function useSelectedNode<
   NodeType extends EditorNode = EditorNode,

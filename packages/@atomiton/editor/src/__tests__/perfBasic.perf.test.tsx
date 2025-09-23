@@ -1,9 +1,9 @@
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useEditorViewport } from "#hooks/useEditorViewport";
 import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider, useReactFlow } from "@xyflow/react";
 import React, { useEffect, useRef } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { useEditorNodes } from "../hooks/useEditorNodes";
-import { useEditorViewport } from "../hooks/useEditorViewport";
 
 /**
  * Performance Contract Tests - Basic Operations
@@ -89,7 +89,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
               {children}
             </TestWrapper>
           ),
-        },
+        }
       );
 
       const initialRenders = renderCounter.get("drag-test");
@@ -100,10 +100,8 @@ describe("Performance Contract Tests - Basic Operations", () => {
         act(() => {
           result.current.setNodes((nodes) =>
             nodes.map((n) =>
-              n.id === "node-0"
-                ? { ...n, position: { x: i * 2, y: i * 2 } }
-                : n,
-            ),
+              n.id === "node-0" ? { ...n, position: { x: i * 2, y: i * 2 } } : n
+            )
           );
         });
       }
@@ -113,7 +111,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
 
       // Contract: Must not exceed threshold
       expect(rendersPerUpdate).toBeLessThanOrEqual(
-        PERFORMANCE_THRESHOLDS.MAX_RERENDERS_DURING_DRAG,
+        PERFORMANCE_THRESHOLDS.MAX_RERENDERS_DURING_DRAG
       );
     });
 
@@ -140,7 +138,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
               {children}
             </TestWrapper>
           ),
-        },
+        }
       );
 
       const initialRenders = renderCounter.get("pan-test");
@@ -156,7 +154,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
 
       // Contract: Panning should NOT cause node list re-renders
       expect(totalRenders).toBeLessThanOrEqual(
-        PERFORMANCE_THRESHOLDS.MAX_RERENDERS_DURING_PAN,
+        PERFORMANCE_THRESHOLDS.MAX_RERENDERS_DURING_PAN
       );
     });
 
@@ -183,7 +181,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
               {children}
             </TestWrapper>
           ),
-        },
+        }
       );
 
       const initialRenders = renderCounter.get("zoom-test");
@@ -199,7 +197,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
 
       // Contract: Zoom changes should be efficient
       expect(totalRenders).toBeLessThanOrEqual(
-        20 * PERFORMANCE_THRESHOLDS.MAX_RERENDERS_DURING_ZOOM,
+        20 * PERFORMANCE_THRESHOLDS.MAX_RERENDERS_DURING_ZOOM
       );
     });
   });
@@ -217,12 +215,12 @@ describe("Performance Contract Tests - Basic Operations", () => {
         },
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       // Contract: Hook execution must be fast
       expect(result.current.executionTime).toBeLessThanOrEqual(
-        PERFORMANCE_THRESHOLDS.MAX_HOOK_EXECUTION_TIME_MS,
+        PERFORMANCE_THRESHOLDS.MAX_HOOK_EXECUTION_TIME_MS
       );
     });
 
@@ -234,7 +232,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
         },
         {
           wrapper: TestWrapper,
-        },
+        }
       );
 
       const start = performance.now();
@@ -249,7 +247,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
               x: n.position.x + 10,
               y: n.position.y + 10,
             },
-          })),
+          }))
         );
       });
 
@@ -257,7 +255,7 @@ describe("Performance Contract Tests - Basic Operations", () => {
 
       // Contract: Batch updates must stay under 60fps threshold
       expect(batchTime).toBeLessThanOrEqual(
-        PERFORMANCE_THRESHOLDS.MAX_UPDATE_BATCH_TIME_MS,
+        PERFORMANCE_THRESHOLDS.MAX_UPDATE_BATCH_TIME_MS
       );
     });
   });

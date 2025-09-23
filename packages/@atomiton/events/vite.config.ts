@@ -19,6 +19,11 @@ export default defineLibraryConfig({
   enableVisualizer: false,
   enableMinification: true,
   additionalConfig: {
+    resolve: {
+      alias: {
+        "#": resolve(__dirname, "src"),
+      },
+    },
     build: {
       lib: {
         entry: {

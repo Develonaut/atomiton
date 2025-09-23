@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { EditorEdge } from "../hooks/useEditorEdges";
-import type { EditorNode } from "../types/EditorNode";
+import type { EditorEdge } from "#hooks/useEditorEdges";
+import type { EditorNode } from "#types/EditorNode";
 import {
   calculateNodePosition,
   createDefaultEditorNode,
@@ -8,7 +8,7 @@ import {
   createNode,
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
-} from "./nodeCreation";
+} from "#utils/nodeCreation";
 
 vi.mock("@atomiton/nodes/browser", () => ({
   createNode: vi.fn((input) => ({

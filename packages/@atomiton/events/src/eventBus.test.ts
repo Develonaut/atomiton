@@ -23,7 +23,7 @@ describe("EventBus", () => {
 
   it("should broadcast events successfully", () => {
     const eventBus = createDesktopEventBus<SmokeEvents>("smoke");
-    let eventData: { test: boolean } | null = null;
+    let eventData: { test: boolean } | undefined;
 
     const unsubscribe = eventBus.on("broadcast", (data) => {
       eventData = data;

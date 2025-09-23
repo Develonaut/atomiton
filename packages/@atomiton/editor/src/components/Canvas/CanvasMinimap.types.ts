@@ -1,6 +1,6 @@
-import type { ComponentProps } from "react";
+import type { EditorNode } from "#types/EditorNode";
 import type { MiniMap } from "@xyflow/react";
-import type { EditorNode } from "../../types/EditorNode";
+import type { ComponentProps } from "react";
 
 /**
  * Canvas Minimap component props

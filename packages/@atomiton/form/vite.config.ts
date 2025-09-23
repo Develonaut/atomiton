@@ -1,4 +1,5 @@
 import { defineReactLibraryConfig } from "@atomiton/vite-config";
+import { resolve } from "path";
 
 export default defineReactLibraryConfig({
   name: "AtomitonForm",
@@ -7,5 +8,12 @@ export default defineReactLibraryConfig({
     components: ["src/components/"],
     hooks: ["src/hooks/"],
     utils: ["src/utils/"],
+  },
+  additionalConfig: {
+    resolve: {
+      alias: {
+        "#": resolve(__dirname, "src"),
+      },
+    },
   },
 });

@@ -6,10 +6,10 @@ import {
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
   type NodePosition,
-} from "../utils/nodeCreation";
-import { useEditorEdges } from "./useEditorEdges";
-import { useEditorNodes } from "./useEditorNodes";
-import { useEditorViewport } from "./useEditorViewport";
+} from "#utils/nodeCreation";
+import { useEditorEdges } from "#hooks/useEditorEdges";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useEditorViewport } from "#hooks/useEditorViewport";
 
 export function useAddNode() {
   const { nodes, setNodes } = useEditorNodes();

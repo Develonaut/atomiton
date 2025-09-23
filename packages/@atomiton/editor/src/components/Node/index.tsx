@@ -7,7 +7,7 @@ import {
   useNodes,
 } from "@xyflow/react";
 import { memo, useMemo } from "react";
-import type { EditorNode } from "../../types/EditorNode";
+import type { EditorNode } from "#types/EditorNode";
 
 /**
  * Custom Node component - focuses purely on content and functionality

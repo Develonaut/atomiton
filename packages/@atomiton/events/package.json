@@ -4,6 +4,9 @@
   "description": "Event system for Atomiton workflow automation",
   "type": "module",
   "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
     "./browser": {
       "types": "./dist/exports/browser/index.d.ts",

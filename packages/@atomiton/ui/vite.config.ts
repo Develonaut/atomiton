@@ -1,4 +1,5 @@
 import { defineReactLibraryConfig } from "@atomiton/vite-config";
+import { resolve } from "path";
 
 export default defineReactLibraryConfig({
   name: "AtomitonUI",
@@ -11,6 +12,11 @@ export default defineReactLibraryConfig({
     utils: ["src/utils/"],
   },
   additionalConfig: {
+    resolve: {
+      alias: {
+        "#": resolve(__dirname, "src"),
+      },
+    },
     server: {
       port: parseInt(process.env.VITE_UI_PORT || "5174"),
       strictPort: true,

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from "vitest";
-import { isEditorNode } from "./EditorNode";
-import type { EditorNode } from "./EditorNode";
+import { isEditorNode } from "#types/EditorNode";
+import type { EditorNode } from "#types/EditorNode";
 
 describe("EditorNode type guards", () => {
   describe("isEditorNode", () => {

@@ -4,7 +4,9 @@
   "description": "YAML parsing utilities for Atomiton Blueprint system",
   "type": "module",
   "private": true,
-  "main": "./dist/index.js",
+  "imports": {
+    "#*": "./src/*"
+  },  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

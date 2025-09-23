@@ -1,3 +1,11 @@
 {
-  "extends": "@atomiton/typescript-config/library.json"
+  "extends": "@atomiton/typescript-config/library.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "#*": ["src/*"]
+    }
+  }
 }

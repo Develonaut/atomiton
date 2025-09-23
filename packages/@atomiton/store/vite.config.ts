@@ -1,4 +1,5 @@
 import { defineLibraryConfig } from "@atomiton/vite-config";
+import { resolve } from "path";
 
 export default defineLibraryConfig({
   name: "AtomitonStore",
@@ -9,6 +10,11 @@ export default defineLibraryConfig({
     utils: "src/utils/",
   },
   additionalConfig: {
+    resolve: {
+      alias: {
+        "#": resolve(__dirname, "src"),
+      },
+    },
     define: {
       __DEV__: process.env.NODE_ENV !== "production",
     },

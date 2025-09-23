@@ -46,6 +46,11 @@ export default defineLibraryConfig({
   enableSourceMap: true,
   testEnvironment: "node",
   additionalConfig: {
+    resolve: {
+      alias: {
+        "#": resolve(__dirname, "src"),
+      },
+    },
     build: {
       lib: {
         entry: {
