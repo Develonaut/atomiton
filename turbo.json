@@ -16,7 +16,8 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "LEFTHOOK"
+        "LEFTHOOK",
+        "BUILD_TARGET"
       ]
     },
     "lint": {
@@ -30,7 +31,8 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "LEFTHOOK"
+        "LEFTHOOK",
+        "BUILD_TARGET"
       ]
     },
     "lint:fix": {
@@ -44,7 +46,8 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "LEFTHOOK"
+        "LEFTHOOK",
+        "BUILD_TARGET"
       ]
     },
     "check-types": {
@@ -58,7 +61,8 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "LEFTHOOK"
+        "LEFTHOOK",
+        "BUILD_TARGET"
       ]
     },
     "typecheck": {
@@ -72,7 +76,8 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
-        "LEFTHOOK"
+        "LEFTHOOK",
+        "BUILD_TARGET"
       ]
     },
     "test": {

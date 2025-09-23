@@ -1,11 +1,16 @@
 {
   "extends": "@atomiton/typescript-config/library.json",
-  "include": ["src"],
   "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": ".",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "baseUrl": "./src",
     "paths": {
-      "#*": ["src/*"]
+      "#core/*": ["core/*"],
+      "#browser/*": ["browser/*"],
+      "#desktop/*": ["desktop/*"],
+      "#shared/*": ["shared/*"]
     }
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }

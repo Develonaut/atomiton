@@ -139,12 +139,12 @@ class DataPipelineNode extends Node implements IGroupNode {
 
 ## 🧠 Mental Model Mapping
 
-| Domain           | Term           | Implementation   | Interface        |
-| ---------------- | -------------- | ---------------- | ---------------- |
-| **UI/Marketing** | Blueprint      | `GroupNode`      | `INode`          |
-| **Code/System**  | Group Node     | `GroupNode`      | `IGroupNode`     |
-| **Code/System**  | Individual Node| `CSVReaderNode`  | `INode`          |
-| **Execution**    | Any Node       | `node.execute()` | Same method!     |
+| Domain           | Term            | Implementation   | Interface    |
+| ---------------- | --------------- | ---------------- | ------------ |
+| **UI/Marketing** | Blueprint       | `GroupNode`      | `INode`      |
+| **Code/System**  | Group Node      | `GroupNode`      | `IGroupNode` |
+| **Code/System**  | Individual Node | `CSVReaderNode`  | `INode`      |
+| **Execution**    | Any Node        | `node.execute()` | Same method! |
 
 ## 🔍 Conceptual Navigation
 

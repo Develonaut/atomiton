@@ -1,4 +1,4 @@
-import type { IPCBridge, IPCEvent } from "./types";
+import type { IPCBridge, IPCContext, IPCEvent } from "#core/types";
 
 function detectElectronEnvironment(): "renderer" | "main" | null {
   if (typeof process === "undefined") return null;
@@ -10,30 +10,6 @@ function detectElectronEnvironment(): "renderer" | "main" | null {
   if (electronProcess.type === "browser") return "main";
   return null;
 }
-
-type IPCContext = {
-  environment: "renderer" | "main" | null;
-  handlers: Map<string, Set<(event: IPCEvent) => void>>;
-  ipcRenderer?: {
-    send: (channel: string, data: unknown) => void;
-    on: (
-      channel: string,
-      listener: (event: unknown, data: unknown) => void,
-    ) => void;
-  };
-  ipcMain?: {
-    on: (
-      channel: string,
-      listener: (event: unknown, data: unknown) => void,
-    ) => void;
-  };
-  webContents?: {
-    getAllWebContents: () => Array<{
-      id: number;
-      send: (channel: string, data: unknown) => void;
-    }>;
-  };
-};
 
 function loadRendererIPC(ctx: IPCContext): void {
   try {
@@ -51,7 +27,7 @@ function loadMainIPC(ctx: IPCContext): void {
   } catch {}
 }
 
-function initializeIPC(): IPCContext {
+function initializeDesktopIPC(): IPCContext {
   const environment = detectElectronEnvironment();
   const ctx: IPCContext = { environment, handlers: new Map() };
 
@@ -78,14 +54,14 @@ function setupChannelHandler(
   channel: string,
   handler: (event: IPCEvent) => void,
 ): void {
+  const wrappedHandler = (_: unknown, data: unknown) => {
+    handler({ channel, data });
+  };
+
   if (ctx.environment === "renderer" && ctx.ipcRenderer) {
-    ctx.ipcRenderer.on(channel, (_: unknown, data: unknown) => {
-      handler({ channel, data });
-    });
+    ctx.ipcRenderer.on(channel, wrappedHandler);
   } else if (ctx.environment === "main" && ctx.ipcMain) {
-    ctx.ipcMain.on(channel, (_: unknown, data: unknown) => {
-      handler({ channel, data });
-    });
+    ctx.ipcMain.on(channel, wrappedHandler);
   }
 }
 
@@ -123,8 +99,8 @@ function createIsAvailable(ctx: IPCContext) {
   };
 }
 
-export function createIPCBridge(): IPCBridge {
-  const ctx = initializeIPC();
+export function createDesktopIPCHandler(): IPCBridge {
+  const ctx = initializeDesktopIPC();
 
   return {
     send: createSend(ctx),
