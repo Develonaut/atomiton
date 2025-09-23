@@ -54,7 +54,6 @@
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "glob": "^11.0.3",
-    "rollup-plugin-visualizer": "^6.0.3",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "^4.5.4",

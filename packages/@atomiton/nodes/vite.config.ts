@@ -1,5 +1,4 @@
 import { resolve } from "path";
-import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
@@ -7,14 +6,8 @@ export default defineConfig({
   plugins: [
     dts({
       insertTypesEntry: true,
-      include: ["src/**/*.ts", "src/**/*.tsx"],
-      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/*.bench.ts"],
-    }),
-    visualizer({
-      filename: "dist/stats.html",
-      open: false,
-      gzipSize: true,
-      brotliSize: true,
+      include: ["src/**/*.ts"],
+      exclude: ["src/**/*.test.ts", "src/**/*.bench.ts"],
     }),
   ],
   build: {
@@ -27,52 +20,20 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      onLog(level, log, handler) {
-        // Detect Node.js built-ins in browser code
-        if (log.code === "UNRESOLVED_IMPORT") {
-          const nodeBuiltins = [
-            "fs",
-            "path",
-            "child_process",
-            "os",
-            "util",
-            "crypto",
-            "stream",
-            "http",
-            "https",
-          ];
-          if (nodeBuiltins.some((builtin) => log.message.includes(builtin))) {
-            console.error(
-              `❌ ERROR: Node.js built-in imported in browser code: ${log.message}`,
-            );
-            return;
-          }
-        }
-        handler(level, log);
-      },
       external: [
-        // Node.js built-ins - these should ONLY be in desktop build
+        // Node.js built-ins
+        /^node:/,
         "fs",
         "fs/promises",
-        "node:fs",
-        "node:fs/promises",
         "path",
-        "node:path",
         "child_process",
-        "node:child_process",
         "os",
-        "node:os",
         "util",
-        "node:util",
         "crypto",
-        "node:crypto",
         "stream",
-        "node:stream",
         "http",
-        "node:http",
         "https",
-        "node:https",
-        // External libraries for Node.js runtime
+        // External libraries
         "sharp",
         "execa",
         "isolated-vm",
