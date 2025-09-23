@@ -1,7 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "jsx": "react-jsx",
     "declaration": true,
@@ -15,10 +13,11 @@
     "moduleResolution": "bundler",
     "noImplicitAny": true,
     "resolveJsonModule": true,
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022",
-    "allowImportingTsExtensions": false,
-    "outDir": "dist"
+    "allowImportingTsExtensions": false
   }
 }

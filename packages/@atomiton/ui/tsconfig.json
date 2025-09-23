@@ -1,6 +1,10 @@
 {
   "extends": "@atomiton/typescript-config/library.json",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"],
   "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
