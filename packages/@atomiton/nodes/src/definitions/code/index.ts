@@ -13,11 +13,10 @@ import { codeDefaults, codeSchema } from "#definitions/code/schema";
  * Code execution node definition (browser-safe)
  */
 export const codeDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "code",
     name       : "Code",
-    variant    : "code",
+    type       : "code",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Execute safe JavaScript expressions with input data",

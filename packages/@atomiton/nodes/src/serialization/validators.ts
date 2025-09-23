@@ -9,18 +9,18 @@ import type {
   NodeFieldControlType,
   NodeIcon,
   NodeMetadataSource,
-  NodeMetadataVariant,
+  NodeMetadataType,
   NodeRuntime,
 } from "#core/types/definition.js";
 
 /**
- * Helper to validate and convert string to NodeMetadataVariant
+ * Helper to validate and convert string to NodeMetadataType
  */
-export function validateVariant(
-  variant: string | undefined,
-): NodeMetadataVariant | undefined {
-  if (!variant) return undefined;
-  const validVariants: NodeMetadataVariant[] = [
+export function validateType(
+  type: string | undefined,
+): NodeMetadataType | undefined {
+  if (!type) return undefined;
+  const validTypes: NodeMetadataType[] = [
     "code",
     "csv-reader",
     "file-system",
@@ -30,10 +30,10 @@ export function validateVariant(
     "parallel",
     "shell-command",
     "transform",
-    "workflow",
+    "group",
   ];
-  if (validVariants.includes(variant as NodeMetadataVariant)) {
-    return variant as NodeMetadataVariant;
+  if (validTypes.includes(type as NodeMetadataType)) {
+    return type as NodeMetadataType;
   }
   return undefined;
 }
@@ -77,7 +77,7 @@ export function validateCategory(
     "communication",
     "utility",
     "user",
-    "composite",
+    "group",
   ];
   if (validCategories.includes(category as NodeCategory)) {
     return category as NodeCategory;

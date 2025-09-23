@@ -2,7 +2,7 @@ id: "550e8400-e29b-41d4-a716-446655440002"
 name: "Data Transform Pipeline"
 description: "Read CSV data, transform it, and output processed results"
 category: "data"
-type: "composite"
+type: "group"
 version: "1.0.0"
 
 metadata:
@@ -11,7 +11,7 @@ metadata:
   author: "Atomiton Team"
   authorId: "atomiton-team"
   source: "system"
-  variant: "data-transform-pipeline"
+  type: "data-transform-pipeline"
   icon: "database"
   tags:
     - "data"
@@ -23,7 +23,6 @@ metadata:
     - "transform"
     - "filter"
     - "aggregate"
-    - "pipeline"
     - "etl"
     - "processing"
   runtime:
@@ -42,7 +41,7 @@ nodes:
     metadata:
       id: "csv-reader"
       name: "CSV Reader"
-      variant: "csv-reader"
+      type: "csv-reader"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Read and parse CSV files"
@@ -117,7 +116,7 @@ nodes:
     metadata:
       id: "transform"
       name: "Transform"
-      variant: "transform"
+      type: "transform"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Transform data using JavaScript expressions"
@@ -183,7 +182,7 @@ nodes:
     metadata:
       id: "code"
       name: "Code"
-      variant: "code"
+      type: "code"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Execute custom JavaScript/TypeScript code"
@@ -259,7 +258,7 @@ nodes:
     metadata:
       id: "file-system"
       name: "File System"
-      variant: "file-system"
+      type: "file-system"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "File system operations (read, write, list)"

@@ -2,7 +2,7 @@ id: "550e8400-e29b-41d4-a716-446655440003"
 name: "Image Processing Workflow"
 description: "Batch process images with parallel operations for optimal performance"
 category: "media"
-type: "composite"
+type: "group"
 version: "1.0.0"
 
 metadata:
@@ -11,7 +11,7 @@ metadata:
   author: "Atomiton Team"
   authorId: "atomiton-team"
   source: "system"
-  variant: "image-processing-workflow"
+  type: "image-processing-workflow"
   icon: "image"
   tags:
     - "image"
@@ -45,7 +45,7 @@ nodes:
     metadata:
       id: "file-system"
       name: "File System"
-      variant: "file-system"
+      type: "file-system"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "File system operations (read, write, list)"
@@ -123,7 +123,7 @@ nodes:
     metadata:
       id: "loop"
       name: "Loop"
-      variant: "loop"
+      type: "loop"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Iterate over arrays or collections"
@@ -194,7 +194,7 @@ nodes:
     metadata:
       id: "parallel"
       name: "Parallel"
-      variant: "parallel"
+      type: "parallel"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Execute multiple operations in parallel"
@@ -257,7 +257,7 @@ nodes:
     metadata:
       id: "image-composite"
       name: "Image Composite"
-      variant: "image-composite"
+      type: "image-composite"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Image processing and manipulation"
@@ -343,7 +343,7 @@ nodes:
     metadata:
       id: "image-composite"
       name: "Image Composite"
-      variant: "image-composite"
+      type: "image-composite"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Image processing and manipulation"
@@ -433,7 +433,7 @@ nodes:
     metadata:
       id: "file-system"
       name: "File System"
-      variant: "file-system"
+      type: "file-system"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "File system operations (read, write, list)"

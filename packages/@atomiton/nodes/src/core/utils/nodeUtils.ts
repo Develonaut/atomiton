@@ -32,11 +32,11 @@ export function isNodeMetadata(obj: unknown): obj is NodeMetadata {
     typeof obj === "object" &&
     "id" in obj &&
     "name" in obj &&
-    "variant" in obj &&
+    "type" in obj &&
     "version" in obj &&
     typeof (obj as Record<string, unknown>).id === "string" &&
     typeof (obj as Record<string, unknown>).name === "string" &&
-    typeof (obj as Record<string, unknown>).variant === "string" &&
+    typeof (obj as Record<string, unknown>).type === "string" &&
     typeof (obj as Record<string, unknown>).version === "string"
   );
 }

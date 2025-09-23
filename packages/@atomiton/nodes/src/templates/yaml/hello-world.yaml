@@ -2,7 +2,7 @@ id: "550e8400-e29b-41d4-a716-446655440001"
 name: "Hello World"
 description: "A simple greeting workflow that demonstrates basic node connectivity"
 category: "tutorial"
-type: "composite"
+type: "group"
 version: "1.0.0"
 
 metadata:
@@ -11,7 +11,7 @@ metadata:
   author: "Atomiton Team"
   authorId: "atomiton-team"
   source: "system"
-  variant: "hello-world"
+  type: "hello-world"
   icon: "message-square"
   tags:
     - "example"
@@ -39,7 +39,7 @@ nodes:
     metadata:
       id: "code"
       name: "Code"
-      variant: "code"
+      type: "code"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Execute custom JavaScript/TypeScript code"
@@ -105,7 +105,7 @@ nodes:
     metadata:
       id: "transform"
       name: "Transform"
-      variant: "transform"
+      type: "transform"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Transform data using JavaScript expressions"

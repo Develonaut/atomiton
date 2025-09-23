@@ -33,8 +33,8 @@ function validateTemplateStructure(definition: NodeDefinition): void {
     throw new Error('Template must have metadata');
   }
 
-  if (definition.type !== 'composite') {
-    throw new Error('Templates must have children (composite type)');
+  if (!definition.children || definition.children.length === 0) {
+    throw new Error('Templates must have children nodes');
   }
 }
 

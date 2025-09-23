@@ -13,7 +13,6 @@ import type {
   NodeFieldsConfig,
   NodePort,
   NodeRuntime,
-  NodeType,
 } from "#core/types/definition.js";
 import v, { type VType } from "@atomiton/validation";
 import yaml from "js-yaml";
@@ -30,7 +29,7 @@ import {
   validateIcon,
   validateRuntime,
   validateSource,
-  validateVariant,
+  validateType,
 } from "#serialization/validators";
 
 /**
@@ -73,7 +72,7 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
   const inputPorts = parsePorts(data.inputPorts || []);
   const outputPorts = parsePorts(data.outputPorts || []);
 
-  // Parse child nodes if composite
+  // Parse child nodes if group
   const children = data.nodes ? data.nodes.map(parseNodeDefinition) : undefined;
 
   // Parse edges
@@ -83,7 +82,6 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
   return createNodeDefinition({
     id: data.id,
     name: data.name,
-    type: (data.type as NodeType) || "atomic",
     position: data.position || { x: 0, y: 0 },
     metadata,
     parameters,
@@ -103,7 +101,7 @@ function parseMetadata(data: YamlNodeDefinition) {
   return createNodeMetadata({
     id: yamlMeta.id || data.id,
     name: yamlMeta.name || data.name,
-    variant: validateVariant(yamlMeta.variant),
+    type: validateType(yamlMeta.type),
     version: yamlMeta.version || data.version || "1.0.0",
     author: yamlMeta.author,
     authorId: yamlMeta.authorId,

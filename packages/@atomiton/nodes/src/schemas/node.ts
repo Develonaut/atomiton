@@ -5,13 +5,11 @@ import nodeMetadataSchema from "#schemas/nodeMetadata";
 import nodeParametersSchema from "#schemas/nodeParameters";
 import nodePortSchema from "#schemas/nodePort";
 import nodePositionSchema from "#schemas/nodePosition";
-import nodeTypeSchema from "#schemas/nodeType";
 
 // Create a base node schema without children for type inference
 const baseNodeSchema = v.object({
   id         : v.string().min(1),
   name       : v.string().min(1),
-  type       : nodeTypeSchema,
   position   : nodePositionSchema,
   metadata   : nodeMetadataSchema,
   parameters : nodeParametersSchema,

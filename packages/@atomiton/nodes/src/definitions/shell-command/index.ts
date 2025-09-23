@@ -17,11 +17,10 @@ import { shellCommandDefaults, shellCommandSchema } from "#definitions/shell-com
  * Shell Command node definition (browser-safe)
  */
 export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "shell-command",
     name       : "Shell Command",
-    variant    : "shell-command",
+    type       : "shell-command",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Execute shell commands and scripts",

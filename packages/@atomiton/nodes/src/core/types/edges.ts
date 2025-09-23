@@ -1,6 +1,6 @@
 /**
  * Node Edge Types
- * Edge connections between nodes in composite workflows
+ * Edge connections between nodes in group workflows
  */
 
 export type NodeEdgeType = "bezier" | "straight" | "step" | "smoothstep";

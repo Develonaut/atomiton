@@ -17,11 +17,10 @@ import { transformDefaults, transformSchema } from "#definitions/transform/schem
  * Transform node definition (browser-safe)
  */
 export const transformDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "transform",
     name       : "Transform",
-    variant    : "transform",
+    type       : "transform",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Transform and manipulate data arrays",

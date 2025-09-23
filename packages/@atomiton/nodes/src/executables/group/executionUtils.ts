@@ -1,10 +1,10 @@
 /**
  * Execution Utilities
- * Common utilities for composite node execution
+ * Common utilities for group node execution
  */
 
 import type { NodeExecutionContext, NodeExecutionResult } from "#core/types/executable";
-import type { ExecutableNode, ExecutionMetadata } from "#executables/composite/types";
+import type { ExecutableNode, ExecutionMetadata } from "#executables/group/types";
 
 /**
  * Execute a node with retry logic
@@ -90,8 +90,8 @@ export function createExecutionMetadata(
 ): ExecutionMetadata {
   return {
     executedAt: new Date().toISOString(),
-    nodeId    : context.nodeId || "composite",
-    nodeType  : "composite",
+    nodeId    : context.nodeId || "group",
+    nodeType  : "group",
     childNodesExecuted,
     totalExecutionTime,
     failedNode,

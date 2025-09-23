@@ -10,5 +10,4 @@ export * from '#schemas/nodeMetadata';
 export * from '#schemas/nodeParameters';
 export * from '#schemas/nodePort';
 export * from '#schemas/nodePosition';
-export * from '#schemas/nodeType';
 export * from '#schemas/nodeVariable';

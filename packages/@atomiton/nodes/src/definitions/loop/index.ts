@@ -17,11 +17,10 @@ import { loopDefaults, loopSchema } from "#definitions/loop/schema";
  * Loop node definition (browser-safe)
  */
 export const loopDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "loop",
     name       : "Loop",
-    variant    : "loop",
+    type       : "loop",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Loop and iterate over data items with various strategies",

@@ -3,7 +3,7 @@ import v from "@atomiton/validation";
 const nodeMetadataSchema = v.object({
   id: v.string().min(1),
   name: v.string().min(1),
-  variant: v.enum([
+  type: v.enum([
     "code",
     "csv-reader",
     "file-system",
@@ -13,9 +13,7 @@ const nodeMetadataSchema = v.object({
     "parallel",
     "shell-command",
     "transform",
-    "workflow",
-    "pipeline",
-    "orchestrator",
+    "group",
     "template",
     "test",
   ]),
@@ -35,7 +33,7 @@ const nodeMetadataSchema = v.object({
     "communication",
     "utility",
     "user",
-    "composite",
+    "group",
   ]),
   icon: v.enum([
     // File & Data

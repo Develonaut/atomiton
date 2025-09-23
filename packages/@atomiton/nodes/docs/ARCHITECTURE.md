@@ -2,267 +2,309 @@
 
 ## Mental Model: "Everything is a Node"
 
-This package implements a unified node architecture where **everything that can execute is a node**. This creates a powerful composition pattern where atomic nodes (building blocks) and composite nodes (orchestrations) share the same interface.
+This package implements a unified node architecture where all executable units
+share the same interface. Nodes can contain other nodes (forming groups),
+connect to each other via edges, and execute business logic.
 
-## Type Hierarchy
-
-The node system follows a clear separation between data structures and runtime instances:
+## Core Architecture
 
 ```
-                        Data vs Runtime
-                 ┌────────────┬────────────────┐
-                 │    Data    │    Runtime     │
-                 │ (Storage)  │  (Execution)   │
-                 └────────────┴────────────────┘
-                       │              │
-                       ▼              ▼
-                 ┌──────────┐  ┌──────────────┐
-                 │   Node    │  │IExecutableNode│
-                 │           │  │   execute()   │
-                 │  - id     │  │   validate()  │
-                 │  - name   │  │   metadata    │
-                 │  - type   │  │               │
-                 │  - nodes  │  └───────┬───────┘
-                 │  - edges  │          │
-                 └──────────┘      ┌────┴────┐
-                       │           │         │
-                       │    ┌──────────┐ ┌────────────┐
-                       │    │IAtomicNode│ │ICompositeNode│
-                       │    │ (single)  │ │(orchestrate) │
-                       │    └──────────┘ └────────────┘
-                       │
-                 ┌─────▼──────┐
-                 │ createNode()│
-                 │  (Factory)  │
-                 └─────────────┘
-                       │
-                   Returns Node
-              (hides implementation)
-
-    Legend:
-    • Node: Data structure for storage, editing, serialization
-    • IExecutableNode: Runtime interface for execution
-    • IAtomicNode/ICompositeNode: Runtime implementations (internal)
-    • createNode(): Public factory that returns Node data
+  NodeDefinition (Data Structure)
+        │
+        ├── id, name
+        ├── position
+        ├── metadata
+        ├── parameters
+        ├── ports (input/output) // Connection points
+        ├── edges[]         // Connections to other nodes
+        └── children[]      // Optional child nodes
+        │
+        ▼
+  NodeExecutable (Runtime Instance)
+    execute()
 ```
 
-### Mental Model
+## Type System
 
-**"A node is just data until you execute it"**
+### NodeDefinition
 
-1. **Node** - The data structure you create, store, and edit
-2. **IExecutableNode** - The runtime instance that actually executes
-3. **createNode()** - The simple factory that creates Node data
+The fundamental data structure that represents any node:
 
-The atomic/composite distinction is an internal implementation detail. From the outside:
+```typescript
+type NodeDefinition = {
+  // Identification
+  readonly id: string;
+  readonly name: string;
 
-- You create a `Node` (data)
-- You store/edit/serialize that `Node`
-- The system converts it to an `IExecutableNode` when needed for execution
+  // Visual positioning
+  position: NodePosition;
 
-### Key Principles
+  // Node information
+  metadata: NodeMetadata;
 
-1. **Data First**: Work with `Node` data structures, not runtime instances
-2. **Hidden Complexity**: The atomic/composite split is internal
-3. **Simple API**: One function (`createNode()`) creates all nodes
-4. **Clear Naming**: "Executable" in the name means runtime execution
+  // Configuration
+  parameters: NodeParameters;
+
+  // Connection points
+  inputPorts: NodePort[];
+  outputPorts: NodePort[];
+
+  // Relationships
+  edges?: NodeEdge[]; // Connections to other nodes
+  children?: NodeDefinition[]; // Nested nodes (for groups)
+};
+```
+
+### NodeMetadata
+
+Describes what kind of node this is:
+
+```typescript
+type NodeMetadata = {
+  type: string; // 'http-request', 'csv-reader', etc.
+  version: string;
+  author: string;
+  description: string;
+  category: string; // 'io', 'data', 'logic', etc.
+  icon: string;
+  tags?: string[];
+  keywords?: string[];
+};
+```
+
+### NodeExecutable
+
+The runtime implementation that executes a node's business logic:
+
+```typescript
+type NodeExecutable<TConfig = unknown> = {
+  execute: (
+    context: NodeExecutionContext,
+    config: TConfig,
+  ) => Promise<NodeExecutionResult>;
+
+  getValidatedParams: (context: NodeExecutionContext) => TConfig;
+};
+```
 
 ## Folder Structure
 
 ```
 src/
-├── interfaces/              # Pure interfaces (no implementations)
-│   ├── IExecutableNode.ts   # Runtime node interface (IExecutableNode, IAtomicNode, ICompositeNode)
-│   ├── INodeExecutable.ts   # Execution logic interface
-│   ├── INodeMetadata.ts    # Metadata interface
-│   ├── INodeParameters.ts  # Parameters interface
-│   └── INodePorts.ts       # Ports interface
+├── core/                    # Shared types and utilities
+│   ├── types/              # Type definitions
+│   ├── factories/          # Factory functions
+│   └── utils/              # Helper utilities
 │
-├── atomic/                  # Atomic node implementations
-│   ├── createAtomicNode.ts # Factory for atomic runtime nodes
-│   ├── createNodeExecutable.ts # Creates execution logic
-│   ├── createNodeParameters.ts # Parameter factory
-│   ├── createNodeMetadata.ts   # Metadata factory
-│   ├── createNodePorts.ts      # Ports factory
-│   └── nodes/              # Actual node implementations
-│       ├── csv-reader/     # Read CSV files
-│       ├── http-request/   # Make HTTP requests
-│       ├── file-system/    # File operations
-│       ├── shell-command/  # Execute shell commands
-│       ├── code/          # Execute JavaScript/TypeScript code
-│       ├── transform/     # Transform data
-│       ├── image-composite/# Image manipulation
-│       ├── loop/          # Loop constructs
-│       └── parallel/      # Parallel execution
+├── definitions/            # Browser-safe node configurations
+│   ├── http-request/      # Each node type has its folder
+│   ├── csv-reader/
+│   ├── registry.ts        # Central registry
+│   └── index.ts
 │
-├── composite/              # Composite node implementations
-│   ├── createCompositeNode.ts  # Factory for composite runtime nodes
-│   ├── createCompositeExecutable.ts # Execution orchestration
-│   ├── createCompositeGraph.ts # Graph management
-│   ├── templates/          # Pre-built composite templates
-│   └── types.ts           # Composite-specific types
+├── executables/           # Runtime implementations (Node.js)
+│   ├── http-request/
+│   ├── csv-reader/
+│   ├── registry.ts
+│   └── index.ts
 │
-├── types.ts               # Public data types (Node, etc.)
-├── createNode.ts          # Public factory function
-└── index.ts               # Clean public exports
+├── schemas/               # Validation schemas (Zod)
+│   └── [node-name].ts
+│
+├── templates/             # Pre-built workflows
+│   ├── yaml/             # Template definitions
+│   ├── registry.ts
+│   └── loader.ts
+│
+└── serialization/         # YAML conversion
+    ├── fromYaml.ts
+    └── toYaml.ts
 ```
 
-## Node Types
+## Key Concepts
 
-### INode (Base Interface)
+### Groups
 
-All nodes implement the `INode` interface:
+A group is simply a node that contains other nodes. Groups enable:
 
-- `execute()` - Core execution method
-- `validate()` - Validate configuration
-- `inputPorts` / `outputPorts` - Port definitions (getter properties)
-- `metadata` - Node metadata (getter property)
-- `isComposite()` - Type identification
-- `dispose()` - Resource cleanup
-
-### IAtomicNode (Leaf Nodes)
-
-Atomic nodes are the building blocks that do actual work:
-
-- **Location**: `src/atomic/`
-- **Purpose**: Perform specific tasks (read files, make HTTP requests, etc.)
-- **Characteristics**: Standalone, no child nodes, `isComposite()` returns `false`
-- **Examples**: CSV Reader, HTTP Request, File System, Shell Command
-
-### ICompositeNode (Orchestrators)
-
-Composite nodes orchestrate other nodes:
-
-- **Location**: `src/composite/`
-- **Purpose**: Coordinate execution of multiple child nodes
-- **Characteristics**: Contains child nodes, `isComposite()` returns `true`
-- **Additional Methods**:
-  - `getChildNodes()` - Get contained nodes
-  - `addChildNode()` / `removeChildNode()` - Manage children
-  - `getExecutionFlow()` - Get node connections
-
-## Key Principles
-
-### 1. Unified Interface
-
-Both atomic and composite nodes implement `INode`, enabling:
-
-- Polymorphic operations
-- Consistent execution pattern
-- Composability (composites can contain other composites)
-
-### 2. Clear Separation of Concerns
-
-- **Atomic**: Focus on specific functionality
-- **Composite**: Focus on orchestration and workflow
-- **Base**: Shared functionality and contracts
-
-### 3. Terminology Consistency
-
-- **UI Domain**: "Blueprint" (user-facing term for workflows)
-- **Code Domain**: "Composite Node" (technical implementation)
-- **Mental Model**: Atomic vs Composite (architectural distinction)
-
-## Interface Hierarchy
-
-```
-INode (base interface)
-├── IAtomicNode extends INode
-│   └── isComposite(): false
-└── ICompositeNode extends INode
-    ├── isComposite(): true
-    ├── getChildNodes(): INode[]
-    ├── addChildNode(node: INode): void
-    └── getExecutionFlow(): CompositeEdge[]
-```
-
-## Usage Examples
-
-### Creating an Atomic Node
+- **Composition** - Build complex workflows from simple nodes
+- **Reusability** - Save and share node combinations
+- **Abstraction** - Hide complexity behind a simple interface
 
 ```typescript
-class MyAtomicNode extends Node implements IAtomicNode {
-  readonly id = "my-atomic-node";
-  readonly name = "My Atomic Node";
-  readonly type = "my-atomic-node";
-
-  isComposite(): false {
-    return false;
-  }
-
-  async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
-    // Perform specific task
-    return this.createSuccessResult({ processed: true });
-  }
-}
+// A group is just a node with children
+const groupNode: NodeDefinition = {
+  id: "data-pipeline",
+  name: "Data Processing Pipeline",
+  children: [csvReaderNode, transformNode, fileWriterNode],
+  edges: [
+    { source: "csv-reader", target: "transform" },
+    { source: "transform", target: "file-writer" },
+  ],
+};
 ```
 
-### Creating a Composite Node
+### Edges
+
+Edges connect nodes together, defining data flow:
 
 ```typescript
-class MyCompositeNode extends Node implements ICompositeNode {
-  readonly id = "my-composite-node";
-  readonly name = "My Composite Node";
-  readonly type = "composite";
-
-  private childNodes = new Map<string, INode>();
-
-  isComposite(): true {
-    return true;
-  }
-
-  getChildNodes(): INode[] {
-    return Array.from(this.childNodes.values());
-  }
-
-  addChildNode(node: INode): void {
-    this.childNodes.set(node.id, node);
-  }
-
-  async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
-    // Orchestrate child node execution
-    return this.createSuccessResult({ orchestrated: true });
-  }
-}
+type NodeEdge = {
+  id: string;
+  source: string; // Source node ID
+  target: string; // Target node ID
+  sourceHandle?: string; // Output port ID
+  targetHandle?: string; // Input port ID
+};
 ```
 
-## Key Changes in Unified Architecture
+### Ports
 
-### Terminology Updates
-
-- **UI Domain**: "Blueprint" (user-facing term)
-- **Code Domain**: "Composite Node" (technical implementation)
-- **Interface**: All nodes implement `INode` regardless of type
-
-### Getter API
-
-Modern property access instead of method calls:
+Ports define a node's interface - where data enters and exits:
 
 ```typescript
-// Current unified API
-const ports = node.inputPorts; // getter property
-const meta = node.metadata; // getter property
-
-// Note: All nodes now use the getter pattern consistently
+type NodePort = {
+  id: string;
+  name: string;
+  type: "input" | "output" | "trigger" | "error";
+  dataType: string;
+  required?: boolean;
+};
 ```
 
-### Factory Pattern
+## Execution Model
 
-Create nodes without classes:
+1. **Context** - Each execution receives a context with inputs, parameters, and
+   utilities
+2. **Validation** - Parameters are validated against schemas
+3. **Execution** - Business logic runs with full access to Node.js (desktop) or
+   browser APIs
+4. **Results** - Output data flows to connected nodes
 
 ```typescript
-// New factory approach
-const customNode = nodes.extendNode({
-  type: "custom-transform",
-  async execute(context) {
-    /* logic */
-  },
+// Simplified execution flow
+const context = {
+  nodeId: "http-request-1",
+  inputs: { url: "https://api.example.com" },
+  parameters: { method: "GET" },
+};
+
+const result = await executable.execute(context);
+// { success: true, outputs: { response: {...} } }
+```
+
+## Environment Separation
+
+### Browser Bundle
+
+- Contains only definitions
+- No Node.js dependencies
+- Used for UI, editing, visualization
+- Lightweight and safe
+
+### Desktop/Server Bundle
+
+- Contains executables + definitions
+- Full Node.js runtime access
+- Handles actual execution
+- File system, network, shell access
+
+## Factory Pattern
+
+Nodes are created using factory functions, not classes:
+
+```typescript
+// Create a node definition
+const myNode = createNodeDefinition({
+  id: "my-node",
+  name: "My Node",
+  metadata: createNodeMetadata({
+    type: "my-node",
+    category: "custom",
+    // ...
+  }),
+  parameters: createNodeParameters({
+    schema: mySchema,
+    defaults: {
+      /* ... */
+    },
+    fields: {
+      /* ... */
+    },
+  }),
+  inputPorts: [createNodePort({ id: "input", type: "input", dataType: "any" })],
+  outputPorts: [
+    createNodePort({ id: "output", type: "output", dataType: "any" }),
+  ],
 });
-
-// Traditional class approach (still works)
-class CustomNode extends Node {
-  /* ... */
-}
 ```
 
-This unified architecture creates a powerful, scalable foundation where "everything executable is a node" while maintaining clean abstractions and developer-friendly patterns.
+## Registry Pattern
+
+Nodes are registered and retrieved from centralized registries:
+
+```typescript
+// Definition registry (browser-safe)
+import {
+  getNodeDefinition,
+  getAllNodeDefinitions,
+} from "@atomiton/nodes/definitions";
+
+const httpNode = getNodeDefinition("http-request");
+const allNodes = getAllNodeDefinitions();
+
+// Executable registry (Node.js only)
+import { getNodeExecutable } from "@atomiton/nodes/executables";
+
+const executable = getNodeExecutable("http-request");
+```
+
+## Templates
+
+Templates are pre-configured node groups saved as YAML:
+
+```yaml
+id: data-transform-pipeline
+name: Data Transform Pipeline
+nodes:
+  - id: reader
+    type: csv-reader
+    parameters:
+      filePath: /data/input.csv
+  - id: transform
+    type: transform
+    parameters:
+      expression: data.filter(row => row.active)
+edges:
+  - source: reader
+    target: transform
+```
+
+Templates provide starting points for common workflows and can be customized
+after loading.
+
+## Helper Functions
+
+Utility functions for working with nodes:
+
+```typescript
+// Check if a node has children
+const hasChildren = (node: NodeDefinition): boolean =>
+  Boolean(node.children && node.children.length > 0);
+
+// Get the node type
+const getNodeType = (node: NodeDefinition): string => node.metadata.type;
+
+// Find all nodes of a specific type
+const findNodesByType = (nodes: NodeDefinition[], type: string) =>
+  nodes.filter((node) => node.metadata.type === type);
+```
+
+## Design Principles
+
+1. **Simplicity** - One node interface for everything
+2. **Composability** - Nodes combine to create complex behaviors
+3. **Type Safety** - Full TypeScript support throughout
+4. **Separation of Concerns** - Clear boundaries between data and execution
+5. **Flexibility** - Nodes can represent anything from simple functions to
+   complex workflows

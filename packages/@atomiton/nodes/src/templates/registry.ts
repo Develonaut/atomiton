@@ -109,7 +109,7 @@ export function hasTemplate(id: string): boolean {
  * Add template to registry
  */
 export function addTemplate(template: NodeDefinition): void {
-  if (template.type !== 'composite') {
+  if (!template.children || template.children.length === 0) {
     throw new Error('Only nodes with children can be added as templates');
   }
 

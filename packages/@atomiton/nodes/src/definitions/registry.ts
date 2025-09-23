@@ -9,7 +9,7 @@ import type { NodeDefinition } from '#core/types/definition';
 import codeDefinition from '#definitions/code';
 import parallelDefinition from '#definitions/parallel';
 import csvReaderDefinition from '#definitions/csv-reader';
-import compositeDefinition from '#definitions/composite';
+import groupDefinition from '#definitions/group';
 import imageCompositeDefinition from '#definitions/image-composite';
 import httpRequestDefinition from '#definitions/http-request';
 import fileSystemDefinition from '#definitions/file-system';
@@ -24,7 +24,7 @@ export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
   ['code', codeDefinition],
   ['parallel', parallelDefinition],
   ['csv-reader', csvReaderDefinition],
-  ['composite', compositeDefinition],
+  ['group', groupDefinition],
   ['image-composite', imageCompositeDefinition],
   ['http-request', httpRequestDefinition],
   ['file-system', fileSystemDefinition],
@@ -121,7 +121,7 @@ export {
   codeDefinition,
   parallelDefinition,
   csvReaderDefinition,
-  compositeDefinition,
+  groupDefinition,
   imageCompositeDefinition,
   httpRequestDefinition,
   fileSystemDefinition,

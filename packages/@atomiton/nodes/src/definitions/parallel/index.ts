@@ -54,11 +54,10 @@ const parallelSchema = {
  * Parallel node definition (browser-safe)
  */
 export const parallelDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "parallel",
     name       : "Parallel",
-    variant    : "parallel",
+    type       : "parallel",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Run multiple operations simultaneously",

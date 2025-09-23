@@ -21,7 +21,7 @@ export {
 
 // Export all individual node executables
 export { default as codeExecutable } from "#executables/code";
-export { default as compositeExecutable } from "#executables/composite";
+export { default as groupExecutable } from "#executables/group";
 export { default as csvReaderExecutable } from "#executables/csv-reader";
 export { default as fileSystemExecutable } from "#executables/file-system";
 export { default as httpRequestExecutable } from "#executables/http-request";

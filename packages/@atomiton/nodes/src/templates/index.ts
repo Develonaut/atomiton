@@ -1,7 +1,7 @@
 /**
  * Template System
  *
- * Pre-built composite node workflows that serve as examples and starting points.
+ * Pre-built group node workflows that serve as examples and starting points.
  * Templates are stored as YAML for portability and loaded as NodeDefinitions.
  */
 

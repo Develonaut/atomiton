@@ -1,30 +1,30 @@
 /**
- * Composite Node Operations
- * Extracted execution logic for composite workflow execution
+ * Group Node Operations
+ * Extracted execution logic for group workflow execution
  */
 
 import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { CompositeParameters } from "#definitions/composite";
+import type { GroupParameters } from "#definitions/group";
 import {
   createChildContext,
   createErrorResult,
   createExecutionMetadata,
   executeWithRetries,
-} from "#executables/composite/executionUtils";
-import type { CompositeGraph } from "#executables/composite/types";
+} from "#executables/group/executionUtils";
+import type { GroupGraph } from "#executables/group/types";
 
-export type { CompositeGraph, ExecutableNode, NodeEdge } from "#executables/composite/types";
+export type { GroupGraph, ExecutableNode, NodeEdge } from "#executables/group/types";
 
 /**
  * Execute nodes in sequence
  */
 export async function executeSequential(
-  graph: CompositeGraph,
+  graph: GroupGraph,
   context: NodeExecutionContext,
-  params: CompositeParameters,
+  params: GroupParameters,
 ): Promise<NodeExecutionResult> {
   let previousResult: NodeExecutionResult | undefined;
   let totalExecutionTime = 0;
@@ -94,9 +94,9 @@ export async function executeSequential(
  * Execute nodes in parallel
  */
 export async function executeParallel(
-  graph: CompositeGraph,
+  graph: GroupGraph,
   context: NodeExecutionContext,
-  params: CompositeParameters,
+  params: GroupParameters,
 ): Promise<NodeExecutionResult> {
   const startTime = Date.now();
 

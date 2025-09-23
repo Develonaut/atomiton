@@ -18,7 +18,7 @@ export type NodeCategory =
   | "communication" // Email, notifications, messaging
   | "utility" // General utilities
   | "user" // User-created nodes
-  | "composite"; // Composite nodes
+  | "group"; // Group nodes
 
 /**
  * Runtime environments for nodes
@@ -87,9 +87,9 @@ export type NodeIcon =
   | "help-circle";
 
 /**
- * Node implementation variants
+ * Node implementation types
  */
-export type NodeMetadataVariant =
+export type NodeMetadataType =
   | "code"
   | "csv-reader"
   | "file-system"
@@ -99,9 +99,7 @@ export type NodeMetadataVariant =
   | "parallel"
   | "shell-command"
   | "transform"
-  | "workflow"
-  | "pipeline"
-  | "orchestrator"
+  | "group"
   | "template"
   | "test";
 
@@ -124,7 +122,7 @@ export type NodeMetadata = {
   // Core identification
   id: string;
   name: string;
-  variant: NodeMetadataVariant;
+  type: NodeMetadataType;
   version: string;
 
   // Attribution

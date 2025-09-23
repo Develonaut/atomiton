@@ -22,7 +22,6 @@ import { generateNodeId } from "@atomiton/utils";
 
 export type CreateNodeInput = {
   id?: string;
-  type?: "atomic" | "composite";
   name?: string;
   position?: { x: number; y: number };
   metadata?: NodeMetadata | NodeMetadataInput;
@@ -41,7 +40,6 @@ export type CreateNodeInput = {
  */
 function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
   const id = input.id || generateNodeId();
-  const type = input.type || "atomic";
   const name =
     input.name ||
     (input.metadata && "name" in input.metadata
@@ -68,7 +66,6 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
   const node: NodeDefinition = {
     id,
     name,
-    type,
     position,
     metadata,
     parameters,
@@ -76,10 +73,12 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     outputPorts: ports.output,
   };
 
-  // Add children/edges for composite nodes
-  if (type === "composite") {
-    node.children = input.children || [];
-    node.edges = input.edges || [];
+  // Add children/edges if provided (any node can have them)
+  if (input.children) {
+    node.children = input.children;
+  }
+  if (input.edges) {
+    node.edges = input.edges;
   }
 
   return node;

@@ -6,7 +6,7 @@ import type {
   NodeCategory,
   NodeIcon,
   NodeMetadata,
-  NodeMetadataVariant,
+  NodeMetadataType,
   NodeRuntime,
 } from "#core/types/definition";
 import { isNodeMetadata } from "#core/utils/nodeUtils";
@@ -15,7 +15,7 @@ import { titleCase } from "@atomiton/utils";
 export type NodeMetadataInput = {
   id?: string;
   name?: string;
-  variant?: NodeMetadataVariant;
+  type?: NodeMetadataType;
   version?: string;
   author?: string;
   description?: string;
@@ -45,7 +45,7 @@ function createNodeMetadata(
 
   const id = input.id || "node";
   const name = input.name || "Node";
-  const variant = input.variant || "test";
+  const type = input.type || "test";
   const formattedName = titleCase(name);
   const category = input.category || "utility";
   const icon = input.icon || "code-2";
@@ -54,7 +54,7 @@ function createNodeMetadata(
   return {
     id,
     name: formattedName,
-    variant,
+    type,
     version: input.version || "1.0.0",
     author: input.author || "Atomiton Core Team",
     description,

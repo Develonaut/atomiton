@@ -17,11 +17,10 @@ import { httpRequestDefaults, httpRequestSchema } from "#definitions/http-reques
  * HTTP Request node definition (browser-safe)
  */
 export const httpRequestDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "http-request",
     name       : "HTTP Request",
-    variant    : "http-request",
+    type       : "http-request",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Make HTTP requests (GET, POST, PUT, DELETE, etc.)",

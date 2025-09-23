@@ -7,7 +7,7 @@ You are conducting a testing compliance review of the Atomiton codebase. Your ta
 ## Your Review Process
 
 1. **Scan the test files** in the following locations:
-   - `apps/e2e/tests/` - Should contain ONLY `*.spec.ts` files
+   - `apps/e2e/tests/` - Should contain ONLY `*.e2e.ts` files
    - `apps/*/src/integration/` - Should contain `*.test.ts` files
    - `apps/*/src/**/*.test.ts` - Co-located unit tests
    - `packages/@atomiton/*/src/integration/` - Should contain `*.test.ts` files
@@ -30,10 +30,11 @@ You are conducting a testing compliance review of the Atomiton codebase. Your ta
 ### Simplified File Naming Rules (CRITICAL)
 
 **ONLY 2 file extensions allowed**:
-- `*.spec.ts` - E2E Playwright tests (ONLY in `apps/e2e/tests/`)
+- `*.e2e.ts` - E2E Playwright tests (ONLY in `apps/e2e/tests/`)
 - `*.test.ts` - All other tests (unit/integration/contract/benchmark)
 
 **BANNED file names**:
+- ❌ `*.spec.ts` or `*.spec.tsx`
 - ❌ `*.int.test.ts`
 - ❌ `*.smoke.test.ts`
 - ❌ `*.bench.test.ts`
@@ -55,7 +56,7 @@ test("electron IPC communication", async () => {
 });
 
 // ✅ CORRECT: E2E test
-// apps/e2e/tests/desktop.spec.ts
+// apps/e2e/tests/desktop.e2e.ts
 test("desktop file save", async () => {
   const app = await electron.launch({...});
   const window = await app.firstWindow();
@@ -72,7 +73,7 @@ test("Button renders with label", () => {
 });
 
 // ✅ CORRECT: E2E test
-// apps/e2e/tests/ui.spec.ts
+// apps/e2e/tests/ui.e2e.ts
 test("user clicks button", async ({ page }) => {
   await page.click('[data-testid="button"]');
 });
@@ -106,10 +107,10 @@ test("calculateNodeLayout handles circular graphs", () => {
    ```typescript
    // VIOLATION: Using banned extensions
    "src/api.int.test.ts"  // Should be: src/integration/api.test.ts
-   "src/ui.smoke.test.ts" // Should be: apps/e2e/tests/ui.spec.ts
+   "src/ui.spec.ts"       // Should be: apps/e2e/tests/ui.e2e.ts
    "src/math.unit.test.ts" // Should be: src/math.test.ts
    ```
-   **Report as**: "Banned file extension - rename to .test.ts or .spec.ts"
+   **Report as**: "Banned file extension - rename to .test.ts or .e2e.ts"
 
 2. **Electron Tests Without UI**
    ```typescript
@@ -139,7 +140,7 @@ test("calculateNodeLayout handles circular graphs", () => {
    **Report as**: "UI interaction must be E2E - move to apps/e2e/tests/"
 
 5. **Wrong Test Location**
-   - E2E tests (*.spec.ts) NOT in `apps/e2e/tests/`
+   - E2E tests (*.e2e.ts) NOT in `apps/e2e/tests/`
    - Integration tests NOT in `integration/` folder
    - Non-co-located unit tests
 
@@ -212,15 +213,15 @@ test("calculateNodeLayout handles circular graphs", () => {
 
 **Files that MUST be renamed**:
 - `src/api.int.test.ts` → Rename to `src/integration/api.test.ts`
-- `src/button.smoke.test.ts` → Move to `apps/e2e/tests/button.spec.ts`
+- `src/button.spec.ts` → Move to `apps/e2e/tests/button.e2e.ts`
 - `src/calc.unit.test.ts` → Rename to `src/calc.test.ts`
 
-**Rule**: Only `.test.ts` and `.spec.ts` allowed. Folder structure determines type.
+**Rule**: Only `.test.ts` and `.e2e.ts` allowed. Folder structure determines type.
 
 ### ❌ CRITICAL: Wrong File Locations ([count])
 
 **E2E tests in wrong location**:
-- `apps/client/src/ui.spec.ts` → Move to `apps/e2e/tests/ui.spec.ts`
+- `apps/client/src/ui.e2e.ts` → Move to `apps/e2e/tests/ui.e2e.ts`
 
 **Integration tests not in integration folder**:
 - `packages/@atomiton/yaml/src/transform.test.ts` → Move to `src/integration/transform.test.ts`
@@ -234,7 +235,7 @@ test("calculateNodeLayout handles circular graphs", () => {
 - `apps/desktop/src/integration/electron.test.ts`
   - Line 15: Testing IPC without UI
   - Line 45: Testing file system without UI
-  **Fix**: Delete and rewrite as E2E test in `apps/e2e/tests/desktop.spec.ts`
+  **Fix**: Delete and rewrite as E2E test in `apps/e2e/tests/desktop.e2e.ts`
 
 ### 🚫 UI Component Unit Tests ([count] found)
 **Severity**: CRITICAL - UI must be tested via E2E
@@ -251,7 +252,7 @@ test("calculateNodeLayout handles circular graphs", () => {
 ## Testing Distribution Analysis
 
 ### Current Distribution
-- E2E Tests: [X]% ([count] tests in apps/e2e/tests/*.spec.ts)
+- E2E Tests: [X]% ([count] tests in apps/e2e/tests/*.e2e.ts)
 - Integration Tests: [X]% ([count] tests in */integration/*.test.ts)
 - Unit Tests: [X]% ([count] co-located *.test.ts files)
 
@@ -270,16 +271,16 @@ test("calculateNodeLayout handles circular graphs", () => {
 | Current Name | New Name | Action |
 |-------------|----------|---------|
 | `api.int.test.ts` | `integration/api.test.ts` | Move to folder + rename |
-| `ui.smoke.test.ts` | `apps/e2e/tests/ui.spec.ts` | Convert to E2E |
+| `ui.spec.ts` | `apps/e2e/tests/ui.e2e.ts` | Convert to E2E |
 | `math.unit.test.ts` | `math.test.ts` | Simple rename |
 
 ### Tests to Convert to E2E (This Week)
 
 1. **All Electron/Desktop tests**
-   - `desktop/src/integration/` → `apps/e2e/tests/desktop.spec.ts`
+   - `desktop/src/integration/` → `apps/e2e/tests/desktop.e2e.ts`
    
 2. **All UI component tests**
-   - `*/components/*.test.tsx` → `apps/e2e/tests/[journey].spec.ts`
+   - `*/components/*.test.tsx` → `apps/e2e/tests/[journey].e2e.ts`
 
 ### Tests to Move to Integration Folders
 
@@ -298,7 +299,7 @@ test("calculateNodeLayout handles circular graphs", () => {
 
 ### ✅ Good Example Found
 ```typescript
-// From: apps/e2e/tests/workflow.spec.ts
+// From: apps/e2e/tests/workflow.e2e.ts
 // Correctly testing Electron+UI together
 test("desktop app saves workflow", async () => {
   const app = await electron.launch({...});
@@ -333,7 +334,7 @@ test("IPC communication", async () => {
 
 ## Key Rules Reminder
 
-1. **Only 2 file extensions**: `.test.ts` and `.spec.ts`
+1. **Only 2 file extensions**: `.test.ts` and `.e2e.ts`
 2. **Electron/Desktop = Always E2E** (Testing without UI is painful)
 3. **UI Interactions = Always E2E**
 4. **Folder structure tells the story**, not file names
@@ -365,10 +366,10 @@ When conducting the review, execute these commands:
 
 ```bash
 # Find ALL banned file extensions (CRITICAL)
-find . -name "*.int.test.ts" -o -name "*.smoke.test.ts" -o -name "*.bench.test.ts" -o -name "*.unit.test.ts" -o -name "*.e2e.test.ts" -o -name "*.contract.test.ts" | grep -v node_modules
+find . \( -name "*.spec.ts" -o -name "*.spec.tsx" -o -name "*.int.test.ts" -o -name "*.smoke.test.ts" -o -name "*.bench.test.ts" -o -name "*.unit.test.ts" -o -name "*.e2e.test.ts" -o -name "*.contract.test.ts" \) | grep -v node_modules
 
-# Find spec files NOT in apps/e2e/tests/
-find . -name "*.spec.ts" | grep -v "apps/e2e/tests" | grep -v node_modules
+# Find E2E files NOT in apps/e2e/tests/
+find . -name "*.e2e.ts" | grep -v "apps/e2e/tests" | grep -v node_modules
 
 # Find Electron/Desktop tests not in E2E
 grep -r "electron\|ipcMain\|ipcRenderer\|app\.quit" --include="*.test.ts" apps/desktop packages
@@ -383,7 +384,7 @@ find . -path "*/src/*.test.ts" -not -path "*/integration/*" -not -path "*/node_m
 grep -r "vi.mock\|jest.mock" --include="*.test.ts" | wc -l
 
 # Find tests without data-testid
-grep -r "querySelector\|getElementsBy\|className" --include="*.spec.ts"
+grep -r "querySelector\|getElementsBy\|className" --include="*.e2e.ts"
 
 # Measure test execution time
 pnpm test:speed-check
@@ -392,8 +393,8 @@ pnpm test:speed-check
 ## Success Criteria
 
 The codebase is compliant when:
-- ✅ **ZERO banned file extensions** (no .int.test.ts, .smoke.test.ts, etc.)
-- ✅ **Only 2 file types**: .test.ts and .spec.ts
+- ✅ **ZERO banned file extensions** (no .spec.ts, .int.test.ts, .smoke.test.ts, etc.)
+- ✅ **Only 2 file types**: .test.ts and .e2e.ts
 - ✅ **All E2E tests in apps/e2e/tests/**
 - ✅ **All Electron/Desktop tests are E2E**
 - ✅ **Zero component unit tests**
@@ -406,11 +407,11 @@ The codebase is compliant when:
 
 ### Renaming Files
 ```bash
+# Rename .spec.ts to .e2e.ts and move to E2E folder
+mv src/ui.spec.ts apps/e2e/tests/ui.e2e.ts
+
 # Rename .int.test.ts to .test.ts and move to integration/
 mv src/api.int.test.ts src/integration/api.test.ts
-
-# Convert .smoke.test.ts to E2E
-mv src/ui.smoke.test.ts apps/e2e/tests/ui.spec.ts
 
 # Simple rename for unit tests
 mv src/calc.unit.test.ts src/calc.test.ts

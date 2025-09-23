@@ -8,10 +8,10 @@
 
 ```
 *.test.ts   - Unit/integration/contract/benchmark tests (co-located)
-*.spec.ts   - E2E Playwright tests (in apps/e2e)
+*.e2e.ts    - E2E Playwright tests (in apps/e2e)
 ```
 
-That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`. The folder structure tells us what kind of test it is.
+That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`, `.spec.ts`. The folder structure tells us what kind of test it is.
 
 ### Folder Structure
 
@@ -19,7 +19,7 @@ That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`. The folde
 atomiton/
 ├── apps/
 │   ├── e2e/
-│   │   └── tests/           # All E2E tests (*.spec.ts)
+│   │   └── tests/           # All E2E tests (*.e2e.ts)
 │   │       ├── critical/    # Must-work user journeys
 │   │       └── workflows/   # Complex user workflows
 │   ├── client/
@@ -45,7 +45,7 @@ atomiton/
 
 ```typescript
 // ✅ CORRECT - E2E test with real Electron + UI
-// apps/e2e/tests/desktop-features.spec.ts
+// apps/e2e/tests/desktop-features.e2e.ts
 test("desktop app saves files locally", async () => {
   const app = await electron.launch({
     args: ["path/to/desktop/main.js"]
@@ -67,7 +67,7 @@ test("desktop app saves files locally", async () => {
 
 ```typescript
 // ✅ CORRECT - E2E test
-// apps/e2e/tests/editor-workflow.spec.ts
+// apps/e2e/tests/editor-workflow.e2e.ts
 test("user creates node connection", async ({ page }) => {
   await page.dragAndDrop(
     '[data-testid="node-output"]',
@@ -162,7 +162,7 @@ Only test these as isolated units:
 ### ✅ Good: E2E for Desktop Features
 
 ```typescript
-// apps/e2e/tests/desktop-persistence.spec.ts
+// apps/e2e/tests/desktop-persistence.e2e.ts
 test("workspace persists between app restarts", async () => {
   // Launch real app
   const app1 = await electron.launch({ args: [DESKTOP_PATH] });
@@ -213,18 +213,21 @@ test("electron IPC without UI", async () => {
 
 ### From Current Tests:
 
-1. **Find all `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts` files**
+1. **Find all `.spec.ts`, `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts` files**
    ```bash
-   find . -name "*.int.test.ts" -o -name "*.smoke.test.ts" -o -name "*.bench.test.ts"
+   find . -name "*.spec.ts" -o -name "*.int.test.ts" -o -name "*.smoke.test.ts" -o -name "*.bench.test.ts"
    ```
 
-2. **Rename to `.test.ts` and move to `integration/` folders**
+2. **Rename based on type**
    ```bash
+   # E2E tests (formerly .spec.ts) become .e2e.ts
+   mv src/foo.spec.ts apps/e2e/tests/foo.e2e.ts
+   
    # Integration tests go in integration/ folder
    mv src/foo.int.test.ts src/integration/foo.test.ts
    
    # Smoke tests likely become E2E tests
-   mv src/bar.smoke.test.ts apps/e2e/tests/bar.spec.ts
+   mv src/bar.smoke.test.ts apps/e2e/tests/bar.e2e.ts
    ```
 
 3. **Update test scripts in package.json**
@@ -243,10 +246,10 @@ test("electron IPC without UI", async () => {
 
 ```
 Is it testing Electron/Desktop features?
-  → E2E test (apps/e2e/tests/*.spec.ts)
+  → E2E test (apps/e2e/tests/*.e2e.ts)
 
 Is it testing UI interactions?
-  → E2E test (apps/e2e/tests/*.spec.ts)
+  → E2E test (apps/e2e/tests/*.e2e.ts)
 
 Is it testing data transformation or package APIs?
   → Integration test (src/integration/*.test.ts)
@@ -260,7 +263,7 @@ Still unsure?
 
 ## Summary
 
-- **2 file extensions only**: `.test.ts` (unit/integration) and `.spec.ts` (E2E)
+- **2 file extensions only**: `.test.ts` (unit/integration) and `.e2e.ts` (E2E)
 - **Folder structure determines test type**, not file naming
 - **E2E for anything involving Electron or UI** (your experience proved this)
 - **Integration for data pipelines and APIs**

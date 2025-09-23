@@ -2,20 +2,23 @@
 
 ## 🎯 Core Mental Model: "Everything Executable is a Node"
 
-The `@atomiton/nodes` package implements a unified architecture where both atomic nodes (individual functionality) and composite nodes (workflows) implement the same `INode` interface. This creates a powerful, scalable, and conceptually consistent system.
+The `@atomiton/nodes` package implements a unified architecture where all nodes
+implement the same unified interface. Individual nodes provide discrete
+functionality, while group nodes orchestrate workflows. This creates a powerful,
+scalable, and conceptually consistent system.
 
 ## 🏗️ Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                           INode                                 │
+│                           Node                                 │
 │  ┌─────────────────────────────────────────────────────────────┤
 │  │ + execute(context): Promise<NodeExecutionResult>             │
 │  │ + validate(): { valid: boolean; errors: string[] }          │
 │  │ + get inputPorts(): NodePort[]                    │
 │  │ + get outputPorts(): NodePort[]                   │
 │  │ + get metadata(): NodeMetadata                               │
-│  │ + isComposite(): boolean                                     │
+│  │ + hasChildren(): boolean                                     │
 │  │ + dispose(): void                                            │
 │  └─────────────────────────────────────────────────────────────┤
 └─────────────────────────────────────────────────────────────────┘
@@ -24,9 +27,9 @@ The `@atomiton/nodes` package implements a unified architecture where both atomi
                     ┌────────────┴────────────┐
                     │                         │
             ┌───────▼────────┐      ┌────────▼────────┐
-            │ Atomic Nodes   │      │ Composite Nodes │
-            │                │      │                 │
-            │ • CSV Reader   │      │ • CompositeNode │
+            │ Individual     │      │ Group Nodes     │
+            │ Nodes          │      │                 │
+            │ • CSV Reader   │      │ • GroupNode     │
             │ • HTTP Request │      │ • Blueprint     │
             │ • Transform    │      │ • Sub-workflows │
             │ • Shell Cmd    │      │                 │
@@ -35,10 +38,10 @@ The `@atomiton/nodes` package implements a unified architecture where both atomi
 
 ## 🔄 Composition Pattern
 
-### Atomic Node Example
+### Individual Node Example
 
 ```typescript
-class CSVReaderNode extends Node implements IAtomicNode {
+class CSVReaderNode extends Node implements INode {
   readonly id = "csv-reader-001";
   readonly name = "CSV Reader";
   readonly type = "csv-reader";
@@ -49,22 +52,22 @@ class CSVReaderNode extends Node implements IAtomicNode {
     return this.createSuccessResult(data);
   }
 
-  isComposite(): boolean {
+  hasChildren(): boolean {
     return false;
   }
 }
 ```
 
-### Composite Node Example
+### Group Node Example
 
 ```typescript
-class CompositeNode extends Node implements ICompositeNode {
+class DataPipelineNode extends Node implements IGroupNode {
   readonly id = "data-pipeline-001";
   readonly name = "Data Processing Pipeline";
-  readonly type = "composite";
+  readonly type = "group";
 
   private childNodes = new Map<string, INode>();
-  private executionFlow: CompositeEdge[] = [];
+  private executionFlow: GroupEdge[] = [];
 
   async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
     // Execute child nodes according to execution flow
@@ -75,8 +78,8 @@ class CompositeNode extends Node implements ICompositeNode {
     );
   }
 
-  isComposite(): boolean {
-    return true;
+  hasChildren(): boolean {
+    return this.childNodes.size > 0;
   }
 }
 ```
@@ -104,7 +107,7 @@ class CompositeNode extends Node implements ICompositeNode {
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│              CompositeNode: "Data Pipeline"                     │
+│                GroupNode: "Data Pipeline"                       │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐         │
@@ -113,7 +116,7 @@ class CompositeNode extends Node implements ICompositeNode {
 │  └─────────────┘    └─────────────┘    └─────────────┘         │
 │                                                                 │
 ├─────────────────────────────────────────────────────────────────┤
-│ System sees: Composite node executing child nodes              │
+│ System sees: Group node executing child nodes                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -138,14 +141,15 @@ class CompositeNode extends Node implements ICompositeNode {
 
 | Domain           | Term           | Implementation   | Interface        |
 | ---------------- | -------------- | ---------------- | ---------------- |
-| **UI/Marketing** | Blueprint      | `CompositeNode`  | `INode`          |
-| **Code/System**  | Composite Node | `CompositeNode`  | `ICompositeNode` |
-| **Code/System**  | Atomic Node    | `CSVReaderNode`  | `IAtomicNode`    |
+| **UI/Marketing** | Blueprint      | `GroupNode`      | `INode`          |
+| **Code/System**  | Group Node     | `GroupNode`      | `IGroupNode`     |
+| **Code/System**  | Individual Node| `CSVReaderNode`  | `INode`          |
 | **Execution**    | Any Node       | `node.execute()` | Same method!     |
 
 ## 🔍 Conceptual Navigation
 
-The unified interface enables seamless **conceptual navigation** between abstraction levels:
+The unified interface enables seamless **conceptual navigation** between
+abstraction levels:
 
 ### High-Level Workflow Management
 
@@ -159,8 +163,8 @@ const result = await pipeline.execute(context);
 
 ```typescript
 // Working with individual nodes within blueprints
-const composite = pipeline as CompositeNode;
-const childNodes = composite.getChildNodes();
+const group = pipeline as GroupNode;
+const childNodes = group.getChildNodes();
 for (const child of childNodes) {
   const childResult = await child.execute(context);
 }
@@ -171,7 +175,7 @@ for (const child of childNodes) {
 ```typescript
 // Same interface works at every level
 async function executeAnyNode(node: INode, context: NodeExecutionContext) {
-  return node.execute(context); // Works for atomic OR composite!
+  return node.execute(context); // Works for individual OR group nodes!
 }
 ```
 
@@ -181,7 +185,7 @@ The unified architecture enables powerful UI patterns:
 
 ### Current: Blueprint Editing
 
-- Drag and drop atomic nodes
+- Drag and drop individual nodes
 - Connect nodes with edges
 - Configure node properties
 - Execute entire blueprint
@@ -201,9 +205,9 @@ The unified architecture enables powerful UI patterns:
 function NodeEditor({ node }: { node: INode }) {
   return (
     <Canvas>
-      {node.isComposite()
-        ? renderCompositeView(node as ICompositeNode)
-        : renderAtomicView(node)
+      {node.hasChildren()
+        ? renderGroupView(node as IGroupNode)
+        : renderIndividualView(node)
       }
     </Canvas>
   );
@@ -239,13 +243,13 @@ function NodeEditor({ node }: { node: INode }) {
 ### 5. **No Circular Dependencies**
 
 - Clean architectural boundaries
-- Atomic nodes have no external dependencies
-- Composite nodes orchestrate atomics
+- Individual nodes have no external dependencies
+- Group nodes orchestrate other nodes
 
 ## 🎯 Example: Real-World Usage
 
 ```typescript
-// Load a data processing composite
+// Load a data processing group
 const dataPipeline = await nodes.getNode("data-processing-pipeline");
 
 // Execute as a single node
@@ -255,9 +259,9 @@ const result = await dataPipeline.execute({
 });
 
 // Or dive into details for debugging
-if (dataPipeline.isComposite()) {
-  const composite = dataPipeline as ICompositeNode;
-  const csvReader = composite
+if (dataPipeline.hasChildren()) {
+  const group = dataPipeline as IGroupNode;
+  const csvReader = group
     .getChildNodes()
     .find((node) => node.type === "csv-reader");
 
@@ -271,12 +275,16 @@ if (dataPipeline.isComposite()) {
 This unified architecture creates a **powerful abstraction** where:
 
 - **Blueprint** = UI term for what users create and manage
-- **Composite Node** = Code term for the same thing
-- **Atomic Node** = Individual functionality building blocks
+- **Group Node** = Code term for the same thing
+- **Individual Node** = Functionality building blocks
 - **INode** = Universal interface for everything
 
-The result is a system that's **conceptually simple** yet **infinitely scalable**, where users can seamlessly navigate between high-level workflow management and detailed node implementation without changing tools or mental models.
+The result is a system that's **conceptually simple** yet **infinitely
+scalable**, where users can seamlessly navigate between high-level workflow
+management and detailed node implementation without changing tools or mental
+models.
 
 ---
 
-**Mental Model**: _"If it can execute, it's a node - whether it's reading a CSV file or orchestrating a 50-step data pipeline."_
+**Mental Model**: _"If it can execute, it's a node - whether it's reading a CSV
+file or orchestrating a 50-step data pipeline."_

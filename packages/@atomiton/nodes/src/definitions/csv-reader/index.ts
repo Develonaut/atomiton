@@ -31,11 +31,10 @@ const csvReaderSchema = {
  * CSV Reader node definition (browser-safe)
  */
 export const csvReaderDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id          : "csv-reader",
     name        : "CSV Reader",
-    variant     : "csv-reader",
+    type        : "csv-reader",
     version     : "1.0.0",
     author      : "Atomiton Core Team",
     description : "Read CSV files and spreadsheet data",

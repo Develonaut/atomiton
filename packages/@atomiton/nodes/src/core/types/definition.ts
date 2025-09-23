@@ -23,13 +23,11 @@ export type NodePosition = {
   y: number;
 };
 
-export type NodeType = "atomic" | "composite";
-
 /**
  * Universal Node Definition
  *
  * Static, serializable structure defining a node's configuration.
- * Both atomic and composite nodes share this interface.
+ * All nodes share this interface - some may have children, some may not.
  */
 export type NodeDefinition = {
   /** Unique identifier for this node */
@@ -37,9 +35,6 @@ export type NodeDefinition = {
 
   /** Human-readable name */
   readonly name: string;
-
-  /** Node type - atomic (leaf) or composite (has children) */
-  readonly type: NodeType;
 
   /** Position of the node in the editor */
   position: NodePosition;
@@ -56,9 +51,9 @@ export type NodeDefinition = {
   /** Output port definitions */
   outputPorts: NodePort[];
 
-  /** Child nodes (only for composite nodes) */
+  /** Child nodes (optional - only some nodes have children) */
   children?: NodeDefinition[];
 
-  /** Edges connecting child nodes (only for composite nodes) */
+  /** Edges connecting nodes */
   edges?: NodeEdge[];
 };

@@ -6,7 +6,7 @@
 export type YamlNodeMetadata = {
   id?: string;
   name?: string;
-  variant?: string;
+  type?: string;
   version?: string;
   author?: string;
   authorId?: string;

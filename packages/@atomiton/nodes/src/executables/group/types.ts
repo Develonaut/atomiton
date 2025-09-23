@@ -1,6 +1,6 @@
 /**
- * Composite Types
- * Type definitions for composite node execution
+ * Group Types
+ * Type definitions for group node execution
  */
 
 import type {
@@ -29,9 +29,9 @@ export type NodeEdge = {
 };
 
 /**
- * Composite graph structure
+ * Group graph structure
  */
-export type CompositeGraph = {
+export type GroupGraph = {
   nodes: ExecutableNode[];
   edges: NodeEdge[];
 };

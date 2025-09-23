@@ -9,7 +9,7 @@ import yaml from "js-yaml";
 type YamlStructure = {
   id: string;
   name: string;
-  type: string;
+  type?: string;
   version: string;
   description: string;
   category: string;
@@ -64,7 +64,6 @@ export function toYaml(definition: NodeDefinition): string {
       // Core identification
       id: definition.id,
       name: definition.name,
-      type: definition.type,
       version: definition.metadata?.version || "1.0.0",
 
       // Description at top level for readability
@@ -77,7 +76,7 @@ export function toYaml(definition: NodeDefinition): string {
       },
     };
 
-    // Add nodes if composite
+    // Add nodes if group
     if (definition.children && definition.children.length > 0) {
       yamlStructure.nodes = definition.children.map(serializeNode);
     }
@@ -130,7 +129,7 @@ export function toYaml(definition: NodeDefinition): string {
 function serializeNode(node: NodeDefinition): SerializedNode {
   const serialized: SerializedNode = {
     id: node.id,
-    type: node.metadata?.variant || node.type,
+    type: node.metadata?.type,
     name: node.name,
     category: node.metadata?.category,
     version: node.metadata?.version,

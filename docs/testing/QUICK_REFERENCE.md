@@ -10,7 +10,7 @@ E2E (60%) > Integration (30%) > Unit (10%)
 
 ```
 Is it Electron/Desktop feature OR UI interaction?
-  YES → E2E test (apps/e2e/tests/*.spec.ts)
+  YES → E2E test (apps/e2e/tests/*.e2e.ts)
   NO ↓
 
 Is it a data pipeline OR package API?
@@ -26,15 +26,15 @@ Is it a complex pure function?
 
 ```
 *.test.ts   - Unit/Integration (folder tells you which)
-*.spec.ts   - E2E Playwright tests
+*.e2e.ts    - E2E Playwright tests
 ```
 
-That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`
+That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`, `.spec.ts`
 
 ## Folder Structure
 
 ```
-apps/e2e/tests/           # All E2E tests (*.spec.ts)
+apps/e2e/tests/           # All E2E tests (*.e2e.ts)
 src/integration/          # Integration tests (*.test.ts)  
 src/[file].test.ts       # Co-located unit tests (*.test.ts)
 ```
@@ -58,7 +58,7 @@ pnpm test:speed-check       # Find slow tests
 
 ### E2E Test (User Journey)
 ```typescript
-// apps/e2e/tests/workflow.spec.ts
+// apps/e2e/tests/workflow.e2e.ts
 test("user creates workflow", async ({ page }) => {
   await page.click('[data-testid="create-button"]');
   await expect(page.locator('[data-testid="editor-canvas"]')).toBeVisible();

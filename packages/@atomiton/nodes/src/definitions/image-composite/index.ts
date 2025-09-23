@@ -17,11 +17,10 @@ import { imageCompositeDefaults, imageCompositeSchema } from "#definitions/image
  * Image Composite node definition (browser-safe)
  */
 export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
-  type    : "atomic",
   metadata: createNodeMetadata({
     id         : "image-composite",
     name       : "Image Composite",
-    variant    : "image-composite",
+    type       : "image-composite",
     version    : "1.0.0",
     author     : "Atomiton Core Team",
     description: "Combine, overlay, and manipulate images",

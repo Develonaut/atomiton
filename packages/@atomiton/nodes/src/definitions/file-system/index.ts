@@ -23,11 +23,10 @@ import v from "@atomiton/validation";
  * File System node definition (browser-safe)
  */
 export const fileSystemDefinition: NodeDefinition = createNodeDefinition({
-  type: "atomic",
   metadata: createNodeMetadata({
     id: "file-system",
     name: "File System",
-    variant: "file-system",
+    type: "file-system",
     version: "1.0.0",
     author: "Atomiton Core Team",
     description: "File system operations (read, write, manage directories)",

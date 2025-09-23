@@ -1,6 +1,6 @@
 /**
- * Composite Node Executable
- * Node.js implementation with composite workflow execution logic
+ * Group Node Executable
+ * Node.js implementation with group workflow execution logic
  */
 
 import { createNodeExecutable } from "#core/factories/createNodeExecutable";
@@ -9,14 +9,14 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { CompositeParameters } from "#definitions/composite";
+import type { GroupParameters } from "#definitions/group";
 import {
-  type CompositeGraph,
+  type GroupGraph,
   executeParallel,
   executeSequential,
-} from "#executables/composite/operations";
+} from "#executables/group/operations";
 
-export type CompositeOutput = {
+export type GroupOutput = {
   result: unknown;
   metadata: {
     executedAt: string;
@@ -29,22 +29,22 @@ export type CompositeOutput = {
 };
 
 /**
- * Composite node executable
+ * Group node executable
  */
-export const compositeExecutable: NodeExecutable<CompositeParameters> =
+export const groupExecutable: NodeExecutable<GroupParameters> =
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      config: CompositeParameters,
+      config: GroupParameters,
     ): Promise<NodeExecutionResult> {
       const startTime = Date.now();
 
       try {
-        // Get composite graph from context metadata
-        const graph = context.metadata?.graph as CompositeGraph | undefined;
+        // Get group graph from context metadata
+        const graph = context.metadata?.graph as GroupGraph | undefined;
 
         if (!graph || !graph.nodes || graph.nodes.length === 0) {
-          context.log?.info?.("Composite node has no child nodes to execute");
+          context.log?.info?.("Group node has no child nodes to execute");
 
           return {
             success: true,
@@ -52,8 +52,8 @@ export const compositeExecutable: NodeExecutable<CompositeParameters> =
               result: context.inputs,
               metadata: {
                 executedAt: new Date().toISOString(),
-                nodeId: context.nodeId || "composite",
-                nodeType: "composite",
+                nodeId: context.nodeId || "group",
+                nodeType: "group",
                 childNodesExecuted: 0,
                 totalExecutionTime: Date.now() - startTime,
               },
@@ -62,7 +62,7 @@ export const compositeExecutable: NodeExecutable<CompositeParameters> =
         }
 
         context.log?.info?.(
-          `Executing composite with ${graph.nodes.length} child nodes`,
+          `Executing group with ${graph.nodes.length} child nodes`,
           {
             parallel: config.parallel,
             timeout: config.timeout,
@@ -80,7 +80,7 @@ export const compositeExecutable: NodeExecutable<CompositeParameters> =
         const errorMessage =
           error instanceof Error ? error.message : String(error);
 
-        context.log?.error?.("Composite execution failed", {
+        context.log?.error?.("Group execution failed", {
           error: errorMessage,
           config,
         });
@@ -92,8 +92,8 @@ export const compositeExecutable: NodeExecutable<CompositeParameters> =
             result: undefined,
             metadata: {
               executedAt: new Date().toISOString(),
-              nodeId: context.nodeId || "composite",
-              nodeType: "composite",
+              nodeId: context.nodeId || "group",
+              nodeType: "group",
               childNodesExecuted: 0,
               totalExecutionTime: Date.now() - startTime,
             },
@@ -102,11 +102,11 @@ export const compositeExecutable: NodeExecutable<CompositeParameters> =
       }
     },
 
-    validateConfig(config: unknown): CompositeParameters {
+    validateConfig(config: unknown): GroupParameters {
       // In a real implementation, this would validate using the schema
       // For now, just cast it
-      return config as CompositeParameters;
+      return config as GroupParameters;
     },
   });
 
-export default compositeExecutable;
+export default groupExecutable;
