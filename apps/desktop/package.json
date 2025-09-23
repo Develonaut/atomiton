@@ -4,7 +4,7 @@
   "type": "module",
   "main": "./out/main/index.js",
   "scripts": {
-    "dev": "cross-env DEBUG=atomiton:* wait-on http://localhost:5173 && electron-vite dev",
+    "dev": "cross-env DEBUG=atomiton:* ATOMITON_DESKTOP=true wait-on http://localhost:5173 && electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "eslint .",

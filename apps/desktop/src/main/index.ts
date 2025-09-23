@@ -91,8 +91,15 @@ if (!gotTheLock) {
   });
 }
 
+// Set app name and user data directory for better process identification
+app.setName('AtomitonDesktop');
+if (is.dev) {
+  // In development, add a unique identifier to help with process management
+  app.setPath('userData', join(app.getPath('userData'), 'AtomitonDev'));
+}
+
 app.whenReady().then(async () => {
-  electronApp.setAppUserModelId("com.electron");
+  electronApp.setAppUserModelId("com.atomiton.desktop");
 
   // Initialize application services
   initializeServices();
