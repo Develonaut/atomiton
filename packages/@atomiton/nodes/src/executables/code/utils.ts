@@ -1,5 +1,6 @@
 
-import ivm from "isolated-vm";
+// Dynamic import to handle Electron compatibility
+let ivm: typeof import("isolated-vm");
 
 /**
  * Secure code executor using isolated-vm
@@ -14,6 +15,15 @@ export async function executeSecureCode(
   } = {},
 ): Promise<unknown> {
   const { memoryLimit = 32, timeoutMs = 5000 } = options;
+
+  // Dynamically import isolated-vm to handle Electron compatibility
+  if (!ivm) {
+    try {
+      ivm = await import("isolated-vm");
+    } catch (error) {
+      throw new Error(`Failed to load isolated-vm: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
 
   // Create isolated V8 instance
   const isolate = new ivm.Isolate({ memoryLimit });
@@ -49,7 +59,7 @@ export async function executeSecureCode(
 /**
  * Create a safe copy of data for the isolated context
  */
-async function createSafeCopy(value: unknown): Promise<ivm.ExternalCopy<unknown>> {
+async function createSafeCopy(value: unknown): Promise<any> {
   // Handle different types safely
   if (value === null || value === undefined) {
     return new ivm.ExternalCopy(value);
@@ -84,7 +94,7 @@ async function createSafeCopy(value: unknown): Promise<ivm.ExternalCopy<unknown>
  * Extract result from isolated context safely
  */
 async function extractResult(result: unknown): Promise<unknown> {
-  if (result instanceof ivm.ExternalCopy) {
+  if (ivm && result instanceof ivm.ExternalCopy) {
     return result.copy();
   }
 
