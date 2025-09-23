@@ -42,6 +42,11 @@
 - **[Development Principles](../../../docs/guides/DEVELOPMENT_PRINCIPLES.md)** - Core development principles
 - **[Code Style](../../../docs/guides/CODE_STYLE.md)** - Code style and quality standards
 
+**For Testing Work Specifically:**
+- **[Testing Strategy](../../../docs/testing/README.md)** - Complete testing philosophy (60% E2E, 30% Integration, 10% Unit)
+- **[When & Where to Test](../../../docs/testing/WHEN_AND_WHERE.md)** - Test placement guide (Electron/UI = E2E)
+- **[Testing Quick Reference](../../../docs/testing/QUICK_REFERENCE.md)** - Quick lookup for test patterns
+
 ## File Access Permissions
 
 Agents have automatic permission for all file operations within the `atomiton` directory:
@@ -112,10 +117,13 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
   - **Block unnecessary barrel exports** - direct imports for utils/types/services
   - Enforce: "Make it work, make it right, make it simple"
 
-- **Brian**: Determine testing requirements
-  - Identify what tests are needed
-  - Ensure test coverage is appropriate
-  - No excessive testing
+- **Brian**: Determine testing requirements following simplified rules
+  - **MUST review testing docs first**: [Testing Strategy](../../../docs/testing/README.md)
+  - **Apply simplified naming**: Only `.test.ts` and `.spec.ts` files allowed
+  - **Follow placement rules**: Electron/UI = E2E, Data pipelines = Integration, Complex algorithms = Unit
+  - **Enforce 60/30/10 distribution**: Primarily E2E tests
+  - **No component unit tests**: Convert to E2E
+  - **No Electron tests without UI**: Must be E2E
 
 ### 3. Before Completion: Code Quality Standards
 

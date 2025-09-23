@@ -6,8 +6,8 @@
 - [ ] `pnpm typecheck` - passes with no errors
 - [ ] `pnpm lint` - passes with no errors or warnings
 - [ ] `pnpm test` - all tests pass
-- [ ] `pnpm test:integration` - all integration tests pass
-- [ ] `pnpm test:bench` - all benchmark tests pass
+- [ ] `pnpm test:integration` - integration tests in correct folders pass
+- [ ] `pnpm test:e2e` - E2E tests pass (if applicable)
 - [ ] `pnpm build` - builds successfully
 - [ ] `pnpm dev` - development servers start without errors
 
@@ -62,9 +62,15 @@
 
 ## 📋 Additional Checks
 
-### Testing
+### Testing (Simplified Rules Apply)
 
-- [ ] New code has tests
+- [ ] **Test file naming compliant** - Only `.test.ts` or `.spec.ts` (NO .int.test.ts, .smoke.test.ts, etc.)
+- [ ] **Test placement correct** - E2E in apps/e2e/tests/, Integration in src/integration/, Unit co-located
+- [ ] **No component unit tests** - UI must be tested via E2E
+- [ ] **No Electron tests without UI** - Desktop features must be E2E
+- [ ] **Distribution follows 60/30/10** - Primarily E2E tests
+- [ ] **All elements have data-testid** - Required for E2E tests
+- [ ] New code has appropriate tests
 - [ ] Edge cases covered
 - [ ] Tests are meaningful (not just coverage)
 
