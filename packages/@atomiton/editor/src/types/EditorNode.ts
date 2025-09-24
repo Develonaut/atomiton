@@ -6,6 +6,9 @@ import type { Node as ReactFlowNode } from "@xyflow/react";
  * Ensures compatibility with ReactFlow while maintaining domain properties.
  */
 export type EditorNode = AtomitonNode & {
+  // ReactFlow requires a type field
+  type: string;
+
   // Make data required for ReactFlow compatibility
   data: Record<string, unknown>;
 

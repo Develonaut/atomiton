@@ -1,6 +1,6 @@
 import Button from "#components/Button";
-import Compression from "./Compression";
-import Settings from "./Settings";
+import Compression from "#components/Export/Images/Compression";
+import Settings from "#components/Export/Images/Settings";
 
 function Images() {
   return (

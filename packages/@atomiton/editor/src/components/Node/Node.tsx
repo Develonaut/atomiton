@@ -1,6 +1,5 @@
 import { useEditorStore } from "#hooks/useEditorStore";
 import type { EditorNode } from "#types/EditorNode";
-import { getNodeDefinition } from "@atomiton/nodes/definitions";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -48,15 +47,6 @@ function NodeComponent(props: ReactFlowNodeProps<EditorNode>) {
   const inputPorts = useMemo(() => data?.inputPorts || [], [data]);
   const outputPorts = useMemo(() => data?.outputPorts || [], [data]);
 
-  // Get icon with fallback
-  const icon = useMemo(
-    () =>
-      data?.metadata?.icon ||
-      getNodeDefinition(props.type)?.metadata?.icon ||
-      "zap",
-    [props.type, data?.metadata?.icon],
-  );
-
   // Calculate handle positions once
   const inputHandlePositions = useMemo(
     () =>
@@ -73,6 +63,8 @@ function NodeComponent(props: ReactFlowNodeProps<EditorNode>) {
       })),
     [outputPorts],
   );
+
+  console.log(data);
 
   // Get icon size based on node size
   const iconSize = 24; // Default to medium size
@@ -97,7 +89,11 @@ function NodeComponent(props: ReactFlowNodeProps<EditorNode>) {
       ))}
 
       {/* Node icon */}
-      <Icon name={icon} size={iconSize} data-icon={icon} />
+      <Icon
+        name={data?.metadata?.icon}
+        size={iconSize}
+        data-icon={data?.metadata?.icon}
+      />
 
       {/* Output handles */}
       {outputPorts.map((port, index) => (

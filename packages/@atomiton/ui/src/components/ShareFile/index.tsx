@@ -1,10 +1,10 @@
 import Button from "#components/Button";
 import Invite from "#components/Invite";
-import Foot from "./Foot";
-import GeneralAccess from "./GeneralAccess";
-import Person from "./Person";
+import Foot from "#components/ShareFile/Foot";
+import GeneralAccess from "#components/ShareFile/GeneralAccess";
+import Person from "#components/ShareFile/Person";
 
-import { people } from "./people";
+import { people } from "#components/ShareFile/people";
 
 function ShareFile() {
   return (

@@ -1,4 +1,5 @@
 import { useEditorStore } from "#hooks/useEditorStore";
+import { useEditorViewport } from "#hooks/useEditorViewport";
 import type { EditorNode } from "#types/EditorNode";
 import { useReactFlow } from "@xyflow/react";
 import { useCallback } from "react";
@@ -15,6 +16,7 @@ import { useCallback } from "react";
  */
 export function useEditorNode(nodeId: string) {
   const { getNode, setNodes } = useReactFlow();
+  const { fitView } = useEditorViewport();
 
   // Use useEditorStore with shallow comparison for both node and selection state
   const { node, isSelected } = useEditorStore((state) => {
@@ -29,7 +31,6 @@ export function useEditorNode(nodeId: string) {
     return getNode(nodeId) as EditorNode | undefined;
   }, [getNode, nodeId]);
 
-  // Select this node (and deselect all others)
   const selectNode = useCallback(() => {
     setNodes((nodes) =>
       nodes.map((n) => ({
@@ -39,10 +40,19 @@ export function useEditorNode(nodeId: string) {
     );
   }, [setNodes, nodeId]);
 
+  const focusNode = useCallback(() => {
+    fitView({
+      nodes: [{ id: nodeId }],
+      duration: 200,
+      padding: 0.2,
+    });
+  }, [fitView, nodeId]);
+
   return {
     node,
     getNode: getTypedNode,
     isSelected,
     selectNode,
+    focusNode,
   };
 }

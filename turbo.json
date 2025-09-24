@@ -25,6 +25,7 @@
       "dependsOn": ["^lint"],
       "env": [
         "NODE_ENV",
+        "DEV",
         "HOME",
         "USERPROFILE",
         "APPDATA",
@@ -41,6 +42,7 @@
       "dependsOn": ["^lint:fix"],
       "env": [
         "NODE_ENV",
+        "DEV",
         "HOME",
         "USERPROFILE",
         "APPDATA",

@@ -1,12 +1,45 @@
-import { useEditorNode } from "#useEditorNode";
-import { useEditorNodes } from "#useEditorNodes";
-import { useSelectedNode } from "#useSelectedNode";
-import { useSelectedNodes } from "#useSelectedNodes";
+import { useEditorNode } from "#hooks/useEditorNode";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useSelectedNode } from "#hooks/useSelectedNode";
+import { useSelectedNodes } from "#hooks/useSelectedNodes";
 import type { EditorNode } from "#types/EditorNode";
 import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import React, { useState } from "react";
 import { describe, expect, it } from "vitest";
+
+// Helper function to create a properly typed EditorNode for tests
+function createTestEditorNode(
+  overrides: Partial<EditorNode> & { id: string },
+): EditorNode {
+  return {
+    id: overrides.id,
+    type: overrides.type || "test",
+    name: overrides.name || "Test Node",
+    position: overrides.position || { x: 0, y: 0 },
+    data: overrides.data || {},
+    inputPorts: overrides.inputPorts || [],
+    outputPorts: overrides.outputPorts || [],
+    metadata: overrides.metadata || {
+      id: overrides.id,
+      name: overrides.name || "Test Node",
+      type: "template" as const,
+      version: "1.0.0",
+      author: "test",
+      description: "Test node",
+      category: "utility" as const,
+      icon: "zap" as const,
+    },
+    parameters: overrides.parameters || {
+      defaults: {},
+      fields: {},
+    },
+    // Required Node type properties
+    execute: async () => ({ success: true }),
+    getValidatedParams: () => ({}),
+    ...overrides,
+  } as EditorNode;
+}
 
 /**
  * Edge case analysis tests - specifically testing the issues found in stress tests
@@ -44,16 +77,12 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
     });
 
     it("should properly set nodes using setNodes", () => {
-      const testNode: EditorNode = {
+      const testNode = createTestEditorNode({
         id: "test-1",
         type: "test",
         name: "Test Node",
-        category: "test",
         position: { x: 100, y: 100 },
-        data: {},
-        inputPorts: [],
-        outputPorts: [],
-      };
+      });
 
       const { result } = renderHook(() => useEditorNodes(), {
         wrapper: TestWrapper,
@@ -73,16 +102,12 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
     });
 
     it("should handle node retrieval with useEditorNode", () => {
-      const testNode: EditorNode = {
+      const testNode = createTestEditorNode({
         id: "test-lookup",
         type: "test",
         name: "Test Lookup Node",
-        category: "test",
         position: { x: 200, y: 200 },
-        data: {},
-        inputPorts: [],
-        outputPorts: [],
-      };
+      });
 
       const { result: nodesResult } = renderHook(() => useEditorNodes(), {
         wrapper: TestWrapper,
@@ -109,28 +134,20 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
 
     it("should handle selection state properly", () => {
       const testNodes: EditorNode[] = [
-        {
+        createTestEditorNode({
           id: "select-1",
           type: "test",
           name: "Node 1",
-          category: "test",
           position: { x: 100, y: 100 },
-          data: {},
           selected: false,
-          inputPorts: [],
-          outputPorts: [],
-        },
-        {
+        }),
+        createTestEditorNode({
           id: "select-2",
           type: "test",
           name: "Node 2",
-          category: "test",
           position: { x: 200, y: 200 },
-          data: {},
           selected: true,
-          inputPorts: [],
-          outputPorts: [],
-        },
+        }),
       ];
 
       const { result } = renderHook(
@@ -178,16 +195,12 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         },
       );
 
-      const testNode: EditorNode = {
+      const testNode = createTestEditorNode({
         id: "store-test",
         type: "test",
         name: "Store Test",
-        category: "test",
         position: { x: 300, y: 300 },
-        data: {},
-        inputPorts: [],
-        outputPorts: [],
-      };
+      });
 
       act(() => {
         result.current.setNodes([testNode]);
@@ -203,21 +216,18 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
 
   describe("Type Compatibility Analysis", () => {
     it("should verify EditorNode compatibility with ReactFlow Node", () => {
-      const editorNode: EditorNode = {
+      const editorNode = createTestEditorNode({
         id: "type-test",
         type: "test",
         name: "Type Test",
-        category: "test",
         position: { x: 400, y: 400 },
         data: { test: "data" },
-        inputPorts: [],
-        outputPorts: [],
         // ReactFlow specific properties
         selected: false,
         draggable: true,
         selectable: true,
         connectable: true,
-      };
+      });
 
       // Verify all required properties are present
       expect(editorNode.id).toBeDefined();
@@ -240,16 +250,14 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       const setupTime = performance.now() - startTime;
       console.log("Hook setup time:", setupTime, "ms");
 
-      const nodes: EditorNode[] = Array.from({ length: 10 }, (_, i) => ({
-        id: `perf-${i}`,
-        type: "test",
-        name: `Node ${i}`,
-        category: "test",
-        position: { x: i * 100, y: 100 },
-        data: {},
-        inputPorts: [],
-        outputPorts: [],
-      }));
+      const nodes: EditorNode[] = Array.from({ length: 10 }, (_, i) =>
+        createTestEditorNode({
+          id: `perf-${i}`,
+          type: "test",
+          name: `Node ${i}`,
+          position: { x: i * 100, y: 100 },
+        }),
+      );
 
       const nodeCreationTime = performance.now() - startTime;
       console.log("Node creation time:", nodeCreationTime - setupTime, "ms");

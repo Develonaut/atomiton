@@ -1,7 +1,7 @@
 import Group from "#components/Group";
 import Layout from "#components/Layout";
 
-import { colors } from "./content";
+import { colors } from "#templates/ColorsPage/content";
 
 function ColorsPage() {
   return (

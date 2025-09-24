@@ -2,7 +2,7 @@ import Group from "#components/Group";
 import Image from "#components/Image";
 import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#components/DesignAndAnimationSidebar/Animation/Effects/content";
 
 function Effects() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

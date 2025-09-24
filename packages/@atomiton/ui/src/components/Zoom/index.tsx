@@ -1,5 +1,5 @@
 import Field from "#components/Field";
-import { zoomOptions } from "./items";
+import { zoomOptions } from "#components/Zoom/items";
 import { useState } from "react";
 
 type PropsLine = {

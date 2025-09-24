@@ -1,4 +1,4 @@
-import type { PropResolver } from "./createPropResolver";
+import type { PropResolver } from "#system/utils/createPropResolver";
 
 /**
  * Compose multiple prop resolvers into a single resolver

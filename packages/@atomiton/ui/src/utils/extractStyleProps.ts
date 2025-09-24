@@ -1,4 +1,4 @@
-import { cn } from "./cn";
+import { cn } from "#utils/cn";
 
 /**
  * Style props that can be applied to any component

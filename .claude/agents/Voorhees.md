@@ -5,7 +5,7 @@ description:
   with surgical precision. Voorhees cuts through unnecessary abstractions to
   deliver simple, maintainable solutions. "Time to cut this complexity down...
   permanently."
-model: sonnet
+model: opus
 color: crimson
 ---
 

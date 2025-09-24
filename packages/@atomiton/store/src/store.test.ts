@@ -70,7 +70,7 @@ describe("Store Smoke Tests", () => {
     });
 
     expect(callCount).toBe(1);
-    expect(lastState.value).toBe(42);
+    expect(lastState?.value).toBe(42);
 
     unsub();
   });

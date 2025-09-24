@@ -1,4 +1,4 @@
-import Item from "./Item";
+import Item from "#components/Export/Images/Settings/Item";
 
 function Settings() {
   return (

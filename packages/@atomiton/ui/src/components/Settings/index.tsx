@@ -1,11 +1,11 @@
-import General from "./General";
-import Notifications from "./Notifications";
-import Profile from "./Profile";
-import Security from "./Security";
-import Subscription from "./Subscription";
+import General from "#components/Settings/General";
+import Notifications from "#components/Settings/Notifications";
+import Profile from "#components/Settings/Profile";
+import Security from "#components/Settings/Security";
+import Subscription from "#components/Settings/Subscription";
 import { useState } from "react";
 
-import { menu } from "./menu";
+import { menu } from "#components/Settings/menu";
 
 function Settings() {
   const [activeId, setActiveId] = useState(0);

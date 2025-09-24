@@ -54,13 +54,13 @@ describe("Edge Cases and Error Boundaries", () => {
 
     it("should handle corrupted stored data", () => {
       const mockStorage = {
-        getItem: vi.fn(() => "invalid-json{"),
+        getItem: vi.fn(() => "invalid-json{") as any,
         setItem: vi.fn(),
         removeItem: vi.fn(),
         clear: vi.fn(),
         length: 0,
         key: vi.fn(),
-      };
+      } as any;
 
       const store = createStore<{ data: string }>(() => ({ data: "default" }), {
         persist: {
@@ -80,13 +80,13 @@ describe("Edge Cases and Error Boundaries", () => {
             state: { wrongProperty: "value", missing: "expected" },
             version: 0,
           }),
-        ),
+        ) as any,
         setItem: vi.fn(),
         removeItem: vi.fn(),
         clear: vi.fn(),
         length: 0,
         key: vi.fn(),
-      };
+      } as any;
 
       const store = createStore<{ data: string; count: number }>(
         () => ({ data: "default", count: 0 }),
@@ -119,13 +119,13 @@ describe("Edge Cases and Error Boundaries", () => {
             state: { data: "old" },
             version: 0,
           }),
-        ),
+        ) as any,
         setItem: vi.fn(),
         removeItem: vi.fn(),
         clear: vi.fn(),
         length: 0,
         key: vi.fn(),
-      };
+      } as any;
 
       const store = createStore<{ data: string }>(() => ({ data: "default" }), {
         persist: {
@@ -221,7 +221,7 @@ describe("Edge Cases and Error Boundaries", () => {
               return state as { keep: string; ignore: string };
             },
             onRehydrateStorage: () => {
-              rehydrationCalled = true;
+              // Track that rehydration was configured
               return (state, error) => {
                 if (error) {
                   console.error("Rehydration error:", error);

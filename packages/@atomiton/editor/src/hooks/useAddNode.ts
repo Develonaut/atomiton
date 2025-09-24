@@ -18,10 +18,8 @@ export function useAddNode() {
 
   const addNode = useCallback(
     (nodeType: string, position?: NodePosition) => {
-      // Calculate position using util function
       const nodePosition = calculateNodePosition(nodes, position);
 
-      // Create new node using util function
       const newNode = createNode(nodeType, nodePosition);
 
       // Update nodes state

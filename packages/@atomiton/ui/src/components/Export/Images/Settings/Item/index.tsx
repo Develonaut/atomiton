@@ -3,7 +3,11 @@ import Select from "#components/Select";
 import Tabs from "#components/Tabs";
 import { useState } from "react";
 
-import { formats, formatsColor, sizes } from "./content";
+import {
+  formats,
+  formatsColor,
+  sizes,
+} from "#components/Export/Images/Settings/Item/content";
 
 type Props = {
   defaultSize: number;

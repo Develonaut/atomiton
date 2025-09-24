@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-import { content } from "./content";
+import { content } from "#components/Layout/content";
 
 function Layout({ title, children }: Props) {
   const [visible, setVisible] = useState(false);

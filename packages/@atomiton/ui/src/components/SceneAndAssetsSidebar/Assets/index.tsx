@@ -1,6 +1,9 @@
 import Accordion from "#components/SceneAndAssetsSidebar/Assets/Accordion";
 
-import { materials, objects3d } from "./content";
+import {
+  materials,
+  objects3d,
+} from "#components/SceneAndAssetsSidebar/Assets/content";
 
 function Assets() {
   return (

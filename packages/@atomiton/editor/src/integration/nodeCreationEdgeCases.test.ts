@@ -14,7 +14,7 @@ vi.mock("@atomiton/nodes/definitions", () => ({
     id: input.id || "generated-id",
     name: input.name || "Test Node",
     description: input.description,
-    category: input.category || "test",
+    category: input.category || ("utility" as any),
     version: input.version || "1.0.0",
     inputPorts: input.inputPorts || [],
     outputPorts: input.outputPorts || [],
@@ -23,7 +23,7 @@ vi.mock("@atomiton/nodes/definitions", () => ({
   getNodeDefinition: vi.fn(() => ({
     metadata: {
       name: "Test Node",
-      category: "test",
+      category: "utility" as any,
       version: "1.0.0",
       description: "A test node",
     },
@@ -39,7 +39,7 @@ vi.mock("@atomiton/nodes/definitions", () => ({
     id: input.id || "generated-id",
     name: input.name || "Test Node",
     description: input.description,
-    category: input.category || "test",
+    category: input.category || ("utility" as any),
     version: input.version || "1.0.0",
     inputPorts: input.inputPorts || [],
     outputPorts: input.outputPorts || [],
@@ -48,7 +48,7 @@ vi.mock("@atomiton/nodes/definitions", () => ({
   getNodeByType: vi.fn(() => ({
     metadata: {
       name: "Test Node",
-      category: "test",
+      category: "utility" as any,
       version: "1.0.0",
       description: "A test node",
     },
@@ -100,7 +100,7 @@ describe("node-creation utils - edge cases", () => {
         {
           id: "1",
           position: { x: Number.MAX_SAFE_INTEGER - 1000, y: 100 },
-        } as EditorNode,
+        } as unknown as EditorNode,
       ];
 
       const position = calculateNodePosition(existingNodes);
@@ -135,7 +135,7 @@ describe("node-creation utils - edge cases", () => {
       getNodeDefinition.mockReturnValueOnce({
         metadata: {
           name: "Complex Node",
-          category: "complex",
+          category: "utility" as any,
           version: "2.0.0",
           description: "A complex test node",
           author: "Test Author",
@@ -144,14 +144,14 @@ describe("node-creation utils - edge cases", () => {
           customProperty: { nested: { value: "test" } },
         },
         inputPorts: [
-          { id: "in1", name: "Input 1", type: "string", required: true },
-          { id: "in2", name: "Input 2", type: "number", required: false },
+          { id: "in1", name: "Input 1", type: "input" as any, required: true },
+          { id: "in2", name: "Input 2", type: "input" as any, required: false },
         ],
-        outputPorts: [{ id: "out1", name: "Output 1", type: "any" }],
+        outputPorts: [{ id: "out1", name: "Output 1", type: "output" as any }],
         parameters: {
-          schema: { type: "object" },
           defaults: { param1: "default", param2: 42 },
-        },
+          fields: {},
+        } as any,
       });
 
       const node = createNode("complex-node", { x: 100, y: 200 });
@@ -176,18 +176,18 @@ describe("node-creation utils - edge cases", () => {
       mockCreateNode.mockReturnValueOnce({
         id: "minimal-id",
         name: "Minimal",
-        category: "test",
+        category: "utility" as any,
         version: "1.0.0",
         inputPorts: [],
         outputPorts: [],
-        metadata: {},
+        metadata: {\n          id: "test-id",\n          name: "Test Node",\n          type: "template" as const,\n          version: "1.0.0",\n          author: "test",\n          description: "Test node",\n          category: "utility" as const,\n          icon: "zap" as const,\n        } as any,
       });
 
       const node = createNode("test-node", { x: 50, y: 75 });
 
       expect(node.data).toEqual({});
       expect(node.parameters).toEqual({});
-      expect(node.settings?.ui?.position).toEqual({ x: 50, y: 75 });
+      expect(node.position).toEqual({ x: 50, y: 75 });
     });
 
     it("should override data with parameter defaults when available", async () => {
@@ -196,27 +196,28 @@ describe("node-creation utils - edge cases", () => {
       mockCreateNode.mockReturnValueOnce({
         id: "test-id",
         name: "Test",
-        category: "test",
+        category: "utility" as any,
         version: "1.0.0",
         inputPorts: [],
         outputPorts: [],
-        metadata: {},
+        metadata: {\n          id: "test-id",\n          name: "Test Node",\n          type: "template" as const,\n          version: "1.0.0",\n          author: "test",\n          description: "Test node",\n          category: "utility" as const,\n          icon: "zap" as const,\n        } as any,
         data: { existing: "data" },
-        parameters: { existing: "params" },
-        settings: { existingSetting: true },
+        parameters: { defaults: { existing: "params" }, fields: {} } as any,
+        // settings: { existingSetting: true }, // Not part of EditorNode type
       });
 
       getNodeDefinition.mockReturnValueOnce({
         metadata: {
           name: "Test Node",
-          category: "test",
+          category: "utility" as any,
           version: "1.0.0",
         },
         inputPorts: [],
         outputPorts: [],
         parameters: {
           defaults: { param1: "default", param2: 42 },
-        },
+          fields: {},
+        } as any,
       });
 
       const node = createNode("test-node", { x: 100, y: 200 });
@@ -224,10 +225,8 @@ describe("node-creation utils - edge cases", () => {
       // The createNode function overrides data and parameters with defaults
       expect(node.data).toEqual({ param1: "default", param2: 42 });
       expect(node.parameters).toEqual({ param1: "default", param2: 42 });
-      expect(node.settings).toMatchObject({
-        existingSetting: true,
-        ui: { position: { x: 100, y: 200 } },
-      });
+      expect(node.position).toEqual({ x: 100, y: 200 });
+      // Settings are not part of EditorNode type
     });
   });
 
@@ -239,27 +238,27 @@ describe("node-creation utils - edge cases", () => {
           id: "1",
           type: "test",
           name: "Node 1",
-          category: "test",
+          category: "utility" as any,
           position: { x: 0, y: 0 },
           data: {},
           inputPorts: [],
           outputPorts: [],
           selected: undefined,
-        } as EditorNode,
+        } as unknown as EditorNode,
         {
           id: "2",
           type: "test",
           name: "Node 2",
-          category: "test",
+          category: "utility" as any,
           position: { x: 0, y: 0 },
           data: {},
           inputPorts: [],
           outputPorts: [],
           // No selected property
-        } as EditorNode,
-        { id: "3", selected: true } as EditorNode,
+        } as unknown as EditorNode,
+        { id: "3", selected: true } as unknown as EditorNode,
       ];
-      const newNode = { id: "4", selected: true } as EditorNode;
+      const newNode = { id: "4", selected: true } as unknown as EditorNode;
 
       const updatedNodes = updateNodesWithNewNode(existingNodes, newNode);
 
@@ -277,14 +276,27 @@ describe("node-creation utils - edge cases", () => {
           selected: true,
           type: "test",
           name: "Test Node",
-          category: "test",
           position: { x: 0, y: 0 },
           data: { customProperty: "preserved" }, // Put custom props in data
           inputPorts: [],
           outputPorts: [],
-        },
+          metadata: {
+            id: "1",
+            name: "Test Node",
+            type: "template" as const,
+            version: "1.0.0",
+            author: "test",
+            description: "Test node",
+            category: "utility" as const,
+            icon: "zap" as const,
+          },
+          parameters: {
+            defaults: {},
+            fields: {},
+          },
+        } as unknown as EditorNode,
       ];
-      const newNode = { id: "2", selected: true } as EditorNode;
+      const newNode = { id: "2", selected: true } as unknown as EditorNode;
 
       const updatedNodes = updateNodesWithNewNode(existingNodes, newNode);
 

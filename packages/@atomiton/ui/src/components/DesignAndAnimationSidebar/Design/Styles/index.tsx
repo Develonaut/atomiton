@@ -2,7 +2,7 @@ import Group from "#components/Group";
 import Image from "#components/Image";
 import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#components/DesignAndAnimationSidebar/Design/Styles/content";
 
 function Styles() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

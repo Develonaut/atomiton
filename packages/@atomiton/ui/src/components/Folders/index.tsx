@@ -1,9 +1,9 @@
 import Folder from "#components/Folder";
 import NewFolder from "#components/NewFolder";
-import Search from "./Search";
+import Search from "#components/Folders/Search";
 import { useState } from "react";
 
-import { folders } from "./folders";
+import { folders } from "#components/Folders/folders";
 
 function Folders() {
   const [search, setSearch] = useState("");

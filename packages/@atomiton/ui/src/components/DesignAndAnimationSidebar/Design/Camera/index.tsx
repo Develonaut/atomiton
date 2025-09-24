@@ -1,6 +1,6 @@
 import Group from "#components/Group";
 import Tabs from "#components/Tabs";
-import Isometric from "./Isometric";
+import Isometric from "#components/DesignAndAnimationSidebar/Design/Camera/Isometric";
 import { useState } from "react";
 
 type TabItem = {

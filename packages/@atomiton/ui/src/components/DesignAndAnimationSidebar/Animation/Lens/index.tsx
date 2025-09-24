@@ -3,7 +3,11 @@ import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import { useState } from "react";
 
-import { lensFormats, rotates, zoomLevels } from "./content";
+import {
+  lensFormats,
+  rotates,
+  zoomLevels,
+} from "#components/DesignAndAnimationSidebar/Animation/Lens/content";
 
 function Lens() {
   const [lensFormat, setLensFormat] = useState<SelectOption | null>(

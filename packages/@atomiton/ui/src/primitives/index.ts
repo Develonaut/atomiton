@@ -1,2 +1,2 @@
-export { Box } from "./box";
-export { Button, type ButtonProps } from "./button";
+export { Box } from "#primitives/box";
+export { Button, type ButtonProps } from "#primitives/button";

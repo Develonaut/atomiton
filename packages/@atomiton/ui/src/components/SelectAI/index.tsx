@@ -1,4 +1,4 @@
-import { options } from "./options";
+import { options } from "#components/SelectAI/options";
 
 type Props = {
   className?: string;

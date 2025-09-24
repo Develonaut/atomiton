@@ -7,7 +7,7 @@ env:
 
 # Fast pre-commit hooks for staged files only
 pre-commit:
-  parallel: true
+  parallel: false
   commands:
     # Format and fix linting issues on staged files
     format-and-lint:
@@ -16,52 +16,60 @@ pre-commit:
         echo "🔧 Formatting and fixing lint issues for staged files..."
         pnpm run fix
       stage_fixed: true
+      fail_text: "❌ Formatting and linting fixes failed"
 
     # Type check affected packages (uses turbo's smart filtering)
     type-check:
       run: |
         echo "🔍 Type checking affected packages..."
         pnpm typecheck
+      fail_text: "❌ Type checking failed"
 
 # More comprehensive pre-push hooks - full test suite must pass
 pre-push:
-  parallel: false # Sequential execution for clearer output and system stability
+  parallel: true
   commands:
     # Full lint check (ensures nothing was missed)
     lint-check:
       run: |
         echo "🔍 Running full lint check..."
         pnpm lint
+      fail_text: "❌ Lint check failed - please fix linting issues"
 
     # Full type check across all packages
     full-type-check:
       run: |
         echo "🔍 Running full type check..."
         pnpm typecheck
+      fail_text: "❌ Type check failed - please fix TypeScript errors"
 
     # Unit tests for all packages
     unit-tests:
       run: |
         echo "🧪 Running unit tests for all packages..."
         pnpm test
+      fail_text: "❌ Unit tests failed - please fix failing tests"
 
     # Integration tests (more comprehensive)
     integration-tests:
       run: |
         echo "🎭 Running integration tests..."
         pnpm test:integration
+      fail_text: "❌ Integration tests failed"
 
     # E2E tests (headless by default in CI/hooks)
     e2e-tests:
       run: |
         echo "🌐 Running end-to-end tests (headless)..."
         pnpm test:e2e
+      fail_text: "❌ E2E tests failed"
 
     # Build verification (ensure everything builds)
     build-check:
       run: |
         echo "🏗️ Verifying build integrity..."
         pnpm build
+      fail_text: "❌ Build failed - please fix build errors"
 
 # Skip options for cleaner output
 skip_output:

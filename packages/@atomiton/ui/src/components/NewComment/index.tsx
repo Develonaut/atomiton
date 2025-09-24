@@ -1,6 +1,6 @@
 import CommentCursor from "#components/CommentCursor";
 import SubmitButton from "#components/SubmitButton";
-import ImagePreview from "./ImagePreview";
+import ImagePreview from "#components/NewComment/ImagePreview";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 

@@ -1,8 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { render, screen, waitFor, act } from "@testing-library/react";
+import { createRouter } from "#createRouter";
 import "@testing-library/jest-dom/vitest";
-import React from "react";
-import { createRouter } from "./createRouter";
+import { act, render, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 // Test components - minimal real components that would actually catch bugs
 function HomePage() {

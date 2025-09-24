@@ -10,7 +10,7 @@ import {
   formats,
   frameRateOptions,
   resolutionOptions,
-} from "./content";
+} from "#components/Export/Video/content";
 
 type TabItem = {
   id: number;
