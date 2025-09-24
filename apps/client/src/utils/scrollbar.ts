@@ -26,4 +26,4 @@ export function removeScrollbarWidth(): void {
  */
 export function getScrollbarWidth(): number {
   return window.innerWidth - document.documentElement.clientWidth;
-}
+} // Test comment
