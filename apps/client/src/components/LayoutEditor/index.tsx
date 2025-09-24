@@ -3,72 +3,18 @@ import RightSidebar from "#components/RightSidebar";
 import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
-import {
-  Canvas,
-  Editor,
-  type EditorNode,
-  type NodeData,
-} from "@atomiton/editor";
-import type { NodeCategory, NodeIcon } from "@atomiton/nodes/definitions";
+import { Canvas, Editor } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
-import { useMemo } from "react";
 
 function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();
   const { state: locationState } = useLocation();
   const editorState = locationState as EditorRouteState | undefined;
 
-  const defaultNodes = useMemo(() => {
-    const rawNodes = Array.isArray(editorState?.defaultNodes)
-      ? editorState.defaultNodes
-      : [];
-
-    return rawNodes.map(
-      (node: Record<string, unknown>, nodeIndex: number): EditorNode => {
-        const nodeBase = node as {
-          id: string;
-          name: string;
-          category: string;
-          type: string;
-          data?: Record<string, unknown>;
-          settings?: { ui?: { position?: { x: number; y: number } } };
-        };
-
-        const nodeData: NodeData = {
-          name: nodeBase.name,
-          metadata: {
-            id: nodeBase.type,
-            name: nodeBase.name,
-            type: "test" as const,
-            version: "1.0.0",
-            category: (nodeBase.category || "utility") as NodeCategory,
-            description: "",
-            icon: "file" as NodeIcon,
-            author: "",
-            tags: [],
-          },
-          parameters: nodeBase.data || {},
-          fields: {},
-          inputPorts: [],
-          outputPorts: [],
-        };
-
-        return {
-          ...nodeBase,
-          position: nodeBase.settings?.ui?.position || {
-            x: nodeIndex * 200,
-            y: 100,
-          },
-          selected: false,
-          draggable: true,
-          selectable: true,
-          connectable: true,
-          deletable: true,
-          data: nodeData,
-        };
-      },
-    );
-  }, [editorState?.defaultNodes]);
+  // Pass raw nodes directly to Canvas - let it handle transformation
+  const defaultNodes = Array.isArray(editorState?.defaultNodes)
+    ? editorState.defaultNodes
+    : [];
 
   const defaultEdges = Array.isArray(editorState?.defaultEdges)
     ? editorState.defaultEdges

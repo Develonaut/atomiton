@@ -1,11 +1,12 @@
-import type { EditorEdge, EditorNode } from "@atomiton/editor";
+import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
 
 /**
  * Custom state for editor routes
+ * Uses raw NodeDefinitions and NodeEdges - the editor handles transformation
  */
 export type EditorRouteState = {
-  defaultNodes?: EditorNode[];
-  defaultEdges?: EditorEdge[];
+  defaultNodes?: NodeDefinition[];
+  defaultEdges?: NodeEdge[];
   name?: string;
   description?: string;
 };

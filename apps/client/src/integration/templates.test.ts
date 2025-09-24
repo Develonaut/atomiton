@@ -46,15 +46,4 @@ describe("Templates Integration Tests", () => {
       console.log("Templates component correctly configured for preloading");
     }
   });
-
-  it("Template conversion utilities work correctly", async () => {
-    const { convertNodeToEditorNode, convertEdgeToEditorEdge } = await import(
-      "#utils/editorConverters"
-    );
-
-    expect(convertNodeToEditorNode).toBeDefined();
-    expect(convertEdgeToEditorEdge).toBeDefined();
-    expect(typeof convertNodeToEditorNode).toBe("function");
-    expect(typeof convertEdgeToEditorEdge).toBe("function");
-  });
 });

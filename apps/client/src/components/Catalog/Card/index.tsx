@@ -3,11 +3,6 @@ import Image from "#components/Image";
 import { useNavigate } from "#router";
 import type { EditorRouteState } from "#router/types";
 import { useTemplates } from "#store/useTemplates";
-import {
-  convertNodeToEditorNode,
-  convertEdgeToEditorEdge,
-} from "#utils/editorConverters";
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 type Props = {
   value: {
@@ -26,12 +21,10 @@ function Card({ value }: Props) {
 
   const handleClick = () => {
     if (value.type === "template" && template) {
+      // Pass raw NodeDefinitions and edges - let the editor handle transformation
       const templateState: EditorRouteState = {
-        defaultNodes:
-          template.children?.map((node: NodeDefinition, nodeIndex: number) =>
-            convertNodeToEditorNode(node, nodeIndex),
-          ) || [],
-        defaultEdges: template.edges?.map(convertEdgeToEditorEdge) || [],
+        defaultNodes: template.children || [],
+        defaultEdges: template.edges || [],
         name: template.name,
         description: template.metadata.description,
       };

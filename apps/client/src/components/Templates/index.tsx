@@ -1,10 +1,6 @@
 import Image from "#components/Image";
 import { useLink } from "#router";
 import { useTemplates } from "#store/useTemplates";
-import {
-  convertEdgeToEditorEdge,
-  convertNodeToEditorNode,
-} from "#utils/editorConverters";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 type TemplateButtonProps = {
@@ -13,12 +9,9 @@ type TemplateButtonProps = {
 };
 
 function TemplateButton({ template, index }: TemplateButtonProps) {
-  const defaultNodes =
-    template.children?.map((node, nodeIndex) =>
-      convertNodeToEditorNode(node, nodeIndex),
-    ) || [];
-
-  const defaultEdges = template.edges?.map(convertEdgeToEditorEdge) || [];
+  // Pass raw NodeDefinitions and edges - let the editor handle transformation
+  const defaultNodes = template.children || [];
+  const defaultEdges = template.edges || [];
 
   const linkProps = useLink({
     to: "/editor/new",
