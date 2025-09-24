@@ -1,5 +1,5 @@
-import type { SystemProps } from "../types";
-import { systemPropsMap } from "../constants/systemPropsMap";
+import type { SystemProps } from "#components/types";
+import { systemPropsMap } from "#components/constants/systemPropsMap";
 
 export function extractSystemProps<T extends Record<string, unknown>>(
   props: T,

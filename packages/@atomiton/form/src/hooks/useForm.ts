@@ -2,8 +2,8 @@ import type { VInfer } from "@atomiton/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { useForm as useHookForm } from "react-hook-form";
-import type { FieldConfig, FieldsMetadata, ZodSchema } from "../types";
-import { generateFieldsFromSchema, getDefaultValues } from "../utils/index";
+import type { FieldConfig, FieldsMetadata, ZodSchema } from "#types";
+import { generateFieldsFromSchema, getDefaultValues } from "#utils/index";
 
 export type UseFormOptions<T extends ZodSchema = ZodSchema> = {
   schema: T;

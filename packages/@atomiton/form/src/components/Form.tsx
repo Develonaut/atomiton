@@ -1,7 +1,7 @@
+import { FormFields } from "#FormFields";
+import { FormProvider } from "#FormProvider";
+import type { FieldsMetadata, ZodSchema } from "#types";
 import React from "react";
-import type { FieldsMetadata, ZodSchema } from "../types";
-import { FormProvider } from "./FormProvider";
-import { FormFields } from "./FormFields";
 
 type FormProps = {
   schema: ZodSchema; // Zod schema from node config

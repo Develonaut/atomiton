@@ -1,7 +1,7 @@
-import { useState } from "react";
 import Tabs from "#components/Tabs";
-import Group from "../../Group";
-import Isometric from "./Isometric";
+import Isometric from "#Isometric";
+import { useState } from "react";
+import Group from "./../Group";
 
 function Camera() {
   const [activeView, setActiveView] = useState<"isometric" | "perspective">(

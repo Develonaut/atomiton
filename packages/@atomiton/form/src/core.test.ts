@@ -1,8 +1,8 @@
+import { useForm } from "#hooks/useForm";
+import { generateFieldsFromSchema, getDefaultValues } from "#utils/index";
 import v from "@atomiton/validation";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { useForm } from "./hooks/useForm";
-import { generateFieldsFromSchema, getDefaultValues } from "./utils/index";
 
 describe("Form Package Smoke Tests", () => {
   it("exports all required functions", () => {

@@ -1,6 +1,6 @@
+import { mapZodTypeToControl } from "#mapZodTypeToControl";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
-import { mapZodTypeToControl } from "./mapZodTypeToControl";
 
 describe("mapZodTypeToControl", () => {
   describe("basic types", () => {

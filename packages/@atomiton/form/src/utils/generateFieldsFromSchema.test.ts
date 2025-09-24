@@ -1,6 +1,6 @@
+import { generateFieldsFromSchema } from "#generateFieldsFromSchema";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
-import { generateFieldsFromSchema } from "./generateFieldsFromSchema";
 
 describe("generateFieldsFromSchema", () => {
   describe("basic functionality", () => {

@@ -1,5 +1,5 @@
+import { useSelectContext } from "#SelectRoot";
 import type { PropsWithChildren } from "react";
-import { useSelectContext } from "./SelectRoot";
 
 type SelectPlaceholderProps = PropsWithChildren<{
   className?: string;

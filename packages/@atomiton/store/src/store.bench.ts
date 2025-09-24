@@ -3,8 +3,8 @@
  * Ensures the simplified API doesn't introduce performance regressions
  */
 
+import { createStore } from "#index";
 import { bench, describe } from "vitest";
-import { createStore } from "./index";
 
 describe("Store Performance Benchmarks", () => {
   describe("Store Creation", () => {

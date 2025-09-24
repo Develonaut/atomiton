@@ -1,4 +1,4 @@
-import type { UIControlType, FieldConfig } from "./types";
+import type { FieldConfig, UIControlType } from "#types";
 
 /**
  * Zod type name to control type mapping

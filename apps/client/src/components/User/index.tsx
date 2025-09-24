@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Link } from "#router";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import Image from "#components/Image";
 import Icon from "#components/Icon";
+import Image from "#components/Image";
 import Modal from "#components/Modal";
-import Settings from "./Settings";
+import { Link } from "#router";
+import Settings from "#Settings";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { useState } from "react";
 
 function User() {
   const [open, setOpen] = useState(false);

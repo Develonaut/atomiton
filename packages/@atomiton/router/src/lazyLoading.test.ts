@@ -1,6 +1,6 @@
+import { createRouter } from "#createRouter";
+import { createRootRouteInstance, createTanStackRoutes } from "#routeFactory";
 import { describe, expect, it } from "vitest";
-import { createRouter } from "./createRouter";
-import { createTanStackRoutes, createRootRouteInstance } from "./routeFactory";
 
 describe("Lazy Loading Smoke Tests", () => {
   it("should detect dynamic imports without executing them", () => {

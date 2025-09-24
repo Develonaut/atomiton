@@ -1,9 +1,9 @@
-import { useState } from "react";
 import Tabs from "#components/Tabs";
+import { useState } from "react";
 // import ViewController from "#components/ViewController";
-import Head from "./Head";
-import Design from "./Design";
-import Animation from "./Animation";
+import Animation from "#Animation";
+import Design from "#Design";
+import Head from "#Head";
 
 type TabItem = {
   id: number;

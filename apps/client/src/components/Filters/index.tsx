@@ -1,4 +1,4 @@
-import { useState } from "react";
+import Icon from "#components/Icon";
 import {
   Menu,
   MenuButton,
@@ -6,9 +6,9 @@ import {
   MenuItems,
   MenuSeparator,
 } from "@headlessui/react";
-import Icon from "#components/Icon";
+import { useState } from "react";
 
-import { itemsType, itemsSort } from "./items";
+import { itemsSort, itemsType } from "#items";
 
 type ItemProps = {
   id?: number;

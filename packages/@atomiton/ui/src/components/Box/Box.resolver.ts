@@ -1,6 +1,6 @@
-import type { BoxProps } from "./Box.types";
-import { extractStyleProps } from "#utils/extractStyleProps";
+import type { BoxProps } from "#Box.types";
 import { cn } from "#utils/cn";
+import { extractStyleProps } from "#utils/extractStyleProps";
 
 function resolveBoxProps<T extends React.ElementType = "div">(
   props: BoxProps<T>,

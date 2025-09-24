@@ -1,4 +1,4 @@
-import type { SystemProps } from "../types";
+import type { SystemProps } from "#components/types";
 
 export type PropResolver = (value: string | number | boolean) => string;
 

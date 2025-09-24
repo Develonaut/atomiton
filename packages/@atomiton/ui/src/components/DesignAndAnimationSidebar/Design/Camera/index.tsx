@@ -1,7 +1,7 @@
-import { useState } from "react";
+import Group from "#components/../Group";
 import Tabs from "#components/Tabs";
-import Group from "../../Group";
-import Isometric from "./Isometric";
+import Isometric from "#Isometric";
+import { useState } from "react";
 
 type TabItem = {
   id: number;

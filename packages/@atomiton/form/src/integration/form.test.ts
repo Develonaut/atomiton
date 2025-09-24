@@ -1,6 +1,6 @@
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
-import { generateFieldsFromSchema, getDefaultValues } from "../utils/index";
+import { generateFieldsFromSchema, getDefaultValues } from "#utils/index";
 
 describe("Integration Tests", () => {
   it("generates working field configurations", () => {

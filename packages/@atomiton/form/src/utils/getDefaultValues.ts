@@ -1,4 +1,4 @@
-import type { ZodSchema } from "../types";
+import type { ZodSchema } from "#types";
 
 export function getDefaultValues(schema: ZodSchema): Record<string, unknown> {
   if (

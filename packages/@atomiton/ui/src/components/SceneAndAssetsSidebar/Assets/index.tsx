@@ -1,6 +1,6 @@
-import Accordion from "./Accordion";
+import Accordion from "#Accordion";
 
-import { objects3d, materials } from "./content";
+import { materials, objects3d } from "#content";
 
 function Assets() {
   return (

@@ -1,9 +1,9 @@
+import Assets from "#Assets";
 import Tabs from "#components/Tabs";
+import Head from "#Head";
+import Scene from "#Scene";
+import Search from "#Search";
 import { useState } from "react";
-import Assets from "./Assets";
-import Head from "./Head";
-import Scene from "./Scene";
-import Search from "./Search";
 
 const tabs = [
   { id: 0, name: "Scene" },

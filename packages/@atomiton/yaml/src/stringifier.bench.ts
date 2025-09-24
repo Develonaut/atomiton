@@ -1,10 +1,10 @@
-import { bench, describe } from "vitest";
 import {
-  stringifyYaml,
-  formatYaml,
-  minifyYaml,
-  prettifyYaml,
-} from "./stringifier.js";
+    formatYaml,
+    minifyYaml,
+    prettifyYaml,
+    stringifyYaml,
+} from "#stringifier.js";
+import { bench, describe } from "vitest";
 
 const smallObject = {
   name: "Test",

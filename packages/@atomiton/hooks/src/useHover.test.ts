@@ -1,6 +1,6 @@
-import { renderHook, act } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { useHover } from "./useHover";
+import { useHover } from "#useHover";
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("useHover", () => {
   beforeEach(() => {

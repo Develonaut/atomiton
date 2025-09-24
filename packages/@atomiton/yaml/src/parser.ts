@@ -1,12 +1,12 @@
+import type {
+    ParseResult,
+    StreamParseOptions,
+    YamlDocument,
+    YamlError,
+    YamlParseOptions,
+} from "#types.js";
 import type { Document } from "yaml";
 import { parse, parseAllDocuments, parseDocument } from "yaml";
-import type {
-  YamlParseOptions,
-  ParseResult,
-  YamlDocument,
-  YamlError,
-  StreamParseOptions,
-} from "./types.js";
 
 export function parseYaml<T = YamlDocument>(
   input: string,

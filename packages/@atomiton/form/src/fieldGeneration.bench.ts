@@ -1,8 +1,8 @@
+import { generateFieldsFromSchema } from "#utils/generateFieldsFromSchema";
+import { getDefaultValues } from "#utils/getDefaultValues";
+import { mapZodTypeToControl } from "#utils/mapZodTypeToControl";
 import v from "@atomiton/validation";
 import { bench, describe } from "vitest";
-import { generateFieldsFromSchema } from "./utils/generateFieldsFromSchema";
-import { getDefaultValues } from "./utils/getDefaultValues";
-import { mapZodTypeToControl } from "./utils/mapZodTypeToControl";
 
 describe("Field Generation Performance", () => {
   const smallSchema = v.object({

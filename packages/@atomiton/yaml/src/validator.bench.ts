@@ -1,12 +1,12 @@
-import { bench, describe } from "vitest";
 import {
-  validateRequired,
-  validateType,
-  validateEnum,
-  validatePattern,
-  validateRange,
-  validateArrayLength,
-} from "./validator.js";
+    validateArrayLength,
+    validateEnum,
+    validatePattern,
+    validateRange,
+    validateRequired,
+    validateType,
+} from "#validator.js";
+import { bench, describe } from "vitest";
 
 const simpleData = {
   name: "Test",

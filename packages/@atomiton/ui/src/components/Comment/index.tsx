@@ -1,6 +1,6 @@
 import CommentPin from "#components/CommentPin";
-import Message from "./Message";
-import NewMessage from "./NewMessage";
+import Message from "#Message";
+import NewMessage from "#NewMessage";
 
 type Props = {
   comments: {

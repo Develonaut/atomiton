@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
 import {
-  stringifyYaml,
-  formatYaml,
-  minifyYaml,
-  prettifyYaml,
-} from "./stringifier";
+    formatYaml,
+    minifyYaml,
+    prettifyYaml,
+    stringifyYaml,
+} from "#stringifier";
+import { describe, expect, it } from "vitest";
 
 describe("stringifyYaml", () => {
   it("should stringify simple objects", () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { createInMemoryStorage } from "./factories/createInMemoryStorage";
-import { createFileSystemStorage } from "./factories/createFileSystemStorage";
-import { StorageError } from "./types";
+import { createInMemoryStorage } from "#factories/createInMemoryStorage";
+import { createFileSystemStorage } from "#factories/createFileSystemStorage";
+import { StorageError } from "#types";
 import * as fs from "fs/promises";
 import * as path from "path";
 import * as os from "os";
@@ -10,7 +10,7 @@ describe("Storage Factory", () => {
   describe("Desktop createStorage", () => {
     it("creates memory storage when using createMemoryEngine", async () => {
       const { createStorage, createMemoryEngine } = await import(
-        "./exports/desktop"
+        "#exports/desktop"
       );
       const storage = createStorage({ engine: createMemoryEngine() });
       expect(storage.getInfo().type).toBe("memory");
@@ -18,7 +18,7 @@ describe("Storage Factory", () => {
 
     it("creates filesystem storage when using createFileSystemEngine", async () => {
       const { createStorage, createFileSystemEngine } = await import(
-        "./exports/desktop"
+        "#exports/desktop"
       );
       const storage = createStorage({
         engine: createFileSystemEngine({ baseDir: os.tmpdir() }),
@@ -27,7 +27,7 @@ describe("Storage Factory", () => {
     });
 
     it("creates default filesystem storage when no engine provided", async () => {
-      const { createStorage } = await import("./exports/desktop");
+      const { createStorage } = await import("#exports/desktop");
       const storage = createStorage();
       expect(storage.getInfo().type).toBe("filesystem");
     });
@@ -36,14 +36,14 @@ describe("Storage Factory", () => {
   describe("Browser createStorage", () => {
     it("creates memory storage when using createMemoryEngine", async () => {
       const { createStorage, createMemoryEngine } = await import(
-        "./exports/browser"
+        "#exports/browser"
       );
       const storage = createStorage({ engine: createMemoryEngine() });
       expect(storage.getInfo().type).toBe("memory");
     });
 
     it("creates default memory storage when no engine provided", async () => {
-      const { createStorage } = await import("./exports/browser");
+      const { createStorage } = await import("#exports/browser");
       const storage = createStorage();
       expect(storage.getInfo().type).toBe("memory");
     });

@@ -3,11 +3,11 @@
  * Only includes engines that work in browser environments
  */
 
-import type { IStorageEngine } from "../../types";
-import { createMemoryEngine } from "../../index";
+import type { IStorageEngine } from "#types";
+import { createMemoryEngine } from "#index";
 
-export * from "../../types";
-export { createMemoryEngine, type InMemoryStorageConfig } from "../../index";
+export * from "#types";
+export { createMemoryEngine, type InMemoryStorageConfig } from "#index";
 
 /**
  * Creates a storage instance for browser environments

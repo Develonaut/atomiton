@@ -96,4 +96,4 @@ export type CompoundComponentContext<T = unknown> = {
 /**
  * Re-export StyleProps from extractStyleProps
  */
-export type { StyleProps } from "../utils/extractStyleProps";
+export type { StyleProps } from "#components/utils/extractStyleProps";

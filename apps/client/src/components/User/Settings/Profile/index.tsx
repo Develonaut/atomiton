@@ -2,9 +2,9 @@ import { useRef, useState } from "react";
 import Switch from "#components/form/Switch";
 import Icon from "#components/Icon";
 import Image from "#components/Image";
-import Title from "../Title";
-import Option from "../Option";
-import Field from "../Field";
+import Title from "./Title";
+import Option from "./Option";
+import Field from "./Field";
 
 function Profile() {
   const [privateProfile, setPrivateProfile] = useState(false);

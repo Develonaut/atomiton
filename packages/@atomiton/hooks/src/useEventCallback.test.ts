@@ -1,6 +1,6 @@
+import { useEventCallback } from "#useEventCallback";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useEventCallback } from "./useEventCallback";
 
 describe("useEventCallback", () => {
   it("should return a stable function reference across re-renders", () => {

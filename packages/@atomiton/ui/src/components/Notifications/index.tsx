@@ -1,7 +1,7 @@
-import { useState } from "react";
 import Notification from "#components/Notification";
+import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#content";
 
 type Props = {
   className?: string;

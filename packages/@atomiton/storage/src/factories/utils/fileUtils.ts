@@ -1,7 +1,7 @@
 import * as fs from "fs/promises";
 import * as os from "os";
 import * as path from "path";
-import { StorageError } from "../../types";
+import { StorageError } from "#types";
 
 export function createBaseDir(baseDir?: string): string {
   return baseDir || path.join(os.homedir(), "Atomiton");

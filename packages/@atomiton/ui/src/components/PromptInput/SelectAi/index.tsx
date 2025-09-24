@@ -1,12 +1,12 @@
-import { useState } from "react";
 import {
   Listbox,
   ListboxButton,
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
+import { useState } from "react";
 
-import { options } from "./options";
+import { options } from "#options";
 
 type AiOption = {
   id: number;

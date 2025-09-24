@@ -1,11 +1,11 @@
+import Images from "#Images";
+import Menu from "#Menu";
+import Object3D from "#Object3D";
+import Preview from "#Preview";
+import Video from "#Video";
 import { Box, Button } from "@atomiton/ui";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { useState } from "react";
-import Images from "./Images";
-import Menu from "./Menu";
-import Object3D from "./Object3D";
-import Preview from "./Preview";
-import Video from "./Video";
 
 const menu = [
   {

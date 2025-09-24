@@ -1,9 +1,9 @@
+import Button from "#components/Button";
+import Icon from "#components/Icon";
+import Image from "#components/Image";
+import Images from "#Images";
 import { useId } from "react";
 import { Tooltip } from "react-tooltip";
-import Image from "#components/Image";
-import Icon from "#components/Icon";
-import Button from "#components/Button";
-import Images from "./Images";
 
 function Details() {
   const idTooltip = useId();

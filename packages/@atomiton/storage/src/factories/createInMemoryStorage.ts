@@ -4,7 +4,7 @@ import {
   type StorageItem,
   type StorageOptions,
   StorageError,
-} from "../types";
+} from "#types";
 
 export type InMemoryStorageConfig = {
   initialData?: Map<string, unknown>;

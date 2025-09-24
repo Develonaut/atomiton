@@ -3,16 +3,16 @@
  * Includes all storage engines including filesystem
  */
 
-import type { IStorageEngine } from "../../types";
-import { createFileSystemEngine } from "../../index";
+import type { IStorageEngine } from "#types";
+import { createFileSystemEngine } from "#index";
 
-export * from "../../types";
+export * from "#types";
 export {
   createFileSystemEngine,
   createMemoryEngine,
   type FileSystemStorageConfig,
   type InMemoryStorageConfig,
-} from "../../index";
+} from "#index";
 
 /**
  * Creates a storage instance for desktop environments

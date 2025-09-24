@@ -1,8 +1,8 @@
-import { useState } from "react";
-import Image from "#components/Image";
 import Icon from "#components/Icon";
-import Share from "./Share";
-import ZoomIn from "./ZoomIn";
+import Image from "#components/Image";
+import Share from "#Share";
+import ZoomIn from "#ZoomIn";
+import { useState } from "react";
 
 type ItemProps = {
   id: number;

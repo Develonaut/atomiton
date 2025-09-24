@@ -1,7 +1,7 @@
+import Card from "#Card";
 import Filters from "#components/Filters";
 import { useEffect, useRef, useState } from "react";
 import { useWindowScroll } from "react-use";
-import Card from "./Card";
 
 type Props = {
   title: string;

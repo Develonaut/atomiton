@@ -1,8 +1,8 @@
 import {
   STRING_CHECK_TO_CONTROL_MAP,
   ZOD_TYPE_TO_CONTROL_MAP,
-} from "../constants";
-import type { FieldConfig, UIControlType, ZodSchema } from "../types";
+} from "#constants";
+import type { FieldConfig, UIControlType, ZodSchema } from "#types";
 
 /**
  * Maps a Zod schema type to a form control configuration

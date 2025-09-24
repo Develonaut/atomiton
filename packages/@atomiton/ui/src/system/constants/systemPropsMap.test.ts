@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { systemPropsMap } from "./systemPropsMap";
+import { systemPropsMap } from "#systemPropsMap";
+import { describe, expect, it } from "vitest";
 
 describe("systemPropsMap", () => {
   describe("fullWidth and fullHeight props", () => {

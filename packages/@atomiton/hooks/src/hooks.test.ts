@@ -1,5 +1,5 @@
+import * as hooks from "#index";
 import { describe, expect, it } from "vitest";
-import * as hooks from "./index";
 
 describe("Hooks Package API Smoke Tests", () => {
   it("should export useDidMount hook", async () => {

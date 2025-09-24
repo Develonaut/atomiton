@@ -1,5 +1,5 @@
-import { Input as InputPrimitive } from "../../primitives/input";
-import { styled } from "../../system/styled";
+import { Input as InputPrimitive } from "#components/../primitives/input";
+import { styled } from "#components/../system/styled";
 
 const Input = styled(InputPrimitive, {
   name: "Input",

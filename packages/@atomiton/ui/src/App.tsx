@@ -1,24 +1,24 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeProvider } from "#components/ThemeProvider";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // Import template components directly
-import HomePage from "./templates/HomePage";
-import ButtonsPage from "./templates/ButtonsPage";
-import CardsPage from "./templates/CardsPage";
-import ColorsPage from "./templates/ColorsPage";
-import CommentPage from "./templates/CommentPage";
-import DepthsPage from "./templates/DepthsPage";
-import DropdownPage from "./templates/DropdownPage";
-import IconographyPage from "./templates/IconographyPage";
-import InputsPage from "./templates/InputsPage";
-import MenuPage from "./templates/MenuPage";
-import ModalPage from "./templates/ModalPage";
-import NotificationsPage from "./templates/NotificationsPage";
-import PromptInputPage from "./templates/PromptInputPage";
-import SidebarPage from "./templates/SidebarPage";
-import ToolbarPage from "./templates/ToolbarPage";
-import TopbarPage from "./templates/TopbarPage";
-import TypographyPage from "./templates/TypographyPage";
+import ButtonsPage from "#templates/ButtonsPage";
+import CardsPage from "#templates/CardsPage";
+import ColorsPage from "#templates/ColorsPage";
+import CommentPage from "#templates/CommentPage";
+import DepthsPage from "#templates/DepthsPage";
+import DropdownPage from "#templates/DropdownPage";
+import HomePage from "#templates/HomePage";
+import IconographyPage from "#templates/IconographyPage";
+import InputsPage from "#templates/InputsPage";
+import MenuPage from "#templates/MenuPage";
+import ModalPage from "#templates/ModalPage";
+import NotificationsPage from "#templates/NotificationsPage";
+import PromptInputPage from "#templates/PromptInputPage";
+import SidebarPage from "#templates/SidebarPage";
+import ToolbarPage from "#templates/ToolbarPage";
+import TopbarPage from "#templates/TopbarPage";
+import TypographyPage from "#templates/TypographyPage";
 
 function App() {
   return (

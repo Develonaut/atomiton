@@ -1,12 +1,12 @@
-import { useState } from "react";
 import Button from "#components/Button";
 import Modal from "#components/Modal";
-import Head from "./Head";
-import GeneralAccess from "./GeneralAccess";
-import Person from "./Person";
-import Foot from "./Foot";
+import Foot from "#Foot";
+import GeneralAccess from "#GeneralAccess";
+import Head from "#Head";
+import Person from "#Person";
+import { useState } from "react";
 
-import { people } from "./people";
+import { people } from "#people";
 
 function Share() {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
-import MotionBlur from "./MotionBlur";
-import Loop from "./Loop";
-import Effects from "./Effects";
-import Lens from "./Lens";
+import Effects from "#Effects";
+import Lens from "#Lens";
+import Loop from "#Loop";
+import MotionBlur from "#MotionBlur";
 
 function Animation() {
   return (

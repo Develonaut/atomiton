@@ -1,9 +1,9 @@
-import ShowFrame from "./ShowFrame";
-import Artboard from "./Artboard";
-import Materials from "./Materials";
-import Styles from "./Styles";
-import Background from "./Background";
-import Camera from "./Camera";
+import Artboard from "#Artboard";
+import Background from "#Background";
+import Camera from "#Camera";
+import Materials from "#Materials";
+import ShowFrame from "#ShowFrame";
+import Styles from "#Styles";
 
 function Design() {
   return (

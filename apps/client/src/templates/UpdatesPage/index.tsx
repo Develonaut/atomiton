@@ -1,7 +1,7 @@
-import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
 import Image from "#components/Image";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function UpdatesPage() {
   return (

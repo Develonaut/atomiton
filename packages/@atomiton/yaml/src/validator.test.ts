@@ -1,13 +1,13 @@
-import { describe, it, expect } from "vitest";
 import {
-  validateRequired,
-  validateType,
-  validateEnum,
-  validatePattern,
-  validateRange,
-  validateArrayLength,
-  createValidator,
-} from "./validator";
+    createValidator,
+    validateArrayLength,
+    validateEnum,
+    validatePattern,
+    validateRange,
+    validateRequired,
+    validateType,
+} from "#validator";
+import { describe, expect, it } from "vitest";
 
 describe("validateRequired", () => {
   it("should pass when all required fields exist", () => {

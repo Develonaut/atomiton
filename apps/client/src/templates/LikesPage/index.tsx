@@ -1,7 +1,7 @@
-import Layout from "#components/Layout";
 import Catalog from "#components/Catalog";
+import Layout from "#components/Layout";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function LikesPage() {
   return (

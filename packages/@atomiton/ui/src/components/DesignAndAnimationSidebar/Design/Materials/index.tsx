@@ -1,8 +1,8 @@
-import { useState } from "react";
+import Group from "#components/../Group";
 import Image from "#components/Image";
-import Group from "../../Group";
+import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Materials() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

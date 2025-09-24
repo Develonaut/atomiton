@@ -1,12 +1,12 @@
+import AddFiles from "#AddFiles";
+import SelectAi from "#SelectAi";
+import Button from "#components/Button";
+import Icon from "#components/Icon";
+import ViewController from "#components/ViewController";
+import Select from "#components/form/Select";
+import { Box } from "@atomiton/ui";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import Icon from "#components/Icon";
-import Select from "#components/form/Select";
-import Button from "#components/Button";
-import ViewController from "#components/ViewController";
-import AddFiles from "./AddFiles";
-import SelectAi from "./SelectAi";
-import { Box } from "@atomiton/ui";
 
 const settings = [
   { id: 0, name: "Inspiration" },

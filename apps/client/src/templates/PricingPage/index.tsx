@@ -1,9 +1,9 @@
-import { useState } from "react";
 import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
 import Tabs from "#components/Tabs";
-import Item from "./Item";
+import Item from "#Item";
+import { useState } from "react";
 
-import { pricing } from "./content";
+import { pricing } from "#content";
 
 const tabs = [
   { id: 0, name: "Pay monthly" },

@@ -1,8 +1,8 @@
-import { useState } from "react";
 import Image from "#components/Image";
-import Group from "../../Group";
+import { useState } from "react";
+import Group from "./../Group";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Effects() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

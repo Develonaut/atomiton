@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { buildClassName } from "./buildClassname";
+import { buildClassName } from "#buildClassname";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock the cn utility
 vi.mock("@/utils/cn", () => ({

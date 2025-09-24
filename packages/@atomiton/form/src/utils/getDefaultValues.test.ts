@@ -1,6 +1,6 @@
+import { getDefaultValues } from "#getDefaultValues";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
-import { getDefaultValues } from "./getDefaultValues";
 
 describe("getDefaultValues", () => {
   describe("basic type defaults", () => {

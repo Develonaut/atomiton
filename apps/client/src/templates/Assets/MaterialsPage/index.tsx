@@ -1,8 +1,8 @@
-import { useState } from "react";
-import Layout from "#components/Layout";
 import Assets from "#components/Assets";
+import Layout from "#components/Layout";
+import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function MaterialsPage() {
   const [tab, setTab] = useState("all-objects");

@@ -5,7 +5,7 @@ import globals from "globals";
 // Note: .js extension is required here because this package uses "type": "module"
 // in package.json, making it an ESM module where Node.js requires explicit
 // file extensions for all relative imports
-import baseConfig from "./base.js";
+import baseConfig from "#base.js";
 
 /**
  * ESLint configuration for React libraries and applications

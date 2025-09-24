@@ -1,5 +1,5 @@
+import { createRouter } from "#createRouter";
 import { bench, describe } from "vitest";
-import { createRouter } from "./createRouter";
 
 describe("Router Performance", () => {
   const routes = [

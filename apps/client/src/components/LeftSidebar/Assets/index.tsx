@@ -1,6 +1,6 @@
+import Accordion from "#Accordion";
 import { useAddNode } from "@atomiton/editor";
 import { getNodeDefinitionsGroupedByCategory } from "@atomiton/nodes/definitions";
-import Accordion from "./Accordion";
 
 function Assets() {
   const { addNode } = useAddNode();

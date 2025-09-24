@@ -1,12 +1,12 @@
-import { useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
+import AddFiles from "#AddFiles";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import SubmitButton from "#components/SubmitButton";
 import ViewController from "#components/ViewController";
-import AddFiles from "./AddFiles";
-import SelectAi from "./SelectAi";
-import PremadePrompt from "./PremadePrompt";
+import PremadePrompt from "#PremadePrompt";
+import SelectAi from "#SelectAi";
+import { useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 
 const settings = [
   { id: 0, name: "Inspiration" },

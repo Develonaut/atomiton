@@ -1,6 +1,6 @@
+import Header from "#Header";
+import Sidebar from "#Sidebar";
 import { useState } from "react";
-import Sidebar from "./Sidebar";
-import Header from "./Header";
 
 type Props = {
   children: React.ReactNode;

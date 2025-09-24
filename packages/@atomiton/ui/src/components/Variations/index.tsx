@@ -1,7 +1,7 @@
-import { useState } from "react";
 import Image from "#components/Image";
+import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Variations() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

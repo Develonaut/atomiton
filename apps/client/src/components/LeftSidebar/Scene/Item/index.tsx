@@ -1,8 +1,8 @@
+import Action from "#Action";
 import Icon from "#components/Icon";
+import Variations from "#Variations";
 import { useEditorNode } from "@atomiton/editor";
 import { useState } from "react";
-import Action from "./Action";
-import Variations from "./Variations";
 
 type Props = {
   nodeId: string;

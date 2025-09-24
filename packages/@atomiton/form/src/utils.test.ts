@@ -1,10 +1,10 @@
+import {
+    generateFieldsFromSchema,
+    getDefaultValues,
+    mapZodTypeToControl,
+} from "#utils/index";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
-import {
-  generateFieldsFromSchema,
-  getDefaultValues,
-  mapZodTypeToControl,
-} from "./utils/index";
 
 describe("mapZodTypeToControl", () => {
   it("maps string to text input", () => {

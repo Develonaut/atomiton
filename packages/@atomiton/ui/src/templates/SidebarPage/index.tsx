@@ -1,13 +1,13 @@
-import Layout from "#components/Layout";
-import Group from "#components/Group";
-import RowCards from "#components/RowCards";
 import Card from "#components/Card";
-import SceneAndAssetsSidebar from "#components/SceneAndAssetsSidebar";
 import DesignAndAnimationSidebar from "#components/DesignAndAnimationSidebar";
-import HomeSidebar from "#components/HomeSidebar";
+import Group from "#components/Group";
 import GuidelineSidebar from "#components/GuidelineSidebar";
+import HomeSidebar from "#components/HomeSidebar";
+import Layout from "#components/Layout";
+import RowCards from "#components/RowCards";
+import SceneAndAssetsSidebar from "#components/SceneAndAssetsSidebar";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function SidebarPage() {
   return (

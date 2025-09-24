@@ -1,6 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { RouterProvider, router, usePathname } from "../router/index";
+import { RouterProvider, router, usePathname } from "./router/index";
 
 // Mock the templates to avoid store dependencies
 vi.mock("#components/Templates", () => ({

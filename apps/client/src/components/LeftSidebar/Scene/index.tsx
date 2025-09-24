@@ -1,5 +1,5 @@
+import Item from "#Item";
 import { useEditorNodes } from "@atomiton/editor";
-import Item from "./Item";
 
 function Scene() {
   const { nodes } = useEditorNodes();

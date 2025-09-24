@@ -1,4 +1,4 @@
-import type { FlexProps } from "../Flex/Flex.types";
+import type { FlexProps } from "#components/Flex/Flex.types";
 
 export type ColumnProps = {
   direction?: never; // Prevent direction prop from being used

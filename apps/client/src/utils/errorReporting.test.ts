@@ -1,5 +1,5 @@
+import { ErrorReporter, errorReporter } from "#errorReporting";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ErrorReporter, errorReporter } from "./errorReporting";
 
 // Mock localStorage
 const mockLocalStorage = {

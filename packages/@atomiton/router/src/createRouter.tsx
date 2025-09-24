@@ -1,3 +1,5 @@
+import { createRootRouteInstance, createTanStackRoutes } from "#routeFactory";
+import type { CreateRouterOptions } from "#types";
 import {
   createRouter as createTanStackRouter,
   Link,
@@ -7,8 +9,6 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import React from "react";
-import { createRootRouteInstance, createTanStackRoutes } from "./routeFactory";
-import type { CreateRouterOptions } from "./types";
 
 export function createRouter(options: CreateRouterOptions) {
   const {

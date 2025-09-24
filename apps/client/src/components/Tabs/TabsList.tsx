@@ -1,6 +1,6 @@
+import { useTabsContext } from "#TabsRoot";
 import type { PropsWithChildren } from "react";
 import { Children, isValidElement } from "react";
-import { useTabsContext } from "./TabsRoot";
 
 type TabsListProps = PropsWithChildren<{
   className?: string;

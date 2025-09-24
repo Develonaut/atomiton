@@ -1,10 +1,10 @@
+import Animation from "#Animation";
 import Tabs from "#components/Tabs";
 import ViewController from "#components/ViewController";
+import Design from "#Design";
+import Head from "#Head";
 import { Box } from "@atomiton/ui";
 import { useState } from "react";
-import Animation from "./Animation";
-import Design from "./Design";
-import Head from "./Head";
 
 function RightSidebar() {
   const [activeTab, setActiveTab] = useState<"design" | "animation">("design");

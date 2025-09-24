@@ -1,5 +1,5 @@
 // Export the new composition API as the main export
-export { Select, LegacySelect, type SelectOption } from "./Select";
+export { LegacySelect, Select, type SelectOption } from "#Select";
 
 // Default export for backward compatibility
-export { LegacySelect as default } from "./Select";
+export { LegacySelect as default } from "#Select";

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import Group from "#components/../Group";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
-import Group from "../../Group";
+import { useState } from "react";
 
-import { lensFormats, zoomLevels, rotates } from "./content";
+import { lensFormats, rotates, zoomLevels } from "#content";
 
 function Lens() {
   const [lensFormat, setLensFormat] = useState<SelectOption | null>(

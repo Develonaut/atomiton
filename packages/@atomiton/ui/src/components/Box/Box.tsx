@@ -1,7 +1,7 @@
+import type { BoxProps } from "#Box.types";
 import { Box as BoxPrimitive } from "#primitives";
 import { styled } from "#system/styled";
 import { type ElementType, forwardRef } from "react";
-import type { BoxProps } from "./Box.types";
 
 const BoxRoot = styled(BoxPrimitive, { name: "Box" })();
 

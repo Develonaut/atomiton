@@ -1,47 +1,36 @@
 // Parser exports
 export {
-  parseYaml as parse,
-  safeParseYaml as safeParse,
-  parseYamlDocument as parseDocument,
-  parseMultipleDocuments as parseMultiple,
-  parseYamlStream as parseStream,
-  isValidYaml as isValid,
-  // Convenience alias
-  parseYaml as fromYaml,
-} from "./parser.js";
+    // Convenience alias
+    parseYaml as fromYaml, isValidYaml as isValid, parseYaml as parse, parseYamlDocument as parseDocument,
+    parseMultipleDocuments as parseMultiple,
+    parseYamlStream as parseStream, safeParseYaml as safeParse
+} from "#parser.js";
 
 // Stringifier exports
 export {
-  stringifyYaml as stringify,
-  stringifyYamlWithComments as stringifyWithComments,
-  formatYaml as format,
-  minifyYaml as minify,
-  prettifyYaml as prettify,
-  toYamlDocument as toDocument,
-  // Convenience alias
-  stringifyYaml as toYaml,
-} from "./stringifier.js";
+    formatYaml as format,
+    minifyYaml as minify,
+    prettifyYaml as prettify, stringifyYaml as stringify,
+    stringifyYamlWithComments as stringifyWithComments, toYamlDocument as toDocument,
+    // Convenience alias
+    stringifyYaml as toYaml
+} from "#stringifier.js";
 
 // Validator exports
 export {
-  createValidator,
-  validateRequired,
-  validateType,
-  validateEnum,
-  validatePattern,
-  validateRange,
-  validateArrayLength,
-  validateSchema,
-} from "./validator.js";
+    createValidator, validateArrayLength, validateEnum,
+    validatePattern,
+    validateRange, validateRequired, validateSchema, validateType
+} from "#validator.js";
 
 // JSON utilities
-export { fromJson, toJson } from "./json.js";
+export { fromJson, toJson } from "#json.js";
 
 // Value utilities
-export { isYamlValue } from "./value.js";
+export { isYamlValue } from "#value.js";
 
 // Version
-export { getVersion } from "./version.js";
+export { getVersion } from "#version.js";
 
 // Type exports
-export * from "./types.js";
+export * from "#types.js";

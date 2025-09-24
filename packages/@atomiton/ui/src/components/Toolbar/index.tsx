@@ -1,7 +1,7 @@
+import Action from "#Action";
+import ExportFiles from "#ExportFiles";
+import ZoomControl from "#ZoomControl";
 import { useState } from "react";
-import Action from "./Action";
-import ZoomControl from "./ZoomControl";
-import ExportFiles from "./ExportFiles";
 
 type Props = {
   playmode?: boolean;

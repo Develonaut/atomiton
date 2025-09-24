@@ -1,9 +1,9 @@
-import { useState } from "react";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import Tabs from "#components/Tabs";
+import { useState } from "react";
 
-import { sizes, formatsColor, formats } from "./content";
+import { formats, formatsColor, sizes } from "#content";
 
 type Props = {
   defaultSize: number;

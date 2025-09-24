@@ -1,5 +1,5 @@
 import Icon from "#components/Icon";
-import Item from "./Item";
+import Item from "#Item";
 
 function Settings() {
   return (

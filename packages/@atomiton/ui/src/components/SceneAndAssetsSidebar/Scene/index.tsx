@@ -1,7 +1,7 @@
+import Item from "#Item";
 import { useState } from "react";
-import Item from "./Item";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Scene() {
   const [selected, setSelected] = useState(4);

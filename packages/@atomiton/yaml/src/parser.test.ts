@@ -1,12 +1,12 @@
-import { describe, it, expect } from "vitest";
 import {
-  parseYaml,
-  safeParseYaml,
-  parseMultipleDocuments,
-  parseYamlStream,
-  isValidYaml,
-} from "./parser";
+    isValidYaml,
+    parseMultipleDocuments,
+    parseYaml,
+    parseYamlStream,
+    safeParseYaml,
+} from "#parser";
 import type { YamlDocument, YamlError } from "#types";
+import { describe, expect, it } from "vitest";
 
 describe("parseYaml", () => {
   it("should parse simple YAML string", () => {

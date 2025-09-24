@@ -1,6 +1,6 @@
+import Box from "#components/Box";
+import type { FlexProps } from "#Flex.types";
 import { Children, Fragment } from "react";
-import Box from "../Box";
-import type { FlexProps } from "./Flex.types";
 
 function Flex({
   direction = "row",

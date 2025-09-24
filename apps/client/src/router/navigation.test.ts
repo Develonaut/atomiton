@@ -1,6 +1,6 @@
+import { navigate, router } from "#index";
+import * as navigationModule from "#navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import * as navigationModule from "./navigation";
-import { navigate, router } from "./index";
 
 // Mock the router exports
 vi.mock("./index", () => ({

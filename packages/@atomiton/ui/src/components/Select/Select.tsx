@@ -9,7 +9,7 @@ import {
   type ListboxOptionsProps,
   type ListboxOptionProps,
 } from "@headlessui/react";
-import { cn } from "../../utils/cn";
+import { cn } from "#components/../utils/cn";
 
 export type SelectOption = {
   id: number | string;

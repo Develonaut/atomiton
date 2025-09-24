@@ -1,13 +1,13 @@
-import { useState } from "react";
 import GuidelineSidebar from "#components/GuidelineSidebar";
-import Header from "./Header";
+import Header from "#Header";
+import { useState } from "react";
 
 type Props = {
   title: string;
   children: React.ReactNode;
 };
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Layout({ title, children }: Props) {
   const [visible, setVisible] = useState(false);

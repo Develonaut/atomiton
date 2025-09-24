@@ -1,13 +1,13 @@
-import { useState } from "react";
+import Icon from "#components/Icon";
 import {
   Listbox,
   ListboxButton,
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
-import Icon from "#components/Icon";
+import { useState } from "react";
 
-import { options } from "./options";
+import { options } from "#options";
 
 type Props = {
   className?: string;

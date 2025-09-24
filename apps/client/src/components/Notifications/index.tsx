@@ -1,4 +1,6 @@
-import { useState } from "react";
+import Icon from "#components/Icon";
+import Details from "#Details";
+import Notification from "#Notification";
 import {
   Popover,
   PopoverBackdrop,
@@ -6,11 +8,9 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { motion } from "framer-motion";
-import Icon from "#components/Icon";
-import Notification from "./Notification";
-import Details from "./Details";
+import { useState } from "react";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Notifications() {
   const [visible, setVisible] = useState(false);

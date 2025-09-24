@@ -1,10 +1,10 @@
+import { mapZodTypeToControl } from "#mapZodTypeToControl";
 import type {
-  FieldConfig,
-  FieldsMetadata,
-  UIControlType,
-  ZodSchema,
-} from "../types";
-import { mapZodTypeToControl } from "./mapZodTypeToControl";
+    FieldConfig,
+    FieldsMetadata,
+    UIControlType,
+    ZodSchema,
+} from "#types";
 
 /**
  * Generates field configurations from a Zod object schema

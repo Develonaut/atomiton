@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { generateDataAttributes } from "./generateDataAttributes";
+import { generateDataAttributes } from "#generateDataAttributes";
+import { describe, expect, it } from "vitest";
 
 describe("generateDataAttributes", () => {
   describe("basic data attribute generation", () => {

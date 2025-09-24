@@ -1,14 +1,14 @@
-import { Button as ButtonPrimitive } from "#primitives";
-import { styled } from "#system/styled";
-import resolveButtonProps from "./Button.resolver";
+import resolveButtonProps from "#Button.resolver";
 import {
   BUTTON_STYLES,
-  buttonVariants,
-  buttonSizes,
-  buttonLoading,
   buttonCompoundVariants,
-} from "./Button.styles";
-import type { ButtonProps } from "./Button.types";
+  buttonLoading,
+  buttonSizes,
+  buttonVariants,
+} from "#Button.styles";
+import type { ButtonProps } from "#Button.types";
+import { Button as ButtonPrimitive } from "#primitives";
+import { styled } from "#system/styled";
 
 const ButtonRoot = styled(ButtonPrimitive, {
   name: "Button",

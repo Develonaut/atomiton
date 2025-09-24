@@ -1,9 +1,9 @@
-import { useState } from "react";
 import Select from "#components/form/Select";
-import Tabs from "#components/Tabs";
 import Icon from "#components/Icon";
+import Tabs from "#components/Tabs";
+import { useState } from "react";
 
-import { sizes, formatsColor, formats } from "./content";
+import { formats, formatsColor, sizes } from "#content";
 
 type Props = {
   defaultSize: number;

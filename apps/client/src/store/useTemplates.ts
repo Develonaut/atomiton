@@ -4,12 +4,12 @@
  * Provides access to system templates
  */
 
-import { useDidMount } from "@atomiton/hooks";
 import {
-  templateActions,
-  templateStore,
-  type TemplateState,
-} from "./templates";
+    templateActions,
+    templateStore,
+    type TemplateState,
+} from "#templates";
+import { useDidMount } from "@atomiton/hooks";
 
 const selectTemplates = (state: TemplateState) => state.templates;
 const selectIsLoading = (state: TemplateState) => state.isLoading;

@@ -1,19 +1,10 @@
-export { createRouter } from "./createRouter";
-export type { RouteConfig, CreateRouterOptions, RouteComponent } from "./types";
+export { createRouter } from "#createRouter";
+export type { CreateRouterOptions, RouteComponent, RouteConfig } from "#types";
 
 export {
-  Link,
-  RouterProvider,
-  useRouter,
-  useNavigate,
-  useParams,
-  useLocation,
-  useRouteContext,
-  useSearch,
-  useLoaderData,
-  Navigate,
-  Outlet,
-  type LinkProps,
+    Link, Navigate,
+    Outlet, RouterProvider, useLoaderData, useLocation, useNavigate,
+    useParams, useRouteContext, useRouter, useSearch, type LinkProps
 } from "@tanstack/react-router";
 
 export type { NavigateOptions } from "@tanstack/react-router";

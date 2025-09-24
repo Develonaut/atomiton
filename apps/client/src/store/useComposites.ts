@@ -5,10 +5,10 @@
  */
 
 import {
-  compositeActions,
-  compositeStore,
-  type CompositeState,
-} from "./composites";
+    compositeActions,
+    compositeStore,
+    type CompositeState,
+} from "#composites";
 
 const selectComposites = (state: CompositeState) => state.composites;
 const selectIsLoading = (state: CompositeState) => state.isLoading;

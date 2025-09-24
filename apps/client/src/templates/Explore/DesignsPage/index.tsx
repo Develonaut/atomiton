@@ -1,9 +1,9 @@
-import Layout from "#components/Layout";
-import Projects from "#components/Projects";
 import Gallery from "#components/Gallery";
+import Layout from "#components/Layout";
 import PanelMessage from "#components/PanelMessage";
+import Projects from "#components/Projects";
 
-import { projects, gallery } from "./content";
+import { gallery, projects } from "#content";
 
 function DesignsPage() {
   return (

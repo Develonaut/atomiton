@@ -1,5 +1,5 @@
+import { useTabsContext } from "#TabsRoot";
 import type { PropsWithChildren } from "react";
-import { useTabsContext } from "./TabsRoot";
 
 type TabsTriggerProps = PropsWithChildren<{
   value: string | number;

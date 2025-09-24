@@ -1,10 +1,10 @@
-import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
-import Image from "#components/Image";
-import Icon from "#components/Icon";
-import Contacts from "./Contacts";
 import Gallery from "#components/Gallery";
+import Icon from "#components/Icon";
+import Image from "#components/Image";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
+import Contacts from "#Contacts";
 
-import { gallery } from "./content";
+import { gallery } from "#content";
 
 function ProfilePage() {
   return (

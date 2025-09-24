@@ -1,5 +1,5 @@
-import Flex from "../Flex";
-import type { ColumnProps } from "./Column.types";
+import Flex from "#components/Flex";
+import type { ColumnProps } from "#components/Column/Column.types";
 
 function Column(props: ColumnProps) {
   return <Flex direction="column" {...props} />;

@@ -1,10 +1,10 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import type { Swiper as SwiperType } from "swiper";
 import Image from "#components/Image";
-import "swiper/css";
 import { useRef } from "react";
+import type { Swiper as SwiperType } from "swiper";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import { content } from "./content";
+import { content } from "#content";
 
 function Slider() {
   const swiperRef = useRef<SwiperType>(null);

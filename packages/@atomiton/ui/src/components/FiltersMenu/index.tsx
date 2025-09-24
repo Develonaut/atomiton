@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { itemsType, itemsSort } from "./items";
+import { itemsSort, itemsType } from "#items";
 
 type ItemProps = {
   id?: number;

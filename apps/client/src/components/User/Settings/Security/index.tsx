@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Switch from "#components/form/Switch";
 import Button from "#components/Button";
-import Title from "../Title";
-import Option from "../Option";
-import Field from "../Field";
+import Title from "./Title";
+import Option from "./Option";
+import Field from "./Field";
 
 function Security() {
   const [username, setUsername] = useState("••••••••••••••");

@@ -1,4 +1,4 @@
-import type { ButtonProps } from "./Button.types";
+import type { ButtonProps } from "#Button.types";
 
 /**
  * Button Props Resolver to convert Brainwave 2.0 Props to Atomoton UI Props.

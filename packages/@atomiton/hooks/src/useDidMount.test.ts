@@ -1,6 +1,6 @@
+import { useDidMount } from "#useDidMount";
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useDidMount } from "./useDidMount";
 
 describe("useDidMount", () => {
   it("should run callback exactly once on mount", () => {

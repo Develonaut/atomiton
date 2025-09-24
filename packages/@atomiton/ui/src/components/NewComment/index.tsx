@@ -1,8 +1,8 @@
+import CommentCursor from "#components/CommentCursor";
+import SubmitButton from "#components/SubmitButton";
+import ImagePreview from "#ImagePreview";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import SubmitButton from "#components/SubmitButton";
-import CommentCursor from "#components/CommentCursor";
-import ImagePreview from "./ImagePreview";
 
 function NewComment() {
   const [message, setMessage] = useState("");

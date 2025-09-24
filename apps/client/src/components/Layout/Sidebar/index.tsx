@@ -1,11 +1,11 @@
-import { Link } from "#router";
-import Image from "#components/Image";
 import Icon from "#components/Icon";
-import NavLink from "./NavLink";
-import Dropdown from "./Dropdown";
-import Folders from "./Folders";
+import Image from "#components/Image";
+import Dropdown from "#Dropdown";
+import Folders from "#Folders";
+import NavLink from "#NavLink";
+import { Link } from "#router";
 
-import { navigation, folders } from "./navigation";
+import { folders, navigation } from "#navigation";
 
 type Props = {
   visible: boolean;

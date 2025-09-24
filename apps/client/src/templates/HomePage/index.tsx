@@ -1,10 +1,10 @@
 import Catalog from "#components/Catalog";
 import Layout from "#components/Layout";
 import Templates from "#components/Templates";
+import { content as fakeContent } from "#content";
 import { useComposites } from "#store/useComposites";
 import { titleCase } from "@atomiton/utils";
 import { useMemo } from "react";
-import { content as fakeContent } from "./content";
 
 function HomePage() {
   const { composites, isLoading } = useComposites();

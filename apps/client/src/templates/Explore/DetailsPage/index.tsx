@@ -1,10 +1,10 @@
-import { useRouter } from "#router";
-import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
 import Icon from "#components/Icon";
+import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
 import VideoPlayer from "#components/VideoPlayer";
-import Slider from "./Slider";
-import Details from "./Details";
-import Report from "./Report";
+import Details from "#Details";
+import Report from "#Report";
+import { useRouter } from "#router";
+import Slider from "#Slider";
 
 function DetailsPage() {
   const router = useRouter();

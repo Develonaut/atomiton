@@ -1,4 +1,4 @@
-import type { YamlDocument, YamlError, ValidationSchema } from "./types.js";
+import type { ValidationSchema, YamlDocument, YamlError } from "#types.js";
 
 export function createValidator<T = YamlDocument>(
   schema: (data: unknown) => data is T,

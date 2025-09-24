@@ -1,16 +1,16 @@
-import { useState } from "react";
-import Select from "#components/form/Select";
-import Tabs from "#components/Tabs";
 import Button from "#components/Button";
+import Select from "#components/form/Select";
 import Icon from "#components/Icon";
-import Line from "../Line";
+import Tabs from "#components/Tabs";
+import { useState } from "react";
+import Line from "./Line";
 
 import {
   cameraOptions,
   formats,
   frameRateOptions,
   resolutionOptions,
-} from "./content";
+} from "#content";
 
 function Video() {
   const [camera, setCamera] = useState(cameraOptions[0]);

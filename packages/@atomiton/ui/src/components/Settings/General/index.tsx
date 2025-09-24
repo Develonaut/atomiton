@@ -3,8 +3,8 @@ import Switch from "#components/Switch";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import NewField from "#components/NewField";
-import Title from "../Title";
-import Option from "../Option";
+import Title from "#components/Title";
+import Option from "#components/Option";
 
 function General() {
   const [username, setUsername] = useState("sophie");

@@ -1,3 +1,13 @@
+import { FIELD_PROPERTY_EXTRACTORS } from "#constants";
+import {
+  BooleanField,
+  JsonField,
+  NumberField,
+  SelectField,
+  TextareaField,
+  TextField,
+} from "#fields/index";
+import type { FieldConfig } from "#types";
 import React from "react";
 import type {
   FieldError,
@@ -6,16 +16,6 @@ import type {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import { FIELD_PROPERTY_EXTRACTORS } from "../constants";
-import type { FieldConfig } from "../types";
-import {
-  BooleanField,
-  JsonField,
-  NumberField,
-  SelectField,
-  TextareaField,
-  TextField,
-} from "./fields/index";
 
 type FieldRendererProps = {
   fieldName: string;

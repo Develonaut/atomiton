@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Group from "../../Group";
+import Group from "./../Group";
 import { ColorDisplay } from "#components/form";
 
 function Background() {

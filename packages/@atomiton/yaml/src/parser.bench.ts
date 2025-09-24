@@ -1,10 +1,10 @@
-import { bench, describe } from "vitest";
 import {
-  parseYaml,
-  safeParseYaml,
-  parseYamlStream,
-  isValidYaml,
-} from "./parser.js";
+    isValidYaml,
+    parseYaml,
+    parseYamlStream,
+    safeParseYaml,
+} from "#parser.js";
+import { bench, describe } from "vitest";
 
 const smallYaml = `
 name: John Doe

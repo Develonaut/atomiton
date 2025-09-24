@@ -1,6 +1,6 @@
 import Icon from "#components/Icon";
 import Button from "#components/Button";
-import Title from "../Title";
+import Title from "./Title";
 
 const features = [
   "Everything in Free",

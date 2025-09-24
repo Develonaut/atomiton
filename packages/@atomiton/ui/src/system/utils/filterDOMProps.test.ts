@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { filterDOMProps } from "./filterDOMProps";
+import { filterDOMProps } from "#filterDOMProps";
+import { describe, expect, it } from "vitest";
 
 describe("filterDOMProps", () => {
   describe("React component props (isHTMLElement = false)", () => {

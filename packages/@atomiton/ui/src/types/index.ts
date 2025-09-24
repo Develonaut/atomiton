@@ -1,2 +1,2 @@
-export * from "./common";
-export type { StyleProps } from "../utils/extractStyleProps";
+export * from "#common";
+export type { StyleProps } from "#components/utils/extractStyleProps";

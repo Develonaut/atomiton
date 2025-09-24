@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { createStore, shallow } from "./index";
+import { createStore, shallow } from "#index";
+import { describe, expect, it } from "vitest";
 
 describe("Store Smoke Tests", () => {
   it("should expose core exports", () => {

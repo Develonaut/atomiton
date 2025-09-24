@@ -5,21 +5,21 @@ import {
   type StorageInfo,
   type StorageItem,
   type StorageOptions,
-} from "../types";
+} from "#types";
 import {
   createBaseDir,
   getFilePath,
   fileExists,
   ensureDirectory,
-} from "./utils/fileUtils";
-import { isCompositeData, addTimestampMetadata } from "./utils/dataValidation";
+} from "#factories/utils/fileUtils";
+import { isCompositeData, addTimestampMetadata } from "#factories/utils/dataValidation";
 import {
   writeDataToFile,
   readDataFromFile,
   findExistingFile,
   deleteExistingFiles,
   walkDirectory,
-} from "./utils/fileOperations";
+} from "#factories/utils/fileOperations";
 
 export type FileSystemStorageConfig = {
   baseDir?: string;

@@ -1,6 +1,6 @@
-import SwitchLabel from "./SwitchLabel";
-import SwitchRoot from "./SwitchRoot";
-import SwitchThumb from "./SwitchThumb";
+import SwitchLabel from "#SwitchLabel";
+import SwitchRoot from "#SwitchRoot";
+import SwitchThumb from "#SwitchThumb";
 
 const Switch = Object.assign(SwitchRoot, {
   Thumb: SwitchThumb,

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { calculateStyleProps } from "./calculateStyleProps";
+import { calculateStyleProps } from "#calculateStyleProps";
+import { describe, expect, it } from "vitest";
 
 describe("calculateStyleProps", () => {
   describe("basic functionality", () => {
