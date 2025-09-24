@@ -1,5 +1,6 @@
 import { defineLibraryConfig } from "@atomiton/vite-config";
 import { resolve } from "path";
+import dts from "vite-plugin-dts";
 
 export default defineLibraryConfig({
   name: "AtomitonStore",
@@ -10,6 +11,14 @@ export default defineLibraryConfig({
     utils: "src/utils/",
   },
   additionalConfig: {
+    plugins: [
+      dts({
+        insertTypesEntry: true,
+        rollupTypes: true,
+        include: ["src/**/*.ts"],
+        exclude: ["src/**/*.test.ts", "src/**/*.bench.ts"],
+      }),
+    ],
     resolve: {
       alias: {
         "#": resolve(__dirname, "src"),
