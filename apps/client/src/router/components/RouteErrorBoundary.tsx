@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { logError } from "#utils/globalErrorHandler";
-
 export function RouteErrorBoundary({
   error,
   reset,
@@ -8,12 +5,6 @@ export function RouteErrorBoundary({
   error?: Error;
   reset?: () => void;
 }) {
-  useEffect(() => {
-    // Log route errors to global error handler
-    if (error) {
-      logError(error, "RouteErrorBoundary");
-    }
-  }, [error]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
