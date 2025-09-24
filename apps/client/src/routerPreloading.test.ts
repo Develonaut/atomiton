@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 describe("Preloading and Lazy Loading Smoke Tests", () => {
   it("should have intent-based preloading enabled in router configuration", () => {
     // Verify router is configured with intent preloading
-    const routerOptions = router.options || router.__options;
+    const routerOptions = router.options;
 
     // The router should have defaultPreload set to "intent"
     expect(routerOptions?.defaultPreload).toBe("intent");

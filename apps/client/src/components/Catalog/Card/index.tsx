@@ -6,6 +6,7 @@ import {
   convertNodeToEditorNode,
   convertEdgeToEditorEdge,
 } from "#utils/editorConverters";
+import type { NodeDefinition } from "@atomiton/nodes";
 
 type Props = {
   value: {
@@ -26,12 +27,12 @@ function Card({ value }: Props) {
     if (value.type === "template" && template) {
       const templateState = {
         defaultNodes:
-          template.nodes?.map((node, nodeIndex) =>
+          template.children?.map((node: NodeDefinition, nodeIndex: number) =>
             convertNodeToEditorNode(node, nodeIndex),
           ) || [],
         defaultEdges: template.edges?.map(convertEdgeToEditorEdge) || [],
         name: template.name,
-        description: template.description,
+        description: template.metadata.description,
       };
 
       navigate({

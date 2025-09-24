@@ -12,4 +12,4 @@ export { useSelectedNodes } from "#hooks/useSelectedNodes";
 
 export type { EditorEdge } from "#hooks/useEditorEdges";
 export type { ViewportOptions } from "#hooks/useEditorViewport";
-export type { EditorNode, NodePosition } from "#types/EditorNode";
+export type { EditorNode, NodePosition, NodeData } from "#types/EditorNode";

@@ -45,3 +45,10 @@ export function generateNodeId(prefix?: string): string {
 export function generateEdgeId(prefix?: string): string {
   return generateId(prefix ? `edge_${prefix}` : "edge");
 }
+
+/**
+ * Generates a unique port ID (for node ports)
+ */
+export function generatePortId(prefix?: string): string {
+  return generateId(prefix ? `port_${prefix}` : "edge");
+}

@@ -1,4 +1,5 @@
 import { mapZodTypeToControl } from "#utils/mapZodTypeToControl";
+import type { SelectFieldConfig } from "#types";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
 
@@ -263,7 +264,7 @@ describe("mapZodTypeToControl", () => {
 
       expect(result.required).toBe(false);
       expect(result.type).toBe("select");
-      expect(result.options).toEqual([
+      expect((result as SelectFieldConfig).options).toEqual([
         { label: "a", value: "a" },
         { label: "b", value: "b" },
       ]);

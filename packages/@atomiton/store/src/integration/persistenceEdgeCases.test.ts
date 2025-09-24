@@ -4,6 +4,7 @@
  */
 
 import { createStore } from "#index";
+import type { PersistStorage, StorageValue } from "zustand/middleware";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Edge Cases and Error Boundaries", () => {
@@ -53,14 +54,13 @@ describe("Edge Cases and Error Boundaries", () => {
     });
 
     it("should handle corrupted stored data", () => {
-      const mockStorage = {
-        getItem: vi.fn(() => "invalid-json{") as any,
+      const mockStorage: PersistStorage<{ data: string }> = {
+        getItem: vi.fn((): StorageValue<{ data: string }> | null => {
+          return "invalid-json{" as unknown as StorageValue<{ data: string }>;
+        }),
         setItem: vi.fn(),
         removeItem: vi.fn(),
-        clear: vi.fn(),
-        length: 0,
-        key: vi.fn(),
-      } as any;
+      };
 
       const store = createStore<{ data: string }>(() => ({ data: "default" }), {
         persist: {
@@ -74,19 +74,18 @@ describe("Edge Cases and Error Boundaries", () => {
     });
 
     it("should handle schema mismatches during hydration", () => {
-      const mockStorage = {
-        getItem: vi.fn(() =>
-          JSON.stringify({
-            state: { wrongProperty: "value", missing: "expected" },
-            version: 0,
-          }),
-        ) as any,
+      const mockStorage: PersistStorage<{ data: string; count: number }> = {
+        getItem: vi.fn(
+          (): StorageValue<{ data: string; count: number }> | null => {
+            return JSON.stringify({
+              state: { wrongProperty: "value", missing: "expected" },
+              version: 0,
+            }) as unknown as StorageValue<{ data: string; count: number }>;
+          },
+        ),
         setItem: vi.fn(),
         removeItem: vi.fn(),
-        clear: vi.fn(),
-        length: 0,
-        key: vi.fn(),
-      } as any;
+      };
 
       const store = createStore<{ data: string; count: number }>(
         () => ({ data: "default", count: 0 }),
@@ -113,19 +112,16 @@ describe("Edge Cases and Error Boundaries", () => {
     });
 
     it("should handle migration function errors", () => {
-      const mockStorage = {
-        getItem: vi.fn(() =>
-          JSON.stringify({
+      const mockStorage: PersistStorage<{ data: string }> = {
+        getItem: vi.fn((): StorageValue<{ data: string }> | null => {
+          return JSON.stringify({
             state: { data: "old" },
             version: 0,
-          }),
-        ) as any,
+          }) as unknown as StorageValue<{ data: string }>;
+        }),
         setItem: vi.fn(),
         removeItem: vi.fn(),
-        clear: vi.fn(),
-        length: 0,
-        key: vi.fn(),
-      } as any;
+      };
 
       const store = createStore<{ data: string }>(() => ({ data: "default" }), {
         persist: {

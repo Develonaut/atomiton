@@ -9,8 +9,11 @@ import { describe, expect, it } from "vitest";
 describe("Template Preloading Smoke Tests", () => {
   it("should verify templates are available as source of truth", async () => {
     // Lightweight check that templates can be imported from nodes package
-    const { templates } = await import("@atomiton/nodes/definitions");
-    expect(templates).toBeDefined();
+    const { getAllTemplates } = await import("@atomiton/nodes/definitions");
+    expect(getAllTemplates).toBeDefined();
+    expect(typeof getAllTemplates).toBe("function");
+
+    const templates = getAllTemplates();
     expect(Array.isArray(templates)).toBe(true);
     expect(templates.length).toBeGreaterThan(0);
 
@@ -18,7 +21,7 @@ describe("Template Preloading Smoke Tests", () => {
     const firstTemplate = templates[0];
     expect(firstTemplate.id).toBeDefined();
     expect(firstTemplate.name).toBeDefined();
-    expect(firstTemplate.nodes).toBeDefined();
+    expect(firstTemplate.children).toBeDefined(); // Templates have children, not nodes
   });
 
   it("should import Link from router successfully", async () => {
@@ -36,7 +39,7 @@ describe("Template Preloading Smoke Tests", () => {
     const router = routerModule.router;
 
     // Check router options for preloading configuration
-    const routerOptions = router.options || router.__options;
+    const routerOptions = router.options;
     expect(routerOptions?.defaultPreload).toBe("intent");
     expect(routerOptions?.defaultPreloadDelay).toBe(50);
   });

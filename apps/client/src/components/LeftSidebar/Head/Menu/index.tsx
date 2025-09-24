@@ -80,7 +80,10 @@ function Menu() {
         onClose={() => setOpenModalFolders(false)}
         hideCloseButton
       >
-        <Folders />
+        <Folders
+          open={openModalFolders}
+          onClose={() => setOpenModalFolders(false)}
+        />
       </Modal>
       <Modal
         classWrapper="max-w-89"
@@ -88,7 +91,10 @@ function Menu() {
         onClose={() => setOpenModalDelete(false)}
         hideCloseButton
       >
-        <DeleteFile onClose={() => setOpenModalDelete(false)} />
+        <DeleteFile
+          open={openModalDelete}
+          onClose={() => setOpenModalDelete(false)}
+        />
       </Modal>
     </>
   );

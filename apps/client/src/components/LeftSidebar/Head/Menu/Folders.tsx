@@ -12,12 +12,7 @@ function Folders({ open, onClose }: Props) {
   const [folderName, setFolderName] = useState("");
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title="Create New Folder"
-      className="max-w-md"
-    >
+    <Modal open={open} onClose={onClose} className="max-w-md">
       <div className="p-6">
         <Field
           label="Folder Name"

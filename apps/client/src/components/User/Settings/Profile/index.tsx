@@ -54,9 +54,10 @@ function Profile() {
       </Option>
       <Option title="Portfolio link">
         <Field
+          label="Portfolio link"
           placeholder="Enter new link"
           value={link}
-          onChange={(e) => setLink(e.target.value)}
+          onChange={(value) => setLink(value)}
         />
       </Option>
       <Option title="Display name">Sophie Bennett ®</Option>

@@ -30,11 +30,12 @@ function General() {
   return (
     <>
       <Title value="General" />
-      <Option title="Usename">
+      <Option title="Username">
         <Field
+          label="Username"
           placeholder="Enter new username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(value) => setUsername(value)}
         />
       </Option>
       <Option title="Email">

@@ -80,7 +80,6 @@ export const compositeActions: CompositeActions = {
         metadata: {
           ...state.composites[index].metadata,
           ...updates.metadata,
-          modified: new Date().toISOString(),
         },
       };
       state.error = null;

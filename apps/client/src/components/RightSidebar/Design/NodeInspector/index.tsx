@@ -1,6 +1,10 @@
 import { useEditorNodes } from "@atomiton/editor";
 import { Form, type ZodSchema, type FieldsMetadata } from "@atomiton/form";
-import { getNodeDefinition } from "@atomiton/nodes/definitions";
+import {
+  getNodeDefinition,
+  getNodeSchema,
+  type NodeSchemaEntry,
+} from "@atomiton/nodes/definitions";
 import { Box } from "@atomiton/ui";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
@@ -11,6 +15,7 @@ function NodeInspector() {
   const [nodeConfig, setNodeConfig] = useState<ReturnType<
     typeof getNodeDefinition
   > | null>(null);
+  const [nodeSchema, setNodeSchema] = useState<NodeSchemaEntry | null>(null);
 
   const selectedNode = selectedId
     ? nodes.find((node) => node.id === selectedId)
@@ -33,12 +38,16 @@ function NodeInspector() {
     if (selectedNode?.type) {
       try {
         const config = getNodeDefinition(selectedNode.type);
-        setNodeConfig(config?.parameters?.schema ? config : null);
+        const schema = getNodeSchema(selectedNode.type);
+        setNodeConfig(config || null);
+        setNodeSchema(schema || null);
       } catch {
         setNodeConfig(null);
+        setNodeSchema(null);
       }
     } else {
       setNodeConfig(null);
+      setNodeSchema(null);
     }
   }, [selectedNode]);
 
@@ -52,7 +61,7 @@ function NodeInspector() {
     );
   }
 
-  if (!nodeConfig?.parameters?.schema) {
+  if (!nodeSchema?.schema) {
     return (
       <Box className="p-4">
         <p className="text-sm text-[#7B7B7B]">
@@ -88,11 +97,11 @@ function NodeInspector() {
         >
           <Form
             key={`${selectedNode.id}-${selectedNode.type}`}
-            schema={nodeConfig.parameters.schema as ZodSchema}
+            schema={nodeSchema.fullSchema as ZodSchema}
             defaultValues={
-              selectedNode.data || nodeConfig.parameters.defaults || {}
+              selectedNode.data || nodeConfig?.parameters.defaults || {}
             }
-            fields={(nodeConfig.parameters.fields || {}) as FieldsMetadata}
+            fields={(nodeConfig?.parameters.fields || {}) as FieldsMetadata}
             onChange={(data) => updateNodeData(selectedNode.id, data)}
           />
         </Suspense>

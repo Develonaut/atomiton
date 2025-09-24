@@ -2,6 +2,7 @@ import LeftSidebar from "#components/LeftSidebar";
 import RightSidebar from "#components/RightSidebar";
 import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
+import type { EditorRouteState } from "#router/types";
 import { Canvas, Editor, type EditorNode } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
 import { useMemo } from "react";
@@ -9,10 +10,11 @@ import { useMemo } from "react";
 function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();
   const { state: locationState } = useLocation();
+  const editorState = locationState as EditorRouteState | undefined;
 
   const defaultNodes = useMemo(() => {
-    const rawNodes = Array.isArray(locationState?.defaultNodes)
-      ? locationState.defaultNodes
+    const rawNodes = Array.isArray(editorState?.defaultNodes)
+      ? editorState.defaultNodes
       : [];
 
     return rawNodes.map(
@@ -41,10 +43,10 @@ function LayoutEditor() {
         };
       },
     );
-  }, [locationState?.defaultNodes]);
+  }, [editorState?.defaultNodes]);
 
-  const defaultEdges = Array.isArray(locationState?.defaultEdges)
-    ? locationState.defaultEdges
+  const defaultEdges = Array.isArray(editorState?.defaultEdges)
+    ? editorState.defaultEdges
     : [];
 
   // TODO: Implement complete file lifecycle:

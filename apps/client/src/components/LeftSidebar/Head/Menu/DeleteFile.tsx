@@ -9,12 +9,7 @@ type Props = {
 
 function DeleteFile({ open, onClose }: Props) {
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title="Delete File"
-      className="max-w-md"
-    >
+    <Modal open={open} onClose={onClose} className="max-w-md">
       <div className="p-6">
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center justify-center size-12 bg-red-100 rounded-full">

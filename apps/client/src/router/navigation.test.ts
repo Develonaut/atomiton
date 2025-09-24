@@ -287,7 +287,7 @@ describe("Navigation Utilities", () => {
 
   describe("Return Values", () => {
     it("should return promises from preload functions", () => {
-      const mockPromise = Promise.resolve();
+      const mockPromise = Promise.resolve([] as any);
       mockPreloadRoute.mockReturnValue(mockPromise);
 
       const result = navigationModule.preloadHome();

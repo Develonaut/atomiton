@@ -6,12 +6,26 @@ export function convertNodeToEditorNode(
   index: number,
 ): EditorNode {
   return {
-    ...node,
-    position: {
+    id: node.id,
+    type: node.name, // Use node name as React Flow node type
+    position: node.position || {
       x: 100 + index * 250,
       y: 100,
     },
-    data: node.data || {},
+    data: {
+      name: node.name,
+      metadata: node.metadata,
+      parameters: node.parameters.defaults,
+      fields: node.parameters.fields,
+      inputPorts: node.inputPorts.map((port) => ({
+        ...port,
+        position: { top: "50%" },
+      })),
+      outputPorts: node.outputPorts.map((port) => ({
+        ...port,
+        position: { top: "50%" },
+      })),
+    },
     selected: false,
     draggable: true,
     selectable: true,

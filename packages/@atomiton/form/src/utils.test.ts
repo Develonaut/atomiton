@@ -3,6 +3,7 @@ import {
   getDefaultValues,
   mapZodTypeToControl,
 } from "#utils/index";
+import type { NumberFieldConfig, SelectFieldConfig } from "#types";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
 
@@ -124,7 +125,7 @@ describe("generateFieldsFromSchema", () => {
 
     expect(result[1].name).toBe("age");
     expect(result[1].type).toBe("number");
-    expect(result[1].min).toBe(0);
+    expect((result[1] as NumberFieldConfig).min).toBe(0);
     expect(result[1].required).toBe(true);
 
     expect(result[2].name).toBe("email");

@@ -25,9 +25,25 @@ describe("Conductor Service", () => {
         getInfo: vi.fn(),
       };
       const mockConductor = {
-        events: {},
-        executor: {},
-        store: {},
+        events: {
+          emit: vi.fn(),
+          on: vi.fn(),
+          once: vi.fn(),
+          off: vi.fn(),
+          removeAllListeners: vi.fn(),
+          listenerCount: vi.fn(),
+          getDomain: vi.fn().mockReturnValue("conductor"),
+        },
+        executor: {
+          executeNode: vi.fn(),
+          destroy: vi.fn(),
+        },
+        store: {
+          recordStart: vi.fn(),
+          recordComplete: vi.fn(),
+          recordError: vi.fn(),
+          clear: vi.fn(),
+        },
         shutdown: vi.fn(),
         cleanup: vi.fn(),
       } as ReturnType<typeof createConductor>;

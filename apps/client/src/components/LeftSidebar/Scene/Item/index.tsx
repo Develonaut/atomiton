@@ -16,8 +16,9 @@ function Item({ nodeId }: Props) {
 
   if (!node) return null;
 
-  const metadata = node.metadata;
-  const title = node.name;
+  const metadata = node.data.metadata;
+  const title = metadata.name;
+  const icon = metadata.icon;
 
   const handleOnClick = () => {
     selectNode();
@@ -41,7 +42,7 @@ function Item({ nodeId }: Props) {
               : "bg-surface-03"
           }`}
         >
-          <Icon className="!size-4" name={metadata?.icon} />
+          <Icon className="!size-4" name={icon} />
         </div>
         <span className="truncate text-left text-body-md text-primary">
           {title}

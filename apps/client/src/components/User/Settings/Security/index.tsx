@@ -14,9 +14,10 @@ function Security() {
       <Title value="Security" />
       <Option title="Password">
         <Field
-          placeholder="Enter new username"
+          label="Password"
+          placeholder="Enter new password"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(value) => setUsername(value)}
           type="password"
         />
       </Option>

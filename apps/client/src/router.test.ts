@@ -9,7 +9,7 @@ describe("Router", () => {
   });
 
   it("router should have intent-based preloading enabled", () => {
-    const routerOptions = router.options || router.__options;
+    const routerOptions = router.options;
     expect(routerOptions?.defaultPreload).toBe("intent");
     expect(routerOptions?.defaultPreloadDelay).toBe(50);
   });

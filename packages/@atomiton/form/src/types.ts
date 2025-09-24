@@ -86,7 +86,18 @@ export type FieldConfig =
  * Maps field names to their configuration
  */
 export type FieldsMetadata = {
-  [fieldName: string]: Partial<Omit<FieldConfig, "name">>;
+  [fieldName: string]: Partial<Omit<FieldConfig, "name">> & {
+    /** Legacy support for controlType */
+    controlType?: UIControlType;
+    /** Override min for number fields */
+    min?: number;
+    /** Override max for number fields */
+    max?: number;
+    /** Override step for number fields */
+    step?: number;
+    /** Options for select fields */
+    options?: Array<{ value: string | number | boolean; label: string }>;
+  };
 };
 
 /**

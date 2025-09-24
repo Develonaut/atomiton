@@ -1,4 +1,5 @@
 import { generateFieldsFromSchema } from "#utils/generateFieldsFromSchema";
+import type { NumberFieldConfig, SelectFieldConfig } from "#types";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
 
@@ -170,7 +171,7 @@ describe("generateFieldsFromSchema", () => {
 
       const result = generateFieldsFromSchema(schema, fields);
 
-      expect(result[0].options).toEqual([
+      expect((result[0] as SelectFieldConfig).options).toEqual([
         { label: "Active User", value: "active" },
         { label: "Inactive User", value: "inactive" },
       ]);
@@ -183,7 +184,7 @@ describe("generateFieldsFromSchema", () => {
 
       const result = generateFieldsFromSchema(schema);
 
-      expect(result[0].options).toEqual([
+      expect((result[0] as SelectFieldConfig).options).toEqual([
         { label: "draft", value: "draft" },
         { label: "published", value: "published" },
       ]);
@@ -203,9 +204,9 @@ describe("generateFieldsFromSchema", () => {
 
       const result = generateFieldsFromSchema(schema, fields);
 
-      expect(result[0].min).toBe(10); // Custom override
-      expect(result[0].max).toBe(100); // From schema
-      expect(result[0].step).toBe(5); // Custom
+      expect((result[0] as NumberFieldConfig).min).toBe(10); // Custom override
+      expect((result[0] as NumberFieldConfig).max).toBe(100); // From schema
+      expect((result[0] as NumberFieldConfig).step).toBe(5); // Custom
     });
 
     it("merges required field overrides", () => {
