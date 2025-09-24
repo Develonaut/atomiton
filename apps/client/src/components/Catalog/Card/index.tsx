@@ -39,7 +39,7 @@ function Card({ value }: Props) {
       navigate({
         to: "/editor/$id",
         params: { id: value.id },
-        state: templateState,
+        state: templateState as never,
       });
     }
   };
