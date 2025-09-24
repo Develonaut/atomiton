@@ -1,11 +1,36 @@
-import { resolve } from "path";
-import { defineConfig, type UserConfig } from "vite";
-import dts from "vite-plugin-dts";
-import { visualizer } from "rollup-plugin-visualizer";
-import { getTerserOptions } from "#utils/terser";
+import type { LibraryOptions } from "#types";
 import { createManualChunks } from "#utils/chunks";
 import { mergeViteConfig } from "#utils/merge";
-import type { LibraryOptions } from "#types";
+import { getTerserOptions } from "#utils/terser";
+import { resolve } from "path";
+import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig, type UserConfig, type LibraryFormats } from "vite";
+import dts from "vite-plugin-dts";
+
+function createMultiEntryLib(entry: Record<string, string>, name: string) {
+  return {
+    entry: Object.entries(entry).reduce(
+      (acc, [key, path]) => ({
+        ...acc,
+        [key]: resolve(process.cwd(), path),
+      }),
+      {} as Record<string, string>,
+    ),
+    name,
+    formats: ["es", "cjs"] as LibraryFormats[],
+    fileName: (format: string, entryName: string) =>
+      `${entryName}.${format === "es" ? "js" : "cjs"}`,
+  };
+}
+
+function createSingleEntryLib(entry: string, name: string) {
+  return {
+    entry: resolve(process.cwd(), entry),
+    name,
+    formats: ["es", "cjs"] as LibraryFormats[],
+    fileName: (format: string) => `index.${format === "es" ? "js" : "cjs"}`,
+  };
+}
 
 export function defineLibraryConfig(options: LibraryOptions): UserConfig {
   const {
@@ -19,6 +44,8 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
     assetsInlineLimit = 4096,
     additionalConfig = {},
   } = options;
+
+  const isMultiEntry = typeof entry === "object";
 
   const plugins = [
     dts({
@@ -44,16 +71,15 @@ export function defineLibraryConfig(options: LibraryOptions): UserConfig {
     );
   }
 
+  const libConfig = isMultiEntry
+    ? createMultiEntryLib(entry as Record<string, string>, name)
+    : createSingleEntryLib(entry as string, name);
+
   const baseConfig: UserConfig = {
     plugins,
     build: {
       target: "es2020",
-      lib: {
-        entry: resolve(process.cwd(), entry),
-        name,
-        formats: ["es", "cjs"],
-        fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
-      },
+      lib: libConfig,
       rollupOptions: {
         external,
         output: {

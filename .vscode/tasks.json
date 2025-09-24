@@ -10,94 +10,18 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": []
-    },
-    {
-      "label": "🏗️ build",
-      "detail": "Build all packages for production",
-      "type": "shell",
-      "command": "pnpm build",
-      "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "🧪 test",
-      "detail": "Run all unit and integration tests",
-      "type": "shell",
-      "command": "pnpm test",
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "🔍 lint",
-      "detail": "Check code for style and quality issues",
-      "type": "shell",
-      "command": "pnpm lint",
-      "group": "build",
-      "problemMatcher": ["$eslint-stylish"]
-    },
-    {
-      "label": "✨ format",
-      "detail": "Auto-format code with Prettier",
-      "type": "shell",
-      "command": "pnpm format",
-      "group": "build",
-      "problemMatcher": []
-    },
-    {
-      "label": "🔎 typecheck",
-      "detail": "Verify TypeScript types across all packages",
-      "type": "shell",
-      "command": "pnpm typecheck",
-      "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "🎨 dev:ui",
-      "detail": "Start UI component dev server for standalone development",
-      "type": "shell",
-      "command": "pnpm --filter=\"@atomiton/ui\" run dev:serve",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "✏️ dev:editor",
-      "detail": "Start Editor dev server for standalone development",
-      "type": "shell",
-      "command": "pnpm --filter=\"@atomiton/editor\" run dev:serve",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "📝 dev:form",
-      "detail": "Start Form components dev server for standalone development",
-      "type": "shell",
-      "command": "pnpm --filter=\"@atomiton/form\" run dev:serve",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "🖥️ dev:client",
-      "detail": "Start client app with editor in development mode",
-      "type": "shell",
-      "command": "pnpm -w run dev:client",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "relative",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+) - (error|warning|info)\\s+(TS\\d+): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "code": 5,
+          "message": 6
+        }
       }
     },
     {
@@ -106,7 +30,19 @@
       "type": "shell",
       "command": "pnpm -w run dev:desktop",
       "group": "build",
-      "problemMatcher": [],
+      "problemMatcher": {
+        "owner": "electron",
+        "fileLocation": "relative",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+) - (error|warning)\\s+(.*): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "code": 5,
+          "message": 6
+        }
+      },
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -119,199 +55,48 @@
       "command": "pnpm",
       "args": ["kill:ports"],
       "group": "none",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "problemMatcher": []
     },
     {
-      "label": "📦 build:ui",
-      "detail": "Build UI package only",
+      "label": "🧪 Run Specific Test",
+      "detail": "Run a specific test file or pattern",
       "type": "shell",
-      "command": "pnpm --filter @atomiton/ui build",
-      "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "📦 build:editor",
-      "detail": "Build Editor package only",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/editor build",
-      "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "📦 build:nodes",
-      "detail": "Build Nodes package only",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/nodes build",
-      "group": "build",
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "👀 watch:ui",
-      "detail": "Watch UI package and rebuild on file changes",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/ui dev",
-      "group": "build",
-      "problemMatcher": ["$tsc"],
-      "isBackground": true,
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "👀 watch:editor",
-      "detail": "Watch Editor package and rebuild on file changes",
-      "type": "shell",
-      "command": "pnpm --filter @atomiton/editor dev",
-      "group": "build",
-      "problemMatcher": ["$tsc"],
-      "isBackground": true,
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "🚨 Smoke Tests",
-      "detail": "Quick smoke tests - Check all apps and packages work",
-      "type": "shell",
-      "command": "pnpm test:smoke",
-      "group": {
-        "kind": "test",
-        "isDefault": true
+      "command": "pnpm",
+      "args": [
+        "test",
+        "${input:testPattern}"
+      ],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "vitest",
+        "fileLocation": "relative",
+        "pattern": [
+          {
+            "regexp": "^\\s*(FAIL|ERROR)\\s+(.+)$",
+            "severity": 1,
+            "file": 2
+          },
+          {
+            "regexp": "^\\s+(.+):(\\d+):(\\d+)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "loop": true
+          }
+        ]
       },
-      "problemMatcher": [],
       "presentation": {
         "reveal": "always",
         "panel": "new"
       }
-    },
+    }
+  ],
+  "inputs": [
     {
-      "label": "✨ E2E: Editor Core Flows",
-      "detail": "Test editor functionality - add nodes, select, delete",
-      "type": "shell",
-      "command": "pnpm test:editor",
-      "group": "test",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "🎭 E2E: Interactive UI",
-      "detail": "Open Playwright UI for interactive test debugging",
-      "type": "shell",
-      "command": "pnpm test:e2e:ui",
-      "group": "test",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "🐛 E2E: Debug Mode",
-      "detail": "Run tests in debug mode with breakpoints",
-      "type": "shell",
-      "command": "pnpm test:e2e:debug",
-      "group": "test",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "📦 Install Playwright",
-      "detail": "Install Playwright browsers for E2E testing",
-      "type": "shell",
-      "command": "pnpm test:install",
-      "group": "none",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "🔍 validate:packages",
-      "detail": "Validate package consistency across monorepo",
-      "type": "shell",
-      "command": "pnpm validate:packages",
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "🔍 validate:knip",
-      "detail": "Validate dependencies and exports with Knip",
-      "type": "shell",
-      "command": "pnpm validate:knip",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "🔍 validate:all",
-      "detail": "Run all validation checks (packages + dependencies)",
-      "type": "shell",
-      "command": "pnpm validate:packages && pnpm validate:knip",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "🧹 knip:dependencies",
-      "detail": "Analyze unused/unlisted dependencies",
-      "type": "shell",
-      "command": "pnpm knip:dependencies",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "🧹 knip:exports",
-      "detail": "Find unused exports across packages",
-      "type": "shell",
-      "command": "pnpm knip:unused-exports",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "🧹 knip:fix",
-      "detail": "Auto-fix Knip issues where possible",
-      "type": "shell",
-      "command": "pnpm knip:fix",
-      "group": "build",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "id": "testPattern",
+      "description": "Test file pattern or specific test name",
+      "default": "",
+      "type": "promptString"
     }
   ]
 }

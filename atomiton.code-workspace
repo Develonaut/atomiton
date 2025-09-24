@@ -58,66 +58,74 @@
     },
   ],
   "settings": {
-    "typescript.preferences.includePackageJsonAutoImports": "on",
-    "typescript.workspaceSymbols.scope": "allOpenProjects",
+    "eslint.useFlatConfig": true,
     "eslint.workingDirectories": [
-      "apps/client",
-      "apps/desktop",
-      "packages/core",
-      "packages/nodes",
-      "packages/theme",
-      "packages/ui",
+      {
+        "mode": "auto",
+      },
     ],
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "json",
+    ],
+    "eslint.format.enable": false,
+    "eslint.lintTask.enable": true,
+
+    // Editor Actions and Formatting Configuration
+    "prettier.requireConfig": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit",
       "source.fixAll": "explicit",
     },
-    "files.exclude": {
-      "**/node_modules": true,
-      "**/.turbo": true,
-      "**/dist": true,
-      "**/.next": true,
-      "**/out": true,
-    },
-    "search.exclude": {
-      "**/node_modules": true,
-      "**/.turbo": true,
-      "**/dist": true,
-      "**/.next": true,
-      "**/out": true,
-      "**/pnpm-lock.yaml": true,
-      "apps/brainwave-reference": true,
-    },
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[typescriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[javascript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[javascriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[markdown]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "typescript.tsdk": "node_modules/typescript/lib",
+
+    // TypeScript Configuration
     "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.preferences.quoteStyle": "double",
+    "typescript.suggest.autoImports": true,
+    "typescript.suggest.includePackageJsonAutoImports": "auto",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.surveys.enabled": false,
+    "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+    "typescript.workspaceSymbols.scope": "allOpenProjects",
+    "typescript.tsdk": "node_modules/typescript/lib",
+
+    // Performance Optimizations - Leverage .gitignore inheritance
+    "files.useExperimentalFileWatcher": true,
+    "files.exclude": {
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+    },
+
+    // Editor Behavior
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+
+    // Git Integration
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+
+    // File Associations
     "files.associations": {
       "*.css": "css",
       ".env*": "dotenv",
     },
+
+    // Extensions Settings
     "emmet.includeLanguages": {
-      "javascript": "javascriptreact",
-      "typescript": "typescriptreact",
+      "typescript": "html",
+      "typescriptreact": "html",
     },
     "tailwindCSS.experimental.classRegex": [
       ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],

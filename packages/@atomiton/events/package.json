@@ -24,11 +24,8 @@
     "#shared/*": "./src/shared/*"
   },
   "scripts": {
-    "dev:browser": "vite build --mode browser --watch",
-    "dev:desktop": "vite build --mode desktop --watch",
-    "build:browser": "vite build --mode browser",
-    "build:desktop": "vite build --mode desktop",
-    "build": "npm run clean && npm run build:browser && npm run build:desktop",
+    "dev": "vite build --watch",
+    "build": "vite build",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

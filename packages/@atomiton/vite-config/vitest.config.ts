@@ -1,3 +1,3 @@
-import { defineTestConfig } from "./dist/vitest.js";
+import { defineTestConfig } from "#presets/vitest";
 
 export default defineTestConfig();

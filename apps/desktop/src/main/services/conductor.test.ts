@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { setupMainProcessHandler } from "@atomiton/conductor/desktop";
 import { initializeConductor } from "@/main/services/conductor";
+import { createConductor } from "@atomiton/conductor/desktop";
 import type { IStorageEngine } from "@atomiton/storage";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the conductor factory
 vi.mock("@atomiton/conductor/desktop", () => ({
-  setupMainProcessHandler: vi.fn(),
+  createConductor: vi.fn(),
 }));
 
 describe("Conductor Service", () => {
@@ -25,17 +25,19 @@ describe("Conductor Service", () => {
         getInfo: vi.fn(),
       };
       const mockConductor = {
-        execute: vi.fn(),
-        configureTransport: vi.fn(),
+        events: {},
+        executor: {},
+        store: {},
+        shutdown: vi.fn(),
         cleanup: vi.fn(),
-      };
-      vi.mocked(setupMainProcessHandler).mockReturnValue(mockConductor);
+      } as any;
+      vi.mocked(createConductor).mockReturnValue(mockConductor);
 
       // Act
       const result = initializeConductor(mockStorage as IStorageEngine);
 
       // Assert
-      expect(setupMainProcessHandler).toHaveBeenCalledWith({
+      expect(createConductor).toHaveBeenCalledWith({
         concurrency: 4,
         storage: mockStorage,
         timeout: 60000,
@@ -43,10 +45,10 @@ describe("Conductor Service", () => {
       expect(result).toBe(mockConductor);
     });
 
-    it("When conductor initialization fails outside Electron context, Then should log warning", () => {
+    it("When conductor initialization fails, Then should log error and return null", () => {
       // Arrange
-      const consoleWarnSpy = vi
-        .spyOn(console, "warn")
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
         .mockImplementation(() => {});
       const mockStorage: IStorageEngine = {
         save: vi.fn(),
@@ -56,11 +58,9 @@ describe("Conductor Service", () => {
         exists: vi.fn(),
         getInfo: vi.fn(),
       };
-      const electronError = new Error(
-        "Main process handler requires Electron main process context",
-      );
-      vi.mocked(setupMainProcessHandler).mockImplementation(() => {
-        throw electronError;
+      const error = new Error("Failed to initialize conductor");
+      vi.mocked(createConductor).mockImplementation(() => {
+        throw error;
       });
 
       // Act
@@ -68,11 +68,12 @@ describe("Conductor Service", () => {
 
       // Assert
       expect(result).toBeNull();
-      expect(consoleWarnSpy).toHaveBeenCalledWith(
-        "Conductor initialization skipped: Not in Electron context",
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        "Failed to initialize conductor:",
+        error,
       );
 
-      consoleWarnSpy.mockRestore();
+      consoleErrorSpy.mockRestore();
     });
   });
 });

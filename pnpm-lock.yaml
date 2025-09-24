@@ -367,9 +367,6 @@ importers:
       p-queue:
         specifier: ^8.0.0
         version: 8.1.1
-      uuid:
-        specifier: ^13.0.0
-        version: 13.0.0
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:*

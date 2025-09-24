@@ -2,7 +2,7 @@ import type { UserConfig } from "vite";
 
 export type BaseOptions = {
   name: string;
-  entry?: string;
+  entry?: string | Record<string, string>;
   external?: string[];
   additionalConfig?: UserConfig;
 };

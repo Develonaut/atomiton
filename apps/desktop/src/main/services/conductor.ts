@@ -1,23 +1,21 @@
-import { setupMainProcessHandler } from "@atomiton/conductor/desktop";
+import { createConductor } from "@atomiton/conductor/desktop";
 import type { IStorageEngine } from "@atomiton/storage/desktop";
 
-export function initializeConductor(storage: IStorageEngine) {
-  // Set up the conductor handler in the main process
-  // This will handle execution requests from the renderer via IPC
+export function initializeConductor(
+  storage: IStorageEngine,
+): ReturnType<typeof createConductor> | null {
+  // Create the conductor in the main process
+  // This will handle execution requests from the renderer via events
   try {
-    const handler = setupMainProcessHandler({
+    const conductor = createConductor({
       concurrency: 4,
       storage,
       timeout: 60000,
     });
 
-    return handler;
+    return conductor;
   } catch (error) {
-    if (error instanceof Error && error.message.includes("Main process handler requires Electron main process context")) {
-      // This is expected when running outside Electron (e.g., during dev build)
-      console.warn("Conductor initialization skipped: Not in Electron context");
-      return null;
-    }
-    throw error; // Re-throw unexpected errors
+    console.error("Failed to initialize conductor:", error);
+    return null;
   }
 }

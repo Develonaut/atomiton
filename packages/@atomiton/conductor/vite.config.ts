@@ -3,19 +3,21 @@ import { resolve } from "path";
 
 export default defineLibraryConfig({
   name: "AtomitonConductor",
-  entry: "./src/index.ts",
+  entry: {
+    "browser/index": "./src/browser/index.ts",
+    "desktop/index": "./src/desktop/index.ts",
+  },
   external: [
-    // External packages
     "@atomiton/events",
-    "@atomiton/nodes/definitions",
+    "@atomiton/nodes",
     "@atomiton/nodes/executables",
+    "@atomiton/nodes/definitions",
     "@atomiton/storage",
     "@atomiton/store",
     "@atomiton/utils",
     "p-queue",
-    "uuid",
-    "electron",
-    // Node.js built-ins
+    "isolated-vm",
+    "child_process",
     "fs",
     "fs/promises",
     "path",
@@ -25,52 +27,26 @@ export default defineLibraryConfig({
     "events",
     "stream",
     "worker_threads",
+    "url",
     /^node:/,
   ],
   chunks: {
     vendor: ["node_modules"],
-    "engine-enhanced": ["src/engine/enhanced/"],
-    engine: ["src/engine/"],
-    "execution-composite": ["src/execution/composite/"],
-    execution: ["src/execution/"],
-    "queue-core": ["src/queue/core/"],
-    queue: ["src/queue/"],
-    store: ["src/store/"],
-    transport: ["src/transport/"],
-    electron: ["src/electron/"],
-    runtime: ["src/runtime/"],
-    simple: ["src/simple/"],
-    interfaces: ["src/interfaces/"],
+    core: ["src/core/"],
+    browser: ["src/browser/"],
+    desktop: ["src/desktop/"],
+    shared: ["src/shared/"],
   },
   enableVisualizer: true,
-  enableMinification: true,
+  enableMinification: false,
   enableSourceMap: true,
-  testEnvironment: "node",
   additionalConfig: {
     resolve: {
       alias: {
-        "#": resolve(__dirname, "src"),
-      },
-    },
-    build: {
-      lib: {
-        entry: {
-          "exports/browser/index": resolve(__dirname, "src/exports/browser/index.ts"),
-          "exports/desktop/index": resolve(__dirname, "src/exports/desktop/index.ts"),
-        },
-        name: "AtomitonConductor",
-        formats: ["es", "cjs"],
-      },
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ["console.log", "console.debug"],
-        },
-        mangle: {
-          keep_classnames: true,
-          keep_fnames: true,
-        },
+        "#core": resolve(__dirname, "src/core"),
+        "#browser": resolve(__dirname, "src/browser"),
+        "#desktop": resolve(__dirname, "src/desktop"),
+        "#shared": resolve(__dirname, "src/shared"),
       },
     },
   },
