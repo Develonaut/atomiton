@@ -5,48 +5,44 @@
       "label": "🚀 dev",
       "detail": "Start development: app servers (HMR) + library build watch",
       "type": "shell",
-      "command": "pnpm dev",
+      "command": "pnpm",
+      "args": ["dev"],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": {
-        "owner": "typescript",
-        "fileLocation": "relative",
-        "pattern": {
-          "regexp": "^(.*):(\\d+):(\\d+) - (error|warning|info)\\s+(TS\\d+): (.*)$",
-          "file": 1,
-          "line": 2,
-          "column": 3,
-          "severity": 4,
-          "code": 5,
-          "message": 6
-        }
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "dedicated",
+        "clear": false,
+        "close": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
       }
     },
     {
       "label": "🖱️ dev:desktop",
       "detail": "Start Electron desktop app",
       "type": "shell",
-      "command": "pnpm -w run dev:desktop",
+      "command": "pnpm",
+      "args": ["-w", "run", "dev:desktop"],
       "group": "build",
-      "problemMatcher": {
-        "owner": "electron",
-        "fileLocation": "relative",
-        "pattern": {
-          "regexp": "^(.*):(\\d+):(\\d+) - (error|warning)\\s+(.*): (.*)$",
-          "file": 1,
-          "line": 2,
-          "column": 3,
-          "severity": 4,
-          "code": 5,
-          "message": 6
-        }
-      },
+      "problemMatcher": ["$tsc"],
       "presentation": {
+        "echo": true,
         "reveal": "always",
-        "panel": "new"
-      }
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "new",
+        "clear": false,
+        "close": false
+      },
+      "dependsOn": []
     },
     {
       "label": "🔌 kill-ports",
@@ -54,8 +50,17 @@
       "type": "shell",
       "command": "pnpm",
       "args": ["kill:ports"],
-      "group": "none",
-      "problemMatcher": []
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "revealProblems": "never",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": true
+      }
     },
     {
       "label": "🧪 Run Specific Test",
@@ -66,18 +71,24 @@
         "test",
         "${input:testPattern}"
       ],
-      "group": "test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
       "problemMatcher": {
         "owner": "vitest",
-        "fileLocation": "relative",
+        "source": "vitest",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
         "pattern": [
           {
-            "regexp": "^\\s*(FAIL|ERROR)\\s+(.+)$",
+            "regexp": "^\\s*(FAIL|ERROR)\\s+(.+)\\s+>\\s+(.+)$",
             "severity": 1,
-            "file": 2
+            "file": 2,
+            "message": 3
           },
           {
-            "regexp": "^\\s+(.+):(\\d+):(\\d+)$",
+            "regexp": "^\\s+(.+):(\\d+):(\\d+)\\s*$",
             "file": 1,
             "line": 2,
             "column": 3,
@@ -86,8 +97,105 @@
         ]
       },
       "presentation": {
+        "echo": true,
         "reveal": "always",
-        "panel": "new"
+        "revealProblems": "onProblem",
+        "focus": true,
+        "panel": "new",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "🏗️ build",
+      "detail": "Build all packages for production",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["build"],
+      "group": "build",
+      "problemMatcher": ["$tsc", "$eslint-stylish"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "🧪 test",
+      "detail": "Run all tests",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test"],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "vitest",
+        "source": "vitest",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": [
+          {
+            "regexp": "^\\s*(FAIL|ERROR)\\s+(.+)\\s+>\\s+(.+)$",
+            "severity": 1,
+            "file": 2,
+            "message": 3
+          },
+          {
+            "regexp": "^\\s+(.+):(\\d+):(\\d+)\\s*$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "loop": true
+          }
+        ]
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "🔍 lint",
+      "detail": "Run ESLint on all packages",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["lint"],
+      "group": "build",
+      "problemMatcher": ["$eslint-stylish"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "🎨 format",
+      "detail": "Format all code with Prettier",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["format"],
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "revealProblems": "never",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": true
       }
     }
   ],
