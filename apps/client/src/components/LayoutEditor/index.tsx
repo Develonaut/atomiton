@@ -3,7 +3,13 @@ import RightSidebar from "#components/RightSidebar";
 import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
-import { Canvas, Editor, type EditorNode, type NodeData } from "@atomiton/editor";
+import {
+  Canvas,
+  Editor,
+  type EditorNode,
+  type NodeData,
+} from "@atomiton/editor";
+import type { NodeCategory, NodeIcon } from "@atomiton/nodes/definitions";
 import { Box } from "@atomiton/ui";
 import { useMemo } from "react";
 
@@ -33,12 +39,12 @@ function LayoutEditor() {
           metadata: {
             id: nodeBase.type,
             name: nodeBase.name,
-            type: 'test' as const,
-            version: '1.0.0',
-            category: (nodeBase.category || 'utility') as any,
-            description: '',
-            icon: 'file' as any,
-            author: '',
+            type: "test" as const,
+            version: "1.0.0",
+            category: (nodeBase.category || "utility") as NodeCategory,
+            description: "",
+            icon: "file" as NodeIcon,
+            author: "",
             tags: [],
           },
           parameters: nodeBase.data || {},

@@ -3,12 +3,9 @@ import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
 import VideoPlayer from "#components/VideoPlayer";
 import Details from "#templates/Explore/DetailsPage/Details";
 import Report from "#templates/Explore/DetailsPage/Report";
-import { useRouter } from "#router";
 import Slider from "#templates/Explore/DetailsPage/Slider";
 
 function DetailsPage() {
-  const router = useRouter();
-
   return (
     <LayoutOnlyHeader>
       <div className="flex max-lg:block">

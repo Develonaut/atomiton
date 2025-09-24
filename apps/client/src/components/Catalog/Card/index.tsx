@@ -1,6 +1,7 @@
 import Icon from "#components/Icon";
 import Image from "#components/Image";
 import { useNavigate } from "#router";
+import type { EditorRouteState } from "#router/types";
 import { useTemplates } from "#store/useTemplates";
 import {
   convertNodeToEditorNode,
@@ -25,7 +26,7 @@ function Card({ value }: Props) {
 
   const handleClick = () => {
     if (value.type === "template" && template) {
-      const templateState = {
+      const templateState: EditorRouteState = {
         defaultNodes:
           template.children?.map((node: NodeDefinition, nodeIndex: number) =>
             convertNodeToEditorNode(node, nodeIndex),
@@ -38,7 +39,7 @@ function Card({ value }: Props) {
       navigate({
         to: "/editor/$id",
         params: { id: value.id },
-        state: templateState as any,
+        state: templateState,
       });
     }
   };

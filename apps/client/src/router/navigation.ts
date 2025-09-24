@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Navigation helper functions that use the TanStack Router navigate function
 import { navigate, router } from "#router";
 

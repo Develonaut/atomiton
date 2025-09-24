@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { navigate, router } from "#router";
 import * as navigationModule from "#router/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
