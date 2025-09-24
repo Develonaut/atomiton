@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createEditorNode } from "./creation";
+import { createEditorNode } from "#utils/node/creation";
 
 describe("createEditorNode performance", () => {
   it("should pre-calculate port positions during creation", () => {

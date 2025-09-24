@@ -155,9 +155,6 @@ importers:
       '@atomiton/editor':
         specifier: workspace:*
         version: link:../../packages/@atomiton/editor
-      '@atomiton/form':
-        specifier: workspace:*
-        version: link:../../packages/@atomiton/form
       '@atomiton/hooks':
         specifier: workspace:*
         version: link:../../packages/@atomiton/hooks
@@ -556,79 +553,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.35.0(jiti@2.5.1)
-      rollup-plugin-visualizer:
-        specifier: 'catalog:'
-        version: 6.0.3(rollup@4.50.2)
-      terser:
-        specifier: 'catalog:'
-        version: 5.44.0
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.2
-      vite:
-        specifier: 'catalog:'
-        version: 7.1.5(@types/node@20.19.16)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
-      vite-plugin-dts:
-        specifier: 'catalog:'
-        version: 4.5.4(@types/node@20.19.16)(rollup@4.50.2)(typescript@5.9.2)(vite@7.1.5(@types/node@20.19.16)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1))
-      vitest:
-        specifier: 'catalog:'
-        version: 3.2.4(@types/node@20.19.16)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
-
-  packages/@atomiton/form:
-    dependencies:
-      '@atomiton/ui':
-        specifier: workspace:*
-        version: link:../ui
-      '@atomiton/validation':
-        specifier: workspace:*
-        version: link:../validation
-      '@hookform/resolvers':
-        specifier: ^3.3.4
-        version: 3.10.0(react-hook-form@7.62.0(react@19.1.1))
-      react:
-        specifier: 'catalog:'
-        version: 19.1.1
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.1.1(react@19.1.1)
-      react-hook-form:
-        specifier: ^7.49.3
-        version: 7.62.0(react@19.1.1)
-    devDependencies:
-      '@atomiton/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@atomiton/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@atomiton/vite-config':
-        specifier: workspace:*
-        version: link:../vite-config
-      '@testing-library/jest-dom':
-        specifier: 'catalog:'
-        version: 6.8.0
-      '@testing-library/react':
-        specifier: 'catalog:'
-        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.9(@types/react@19.1.13))(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@types/node':
-        specifier: 'catalog:'
-        version: 20.19.16
-      '@types/react':
-        specifier: 'catalog:'
-        version: 19.1.13
-      '@types/react-dom':
-        specifier: 'catalog:'
-        version: 19.1.9(@types/react@19.1.13)
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 5.0.3(vite@7.1.5(@types/node@20.19.16)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1))
-      eslint:
-        specifier: 'catalog:'
-        version: 9.35.0(jiti@2.5.1)
-      jsdom:
-        specifier: 'catalog:'
-        version: 25.0.1
       rollup-plugin-visualizer:
         specifier: 'catalog:'
         version: 6.0.3(rollup@4.50.2)
@@ -1599,11 +1523,6 @@ packages:
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
-
-  '@hookform/resolvers@3.10.0':
-    resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
-    peerDependencies:
-      react-hook-form: ^7.0.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -4305,12 +4224,6 @@ packages:
     peerDependencies:
       react: '>=16.13.1'
 
-  react-hook-form@7.62.0:
-    resolution: {integrity: sha512-7KWFejc98xqG/F4bAxpL41NB3o1nnvQO1RWZT3TqRZYL8RryQETGfEdVnJN2fy1crCiBLLjkRBVK05j24FxJGA==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18 || ^19
-
   react-hot-toast@2.6.0:
     resolution: {integrity: sha512-bH+2EBMZ4sdyou/DPrfgIouFpcRLCJ+HoCA32UoAYHn6T3Ur5yfcDCeSr5mwldl6pFOsiocmrXMuoCJ1vV8bWg==}
     engines: {node: '>=10'}
@@ -5684,10 +5597,6 @@ snapshots:
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       use-sync-external-store: 1.5.0(react@19.1.1)
-
-  '@hookform/resolvers@3.10.0(react-hook-form@7.62.0(react@19.1.1))':
-    dependencies:
-      react-hook-form: 7.62.0(react@19.1.1)
 
   '@humanfs/core@0.19.1': {}
 
@@ -8611,10 +8520,6 @@ snapshots:
   react-error-boundary@6.0.0(react@19.1.1):
     dependencies:
       '@babel/runtime': 7.28.4
-      react: 19.1.1
-
-  react-hook-form@7.62.0(react@19.1.1):
-    dependencies:
       react: 19.1.1
 
   react-hot-toast@2.6.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1):

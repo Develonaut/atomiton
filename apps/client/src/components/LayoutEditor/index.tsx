@@ -3,7 +3,7 @@ import RightSidebar from "#components/RightSidebar";
 import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
-import { Canvas, Editor, type EditorNode } from "@atomiton/editor";
+import { Canvas, Editor, type EditorNode, type NodeData } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
 import { useMemo } from "react";
 
@@ -28,6 +28,25 @@ function LayoutEditor() {
           settings?: { ui?: { position?: { x: number; y: number } } };
         };
 
+        const nodeData: NodeData = {
+          name: nodeBase.name,
+          metadata: {
+            id: nodeBase.type,
+            name: nodeBase.name,
+            type: 'test' as const,
+            version: '1.0.0',
+            category: (nodeBase.category || 'utility') as any,
+            description: '',
+            icon: 'file' as any,
+            author: '',
+            tags: [],
+          },
+          parameters: nodeBase.data || {},
+          fields: {},
+          inputPorts: [],
+          outputPorts: [],
+        };
+
         return {
           ...nodeBase,
           position: nodeBase.settings?.ui?.position || {
@@ -39,7 +58,7 @@ function LayoutEditor() {
           selectable: true,
           connectable: true,
           deletable: true,
-          data: { ...nodeBase.data, ...nodeBase },
+          data: nodeData,
         };
       },
     );

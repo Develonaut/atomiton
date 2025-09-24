@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "@atomiton/editor": "workspace:*",
-    "@atomiton/form": "workspace:*",
     "@atomiton/hooks": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/router": "workspace:*",

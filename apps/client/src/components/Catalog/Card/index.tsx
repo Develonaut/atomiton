@@ -6,7 +6,7 @@ import {
   convertNodeToEditorNode,
   convertEdgeToEditorEdge,
 } from "#utils/editorConverters";
-import type { NodeDefinition } from "@atomiton/nodes";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 type Props = {
   value: {
@@ -38,7 +38,7 @@ function Card({ value }: Props) {
       navigate({
         to: "/editor/$id",
         params: { id: value.id },
-        state: templateState,
+        state: templateState as any,
       });
     }
   };

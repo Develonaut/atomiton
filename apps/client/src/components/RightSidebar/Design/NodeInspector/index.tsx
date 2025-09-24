@@ -1,13 +1,13 @@
 import { useEditorNodes } from "@atomiton/editor";
-import { Form, type ZodSchema, type FieldsMetadata } from "@atomiton/form";
+// Form package removed - temporarily disabled
+// import { Form, type ZodSchema, type FieldsMetadata } from "@atomiton/form";
 import {
   getNodeDefinition,
   getNodeSchema,
   type NodeSchemaEntry,
 } from "@atomiton/nodes/definitions";
 import { Box } from "@atomiton/ui";
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import { useCallback, useEffect, useState } from "react";
 
 function NodeInspector() {
   const { setNodes, nodes } = useEditorNodes();
@@ -82,30 +82,13 @@ function NodeInspector() {
         </p>
       </div>
 
-      <ErrorBoundary
-        fallback={
-          <div className="text-sm text-red-600">
-            <p className="font-semibold mb-2">Error loading form</p>
-          </div>
-        }
-        resetKeys={[selectedNode.id]}
-      >
-        <Suspense
-          fallback={
-            <div className="text-sm text-[#7B7B7B]">Loading form...</div>
-          }
-        >
-          <Form
-            key={`${selectedNode.id}-${selectedNode.type}`}
-            schema={nodeSchema.fullSchema as ZodSchema}
-            defaultValues={
-              selectedNode.data || nodeConfig?.parameters.defaults || {}
-            }
-            fields={(nodeConfig?.parameters.fields || {}) as FieldsMetadata}
-            onChange={(data) => updateNodeData(selectedNode.id, data)}
-          />
-        </Suspense>
-      </ErrorBoundary>
+      {/* Form component temporarily disabled - will be reimplemented */}
+      <div className="text-sm text-[#7B7B7B]">
+        <p>Node configuration form coming soon</p>
+        <p className="text-xs mt-2">
+          Schema: {nodeSchema ? "Available" : "Not available"}
+        </p>
+      </div>
     </Box>
   );
 }
