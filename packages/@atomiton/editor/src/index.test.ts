@@ -3,14 +3,12 @@
  * These tests must complete in <5 seconds and verify critical functionality
  */
 
-import { describe, expect, it } from "vitest";
-// Import hooks directly to avoid component import issues in test environment
-import { useEditorNodes } from "#useEditorNodes";
-import { useEditorEdges } from "#useEditorEdges";
-import { useEditorViewport } from "#useEditorViewport";
-import { useEditorNode } from "#useEditorNode";
-import { useSelectedNode } from "#useSelectedNode";
-import { useAddNode } from "#useAddNode";
+import { useAddNode } from "#hooks/useAddNode";
+import { useEditorEdges } from "#hooks/useEditorEdges";
+import { useEditorNode } from "#hooks/useEditorNode";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useEditorViewport } from "#hooks/useEditorViewport";
+import { useSelectedNode } from "#hooks/useSelectedNode";
 import {
   calculateNodePosition,
   createDefaultEditorNode,
@@ -19,6 +17,7 @@ import {
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
 } from "#utils/nodeCreation";
+import { describe, expect, it } from "vitest";
 
 describe("Editor Package Smoke Tests", () => {
   describe("Public API Exports", () => {

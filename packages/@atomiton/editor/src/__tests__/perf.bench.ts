@@ -1,6 +1,6 @@
-import { bench, describe } from "vitest";
-import type { EditorEdge } from "#useEditorEdges";
+import type { EditorEdge } from "#hooks/useEditorEdges";
 import type { EditorNode } from "#types/EditorNode";
+import { bench, describe } from "vitest";
 
 /**
  * Performance benchmarks for editor hooks.

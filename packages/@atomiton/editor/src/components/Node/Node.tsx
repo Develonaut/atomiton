@@ -1,3 +1,5 @@
+import { useEditorStore } from "#hooks/useEditorStore";
+import type { EditorNode } from "#types/EditorNode";
 import { getNodeDefinition } from "@atomiton/nodes/definitions";
 import { Icon } from "@atomiton/ui";
 import {
@@ -6,8 +8,6 @@ import {
   type NodeProps as ReactFlowNodeProps,
 } from "@xyflow/react";
 import { memo, useMemo } from "react";
-import { useEditorStore } from "#useEditorStore";
-import type { EditorNode } from "#types/EditorNode";
 
 /**
  * Node Component

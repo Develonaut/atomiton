@@ -1,5 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { EditorEdge } from "#useEditorEdges";
+import type { EditorEdge } from "#hooks/useEditorEdges";
 import type { EditorNode } from "#types/EditorNode";
 import {
   calculateNodePosition,
@@ -9,11 +8,11 @@ import {
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
 } from "#utils/nodeCreation";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@atomiton/nodes/definitions", () => ({
   createNodeDefinition: vi.fn((input) => ({
     id: input.id || "generated-id",
-    type: "atomic",
     name: input.name || "Test Node",
     description: input.description,
     category: input.category || "test",
@@ -39,7 +38,6 @@ vi.mock("@atomiton/nodes/definitions", () => ({
   // Aliases for backward compatibility
   createNode: vi.fn((input) => ({
     id: input.id || "generated-id",
-    type: "atomic",
     name: input.name || "Test Node",
     description: input.description,
     category: input.category || "test",

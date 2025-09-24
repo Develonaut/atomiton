@@ -45,7 +45,6 @@ export const compositeActions: CompositeActions = {
     // Use createNode to properly format the node with all defaults
     const newComposite = createNodeDefinition({
       ...nodeDefinition,
-      type: "composite",
       name: nodeDefinition.name || "Untitled Node",
       position: nodeDefinition.position || { x: 0, y: 0 },
       children: nodeDefinition.children || [],

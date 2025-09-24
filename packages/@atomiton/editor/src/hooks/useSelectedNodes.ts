@@ -1,4 +1,4 @@
-import { useEditorStore } from "#useEditorStore";
+import { useEditorStore } from "#hooks/useEditorStore";
 import type { EditorNode } from "#types/EditorNode";
 
 export function useSelectedNodes<

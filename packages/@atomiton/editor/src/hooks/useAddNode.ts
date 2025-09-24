@@ -1,4 +1,6 @@
-import { useCallback } from "react";
+import { useEditorEdges } from "#hooks/useEditorEdges";
+import { useEditorNodes } from "#hooks/useEditorNodes";
+import { useEditorViewport } from "#hooks/useEditorViewport";
 import {
   calculateNodePosition,
   createEdgeFromLastNode,
@@ -7,9 +9,7 @@ import {
   updateNodesWithNewNode,
   type NodePosition,
 } from "#utils/nodeCreation";
-import { useEditorEdges } from "#useEditorEdges";
-import { useEditorNodes } from "#useEditorNodes";
-import { useEditorViewport } from "#useEditorViewport";
+import { useCallback } from "react";
 
 export function useAddNode() {
   const { nodes, setNodes } = useEditorNodes();

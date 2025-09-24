@@ -14,7 +14,7 @@ function Assets() {
           title={category.title}
           items={category.items.map((item, itemIndex: number) => ({
             id: index * 100 + itemIndex, // Generate unique numeric id for compatibility
-            nodeType: item.metadata.variant, // Use variant as the node type
+            nodeType: item.metadata.type, // Use type as the node type
             title: item.metadata.name, // Map name to title for display
             category: item.metadata.category, // Add required category property
             icon: item.metadata.icon || "zap", // Use icon name directly

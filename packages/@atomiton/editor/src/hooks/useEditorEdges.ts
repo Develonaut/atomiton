@@ -1,7 +1,7 @@
+import { useEditorStore } from "#hooks/useEditorStore";
 import type { Edge } from "@xyflow/react";
 import { useReactFlow } from "@xyflow/react";
 import { useCallback } from "react";
-import { useEditorStore } from "#useEditorStore";
 
 export type EditorEdge = Edge;
 

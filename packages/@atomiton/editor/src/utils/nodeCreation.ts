@@ -1,10 +1,10 @@
+import type { EditorEdge } from "#hooks/useEditorEdges";
+import type { EditorNode, NodePosition } from "#types/EditorNode";
 import {
   createNodeDefinition,
   getNodeDefinition,
 } from "@atomiton/nodes/definitions";
 import { generateEdgeId, generateNodeId } from "@atomiton/utils";
-import type { EditorEdge } from "#useEditorEdges";
-import type { EditorNode, NodePosition } from "#types/EditorNode";
 // Note: nodeMapping is internal to editor package, not exported
 
 // Re-export NodePosition for external use
@@ -85,7 +85,6 @@ export function createNode(
     description: nodeDefinition.metadata?.description,
     category: nodeDefinition.metadata?.category,
     version: nodeDefinition.metadata?.version || "1.0.0",
-    type: "atomic",
     inputPorts: nodeDefinition.inputPorts,
     outputPorts: nodeDefinition.outputPorts,
     metadata: nodeDefinition.metadata,

@@ -8,7 +8,7 @@ function Isometric() {
       <div className="mb-2 text-[0.75rem] font-medium">Distortion</div>
       <div className="flex gap-1">
         <input
-          type="range"
+        type="range"
           min={0}
           max={1}
           step={0.001}

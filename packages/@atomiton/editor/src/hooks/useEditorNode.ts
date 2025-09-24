@@ -1,7 +1,7 @@
-import { useReactFlow } from "@xyflow/react";
-import { useEditorStore } from "#useEditorStore";
-import { useCallback } from "react";
+import { useEditorStore } from "#hooks/useEditorStore";
 import type { EditorNode } from "#types/EditorNode";
+import { useReactFlow } from "@xyflow/react";
+import { useCallback } from "react";
 
 /**
  * Hook to get a specific node by ID from the editor.
