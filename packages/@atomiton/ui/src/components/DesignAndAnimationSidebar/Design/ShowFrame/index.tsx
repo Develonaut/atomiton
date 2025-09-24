@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Switch from "#components/Switch";
-import Group from "#components/../Group";
+import Group from "#components/Group";
 
 function ShowFrame() {
   const [showFrame, setShowFrame] = useState(true);

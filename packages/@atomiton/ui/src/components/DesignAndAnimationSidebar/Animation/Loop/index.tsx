@@ -2,7 +2,7 @@ import { useState } from "react";
 import Slider from "rc-slider";
 import Image from "#components/Image";
 import Tabs from "#components/Tabs";
-import Group from "#components/../Group";
+import Group from "#components/Group";
 import "rc-slider/assets/index.css";
 
 type TabItem = {

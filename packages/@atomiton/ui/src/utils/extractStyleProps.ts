@@ -1,4 +1,4 @@
-import { cn } from "#cn";
+import { cn } from "./cn";
 
 /**
  * Style props that can be applied to any component

@@ -6,7 +6,7 @@ import {
 } from "@headlessui/react";
 import { useState } from "react";
 
-import { options } from "#options";
+import { options } from "#components/PromptInput/SelectAi/options";
 
 type AiOption = {
   id: number;

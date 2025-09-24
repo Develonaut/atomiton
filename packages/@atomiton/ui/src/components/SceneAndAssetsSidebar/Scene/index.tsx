@@ -1,7 +1,6 @@
-import Item from "#Item";
+import { content } from "#components/SceneAndAssetsSidebar/Scene/content";
+import Item from "#components/SceneAndAssetsSidebar/Scene/Item";
 import { useState } from "react";
-
-import { content } from "#content";
 
 function Scene() {
   const [selected, setSelected] = useState(4);

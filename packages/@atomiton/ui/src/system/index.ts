@@ -1,2 +1,2 @@
-export { styled } from "#styled";
-export type { SystemProps } from "#types";
+export { styled } from "./styled";
+export type { SystemProps } from "./types";

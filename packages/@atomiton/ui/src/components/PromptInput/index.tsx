@@ -1,10 +1,10 @@
-import AddFiles from "#components/AddFiles/AddFiles";
+import AddFiles from "#components/PromptInput/AddFiles";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import SubmitButton from "#components/SubmitButton";
 import ViewController from "#components/ViewController";
-import PremadePrompt from "#components/PremadePrompt/PremadePrompt";
-import SelectAi from "#components/SelectAi/SelectAi";
+import PremadePrompt from "#components/PremadePrompt";
+import SelectAi from "#components/SelectAi";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 

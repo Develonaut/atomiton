@@ -1,10 +1,10 @@
 import Image from "#components/Image";
 import Link from "#components/Link";
-import Dropdown from "#components/Dropdown/Dropdown";
-import Folders from "#components/Folders/Folders";
-import NavLink from "#components/NavLink/NavLink";
+import Dropdown from "#components/HomeSidebar/Dropdown";
+import Folders from "#components/Folders";
+import NavLink from "#components/HomeSidebar/NavLink";
 
-import { folders, navigation } from "#navigation";
+import { folders, navigation } from "./navigation";
 
 function Sidebar() {
   return (

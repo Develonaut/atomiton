@@ -1,11 +1,11 @@
 import Button from "#components/Button";
-import Line from "#components/Line";
+import Line from "#components/Export/Line";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import Tabs from "#components/Tabs";
 import { useState } from "react";
 
-import { cameraOptions, formats, materialOptions } from "#content";
+import { cameraOptions, formats, materialOptions } from "./content";
 
 type TabItem = {
   id: number;

@@ -1,8 +1,8 @@
-import Images from "#Images";
-import Menu from "#Menu";
-import Object3D from "#Object3D";
-import Preview from "#Preview";
-import Video from "#Video";
+import Images from "./Images";
+import Menu from "./Menu";
+import Object3D from "./Object3D";
+import Preview from "./Preview";
+import Video from "./Video";
 import { useState } from "react";
 
 const menu = [

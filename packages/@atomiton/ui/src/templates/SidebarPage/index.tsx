@@ -7,7 +7,7 @@ import Layout from "#components/Layout";
 import RowCards from "#components/RowCards";
 import SceneAndAssetsSidebar from "#components/SceneAndAssetsSidebar";
 
-import { content } from "#content";
+import { content } from "./content";
 
 function SidebarPage() {
   return (
