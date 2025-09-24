@@ -1,4 +1,4 @@
-import { getNodeDefinition } from "@atomiton/nodes/definitions";
+import type { EditorNodePort, NodeData } from "#types/EditorNode";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -6,8 +6,7 @@ import {
   type NodeProps as ReactFlowNodeProps,
   useNodes,
 } from "@xyflow/react";
-import { memo, useMemo } from "react";
-import type { EditorNode } from "#types/EditorNode";
+import { memo } from "react";
 
 /**
  * Custom Node component - focuses purely on content and functionality
@@ -16,30 +15,11 @@ import type { EditorNode } from "#types/EditorNode";
 function Node(props: ReactFlowNodeProps) {
   const nodes = useNodes();
   const isFirstNode = nodes.length > 0 && nodes[0].id === props.id;
-
-  const icon = getNodeDefinition(props.type)?.metadata.icon || "zap";
-
-  // Extract port definitions from node data
-  const data = useMemo(() => props.data as EditorNode, [props.data]);
-  const inputPorts = useMemo(() => data?.inputPorts || [], [data]);
-  const outputPorts = useMemo(() => data?.outputPorts || [], [data]);
-
-  // Calculate handle positions for multiple ports
-  const inputHandlePositions = useMemo(
-    () =>
-      inputPorts.map((_, index) => ({
-        top: `${((index + 1) * 100) / (inputPorts.length + 1)}%`,
-      })),
-    [inputPorts],
-  );
-
-  const outputHandlePositions = useMemo(
-    () =>
-      outputPorts.map((_, index) => ({
-        top: `${((index + 1) * 100) / (outputPorts.length + 1)}%`,
-      })),
-    [outputPorts],
-  );
+  const data = props.data as NodeData | undefined;
+  const metadata = data?.metadata;
+  const inputPorts = data?.inputPorts || [];
+  const outputPorts = data?.outputPorts || [];
+  const icon = metadata?.icon || "zap";
 
   return (
     <div
@@ -48,55 +28,35 @@ function Node(props: ReactFlowNodeProps) {
       data-node-type={props.type}
       data-node-id={props.id}
     >
-      {/* Input handles - dynamic based on inputPorts */}
-      {inputPorts.map((port, index) => (
-        <Handle
-          key={`input-${port.id}`}
-          id={port.id}
-          type="target"
-          position={Position.Left}
-          style={inputHandlePositions[index]}
-          isConnectable={!isFirstNode}
-          data-testid={`handle-input-${port.id}`}
-        />
-      ))}
-
       <Icon
         name={icon}
         size={32}
         className="transition-colors duration-200 text-gray-500"
       />
 
-      {/* Output handles - dynamic based on outputPorts */}
-      {outputPorts.map((port, index) => (
+      {inputPorts.map((port: EditorNodePort) => (
+        <Handle
+          key={`input-${port.id}`}
+          id={port.id}
+          type="target"
+          position={Position.Left}
+          style={port.position}
+          isConnectable={!isFirstNode}
+          data-testid={`handle-input-${port.id}`}
+        />
+      ))}
+
+      {outputPorts.map((port: EditorNodePort) => (
         <Handle
           key={`output-${port.id}`}
           id={port.id}
           type="source"
           position={Position.Right}
-          style={outputHandlePositions[index]}
+          style={port.position}
           isConnectable
           data-testid={`handle-output-${port.id}`}
         />
       ))}
-
-      {/* Fallback handles when no ports are defined */}
-      {inputPorts.length === 0 && (
-        <Handle
-          type="target"
-          position={Position.Left}
-          isConnectable={!isFirstNode}
-          data-testid="handle-input-default"
-        />
-      )}
-      {outputPorts.length === 0 && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          isConnectable
-          data-testid="handle-output-default"
-        />
-      )}
     </div>
   );
 }

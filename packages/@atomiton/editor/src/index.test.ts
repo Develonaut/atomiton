@@ -16,7 +16,7 @@ import {
   createNode,
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
-} from "#utils/nodeCreation";
+} from "#utils/index.js";
 import { describe, expect, it } from "vitest";
 
 describe("Editor Package Smoke Tests", () => {

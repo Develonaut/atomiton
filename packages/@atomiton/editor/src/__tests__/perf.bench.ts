@@ -12,13 +12,25 @@ function createMockNodes(count: number): EditorNode[] {
   return Array.from({ length: count }, (_, i) => ({
     id: `node-${i}`,
     type: "default",
-    name: `Node ${i}`,
-    category: "test",
     position: { x: i * 100, y: i * 100 },
-    data: { label: `Node ${i}` },
+    data: {
+      name: `Node ${i}`,
+      metadata: {
+        id: `node-${i}`,
+        name: `Node ${i}`,
+        type: "test",
+        category: "utility",
+        description: `Test node ${i}`,
+        version: "1.0.0",
+        author: "test",
+        icon: "zap",
+      },
+      parameters: {},
+      inputPorts: [],
+      outputPorts: [],
+      fields: {},
+    },
     selected: i % 10 === 0, // 10% selected
-    inputPorts: [],
-    outputPorts: [],
   }));
 }
 

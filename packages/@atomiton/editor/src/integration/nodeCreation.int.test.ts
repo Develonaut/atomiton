@@ -1,5 +1,5 @@
 /**
- * ReactFlow Integration Smoke Tests
+ * ReactFlow Integration Tests
  *
  * Lightweight tests to catch critical ReactFlow integration breakage early.
  * These must run in <5 seconds and focus on the most common failure points.
@@ -12,13 +12,13 @@
  * Performance requirement: Complete in <100ms total
  */
 
+import { createEdgeFromLastNode, createNode } from "#utils/index.js";
 import { describe, expect, it } from "vitest";
-import { createEdgeFromLastNode, createNode } from "#utils/nodeCreation";
 
-describe("ReactFlow Integration Smoke Tests", () => {
-  // Core smoke test: Can we create nodes that ReactFlow can use?
+describe("ReactFlow Integration Tests", () => {
+  // Core test: Can we create nodes that ReactFlow can use?
   it("creates valid ReactFlow nodes", () => {
-    const node = createNode("greeting", { x: 100, y: 100 });
+    const node = createNode("code", { x: 100, y: 100 });
 
     // Essential ReactFlow requirements
     expect(node.id).toBeDefined();
@@ -26,14 +26,14 @@ describe("ReactFlow Integration Smoke Tests", () => {
     expect(node.data).toBeDefined();
 
     // Critical: Ports must be arrays to prevent handle errors
-    expect(Array.isArray(node.inputPorts)).toBe(true);
-    expect(Array.isArray(node.outputPorts)).toBe(true);
+    expect(Array.isArray(node.data.inputPorts)).toBe(true);
+    expect(Array.isArray(node.data.outputPorts)).toBe(true);
   });
 
-  // Core smoke test: Can we create edges between nodes?
+  // Core test: Can we create edges between nodes?
   it("creates valid ReactFlow edges", () => {
-    const sourceNode = createNode("greeting", { x: 0, y: 0 });
-    const targetNode = createNode("display", { x: 200, y: 0 });
+    const sourceNode = createNode("code", { x: 0, y: 0 });
+    const targetNode = createNode("transform", { x: 200, y: 0 });
     const edge = createEdgeFromLastNode(sourceNode.id, targetNode.id);
 
     // Essential ReactFlow edge requirements
@@ -43,13 +43,13 @@ describe("ReactFlow Integration Smoke Tests", () => {
     expect(edge.source).not.toBe(edge.target);
   });
 
-  // Performance smoke test: Operations should be fast
+  // Performance test: Operations should be fast
   it("performs node creation quickly", () => {
     const startTime = performance.now();
 
     // Create 10 nodes (realistic small workflow)
     const nodes = Array.from({ length: 10 }, (_, i) =>
-      createNode("greeting", { x: i * 100, y: 0 }),
+      createNode("code", { x: i * 100, y: 0 }),
     );
 
     const duration = performance.now() - startTime;

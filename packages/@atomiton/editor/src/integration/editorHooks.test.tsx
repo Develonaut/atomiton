@@ -12,32 +12,31 @@ import { describe, expect, it } from "vitest";
 function createTestEditorNode(
   overrides: Partial<EditorNode> & { id: string },
 ): EditorNode {
+  const nodeName = overrides.data?.name || "Test Node";
+  const { id, data, ...restOverrides } = overrides;
   return {
-    id: overrides.id,
+    id,
     type: overrides.type || "test",
-    name: overrides.name || "Test Node",
     position: overrides.position || { x: 0, y: 0 },
-    data: overrides.data || {},
-    inputPorts: overrides.inputPorts || [],
-    outputPorts: overrides.outputPorts || [],
-    metadata: overrides.metadata || {
-      id: overrides.id,
-      name: overrides.name || "Test Node",
-      type: "template" as const,
-      version: "1.0.0",
-      author: "test",
-      description: "Test node",
-      category: "utility" as const,
-      icon: "zap" as const,
-    },
-    parameters: overrides.parameters || {
-      defaults: {},
+    data: {
+      name: nodeName,
+      metadata: {
+        id,
+        name: nodeName,
+        type: "test",
+        category: "utility",
+        description: "Test node",
+        version: "1.0.0",
+        author: "test",
+        icon: "zap",
+      },
+      parameters: {},
+      inputPorts: [],
+      outputPorts: [],
       fields: {},
+      ...data,
     },
-    // Required Node type properties
-    execute: async () => ({ success: true }),
-    getValidatedParams: () => ({}),
-    ...overrides,
+    ...restOverrides,
   } as EditorNode;
 }
 
@@ -80,8 +79,24 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       const testNode = createTestEditorNode({
         id: "test-1",
         type: "test",
-        name: "Test Node",
         position: { x: 100, y: 100 },
+        data: {
+          name: "Test Node",
+          metadata: {
+            id: "test-1",
+            name: "Test Node",
+            type: "test",
+            category: "utility",
+            description: "Test node",
+            version: "1.0.0",
+            author: "test",
+            icon: "zap",
+          },
+          parameters: {},
+          inputPorts: [],
+          outputPorts: [],
+          fields: {},
+        },
       });
 
       const { result } = renderHook(() => useEditorNodes(), {
@@ -105,8 +120,24 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       const testNode = createTestEditorNode({
         id: "test-lookup",
         type: "test",
-        name: "Test Lookup Node",
         position: { x: 200, y: 200 },
+        data: {
+          name: "Test Lookup Node",
+          metadata: {
+            id: "test-lookup",
+            name: "Test Lookup Node",
+            type: "test",
+            category: "utility",
+            description: "Test node",
+            version: "1.0.0",
+            author: "test",
+            icon: "zap",
+          },
+          parameters: {},
+          inputPorts: [],
+          outputPorts: [],
+          fields: {},
+        },
       });
 
       const { result: nodesResult } = renderHook(() => useEditorNodes(), {
@@ -137,15 +168,47 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         createTestEditorNode({
           id: "select-1",
           type: "test",
-          name: "Node 1",
           position: { x: 100, y: 100 },
+          data: {
+            name: "Node 1",
+            metadata: {
+              id: "select-1",
+              name: "Node 1",
+              type: "test",
+              category: "utility",
+              description: "Test node",
+              version: "1.0.0",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
           selected: false,
         }),
         createTestEditorNode({
           id: "select-2",
           type: "test",
-          name: "Node 2",
           position: { x: 200, y: 200 },
+          data: {
+            name: "Node 2",
+            metadata: {
+              id: "select-2",
+              name: "Node 2",
+              type: "test",
+              category: "utility",
+              description: "Test node",
+              version: "1.0.0",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
           selected: true,
         }),
       ];
@@ -198,8 +261,24 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       const testNode = createTestEditorNode({
         id: "store-test",
         type: "test",
-        name: "Store Test",
         position: { x: 300, y: 300 },
+        data: {
+          name: "Store Test",
+          metadata: {
+            id: "store-test",
+            name: "Store Test",
+            type: "test",
+            category: "utility",
+            description: "Test node",
+            version: "1.0.0",
+            author: "test",
+            icon: "zap",
+          },
+          parameters: {},
+          inputPorts: [],
+          outputPorts: [],
+          fields: {},
+        },
       });
 
       act(() => {
@@ -219,9 +298,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       const editorNode = createTestEditorNode({
         id: "type-test",
         type: "test",
-        name: "Type Test",
         position: { x: 400, y: 400 },
-        data: { test: "data" },
         // ReactFlow specific properties
         selected: false,
         draggable: true,
@@ -254,8 +331,24 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         createTestEditorNode({
           id: `perf-${i}`,
           type: "test",
-          name: `Node ${i}`,
           position: { x: i * 100, y: 100 },
+          data: {
+            name: `Node ${i}`,
+            metadata: {
+              id: `perf-${i}`,
+              name: `Node ${i}`,
+              type: "test",
+              category: "utility",
+              description: "Test node",
+              version: "1.0.0",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
         }),
       );
 

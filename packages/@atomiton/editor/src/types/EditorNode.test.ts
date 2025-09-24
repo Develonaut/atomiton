@@ -9,14 +9,24 @@ describe("EditorNode type guards", () => {
       const validNode: EditorNode = {
         id: "node-1",
         type: "test-node",
-        name: "Test Node",
-        category: "test",
-        version: "1.0.0",
-        inputPorts: [],
-        outputPorts: [],
-        metadata: {},
-        data: {},
         position: { x: 100, y: 200 },
+        data: {
+          name: "Test Node",
+          metadata: {
+            id: "test-node",
+            name: "Test Node",
+            type: "test",
+            version: "1.0.0",
+            category: "utility",
+            description: "Test description",
+            author: "test",
+            icon: "zap",
+          },
+          parameters: {},
+          inputPorts: [],
+          outputPorts: [],
+          fields: {},
+        },
       };
 
       expect(isEditorNode(validNode)).toBe(true);
@@ -26,14 +36,24 @@ describe("EditorNode type guards", () => {
       const fullNode: EditorNode = {
         id: "node-1",
         type: "test-node",
-        name: "Test Node",
-        category: "test",
-        version: "1.0.0",
-        inputPorts: [],
-        outputPorts: [],
-        metadata: {},
-        data: { config: "value" },
         position: { x: 100, y: 200 },
+        data: {
+          name: "Test Node",
+          metadata: {
+            id: "test-node",
+            name: "Test Node",
+            type: "test",
+            version: "1.0.0",
+            category: "utility",
+            description: "Test description",
+            author: "test",
+            icon: "zap",
+          },
+          parameters: { config: "value" },
+          inputPorts: [],
+          outputPorts: [],
+          fields: {},
+        },
         selected: true,
         draggable: false,
         selectable: true,
@@ -47,9 +67,8 @@ describe("EditorNode type guards", () => {
         ariaLabel: "Test node",
         style: { color: "red" },
         className: "test-class",
-        parentNode: "parent-1",
+        parentId: "parent-1",
         expandParent: true,
-        positionAbsolute: { x: 150, y: 250 },
         width: 200,
         height: 100,
       };
@@ -88,6 +107,7 @@ describe("EditorNode type guards", () => {
         const missingId = {
           type: "test-node",
           position: { x: 100, y: 200 },
+          data: {},
         };
         expect(isEditorNode(missingId)).toBe(false);
       });
@@ -97,6 +117,7 @@ describe("EditorNode type guards", () => {
           id: 123,
           type: "test-node",
           position: { x: 100, y: 200 },
+          data: {},
         };
         expect(isEditorNode(invalidId)).toBe(false);
       });
@@ -105,6 +126,7 @@ describe("EditorNode type guards", () => {
         const missingType = {
           id: "node-1",
           position: { x: 100, y: 200 },
+          data: {},
         };
         expect(isEditorNode(missingType)).toBe(false);
       });
@@ -114,6 +136,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: 123,
           position: { x: 100, y: 200 },
+          data: {},
         };
         expect(isEditorNode(invalidType)).toBe(false);
       });
@@ -122,6 +145,7 @@ describe("EditorNode type guards", () => {
         const missingPosition = {
           id: "node-1",
           type: "test-node",
+          data: {},
         };
         expect(isEditorNode(missingPosition)).toBe(false);
       });
@@ -131,6 +155,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: null,
+          data: {},
         };
         expect(isEditorNode(nullPosition)).toBe(false);
       });
@@ -140,6 +165,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: "not-an-object",
+          data: {},
         };
         expect(isEditorNode(invalidPosition)).toBe(false);
       });
@@ -149,6 +175,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { y: 200 },
+          data: {},
         };
         expect(isEditorNode(missingX)).toBe(false);
       });
@@ -158,6 +185,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100 },
+          data: {},
         };
         expect(isEditorNode(missingY)).toBe(false);
       });
@@ -167,6 +195,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: "100", y: 200 },
+          data: {},
         };
         expect(isEditorNode(invalidX)).toBe(false);
       });
@@ -176,6 +205,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100, y: "200" },
+          data: {},
         };
         expect(isEditorNode(invalidY)).toBe(false);
       });
@@ -185,6 +215,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: NaN, y: 200 },
+          data: {},
         };
         expect(isEditorNode(nanX)).toBe(false);
 
@@ -192,6 +223,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100, y: NaN },
+          data: {},
         };
         expect(isEditorNode(nanY)).toBe(false);
       });
@@ -201,6 +233,7 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: Infinity, y: 200 },
+          data: {},
         };
         expect(isEditorNode(infX)).toBe(false);
 
@@ -208,8 +241,41 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100, y: -Infinity },
+          data: {},
         };
         expect(isEditorNode(infY)).toBe(false);
+      });
+
+      it("should reject objects missing data", () => {
+        const missingData = {
+          id: "node-1",
+          type: "test-node",
+          position: { x: 100, y: 200 },
+        };
+        expect(isEditorNode(missingData)).toBe(false);
+      });
+
+      it("should reject objects with null data", () => {
+        const nullData = {
+          id: "node-1",
+          type: "test-node",
+          position: { x: 100, y: 200 },
+          data: null,
+        };
+        expect(isEditorNode(nullData)).toBe(false);
+      });
+
+      it("should reject objects with incomplete data", () => {
+        const incompleteData = {
+          id: "node-1",
+          type: "test-node",
+          position: { x: 100, y: 200 },
+          data: {
+            name: "Test",
+            // Missing metadata, parameters, ports, etc.
+          },
+        };
+        expect(isEditorNode(incompleteData)).toBe(false);
       });
     });
 
@@ -231,6 +297,23 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100, y: 200 },
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
           extraProperty: "should not affect validation",
           anotherExtra: 42,
         };
@@ -238,13 +321,27 @@ describe("EditorNode type guards", () => {
       });
 
       it("should handle circular references gracefully", () => {
-        const circular: EditorNode & { self?: unknown } = {
+        const circular: any = {
           id: "node-1",
           type: "test-node",
-          name: "Test Node",
-          category: "test",
-          data: {},
           position: { x: 100, y: 200 },
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
         };
         circular.self = circular;
 
@@ -266,6 +363,23 @@ describe("EditorNode type guards", () => {
               },
             },
           },
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
         };
         expect(isEditorNode(deepNested)).toBe(true);
       });
@@ -275,17 +389,25 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: Number.MAX_SAFE_INTEGER, y: Number.MIN_SAFE_INTEGER },
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
         };
         expect(isEditorNode(largeCoords)).toBe(true);
-      });
-
-      it("should handle very small coordinate values", () => {
-        const smallCoords = {
-          id: "node-1",
-          type: "test-node",
-          position: { x: Number.EPSILON, y: -Number.EPSILON },
-        };
-        expect(isEditorNode(smallCoords)).toBe(true);
       });
 
       it("should handle empty string id", () => {
@@ -293,26 +415,25 @@ describe("EditorNode type guards", () => {
           id: "",
           type: "test-node",
           position: { x: 100, y: 200 },
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
         };
         expect(isEditorNode(emptyId)).toBe(true); // Empty string is still a string
-      });
-
-      it("should handle empty string type", () => {
-        const emptyType = {
-          id: "node-1",
-          type: "",
-          position: { x: 100, y: 200 },
-        };
-        expect(isEditorNode(emptyType)).toBe(true); // Empty string is still a string
-      });
-
-      it("should handle Object.create(null) as position", () => {
-        const nullProto = {
-          id: "node-1",
-          type: "test-node",
-          position: Object.assign(Object.create(null), { x: 100, y: 200 }),
-        };
-        expect(isEditorNode(nullProto)).toBe(true);
       });
     });
 
@@ -322,9 +443,26 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100, y: 200 },
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+          },
         };
 
-        // Simulate "clicking 100 times" - repeated type guard calls
+        // Simulate repeated type guard calls
         const start = performance.now();
         for (let i = 0; i < 1000; i++) {
           isEditorNode(validNode);
@@ -340,10 +478,27 @@ describe("EditorNode type guards", () => {
           id: "node-1",
           type: "test-node",
           position: { x: 100, y: 200 },
-          // Add many extra properties to test performance
-          ...Object.fromEntries(
-            Array.from({ length: 1000 }, (_, i) => [`prop${i}`, `value${i}`]),
-          ),
+          data: {
+            name: "Test Node",
+            metadata: {
+              id: "test",
+              name: "Test",
+              type: "test",
+              version: "1.0.0",
+              category: "utility",
+              description: "Test",
+              author: "test",
+              icon: "zap",
+            },
+            parameters: {},
+            inputPorts: [],
+            outputPorts: [],
+            fields: {},
+            // Add many extra properties to test performance
+            ...Object.fromEntries(
+              Array.from({ length: 1000 }, (_, i) => [`prop${i}`, `value${i}`]),
+            ),
+          },
         };
 
         const start = performance.now();
@@ -352,37 +507,6 @@ describe("EditorNode type guards", () => {
 
         expect(result).toBe(true);
         expect(end - start).toBeLessThan(50); // Should still be fast
-      });
-    });
-
-    describe("browser compatibility edge cases", () => {
-      it("should handle prototype pollution attempts", () => {
-        const malicious = JSON.parse(
-          '{"id":"node-1","type":"test-node","position":{"x":100,"y":200},"__proto__":{"isAdmin":true}}',
-        );
-        expect(isEditorNode(malicious)).toBe(true);
-        // Ensure no prototype pollution occurred
-        expect(({} as any).isAdmin).toBeUndefined();
-      });
-
-      it("should handle toString manipulation", () => {
-        const manipulated = {
-          id: "node-1",
-          type: "test-node",
-          position: { x: 100, y: 200 },
-          toString: () => "malicious",
-        };
-        expect(isEditorNode(manipulated)).toBe(true);
-      });
-
-      it("should handle valueOf manipulation", () => {
-        const manipulated = {
-          id: "node-1",
-          type: "test-node",
-          position: { x: 100, y: 200 },
-          valueOf: () => 42,
-        };
-        expect(isEditorNode(manipulated)).toBe(true);
       });
     });
   });

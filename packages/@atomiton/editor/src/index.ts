@@ -13,13 +13,3 @@ export { useSelectedNodes } from "#hooks/useSelectedNodes";
 export type { EditorEdge } from "#hooks/useEditorEdges";
 export type { ViewportOptions } from "#hooks/useEditorViewport";
 export type { EditorNode, NodePosition } from "#types/EditorNode";
-
-// Node creation utilities
-export {
-  calculateNodePosition,
-  createDefaultEditorNode,
-  createEdgeFromLastNode,
-  createNode,
-  updateEdgesWithNewEdge,
-  updateNodesWithNewNode,
-} from "#utils/nodeCreation";

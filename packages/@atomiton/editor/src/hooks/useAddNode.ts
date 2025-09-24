@@ -4,11 +4,11 @@ import { useEditorViewport } from "#hooks/useEditorViewport";
 import {
   calculateNodePosition,
   createEdgeFromLastNode,
-  createNode,
+  createEditorNode,
   updateEdgesWithNewEdge,
   updateNodesWithNewNode,
   type NodePosition,
-} from "#utils/nodeCreation";
+} from "#utils/index.js";
 import { useCallback } from "react";
 
 export function useAddNode() {
@@ -20,19 +20,16 @@ export function useAddNode() {
     (nodeType: string, position?: NodePosition) => {
       const nodePosition = calculateNodePosition(nodes, position);
 
-      const newNode = createNode(nodeType, nodePosition);
+      const newNode = createEditorNode(nodeType, nodePosition);
 
-      // Update nodes state
       setNodes((prevNodes) => updateNodesWithNewNode(prevNodes, newNode));
 
-      // Create edge if there are existing nodes
       if (nodes.length > 0) {
         const lastNode = nodes[nodes.length - 1];
         const newEdge = createEdgeFromLastNode(lastNode.id, newNode.id);
         setEdges((prevEdges) => updateEdgesWithNewEdge(prevEdges, newEdge));
       }
 
-      // Focus on new node
       fitView({
         nodes: [{ id: newNode.id }],
         duration: 200,

@@ -2,7 +2,7 @@ import Node from "#components/Node";
 import { getAllNodeDefinitions } from "@atomiton/nodes/definitions";
 import type { NodeTypes } from "@xyflow/react";
 
-export const NODE_TYPES: NodeTypes = getAllNodeDefinitions().reduce<NodeTypes>(
+export const NODE_TYPES: NodeTypes = getAllNodeDefinitions().reduce(
   (acc, nodeDefinition) => ({ ...acc, [nodeDefinition.metadata.type]: Node }),
   {},
 );

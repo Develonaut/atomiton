@@ -1,53 +1,44 @@
-import type { Node as AtomitonNode } from "@atomiton/nodes/definitions";
+import type {
+  NodeFieldsConfig,
+  NodeMetadata,
+  NodePort,
+} from "@atomiton/nodes/definitions";
 import type { Node as ReactFlowNode } from "@xyflow/react";
 
 /**
- * EditorNode extends AtomitonNode with editor-specific properties.
- * Ensures compatibility with ReactFlow while maintaining domain properties.
+ * Enhanced port with pre-calculated position for performance
  */
-export type EditorNode = AtomitonNode & {
-  // ReactFlow requires a type field
-  type: string;
-
-  // Make data required for ReactFlow compatibility
-  data: Record<string, unknown>;
-
-  // Editor position - required for ReactFlow
+export type EditorNodePort = NodePort & {
   position: {
-    x: number;
-    y: number;
+    top: string;
   };
+};
 
-  // Editor-specific properties
-  selected?: boolean;
-  draggable?: boolean;
-  selectable?: boolean;
-  connectable?: boolean;
-  deletable?: boolean;
-  focusable?: boolean;
-  hidden?: boolean;
-  dragging?: boolean;
-  resizing?: boolean;
-  zIndex?: number;
-  ariaLabel?: string;
+/**
+ * Data passed to React Flow node components
+ * Contains everything needed to render and configure a node
+ */
+export type NodeData = {
+  name: string;
+  metadata: NodeMetadata;
+  parameters: Record<string, unknown>; // Current parameter values
+  fields: NodeFieldsConfig; // UI field configurations
+  inputPorts: EditorNodePort[];
+  outputPorts: EditorNodePort[];
+};
 
-  // React Flow compatibility
-  style?: React.CSSProperties;
-  className?: string;
-  sourcePosition?: ReactFlowNode["sourcePosition"];
-  targetPosition?: ReactFlowNode["targetPosition"];
-  dragHandle?: string;
-  parentId?: string;
-  parentNode?: string;
-  expandParent?: boolean;
-  extent?: ReactFlowNode["extent"];
-  positionAbsolute?: {
-    x: number;
-    y: number;
-  };
-  measured?: ReactFlowNode["measured"];
-  width?: number;
-  height?: number;
+/**
+ * EditorNode is a React Flow node with our specific data structure
+ * Decoupled from AtomitonNode to avoid confusion and duplication
+ */
+export type EditorNode = ReactFlowNode<NodeData>;
+
+/**
+ * Position type for node placement
+ */
+export type NodePosition = {
+  x: number;
+  y: number;
 };
 
 /**
@@ -59,23 +50,40 @@ export function isEditorNode(node: unknown): node is EditorNode {
   }
 
   const n = node as Record<string, unknown>;
-  const position = n.position as Record<string, unknown>;
-  return (
-    typeof n.id === "string" &&
-    typeof n.type === "string" &&
-    typeof n.position === "object" &&
-    n.position !== null &&
-    typeof position.x === "number" &&
-    typeof position.y === "number" &&
-    Number.isFinite(position.x) &&
-    Number.isFinite(position.y)
-  );
-}
 
-/**
- * Position type for node placement
- */
-export type NodePosition = {
-  x: number;
-  y: number;
-};
+  // Check React Flow required fields
+  if (typeof n.id !== "string" || typeof n.type !== "string") {
+    return false;
+  }
+
+  // Check position
+  const position = n.position as Record<string, unknown>;
+  if (
+    typeof n.position !== "object" ||
+    n.position === null ||
+    typeof position.x !== "number" ||
+    typeof position.y !== "number" ||
+    !Number.isFinite(position.x) ||
+    !Number.isFinite(position.y)
+  ) {
+    return false;
+  }
+
+  // Check data structure
+  const data = n.data as Record<string, unknown>;
+  if (
+    typeof n.data !== "object" ||
+    n.data === null ||
+    typeof data.name !== "string" ||
+    !data.metadata ||
+    !data.parameters ||
+    !Array.isArray(data.inputPorts) ||
+    !Array.isArray(data.outputPorts) ||
+    typeof data.fields !== "object" ||
+    data.fields === null
+  ) {
+    return false;
+  }
+
+  return true;
+}
