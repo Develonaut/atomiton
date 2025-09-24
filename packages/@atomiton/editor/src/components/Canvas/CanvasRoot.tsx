@@ -24,17 +24,19 @@ export function CanvasRoot({
 }: ReactFlowProps) {
   // Transform raw node definitions or pass through editor nodes
   const transformedNodes = useMemo(() => {
-    return defaultNodes.map((node: any, index) => {
-      // If it looks like a NodeDefinition (has metadata and inputPorts at root level but no data property)
-      if (node.metadata && node.inputPorts && !node.data) {
-        const position = node.position || {
+    return defaultNodes.map((node: unknown, index) => {
+      // Type guard for NodeDefinition
+      const nodeObj = node as Record<string, unknown>;
+      if (nodeObj.metadata && nodeObj.inputPorts && !nodeObj.data) {
+        const position = (nodeObj.position as { x: number; y: number }) || {
           x: 100 + index * 250,
           y: 100,
         };
         return createEditorNode(
-          node.metadata?.type || node.name,
+          (nodeObj.metadata as { type?: string })?.type ||
+            (nodeObj.name as string),
           position,
-          node.id,
+          nodeObj.id as string,
         );
       }
       // Already an EditorNode
@@ -44,14 +46,23 @@ export function CanvasRoot({
 
   // Transform edges to ensure they have all required properties
   const transformedEdges = useMemo(() => {
-    return defaultEdges.map((edge: any) => ({
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      sourceHandle: edge.sourceHandle || edge.sourcePort || undefined,
-      targetHandle: edge.targetHandle || edge.targetPort || undefined,
-      type: edge.type || "default",
-    }));
+    return defaultEdges.map((edge: unknown) => {
+      const edgeObj = edge as Record<string, unknown>;
+      return {
+        id: edgeObj.id as string,
+        source: edgeObj.source as string,
+        target: edgeObj.target as string,
+        sourceHandle:
+          (edgeObj.sourceHandle as string | undefined) ||
+          (edgeObj.sourcePort as string | undefined) ||
+          undefined,
+        targetHandle:
+          (edgeObj.targetHandle as string | undefined) ||
+          (edgeObj.targetPort as string | undefined) ||
+          undefined,
+        type: (edgeObj.type as string | undefined) || "default",
+      };
+    });
   }, [defaultEdges]);
 
   return (
