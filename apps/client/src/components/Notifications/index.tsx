@@ -1,6 +1,6 @@
 import Icon from "#components/Icon";
-import Details from "#Details";
-import Notification from "#Notification";
+import Details from "#components/Notifications/Details";
+import Notification from "#components/Notifications/Notification";
 import {
   Popover,
   PopoverBackdrop,
@@ -10,7 +10,7 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-import { content } from "#content";
+import { content } from "#components/Notifications/content";
 
 function Notifications() {
   const [visible, setVisible] = useState(false);

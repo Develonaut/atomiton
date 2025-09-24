@@ -7,8 +7,8 @@ import {
 } from "@headlessui/react";
 import Icon from "#components/Icon";
 import Modal from "#components/Modal";
-import Folders from "./Folders";
-import DeleteFile from "./DeleteFile";
+import Folders from "#components/LeftSidebar/Head/Menu/Folders";
+import DeleteFile from "#components/LeftSidebar/Head/Menu/DeleteFile";
 
 function Menu() {
   const [openModalFolders, setOpenModalFolders] = useState(false);

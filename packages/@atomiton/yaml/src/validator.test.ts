@@ -1,11 +1,11 @@
 import {
-    createValidator,
-    validateArrayLength,
-    validateEnum,
-    validatePattern,
-    validateRange,
-    validateRequired,
-    validateType,
+  createValidator,
+  validateArrayLength,
+  validateEnum,
+  validatePattern,
+  validateRange,
+  validateRequired,
+  validateType,
 } from "#validator";
 import { describe, expect, it } from "vitest";
 

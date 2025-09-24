@@ -4,11 +4,7 @@
  * Provides access to system templates
  */
 
-import {
-    templateActions,
-    templateStore,
-    type TemplateState,
-} from "#templates";
+import { templateActions, templateStore, type TemplateState } from "#store/templates";
 import { useDidMount } from "@atomiton/hooks";
 
 const selectTemplates = (state: TemplateState) => state.templates;

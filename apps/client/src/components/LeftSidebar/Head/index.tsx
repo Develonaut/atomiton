@@ -1,6 +1,6 @@
 import Icon from "#components/Icon";
 import Image from "#components/Image";
-import Menu from "#Menu";
+import Menu from "#components/LeftSidebar/Head/Menu";
 import { Link } from "#router";
 
 function Head() {

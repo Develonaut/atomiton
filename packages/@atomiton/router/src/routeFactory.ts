@@ -1,12 +1,12 @@
 import type { RouteConfig } from "#types";
 import {
-    createRootRoute,
-    createRoute,
-    lazyRouteComponent,
-    Outlet,
-    type ErrorRouteComponent,
-    type NotFoundRouteComponent,
-    type RouteComponent,
+  createRootRoute,
+  createRoute,
+  lazyRouteComponent,
+  Outlet,
+  type ErrorRouteComponent,
+  type NotFoundRouteComponent,
+  type RouteComponent,
 } from "@tanstack/react-router";
 import React, { type ComponentType } from "react";
 

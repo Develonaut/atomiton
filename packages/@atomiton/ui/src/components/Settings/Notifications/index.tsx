@@ -2,8 +2,8 @@ import { useState } from "react";
 import Switch from "#components/Switch";
 import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
-import Title from "#components/Title";
-import Option from "#components/Option";
+import Title from "#components/Settings/Title";
+import Option from "#components/Settings/Option";
 
 function Notifications() {
   const displays = [

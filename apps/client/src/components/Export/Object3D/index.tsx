@@ -3,9 +3,9 @@ import Select from "#components/form/Select";
 import Icon from "#components/Icon";
 import Tabs from "#components/Tabs";
 import { useState } from "react";
-import Line from "./Line";
+import Line from "#components/Export/Object3D/Line";
 
-import { cameraOptions, formats, materialOptions } from "#content";
+import { cameraOptions, formats, materialOptions } from "#components/Export/Object3D/content";
 
 function Object3D() {
   const [format, setFormat] = useState(formats[0]);

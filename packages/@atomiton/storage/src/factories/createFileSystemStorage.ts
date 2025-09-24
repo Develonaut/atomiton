@@ -12,7 +12,10 @@ import {
   fileExists,
   ensureDirectory,
 } from "#factories/utils/fileUtils";
-import { isCompositeData, addTimestampMetadata } from "#factories/utils/dataValidation";
+import {
+  isCompositeData,
+  addTimestampMetadata,
+} from "#factories/utils/dataValidation";
 import {
   writeDataToFile,
   readDataFromFile,

@@ -1,6 +1,6 @@
 // Navigation helper functions that use the TanStack Router navigate function
-import { navigate, router } from "#index";
-import { PATHS } from "#paths";
+import { navigate, router } from "#router";
+import { PATHS } from "#router/paths";
 
 // Preloading functions for programmatic route preloading
 export function preloadEditor(id: string) {

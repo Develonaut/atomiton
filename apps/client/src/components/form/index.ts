@@ -1,7 +1,7 @@
-export { default as ColorDisplay } from "#ColorDisplay";
-export { default as DualRangeSlider } from "#DualRangeSlider";
-export { default as ImageGrid } from "#ImageGrid";
-export type { ImageGridItem } from "#ImageGrid";
-export { default as NumberInput } from "#NumberInput";
-export { default as RangeSlider } from "#RangeSlider";
-export type { SelectOption } from "#Select";
+export { default as ColorDisplay } from "#components/form/ColorDisplay";
+export { default as DualRangeSlider } from "#components/form/DualRangeSlider";
+export { default as ImageGrid } from "#components/form/ImageGrid";
+export type { ImageGridItem } from "#components/form/ImageGrid";
+export { default as NumberInput } from "#components/form/NumberInput";
+export { default as RangeSlider } from "#components/form/RangeSlider";
+export type { SelectOption } from "#components/form/Select";

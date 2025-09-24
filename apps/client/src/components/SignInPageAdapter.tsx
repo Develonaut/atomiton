@@ -1,4 +1,4 @@
-import ButtonAdapter from "#ButtonAdapter";
+import ButtonAdapter from "#components/ButtonAdapter";
 import Field from "#components/Field";
 import Image from "#components/Image";
 import Login from "#components/Login";

@@ -1,4 +1,4 @@
-import Accordion from "#components/Accordion";
+import Accordion from "#components/SceneAndAssetsSidebar/Assets/Accordion";
 
 import { materials, objects3d } from "./content";
 

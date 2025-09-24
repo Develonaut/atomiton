@@ -2,7 +2,7 @@ import Icon from "#components/Icon";
 import Image from "#components/Image";
 import Modal from "#components/Modal";
 import { Link } from "#router";
-import Settings from "#Settings";
+import Settings from "#components/User/Settings";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { useState } from "react";
 

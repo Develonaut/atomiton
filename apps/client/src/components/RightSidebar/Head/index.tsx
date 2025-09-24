@@ -1,5 +1,5 @@
 import Image from "#components/Image";
-import Share from "#Share";
+import Share from "#components/RightSidebar/Head/Share";
 
 const avatars = ["/images/avatars/1.png", "/images/avatars/2.png"];
 

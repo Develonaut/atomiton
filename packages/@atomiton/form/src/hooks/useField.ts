@@ -1,4 +1,4 @@
-import type { useForm } from "#useForm";
+import type { useForm } from "#hooks/useForm";
 import type { FieldPath, FieldValues } from "react-hook-form";
 
 export function useField<TFieldValues extends FieldValues = FieldValues>({

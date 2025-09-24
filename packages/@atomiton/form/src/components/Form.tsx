@@ -1,5 +1,5 @@
-import { FormFields } from "#FormFields";
-import { FormProvider } from "#FormProvider";
+import { FormFields } from "#components/FormFields";
+import { FormProvider } from "#components/FormProvider";
 import type { FieldsMetadata, ZodSchema } from "#types";
 import React from "react";
 

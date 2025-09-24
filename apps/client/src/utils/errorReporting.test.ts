@@ -1,4 +1,4 @@
-import { ErrorReporter, errorReporter } from "#errorReporting";
+import { ErrorReporter, errorReporter } from "#utils/errorReporting";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock localStorage

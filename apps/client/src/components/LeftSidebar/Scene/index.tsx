@@ -1,4 +1,4 @@
-import Item from "#Item";
+import Item from "#components/LeftSidebar/Scene/Item";
 import { useEditorNodes } from "@atomiton/editor";
 
 function Scene() {

@@ -1,4 +1,4 @@
-import { getDefaultValues } from "#getDefaultValues";
+import { getDefaultValues } from "#utils/getDefaultValues";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
 

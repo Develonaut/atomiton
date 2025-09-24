@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Switch from "#components/form/Switch";
 import Select from "#components/form/Select";
-import Title from "./Title";
-import Option from "./Option";
-import Field from "./Field";
+import Title from "#components/User/Settings/General/Title";
+import Option from "#components/User/Settings/General/Option";
+import Field from "#components/User/Settings/General/Field";
 
 function General() {
   const [username, setUsername] = useState("sophie");

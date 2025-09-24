@@ -8,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { useState } from "react";
 
-import { content } from "#content";
+import { content } from "#components/LeftSidebar/Scene/Item/Variations/content";
 
 type Props = {
   onClick: () => void;

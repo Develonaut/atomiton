@@ -1,8 +1,8 @@
 import {
-    formatYaml,
-    minifyYaml,
-    prettifyYaml,
-    stringifyYaml,
+  formatYaml,
+  minifyYaml,
+  prettifyYaml,
+  stringifyYaml,
 } from "#stringifier.js";
 import { bench, describe } from "vitest";
 

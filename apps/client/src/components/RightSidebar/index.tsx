@@ -1,8 +1,8 @@
-import Animation from "#Animation";
+import Animation from "#components/RightSidebar/Animation";
 import Tabs from "#components/Tabs";
 import ViewController from "#components/ViewController";
-import Design from "#Design";
-import Head from "#Head";
+import Design from "#components/RightSidebar/Design";
+import Head from "#components/RightSidebar/Head";
 import { Box } from "@atomiton/ui";
 import { useState } from "react";
 

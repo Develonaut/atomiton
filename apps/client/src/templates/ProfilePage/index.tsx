@@ -2,9 +2,9 @@ import Gallery from "#components/Gallery";
 import Icon from "#components/Icon";
 import Image from "#components/Image";
 import LayoutOnlyHeader from "#components/LayoutOnlyHeader";
-import Contacts from "#Contacts";
+import Contacts from "#templates/ProfilePage/Contacts";
 
-import { gallery } from "#content";
+import { gallery } from "#templates/ProfilePage/content";
 
 function ProfilePage() {
   return (

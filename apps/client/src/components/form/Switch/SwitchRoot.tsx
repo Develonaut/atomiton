@@ -1,6 +1,6 @@
-import { SwitchContext } from "#SwitchContext";
-import SwitchLabel from "#SwitchLabel";
-import SwitchThumb from "#SwitchThumb";
+import { SwitchContext } from "#components/form/Switch/SwitchContext";
+import SwitchLabel from "#components/form/Switch/SwitchLabel";
+import SwitchThumb from "#components/form/Switch/SwitchThumb";
 import { Switch as HeadlessSwitch } from "@headlessui/react";
 import type { PropsWithChildren } from "react";
 import { Children, isValidElement } from "react";

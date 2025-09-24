@@ -1,6 +1,6 @@
-import Action from "#Action";
+import Action from "#components/LeftSidebar/Scene/Item/Action";
 import Icon from "#components/Icon";
-import Variations from "#Variations";
+import Variations from "#components/LeftSidebar/Scene/Item/Variations";
 import { useEditorNode } from "@atomiton/editor";
 import { useState } from "react";
 

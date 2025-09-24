@@ -1,4 +1,4 @@
-import Comment from "#Comment";
+import Comment from "#components/Notifications/Details/Comment";
 import Icon from "#components/Icon";
 import Image from "#components/Image";
 

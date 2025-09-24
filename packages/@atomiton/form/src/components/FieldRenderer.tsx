@@ -6,7 +6,7 @@ import {
   SelectField,
   TextareaField,
   TextField,
-} from "#fields/index";
+} from "#components/fields/index";
 import type { FieldConfig } from "#types";
 import React from "react";
 import type {

@@ -1,5 +1,5 @@
 import Icon from "#components/Icon";
-import Share from "#Share";
+import Share from "#templates/ProfilePage/Contacts/Share";
 
 const socials = [
   {

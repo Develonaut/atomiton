@@ -3,7 +3,7 @@ import Image from "#components/Image";
 import { useId } from "react";
 import { Tooltip } from "react-tooltip";
 
-import { images } from "#content";
+import { images } from "#templates/Explore/DetailsPage/Details/Images/content";
 
 function Images() {
   const idTooltip = useId();

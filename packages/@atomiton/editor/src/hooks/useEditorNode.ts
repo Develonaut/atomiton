@@ -1,5 +1,5 @@
 import { useReactFlow } from "@xyflow/react";
-import { useEditorStore } from "#hooks/useEditorStore";
+import { useEditorStore } from "#useEditorStore";
 import { useCallback } from "react";
 import type { EditorNode } from "#types/EditorNode";
 

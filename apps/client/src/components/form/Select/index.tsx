@@ -1,12 +1,12 @@
-import SelectIcon from "#SelectIcon";
-import SelectIndicator from "#SelectIndicator";
-import SelectLabel from "#SelectLabel";
-import SelectOption from "#SelectOption";
-import SelectOptions from "#SelectOptions";
-import SelectPlaceholder from "#SelectPlaceholder";
-import SelectRoot from "#SelectRoot";
-import SelectTrigger from "#SelectTrigger";
-import SelectValue from "#SelectValue";
+import SelectIcon from "#components/form/Select/SelectIcon";
+import SelectIndicator from "#components/form/Select/SelectIndicator";
+import SelectLabel from "#components/form/Select/SelectLabel";
+import SelectOption from "#components/form/Select/SelectOption";
+import SelectOptions from "#components/form/Select/SelectOptions";
+import SelectPlaceholder from "#components/form/Select/SelectPlaceholder";
+import SelectRoot from "#components/form/Select/SelectRoot";
+import SelectTrigger from "#components/form/Select/SelectTrigger";
+import SelectValue from "#components/form/Select/SelectValue";
 
 const Select = Object.assign(SelectRoot, {
   Trigger: SelectTrigger,

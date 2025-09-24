@@ -8,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { useState } from "react";
 
-import { itemsSort, itemsType } from "#items";
+import { itemsSort, itemsType } from "#components/Filters/items";
 
 type ItemProps = {
   id?: number;

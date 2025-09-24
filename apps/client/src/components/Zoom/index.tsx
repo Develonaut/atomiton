@@ -3,7 +3,7 @@ import { useEditorViewport } from "@atomiton/editor";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { useRef, useState } from "react";
 
-import { zoomOptions } from "#items";
+import { zoomOptions } from "#components/Zoom/items";
 
 type PropsLine = {
   title: string;

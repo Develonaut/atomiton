@@ -2,8 +2,8 @@ import { useState } from "react";
 import Switch from "#components/Switch";
 import UploadAvatar from "#components/UploadAvatar";
 import NewField from "#components/NewField";
-import Title from "#components/Title";
-import Option from "#components/Option";
+import Title from "#components/Settings/Title";
+import Option from "#components/Settings/Option";
 
 function Profile() {
   const [privateProfile, setPrivateProfile] = useState(false);

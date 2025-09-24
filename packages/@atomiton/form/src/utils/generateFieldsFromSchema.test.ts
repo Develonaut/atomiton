@@ -1,4 +1,4 @@
-import { generateFieldsFromSchema } from "#generateFieldsFromSchema";
+import { generateFieldsFromSchema } from "#utils/generateFieldsFromSchema";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
 

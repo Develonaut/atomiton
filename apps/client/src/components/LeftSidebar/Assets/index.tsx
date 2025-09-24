@@ -1,4 +1,4 @@
-import Accordion from "#Accordion";
+import Accordion from "#components/LeftSidebar/Assets/Accordion";
 import { useAddNode } from "@atomiton/editor";
 import { getNodeDefinitionsGroupedByCategory } from "@atomiton/nodes/definitions";
 

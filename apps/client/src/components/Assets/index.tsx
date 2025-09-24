@@ -1,4 +1,4 @@
-import Item from "#Item";
+import Item from "#components/Assets/Item";
 
 type Props = {
   title: string;

@@ -1,5 +1,5 @@
 import type { EventBus, EventMap } from "#core/types";
-import { createEventBus } from "#index";
+import { createEventBus } from "#desktop/index";
 
 const eventBus = createEventBus({
   domain: "global",

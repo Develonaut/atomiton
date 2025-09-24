@@ -1,8 +1,8 @@
 import Image from "#components/Image";
 import { useState } from "react";
-import Group from "./../Group";
+import Group from "#components/RightSidebar/Group";
 
-import { content } from "#content";
+import { content } from "#components/RightSidebar/Design/Styles/content";
 
 function Styles() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

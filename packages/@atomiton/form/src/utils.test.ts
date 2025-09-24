@@ -1,7 +1,7 @@
 import {
-    generateFieldsFromSchema,
-    getDefaultValues,
-    mapZodTypeToControl,
+  generateFieldsFromSchema,
+  getDefaultValues,
+  mapZodTypeToControl,
 } from "#utils/index";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";

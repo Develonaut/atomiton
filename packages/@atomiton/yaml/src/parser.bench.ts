@@ -1,8 +1,8 @@
 import {
-    isValidYaml,
-    parseYaml,
-    parseYamlStream,
-    safeParseYaml,
+  isValidYaml,
+  parseYaml,
+  parseYamlStream,
+  safeParseYaml,
 } from "#parser.js";
 import { bench, describe } from "vitest";
 

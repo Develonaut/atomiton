@@ -2,7 +2,7 @@ import Assets from "#components/Assets";
 import Layout from "#components/Layout";
 import { useState } from "react";
 
-import { content } from "#content";
+import { content } from "#templates/Assets/Objects3dPage/content";
 
 function Objects3dPage() {
   const [tab, setTab] = useState("all-objects");

@@ -1,9 +1,9 @@
 import {
-    isValidYaml,
-    parseMultipleDocuments,
-    parseYaml,
-    parseYamlStream,
-    safeParseYaml,
+  isValidYaml,
+  parseMultipleDocuments,
+  parseYaml,
+  parseYamlStream,
+  safeParseYaml,
 } from "#parser";
 import type { YamlDocument, YamlError } from "#types";
 import { describe, expect, it } from "vitest";

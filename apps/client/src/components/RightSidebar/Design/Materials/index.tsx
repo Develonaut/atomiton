@@ -1,8 +1,8 @@
 import { ImageGrid } from "#components/form";
 import { useState } from "react";
-import Group from "./../Group";
+import Group from "#components/RightSidebar/Group";
 
-import { content } from "#content";
+import { content } from "#components/RightSidebar/Design/Materials/content";
 
 function Materials() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);

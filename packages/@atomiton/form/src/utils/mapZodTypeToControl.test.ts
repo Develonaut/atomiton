@@ -1,4 +1,4 @@
-import { mapZodTypeToControl } from "#mapZodTypeToControl";
+import { mapZodTypeToControl } from "#utils/mapZodTypeToControl";
 import v from "@atomiton/validation";
 import { describe, expect, it } from "vitest";
 

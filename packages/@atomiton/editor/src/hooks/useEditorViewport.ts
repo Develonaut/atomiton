@@ -1,7 +1,7 @@
 import type { FitViewOptions, Viewport } from "@xyflow/react";
 import { useReactFlow } from "@xyflow/react";
 import { useMemo } from "react";
-import { useEditorStore } from "#hooks/useEditorStore";
+import { useEditorStore } from "#useEditorStore";
 
 export type ViewportOptions = Viewport;
 

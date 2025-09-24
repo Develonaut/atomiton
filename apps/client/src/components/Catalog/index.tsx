@@ -1,4 +1,4 @@
-import Card from "#Card";
+import Card from "#components/Catalog/Card";
 import Filters from "#components/Filters";
 import { useEffect, useRef, useState } from "react";
 import { useWindowScroll } from "react-use";

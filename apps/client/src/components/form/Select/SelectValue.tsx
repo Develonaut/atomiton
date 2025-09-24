@@ -1,4 +1,4 @@
-import { useSelectContext } from "#SelectRoot";
+import { useSelectContext } from "#components/form/Select/SelectRoot";
 import type { PropsWithChildren } from "react";
 
 type SelectValueProps = PropsWithChildren<{

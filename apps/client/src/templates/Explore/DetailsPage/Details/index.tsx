@@ -1,7 +1,7 @@
 import Button from "#components/Button";
 import Icon from "#components/Icon";
 import Image from "#components/Image";
-import Images from "#Images";
+import Images from "#templates/Explore/DetailsPage/Details/Images";
 import { useId } from "react";
 import { Tooltip } from "react-tooltip";
 

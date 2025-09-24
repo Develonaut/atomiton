@@ -3,7 +3,7 @@ import {
   getNodeDefinition,
 } from "@atomiton/nodes/definitions";
 import { generateEdgeId, generateNodeId } from "@atomiton/utils";
-import type { EditorEdge } from "#hooks/useEditorEdges";
+import type { EditorEdge } from "#useEditorEdges";
 import type { EditorNode, NodePosition } from "#types/EditorNode";
 // Note: nodeMapping is internal to editor package, not exported
 

@@ -3,8 +3,8 @@ import type { SelectOption } from "#components/Select";
 import Select from "#components/Select";
 import SubmitButton from "#components/SubmitButton";
 import ViewController from "#components/ViewController";
-import PremadePrompt from "#components/PremadePrompt";
-import SelectAi from "#components/SelectAi";
+import PremadePrompt from "#components/PromptInput/PremadePrompt";
+import SelectAI from "#components/SelectAI";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -77,7 +77,7 @@ function PromptInput({
             </svg>
           }
         />
-        <SelectAi
+        <SelectAI
           className={`${visibleAudio ? "opacity-30 pointer-events-none" : ""}`}
         />
         <button

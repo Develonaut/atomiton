@@ -1,4 +1,4 @@
-import ButtonAdapter from "#ButtonAdapter";
+import ButtonAdapter from "#components/ButtonAdapter";
 import Field from "#components/Field";
 import Login from "#components/Login";
 import { Link } from "#router";

@@ -42,7 +42,7 @@ function Sidebar() {
               active: false,
             }}
           />
-          <Folders folders={folders} />
+          <Folders />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
-import Header from "#Header";
-import Sidebar from "#Sidebar";
+import Header from "#components/Layout/Header";
+import Sidebar from "#components/Layout/Sidebar";
 import { useState } from "react";
 
 type Props = {

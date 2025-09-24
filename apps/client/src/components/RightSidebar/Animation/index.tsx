@@ -1,7 +1,7 @@
-import Effects from "#Effects";
-import Lens from "#Lens";
-import Loop from "#Loop";
-import MotionBlur from "#MotionBlur";
+import Effects from "#components/RightSidebar/Animation/Effects";
+import Lens from "#components/RightSidebar/Animation/Lens";
+import Loop from "#components/RightSidebar/Animation/Loop";
+import MotionBlur from "#components/RightSidebar/Animation/MotionBlur";
 
 function Animation() {
   return (

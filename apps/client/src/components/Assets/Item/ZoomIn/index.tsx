@@ -5,7 +5,7 @@ import { Dialog, DialogPanel, CloseButton } from "@headlessui/react";
 import Icon from "#components/Icon";
 import Image from "#components/Image";
 import Button from "#components/Button";
-import Share from "./Share";
+import Share from "#components/Assets/Item/Share";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";

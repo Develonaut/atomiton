@@ -1,9 +1,9 @@
 import type {
-    ParseResult,
-    StreamParseOptions,
-    YamlDocument,
-    YamlError,
-    YamlParseOptions,
+  ParseResult,
+  StreamParseOptions,
+  YamlDocument,
+  YamlError,
+  YamlParseOptions,
 } from "#types.js";
 import type { Document } from "yaml";
 import { parse, parseAllDocuments, parseDocument } from "yaml";

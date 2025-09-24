@@ -1,4 +1,4 @@
-import { useForm } from "#hooks/useForm";
+import { useForm } from "#useForm";
 import { generateFieldsFromSchema, getDefaultValues } from "#utils/index";
 import v from "@atomiton/validation";
 import { renderHook } from "@testing-library/react";

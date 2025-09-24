@@ -1,7 +1,7 @@
-import { useEditorNode } from "#hooks/useEditorNode";
-import { useEditorNodes } from "#hooks/useEditorNodes";
-import { useSelectedNode } from "#hooks/useSelectedNode";
-import { useSelectedNodes } from "#hooks/useSelectedNodes";
+import { useEditorNode } from "#useEditorNode";
+import { useEditorNodes } from "#useEditorNodes";
+import { useSelectedNode } from "#useSelectedNode";
+import { useSelectedNodes } from "#useSelectedNodes";
 import type { EditorNode } from "#types/EditorNode";
 import { act, renderHook } from "@testing-library/react";
 import { ReactFlow, ReactFlowProvider } from "@xyflow/react";

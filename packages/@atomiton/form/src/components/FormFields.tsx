@@ -1,5 +1,5 @@
-import { FieldRenderer } from "#FieldRenderer";
-import { useFormFields } from "#FormProvider";
+import { FieldRenderer } from "#components/FieldRenderer";
+import { useFormFields } from "#components/FormProvider";
 import type { FieldConfig } from "#types";
 import React, { useMemo } from "react";
 import { useFormContext } from "react-hook-form";

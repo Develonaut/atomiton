@@ -1,10 +1,10 @@
 import { parseYaml, safeParseYaml } from "#parser.js";
 import { stringifyYaml } from "#stringifier.js";
 import type {
-    ParseResult,
-    YamlDocument,
-    YamlParseOptions,
-    YamlStringifyOptions,
+  ParseResult,
+  YamlDocument,
+  YamlParseOptions,
+  YamlStringifyOptions,
 } from "#types.js";
 import { readFile, writeFile } from "node:fs/promises";
 

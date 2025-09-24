@@ -1,10 +1,10 @@
 import {
-    validateArrayLength,
-    validateEnum,
-    validatePattern,
-    validateRange,
-    validateRequired,
-    validateType,
+  validateArrayLength,
+  validateEnum,
+  validatePattern,
+  validateRange,
+  validateRequired,
+  validateType,
 } from "#validator.js";
 import { bench, describe } from "vitest";
 

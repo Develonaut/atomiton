@@ -1,10 +1,10 @@
-import Artboard from "#Artboard";
-import Background from "#Background";
-import Camera from "#Camera";
-import Materials from "#Materials";
-import NodeInspector from "#NodeInspector";
-import ShowFrame from "#ShowFrame";
-import Styles from "#Styles";
+import Artboard from "#components/RightSidebar/Design/Artboard";
+import Background from "#components/RightSidebar/Design/Background";
+import Camera from "#components/RightSidebar/Design/Camera";
+import Materials from "#components/RightSidebar/Design/Materials";
+import NodeInspector from "#components/RightSidebar/Design/NodeInspector";
+import ShowFrame from "#components/RightSidebar/Design/ShowFrame";
+import Styles from "#components/RightSidebar/Design/Styles";
 
 function Design() {
   return (

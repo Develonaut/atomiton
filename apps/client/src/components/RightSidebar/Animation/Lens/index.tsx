@@ -1,9 +1,9 @@
 import Select from "#components/form/Select";
 import Icon from "#components/Icon";
 import { useState } from "react";
-import Group from "./../Group";
+import Group from "#components/RightSidebar/Group";
 
-import { lensFormats, rotates, zoomLevels } from "#content";
+import { lensFormats, rotates, zoomLevels } from "#components/RightSidebar/Animation/Lens/content";
 
 function Lens() {
   const [lensFormat, setLensFormat] = useState(lensFormats[0]);

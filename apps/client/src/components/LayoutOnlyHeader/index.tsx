@@ -1,4 +1,4 @@
-import Header from "#Header";
+import Header from "#components/LayoutOnlyHeader/Header";
 
 type Props = {
   classNameHeader?: string;

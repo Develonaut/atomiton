@@ -1,8 +1,8 @@
-import Assets from "#Assets";
+import Assets from "#components/LeftSidebar/Assets";
 import Tabs from "#components/Tabs";
-import Head from "#Head";
-import Scene from "#Scene";
-import Search from "#Search";
+import Head from "#components/LeftSidebar/Head";
+import Scene from "#components/LeftSidebar/Scene";
+import Search from "#components/LeftSidebar/Search";
 import { useState } from "react";
 
 const tabs = [

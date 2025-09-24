@@ -4,7 +4,7 @@ import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { content } from "#content";
+import { content } from "#templates/Explore/DetailsPage/Slider/content";
 
 function Slider() {
   const swiperRef = useRef<SwiperType>(null);

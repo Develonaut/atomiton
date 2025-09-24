@@ -1,4 +1,4 @@
-import { useSwitchContext } from "#SwitchContext";
+import { useSwitchContext } from "#components/form/Switch/SwitchContext";
 
 type SwitchThumbProps = {
   className?: string;

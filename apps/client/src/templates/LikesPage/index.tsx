@@ -1,7 +1,7 @@
 import Catalog from "#components/Catalog";
 import Layout from "#components/Layout";
 
-import { content } from "#content";
+import { content } from "#templates/LikesPage/content";
 
 function LikesPage() {
   return (

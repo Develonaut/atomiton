@@ -1,8 +1,8 @@
-import TabsContent from "#TabsContent";
-import TabsLegacy from "#TabsLegacy";
-import TabsList from "#TabsList";
-import TabsRoot from "#TabsRoot";
-import TabsTrigger from "#TabsTrigger";
+import TabsContent from "#components/Tabs/TabsContent";
+import TabsLegacy from "#components/Tabs/TabsLegacy";
+import TabsList from "#components/Tabs/TabsList";
+import TabsRoot from "#components/Tabs/TabsRoot";
+import TabsTrigger from "#components/Tabs/TabsTrigger";
 import type { TabItem } from "#types/tabs";
 
 // Check if props match legacy API

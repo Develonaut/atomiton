@@ -1,7 +1,7 @@
 import Icon from "#components/Icon";
 import Image from "#components/Image";
-import Share from "#Share";
-import ZoomIn from "#ZoomIn";
+import Share from "#components/Assets/Item/Share";
+import ZoomIn from "#components/Assets/Item/ZoomIn";
 import { useState } from "react";
 
 type ItemProps = {

@@ -1,5 +1,5 @@
-import AddFiles from "#AddFiles";
-import SelectAi from "#SelectAi";
+import AddFiles from "#components/PanelMessage/AddFiles";
+import SelectAi from "#components/PanelMessage/SelectAi";
 import Button from "#components/Button";
 import Icon from "#components/Icon";
 import ViewController from "#components/ViewController";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import Icon from "#components/Icon";
 import Tabs from "#components/Tabs";
 import Image from "#components/Image";
-import Group from "./../Group";
+import Group from "#components/RightSidebar/Group";
 import { DualRangeSlider } from "#components/form";
 
 const tabs = [

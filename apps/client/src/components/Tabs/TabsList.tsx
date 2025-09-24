@@ -1,4 +1,4 @@
-import { useTabsContext } from "#TabsRoot";
+import { useTabsContext } from "#components/Tabs/TabsRoot";
 import type { PropsWithChildren } from "react";
 import { Children, isValidElement } from "react";
 

@@ -1,5 +1,5 @@
-import { navigate, router } from "#index";
-import * as navigationModule from "#navigation";
+import { navigate, router } from "#router";
+import * as navigationModule from "#router/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the router exports

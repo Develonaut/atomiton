@@ -1,4 +1,4 @@
-import Item from "#Item";
+import Item from "#components/Gallery/Item";
 import { Masonry } from "react-plock";
 
 type Props = {
