@@ -108,38 +108,6 @@ export const parallelDefinition: NodeDefinition = createNodeDefinition({
       multiple: false,
       description: "Array of operation results",
     }),
-    createNodePort("output", {
-      id: "completed",
-      name: "Completed",
-      dataType: "number",
-      required: false,
-      multiple: false,
-      description: "Number of operations completed",
-    }),
-    createNodePort("output", {
-      id: "failed",
-      name: "Failed",
-      dataType: "number",
-      required: false,
-      multiple: false,
-      description: "Number of operations failed",
-    }),
-    createNodePort("output", {
-      id: "duration",
-      name: "Duration",
-      dataType: "number",
-      required: false,
-      multiple: false,
-      description: "Total execution duration in milliseconds",
-    }),
-    createNodePort("output", {
-      id: "success",
-      name: "Success",
-      dataType: "boolean",
-      required: false,
-      multiple: false,
-      description: "Whether all operations completed successfully",
-    }),
   ],
 });
 

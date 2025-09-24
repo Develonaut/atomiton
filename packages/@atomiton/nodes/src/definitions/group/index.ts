@@ -82,14 +82,6 @@ export const groupDefinition: NodeDefinition = createNodeDefinition({
       multiple: false,
       description: "Result from the group workflow",
     }),
-    createNodePort("output", {
-      id: "metadata",
-      name: "Metadata",
-      dataType: "object",
-      required: false,
-      multiple: false,
-      description: "Execution metadata and statistics",
-    }),
   ],
 });
 

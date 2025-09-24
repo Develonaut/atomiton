@@ -80,22 +80,6 @@ export const csvReaderDefinition: NodeDefinition = createNodeDefinition({
       multiple: false,
       description: "Path to the CSV file to read",
     }),
-    createNodePort("input", {
-      id: "data",
-      name: "CSV Data",
-      dataType: "string",
-      required: false,
-      multiple: false,
-      description: "Raw CSV data as string",
-    }),
-    createNodePort("input", {
-      id: "content",
-      name: "Content",
-      dataType: "string",
-      required: false,
-      multiple: false,
-      description: "Alternative input for CSV content",
-    }),
   ],
   outputPorts: [
     createNodePort("output", {
@@ -105,22 +89,6 @@ export const csvReaderDefinition: NodeDefinition = createNodeDefinition({
       required: true,
       multiple: false,
       description: "Parsed CSV data as array of objects",
-    }),
-    createNodePort("output", {
-      id: "headers",
-      name: "Headers",
-      dataType: "array",
-      required: false,
-      multiple: false,
-      description: "Column headers from CSV",
-    }),
-    createNodePort("output", {
-      id: "rowCount",
-      name: "Row Count",
-      dataType: "number",
-      required: false,
-      multiple: false,
-      description: "Number of data rows",
     }),
   ],
 });
