@@ -1,8 +1,8 @@
 import Image from "#components/Image";
 import Link from "#components/Link";
-import Dropdown from "#Dropdown";
-import Folders from "#Folders";
-import NavLink from "#NavLink";
+import Dropdown from "#components/Dropdown/Dropdown";
+import Folders from "#components/Folders/Folders";
+import NavLink from "#components/NavLink/NavLink";
 
 import { folders, navigation } from "#navigation";
 

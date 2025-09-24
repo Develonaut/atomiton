@@ -1,5 +1,5 @@
 import Box from "#components/Box";
-import type { FlexProps } from "#Flex.types";
+import type { FlexProps } from "#components/Flex/Flex.types";
 import { Children, Fragment } from "react";
 
 function Flex({

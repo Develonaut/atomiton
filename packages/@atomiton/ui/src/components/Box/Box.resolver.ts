@@ -1,4 +1,4 @@
-import type { BoxProps } from "#Box.types";
+import type { BoxProps } from "#components/Box/Box.types";
 import { cn } from "#utils/cn";
 import { extractStyleProps } from "#utils/extractStyleProps";
 

@@ -1,12 +1,12 @@
-import resolveButtonProps from "#Button.resolver";
+import resolveButtonProps from "#components/Button/Button.resolver";
 import {
   BUTTON_STYLES,
   buttonCompoundVariants,
   buttonLoading,
   buttonSizes,
   buttonVariants,
-} from "#Button.styles";
-import type { ButtonProps } from "#Button.types";
+} from "#components/Button/Button.styles";
+import type { ButtonProps } from "#components/Button/Button.types";
 import { Button as ButtonPrimitive } from "#primitives";
 import { styled } from "#system/styled";
 

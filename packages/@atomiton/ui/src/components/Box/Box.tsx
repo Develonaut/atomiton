@@ -1,4 +1,4 @@
-import type { BoxProps } from "#Box.types";
+import type { BoxProps } from "#components/Box.types";
 import { Box as BoxPrimitive } from "#primitives";
 import { styled } from "#system/styled";
 import { type ElementType, forwardRef } from "react";

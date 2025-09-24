@@ -1,6 +1,6 @@
-import Action from "#Action";
-import ExportFiles from "#ExportFiles";
-import ZoomControl from "#ZoomControl";
+import Action from "#components/Toolbar/Action";
+import ExportFiles from "#components/Toolbar/ExportFiles";
+import ZoomControl from "#components/Toolbar/ZoomControl";
 import { useState } from "react";
 
 type Props = {

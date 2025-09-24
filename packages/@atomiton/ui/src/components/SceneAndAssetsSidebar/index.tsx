@@ -1,8 +1,8 @@
-import Assets from "#Assets";
+import Assets from "#components/SceneAndAssetsSidebar/Assets";
 import Tabs from "#components/Tabs";
-import Head from "#Head";
-import Scene from "#Scene";
-import Search from "#Search";
+import Head from "#components/SceneAndAssetsSidebar/Head";
+import Scene from "#components/SceneAndAssetsSidebar/Scene";
+import Search from "#components/SceneAndAssetsSidebar/Search";
 import { useState } from "react";
 
 type TabItem = {

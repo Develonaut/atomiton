@@ -1,2 +1,2 @@
-export { default } from "#Box";
-export type { BoxProps } from "#Box.types";
+export { default } from "#components/Box/Box";
+export type { BoxProps } from "#components/Box/Box.types";

@@ -1,5 +1,5 @@
 import GuidelineSidebar from "#components/GuidelineSidebar";
-import Header from "#Header";
+import Header from "#components/Layout/Header";
 import { useState } from "react";
 
 type Props = {
