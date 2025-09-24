@@ -5,7 +5,11 @@ import Tabs from "#components/Tabs";
 import { useState } from "react";
 import Line from "#components/Export/Object3D/Line";
 
-import { cameraOptions, formats, materialOptions } from "#components/Export/Object3D/content";
+import {
+  cameraOptions,
+  formats,
+  materialOptions,
+} from "#components/Export/Object3D/content";
 
 function Object3D() {
   const [format, setFormat] = useState(formats[0]);

@@ -7,7 +7,7 @@ export {
   parseYamlDocument as parseDocument,
   parseMultipleDocuments as parseMultiple,
   parseYamlStream as parseStream,
-  safeParseYaml as safeParse
+  safeParseYaml as safeParse,
 } from "#parser.js";
 
 // Stringifier exports
@@ -19,7 +19,7 @@ export {
   stringifyYamlWithComments as stringifyWithComments,
   toYamlDocument as toDocument,
   // Convenience alias
-  stringifyYaml as toYaml
+  stringifyYaml as toYaml,
 } from "#stringifier.js";
 
 // Validator exports
@@ -31,7 +31,7 @@ export {
   validateRange,
   validateRequired,
   validateSchema,
-  validateType
+  validateType,
 } from "#validator.js";
 
 // JSON utilities

@@ -21,5 +21,5 @@ export {
   createEdgeFromLastNode,
   createNode,
   updateEdgesWithNewEdge,
-  updateNodesWithNewNode
+  updateNodesWithNewNode,
 } from "#utils/nodeCreation";

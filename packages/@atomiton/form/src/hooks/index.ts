@@ -6,7 +6,7 @@ export {
   useFieldArray,
   useFormContext,
   useFormState,
-  useWatch
+  useWatch,
 } from "react-hook-form";
 export type {
   Control,
@@ -32,5 +32,5 @@ export type {
   UseFormSetValue,
   UseFormTrigger,
   UseFormUnregister,
-  UseFormWatch
+  UseFormWatch,
 } from "react-hook-form";

@@ -20,9 +20,9 @@ export { default as Field } from "#components/Field";
 export { default as Input } from "#components/Input";
 
 export {
-    LegacySelect,
-    default as Select,
-    Select as SelectComposition
+  LegacySelect,
+  default as Select,
+  Select as SelectComposition,
 } from "#components/Select";
 export type { SelectOption } from "#components/Select";
 
@@ -30,11 +30,11 @@ export { Icon, NODE_ICON_MAP, getNodeIcon } from "#components/Icon";
 export type { IconProps } from "#components/Icon";
 
 export {
-    BRAINWAVE_THEME,
-    CATEGORY_COLORS,
-    COLORS,
-    STATUS_COLORS,
-    themeConfig
+  BRAINWAVE_THEME,
+  CATEGORY_COLORS,
+  COLORS,
+  STATUS_COLORS,
+  themeConfig,
 } from "#theme";
 
 export { styled } from "#system/styled";
