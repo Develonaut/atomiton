@@ -2,7 +2,10 @@
 
 ## Overview
 
-The Bento Box philosophy is our core architectural principle at Atomiton. Like a Japanese bento box with its organized compartments, our code should be composed of small, focused, self-contained modules that combine to create a complete system.
+The Bento Box philosophy is our core architectural principle at Atomiton. Like a
+Japanese bento box with its organized compartments, our code should be composed
+of small, focused, self-contained modules that combine to create a complete
+system.
 
 ## Core Principles
 
@@ -12,11 +15,13 @@ Each module/component/function should do ONE thing well.
 
 ### 2. Clear Boundaries
 
-Modules should have explicit, well-defined interfaces with clear inputs and outputs.
+Modules should have explicit, well-defined interfaces with clear inputs and
+outputs.
 
 ### 3. Self-Contained
 
-Each "compartment" should be as independent as possible, with minimal dependencies.
+Each "compartment" should be as independent as possible, with minimal
+dependencies.
 
 ### 4. Composable
 
@@ -139,7 +144,8 @@ export function useData() {
 }
 ```
 
-See [React Hooks Best Practices](./REACT_HOOKS_BEST_PRACTICES.md) for detailed patterns.
+See [React Hooks Best Practices](./REACT_HOOKS_BEST_PRACTICES.md) for detailed
+patterns.
 
 ### API Module
 
@@ -204,4 +210,5 @@ When refactoring existing code:
 
 > "Every big thing is just small things combined thoughtfully."
 
-The Bento Box principle isn't just about code organization—it's about thinking in small, composable pieces that create elegant solutions.
+The Bento Box principle isn't just about code organization—it's about thinking
+in small, composable pieces that create elegant solutions.

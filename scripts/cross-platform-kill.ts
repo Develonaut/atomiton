@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import fkill from 'fkill';
+import fkill from "fkill";
 
 interface KillOptions {
   ports: boolean;
@@ -27,7 +27,7 @@ async function killPorts(): Promise<void> {
     try {
       await fkill(`:${port}`, {
         force: true,
-        silent: true
+        silent: true,
       });
       console.log(`✅ Killed process on port ${port}`);
     } catch {
@@ -46,17 +46,17 @@ async function killElectron(): Promise<void> {
     // These patterns are designed to match our specific app instances
     const processPatterns = [
       // Match our custom app name
-      'AtomitonDesktop',
+      "AtomitonDesktop",
       // Match processes with our environment variable
-      'electron.*ATOMITON_DESKTOP=true',
+      "electron.*ATOMITON_DESKTOP=true",
       // Match electron-vite dev processes in our desktop directory
-      'electron.*apps/desktop.*electron-vite',
+      "electron.*apps/desktop.*electron-vite",
       // Match our specific userData directory in dev
-      'electron.*AtomitonDev',
+      "electron.*AtomitonDev",
       // Match built app executables
-      'Atomiton.exe',
-      'Atomiton.app',
-      'atomiton-desktop'
+      "Atomiton.exe",
+      "Atomiton.app",
+      "atomiton-desktop",
     ];
 
     let killed = false;
@@ -65,7 +65,7 @@ async function killElectron(): Promise<void> {
         await fkill(pattern, {
           force: true,
           ignoreCase: true,
-          tree: process.platform === 'win32'
+          tree: process.platform === "win32",
         });
         killed = true;
         console.log(`✅ Killed process matching: ${pattern}`);

@@ -1,6 +1,7 @@
 # Agent Execution Plan - Workflow Source of Truth
 
-**CRITICAL**: This document defines the WORKFLOW for all agent work. For technical standards, see the [Guidelines](../../../docs/guides/README.md).
+**CRITICAL**: This document defines the WORKFLOW for all agent work. For
+technical standards, see the [Guidelines](../../../docs/guides/README.md).
 
 ## Table of Contents
 
@@ -30,32 +31,43 @@
 ## Mandatory Requirements
 
 1. **ALL agents MUST follow this workflow before starting ANY work**
-2. **NO code can be added, committed, or pushed without EXPLICIT permission from Ryan**
+2. **NO code can be added, committed, or pushed without EXPLICIT permission from
+   Ryan**
 3. **This workflow supersedes all other workflow documentation**
-4. **ALL agents MUST log progress to `.claude/LOG.md` using format: `[YYYY-MM-DD HH:MM] [Agent] Status` (1 line max)**
+4. **ALL agents MUST log progress to `.claude/LOG.md` using format:
+   `[YYYY-MM-DD HH:MM] [Agent] Status` (1 line max)**
 
 ## Required Guidelines Review
 
 **BEFORE STARTING ANY WORK**, ALL agents MUST review:
 
-- **[Guidelines README](../../../docs/guides/README.md)** - READ THIS FIRST - Index to all technical standards and requirements
-- **[Development Principles](../../../docs/guides/DEVELOPMENT_PRINCIPLES.md)** - Core development principles
-- **[Code Style](../../../docs/guides/CODE_STYLE.md)** - Code style and quality standards
+- **[Guidelines README](../../../docs/guides/README.md)** - READ THIS FIRST -
+  Index to all technical standards and requirements
+- **[Development Principles](../../../docs/guides/DEVELOPMENT_PRINCIPLES.md)** -
+  Core development principles
+- **[Code Style](../../../docs/guides/CODE_STYLE.md)** - Code style and quality
+  standards
 
 **For Testing Work Specifically:**
-- **[Testing Strategy](../../../docs/testing/README.md)** - Complete testing philosophy (60% E2E, 30% Integration, 10% Unit)
-- **[When & Where to Test](../../../docs/testing/WHEN_AND_WHERE.md)** - Test placement guide (Electron/UI = E2E)
-- **[Testing Quick Reference](../../../docs/testing/QUICK_REFERENCE.md)** - Quick lookup for test patterns
+
+- **[Testing Strategy](../../../docs/testing/README.md)** - Complete testing
+  philosophy (60% E2E, 30% Integration, 10% Unit)
+- **[When & Where to Test](../../../docs/testing/WHEN_AND_WHERE.md)** - Test
+  placement guide (Electron/UI = E2E)
+- **[Testing Quick Reference](../../../docs/testing/QUICK_REFERENCE.md)** -
+  Quick lookup for test patterns
 
 ## File Access Permissions
 
-Agents have automatic permission for all file operations within the `atomiton` directory:
+Agents have automatic permission for all file operations within the `atomiton`
+directory:
 
 - Read, write, edit, search any files
 - Create new files as needed
 - Use all discovery tools (Glob, Grep, Read, bash commands)
 
-**Note**: Git operations (add, commit, push) still require explicit Ryan permission.
+**Note**: Git operations (add, commit, push) still require explicit Ryan
+permission.
 
 ## Progress Logging Requirements
 
@@ -67,11 +79,13 @@ Agents have automatic permission for all file operations within the `atomiton` d
 
 Keep entries to 1 line maximum. Write to `.claude/LOG.md`.
 
-**IMPORTANT**: Agents should NEVER read LOG.md - it's purely for Ryan's tracking. Just append your progress.
+**IMPORTANT**: Agents should NEVER read LOG.md - it's purely for Ryan's
+tracking. Just append your progress.
 
 ## Complete Work Verification Process
 
-Every task, regardless of size or complexity, MUST follow this complete workflow:
+Every task, regardless of size or complexity, MUST follow this complete
+workflow:
 
 ### 1. Before Development: Planning & Architecture Review
 
@@ -84,15 +98,18 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
   - Block custom scripts/tools when built-in solutions exist
   - Enforce: "The framework already solved this"
 
-- **Voorhees**: Cut through architectural complexity - find the SIMPLEST solution
+- **Voorhees**: Cut through architectural complexity - find the SIMPLEST
+  solution
   - Challenge every abstraction and pattern
   - Question if features are actually needed (YAGNI)
   - Eliminate over-engineering before it starts
-  - **Review ALL barrel exports (index.ts)** - only allow for component composition
+  - **Review ALL barrel exports (index.ts)** - only allow for component
+    composition
   - Mandate: "What's the SIMPLEST possible solution that meets requirements?"
   - Remember: Simple > Complex > Complicated
 
-**REQUIRED if changes involve adding/removing major components or significant updates:**
+**REQUIRED if changes involve adding/removing major components or significant
+updates:**
 
 - **Michael**: Ensure no architecture issues will arise
   - Validate against system design principles
@@ -114,13 +131,16 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
   - Remove clever code in favor of obvious code
   - Eliminate premature optimization
   - Challenge every design pattern - is it needed?
-  - **Block unnecessary barrel exports** - direct imports for utils/types/services
+  - **Block unnecessary barrel exports** - direct imports for
+    utils/types/services
   - Enforce: "Make it work, make it right, make it simple"
 
 - **Brian**: Determine testing requirements following simplified rules
-  - **MUST review testing docs first**: [Testing Strategy](../../../docs/testing/README.md)
+  - **MUST review testing docs first**:
+    [Testing Strategy](../../../docs/testing/README.md)
   - **Apply simplified naming**: Only `.test.ts` and `.spec.ts` files allowed
-  - **Follow placement rules**: Electron/UI = E2E, Data pipelines = Integration, Complex algorithms = Unit
+  - **Follow placement rules**: Electron/UI = E2E, Data pipelines = Integration,
+    Complex algorithms = Unit
   - **Enforce 60/30/10 distribution**: Primarily E2E tests
   - **No component unit tests**: Convert to E2E
   - **No Electron tests without UI**: Must be E2E
@@ -129,7 +149,8 @@ Every task, regardless of size or complexity, MUST follow this complete workflow
 
 **MANDATORY - ALL must pass with exit code 0:**
 
-See [Development Process](../../../docs/development/archive/PROCESS.md) for complete technical requirements.
+See [Development Process](../../../docs/development/archive/PROCESS.md) for
+complete technical requirements.
 
 **MANDATORY - Package Version Management:**
 
@@ -207,21 +228,29 @@ When making changes to any package (`packages/@atomiton/*` or `apps/*`):
 - `/docs/TODO.md` - Task-specific status tracking
 - Dedicated status files, NOT process documentation
 
-**Barbara and Karen:** Direct ALL status updates to appropriate STATUS documents, never workflow documents.
+**Barbara and Karen:** Direct ALL status updates to appropriate STATUS
+documents, never workflow documents.
 
 ### Technical Standards
 
-**ALL technical requirements are referenced from the [Guidelines README](../../../docs/guidelines/README.md)** which indexes standards in:
+**ALL technical requirements are referenced from the
+[Guidelines README](../../../docs/guidelines/README.md)** which indexes
+standards in:
 
-- [Development Process](../../../docs/development/archive/PROCESS.md) - Code quality and validation
-- [TypeScript Standards](../../../docs/development/archive/TYPESCRIPT.md) - TypeScript requirements
-- [Core Values](../../../docs/development/archive/CORE_VALUES.md) - Development principles
+- [Development Process](../../../docs/development/archive/PROCESS.md) - Code
+  quality and validation
+- [TypeScript Standards](../../../docs/development/archive/TYPESCRIPT.md) -
+  TypeScript requirements
+- [Core Values](../../../docs/development/archive/CORE_VALUES.md) - Development
+  principles
 
 ### Definition of "Complete"
 
 ALL agents MUST follow this workflow. Work is ONLY complete when:
 
-1. **Guidelines have been reviewed** ([Guidelines README](../../../docs/guidelines/README.md) and all referenced standards)
+1. **Guidelines have been reviewed**
+   ([Guidelines README](../../../docs/guidelines/README.md) and all referenced
+   standards)
 2. Voorhees has approved the approach
 3. Michael has validated architecture (if applicable)
 4. Brian has confirmed testing approach
@@ -254,7 +283,9 @@ END (Work is officially complete)
 
 ## Referenced Guidelines
 
-This workflow references technical requirements from the **[Guidelines README](../../../docs/guides/README.md)** which indexes all standards and requirements across:
+This workflow references technical requirements from the
+**[Guidelines README](../../../docs/guides/README.md)** which indexes all
+standards and requirements across:
 
 - Development standards in `/docs/guides/`
 - UI standards in `/packages/ui/docs/`
@@ -262,17 +293,21 @@ This workflow references technical requirements from the **[Guidelines README](.
 
 ## Important Note on Archived Documents
 
-**CRITICAL**: Any documents in `archived/` folders contain outdated information and should NEVER be used for current work. They are kept solely for historical reference. Always use the current, non-archived versions of documents.
+**CRITICAL**: Any documents in `archived/` folders contain outdated information
+and should NEVER be used for current work. They are kept solely for historical
+reference. Always use the current, non-archived versions of documents.
 
 ## For MVP Implementation
 
-For specific MVP prototype implementation details, see package-specific ROADMAP files:
+For specific MVP prototype implementation details, see package-specific ROADMAP
+files:
 
 - UI Migration: `/packages/ui/ROADMAP.md`
 - Core Migration: `/packages/core/ROADMAP.md`
 
 ---
 
-**Remember**: No shortcuts. Every step is mandatory. Work is not done until Karen says it's done.
+**Remember**: No shortcuts. Every step is mandatory. Work is not done until
+Karen says it's done.
 
 Last Updated: 2025-08-31

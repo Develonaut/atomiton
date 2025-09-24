@@ -28,7 +28,7 @@ export type { FileSystemOutput } from "#executables/file-system/operations";
  */
 function getInputValue<T>(
   context: NodeExecutionContext,
-  key: string
+  key: string,
 ): T | undefined {
   return context.inputs?.[key] as T | undefined;
 }
@@ -40,7 +40,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      config: FileSystemParameters
+      config: FileSystemParameters,
     ): Promise<NodeExecutionResult> {
       try {
         // Get parameters from inputs or config
@@ -67,7 +67,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
             result = await readFileOperation(
               filePath,
               (config.encoding || "utf8") as string,
-              context
+              context,
             );
             break;
 
@@ -77,7 +77,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
               content as string,
               config.encoding || "utf8",
               config.createDirectories || false,
-              context
+              context,
             );
             break;
 
@@ -85,7 +85,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
             result = await createDirectoryOperation(
               filePath as string,
               config.recursive || false,
-              context
+              context,
             );
             break;
 
@@ -94,7 +94,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
               filePath as string,
               config.recursive || false,
               false, // includeHidden - not in current schema, default to false
-              context
+              context,
             );
             break;
 
@@ -102,7 +102,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
             result = await deleteOperation(
               filePath as string,
               config.recursive || false,
-              context
+              context,
             );
             break;
 
@@ -114,7 +114,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
               filePath as string,
               targetPath,
               config.overwrite || false,
-              context
+              context,
             );
             break;
 
@@ -126,7 +126,7 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
               filePath as string,
               targetPath,
               config.overwrite || false,
-              context
+              context,
             );
             break;
 
@@ -147,18 +147,18 @@ export const fileSystemExecutable: NodeExecutable<FileSystemParameters> =
           error instanceof Error ? error.message : String(error);
 
         context.log?.error?.("File system operation failed", {
-          error    : errorMessage,
+          error: errorMessage,
           operation: config.operation,
-          path     : config.path,
+          path: config.path,
         });
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
           outputs: {
-            result : null,
+            result: null,
             success: false,
-            path   : config.path || "",
+            path: config.path || "",
           },
         };
       }

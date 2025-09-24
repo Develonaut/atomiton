@@ -12,4 +12,5 @@ This package provides ESLint configurations for:
 
 ## Documentation
 
-See [Development Guidelines](../../docs/development/README.md) for code quality standards.
+See [Development Guidelines](../../docs/development/README.md) for code quality
+standards.

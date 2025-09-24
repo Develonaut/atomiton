@@ -6,7 +6,8 @@
 
 **Key Requirements:**
 
-1. Follow [MANDATORY_CHECKLIST.md](./workflow/MANDATORY_CHECKLIST.md) before ANY work
+1. Follow [MANDATORY_CHECKLIST.md](./workflow/MANDATORY_CHECKLIST.md) before ANY
+   work
 2. Complete ALL steps in [EXECUTION_PLAN.md](./workflow/EXECUTION_PLAN.md)
 3. ONLY create worktrees for NEW features/efforts (not when assisting)
 4. Use TodoWrite to track workflow progress
@@ -15,7 +16,8 @@
 
 ### When Invoking Agents
 
-See [AGENT_INVOCATION.md](./workflow/AGENT_INVOCATION.md) for how to properly invoke agents with workflow compliance.
+See [AGENT_INVOCATION.md](./workflow/AGENT_INVOCATION.md) for how to properly
+invoke agents with workflow compliance.
 
 ### Workflow Enforcement
 
@@ -29,7 +31,9 @@ Work that doesn't follow this workflow will be rejected. No exceptions.
 
 ## 🎯 Project Overview
 
-Atomiton is a Blueprint automation platform that enables visual workflow creation through a node-based editor. The project uses a monorepo structure with separate UI and API packages.
+Atomiton is a Blueprint automation platform that enables visual workflow
+creation through a node-based editor. The project uses a monorepo structure with
+separate UI and API packages.
 
 ## 📁 Documentation Structure
 
@@ -58,9 +62,13 @@ atomiton/                       # Project root
 
 ### 🚨 MANDATORY FOR ALL AGENTS
 
-- **BEFORE ANY WORK**: [Code Quality Requirements](../docs/guides/CODE_STYLE.md) - ALL agents MUST run format/lint/typecheck/build before completing work
-- **Agent workflows**: [Agents Overview](./agents/README.md) - Team coordination and specific requirements
-- **Guidelines**: [Guidelines Index](../docs/guides/README.md) - Environment restrictions and development standards
+- **BEFORE ANY WORK**:
+  [Code Quality Requirements](../docs/guides/CODE_STYLE.md) - ALL agents MUST
+  run format/lint/typecheck/build before completing work
+- **Agent workflows**: [Agents Overview](./agents/README.md) - Team coordination
+  and specific requirements
+- **Guidelines**: [Guidelines Index](../docs/guides/README.md) - Environment
+  restrictions and development standards
 
 ## 🔗 Essential Documentation Links
 
@@ -93,9 +101,11 @@ atomiton/                       # Project root
 
 ### Domain-Specific Documentation
 
-- [Node Development Guide](../docs/nodes/README.md) - Creating and testing custom nodes
+- [Node Development Guide](../docs/nodes/README.md) - Creating and testing
+  custom nodes
 - [Testing Strategy](../docs/testing/README.md) - Comprehensive testing approach
-- [Deployment Guide](../docs/deployment/README.md) - Multi-environment deployment
+- [Deployment Guide](../docs/deployment/README.md) - Multi-environment
+  deployment
 
 ### Migration Documentation
 
@@ -107,7 +117,8 @@ Migration plans are documented in package-specific ROADMAP files:
 
 ## ✅ Permissions
 
-This project has comprehensive permissions configured in `.claude/settings.local.json`:
+This project has comprehensive permissions configured in
+`.claude/settings.local.json`:
 
 - Full read/write access to all project files
 - All common development tools and commands pre-approved
@@ -123,7 +134,8 @@ Packages are organized under `packages/@atomiton/`:
 - `packages/@atomiton/store` - State management
 - `packages/@atomiton/events` - Event system
 - `packages/@atomiton/di` - Dependency injection
-- `packages/@atomiton/vite-config` - Unified Vite configuration presets (library, react, app)
+- `packages/@atomiton/vite-config` - Unified Vite configuration presets
+  (library, react, app)
 - `packages/@atomiton/eslint-config` - Shared ESLint configuration
 - `packages/@atomiton/typescript-config` - Shared TypeScript configuration
 - `apps/client` - Main Vite React application (includes Playwright E2E tests)
@@ -131,10 +143,14 @@ Packages are organized under `packages/@atomiton/`:
 
 ## 🔄 Important Notes
 
-1. **Single Source of Truth**: This file is the main entry point. All workspace CLAUDE.md files reference back here.
-2. **Documentation Location**: All documentation lives in `/docs/` to avoid .claude nesting issues
-3. **Permission Inheritance**: Permissions granted at root level apply to all subdirectories
-4. **No Permission Prompts**: With the comprehensive settings.local.json, agents should never need to ask for file access
+1. **Single Source of Truth**: This file is the main entry point. All workspace
+   CLAUDE.md files reference back here.
+2. **Documentation Location**: All documentation lives in `/docs/` to avoid
+   .claude nesting issues
+3. **Permission Inheritance**: Permissions granted at root level apply to all
+   subdirectories
+4. **No Permission Prompts**: With the comprehensive settings.local.json, agents
+   should never need to ask for file access
 
 ## 📝 Core Development Values
 
@@ -147,5 +163,5 @@ Packages are organized under `packages/@atomiton/`:
 
 ---
 
-**Last Updated**: 2025-09-17
-**Documentation Root**: `./docs/` (relative to project root)
+**Last Updated**: 2025-09-17 **Documentation Root**: `./docs/` (relative to
+project root)

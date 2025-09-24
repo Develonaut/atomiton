@@ -9,7 +9,9 @@ import * as os from "os";
 describe("Storage Factory", () => {
   describe("Desktop createStorage", () => {
     it("creates memory storage when using createMemoryEngine", async () => {
-      const { createStorage, createMemoryEngine } = await import("./exports/desktop");
+      const { createStorage, createMemoryEngine } = await import(
+        "./exports/desktop"
+      );
       const storage = createStorage({ engine: createMemoryEngine() });
       expect(storage.getInfo().type).toBe("memory");
     });
@@ -33,7 +35,9 @@ describe("Storage Factory", () => {
 
   describe("Browser createStorage", () => {
     it("creates memory storage when using createMemoryEngine", async () => {
-      const { createStorage, createMemoryEngine } = await import("./exports/browser");
+      const { createStorage, createMemoryEngine } = await import(
+        "./exports/browser"
+      );
       const storage = createStorage({ engine: createMemoryEngine() });
       expect(storage.getInfo().type).toBe("memory");
     });

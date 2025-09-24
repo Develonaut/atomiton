@@ -2,9 +2,12 @@
 
 ## Vision Statement
 
-The Conductor package serves as Atomiton's Blueprint execution orchestrator, providing a unified, performant, and reliable execution engine that works consistently across all environments (Electron, Browser, Server).
+The Conductor package serves as Atomiton's Blueprint execution orchestrator,
+providing a unified, performant, and reliable execution engine that works
+consistently across all environments (Electron, Browser, Server).
 
-**Core Philosophy**: Start simple, prove value, add complexity only when necessary.
+**Core Philosophy**: Start simple, prove value, add complexity only when
+necessary.
 
 ## Long-term Architecture Goals
 
@@ -21,7 +24,8 @@ The Conductor package serves as Atomiton's Blueprint execution orchestrator, pro
 
 #### Q2 2025 - Scalability Foundations
 
-- **Parallel Execution**: True parallel node execution (when sequential proves limiting)
+- **Parallel Execution**: True parallel node execution (when sequential proves
+  limiting)
 - **Queue Optimization**: Enhanced job processing and worker management
 - **Memory Management**: Advanced memory pooling and cleanup
 - **Caching Layer**: Execution result caching for performance
@@ -141,7 +145,8 @@ Phase 4: HybridExecutor (multi-runtime support)
 
 ### Technical Risks
 
-- **Complexity Creep**: Maintain "Karen Principle" - working code over abstractions
+- **Complexity Creep**: Maintain "Karen Principle" - working code over
+  abstractions
 - **Performance Regression**: Continuous benchmarking and testing
 - **Breaking Changes**: Conservative API evolution with deprecation periods
 
@@ -169,20 +174,23 @@ Phase 4: HybridExecutor (multi-runtime support)
 
 ## Long-term Vision
 
-**5-Year Goal**: Conductor becomes the standard for workflow orchestration across industries, known for:
+**5-Year Goal**: Conductor becomes the standard for workflow orchestration
+across industries, known for:
 
 - **Unmatched Performance**: Consistently fastest execution engine
 - **Developer Experience**: Easiest platform to build and deploy workflows
 - **Reliability**: Most stable and predictable execution platform
 - **Ecosystem**: Richest community and integration ecosystem
 
-**10-Year Goal**: Conductor powers the next generation of automation platforms, enabling:
+**10-Year Goal**: Conductor powers the next generation of automation platforms,
+enabling:
 
 - **Visual Programming**: No-code/low-code workflow creation
 - **AI Integration**: Intelligent workflow optimization and generation
 - **Global Scale**: Distributed execution across edge and cloud
 - **Industry Standards**: Define standards for workflow orchestration
 
-**Legacy Goal**: When developers think "workflow orchestration," they think Conductor first.
+**Legacy Goal**: When developers think "workflow orchestration," they think
+Conductor first.
 
 **Last Updated**: 2025-09-16

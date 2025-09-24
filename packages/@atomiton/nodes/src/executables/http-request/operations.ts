@@ -43,7 +43,7 @@ export async function executeRequestWithRetries(
   url: string,
   options: RequestInit,
   config: HttpRequestParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<Response> {
   let lastError: Error;
 
@@ -63,14 +63,14 @@ export async function executeRequestWithRetries(
         context.log?.warn?.(
           `HTTP request failed, retrying (attempt ${attempt + 1}/${config.retries as number})`,
           {
-            error     : lastError.message,
+            error: lastError.message,
             retryDelay: config.retryDelay,
-          }
+          },
         );
 
         // Wait before retry
         await new Promise((resolve) =>
-          setTimeout(resolve, config.retryDelay as number)
+          setTimeout(resolve, config.retryDelay as number),
         );
       }
     }
@@ -85,7 +85,7 @@ export async function executeRequestWithRetries(
 export function prepareRequestBody(
   body: unknown,
   method: string,
-  headers: Record<string, string>
+  headers: Record<string, string>,
 ): { body: string | undefined; headers: Record<string, string> } {
   let requestBody: string | undefined;
 
@@ -115,13 +115,13 @@ export function addAuthenticationHeaders(
     username?: string;
     password?: string;
     token?: string;
-  }
+  },
 ): Record<string, string> {
   if (!auth) return headers;
 
   if (auth.type === "basic" && auth.username && auth.password) {
     const credentials = Buffer.from(
-      `${auth.username}:${auth.password}`
+      `${auth.username}:${auth.password}`,
     ).toString("base64");
     headers["Authorization"] = `Basic ${credentials}`;
   } else if (auth.type === "bearer" && auth.token) {
@@ -134,7 +134,9 @@ export function addAuthenticationHeaders(
 /**
  * Extract headers from Response object
  */
-export function extractResponseHeaders(response: Response): Record<string, string> {
+export function extractResponseHeaders(
+  response: Response,
+): Record<string, string> {
   const responseHeaders: Record<string, string> = {};
   response.headers.forEach((value, key) => {
     responseHeaders[key] = value;

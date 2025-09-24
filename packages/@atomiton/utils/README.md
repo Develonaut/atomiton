@@ -4,7 +4,8 @@ Shared utility functions for Atomiton workflow automation.
 
 ## Installation
 
-This package is part of the Atomiton monorepo and is available as a workspace dependency:
+This package is part of the Atomiton monorepo and is available as a workspace
+dependency:
 
 ```json
 {

@@ -262,7 +262,8 @@
 
 ### Step 2: Remove Duplicate Dependencies
 
-After migrating components, remove dependencies that are now provided by @atomiton/ui:
+After migrating components, remove dependencies that are now provided by
+@atomiton/ui:
 
 ```json
 // apps/client/package.json

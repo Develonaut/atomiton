@@ -3,8 +3,14 @@
  * Common utilities for group node execution
  */
 
-import type { NodeExecutionContext, NodeExecutionResult } from "#core/types/executable";
-import type { ExecutableNode, ExecutionMetadata } from "#executables/group/types";
+import type {
+  NodeExecutionContext,
+  NodeExecutionResult,
+} from "#core/types/executable";
+import type {
+  ExecutableNode,
+  ExecutionMetadata,
+} from "#executables/group/types";
 
 /**
  * Execute a node with retry logic
@@ -13,7 +19,7 @@ export async function executeWithRetries(
   node: ExecutableNode,
   context: NodeExecutionContext,
   retries: number,
-  timeout: number
+  timeout: number,
 ): Promise<NodeExecutionResult> {
   let lastError: Error | undefined;
 
@@ -24,8 +30,8 @@ export async function executeWithRetries(
         setTimeout(
           () =>
             reject(new Error(`Node execution timed out after ${timeout}ms`)),
-          timeout
-        )
+          timeout,
+        ),
       );
 
       // Execute with timeout
@@ -47,9 +53,9 @@ export async function executeWithRetries(
       context.log?.warn?.(
         `Node ${node.name} failed, retrying (attempt ${attempt + 1}/${retries})`,
         {
-          error : result.error,
+          error: result.error,
           nodeId: node.id,
-        }
+        },
       );
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
@@ -63,9 +69,9 @@ export async function executeWithRetries(
       context.log?.warn?.(
         `Node ${node.name} threw error, retrying (attempt ${attempt + 1}/${retries})`,
         {
-          error : lastError.message,
+          error: lastError.message,
           nodeId: node.id,
-        }
+        },
       );
     }
 
@@ -86,12 +92,12 @@ export function createExecutionMetadata(
   context: NodeExecutionContext,
   childNodesExecuted: number,
   totalExecutionTime: number,
-  failedNode?: string
+  failedNode?: string,
 ): ExecutionMetadata {
   return {
     executedAt: new Date().toISOString(),
-    nodeId    : context.nodeId || "group",
-    nodeType  : "group",
+    nodeId: context.nodeId || "group",
+    nodeType: "group",
     childNodesExecuted,
     totalExecutionTime,
     failedNode,
@@ -104,11 +110,11 @@ export function createExecutionMetadata(
 export function createErrorResult(
   nodeName: string,
   error: string,
-  metadata: ExecutionMetadata
+  metadata: ExecutionMetadata,
 ): NodeExecutionResult {
   return {
     success: false,
-    error  : `Child node ${nodeName} failed: ${error}`,
+    error: `Child node ${nodeName} failed: ${error}`,
     outputs: {
       result: undefined,
       metadata,
@@ -122,7 +128,7 @@ export function createErrorResult(
 export function createChildContext(
   baseContext: NodeExecutionContext,
   nodeId: string,
-  previousResult?: NodeExecutionResult
+  previousResult?: NodeExecutionResult,
 ): NodeExecutionContext {
   return {
     ...baseContext,

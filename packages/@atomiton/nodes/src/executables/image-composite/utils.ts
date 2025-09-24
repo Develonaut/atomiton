@@ -34,7 +34,7 @@ export function validateImageInput(input: unknown): ImageInput | null {
         obj.data instanceof Buffer || typeof obj.data === "string"
           ? obj.data
           : undefined,
-      width : typeof obj.width === "number" ? obj.width : undefined,
+      width: typeof obj.width === "number" ? obj.width : undefined,
       height: typeof obj.height === "number" ? obj.height : undefined,
     };
   }

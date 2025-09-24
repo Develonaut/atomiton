@@ -64,8 +64,10 @@
 
 ### Testing (Simplified Rules Apply)
 
-- [ ] **Test file naming compliant** - Only `.test.ts` or `.spec.ts` (NO .int.test.ts, .smoke.test.ts, etc.)
-- [ ] **Test placement correct** - E2E in apps/e2e/tests/, Integration in src/integration/, Unit co-located
+- [ ] **Test file naming compliant** - Only `.test.ts` or `.spec.ts` (NO
+      .int.test.ts, .smoke.test.ts, etc.)
+- [ ] **Test placement correct** - E2E in apps/e2e/tests/, Integration in
+      src/integration/, Unit co-located
 - [ ] **No component unit tests** - UI must be tested via E2E
 - [ ] **No Electron tests without UI** - Desktop features must be E2E
 - [ ] **Distribution follows 60/30/10** - Primarily E2E tests

@@ -1,6 +1,7 @@
 # Atomiton Development Roadmap
 
-**Vision**: The desktop-first, AI-native automation platform that beats n8n through simplicity, performance, and modern architecture
+**Vision**: The desktop-first, AI-native automation platform that beats n8n
+through simplicity, performance, and modern architecture
 
 **Created**: January 2, 2025  
 **Status**: Strategic roadmap capitalizing on n8n analysis insights  
@@ -39,7 +40,8 @@
 ### Core Strengths to Build On
 
 - **Modern Stack**: Already using pnpm, Turborepo (like n8n but newer)
-- **Clean Codebase**: No technical debt yet, can make architectural decisions freely
+- **Clean Codebase**: No technical debt yet, can make architectural decisions
+  freely
 - **Desktop-First Vision**: Clear differentiation from n8n's web complexity
 - **AI-Native Planning**: Built for LLMs from day one (n8n retrofitted)
 
@@ -100,8 +102,8 @@
   - Simpler than n8n's Bull/Redis complexity
   - Works locally without infrastructure
 
-**Week 7-8: Essential Nodes (10-15 nodes)**
-Focus on quality over quantity (n8n has 500+ but most unused):
+**Week 7-8: Essential Nodes (10-15 nodes)** Focus on quality over quantity (n8n
+has 500+ but most unused):
 
 - [ ] **Data Nodes** (3-4):
   - JSON Transform (with AI assistance)
@@ -503,7 +505,10 @@ Focus on quality over quantity (n8n has 500+ but most unused):
 
 ---
 
-**Remember**: We're not competing with n8n for enterprises. We're building something simpler, faster, and more accessible for individual creators and small teams. Every decision should optimize for simplicity and performance, not feature completeness.
+**Remember**: We're not competing with n8n for enterprises. We're building
+something simpler, faster, and more accessible for individual creators and small
+teams. Every decision should optimize for simplicity and performance, not
+feature completeness.
 
 **Last Updated**: January 2, 2025  
 **Next Review**: End of Phase 1 (March 2025)

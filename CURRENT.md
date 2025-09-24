@@ -2,13 +2,15 @@
 
 ## Overview
 
-This document aggregates current work across the entire monorepo. For detailed progress, see individual CURRENT.md files in each package and app.
+This document aggregates current work across the entire monorepo. For detailed
+progress, see individual CURRENT.md files in each package and app.
 
 ## Current Status: September 2025
 
 ### 🎯 Primary Focus
 
-**Editor Node Inspector** - Implementing property configuration panel for selected nodes to enable workflow creation
+**Editor Node Inspector** - Implementing property configuration panel for
+selected nodes to enable workflow creation
 
 ### 📦 Package Status
 
@@ -40,9 +42,12 @@ This document aggregates current work across the entire monorepo. For detailed p
 - ✅ Basic node addition and selection working
 - ✅ Left/Right sidebars integrated with placeholder content
 - ✅ All packages building successfully
-- ✅ **@atomiton/core testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Sep 13, 2025)
-- ✅ **@atomiton/events testing infrastructure fixed** - Added smoke tests, benchmarks, and all 8 test scripts functional (Sep 13, 2025)
-- ✅ **@atomiton/validation package created** - Centralized Zod dependency in a thin wrapper package, migrated all packages to use it (Sep 17, 2025)
+- ✅ **@atomiton/core testing infrastructure fixed** - Added smoke tests,
+  benchmarks, and all 8 test scripts functional (Sep 13, 2025)
+- ✅ **@atomiton/events testing infrastructure fixed** - Added smoke tests,
+  benchmarks, and all 8 test scripts functional (Sep 13, 2025)
+- ✅ **@atomiton/validation package created** - Centralized Zod dependency in a
+  thin wrapper package, migrated all packages to use it (Sep 17, 2025)
 
 ### 📊 Current Priorities
 
@@ -50,12 +55,13 @@ This document aggregates current work across the entire monorepo. For detailed p
 
 ### Phase 1: Blueprint Loading & Editing System
 
-**Development Strategy**: Each step below should be developed in its own git worktree to enable parallel development without conflicts.
+**Development Strategy**: Each step below should be developed in its own git
+worktree to enable parallel development without conflicts.
 
 #### Step 1: Blueprint Template Creation
 
-**Worktree**: `wtnew blueprint-templates`
-**Status**: 🔴 **CRITICAL - START HERE**
+**Worktree**: `wtnew blueprint-templates` **Status**: 🔴 **CRITICAL - START
+HERE**
 
 Create example blueprints that appear in the Explore Gallery:
 
@@ -76,8 +82,7 @@ Store templates in apps/client/src/data/blueprints/ and update Explore Gallery t
 
 #### Step 2: Gallery-to-Editor Loading
 
-**Worktree**: `wtnew gallery-editor-integration`
-**Status**: 🔴 **CRITICAL**
+**Worktree**: `wtnew gallery-editor-integration` **Status**: 🔴 **CRITICAL**
 
 Enable clicking blueprints in gallery to load them into the React Flow editor:
 
@@ -94,13 +99,13 @@ Implement loading blueprints from Explore Gallery into the React Flow editor. Th
 
 #### Step 3: Blueprint Save/Restore
 
-**Worktree**: `wtnew blueprint-persistence`
-**Status**: 🔴 **CRITICAL**
+**Worktree**: `wtnew blueprint-persistence` **Status**: 🔴 **CRITICAL**
 
 Implement saving edited blueprints:
 
 - Save current editor state to YAML format using @atomiton/yaml
-- Implement React Flow save/restore patterns from https://reactflow.dev/examples/interaction/save-and-restore
+- Implement React Flow save/restore patterns from
+  https://reactflow.dev/examples/interaction/save-and-restore
 - Store in localStorage initially, prepare for backend integration
 - Add save/load UI controls to editor
 
@@ -112,8 +117,7 @@ Implement blueprint save/restore functionality for the React Flow editor. Use th
 
 #### Step 4a: Individual Node Testing
 
-**Worktree**: `wtnew node-testing-ui`
-**Status**: 🟡 **HIGH**
+**Worktree**: `wtnew node-testing-ui` **Status**: 🟡 **HIGH**
 
 Enable testing individual nodes during editing:
 
@@ -130,8 +134,7 @@ Add individual node testing capability to the editor. When a node is selected, p
 
 #### Step 4b: Full Blueprint Execution
 
-**Worktree**: `wtnew blueprint-execution`
-**Status**: 🟡 **HIGH**
+**Worktree**: `wtnew blueprint-execution` **Status**: 🟡 **HIGH**
 
 Implement full blueprint execution:
 
@@ -148,8 +151,7 @@ Implement full blueprint execution in the editor. Add a "Run Blueprint" button t
 
 #### Step 5: My Scenes Integration
 
-**Worktree**: `wtnew my-scenes-integration`
-**Status**: 🟢 **MEDIUM**
+**Worktree**: `wtnew my-scenes-integration` **Status**: 🟢 **MEDIUM**
 
 Enable saving custom blueprints to My Scenes:
 
@@ -166,7 +168,8 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
 
 ### Secondary Priorities (After Blueprint System)
 
-1. **🔴 Node Package Separation** - Implement n8n-inspired workflow/nodes separation for browser safety
+1. **🔴 Node Package Separation** - Implement n8n-inspired workflow/nodes
+   separation for browser safety
    - Create @atomiton/workflow package with browser-safe types and metadata
    - Keep execution logic in @atomiton/nodes (Node.js only)
    - Update conductor to use workflow types
@@ -178,9 +181,11 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    Implement n8n-inspired package separation following the strategy in docs/strategies/NODE_PACKAGE_SEPARATION.md. Create @atomiton/workflow package for browser-safe types/metadata, keep execution in @atomiton/nodes, and update conductor imports. The strategy document contains complete implementation details. Follow the mandatory workflow and coordinate with agents as required.
    ```
 
-2. **🔴 Node Inspector** - Display/edit node properties in right sidebar (CRITICAL)
+2. **🔴 Node Inspector** - Display/edit node properties in right sidebar
+   (CRITICAL)
 3. **🔴 Data Connections** - Enable node-to-node data flow connections
-4. **🔴 Barrel Export Audit** - Conduct comprehensive audit to remove unnecessary barrel exports (index.ts files)
+4. **🔴 Barrel Export Audit** - Conduct comprehensive audit to remove
+   unnecessary barrel exports (index.ts files)
    - Review all packages for non-essential barrel exports
    - Keep ONLY component composition and package public APIs
    - Remove barrels from: utils, types, services, stores, hooks, constants
@@ -225,14 +230,16 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    - Review and refactor circular dependencies in router/components
    - Configure proper externalization for Node.js modules in browser builds
    - Consider dynamic imports for heavy components (Gallery, Editor)
-   - Analyze bundle with rollup-plugin-visualizer to identify optimization opportunities
+   - Analyze bundle with rollup-plugin-visualizer to identify optimization
+     opportunities
 
    **Target Performance:**
    - Reduce initial bundle size by 30-40%
    - Eliminate circular dependency warnings
    - Clean build output with no externalization warnings
 
-6. **🔴 Smoke Test Optimization** - Reduce smoke test execution time to maintain <30s limit (Currently: 17s)
+6. **🔴 Smoke Test Optimization** - Reduce smoke test execution time to maintain
+   <30s limit (Currently: 17s)
 
    **Current Issues:**
    - Client smoke tests: 3.4s (template initialization takes 1.7s)
@@ -242,7 +249,8 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    **Suggested Optimizations:**
    - Mock template initialization in api.smoke.test.ts
    - Use test fixtures for node type registration
-   - Consider splitting tests: keep only critical paths in smoke, move others to integration
+   - Consider splitting tests: keep only critical paths in smoke, move others to
+     integration
    - Implement test result caching for unchanged packages
    - Parallelize test execution within packages where possible
 
@@ -251,15 +259,20 @@ Create My Scenes functionality for user-created blueprints. Build a page similar
    - Total smoke test suite: <15s (with 30s as hard limit)
 
 7. **🟢 Visual Feedback** - Show execution status on nodes
-8. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce duplication in build configurations
-9. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'` instead of `import { store } from '@atomiton/store'`)
-10. **🟢 User Authentication** - Create @atomiton/auth package using Supabase Auth for user accounts and identity management
+8. **🟢 Shared Vite Config** - Create @atomiton/vite-config package to reduce
+   duplication in build configurations
+9. **🟢 Standardize Default Exports** - Unify all non-UI packages to use default
+   exports for ES6 class-based APIs (e.g., `import store from '@atomiton/store'`
+   instead of `import { store } from '@atomiton/store'`)
+10. **🟢 User Authentication** - Create @atomiton/auth package using Supabase
+    Auth for user accounts and identity management
 
 ## 🚨 CRITICAL: Testing Infrastructure Remediation
 
 ### Testing Compliance Status
 
-Based on Karen's audit, **only 2 of 15 packages** meet our testing standards. The following packages require immediate remediation:
+Based on Karen's audit, **only 2 of 15 packages** meet our testing standards.
+The following packages require immediate remediation:
 
 #### 🔴 CRITICAL PRIORITY - Core API Packages (Missing Required Tests)
 
@@ -447,13 +460,15 @@ The editor is currently **~50% complete**. Users can:
 - ❌ Execute workflows
 - ❌ Save/load Blueprints
 
-**Next Milestone**: Functional workflow creation with configured, connected nodes.
+**Next Milestone**: Functional workflow creation with configured, connected
+nodes.
 
 ---
 
 ## 🔗 URL Centralization - apps/client
 
-Create a url.ts file in apps/client/src/constants/ to centralize all important URLs.
+Create a url.ts file in apps/client/src/constants/ to centralize all important
+URLs.
 
 ### Application Routes
 
@@ -489,11 +504,13 @@ Create a url.ts file in apps/client/src/constants/ to centralize all important U
 2. **@atomiton/nodes** - `src/composite/createCompositeNode.ts`
    - TODO: Enable when composite execution is fully implemented
    - Location: Line 136-142
-   - Context: `compositeExecutable` creation is commented out pending full implementation
+   - Context: `compositeExecutable` creation is commented out pending full
+     implementation
 
 ### Existing TODOs in Codebase
 
-- **@atomiton/storage** - Multiple YAML serialization TODOs pending stable nodes API
+- **@atomiton/storage** - Multiple YAML serialization TODOs pending stable nodes
+  API
 - **@atomiton/form** - Fields refactoring TODO
 - **@atomiton/ui** - Button resolver cleanup TODO
 - **@atomiton/eslint-config** - Re-enable import plugin when added

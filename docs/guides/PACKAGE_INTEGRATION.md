@@ -1,6 +1,7 @@
 # Package Integration Guide
 
-This guide outlines how to integrate and structure packages in the Atomiton monorepo.
+This guide outlines how to integrate and structure packages in the Atomiton
+monorepo.
 
 ## Table of Contents
 
@@ -39,7 +40,8 @@ packages/
 └── electron/
 ```
 
-- **Scoped packages** (`@atomiton/*`) - Internal shared modules and configurations
+- **Scoped packages** (`@atomiton/*`) - Internal shared modules and
+  configurations
 - **Top-level packages** - Application-specific packages and features
 
 ## Creating a New Package
@@ -209,12 +211,14 @@ All packages should extend shared configurations:
 
 **Available TypeScript configurations:**
 
-- `@atomiton/typescript-config/base.json` - Base configuration with @/ alias support
+- `@atomiton/typescript-config/base.json` - Base configuration with @/ alias
+  support
 - `@atomiton/typescript-config/react-library.json` - React library configuration
 - `@atomiton/typescript-config/bundler.json` - Bundler-specific configuration
 - `@atomiton/typescript-config/react-bundler.json` - React bundler configuration
 - `@atomiton/typescript-config/development.json` - Development configuration
-- `@atomiton/typescript-config/react-development.json` - React development configuration
+- `@atomiton/typescript-config/react-development.json` - React development
+  configuration
 
 ## Build Pipeline
 

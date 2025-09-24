@@ -1,10 +1,14 @@
 # TypeScript Configuration Guide
 
-This guide documents the standardized TypeScript configuration system for the Atomiton monorepo, including the new preset system and path alias standardization.
+This guide documents the standardized TypeScript configuration system for the
+Atomiton monorepo, including the new preset system and path alias
+standardization.
 
 ## Overview
 
-The `@atomiton/typescript-config` package provides a centralized TypeScript configuration system with multiple presets optimized for different use cases. All configurations include standardized path alias support for the `@/` pattern.
+The `@atomiton/typescript-config` package provides a centralized TypeScript
+configuration system with multiple presets optimized for different use cases.
+All configurations include standardized path alias support for the `@/` pattern.
 
 ## Available Configurations
 
@@ -98,7 +102,8 @@ The `@atomiton/typescript-config` package provides a centralized TypeScript conf
 }
 ```
 
-**Use for:** Packages that will be processed by Vite, Webpack, or other bundlers.
+**Use for:** Packages that will be processed by Vite, Webpack, or other
+bundlers.
 
 **Features:**
 
@@ -184,7 +189,8 @@ import { config } from "@/config";
 
 ### Configuration Requirements
 
-**For packages using @/ path aliases, the following is REQUIRED in tsconfig.json:**
+**For packages using @/ path aliases, the following is REQUIRED in
+tsconfig.json:**
 
 ```json
 {
@@ -351,11 +357,13 @@ import { Button } from "@atomiton/ui";
 
 ### 1. Always Use Appropriate Preset
 
-Choose the most specific configuration for your use case rather than customizing the base configuration.
+Choose the most specific configuration for your use case rather than customizing
+the base configuration.
 
 ### 2. Minimize Custom Overrides
 
-Only add custom `compilerOptions` when absolutely necessary. The presets are designed to cover common scenarios.
+Only add custom `compilerOptions` when absolutely necessary. The presets are
+designed to cover common scenarios.
 
 ### 3. Consistent Path Usage
 
@@ -365,7 +373,8 @@ Only add custom `compilerOptions` when absolutely necessary. The presets are des
 
 ### 4. BaseUrl Requirement
 
-Always include `baseUrl: "."` when using `@/` path aliases to ensure proper resolution.
+Always include `baseUrl: "."` when using `@/` path aliases to ensure proper
+resolution.
 
 ### 5. Build Tool Alignment
 
@@ -397,7 +406,8 @@ Failed to resolve import "@/utils" from "src/components/Button.tsx"
 Module resolution issues during build
 ```
 
-**Solution:** Use bundler-specific configurations (`bundler.json` or `react-bundler.json`).
+**Solution:** Use bundler-specific configurations (`bundler.json` or
+`react-bundler.json`).
 
 ## Migration Checklist
 
@@ -412,4 +422,6 @@ Module resolution issues during build
 
 ---
 
-This standardized approach ensures consistent TypeScript configuration across all packages while providing flexibility for different use cases and build requirements.
+This standardized approach ensures consistent TypeScript configuration across
+all packages while providing flexibility for different use cases and build
+requirements.

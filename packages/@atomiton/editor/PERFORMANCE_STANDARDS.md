@@ -2,7 +2,9 @@
 
 ## 🎯 Performance Contract
 
-This document defines the **non-negotiable** performance standards for the @atomiton/editor package. These standards are enforced through automated tests that **MUST PASS** before any code can be pushed.
+This document defines the **non-negotiable** performance standards for the
+@atomiton/editor package. These standards are enforced through automated tests
+that **MUST PASS** before any code can be pushed.
 
 ## 📊 Critical Performance Metrics
 
@@ -50,7 +52,8 @@ This document defines the **non-negotiable** performance standards for the @atom
 
 ### useEditorStore Hook
 
-Our custom `useEditorStore` wrapper provides automatic shallow comparison to prevent unnecessary re-renders:
+Our custom `useEditorStore` wrapper provides automatic shallow comparison to
+prevent unnecessary re-renders:
 
 ```typescript
 // ✅ GOOD - Uses shallow comparison automatically
@@ -70,7 +73,8 @@ const nodes = useStore((state) => {
 ### Key Performance Wins
 
 1. **Shallow Comparison by Default**
-   - Prevents re-renders when arrays/objects have same values but different references
+   - Prevents re-renders when arrays/objects have same values but different
+     references
    - Particularly important during viewport changes that don't affect nodes
 
 2. **Optimized Selectors**
@@ -141,15 +145,20 @@ Performance tests are automatically run:
 If performance tests fail:
 
 1. **Build will fail** - CI pipeline will block the PR
-2. **Push will be rejected** - Pre-push hook prevents bad code from reaching remote
-3. **Investigation required** - Use benchmark comparison to identify regression source
+2. **Push will be rejected** - Pre-push hook prevents bad code from reaching
+   remote
+3. **Investigation required** - Use benchmark comparison to identify regression
+   source
 
 ### Common Causes of Performance Regressions
 
 1. **Missing shallow comparison** - Forgetting to use `useEditorStore`
-2. **Creating arrays in render** - Arrays/objects created during render cause re-renders
-3. **Incorrect dependencies** - Including unnecessary deps in `useCallback`/`useMemo`
-4. **Selector inefficiency** - Using `.filter()` or `.find()` instead of Map lookups
+2. **Creating arrays in render** - Arrays/objects created during render cause
+   re-renders
+3. **Incorrect dependencies** - Including unnecessary deps in
+   `useCallback`/`useMemo`
+4. **Selector inefficiency** - Using `.filter()` or `.find()` instead of Map
+   lookups
 
 ## 💡 Best Practices
 
@@ -175,5 +184,4 @@ This document and its associated tests are **living standards**. They should be:
 - Reviewed quarterly for relevance
 - Enhanced with new test cases as the editor grows
 
-**Last Updated**: 2024-01-18
-**Next Review**: 2024-04-18
+**Last Updated**: 2024-01-18 **Next Review**: 2024-04-18

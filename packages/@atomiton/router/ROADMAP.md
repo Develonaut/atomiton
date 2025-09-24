@@ -2,12 +2,13 @@
 
 ## Vision
 
-Provide a clean, simplified wrapper around TanStack Router that eliminates over-engineering while maintaining the benefits of type safety and React integration.
+Provide a clean, simplified wrapper around TanStack Router that eliminates
+over-engineering while maintaining the benefits of type safety and React
+integration.
 
 ## Current State (Complete ✅)
 
-**Major Simplification**: Complete - Q4 2024
-**Status**: Production Ready
+**Major Simplification**: Complete - Q4 2024 **Status**: Production Ready
 
 - [x] Reduced codebase from ~1930 lines to 174 lines (91% reduction)
 - [x] Eliminated over-engineered abstractions and custom state management
@@ -19,7 +20,8 @@ Provide a clean, simplified wrapper around TanStack Router that eliminates over-
 
 ## Future Considerations (Maintenance Focus)
 
-**Philosophy**: Keep it simple. Only add features if absolutely necessary and they maintain the simplified architecture.
+**Philosophy**: Keep it simple. Only add features if absolutely necessary and
+they maintain the simplified architecture.
 
 ### Potential Enhancements (Evaluate on demand)
 
@@ -94,6 +96,5 @@ This package follows a stability-first approach:
 
 ---
 
-**Maintained by**: Atomiton Core Team
-**Last Updated**: September 2025
+**Maintained by**: Atomiton Core Team **Last Updated**: September 2025
 **Status**: Simplified & Stable

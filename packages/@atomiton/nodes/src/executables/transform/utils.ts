@@ -22,7 +22,7 @@ export type TransformOutput = {
  */
 export function getInputValue<T>(
   context: NodeExecutionContext,
-  key: string
+  key: string,
 ): T | undefined {
   return context.inputs?.[key] as T | undefined;
 }
@@ -46,13 +46,13 @@ export function calculateOutputCount(transformedData: unknown): number {
 export function createTransformOutput(
   transformedData: unknown,
   inputCount: number,
-  operation: string
+  operation: string,
 ): TransformOutput {
   const outputCount = calculateOutputCount(transformedData);
 
   return {
-    result : transformedData,
-    data   : transformedData,
+    result: transformedData,
+    data: transformedData,
     inputCount,
     outputCount,
     operation,
@@ -65,12 +65,12 @@ export function createTransformOutput(
  */
 export function createErrorOutput(operation: string): TransformOutput {
   return {
-    result     : null,
-    data       : null,
-    inputCount : 0,
+    result: null,
+    data: null,
+    inputCount: 0,
     outputCount: 0,
     operation,
-    success    : false,
+    success: false,
   };
 }
 
@@ -81,7 +81,7 @@ export function logTransformResult(
   context: NodeExecutionContext,
   operation: string,
   inputCount: number,
-  outputCount: number
+  outputCount: number,
 ): void {
   context.log?.info?.(`Transformation completed: ${operation}`, {
     inputCount,

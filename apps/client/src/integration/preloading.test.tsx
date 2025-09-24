@@ -1,11 +1,11 @@
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { RouterProvider, router } from "./index";
+import { RouterProvider, router } from "../router/index";
 
 // Mock the router's preloadRoute method while preserving RouterProvider
-vi.mock("../../index", async () => {
+vi.mock("../router/index", async () => {
   const mockPreloadRoute = vi.fn();
-  const actual = (await vi.importActual("../../index")) as Record<
+  const actual = (await vi.importActual("../router/index")) as Record<
     string,
     unknown
   >;

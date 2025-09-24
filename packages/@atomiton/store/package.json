@@ -24,8 +24,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:integration": "vitest run --config vitest.integration.config.ts",
-    "test:benchmark": "vitest bench --config vitest.benchmark.config.ts"
+    "test:watch": "vitest watch",
+    "test:integration": "vitest run src/integration"
   },
   "keywords": [
     "store",

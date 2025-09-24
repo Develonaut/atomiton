@@ -2,7 +2,9 @@
 
 ## Vision
 
-Provide comprehensive, performant ESLint configurations that enforce consistent code quality across the Atomiton monorepo while being flexible enough to accommodate different package types and development workflows.
+Provide comprehensive, performant ESLint configurations that enforce consistent
+code quality across the Atomiton monorepo while being flexible enough to
+accommodate different package types and development workflows.
 
 ## Q4 2025 - Foundation
 
@@ -92,5 +94,4 @@ Provide comprehensive, performant ESLint configurations that enforce consistent 
 
 ---
 
-**Last Updated**: 2025-09-05
-**Next Review**: 2025-12-01
+**Last Updated**: 2025-09-05 **Next Review**: 2025-12-01

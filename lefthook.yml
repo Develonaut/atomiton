@@ -5,38 +5,65 @@
 env:
   LEFTHOOK: "1"
 
+# Fast pre-commit hooks for staged files only
 pre-commit:
-  parallel: false
-  commands:
-    package-validation:
-      run: |
-        echo "📦 Validating package consistency..."
-        pnpm exec tsx scripts/validate-packages.ts
-    lint-staged:
-      run: |
-        echo "📝 Checking code style..."
-        npx lint-staged
-    unit-tests:
-      run: |
-        echo "🧪 Running unit tests for changed packages..."
-        pnpm turbo run test --filter=[HEAD^] --ui stream --output-logs=new-only --log-order=grouped
-
-pre-push:
   parallel: true
   commands:
-    benchmark-tests:
+    # Format and fix linting issues on staged files
+    format-and-lint:
+      glob: "*.{ts,tsx,js,jsx,md,json,yml,yaml}"
       run: |
-        echo "📊 Checking performance regressions in changed packages..."
-        pnpm turbo run test:benchmark --filter=[HEAD^] --output-logs=errors-only || {
-          echo "❌ Benchmark tests failed!"
-          echo "💡 Performance contracts must pass before pushing"
-          exit 1
-        }
+        echo "🔧 Formatting and fixing lint issues for staged files..."
+        pnpm run fix
+      stage_fixed: true
+
+    # Type check affected packages (uses turbo's smart filtering)
+    type-check:
+      run: |
+        echo "🔍 Type checking affected packages..."
+        pnpm typecheck
+
+# More comprehensive pre-push hooks - full test suite must pass
+pre-push:
+  parallel: false # Sequential execution for clearer output and system stability
+  commands:
+    # Full lint check (ensures nothing was missed)
+    lint-check:
+      run: |
+        echo "🔍 Running full lint check..."
+        pnpm lint
+
+    # Full type check across all packages
+    full-type-check:
+      run: |
+        echo "🔍 Running full type check..."
+        pnpm typecheck
+
+    # Unit tests for all packages
+    unit-tests:
+      run: |
+        echo "🧪 Running unit tests for all packages..."
+        pnpm test
+
+    # Integration tests (more comprehensive)
     integration-tests:
       run: |
-        echo "🎭 Running integration tests for apps and changed packages..."
-        pnpm turbo run test:integration --filter=@atomiton/client --filter=@atomiton/desktop --filter=[HEAD^] --output-logs=errors-only || {
-          echo "❌ Integration tests failed!"
-          echo "💡 Fix integration tests before pushing"
-          exit 1
-        }
+        echo "🎭 Running integration tests..."
+        pnpm test:integration
+
+    # E2E tests (headless by default in CI/hooks)
+    e2e-tests:
+      run: |
+        echo "🌐 Running end-to-end tests (headless)..."
+        pnpm test:e2e
+
+    # Build verification (ensure everything builds)
+    build-check:
+      run: |
+        echo "🏗️ Verifying build integrity..."
+        pnpm build
+
+# Skip options for cleaner output
+skip_output:
+  - meta
+  - summary

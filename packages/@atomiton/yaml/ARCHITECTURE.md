@@ -2,7 +2,8 @@
 
 ## Data Flow Philosophy
 
-The `@atomiton/yaml` package implements a clear separation between storage and runtime formats:
+The `@atomiton/yaml` package implements a clear separation between storage and
+runtime formats:
 
 ### Storage Format: YAML
 
@@ -67,10 +68,13 @@ const jsonString = yaml.toJson(data); // Object → JSON string
 
 ## Benefits
 
-1. **Single Source of Truth**: One JSON structure serves both editor and conductor
-2. **No Data Divergence**: Editor and conductor work with identical data structures
+1. **Single Source of Truth**: One JSON structure serves both editor and
+   conductor
+2. **No Data Divergence**: Editor and conductor work with identical data
+   structures
 3. **Clear Boundaries**: Explicit conversion points between storage and runtime
-4. **Version Control Friendly**: YAML format for clean diffs and human readability
+4. **Version Control Friendly**: YAML format for clean diffs and human
+   readability
 5. **Performance**: JSON for fast runtime processing
 6. **Maintainability**: Simpler codebase with no duplicate data structures
 
@@ -118,7 +122,8 @@ await conductor.execute(blueprint);
 
 ## Type Safety
 
-The conversion methods are fully typed to ensure type safety across the pipeline:
+The conversion methods are fully typed to ensure type safety across the
+pipeline:
 
 ```typescript
 interface Blueprint {

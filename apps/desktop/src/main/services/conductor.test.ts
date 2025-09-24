@@ -30,7 +30,7 @@ describe("Conductor Service", () => {
         store: {},
         shutdown: vi.fn(),
         cleanup: vi.fn(),
-      } as any;
+      } as ReturnType<typeof createConductor>;
       vi.mocked(createConductor).mockReturnValue(mockConductor);
 
       // Act

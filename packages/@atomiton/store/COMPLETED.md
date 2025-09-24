@@ -37,10 +37,13 @@
 ### Major Refactor Completed
 
 - ✅ **Simplified API** - Reduced from 473 to 111 lines (75% reduction)
-- ✅ **Removed Complexity** - Eliminated StoreAPI singleton, action creators, selector utilities
+- ✅ **Removed Complexity** - Eliminated StoreAPI singleton, action creators,
+  selector utilities
 - ✅ **Single Function API** - One `createStore()` function for all use cases
-- ✅ **Full Feature Parity** - Maintained Immer, persistence, devtools, React integration
-- ✅ **Comprehensive Testing** - 27 tests including edge cases and performance benchmarks
+- ✅ **Full Feature Parity** - Maintained Immer, persistence, devtools, React
+  integration
+- ✅ **Comprehensive Testing** - 27 tests including edge cases and performance
+  benchmarks
 - ✅ **Documentation Updated** - Complete API reference and migration guide
 
 ### Migration Guide

@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document aggregates upcoming work across the entire monorepo. For detailed plans, see individual NEXT.md files in each package and app.
+This document aggregates upcoming work across the entire monorepo. For detailed
+plans, see individual NEXT.md files in each package and app.
 
 ## Strategic Priorities
 
@@ -106,6 +107,5 @@ Breaking `@atomiton/core` into:
 
 ---
 
-**Last Updated**: 2025-09-04
-**Next Review**: 2025-09-11
-**Planning Horizon**: Q4 2025
+**Last Updated**: 2025-09-04 **Next Review**: 2025-09-11 **Planning Horizon**:
+Q4 2025

@@ -3,7 +3,7 @@ import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
 
 export function convertNodeToEditorNode(
   node: NodeDefinition,
-  index: number
+  index: number,
 ): EditorNode {
   return {
     ...node,

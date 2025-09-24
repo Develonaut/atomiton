@@ -19,7 +19,7 @@ import {
 export function executeMapTransform(
   data: unknown[],
   transformFunction: string,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): unknown[] {
   try {
     const mapFn = createSafeFunction(transformFunction);
@@ -29,7 +29,7 @@ export function executeMapTransform(
       "Function evaluation failed, using fallback transformation",
       {
         error: error instanceof Error ? error.message : String(error),
-      }
+      },
     );
     return data.map((item, index) => ({
       ...(typeof item === "object" && item !== null ? item : { value: item }),
@@ -45,7 +45,7 @@ export function executeMapTransform(
 export function executeFilterTransform(
   data: unknown[],
   filterCondition: string,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): unknown[] {
   try {
     const filterFn = createSafeFunction(filterCondition);
@@ -55,7 +55,7 @@ export function executeFilterTransform(
       "Filter condition evaluation failed, filtering null/undefined values",
       {
         error: error instanceof Error ? error.message : String(error),
-      }
+      },
     );
     return data.filter((item) => item != null);
   }
@@ -68,21 +68,21 @@ export function executeReduceTransform(
   data: unknown[],
   reduceFunction: string,
   reduceInitial: string,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): unknown {
   try {
     const reduceFn = createSafeFunction(reduceFunction);
     const initialValue = parseInitialValue(reduceInitial);
     return data.reduce(
       (acc, item, index) => reduceFn({ acc, item, index }),
-      initialValue
+      initialValue,
     );
   } catch (error) {
     context.log?.warn?.(
       "Reduce function evaluation failed, using sum fallback",
       {
         error: error instanceof Error ? error.message : String(error),
-      }
+      },
     );
     // Fallback to sum for numbers
     return data.reduce((acc: number, item: unknown) => {
@@ -103,14 +103,14 @@ export function executeReduceTransform(
 export function executeSortTransform(
   data: unknown[],
   sortKey?: string,
-  sortDirection: "asc" | "desc" = "asc"
+  sortDirection: "asc" | "desc" = "asc",
 ): unknown[] {
   const sortKeys = sortKey ? [sortKey] : [(item: unknown) => item];
   const sortOrders: ("asc" | "desc")[] = [sortDirection];
   return simpleOrderBy(
     data,
     sortKeys as (string | ((item: unknown) => unknown))[],
-    sortOrders
+    sortOrders,
   );
 }
 
@@ -119,7 +119,7 @@ export function executeSortTransform(
  */
 export function executeGroupTransform(
   data: unknown[],
-  groupBy: string
+  groupBy: string,
 ): Record<string, unknown[]> {
   return simpleGroupBy(data, groupBy);
 }
@@ -129,7 +129,7 @@ export function executeGroupTransform(
  */
 export function executeFlattenTransform(
   data: unknown[],
-  depth: number = 1
+  depth: number = 1,
 ): unknown[] {
   return data.flat(depth);
 }
@@ -156,7 +156,7 @@ export function executeTransformation(
   data: unknown[],
   config: TransformParameters,
   context: NodeExecutionContext,
-  functionOverride?: string
+  functionOverride?: string,
 ): unknown {
   const transformFunction = functionOverride || config.transformFunction;
 
@@ -174,14 +174,14 @@ export function executeTransformation(
         data,
         config.reduceFunction as string,
         config.reduceInitial as string,
-        context
+        context,
       );
 
     case "sort":
       return executeSortTransform(
         data,
         config.sortKey,
-        config.sortDirection as "asc" | "desc"
+        config.sortDirection as "asc" | "desc",
       );
 
     case "group": {
@@ -194,7 +194,7 @@ export function executeTransformation(
     case "flatten":
       return executeFlattenTransform(
         data,
-        typeof config.flattenDepth === "number" ? config.flattenDepth : 1
+        typeof config.flattenDepth === "number" ? config.flattenDepth : 1,
       );
 
     case "unique":

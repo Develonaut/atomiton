@@ -9,7 +9,7 @@ import {
   generateWorkerId,
   kebabCase,
   titleCase,
-} from "./index";
+} from "#index";
 
 describe("Utils Package Contract", () => {
   describe("package exports", () => {

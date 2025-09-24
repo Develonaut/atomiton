@@ -290,4 +290,5 @@ MIT
 
 ---
 
-**Built following the Karen Principle**: Working code over impressive abstractions.
+**Built following the Karen Principle**: Working code over impressive
+abstractions.

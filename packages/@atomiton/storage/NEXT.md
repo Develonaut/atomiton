@@ -64,6 +64,5 @@
 
 ---
 
-**Last Updated**: 2025-01-11
-**Target Start**: Week 2, January 2025  
+**Last Updated**: 2025-01-11 **Target Start**: Week 2, January 2025  
 **Duration**: 1 week

@@ -19,12 +19,14 @@
   - `pascalCase()` - Converts strings to PascalCase
   - `titleCase()` - Converts strings to Title Case
   - `constantCase()` - Converts strings to CONSTANT_CASE
-- These utilities are now used by `@atomiton/router` for consistent string transformations
+- These utilities are now used by `@atomiton/router` for consistent string
+  transformations
 
 ## [0.1.1] - 2025-01-15
 
 ### Added
 
-- Added `generateNodeId()` function for generating unique node IDs with `node_` prefix
+- Added `generateNodeId()` function for generating unique node IDs with `node_`
+  prefix
 
 ## [0.1.0] - Initial Release

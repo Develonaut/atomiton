@@ -1,6 +1,9 @@
 # Monetization Ideas & Community Discussion
 
-> **This is a community discussion document!** I'm building Atomiton in public and want to be transparent about sustainability. This is a new project, I don't expect to make money anytime soon, but if the community wants to support development or has ideas for sustainable features, I'm all ears!
+> **This is a community discussion document!** I'm building Atomiton in public
+> and want to be transparent about sustainability. This is a new project, I
+> don't expect to make money anytime soon, but if the community wants to support
+> development or has ideas for sustainable features, I'm all ears!
 
 ## The Reality
 
@@ -13,7 +16,8 @@
 
 **What would you be willing to pay for (if anything)?**
 
-I'm not planning to charge for anything soon, but curious what the community thinks. Would any of these be valuable to you?
+I'm not planning to charge for anything soon, but curious what the community
+thinks. Would any of these be valuable to you?
 
 ### Option 1: Just Donations
 
@@ -52,7 +56,9 @@ I'm not planning to charge for anything soon, but curious what the community thi
 
 ## My Thoughts
 
-Honestly, I'm building this because I want it to exist. If people find it useful and want to support development, amazing! If not, I'll keep building anyway because it's fun and I'm learning.
+Honestly, I'm building this because I want it to exist. If people find it useful
+and want to support development, amazing! If not, I'll keep building anyway
+because it's fun and I'm learning.
 
 The dream would be:
 
@@ -105,11 +111,11 @@ I'm not trying to get rich or build a unicorn. I just want to:
 - Maybe cover hosting and development costs
 - Buy ramen while coding 🍜
 
-If the community grows and people want to support it financially, we'll figure it out together. For now, let's focus on building something awesome!
+If the community grows and people want to support it financially, we'll figure
+it out together. For now, let's focus on building something awesome!
 
 ---
 
 **What are your thoughts? Open an issue and let me know!**
 
-_Last Updated: January 2025_
-_Status: Just exploring ideas, nothing decided_
+_Last Updated: January 2025_ _Status: Just exploring ideas, nothing decided_

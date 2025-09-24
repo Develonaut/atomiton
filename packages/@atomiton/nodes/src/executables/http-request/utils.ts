@@ -8,7 +8,7 @@
  */
 export function buildUrlWithParams(
   baseUrl: string,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): string {
   if (!params || Object.keys(params).length === 0) {
     return baseUrl;

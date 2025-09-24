@@ -2,7 +2,8 @@
 
 ## Overview
 
-The @atomiton/conductor package provides a unified Blueprint execution API that works seamlessly across all environments (Electron, Browser, Node.js).
+The @atomiton/conductor package provides a unified Blueprint execution API that
+works seamlessly across all environments (Electron, Browser, Node.js).
 
 ## Visual Documentation
 

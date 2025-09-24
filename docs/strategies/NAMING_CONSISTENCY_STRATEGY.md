@@ -2,19 +2,23 @@
 
 ## Background
 
-Based on Guilliman's research into industry standards (Playwright, Vitest, MDN, W3C), we need to standardize our naming conventions across the Atomiton monorepo to align with industry best practices.
+Based on Guilliman's research into industry standards (Playwright, Vitest, MDN,
+W3C), we need to standardize our naming conventions across the Atomiton monorepo
+to align with industry best practices.
 
 ## Current State Analysis
 
 ### ✅ Already Correct
 
 - `@atomiton/testing/playwright/web` - Testing web applications ✓
-- `@atomiton/events/browser/createBrowserEventBus.ts` - Browser environment implementation ✓
+- `@atomiton/events/browser/createBrowserEventBus.ts` - Browser environment
+  implementation ✓
 - Package structure: `./playwright/web` vs `./playwright/electron` ✓
 
 ### ❌ Needs Migration
 
-- `apps/desktop/tsconfig.web.json` → Should be `tsconfig.browser.json` (execution environment)
+- `apps/desktop/tsconfig.web.json` → Should be `tsconfig.browser.json`
+  (execution environment)
 - Any other "web" references that should be "browser" for execution context
 - Any inconsistent usage throughout the codebase
 
@@ -72,7 +76,8 @@ tsconfig.node.json       // Node execution environment
    - Search for inconsistent "web"/"browser" usage
    - Apply rules: "web" = application domain, "browser" = execution environment
    - Search for inconsistent "desktop"/"electron" usage
-   - Apply rules: "desktop" = application domain, "electron" = execution environment
+   - Apply rules: "desktop" = application domain, "electron" = execution
+     environment
 
 3. **Package Configurations**
    - Review all package.json exports for consistency
@@ -81,9 +86,12 @@ tsconfig.node.json       // Node execution environment
 
 ### Benefits of This Migration
 
-1. **Framework Alignment**: Matches Playwright, Vitest, and modern web development tools
-2. **Industry Standards**: Consistent with MDN, W3C, and major platform documentation
-3. **Clear Semantics**: Logical distinction between what you're building vs where it runs
+1. **Framework Alignment**: Matches Playwright, Vitest, and modern web
+   development tools
+2. **Industry Standards**: Consistent with MDN, W3C, and major platform
+   documentation
+3. **Clear Semantics**: Logical distinction between what you're building vs
+   where it runs
 4. **Future-Proof**: Scales well for potential mobile web, desktop web, etc.
 
 ## Action Items
@@ -104,4 +112,5 @@ This migration is based on Guilliman's comprehensive research into:
 - Industry consensus from MDN, W3C, major browsers
 - Framework tool recommendations and best practices
 
-The goal is to follow existing industry conventions rather than creating custom patterns, adhering to the principle that "the framework already solved this."
+The goal is to follow existing industry conventions rather than creating custom
+patterns, adhering to the principle that "the framework already solved this."

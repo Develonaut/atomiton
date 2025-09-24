@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document outlines the strategy for creating a **validation-agnostic** form package that can work with any validation library (Zod, Yup, Joi, custom) while providing first-class support for Zod.
+This document outlines the strategy for creating a **validation-agnostic** form
+package that can work with any validation library (Zod, Yup, Joi, custom) while
+providing first-class support for Zod.
 
 ## Core Philosophy
 
@@ -219,7 +221,8 @@ function NodeProperties({ nodeId }) {
 
 1. **Flexibility**: Not locked into any validation library
 2. **Future-Proof**: Can adapt to new validation libraries
-3. **Gradual Migration**: Can switch validation libraries without rewriting forms
+3. **Gradual Migration**: Can switch validation libraries without rewriting
+   forms
 4. **Custom Logic**: Support complex business validation rules
 5. **Performance**: Can optimize validation strategy per form
 6. **Testing**: Easier to test without validation dependencies
@@ -305,5 +308,4 @@ Start with the core Form component and ZodForm adapter, as these are needed for 
 
 ---
 
-_Last Updated: 2025-01-10_
-_Status: Ready for Implementation_
+_Last Updated: 2025-01-10_ _Status: Ready for Implementation_

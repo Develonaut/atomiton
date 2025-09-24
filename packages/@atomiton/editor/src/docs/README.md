@@ -2,7 +2,9 @@
 
 ## Overview
 
-The Editor package is a domain-agnostic visual manipulation system. It provides components for building editors that work with positioned elements and their connections.
+The Editor package is a domain-agnostic visual manipulation system. It provides
+components for building editors that work with positioned elements and their
+connections.
 
 ## Core Domains
 
@@ -233,7 +235,8 @@ The editor doesn't know what the elements represent. It only knows they can be:
 
 ### 2. **Separation of Concerns**
 
-Each domain has clear boundaries and responsibilities. Domains communicate through:
+Each domain has clear boundaries and responsibilities. Domains communicate
+through:
 
 - Events (via core.events)
 - State (via store)

@@ -48,7 +48,7 @@ export type PlaywrightPresetOptions = {
  * Creates a shared Playwright configuration with standard patterns
  *
  * Features:
- * - Automatic CI/hooks detection for headless mode
+ * - Runs headless by default, set PLAYWRIGHT_HEADED=true for browser windows
  * - Standard test file patterns matching Vitest conventions
  * - Consistent snapshot and video settings
  * - Built-in web server management
@@ -65,8 +65,8 @@ export function definePlaywrightConfig(options: PlaywrightPresetOptions = {}) {
   } = options;
 
   const isCI = !!process.env.CI;
-  const isGitHooks = !!process.env.GIT_HOOKS;
-  const isHeadless = isCI || isGitHooks;
+  const isHeaded = !!process.env.PLAYWRIGHT_HEADED;
+  const isHeadless = !isHeaded;
 
   return defineConfig({
     testDir: "./src/__tests__",

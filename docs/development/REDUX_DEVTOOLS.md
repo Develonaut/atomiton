@@ -2,20 +2,24 @@
 
 ## Overview
 
-Our Zustand stores are configured to work with Redux DevTools for state debugging. However, there are platform-specific considerations.
+Our Zustand stores are configured to work with Redux DevTools for state
+debugging. However, there are platform-specific considerations.
 
 ## ✅ Working in Chrome Browser
 
-Redux DevTools integration works perfectly when accessing the app directly in Chrome:
+Redux DevTools integration works perfectly when accessing the app directly in
+Chrome:
 
 1. Open http://localhost:5173 in Chrome
 2. Open Redux DevTools Extension
-3. You'll see all Zustand stores listed with "atomiton-" prefix (e.g., "atomiton-blueprint-store", "atomiton-navigation", etc.)
+3. You'll see all Zustand stores listed with "atomiton-" prefix (e.g.,
+   "atomiton-blueprint-store", "atomiton-navigation", etc.)
 4. State changes are tracked in real-time
 
 ## ⚠️ Electron Limitations
 
-Redux DevTools has known compatibility issues with Electron due to Manifest V3 service worker registration problems. You'll see errors like:
+Redux DevTools has known compatibility issues with Electron due to Manifest V3
+service worker registration problems. You'll see errors like:
 
 - "Service worker registration failed. Status code: 2"
 - "Cannot read properties of undefined (reading 'filter')"
@@ -78,10 +82,13 @@ export function createStore<T extends object>(
 ### Key Features
 
 1. **Automatic DevTools Integration** - Enabled in development mode only
-2. **Consistent Naming** - All stores automatically prefixed with "atomiton-" and converted to kebab-case
+2. **Consistent Naming** - All stores automatically prefixed with "atomiton-"
+   and converted to kebab-case
 3. **Proper Middleware Order** - immer → persist → devtools
-4. **Named Stores** - Each store has a descriptive name in DevTools (e.g., "atomiton-blueprint-store")
-5. **Map Support** - enableMapSet() called on module load for Map/Set serialization
+4. **Named Stores** - Each store has a descriptive name in DevTools (e.g.,
+   "atomiton-blueprint-store")
+5. **Map Support** - enableMapSet() called on module load for Map/Set
+   serialization
 
 ## Testing Store Visibility
 

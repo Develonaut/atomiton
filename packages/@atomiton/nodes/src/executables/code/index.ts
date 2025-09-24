@@ -1,4 +1,3 @@
-
 import { createNodeExecutable } from "#core/factories/createNodeExecutable";
 import type {
   NodeExecutable,
@@ -41,17 +40,16 @@ export const codeExecutable: NodeExecutable<CodeParameters> =
         });
 
         // Execute code in isolated VM
-        const result = await executeSecureCode(
-          config.code,
-          executionContext,
-          {
-            memoryLimit: config.memoryLimit || 32,
-            timeoutMs: config.timeout || 5000,
-          }
-        );
+        const result = await executeSecureCode(config.code, executionContext, {
+          memoryLimit: config.memoryLimit || 32,
+          timeoutMs: config.timeout || 5000,
+        });
 
         // Convert result to target type if specified
-        const convertedResult = convertToType(result, config.returnType || "auto");
+        const convertedResult = convertToType(
+          result,
+          config.returnType || "auto",
+        );
         const actualType = getActualType(convertedResult);
         const duration = Date.now() - startTime;
 
@@ -72,7 +70,8 @@ export const codeExecutable: NodeExecutable<CodeParameters> =
         };
       } catch (error) {
         const duration = Date.now() - startTime;
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
 
         context.log?.error?.("Code execution failed", {
           error: errorMessage,
@@ -103,31 +102,56 @@ export const codeExecutable: NodeExecutable<CodeParameters> =
 
       // Validate required fields
       if (typeof configObj.code !== "string" || !configObj.code.trim()) {
-        throw new Error("Invalid configuration: code must be a non-empty string");
+        throw new Error(
+          "Invalid configuration: code must be a non-empty string",
+        );
       }
 
       // Validate timeout
       const timeout = configObj.timeout;
-      if (timeout !== undefined && (typeof timeout !== "number" || timeout < 100 || timeout > 30000)) {
-        throw new Error("Invalid configuration: timeout must be between 100 and 30000 milliseconds");
+      if (
+        timeout !== undefined &&
+        (typeof timeout !== "number" || timeout < 100 || timeout > 30000)
+      ) {
+        throw new Error(
+          "Invalid configuration: timeout must be between 100 and 30000 milliseconds",
+        );
       }
 
       // Validate memoryLimit
       const memoryLimit = configObj.memoryLimit;
-      if (memoryLimit !== undefined && (typeof memoryLimit !== "number" || memoryLimit < 8 || memoryLimit > 128)) {
-        throw new Error("Invalid configuration: memoryLimit must be between 8 and 128 MB");
+      if (
+        memoryLimit !== undefined &&
+        (typeof memoryLimit !== "number" ||
+          memoryLimit < 8 ||
+          memoryLimit > 128)
+      ) {
+        throw new Error(
+          "Invalid configuration: memoryLimit must be between 8 and 128 MB",
+        );
       }
 
       // Validate returnType
       const returnType = configObj.returnType;
-      const validReturnTypes = ["auto", "string", "number", "boolean", "object", "array"];
-      if (returnType !== undefined && !validReturnTypes.includes(returnType as string)) {
-        throw new Error(`Invalid configuration: returnType must be one of ${validReturnTypes.join(", ")}`);
+      const validReturnTypes = [
+        "auto",
+        "string",
+        "number",
+        "boolean",
+        "object",
+        "array",
+      ];
+      if (
+        returnType !== undefined &&
+        !validReturnTypes.includes(returnType as string)
+      ) {
+        throw new Error(
+          `Invalid configuration: returnType must be one of ${validReturnTypes.join(", ")}`,
+        );
       }
 
       return config as CodeParameters;
     },
   });
-
 
 export default codeExecutable;

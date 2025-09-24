@@ -1,4 +1,4 @@
-import type { EventMap } from '#core/types';
+import type { EventMap } from "#core/types";
 
 // EventRegistry for managing event type definitions across the application
 export type EventRegistry = {
@@ -31,7 +31,7 @@ export function createEventRegistry(): EventRegistry {
 
     clear(): void {
       registry.clear();
-    }
+    },
   };
 }
 

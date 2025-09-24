@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This framework provides a standardized approach for analyzing competitor node-based editors to identify features, strengths, weaknesses, and opportunities for Atomiton.
+This framework provides a standardized approach for analyzing competitor
+node-based editors to identify features, strengths, weaknesses, and
+opportunities for Atomiton.
 
 ## Analysis Structure
 

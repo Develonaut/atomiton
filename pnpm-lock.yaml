@@ -282,6 +282,9 @@ importers:
       '@atomiton/conductor':
         specifier: workspace:^
         version: link:../../packages/@atomiton/conductor
+      '@atomiton/nodes':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/nodes
       '@atomiton/storage':
         specifier: workspace:^
         version: link:../../packages/@atomiton/storage
@@ -343,6 +346,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.16
+      cross-env:
+        specifier: 'catalog:'
+        version: 10.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2

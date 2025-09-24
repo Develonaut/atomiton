@@ -4,7 +4,8 @@
 
 ### BREAKING CHANGES
 
-- **MAJOR SIMPLIFICATION**: Complete rewrite and 91% code reduction (1930 → 174 lines)
+- **MAJOR SIMPLIFICATION**: Complete rewrite and 91% code reduction (1930 → 174
+  lines)
 - Removed all over-engineered abstractions and custom state management
 - Removed auto-generated navigation methods (moved to client application)
 - Removed Zustand-powered navigation store
@@ -13,13 +14,18 @@
 
 ### Features
 
-- **Simplified Architecture**: Clean wrapper around TanStack Router with 4 focused files
-- **Modular Structure**: Separated into types.ts, routeFactory.ts, createRouter.tsx, index.ts
-- **Clean API**: Returns structured object with {router, navigate, useRouter, Link, RouterProvider, ...}
-- **Async Component Loading**: Improved component loading with proper React patterns
+- **Simplified Architecture**: Clean wrapper around TanStack Router with 4
+  focused files
+- **Modular Structure**: Separated into types.ts, routeFactory.ts,
+  createRouter.tsx, index.ts
+- **Clean API**: Returns structured object with {router, navigate, useRouter,
+  Link, RouterProvider, ...}
+- **Async Component Loading**: Improved component loading with proper React
+  patterns
 - **Production Ready**: 3.83 kB production bundle with zero TypeScript errors
 - **Comprehensive Testing**: Smoke tests validating API structure
-- **Updated Documentation**: Complete documentation overhaul reflecting simplified approach
+- **Updated Documentation**: Complete documentation overhaul reflecting
+  simplified approach
 
 ### Migration Guide
 

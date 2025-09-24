@@ -4,7 +4,8 @@
 
 ### 🎯 Primary Focus: API Stability & Documentation
 
-The form package is currently in a stable state and actively used by the editor. Focus is on maintaining compatibility while supporting new use cases.
+The form package is currently in a stable state and actively used by the editor.
+Focus is on maintaining compatibility while supporting new use cases.
 
 ## Upcoming Enhancements
 
@@ -12,7 +13,8 @@ The form package is currently in a stable state and actively used by the editor.
 
 #### Advanced Field Types
 
-- [ ] **Array Field Support**: Dynamic array field management with add/remove controls
+- [ ] **Array Field Support**: Dynamic array field management with add/remove
+      controls
 - [ ] **Object Field Support**: Nested object editing with collapsible sections
 - [ ] **Conditional Fields**: Fields that show/hide based on other field values
 - [ ] **Field Validation**: Advanced validation rules beyond basic Zod schemas
@@ -21,7 +23,8 @@ The form package is currently in a stable state and actively used by the editor.
 
 - [ ] **Memoization**: Optimize field generation for large schemas
 - [ ] **Lazy Validation**: Defer validation until field interaction
-- [ ] **Bundle Splitting**: Separate advanced features to reduce core bundle size
+- [ ] **Bundle Splitting**: Separate advanced features to reduce core bundle
+      size
 
 ### Medium-term (Next Quarter)
 
@@ -46,7 +49,8 @@ The form package is currently in a stable state and actively used by the editor.
 - [ ] **State Management**: Integration with Zustand/Redux for global form state
 - [ ] **Animation Support**: Form transition animations and micro-interactions
 - [ ] **Accessibility**: Enhanced ARIA support and keyboard navigation
-- [ ] **Internationalization**: Multi-language form labels and validation messages
+- [ ] **Internationalization**: Multi-language form labels and validation
+      messages
 
 ### Enterprise Features
 
@@ -143,6 +147,5 @@ Explore performance improvements:
 
 ---
 
-**Maintained by**: Atomiton Core Team
-**Last Updated**: January 2025
-**Next Review**: February 2025
+**Maintained by**: Atomiton Core Team **Last Updated**: January 2025 **Next
+Review**: February 2025

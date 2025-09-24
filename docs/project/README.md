@@ -8,24 +8,31 @@
 
 ## 🎯 What is Atomiton?
 
-Atomiton is a desktop-first, AI-native automation platform that transforms complex workflows into visual Blueprints. Think of it as n8n's simpler, faster, more modern cousin - built for individual creators and small teams who want powerful automation without enterprise complexity.
+Atomiton is a desktop-first, AI-native automation platform that transforms
+complex workflows into visual Blueprints. Think of it as n8n's simpler, faster,
+more modern cousin - built for individual creators and small teams who want
+powerful automation without enterprise complexity.
 
 ### Our Mission
 
-> Transform complex workflows into visual Blueprints that anyone can create, with AI assistance at every step, running entirely on your machine with zero infrastructure costs.
+> Transform complex workflows into visual Blueprints that anyone can create,
+> with AI assistance at every step, running entirely on your machine with zero
+> infrastructure costs.
 
 ## 🚀 Why Atomiton?
 
 ### The Problem
 
-- **n8n** is powerful but complex (500+ nodes, enterprise-focused, heavy infrastructure)
+- **n8n** is powerful but complex (500+ nodes, enterprise-focused, heavy
+  infrastructure)
 - **Zapier/Make** are expensive and cloud-dependent
 - **Writing scripts** requires coding knowledge and maintenance
 - **AI tools** are disconnected from automation workflows
 
 ### Our Solution
 
-- **Desktop-first**: Runs on your machine, full file system access, no CORS issues
+- **Desktop-first**: Runs on your machine, full file system access, no CORS
+  issues
 - **AI-native**: Built for LLMs from day one, not retrofitted
 - **Simple**: 20-50 essential nodes that cover 90% of use cases
 - **Fast**: 10-30x faster than n8n through streaming architecture
@@ -134,7 +141,8 @@ atomiton/
 
 ## 🤝 Contributing
 
-We're building in public and welcome contributions! As a learning project, we're open to experimentation and new ideas.
+We're building in public and welcome contributions! As a learning project, we're
+open to experimentation and new ideas.
 
 ### How to Contribute
 
@@ -253,7 +261,8 @@ pnpm test
 
 ## 📬 Contact & Community
 
-- **GitHub**: [github.com/yourusername/atomiton](https://github.com/yourusername/atomiton)
+- **GitHub**:
+  [github.com/yourusername/atomiton](https://github.com/yourusername/atomiton)
 - **Discord**: Coming soon (after 10 users)
 - **Website**: [atomiton.com](https://atomiton.com) (coming soon)
 - **Author**: Ryan (solo developer, learning project)
@@ -269,4 +278,5 @@ MIT License - Use it, modify it, learn from it!
 **Public Launch**: Q2 2025 (estimated)  
 **Current Focus**: Building execution engine and core nodes
 
-_Built with ❤️ by a solo developer who thinks automation should be simple, fast, and free._
+_Built with ❤️ by a solo developer who thinks automation should be simple, fast,
+and free._

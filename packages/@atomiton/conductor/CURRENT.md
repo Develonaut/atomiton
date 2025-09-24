@@ -52,7 +52,8 @@
 - **NodeExecutor**: Multi-runtime support with import issues
 - **Advanced Queue**: n8n-inspired patterns need resolution
 
-These are intentionally deprioritized following "Karen Principle" - ship working simple components first.
+These are intentionally deprioritized following "Karen Principle" - ship working
+simple components first.
 
 ## Immediate Priorities
 

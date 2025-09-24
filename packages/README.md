@@ -1,10 +1,12 @@
 # Atomiton Packages
 
-This directory contains all shared packages for the Atomiton Blueprint automation platform.
+This directory contains all shared packages for the Atomiton Blueprint
+automation platform.
 
 ## Package Organization Philosophy
 
-All packages start in the `@atomiton/` namespace as internal packages. This approach allows us to:
+All packages start in the `@atomiton/` namespace as internal packages. This
+approach allows us to:
 
 1. **Iterate quickly** without worrying about public API stability
 2. **Refactor freely** as we discover better patterns
@@ -150,8 +152,10 @@ As the platform matures, some packages may be published to npm:
 - `@atomiton/ui` → Could become a public design system
 - `@atomiton/nodes` → Could allow community node contributions
 
-But for now, keeping everything internal gives us maximum flexibility to build the best possible platform.
+But for now, keeping everything internal gives us maximum flexibility to build
+the best possible platform.
 
 ## Questions?
 
-See the [Architecture Documentation](../docs/architecture/README.md) for more details on how these packages work together.
+See the [Architecture Documentation](../docs/architecture/README.md) for more
+details on how these packages work together.

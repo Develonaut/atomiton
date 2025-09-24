@@ -38,8 +38,8 @@ export function executeCommand(
 ): Promise<CommandResult> {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
-      cwd  : options.cwd,
-      env  : { ...process.env, ...options.env },
+      cwd: options.cwd,
+      env: { ...process.env, ...options.env },
       shell: options.shell || true,
       stdio: options.stdio || "pipe",
     });
@@ -73,7 +73,7 @@ export function executeCommand(
         stdout,
         stderr,
         exitCode: code || 0,
-        command : `${command} ${args.join(" ")}`,
+        command: `${command} ${args.join(" ")}`,
         timedOut,
       });
     });

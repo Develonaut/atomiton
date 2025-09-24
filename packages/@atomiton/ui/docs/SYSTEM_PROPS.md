@@ -1,19 +1,24 @@
 # System Props
 
-System Props are standardized convenience properties supported by all Atomiton lower-level components. They provide consistent shortcuts and aliases across the entire component library.
+System Props are standardized convenience properties supported by all Atomiton
+lower-level components. They provide consistent shortcuts and aliases across the
+entire component library.
 
 ## What are System Props?
 
-System Props are a predefined set of prop transformations that make components easier to use:
+System Props are a predefined set of prop transformations that make components
+easier to use:
 
 - **Shortcuts**: `fullW` instead of `fullWidth`, `fw` for `fontWeight`
 - **Aliases**: `startIcon` as an alternative to `leftIcon`
 - **Derived states**: `loading` automatically sets `disabled`
-- **Consistent patterns**: Typography uses 2-letter codes (`fs`, `fw`, `ff`), layout uses explicit names (`fullW`, `fullH`)
+- **Consistent patterns**: Typography uses 2-letter codes (`fs`, `fw`, `ff`),
+  layout uses explicit names (`fullW`, `fullH`)
 
 ## Supported System Props
 
-All lower-level components (Box, Stack, Button, Input, etc.) support these props:
+All lower-level components (Box, Stack, Button, Input, etc.) support these
+props:
 
 ### Layout Props
 
@@ -88,7 +93,10 @@ All lower-level components (Box, Stack, Button, Input, etc.) support these props
 | `startIcon` | `leftIcon`  | Icon at the start (left in LTR) |
 | `endIcon`   | `rightIcon` | Icon at the end (right in LTR)  |
 
-> **Future Consideration**: The icon/adornment pattern could be expanded to support all directions (left, top, right, bottom) with consistent naming like `{direction}{Noun}` (e.g., `topBadge`, `bottomLabel`). This would provide a standardized way to attach UI elements in any direction.
+> **Future Consideration**: The icon/adornment pattern could be expanded to
+> support all directions (left, top, right, bottom) with consistent naming like
+> `{direction}{Noun}` (e.g., `topBadge`, `bottomLabel`). This would provide a
+> standardized way to attach UI elements in any direction.
 
 ### State Props
 
@@ -180,7 +188,8 @@ All lower-level components (Box, Stack, Button, Input, etc.) support these props
 
 ## How It Works
 
-System Props are resolved through a centralized map (`SYSTEM_PROPS_MAP`) that ensures consistency:
+System Props are resolved through a centralized map (`SYSTEM_PROPS_MAP`) that
+ensures consistency:
 
 ```tsx
 // The map defines all transformations

@@ -1,6 +1,8 @@
 # Testing Strategy: When & Where to Write Tests
 
-> **Core Principle**: Test at the highest level that makes sense. If you can test it via E2E, do that. Only drop down to lower levels when E2E isn't practical.
+> **Core Principle**: Test at the highest level that makes sense. If you can
+> test it via E2E, do that. Only drop down to lower levels when E2E isn't
+> practical.
 
 ## Test Location & Naming (Simplified)
 
@@ -11,7 +13,8 @@
 *.e2e.ts    - E2E Playwright tests (in apps/e2e)
 ```
 
-That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`, `.spec.ts`. The folder structure tells us what kind of test it is.
+That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`,
+`.spec.ts`. The folder structure tells us what kind of test it is.
 
 ### Folder Structure
 
@@ -41,17 +44,18 @@ atomiton/
 
 ### 1. Desktop/Electron Features → E2E Tests ONLY
 
-**Why**: Your experience proved this - testing Electron without UI is painful and not realistic.
+**Why**: Your experience proved this - testing Electron without UI is painful
+and not realistic.
 
 ```typescript
 // ✅ CORRECT - E2E test with real Electron + UI
 // apps/e2e/tests/desktop-features.e2e.ts
 test("desktop app saves files locally", async () => {
   const app = await electron.launch({
-    args: ["path/to/desktop/main.js"]
+    args: ["path/to/desktop/main.js"],
   });
   const window = await app.firstWindow();
-  
+
   // Test through real UI interactions
   await window.click('[data-testid="save-button"]');
   // Verify file was saved
@@ -71,7 +75,7 @@ test("desktop app saves files locally", async () => {
 test("user creates node connection", async ({ page }) => {
   await page.dragAndDrop(
     '[data-testid="node-output"]',
-    '[data-testid="node-input"]'
+    '[data-testid="node-input"]',
   );
   await expect(page.locator('[data-testid="connection"]')).toBeVisible();
 });
@@ -125,6 +129,7 @@ test("conductor executes workflow with all node types", async () => {
 ### E2E Tests (apps/e2e/tests/)
 
 Test these through real user interactions:
+
 - **Electron/Desktop features**: File system, native menus, IPC
 - **User workflows**: Template → Editor → Save → Load
 - **Canvas interactions**: Pan, zoom, node creation, connections
@@ -134,15 +139,17 @@ Test these through real user interactions:
 ### Integration Tests (src/integration/)
 
 Test these as data pipelines without UI:
+
 - **Package APIs**: Public methods and contracts
 - **Data transformations**: YAML→JSON, validation, parsing
 - **Store operations**: State management (without UI)
 - **Factory functions**: Node creation, composite assembly
 - **IPC message handling**: Message serialization/deserialization
 
-### Unit Tests (co-located *.test.ts)
+### Unit Tests (co-located \*.test.ts)
 
 Only test these as isolated units:
+
 - **Complex algorithms**: Graph algorithms, layout calculations
 - **Pure utilities**: Date formatting, ID generation, deep merge
 - **Math functions**: Collision detection, position calculations
@@ -151,6 +158,7 @@ Only test these as isolated units:
 ## What NOT to Test
 
 ### Never Write Tests For:
+
 - **React component rendering**: Test through E2E instead
 - **Electron main process alone**: Test through E2E with renderer
 - **Mocked IPC communication**: Test real IPC through E2E
@@ -167,17 +175,19 @@ test("workspace persists between app restarts", async () => {
   // Launch real app
   const app1 = await electron.launch({ args: [DESKTOP_PATH] });
   const window1 = await app1.firstWindow();
-  
+
   // Create workflow through UI
   await window1.click('[data-testid="new-workflow"]');
   await window1.fill('[data-testid="workflow-name"]', "My Workflow");
   await window1.click('[data-testid="save"]');
   await app1.close();
-  
+
   // Relaunch and verify persistence
   const app2 = await electron.launch({ args: [DESKTOP_PATH] });
   const window2 = await app2.firstWindow();
-  await expect(window2.locator('[data-testid="workflow-name"]')).toContainText("My Workflow");
+  await expect(window2.locator('[data-testid="workflow-name"]')).toContainText(
+    "My Workflow",
+  );
   await app2.close();
 });
 ```
@@ -190,7 +200,7 @@ test("composite node factory pipeline", () => {
   const yamlTemplate = fs.readFileSync("hello-world.yaml", "utf-8");
   const parsed = fromYaml(yamlTemplate);
   const composite = createCompositeNode(parsed.data);
-  
+
   expect(composite.nodes).toHaveLength(3);
   expect(composite.edges).toHaveLength(2);
   expect(composite.validate()).toBe(true);
@@ -213,19 +223,22 @@ test("electron IPC without UI", async () => {
 
 ### From Current Tests:
 
-1. **Find all `.spec.ts`, `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts` files**
+1. **Find all `.spec.ts`, `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`
+   files**
+
    ```bash
    find . -name "*.spec.ts" -o -name "*.int.test.ts" -o -name "*.smoke.test.ts" -o -name "*.bench.test.ts"
    ```
 
 2. **Rename based on type**
+
    ```bash
    # E2E tests (formerly .spec.ts) become .e2e.ts
    mv src/foo.spec.ts apps/e2e/tests/foo.e2e.ts
-   
+
    # Integration tests go in integration/ folder
    mv src/foo.int.test.ts src/integration/foo.test.ts
-   
+
    # Smoke tests likely become E2E tests
    mv src/bar.smoke.test.ts apps/e2e/tests/bar.e2e.ts
    ```
@@ -270,9 +283,10 @@ Still unsure?
 - **Unit tests only for complex pure functions**
 - **When in doubt, test at the highest level possible**
 
-This approach is simpler, clearer, and aligns with what you learned from trying to test Electron without UI - just test it the way users use it!
+This approach is simpler, clearer, and aligns with what you learned from trying
+to test Electron without UI - just test it the way users use it!
 
 ---
 
-**Last Updated**: 2025-01-17
-**Status**: Active strategy based on real experience
+**Last Updated**: 2025-01-17 **Status**: Active strategy based on real
+experience

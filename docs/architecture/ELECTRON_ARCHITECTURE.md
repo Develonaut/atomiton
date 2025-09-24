@@ -2,7 +2,8 @@
 
 ## Overview
 
-The conductor package provides a **unified API** that works the same across all environments. Here's how execution flows in the Electron desktop app:
+The conductor package provides a **unified API** that works the same across all
+environments. Here's how execution flows in the Electron desktop app:
 
 ## Architecture Diagram
 
@@ -165,7 +166,8 @@ function WorkflowEditor() {
 1. **Unified API**: Same `conductor.execute()` call everywhere
 2. **Auto-Detection**: Automatically uses correct transport based on environment
 3. **Security**: Renderer never directly executes code, only sends messages
-4. **Full Node.js Access**: Main process has unrestricted access to system resources
+4. **Full Node.js Access**: Main process has unrestricted access to system
+   resources
 5. **Type Safety**: Full TypeScript support across IPC boundary
 
 ## Environment Detection
@@ -191,15 +193,22 @@ When running in non-desktop environments:
 - **Cloud/Server**: Uses local transport for direct execution
 - **Same API**: `conductor.execute()` works identically in all cases
 
-This architecture ensures the conductor API remains consistent regardless of the runtime environment!
+This architecture ensures the conductor API remains consistent regardless of the
+runtime environment!
 
 ## Related Documentation
 
-- **[Conductor API](./CONDUCTOR_API.md)** - Complete API reference and usage examples
-- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Detailed transport layer implementation
-- **[BENTO_BOX Implementation](./BENTO_BOX_IMPLEMENTATION.md)** - How Electron architecture exemplifies our simplicity principles
-- **[Architecture Overview](./README.md)** - Main architecture documentation index
+- **[Conductor API](./CONDUCTOR_API.md)** - Complete API reference and usage
+  examples
+- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Detailed transport
+  layer implementation
+- **[BENTO_BOX Implementation](./BENTO_BOX_IMPLEMENTATION.md)** - How Electron
+  architecture exemplifies our simplicity principles
+- **[Architecture Overview](./README.md)** - Main architecture documentation
+  index
 
 ---
 
-This Electron architecture demonstrates cross-environment consistency: the same `conductor.execute()` API works identically in renderer, main, browser, and server environments.
+This Electron architecture demonstrates cross-environment consistency: the same
+`conductor.execute()` API works identically in renderer, main, browser, and
+server environments.

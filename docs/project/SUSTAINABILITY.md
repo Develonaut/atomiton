@@ -1,14 +1,21 @@
 # Sustainability & Monetization Ideas
 
-> **Note**: This document contains IDEAS and POSSIBILITIES, not commitments. Everything here is subject to change based on community feedback and what actually works. The only promise is that the core platform will always be open source and free.
+> **Note**: This document contains IDEAS and POSSIBILITIES, not commitments.
+> Everything here is subject to change based on community feedback and what
+> actually works. The only promise is that the core platform will always be open
+> source and free.
 
 ## Our Philosophy
 
-Atomiton is and will always be open source. The core platform is free to use, modify, and distribute. However, sustainable open source requires resources. This document explores potential community-friendly ways to support development while keeping the tool accessible to everyone.
+Atomiton is and will always be open source. The core platform is free to use,
+modify, and distribute. However, sustainable open source requires resources.
+This document explores potential community-friendly ways to support development
+while keeping the tool accessible to everyone.
 
 ## Core Principles
 
-1. **Core is Forever Free**: The automation platform, editor, and essential nodes will always be free
+1. **Core is Forever Free**: The automation platform, editor, and essential
+   nodes will always be free
 2. **No Artificial Limits**: We won't cripple the free version to force upgrades
 3. **Community First**: Monetization should add value, not create barriers
 4. **Transparent Pricing**: Clear, fair pricing with no hidden costs
@@ -16,11 +23,15 @@ Atomiton is and will always be open source. The core platform is free to use, mo
 
 ## Potential Support Methods
 
-> **Important**: These are just ideas being explored. Nothing is decided. Community feedback will shape what, if anything, gets implemented. For now, the focus is 100% on building a great free tool.
+> **Important**: These are just ideas being explored. Nothing is decided.
+> Community feedback will shape what, if anything, gets implemented. For now,
+> the focus is 100% on building a great free tool.
 
 ### Starting Simple: Donations
 
-The most common and community-friendly approach is to start with optional donations. Many successful open source projects are sustained entirely through voluntary support. This might be the only monetization ever needed.
+The most common and community-friendly approach is to start with optional
+donations. Many successful open source projects are sustained entirely through
+voluntary support. This might be the only monetization ever needed.
 
 ### Other Ideas Being Considered
 
@@ -305,24 +316,29 @@ Everything else in this document is just brainstorming!
 
 ## FAQ
 
-**Q: Will Atomiton always be free?**
-A: Yes, the core platform will always be free and open source.
+**Q: Will Atomiton always be free?** A: Yes, the core platform will always be
+free and open source.
 
-**Q: Are you planning to charge for things?**
-A: Nothing is decided yet. Starting with donations to see if that's sustainable. Any paid features would be purely optional enhancements.
+**Q: Are you planning to charge for things?** A: Nothing is decided yet.
+Starting with donations to see if that's sustainable. Any paid features would be
+purely optional enhancements.
 
-**Q: When will you add monetization?**
-A: Not until the platform is mature and valuable (100+ happy users minimum). Building a great tool comes first.
+**Q: When will you add monetization?** A: Not until the platform is mature and
+valuable (100+ happy users minimum). Building a great tool comes first.
 
-**Q: What if I have ideas for monetization?**
-A: Community input is welcome! Open an issue or discussion on GitHub.
+**Q: What if I have ideas for monetization?** A: Community input is welcome!
+Open an issue or discussion on GitHub.
 
-**Q: How can I support the project now?**
-A: Use it, report bugs, contribute code, spread the word! Financial support options will be added when the project is more mature.
+**Q: How can I support the project now?** A: Use it, report bugs, contribute
+code, spread the word! Financial support options will be added when the project
+is more mature.
 
 ---
 
-**Remember**: The goal isn't to maximize revenue but to create sustainable development that benefits everyone. Free users provide value through feedback, contributions, and community building. Paid users provide resources to keep development active. Everyone wins.
+**Remember**: The goal isn't to maximize revenue but to create sustainable
+development that benefits everyone. Free users provide value through feedback,
+contributions, and community building. Paid users provide resources to keep
+development active. Everyone wins.
 
 **Status**: Planning stage  
 **Review**: After reaching 100 active users

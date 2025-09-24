@@ -17,7 +17,11 @@ import {
   parseResponse,
   prepareRequestBody,
 } from "#executables/http-request/operations";
-import { buildUrlWithParams, parseErrorMessage, validateUrl } from "#executables/http-request/utils";
+import {
+  buildUrlWithParams,
+  parseErrorMessage,
+  validateUrl,
+} from "#executables/http-request/utils";
 
 // Types for HTTP request
 export type HttpRequestInput = {
@@ -53,7 +57,7 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      config: HttpRequestParameters
+      config: HttpRequestParameters,
     ): Promise<NodeExecutionResult> {
       const startTime = Date.now();
       const inputs = context.inputs as HttpRequestInput;
@@ -78,9 +82,9 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
           `Making ${method} request to ${validUrl.hostname}`,
           {
             method,
-            path   : validUrl.pathname,
+            path: validUrl.pathname,
             hasBody: !!body,
-          }
+          },
         );
 
         // Build final URL with query parameters
@@ -96,14 +100,17 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         headers = addAuthenticationHeaders(headers, auth);
 
         // Prepare request body
-        const { body: requestBody, headers: finalHeaders } =
-          prepareRequestBody(body, method, headers);
+        const { body: requestBody, headers: finalHeaders } = prepareRequestBody(
+          body,
+          method,
+          headers,
+        );
 
         // Prepare request options
         const requestOptions: RequestInit = {
           method,
-          headers : finalHeaders,
-          signal  : AbortSignal.timeout(config.timeout as number),
+          headers: finalHeaders,
+          signal: AbortSignal.timeout(config.timeout as number),
           redirect: (config.followRedirects as boolean) ? "follow" : "manual",
         };
 
@@ -113,9 +120,9 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         }
 
         context.log?.debug?.("Sending HTTP request", {
-          url        : finalUrl,
+          url: finalUrl,
           method,
-          hasBody    : !!requestBody,
+          hasBody: !!requestBody,
           headerCount: Object.keys(finalHeaders).length,
         });
 
@@ -124,7 +131,7 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
           finalUrl,
           requestOptions,
           config,
-          context
+          context,
         );
 
         const duration = Date.now() - startTime;
@@ -136,25 +143,25 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         const responseHeaders = extractResponseHeaders(response);
 
         const output: HttpRequestOutput = {
-          result    : data,
+          result: data,
           data,
-          status    : response.status,
+          status: response.status,
           statusText: response.statusText,
-          headers   : responseHeaders,
-          success   : response.ok,
+          headers: responseHeaders,
+          success: response.ok,
           duration,
-          url       : finalUrl,
-          ok        : response.ok,
+          url: finalUrl,
+          ok: response.ok,
         };
 
         context.log?.info?.(
           `HTTP request completed: ${response.status} ${response.statusText}`,
           {
-            status     : response.status,
-            ok         : response.ok,
+            status: response.status,
+            ok: response.ok,
             duration,
             contentType: response.headers.get("content-type"),
-          }
+          },
         );
 
         return {
@@ -166,11 +173,11 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
         const errorMessage = parseErrorMessage(error, config.timeout as number);
 
         context.log?.error?.("HTTP request failed", {
-          error : errorMessage,
+          error: errorMessage,
           duration,
           config: {
-            method : config.method,
-            url    : config.url,
+            method: config.method,
+            url: config.url,
             timeout: config.timeout,
             retries: config.retries,
           },
@@ -178,17 +185,17 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
           outputs: {
-            result    : null,
-            data      : null,
-            status    : 0,
+            result: null,
+            data: null,
+            status: 0,
             statusText: "",
-            headers   : {},
-            success   : false,
+            headers: {},
+            success: false,
             duration,
-            url       : "",
-            ok        : false,
+            url: "",
+            ok: false,
           },
         };
       }

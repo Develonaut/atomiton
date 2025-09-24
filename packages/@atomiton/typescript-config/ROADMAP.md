@@ -2,7 +2,8 @@
 
 ## Overview
 
-Shared TypeScript configuration package for consistent build settings across the Atomiton monorepo.
+Shared TypeScript configuration package for consistent build settings across the
+Atomiton monorepo.
 
 ## Current Architecture
 

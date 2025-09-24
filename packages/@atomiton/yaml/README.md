@@ -1,11 +1,13 @@
 # @atomiton/yaml
 
-High-performance YAML parsing and serialization utilities for the Atomiton ecosystem.
+High-performance YAML parsing and serialization utilities for the Atomiton
+ecosystem.
 
 ## Features
 
 - **Singleton API**: Clean ES6 class-based singleton interface
-- **Fast & Efficient**: Built on the performant `yaml` library with streaming support
+- **Fast & Efficient**: Built on the performant `yaml` library with streaming
+  support
 - **Type-Safe**: Full TypeScript support with comprehensive type definitions
 - **Error Handling**: Safe parsing with detailed error reporting
 - **File Operations**: Async file reading/writing utilities
@@ -44,7 +46,8 @@ const yamlString = yaml.stringify({
 
 ### Data Conversion Pattern
 
-The package provides explicit conversion methods following the [storage ↔ runtime pattern](./ARCHITECTURE.md):
+The package provides explicit conversion methods following the
+[storage ↔ runtime pattern](./ARCHITECTURE.md):
 
 ```typescript
 import { yaml } from "@atomiton/yaml";
@@ -179,13 +182,16 @@ The package provides a singleton `yaml` instance with the following methods:
 ### Conversion Methods
 
 - `yaml.fromYaml<T>(yamlString: string): T` - Convert YAML string to JSON object
-- `yaml.toYaml(jsonObject: unknown, options?: YamlStringifyOptions): string` - Convert JSON object to YAML string
+- `yaml.toYaml(jsonObject: unknown, options?: YamlStringifyOptions): string` -
+  Convert JSON object to YAML string
 - `yaml.fromJson<T>(jsonString: string): T` - Parse JSON string to object
-- `yaml.toJson(object: unknown, indent?: number): string` - Convert object to JSON string
+- `yaml.toJson(object: unknown, indent?: number): string` - Convert object to
+  JSON string
 
 ### Direct Utility Access
 
-For advanced users who need direct access to the underlying utilities, all functions are still available via direct import:
+For advanced users who need direct access to the underlying utilities, all
+functions are still available via direct import:
 
 ```typescript
 import { parseYaml, stringifyYaml } from "@atomiton/yaml";

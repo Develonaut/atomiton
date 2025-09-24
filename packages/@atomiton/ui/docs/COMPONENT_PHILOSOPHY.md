@@ -1,6 +1,8 @@
 # Component Philosophy
 
-> **Note**: This document extends the [Bento Box Principles](../../../docs/BENTO_BOX_PRINCIPLES.md) specifically for UI components.
+> **Note**: This document extends the
+> [Bento Box Principles](../../../docs/BENTO_BOX_PRINCIPLES.md) specifically for
+> UI components.
 
 ## Table of Contents
 
@@ -58,14 +60,16 @@ interface ButtonProps {
 
 1. **3-5 variants max** - Covers 95% of real use cases
 2. **Semantic tones** - Separate from visual variants
-3. **Composition over configuration** - Use multiple props, not compound variants
+3. **Composition over configuration** - Use multiple props, not compound
+   variants
 4. **Custom escape hatch** - Allow className/style for edge cases
 
 ## Style Props System
 
 ### The Power of Style Shortcuts
 
-Instead of forcing users to write className strings, provide intuitive style props:
+Instead of forcing users to write className strings, provide intuitive style
+props:
 
 ```tsx
 // ✅ GOOD - Style props for common needs
@@ -387,13 +391,15 @@ Our philosophy prioritizes:
 4. **Escape Hatches** - className/style for edge cases
 5. **Real Usage** - Build what's actually needed
 
-Remember: Every variant, prop, and option adds complexity. Default to simple, add complexity only when proven necessary.
+Remember: Every variant, prop, and option adds complexity. Default to simple,
+add complexity only when proven necessary.
 
 ## API Design Patterns
 
 ### Compound Components with Dot Notation
 
-Related components are grouped using dot notation, creating clear hierarchy and improving discoverability.
+Related components are grouped using dot notation, creating clear hierarchy and
+improving discoverability.
 
 ```tsx
 // ✅ Good - Clear relationship between components
@@ -416,7 +422,8 @@ Related components are grouped using dot notation, creating clear hierarchy and 
 
 ### Implicit State Sharing
 
-Compound components share state through React Context, eliminating prop drilling.
+Compound components share state through React Context, eliminating prop
+drilling.
 
 ```tsx
 // Parent manages state, children consume it implicitly
@@ -470,7 +477,8 @@ This convention ensures:
 
 ### Data Attributes for State
 
-Use data attributes instead of conditional classes for state visualization. This is a powerful pattern that solves multiple problems elegantly.
+Use data attributes instead of conditional classes for state visualization. This
+is a powerful pattern that solves multiple problems elegantly.
 
 #### Why Data Attributes?
 
@@ -683,7 +691,8 @@ export const Button = ({
 
 #### Best Practices
 
-1. **Use `undefined` for boolean attributes** - This removes the attribute when false
+1. **Use `undefined` for boolean attributes** - This removes the attribute when
+   false
 2. **Always include variant/size as values** - Even when they don't change
 3. **Keep state values semantic** - "loading", not "state-1"
 4. **Document your data attributes** - Make them part of your component's API
@@ -691,15 +700,20 @@ export const Button = ({
 
 ### Class Variance Authority (CVA)
 
-CVA is our chosen solution for managing component variants and their associated styles. It's a powerful pattern that solves the complexity of variant management elegantly.
+CVA is our chosen solution for managing component variants and their associated
+styles. It's a powerful pattern that solves the complexity of variant management
+elegantly.
 
 #### Prop Resolvers: The Foundation of Our System
 
-Before diving into CVA, it's important to understand **prop resolvers** - the core pattern that powers our component system.
+Before diving into CVA, it's important to understand **prop resolvers** - the
+core pattern that powers our component system.
 
 **What is a Prop Resolver?**
 
-A prop resolver is a pure function that transforms one set of props into another. It's the foundation for handling prop aliases, defaults, and transformations:
+A prop resolver is a pure function that transforms one set of props into
+another. It's the foundation for handling prop aliases, defaults, and
+transformations:
 
 ```tsx
 // Simple prop resolver
@@ -755,7 +769,8 @@ const myComponentResolver = composePropResolvers(
 
 **Standard System Props Map**
 
-We maintain a centralized map of standard prop transformations that all components support:
+We maintain a centralized map of standard prop transformations that all
+components support:
 
 ```tsx
 export const SYSTEM_PROPS_MAP = {
@@ -791,7 +806,10 @@ export const SYSTEM_PROPS_MAP = {
 
 #### What is CVA?
 
-Class Variance Authority (CVA) is a library that provides a declarative API for managing component variants. Think of it as a "style recipe generator" - you define the ingredients (variants) and CVA handles creating the right combination of classes based on the props you pass.
+Class Variance Authority (CVA) is a library that provides a declarative API for
+managing component variants. Think of it as a "style recipe generator" - you
+define the ingredients (variants) and CVA handles creating the right combination
+of classes based on the props you pass.
 
 ```tsx
 // Without CVA - Manual variant management is error-prone
@@ -1133,7 +1151,9 @@ CVA aligns perfectly with our component philosophy:
 - **Flexibility**: Works with our `cn` utility and className overrides
 - **Testability**: Variants can be tested in isolation
 
-By using CVA, we get a powerful, type-safe system for managing component variants while keeping our components clean and focused on behavior rather than styling logic.
+By using CVA, we get a powerful, type-safe system for managing component
+variants while keeping our components clean and focused on behavior rather than
+styling logic.
 
 ### Consistent Naming Conventions
 
@@ -1148,8 +1168,10 @@ By using CVA, we get a powerful, type-safe system for managing component variant
 
 - **Prop name**: Always use `side` for positioning components
 - **Values**: `"top"` | `"right"` | `"bottom"` | `"left"`
-- **Extended values** (when needed): `"top-left"` | `"top-right"` | `"bottom-left"` | `"bottom-right"`
-- **Applies to**: Panel, Sheet, Tooltip, Popover, Drawer, Toast, and any floating/positioned elements
+- **Extended values** (when needed): `"top-left"` | `"top-right"` |
+  `"bottom-left"` | `"bottom-right"`
+- **Applies to**: Panel, Sheet, Tooltip, Popover, Drawer, Toast, and any
+  floating/positioned elements
 
 ```tsx
 // ✅ Consistent across all components

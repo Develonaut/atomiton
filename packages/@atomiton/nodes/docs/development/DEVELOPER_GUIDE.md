@@ -2,7 +2,9 @@
 
 ## Overview
 
-This guide walks you through creating nodes for the Atomiton system. Nodes are reusable units that process data, and they can be combined to create complex workflows.
+This guide walks you through creating nodes for the Atomiton system. Nodes are
+reusable units that process data, and they can be combined to create complex
+workflows.
 
 ## Table of Contents
 
@@ -23,10 +25,12 @@ Define what parameters your node accepts:
 
 ```typescript
 // src/schemas/text-transform.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 export const textTransformSchema = z.object({
-  operation: z.enum(['uppercase', 'lowercase', 'capitalize']).default('uppercase'),
+  operation: z
+    .enum(["uppercase", "lowercase", "capitalize"])
+    .default("uppercase"),
   trimWhitespace: z.boolean().default(true),
 });
 
@@ -39,61 +43,66 @@ Define the node's interface and metadata:
 
 ```typescript
 // src/definitions/text-transform/definition.ts
-import { createNodeDefinition, createNodeMetadata, createNodeParameters, createNodePort } from '#core/factories';
-import { textTransformSchema } from '#schemas/text-transform';
+import {
+  createNodeDefinition,
+  createNodeMetadata,
+  createNodeParameters,
+  createNodePort,
+} from "#core/factories";
+import { textTransformSchema } from "#schemas/text-transform";
 
 export const textTransformDefinition = createNodeDefinition({
-  id: 'text-transform',
-  name: 'Text Transform',
-  
+  id: "text-transform",
+  name: "Text Transform",
+
   metadata: createNodeMetadata({
-    type: 'text-transform',
-    version: '1.0.0',
-    author: 'System',
-    description: 'Transform text with various operations',
-    category: 'data',
-    icon: 'text',
+    type: "text-transform",
+    version: "1.0.0",
+    author: "System",
+    description: "Transform text with various operations",
+    category: "data",
+    icon: "text",
   }),
-  
+
   parameters: createNodeParameters({
     schema: textTransformSchema,
     defaults: {
-      operation: 'uppercase',
+      operation: "uppercase",
       trimWhitespace: true,
     },
     fields: {
       operation: {
-        controlType: 'select',
-        label: 'Operation',
+        controlType: "select",
+        label: "Operation",
         options: [
-          { value: 'uppercase', label: 'UPPERCASE' },
-          { value: 'lowercase', label: 'lowercase' },
-          { value: 'capitalize', label: 'Capitalize' },
+          { value: "uppercase", label: "UPPERCASE" },
+          { value: "lowercase", label: "lowercase" },
+          { value: "capitalize", label: "Capitalize" },
         ],
       },
       trimWhitespace: {
-        controlType: 'boolean',
-        label: 'Trim Whitespace',
+        controlType: "boolean",
+        label: "Trim Whitespace",
       },
     },
   }),
-  
+
   inputPorts: [
     createNodePort({
-      id: 'text',
-      name: 'Text',
-      type: 'input',
-      dataType: 'string',
+      id: "text",
+      name: "Text",
+      type: "input",
+      dataType: "string",
       required: true,
     }),
   ],
-  
+
   outputPorts: [
     createNodePort({
-      id: 'text',
-      name: 'Transformed Text',
-      type: 'output',
-      dataType: 'string',
+      id: "text",
+      name: "Transformed Text",
+      type: "output",
+      dataType: "string",
     }),
   ],
 });
@@ -105,52 +114,53 @@ Implement the business logic:
 
 ```typescript
 // src/executables/text-transform/executable.ts
-import { createNodeExecutable } from '#core/factories';
-import { textTransformSchema } from '#schemas/text-transform';
-import type { TextTransformConfig } from '#schemas/text-transform';
+import { createNodeExecutable } from "#core/factories";
+import { textTransformSchema } from "#schemas/text-transform";
+import type { TextTransformConfig } from "#schemas/text-transform";
 
-export const textTransformExecutable = createNodeExecutable<TextTransformConfig>({
-  schema: textTransformSchema,
-  
-  async execute(context, config) {
-    let text = context.inputs.text as string;
-    
-    if (!text) {
+export const textTransformExecutable =
+  createNodeExecutable<TextTransformConfig>({
+    schema: textTransformSchema,
+
+    async execute(context, config) {
+      let text = context.inputs.text as string;
+
+      if (!text) {
+        return {
+          success: false,
+          error: "Text input is required",
+        };
+      }
+
+      // Apply whitespace trimming
+      if (config.trimWhitespace) {
+        text = text.trim();
+      }
+
+      // Apply transformation
+      let result: string;
+      switch (config.operation) {
+        case "uppercase":
+          result = text.toUpperCase();
+          break;
+        case "lowercase":
+          result = text.toLowerCase();
+          break;
+        case "capitalize":
+          result = text.replace(/\b\w/g, (l) => l.toUpperCase());
+          break;
+        default:
+          result = text;
+      }
+
       return {
-        success: false,
-        error: 'Text input is required',
+        success: true,
+        outputs: {
+          text: result,
+        },
       };
-    }
-    
-    // Apply whitespace trimming
-    if (config.trimWhitespace) {
-      text = text.trim();
-    }
-    
-    // Apply transformation
-    let result: string;
-    switch (config.operation) {
-      case 'uppercase':
-        result = text.toUpperCase();
-        break;
-      case 'lowercase':
-        result = text.toLowerCase();
-        break;
-      case 'capitalize':
-        result = text.replace(/\b\w/g, l => l.toUpperCase());
-        break;
-      default:
-        result = text;
-    }
-    
-    return {
-      success: true,
-      outputs: {
-        text: result,
-      },
-    };
-  },
-});
+    },
+  });
 ```
 
 ### 4. Register the Node
@@ -161,13 +171,13 @@ Add your node to the registries:
 // src/definitions/registry.ts
 export const nodeDefinitions = {
   // ... existing nodes
-  'text-transform': textTransformDefinition,
+  "text-transform": textTransformDefinition,
 };
 
 // src/executables/registry.ts
 export const nodeExecutables = {
   // ... existing nodes
-  'text-transform': textTransformExecutable,
+  "text-transform": textTransformExecutable,
 };
 ```
 
@@ -196,6 +206,7 @@ text-transform/
 ### Step 1: Design Your Node
 
 Before coding, answer these questions:
+
 - What does the node do?
 - What inputs does it need?
 - What outputs does it produce?
@@ -209,13 +220,13 @@ Use Zod to define parameter validation:
 const schema = z.object({
   // Required fields
   url: z.string().url(),
-  
+
   // Optional with defaults
-  method: z.enum(['GET', 'POST', 'PUT', 'DELETE']).default('GET'),
-  
+  method: z.enum(["GET", "POST", "PUT", "DELETE"]).default("GET"),
+
   // Nested objects
   headers: z.record(z.string()).optional(),
-  
+
   // Numbers with constraints
   timeout: z.number().min(0).max(60000).default(30000),
 });
@@ -227,22 +238,22 @@ The definition describes the node's interface:
 
 ```typescript
 const definition = createNodeDefinition({
-  id: 'unique-node-id',
-  name: 'Human Readable Name',
-  
+  id: "unique-node-id",
+  name: "Human Readable Name",
+
   metadata: {
-    type: 'node-type',      // Unique identifier
-    category: 'io',         // io, data, logic, etc.
-    icon: 'file',          // Icon name
-    description: 'What this node does',
+    type: "node-type", // Unique identifier
+    category: "io", // io, data, logic, etc.
+    icon: "file", // Icon name
+    description: "What this node does",
   },
-  
+
   parameters: {
     schema,
     defaults,
-    fields,  // UI configuration
+    fields, // UI configuration
   },
-  
+
   inputPorts: [],
   outputPorts: [],
 });
@@ -255,15 +266,15 @@ The executable contains the actual business logic:
 ```typescript
 const executable = createNodeExecutable({
   schema,
-  
+
   async execute(context, config) {
     try {
       // Access inputs
       const input = context.inputs.myInput;
-      
+
       // Perform operations
       const result = await doSomething(input, config);
-      
+
       // Return outputs
       return {
         success: true,
@@ -289,35 +300,35 @@ Test your node's definition and executable:
 
 ```typescript
 // definition.test.ts
-describe('TextTransform Definition', () => {
-  it('should have correct ports', () => {
+describe("TextTransform Definition", () => {
+  it("should have correct ports", () => {
     expect(textTransformDefinition.inputPorts).toHaveLength(1);
     expect(textTransformDefinition.outputPorts).toHaveLength(1);
   });
-  
-  it('should validate parameters', () => {
+
+  it("should validate parameters", () => {
     const result = textTransformDefinition.parameters.safeParse({
-      operation: 'invalid',
+      operation: "invalid",
     });
     expect(result.success).toBe(false);
   });
 });
 
 // executable.test.ts
-describe('TextTransform Executable', () => {
-  it('should transform to uppercase', async () => {
+describe("TextTransform Executable", () => {
+  it("should transform to uppercase", async () => {
     const context = {
-      nodeId: 'test',
-      inputs: { text: 'hello' },
+      nodeId: "test",
+      inputs: { text: "hello" },
     };
-    
+
     const result = await textTransformExecutable.execute(context, {
-      operation: 'uppercase',
+      operation: "uppercase",
       trimWhitespace: false,
     });
-    
+
     expect(result.success).toBe(true);
-    expect(result.outputs?.text).toBe('HELLO');
+    expect(result.outputs?.text).toBe("HELLO");
   });
 });
 ```
@@ -328,12 +339,12 @@ Measure performance:
 
 ```typescript
 // executable.bench.ts
-import { bench, describe } from 'vitest';
+import { bench, describe } from "vitest";
 
-describe('TextTransform Performance', () => {
-  bench('uppercase transformation', () => {
-    const context = { inputs: { text: 'test'.repeat(1000) } };
-    await executable.execute(context, { operation: 'uppercase' });
+describe("TextTransform Performance", () => {
+  bench("uppercase transformation", () => {
+    const context = { inputs: { text: "test".repeat(1000) } };
+    await executable.execute(context, { operation: "uppercase" });
   });
 });
 ```
@@ -358,11 +369,11 @@ async execute(context, config) {
       error: 'Missing required input',
     };
   }
-  
+
   try {
     // Main logic
     const result = await process(context.inputs);
-    
+
     return {
       success: true,
       outputs: { result },
@@ -370,7 +381,7 @@ async execute(context, config) {
   } catch (error) {
     // Log for debugging
     context.log?.error('Processing failed', error);
-    
+
     // Return user-friendly error
     return {
       success: false,
@@ -385,17 +396,17 @@ async execute(context, config) {
 For long-running operations:
 
 ```typescript
-context.reportProgress?.(0, 'Starting processing');
+context.reportProgress?.(0, "Starting processing");
 
 for (let i = 0; i < items.length; i++) {
   await processItem(items[i]);
   context.reportProgress?.(
-    (i + 1) / items.length * 100,
-    `Processed ${i + 1} of ${items.length}`
+    ((i + 1) / items.length) * 100,
+    `Processed ${i + 1} of ${items.length}`,
   );
 }
 
-context.reportProgress?.(100, 'Complete');
+context.reportProgress?.(100, "Complete");
 ```
 
 ### 4. Resource Cleanup
@@ -425,17 +436,17 @@ For processing large datasets:
 async execute(context, config) {
   const stream = context.inputs.stream;
   const results = [];
-  
+
   for await (const chunk of stream) {
     const processed = processChunk(chunk);
     results.push(processed);
-    
+
     // Check for cancellation
     if (context.signal?.aborted) {
       throw new Error('Operation cancelled');
     }
   }
-  
+
   return {
     success: true,
     outputs: { results },
@@ -448,14 +459,14 @@ async execute(context, config) {
 ```typescript
 async execute(context, config) {
   const timeoutMs = config.timeout || 30000;
-  
+
   const result = await Promise.race([
     performOperation(),
-    new Promise((_, reject) => 
+    new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Timeout')), timeoutMs)
     ),
   ]);
-  
+
   return {
     success: true,
     outputs: { result },
@@ -470,20 +481,20 @@ import { readFile, writeFile } from 'fs/promises';
 
 async execute(context, config) {
   const { filePath } = config;
-  
+
   // Read file
   const content = await readFile(filePath, 'utf-8');
-  
+
   // Process
   const processed = transform(content);
-  
+
   // Write result
   const outputPath = filePath.replace('.txt', '.processed.txt');
   await writeFile(outputPath, processed);
-  
+
   return {
     success: true,
-    outputs: { 
+    outputs: {
       path: outputPath,
       size: processed.length,
     },
@@ -501,16 +512,16 @@ async execute(context, config) {
     body: config.body ? JSON.stringify(config.body) : undefined,
     signal: context.signal, // Pass abort signal
   });
-  
+
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   }
-  
+
   const data = await response.json();
-  
+
   return {
     success: true,
-    outputs: { 
+    outputs: {
       data,
       status: response.status,
       headers: Object.fromEntries(response.headers),

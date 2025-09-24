@@ -1,6 +1,7 @@
 # @atomiton/events
 
-Type-safe event system for Atomiton workflow automation with optional Electron IPC support.
+Type-safe event system for Atomiton workflow automation with optional Electron
+IPC support.
 
 ## Installation
 
@@ -58,7 +59,8 @@ const ipcBus = createEventBus<MyEvents>("app", {
 
 ### Event Bus
 
-An event bus is an isolated communication channel for a specific domain. Events from one bus don't leak to others.
+An event bus is an isolated communication channel for a specific domain. Events
+from one bus don't leak to others.
 
 ```typescript
 const uiBus = createEventBus<UIEvents>("ui");
@@ -99,7 +101,8 @@ Creates a new event bus for the specified domain.
 
 #### Parameters
 
-- `domain: string` - Unique identifier for this bus (e.g., "ui", "data", "conductor")
+- `domain: string` - Unique identifier for this bus (e.g., "ui", "data",
+  "conductor")
 - `config?: EventBusConfig` - Optional configuration
 
 #### Browser Config

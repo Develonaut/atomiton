@@ -36,9 +36,11 @@ None
 
 ## Notes
 
-This package provides shared ESLint configurations for the Atomiton monorepo. Focus is on consistency across packages while maintaining flexibility for package-specific needs. Currently provides base config and React-specific config with plans to expand based on actual usage patterns.
+This package provides shared ESLint configurations for the Atomiton monorepo.
+Focus is on consistency across packages while maintaining flexibility for
+package-specific needs. Currently provides base config and React-specific config
+with plans to expand based on actual usage patterns.
 
 ---
 
-**Last Updated**: 2025-09-05
-**Status**: 🟢 Active Development
+**Last Updated**: 2025-09-05 **Status**: 🟢 Active Development

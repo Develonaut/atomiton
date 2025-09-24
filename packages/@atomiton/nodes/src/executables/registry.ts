@@ -35,10 +35,7 @@ nodeExecutableRegistry.set(
   "csv-reader",
   csvReaderExecutable as NodeExecutable<unknown>,
 );
-nodeExecutableRegistry.set(
-  "group",
-  groupExecutable as NodeExecutable<unknown>,
-);
+nodeExecutableRegistry.set("group", groupExecutable as NodeExecutable<unknown>);
 nodeExecutableRegistry.set(
   "image-composite",
   imageCompositeExecutable as NodeExecutable<unknown>,

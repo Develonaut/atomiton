@@ -18,8 +18,8 @@
     "format:fix": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "prepare-commit": "./scripts/prepare-commit.sh",
     "test": "vitest run",
-    "test:integration": "vitest run src/__tests__/integration",
-    "test:benchmark": "vitest bench --run || echo 'No benchmark tests yet'",
+    "test:watch": "vitest watch",
+    "test:integration": "vitest run src/integration",
     "kill:servers": "npm run kill:ports",
     "kill": "kill-port --port 5173 || true",
     "kill:ports": "kill-port --port 5173,5174,5175 || true"

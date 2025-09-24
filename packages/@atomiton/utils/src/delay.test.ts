@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { delay } from "./delay";
+import { delay } from "#delay";
 
 describe("delay", () => {
   it("should resolve after specified milliseconds", async () => {

@@ -2,13 +2,16 @@
 
 ## Overview
 
-Visual editor package for the Atomiton Blueprint automation platform. Provides domain-agnostic components for building node-based editors with React Flow integration.
+Visual editor package for the Atomiton Blueprint automation platform. Provides
+domain-agnostic components for building node-based editors with React Flow
+integration.
 
 ## Current Status: January 2025
 
 ### 🎯 Primary Focus
 
-**Node Inspector Implementation** - Enabling configuration of nodes through property panels
+**Node Inspector Implementation** - Enabling configuration of nodes through
+property panels
 
 ### 📊 Architecture Status
 
@@ -48,14 +51,16 @@ Based on our [Architecture Documentation](./src/docs/README.md):
 
 #### Node Configuration System
 
-- ✅ Node configuration architecture designed ([docs](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md))
+- ✅ Node configuration architecture designed
+  ([docs](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md))
 - ✅ Property panel control mapping system specified
 - ✅ React Hook Form + Zod foundation established
 - ✅ Basic property display for selected nodes
 
 ### 🔧 Current Limitations
 
-1. **Limited Node Configuration** - Can display properties but can't edit them yet
+1. **Limited Node Configuration** - Can display properties but can't edit them
+   yet
 2. **No Data Connections** - Can't connect nodes for data flow
 3. **No Execution** - Can't run workflows
 4. **No Persistence** - Can't save/load Blueprints
@@ -83,9 +88,11 @@ Based on our [Architecture Documentation](./src/docs/README.md):
 
 ### Implementation Plan
 
-**Next Phase**: Build out the property field components and React Hook Form integration
+**Next Phase**: Build out the property field components and React Hook Form
+integration
 
-1. **Control Components** (following [architecture](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md))
+1. **Control Components** (following
+   [architecture](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md))
    - TextField for strings
    - NumberField for numbers
    - SelectField for enums
@@ -120,6 +127,5 @@ Based on our [Architecture Documentation](./src/docs/README.md):
 
 ---
 
-**Last Updated**: 2025-01-10
-**Package Version**: 0.0.1
-**Build Status**: ✅ Passing
+**Last Updated**: 2025-01-10 **Package Version**: 0.0.1 **Build Status**: ✅
+Passing

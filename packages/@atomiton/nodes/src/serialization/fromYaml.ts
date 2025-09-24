@@ -158,7 +158,8 @@ function parseParameters(params?: Record<string, YamlParameter>) {
         min: param.min,
         max: param.max,
         step: param.step,
-        options: (param.options as Array<{ value: string; label: string }>) || [],
+        options:
+          (param.options as Array<{ value: string; label: string }>) || [],
       };
     }
 
@@ -180,7 +181,13 @@ function parsePorts(ports: YamlPort[]): NodePort[] {
     return createNodePort(portType, {
       id: port.id,
       name: port.name,
-      dataType: (port.dataType || "any") as "string" | "number" | "boolean" | "object" | "array" | "any",
+      dataType: (port.dataType || "any") as
+        | "string"
+        | "number"
+        | "boolean"
+        | "object"
+        | "array"
+        | "any",
       required: port.required || false,
       multiple: port.multiple || false,
       description: port.description,

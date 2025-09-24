@@ -18,25 +18,25 @@ export const NODE_CATEGORIES_ORDER = [
   "communication",
   "utility",
   "user",
-  "templates"
+  "templates",
 ];
 
 /**
  * Display names for node categories
  */
 export const NODE_CATEGORY_DISPLAY_NAMES: Record<string, string> = {
-  io           : "Input/Output",
-  data         : "Data Processing",
-  logic        : "Logic & Control",
-  media        : "Media Processing",
-  system       : "System Operations",
-  ai           : "AI & Machine Learning",
-  database     : "Database",
-  analytics    : "Analytics & Monitoring",
+  io: "Input/Output",
+  data: "Data Processing",
+  logic: "Logic & Control",
+  media: "Media Processing",
+  system: "System Operations",
+  ai: "AI & Machine Learning",
+  database: "Database",
+  analytics: "Analytics & Monitoring",
   communication: "Communication",
-  utility      : "Utilities",
-  user         : "User Created",
-  templates    : "Templates"
+  utility: "Utilities",
+  user: "User Created",
+  templates: "Templates",
 };
 
 /**
@@ -44,16 +44,16 @@ export const NODE_CATEGORY_DISPLAY_NAMES: Record<string, string> = {
  */
 export const DEFAULT_EXECUTION_LIMITS = {
   maxExecutionTimeMs: 300000, // 5 minutes
-  maxMemoryMB       : 512,
-  maxRetries        : 3,
-  retryDelayMs      : 1000,
+  maxMemoryMB: 512,
+  maxRetries: 3,
+  retryDelayMs: 1000,
 };
 
 /**
  * Node port limits
  */
 export const NODE_PORT_LIMITS = {
-  maxInputPorts : 20,
+  maxInputPorts: 20,
   maxOutputPorts: 20,
   maxConnections: 100,
 };

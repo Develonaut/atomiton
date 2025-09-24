@@ -2,7 +2,8 @@
 
 ## Overview
 
-This directory contains competitive analysis of node-based editors and workflow automation platforms to inform Atomiton's product development strategy.
+This directory contains competitive analysis of node-based editors and workflow
+automation platforms to inform Atomiton's product development strategy.
 
 ## Purpose
 
@@ -16,11 +17,15 @@ This directory contains competitive analysis of node-based editors and workflow 
 
 ### Completed Analyses
 
-1. **[n8n Analysis](./n8n-analysis.md)** - Comprehensive review of n8n's node editor, identifying strengths in code flexibility and self-hosting, with opportunities in UX improvements and debugging tools.
+1. **[n8n Analysis](./n8n-analysis.md)** - Comprehensive review of n8n's node
+   editor, identifying strengths in code flexibility and self-hosting, with
+   opportunities in UX improvements and debugging tools.
 
 ### Framework
 
-- **[Competitor Analysis Framework](./COMPETITOR_ANALYSIS_FRAMEWORK.md)** - Standardized template for analyzing node editors across 10 key dimensions with scoring rubric.
+- **[Competitor Analysis Framework](./COMPETITOR_ANALYSIS_FRAMEWORK.md)** -
+  Standardized template for analyzing node editors across 10 key dimensions with
+  scoring rubric.
 
 ## Key Findings Summary
 

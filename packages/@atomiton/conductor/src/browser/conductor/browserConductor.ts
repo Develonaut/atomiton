@@ -88,7 +88,7 @@ export function createBrowserConductor(options?: BrowserConductorOptions) {
     // Validate request
     const validation = validateRequest(request);
     if (!validation.valid) {
-      throw new Error(`Invalid request: ${validation.errors.join(', ')}`);
+      throw new Error(`Invalid request: ${validation.errors.join(", ")}`);
     }
 
     return new Promise((resolve, reject) => {

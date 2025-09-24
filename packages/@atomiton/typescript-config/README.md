@@ -4,7 +4,9 @@ Shared TypeScript configuration for the Atomiton monorepo.
 
 ## Overview
 
-This package provides centralized TypeScript configurations that are shared across all packages in the Atomiton monorepo. It includes base configurations and specialized configs for React libraries.
+This package provides centralized TypeScript configurations that are shared
+across all packages in the Atomiton monorepo. It includes base configurations
+and specialized configs for React libraries.
 
 ## Installation
 

@@ -1,15 +1,18 @@
 # Changelog
 
-All notable changes to the @atomiton/form package will be documented in this file.
+All notable changes to the @atomiton/form package will be documented in this
+file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Changed
 
-- Complete rewrite from over-engineered custom store to minimal React Hook Form + Zod wrapper
+- Complete rewrite from over-engineered custom store to minimal React Hook
+  Form + Zod wrapper
 - API changed from `uiMetadata` to `fields` parameter to match node interface
 - Reduced from 1,200+ lines to ~150 lines (87% reduction)
 
@@ -18,7 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - React Hook Form integration for optimal performance
 - Zod schema-first approach with automatic field generation
 - Direct compatibility with Atomiton node field configurations
-- Support for all node control types (text, textarea, number, boolean, select, etc.)
+- Support for all node control types (text, textarea, number, boolean, select,
+  etc.)
 - TypeScript support with full type inference
 - Comprehensive documentation and examples
 

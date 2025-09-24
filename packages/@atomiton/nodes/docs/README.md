@@ -2,13 +2,17 @@
 
 ## Overview
 
-The nodes package implements a unified architecture where **everything is a node**. There's no distinction between "atomic" and "composite" nodes - some nodes simply have children (groups), while others don't (leaf nodes). Any node can connect to any other node via edges.
+The nodes package implements a unified architecture where **everything is a
+node**. There's no distinction between "atomic" and "composite" nodes - some
+nodes simply have children (groups), while others don't (leaf nodes). Any node
+can connect to any other node via edges.
 
 ## Core Concepts
 
 ### Mental Model: "Everything is a Node"
 
 Think of nodes like DOM elements:
+
 - All elements share the same interface
 - Some elements have children, some don't
 - The presence of children determines behavior, not a "type" field
@@ -16,32 +20,39 @@ Think of nodes like DOM elements:
 
 ### Key Principles
 
-1. **Unified Interface** - All nodes implement the same `NodeDefinition` structure
+1. **Unified Interface** - All nodes implement the same `NodeDefinition`
+   structure
 2. **Functional Composition** - Factory functions and composition over classes
-3. **Environment Separation** - Browser gets definitions, Node.js gets executables
+3. **Environment Separation** - Browser gets definitions, Node.js gets
+   executables
 4. **Type Safety** - Full TypeScript support with Zod validation
 
 ## Quick Start
 
 ### Browser (Definitions Only)
+
 ```typescript
-import { getNodeDefinition, getAllNodeDefinitions } from '@atomiton/nodes/definitions';
+import {
+  getNodeDefinition,
+  getAllNodeDefinitions,
+} from "@atomiton/nodes/definitions";
 
 // Get a specific node definition
-const httpNode = getNodeDefinition('http-request');
+const httpNode = getNodeDefinition("http-request");
 
 // Get all available definitions
 const allNodes = getAllNodeDefinitions();
 ```
 
 ### Desktop/Server (Executables)
+
 ```typescript
-import { getNodeExecutable } from '@atomiton/nodes/executables';
-import { getNodeDefinition } from '@atomiton/nodes/definitions';
+import { getNodeExecutable } from "@atomiton/nodes/executables";
+import { getNodeDefinition } from "@atomiton/nodes/definitions";
 
 // Get both definition and executable
-const definition = getNodeDefinition('http-request');
-const executable = getNodeExecutable('http-request');
+const definition = getNodeDefinition("http-request");
+const executable = getNodeExecutable("http-request");
 
 // Execute the node
 const result = await executable.execute(context);
@@ -61,15 +72,18 @@ const result = await executable.execute(context);
 
 ## Creating Custom Nodes
 
-See the [Developer Guide](./development/DEVELOPER_GUIDE.md) for detailed instructions on creating your own nodes.
+See the [Developer Guide](./development/DEVELOPER_GUIDE.md) for detailed
+instructions on creating your own nodes.
 
 ## Architecture
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed architecture documentation.
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed architecture
+documentation.
 
 ## Templates
 
 Pre-built workflow templates are available:
+
 - **Hello World** - Basic workflow example
 - **Data Transform** - CSV processing pipeline
 - **Image Processor** - Batch image processing

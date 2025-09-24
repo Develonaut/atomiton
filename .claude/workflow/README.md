@@ -1,14 +1,20 @@
 # Workflow Documentation
 
-This directory contains all workflow-related documentation for Claude and agents.
+This directory contains all workflow-related documentation for Claude and
+agents.
 
 ## 📋 Core Documents
 
-1. **[MANDATORY_CHECKLIST.md](./MANDATORY_CHECKLIST.md)** - Pre-work checklist that MUST be followed
-2. **[EXECUTION_PLAN.md](./EXECUTION_PLAN.md)** - Complete workflow steps and requirements
-3. **[AGENT_INVOCATION.md](./AGENT_INVOCATION.md)** - How to properly invoke agents with workflow
-4. **[SYSTEM_PROMPT_TEMPLATE.md](./SYSTEM_PROMPT_TEMPLATE.md)** - Template for agent prompts
-5. **[ENFORCEMENT_CHECKLIST.md](./ENFORCEMENT_CHECKLIST.md)** - Quick reference for verification
+1. **[MANDATORY_CHECKLIST.md](./MANDATORY_CHECKLIST.md)** - Pre-work checklist
+   that MUST be followed
+2. **[EXECUTION_PLAN.md](./EXECUTION_PLAN.md)** - Complete workflow steps and
+   requirements
+3. **[AGENT_INVOCATION.md](./AGENT_INVOCATION.md)** - How to properly invoke
+   agents with workflow
+4. **[SYSTEM_PROMPT_TEMPLATE.md](./SYSTEM_PROMPT_TEMPLATE.md)** - Template for
+   agent prompts
+5. **[ENFORCEMENT_CHECKLIST.md](./ENFORCEMENT_CHECKLIST.md)** - Quick reference
+   for verification
 
 ## 🚨 Key Rules
 

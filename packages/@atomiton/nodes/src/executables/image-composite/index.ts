@@ -15,7 +15,10 @@ import {
   getImageMetadata,
   performImageComposition,
 } from "#executables/image-composite/operations";
-import { createTempFilePath, validateImageInput } from "#executables/image-composite/utils";
+import {
+  createTempFilePath,
+  validateImageInput,
+} from "#executables/image-composite/utils";
 
 export type ImageCompositeOutput = {
   result: string;
@@ -32,7 +35,7 @@ export type ImageCompositeOutput = {
  */
 function getInputValue<T>(
   context: NodeExecutionContext,
-  key: string
+  key: string,
 ): T | undefined {
   return context.inputs?.[key] as T | undefined;
 }
@@ -44,14 +47,14 @@ export const imageCompositeExecutable: NodeExecutable<ImageCompositeParameters> 
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      config: ImageCompositeParameters
+      config: ImageCompositeParameters,
     ): Promise<NodeExecutionResult> {
       try {
         // Get inputs
         const baseImageInput = getInputValue<unknown>(context, "baseImage");
         const overlayImageInput = getInputValue<unknown>(
           context,
-          "overlayImage"
+          "overlayImage",
         );
         const imagesInput = getInputValue<unknown[]>(context, "images");
 
@@ -64,22 +67,22 @@ export const imageCompositeExecutable: NodeExecutable<ImageCompositeParameters> 
             .filter(Boolean) as ImageInput[]) || [];
 
         context.log?.info?.(`Starting image composite operation`, {
-          operation      : config.operation,
-          hasBaseImage   : !!baseImage,
+          operation: config.operation,
+          hasBaseImage: !!baseImage,
           hasOverlayImage: !!overlayImage,
-          imageCount     : images.length,
+          imageCount: images.length,
         });
 
         // Validate operation requirements
         if (config.operation === "overlay" && (!baseImage || !overlayImage)) {
           throw new Error(
-            "Overlay operation requires both baseImage and overlayImage"
+            "Overlay operation requires both baseImage and overlayImage",
           );
         }
 
         if (config.operation === "merge" && images.length < 2) {
           throw new Error(
-            "Merge operation requires at least 2 images in the images array"
+            "Merge operation requires at least 2 images in the images array",
           );
         }
 
@@ -101,7 +104,7 @@ export const imageCompositeExecutable: NodeExecutable<ImageCompositeParameters> 
           { baseImage, overlayImage, images },
           outputPath,
           config,
-          context
+          context,
         );
 
         // Get output metadata
@@ -112,21 +115,21 @@ export const imageCompositeExecutable: NodeExecutable<ImageCompositeParameters> 
         const finalHeight = (config.height as number) || metadata.height;
 
         const output: ImageCompositeOutput = {
-          result   : outputPath,
+          result: outputPath,
           imagePath: outputPath,
-          width    : finalWidth,
-          height   : finalHeight,
-          format   : config.outputFormat as string,
-          size     : metadata.size,
-          success  : true,
+          width: finalWidth,
+          height: finalHeight,
+          format: config.outputFormat as string,
+          size: metadata.size,
+          success: true,
         };
 
         context.log?.info?.(`Image composite completed successfully`, {
           outputPath,
-          width : finalWidth,
+          width: finalWidth,
           height: finalHeight,
           format: config.outputFormat,
-          size  : metadata.size,
+          size: metadata.size,
         });
 
         return {
@@ -144,15 +147,15 @@ export const imageCompositeExecutable: NodeExecutable<ImageCompositeParameters> 
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
           outputs: {
-            result   : "",
+            result: "",
             imagePath: "",
-            width    : 0,
-            height   : 0,
-            format   : config.outputFormat,
-            size     : 0,
-            success  : false,
+            width: 0,
+            height: 0,
+            format: config.outputFormat,
+            size: 0,
+            success: false,
           },
         };
       }

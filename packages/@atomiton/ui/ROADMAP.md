@@ -2,11 +2,16 @@
 
 ## Vision
 
-Build a lightweight, composable UI framework that combines the best patterns from modern component libraries with a CSS-first approach using Tailwind. This framework will serve Atomiton's needs while being potentially useful for the broader developer community.
+Build a lightweight, composable UI framework that combines the best patterns
+from modern component libraries with a CSS-first approach using Tailwind. This
+framework will serve Atomiton's needs while being potentially useful for the
+broader developer community.
 
 ## Current State (v0.1.0)
 
-We have a Vite app with 60+ components, many of which are highly specific to the Atomiton application. Our goal is NOT to build a generic UI library, but to create a clean, maintainable component system for our specific needs.
+We have a Vite app with 60+ components, many of which are highly specific to the
+Atomiton application. Our goal is NOT to build a generic UI library, but to
+create a clean, maintainable component system for our specific needs.
 
 ## Phase 1: Foundation (✅ COMPLETE)
 

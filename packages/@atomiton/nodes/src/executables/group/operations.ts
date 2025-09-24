@@ -16,7 +16,11 @@ import {
 } from "#executables/group/executionUtils";
 import type { GroupGraph } from "#executables/group/types";
 
-export type { GroupGraph, ExecutableNode, NodeEdge } from "#executables/group/types";
+export type {
+  GroupGraph,
+  ExecutableNode,
+  NodeEdge,
+} from "#executables/group/types";
 
 /**
  * Execute nodes in sequence

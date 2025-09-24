@@ -50,10 +50,10 @@ export function logExecutionResult(
     : `Command completed with exit code ${result.exitCode}`;
 
   context.log?.[logLevel]?.(message, {
-    exitCode    : result.exitCode,
+    exitCode: result.exitCode,
     duration,
     stdoutLength: result.stdout.length,
     stderrLength: result.stderr.length,
-    timedOut    : result.timedOut,
+    timedOut: result.timedOut,
   });
 }

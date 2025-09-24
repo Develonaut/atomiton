@@ -24,8 +24,8 @@ export async function executeBaseLoop(
   iteratorFn: (
     results: unknown[],
     errors: unknown[],
-    iterationCount: number
-  ) => Promise<{ shouldContinue: boolean; incrementCount?: boolean }>
+    iterationCount: number,
+  ) => Promise<{ shouldContinue: boolean; incrementCount?: boolean }>,
 ): Promise<LoopResult> {
   const results: unknown[] = [];
   const errors: unknown[] = [];
@@ -39,7 +39,7 @@ export async function executeBaseLoop(
       const { shouldContinue, incrementCount = true } = await iteratorFn(
         results,
         errors,
-        iterationCount
+        iterationCount,
       );
 
       if (incrementCount) {
@@ -54,7 +54,7 @@ export async function executeBaseLoop(
         error,
         iterationCount,
         errors,
-        config.continueOnError as boolean
+        config.continueOnError as boolean,
       );
       if (!shouldContinue) break;
       iterationCount++;
@@ -74,10 +74,10 @@ export async function executeConditionLoop(
   options: {
     type: "while" | "until" | "doWhile";
     conditionValue?: boolean;
-  }
+  },
 ): Promise<LoopResult> {
   const loopContext: LoopContext = {
-    iteration : 0,
+    iteration: 0,
     lastResult: null,
   };
 
@@ -89,26 +89,33 @@ export async function executeConditionLoop(
   // For doWhile, execute at least once
   let shouldExecute = options.type === "doWhile" ? true : checkCondition();
 
-  return executeBaseLoop(config, context, async (results, _errors, _iterationCount) => {
-    if (!shouldExecute) {
-      return { shouldContinue: false };
-    }
+  return executeBaseLoop(
+    config,
+    context,
+    async (results, _errors, _iterationCount) => {
+      if (!shouldExecute) {
+        return { shouldContinue: false };
+      }
 
-    const result = createIterationResult("iteration", _iterationCount, {
-      condition: options.conditionValue ?? true,
-    });
+      const result = createIterationResult("iteration", _iterationCount, {
+        condition: options.conditionValue ?? true,
+      });
 
-    results.push(result);
-    loopContext.iteration = _iterationCount;
-    loopContext.lastResult = result;
+      results.push(result);
+      loopContext.iteration = _iterationCount;
+      loopContext.lastResult = result;
 
-    logIteration(context, `${options.type} loop iteration ${_iterationCount + 1}`);
+      logIteration(
+        context,
+        `${options.type} loop iteration ${_iterationCount + 1}`,
+      );
 
-    // Check condition for next iteration
-    shouldExecute = checkCondition();
+      // Check condition for next iteration
+      shouldExecute = checkCondition();
 
-    return { shouldContinue: shouldExecute };
-  });
+      return { shouldContinue: shouldExecute };
+    },
+  );
 }
 
 /**
@@ -118,20 +125,30 @@ export async function executeIterationLoop<T>(
   items: T[],
   config: LoopParameters,
   context: NodeExecutionContext,
-  processor: (item: T, index: number) => { result: unknown; logMessage: string }
+  processor: (
+    item: T,
+    index: number,
+  ) => { result: unknown; logMessage: string },
 ): Promise<LoopResult> {
   let currentIndex = 0;
 
-  return executeBaseLoop(config, context, async (results, _errors, _iterationCount) => {
-    if (currentIndex >= items.length) {
-      return { shouldContinue: false };
-    }
+  return executeBaseLoop(
+    config,
+    context,
+    async (results, _errors, _iterationCount) => {
+      if (currentIndex >= items.length) {
+        return { shouldContinue: false };
+      }
 
-    const { result, logMessage } = processor(items[currentIndex], currentIndex);
-    results.push(result);
-    logIteration(context, logMessage);
+      const { result, logMessage } = processor(
+        items[currentIndex],
+        currentIndex,
+      );
+      results.push(result);
+      logIteration(context, logMessage);
 
-    currentIndex++;
-    return { shouldContinue: currentIndex < items.length };
-  });
+      currentIndex++;
+      return { shouldContinue: currentIndex < items.length };
+    },
+  );
 }

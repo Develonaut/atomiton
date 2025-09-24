@@ -149,7 +149,7 @@ describe("node-creation utils - basic functionality", () => {
 
     it("should handle unknown node type gracefully", async () => {
       const { getNodeDefinition } = vi.mocked(
-        await import("@atomiton/nodes/definitions")
+        await import("@atomiton/nodes/definitions"),
       );
       getNodeDefinition.mockReturnValueOnce(undefined);
 
@@ -306,7 +306,7 @@ describe("node-creation utils - basic functionality", () => {
       const node = createDefaultEditorNode(
         "extreme",
         "extreme-type",
-        extremePosition
+        extremePosition,
       );
 
       expect(node.position).toEqual(extremePosition);
@@ -352,7 +352,7 @@ describe("node-creation utils - basic functionality", () => {
 
         for (let i = 0; i < 1000; i++) {
           nodes.push(
-            createDefaultEditorNode(`node-${i}`, `type-${i}`, { x: i, y: i })
+            createDefaultEditorNode(`node-${i}`, `type-${i}`, { x: i, y: i }),
           );
         }
 

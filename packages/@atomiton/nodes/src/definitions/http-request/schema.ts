@@ -62,12 +62,12 @@ export const httpRequestSchema = {
  * Default values for HTTP request parameters
  */
 export const httpRequestDefaults = {
-  method         : "GET" as const,
-  url            : "https://api.example.com",
-  headers        : {},
+  method: "GET" as const,
+  url: "https://api.example.com",
+  headers: {},
   followRedirects: true,
-  validateSSL    : true,
-  timeout        : 30000,
-  retries        : 0,
-  retryDelay     : 1000,
+  validateSSL: true,
+  timeout: 30000,
+  retries: 0,
+  retryDelay: 1000,
 };

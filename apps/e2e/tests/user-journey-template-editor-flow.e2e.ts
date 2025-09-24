@@ -96,9 +96,7 @@ test.describe("User Journey: Template to Editor Data Flow", () => {
     await verifyNoReactFlowErrors(page);
   });
 
-  test("Each template has valid NodeDefinition structure", async ({
-    page,
-  }) => {
+  test("Each template has valid NodeDefinition structure", async ({ page }) => {
     await goToHomepage(page);
     await page.waitForTimeout(2000);
 

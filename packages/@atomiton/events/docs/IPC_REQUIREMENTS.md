@@ -2,7 +2,10 @@
 
 ## Overview
 
-The @atomiton/conductor package requires IPC (Inter-Process Communication) support in the events package to enable communication between Electron's renderer process (where the editor runs) and the main process (where Blueprint execution happens).
+The @atomiton/conductor package requires IPC (Inter-Process Communication)
+support in the events package to enable communication between Electron's
+renderer process (where the editor runs) and the main process (where Blueprint
+execution happens).
 
 ## Requirements
 
@@ -265,6 +268,5 @@ class EditorClient {
 
 ---
 
-**Created**: 2025-01-11
-**Required By**: @atomiton/conductor package
+**Created**: 2025-01-11 **Required By**: @atomiton/conductor package
 **Priority**: HIGH

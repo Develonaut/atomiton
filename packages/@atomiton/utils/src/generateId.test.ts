@@ -5,7 +5,7 @@ import {
   generateJobId,
   generateNodeId,
   generateWorkerId,
-} from "./generateId";
+} from "#generateId";
 
 describe("generateId functions", () => {
   describe("generateExecutionId", () => {

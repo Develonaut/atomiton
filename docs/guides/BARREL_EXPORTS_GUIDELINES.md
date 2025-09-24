@@ -2,19 +2,26 @@
 
 ## Overview
 
-Barrel exports (index.ts files) are a double-edged sword in TypeScript projects. While they provide organizational benefits and clean import paths, they significantly impact build performance and can prevent optimal tree-shaking. This guide establishes clear rules for when barrel exports are beneficial versus detrimental.
+Barrel exports (index.ts files) are a double-edged sword in TypeScript projects.
+While they provide organizational benefits and clean import paths, they
+significantly impact build performance and can prevent optimal tree-shaking.
+This guide establishes clear rules for when barrel exports are beneficial versus
+detrimental.
 
 ## The Core Philosophy
 
-**Use barrel exports judiciously for organizational benefit, never for convenience alone.**
+**Use barrel exports judiciously for organizational benefit, never for
+convenience alone.**
 
-The key question: "Does this barrel export provide genuine architectural value that justifies the performance cost?"
+The key question: "Does this barrel export provide genuine architectural value
+that justifies the performance cost?"
 
 ## When to Use Barrel Exports ✅
 
 ### 1. Component Composition Patterns
 
-**Use Case**: When components work together as a cohesive unit with clear hierarchical relationships.
+**Use Case**: When components work together as a cohesive unit with clear
+hierarchical relationships.
 
 ```typescript
 // ✅ GOOD: components/Card/index.ts
@@ -54,7 +61,8 @@ export type { ButtonProps, CardProps, ModalProps } from "./types";
 
 ### 3. Feature Modules with Tight Coupling
 
-**Use Case**: When a folder represents a complete feature with multiple interdependent parts.
+**Use Case**: When a folder represents a complete feature with multiple
+interdependent parts.
 
 ```typescript
 // ✅ GOOD: features/user-management/index.ts
@@ -302,9 +310,13 @@ import { debounce } from "@/utils/debounce"; // Efficient
 
 ## Conclusion
 
-Barrel exports are a powerful tool that should be used sparingly and strategically. Focus on genuine architectural boundaries and component composition patterns. When in doubt, favor direct imports for better performance and clearer dependencies.
+Barrel exports are a powerful tool that should be used sparingly and
+strategically. Focus on genuine architectural boundaries and component
+composition patterns. When in doubt, favor direct imports for better performance
+and clearer dependencies.
 
-**Remember**: Organization through folder structure is often sufficient and more performant than barrel exports.
+**Remember**: Organization through folder structure is often sufficient and more
+performant than barrel exports.
 
 ---
 

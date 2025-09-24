@@ -2,27 +2,42 @@
 
 ## Overview
 
-Atomiton follows a **document-based application architecture** where YAML files serve as the canonical external format for composite node definitions. These files are the source of truth for all workflow definitions, similar to how `.psd` files work for Photoshop or `.fig` files work for Figma.
+Atomiton follows a **document-based application architecture** where YAML files
+serve as the canonical external format for composite node definitions. These
+files are the source of truth for all workflow definitions, similar to how
+`.psd` files work for Photoshop or `.fig` files work for Figma.
 
 **Critical Format Distinction:**
 
-- **YAML**: Canonical format for external operations (user downloads, storage, persistence, sharing)
-- **JSON**: Internal format for parsing and data manipulation within the application
-- **User Exposure**: Users can only download/export YAML - JSON is never exposed to users
+- **YAML**: Canonical format for external operations (user downloads, storage,
+  persistence, sharing)
+- **JSON**: Internal format for parsing and data manipulation within the
+  application
+- **User Exposure**: Users can only download/export YAML - JSON is never exposed
+  to users
 
 ## Core Principle: YAML as External Source of Truth
 
-Composite node YAML files are our application's documents for all external operations. **Key principle**: What you save as YAML is exactly what you get back. The YAML file contains everything needed to recreate the exact editor state.
+Composite node YAML files are our application's documents for all external
+operations. **Key principle**: What you save as YAML is exactly what you get
+back. The YAML file contains everything needed to recreate the exact editor
+state.
 
 **Internal vs External Formats:**
 
-- **External (User-Facing)**: YAML only - for downloads, storage, persistence, and sharing
-- **Internal (Application)**: JSON for parsing, validation, and runtime manipulation
-- **Conversion**: All data leaving the application (to user or storage) must be converted to YAML
+- **External (User-Facing)**: YAML only - for downloads, storage, persistence,
+  and sharing
+- **Internal (Application)**: JSON for parsing, validation, and runtime
+  manipulation
+- **Conversion**: All data leaving the application (to user or storage) must be
+  converted to YAML
 
 ## YAML File Naming Convention
 
-**Critical Rule**: The YAML filename is always determined by the `yaml.name` property within the file itself, regardless of context or user input. This ensures consistent file naming across all operations and removes ambiguity about how files are named when exported or saved.
+**Critical Rule**: The YAML filename is always determined by the `yaml.name`
+property within the file itself, regardless of context or user input. This
+ensures consistent file naming across all operations and removes ambiguity about
+how files are named when exported or saved.
 
 ### Filename Determination
 
@@ -125,17 +140,21 @@ Internal Layer (Application Runtime)
 **Format Usage Rules:**
 
 - **YAML**: All user downloads, file saves, storage, and external sharing
-- **JSON**: Internal parsing, validation, data manipulation, and API communication
+- **JSON**: Internal parsing, validation, data manipulation, and API
+  communication
 - **No JSON Exports**: Users cannot download or export JSON format
 
 ### Separation of Concerns
 
-- **External Document Format (YAML)**: User-facing, persistent, shareable, version-controllable
+- **External Document Format (YAML)**: User-facing, persistent, shareable,
+  version-controllable
 - **Internal Format (JSON)**: Application-internal parsing and manipulation only
-- **Runtime State**: Validated, type-safe working representation (internally JSON-based)
+- **Runtime State**: Validated, type-safe working representation (internally
+  JSON-based)
 - **Editor State**: UI-optimized with ReactFlow compatibility
 - **Presentation Layer**: Visual interface for manipulation
-- **Export Boundary**: JSON → YAML conversion required for all external operations
+- **Export Boundary**: JSON → YAML conversion required for all external
+  operations
 
 ## File Lifecycle
 
@@ -198,7 +217,9 @@ node.data = {
 
 ### 3. Saving (Memory → YAML)
 
-When saving, the complete node state is serialized with the filename automatically determined by the `name` property. The user cannot specify a different filename - it is always derived from the document's `name` property:
+When saving, the complete node state is serialized with the filename
+automatically determined by the `name` property. The user cannot specify a
+different filename - it is always derived from the document's `name` property:
 
 ```yaml
 # customer-data-pipeline.yaml - Filename determined by 'name' property
@@ -266,7 +287,8 @@ edges:
 
 ### 4. Loading (YAML → Memory → Editor)
 
-When loading a composite node definition, the system validates that the filename matches the `name` property:
+When loading a composite node definition, the system validates that the filename
+matches the `name` property:
 
 ```javascript
 // 1. Parse YAML and validate filename
@@ -344,7 +366,8 @@ Internal State → JSON (manipulation) → Filename from yaml.name → YAML (use
 Application Data → JSON (processing) → Filename from yaml.name → YAML (persistence)
 ```
 
-**Critical Rule**: No JSON ever reaches users or external storage - all external operations use YAML.
+**Critical Rule**: No JSON ever reaches users or external storage - all external
+operations use YAML.
 
 ## Version Management and Migration
 
@@ -424,7 +447,8 @@ function migrateCSVReaderV1ToV2(node) {
 
 ### YAML (External Format)
 
-1. **Completeness**: YAML files contain everything needed to recreate the workflow
+1. **Completeness**: YAML files contain everything needed to recreate the
+   workflow
 2. **Stability**: Files continue to work as node packages evolve
 3. **Portability**: Files can be shared between users and systems
 4. **Debuggability**: Files are human-readable for troubleshooting
@@ -433,7 +457,8 @@ function migrateCSVReaderV1ToV2(node) {
 
 ### JSON (Internal Format)
 
-1. **Performance**: Optimized for parsing and manipulation within the application
+1. **Performance**: Optimized for parsing and manipulation within the
+   application
 2. **Flexibility**: Easier programmatic access for runtime operations
 3. **Validation**: Structured format for schema validation
 4. **Internal Only**: Never exposed to users or external systems
@@ -443,19 +468,30 @@ function migrateCSVReaderV1ToV2(node) {
 - **All External Operations**: Must convert JSON → YAML before user access
 - **All Imports**: Must convert YAML → JSON for internal processing
 - **No JSON Exports**: Application must never offer JSON download/export options
-- **Filename Convention**: All YAML files use filename derived from `yaml.name` property
+- **Filename Convention**: All YAML files use filename derived from `yaml.name`
+  property
 
 ### File Naming Standards
 
 - **Source of Truth**: The `yaml.name` property within the document
 - **Format**: `${yaml.name}.yaml` (kebab-case recommended)
-- **User Interface**: No manual filename input - name is set via document properties
-- **Consistency**: Same naming rules apply to downloads, saves, exports, and storage
-- **Validation**: System validates filename matches `yaml.name` on load operations
-- **System-Wide Rule**: This naming convention is applied regardless of context or user input
+- **User Interface**: No manual filename input - name is set via document
+  properties
+- **Consistency**: Same naming rules apply to downloads, saves, exports, and
+  storage
+- **Validation**: System validates filename matches `yaml.name` on load
+  operations
+- **System-Wide Rule**: This naming convention is applied regardless of context
+  or user input
 
 ---
 
-The composite node file lifecycle ensures reliability, compatibility, transparency, and maintainability. YAML files serve as the definitive source of truth for workflow definitions, containing complete node definitions, configurations, and editor state necessary for perfect reconstruction.
+The composite node file lifecycle ensures reliability, compatibility,
+transparency, and maintainability. YAML files serve as the definitive source of
+truth for workflow definitions, containing complete node definitions,
+configurations, and editor state necessary for perfect reconstruction.
 
-**Filename Convention Summary**: All YAML files are automatically named using the `yaml.name` property (e.g., `${yaml.name}.yaml`). This system-wide rule ensures consistent file naming across all operations - saves, exports, downloads, and storage - regardless of user input or context.
+**Filename Convention Summary**: All YAML files are automatically named using
+the `yaml.name` property (e.g., `${yaml.name}.yaml`). This system-wide rule
+ensures consistent file naming across all operations - saves, exports,
+downloads, and storage - regardless of user input or context.

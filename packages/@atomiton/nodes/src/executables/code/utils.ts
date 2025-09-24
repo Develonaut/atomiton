@@ -1,4 +1,3 @@
-
 // Dynamic import to handle Electron compatibility
 let ivm: typeof import("isolated-vm");
 
@@ -21,7 +20,9 @@ export async function executeSecureCode(
     try {
       ivm = await import("isolated-vm");
     } catch (error) {
-      throw new Error(`Failed to load isolated-vm: ${error instanceof Error ? error.message : String(error)}`);
+      throw new Error(
+        `Failed to load isolated-vm: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   }
 
@@ -65,13 +66,17 @@ async function createSafeCopy(value: unknown): Promise<any> {
     return new ivm.ExternalCopy(value);
   }
 
-  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
     return new ivm.ExternalCopy(value);
   }
 
   if (Array.isArray(value)) {
     // Create safe copy of array
-    const safeCopy = value.map(item => {
+    const safeCopy = value.map((item) => {
       if (typeof item === "object" && item !== null) {
         return JSON.parse(JSON.stringify(item)); // Deep clone to prevent prototype pollution
       }

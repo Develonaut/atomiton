@@ -2,11 +2,14 @@
 
 ## Overview
 
-This guide covers the current deployment strategy for Atomiton. The platform is currently in development, so this document reflects our planned deployment approach rather than a fully implemented system.
+This guide covers the current deployment strategy for Atomiton. The platform is
+currently in development, so this document reflects our planned deployment
+approach rather than a fully implemented system.
 
 ## Current Deployment Status
 
-**🚧 In Development** - Atomiton is currently being built and deployment infrastructure is being planned.
+**🚧 In Development** - Atomiton is currently being built and deployment
+infrastructure is being planned.
 
 ### Planned Deployment Models
 
@@ -215,6 +218,5 @@ lsof -i :3001  # Future API server
 
 ---
 
-**Last Updated**: 2025-09-17
-**Status**: Development Phase - Deployment Strategy Planning
-**Next Review**: When backend architecture is defined
+**Last Updated**: 2025-09-17 **Status**: Development Phase - Deployment Strategy
+Planning **Next Review**: When backend architecture is defined

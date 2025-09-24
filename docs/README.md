@@ -1,17 +1,21 @@
 # Atomiton Documentation
 
-> ⚠️ **Documentation for features that don't exist yet!** We're documenting the vision and architecture before building. It's aspirational documentation.
+> ⚠️ **Documentation for features that don't exist yet!** We're documenting the
+> vision and architecture before building. It's aspirational documentation.
 
 ## Documentation Structure
 
 ### 📁 Package Documentation
 
-Documentation is co-located with code. See each package's README and docs folder:
+Documentation is co-located with code. See each package's README and docs
+folder:
 
-- **[packages/core/](../packages/core/)** - Foundation abstractions and utilities
+- **[packages/core/](../packages/core/)** - Foundation abstractions and
+  utilities
 - **[packages/ui/](../packages/ui/)** - UI components and design system
 - **[packages/nodes/](../packages/nodes/)** - Node system and implementations
-- **[packages/blueprints/](../packages/@atomiton/blueprints/)** - Blueprint definition and validation
+- **[packages/blueprints/](../packages/@atomiton/blueprints/)** - Blueprint
+  definition and validation
 - **[packages/theme/](../packages/theme/)** - Framework-agnostic theme system
 - **[packages/di/](../packages/di/)** - Dependency injection system
 

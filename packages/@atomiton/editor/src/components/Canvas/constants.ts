@@ -4,7 +4,7 @@ import type { NodeTypes } from "@xyflow/react";
 
 export const NODE_TYPES: NodeTypes = getNodeDefinitionIds().reduce<NodeTypes>(
   (acc, nodeType) => ({ ...acc, [nodeType]: Node }),
-  {}
+  {},
 );
 
 export const DELETE_KEY_CODES = ["Delete", "Backspace"];

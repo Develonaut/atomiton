@@ -1,10 +1,12 @@
 # Turborepo Development Setup
 
-This document describes our Turborepo pipeline configuration, development scripts, and how our monorepo development environment works.
+This document describes our Turborepo pipeline configuration, development
+scripts, and how our monorepo development environment works.
 
 ## Overview
 
-Our project uses Turborepo for efficient monorepo management with the following key components:
+Our project uses Turborepo for efficient monorepo management with the following
+key components:
 
 - **Electron desktop app** with coordinated startup
 - **Vite dev servers** for React client and component libraries
@@ -99,7 +101,8 @@ wait-on http://localhost:5173 && electron-vite dev
 
 **Startup Sequence (via `pnpm dev`):**
 
-1. **All packages build** (`^build` dependency ensures libraries are built first)
+1. **All packages build** (`^build` dependency ensures libraries are built
+   first)
 2. **Client dev server starts** (Vite on port 5173)
 3. **Desktop app waits** (`wait-on http://localhost:5173`)
 4. **Electron starts** only after client server responds
@@ -290,7 +293,8 @@ pnpm dev      # Restart development
 1. **Always use `pnpm kill`** before starting development to ensure clean state
 2. **Use package-specific dev scripts** for focused development
 3. **Let Turborepo handle dependencies** - don't manually coordinate builds
-4. **Trust the process coordination** - desktop app will wait for client automatically
+4. **Trust the process coordination** - desktop app will wait for client
+   automatically
 5. **Check process logs** if something isn't working as expected
 
 ## Dependencies
@@ -303,4 +307,5 @@ pnpm dev      # Restart development
 
 ---
 
-This setup follows 2024 industry best practices for Electron + Vite + Turborepo development workflows.
+This setup follows 2024 industry best practices for Electron + Vite + Turborepo
+development workflows.

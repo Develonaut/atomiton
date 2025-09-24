@@ -1,6 +1,9 @@
 # Form Components
 
-This directory contains reusable form components extracted from the RightSidebar implementation. These components maintain the exact same visual appearance and functionality as the original implementations while providing better reusability.
+This directory contains reusable form components extracted from the RightSidebar
+implementation. These components maintain the exact same visual appearance and
+functionality as the original implementations while providing better
+reusability.
 
 ## Components
 
@@ -125,4 +128,6 @@ import {
 
 ## Styling
 
-All components use the existing Atomiton design system classes and maintain the same visual appearance as the original implementations. The components follow the established patterns for surface colors, transitions, and spacing.
+All components use the existing Atomiton design system classes and maintain the
+same visual appearance as the original implementations. The components follow
+the established patterns for surface colors, transitions, and spacing.

@@ -15,7 +15,8 @@
 
 **Priority**: Low (ship simple first)
 
-- **Parallel Execution**: True parallel node execution (currently sequential only)
+- **Parallel Execution**: True parallel node execution (currently sequential
+  only)
 - **Graph Dependencies**: Blueprint dependency resolution
 - **Runtime Support**: Multi-runtime (Rust/WASM/Python) integration
 
@@ -29,7 +30,8 @@
 
 ## Development Approach
 
-Following **Karen Principle**: "Is it ACTUALLY working or are you just saying it is?"
+Following **Karen Principle**: "Is it ACTUALLY working or are you just saying it
+is?"
 
 ### Phase 1: Stabilize Working Components
 

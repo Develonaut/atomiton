@@ -2,27 +2,36 @@
 
 ## Overview
 
-This directory contains the system architecture documentation for Atomiton, focusing on core components, patterns, and integration strategies.
+This directory contains the system architecture documentation for Atomiton,
+focusing on core components, patterns, and integration strategies.
 
 ## Core Architecture
 
 ### Conductor - Blueprint Execution Engine
 
-The conductor is Atomiton's unified execution engine that works consistently across all environments.
+The conductor is Atomiton's unified execution engine that works consistently
+across all environments.
 
-- **[Conductor API](./CONDUCTOR_API.md)** - Unified factory pattern and core API design
-- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Cross-environment communication layer
-- **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Desktop application architecture and IPC flow
-- **[BENTO_BOX_IMPLEMENTATION](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity and efficiency principles in action
+- **[Conductor API](./CONDUCTOR_API.md)** - Unified factory pattern and core API
+  design
+- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Cross-environment
+  communication layer
+- **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Desktop application
+  architecture and IPC flow
+- **[BENTO_BOX_IMPLEMENTATION](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity and
+  efficiency principles in action
 
 ### Storage & Security
 
-- **[Storage Architecture](./STORAGE.md)** - Universal storage abstraction and platform-specific implementations
-- **[Security Architecture](./SECURITY.md)** - Comprehensive security strategy for credentials and data protection
+- **[Storage Architecture](./STORAGE.md)** - Universal storage abstraction and
+  platform-specific implementations
+- **[Security Architecture](./SECURITY.md)** - Comprehensive security strategy
+  for credentials and data protection
 
 ### Node System
 
-- **[Node Configuration System](./NODE_CONFIGURATION_SYSTEM.md)** - Configuration patterns for Blueprint nodes
+- **[Node Configuration System](./NODE_CONFIGURATION_SYSTEM.md)** -
+  Configuration patterns for Blueprint nodes
 
 ## Key Principles
 
@@ -74,7 +83,8 @@ return "local"; // Node.js/Electron main
 
 The conductor demonstrates our "measure first, optimize later" approach:
 
-- **Proven faster than competitors** (22-92% performance advantage in benchmarks)
+- **Proven faster than competitors** (22-92% performance advantage in
+  benchmarks)
 - **Memory efficient** (<5MB overhead for complex workflows)
 - **Fast failure detection** (<50ms vs 30+ seconds for competitors)
 - **TypeScript-first** with room for multi-runtime expansion
@@ -83,7 +93,8 @@ The conductor demonstrates our "measure first, optimize later" approach:
 
 ### Development Guidelines
 
-- **[Development Principles](../guides/DEVELOPMENT_PRINCIPLES.md)** - Core development philosophy
+- **[Development Principles](../guides/DEVELOPMENT_PRINCIPLES.md)** - Core
+  development philosophy
 - **[Code Style](../guides/CODE_STYLE.md)** - Code quality standards
 
 ### Package Documentation
@@ -94,4 +105,6 @@ The conductor demonstrates our "measure first, optimize later" approach:
 
 ---
 
-**Navigation**: This README serves as the entry point to architecture documentation. Each linked document focuses on specific architectural concerns without duplication.
+**Navigation**: This README serves as the entry point to architecture
+documentation. Each linked document focuses on specific architectural concerns
+without duplication.

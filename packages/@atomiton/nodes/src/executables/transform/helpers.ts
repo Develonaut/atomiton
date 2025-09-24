@@ -8,7 +8,7 @@
  */
 export function simpleGroupBy<T>(
   array: T[],
-  keyFn: string | ((item: T) => string)
+  keyFn: string | ((item: T) => string),
 ): Record<string, T[]> {
   const result: Record<string, T[]> = {};
   for (const item of array) {
@@ -17,7 +17,7 @@ export function simpleGroupBy<T>(
         ? String(
             item && typeof item === "object" && keyFn in item
               ? (item as Record<string, unknown>)[keyFn]
-              : undefined
+              : undefined,
           )
         : keyFn(item);
     if (!result[key]) result[key] = [];
@@ -32,7 +32,7 @@ export function simpleGroupBy<T>(
 export function simpleOrderBy<T>(
   array: T[],
   keys: (string | ((item: T) => unknown))[],
-  orders: ("asc" | "desc")[]
+  orders: ("asc" | "desc")[],
 ): T[] {
   return [...array].sort((a, b) => {
     for (let i = 0; i < keys.length; i++) {
@@ -82,7 +82,7 @@ export function simpleOrderBy<T>(
  * Only supports simple property access and basic operations
  */
 export function createSafeFunction(
-  expression: string
+  expression: string,
 ): (item: Record<string, unknown>) => unknown {
   // Remove any potentially dangerous patterns
   const dangerousPatterns = [
@@ -119,7 +119,7 @@ export function createSafeFunction(
         return evaluateExpression(body, { [param]: item });
       } catch (error) {
         throw new Error(
-          `Failed to evaluate expression: ${error instanceof Error ? error.message : String(error)}`
+          `Failed to evaluate expression: ${error instanceof Error ? error.message : String(error)}`,
         );
       }
     };
@@ -136,7 +136,7 @@ export function createSafeFunction(
  */
 export function evaluateExpression(
   expr: string,
-  context: Record<string, unknown>
+  context: Record<string, unknown>,
 ): unknown {
   // Handle simple property access like "item.name" or "x.value"
   const propertyAccessPattern = /^(\w+)(\.[\w.]+)?$/;
@@ -162,7 +162,7 @@ export function evaluateExpression(
 
   // For more complex expressions, throw an error
   throw new Error(
-    `Complex expressions are not supported for security reasons: ${expr}`
+    `Complex expressions are not supported for security reasons: ${expr}`,
   );
 }
 
@@ -187,6 +187,6 @@ export function parseInitialValue(value: string): unknown {
  */
 export function uniqueArray<T>(array: T[]): T[] {
   return Array.from(new Set(array.map((item) => JSON.stringify(item)))).map(
-    (item) => JSON.parse(item)
+    (item) => JSON.parse(item),
   );
 }

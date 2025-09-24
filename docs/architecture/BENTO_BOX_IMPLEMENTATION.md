@@ -2,7 +2,9 @@
 
 ## Overview
 
-The conductor package exemplifies our BENTO_BOX_PRINCIPLE in practice. It demonstrates how complex cross-environment execution can be achieved through small, focused, composable modules that work together elegantly.
+The conductor package exemplifies our BENTO_BOX_PRINCIPLE in practice. It
+demonstrates how complex cross-environment execution can be achieved through
+small, focused, composable modules that work together elegantly.
 
 ## Core Implementation Philosophy
 
@@ -16,7 +18,8 @@ const conductor = createConductor();
 const result = await conductor.execute(request);
 ```
 
-**BENTO_BOX Applied**: Instead of exposing complex internals, provide one clean interface that hides all complexity.
+**BENTO_BOX Applied**: Instead of exposing complex internals, provide one clean
+interface that hides all complexity.
 
 ### Clear Module Boundaries
 
@@ -37,7 +40,8 @@ conductor/
     └── IExecutionEngine.ts  # Contracts (interfaces only)
 ```
 
-**BENTO_BOX Applied**: Each file has a single responsibility and stays under the 200-line preferred limit (500-line maximum).
+**BENTO_BOX Applied**: Each file has a single responsibility and stays under the
+200-line preferred limit (500-line maximum).
 
 ## Implementation Examples
 
@@ -164,7 +168,8 @@ ExecutionEngine()
 SimpleExecutor() + StateManager() + Queue()
 ```
 
-**BENTO_BOX Applied**: Each layer has a clear responsibility and interfaces cleanly with the next layer.
+**BENTO_BOX Applied**: Each layer has a clear responsibility and interfaces
+cleanly with the next layer.
 
 ### Plugin Architecture
 
@@ -185,7 +190,8 @@ export function createExecutionRouter() {
 }
 ```
 
-**BENTO_BOX Applied**: Router doesn't know about specific transports - they're pluggable modules that register themselves.
+**BENTO_BOX Applied**: Router doesn't know about specific transports - they're
+pluggable modules that register themselves.
 
 ## Benefits Realized
 
@@ -404,7 +410,8 @@ const transport = createLocalTransport({
 
 ## Key Lessons
 
-1. **Start Simple**: The working SimpleExecutor (50 lines) shipped before complex abstractions
+1. **Start Simple**: The working SimpleExecutor (50 lines) shipped before
+   complex abstractions
 2. **Interface First**: Define clean contracts before implementation
 3. **Single Responsibility**: Each module does ONE thing well
 4. **Compose Up**: Build complex behavior from simple modules
@@ -412,10 +419,15 @@ const transport = createLocalTransport({
 
 ## Related Documentation
 
-- **[BENTO_BOX Principles](../BENTO_BOX_PRINCIPLES.md)** - Core philosophy and guidelines
-- **[Conductor API](./CONDUCTOR_API.md)** - Usage examples of the unified interface
-- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Technical implementation details
+- **[BENTO_BOX Principles](../BENTO_BOX_PRINCIPLES.md)** - Core philosophy and
+  guidelines
+- **[Conductor API](./CONDUCTOR_API.md)** - Usage examples of the unified
+  interface
+- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Technical
+  implementation details
 
 ---
 
-The conductor demonstrates that BENTO_BOX_PRINCIPLE isn't just philosophy—it's practical architecture that delivers better performance, maintainability, and developer experience through thoughtful composition of small, focused modules.
+The conductor demonstrates that BENTO_BOX_PRINCIPLE isn't just philosophy—it's
+practical architecture that delivers better performance, maintainability, and
+developer experience through thoughtful composition of small, focused modules.

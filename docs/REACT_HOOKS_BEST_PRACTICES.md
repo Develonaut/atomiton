@@ -2,11 +2,13 @@
 
 ## Core Principle: Hooks as Contracts
 
-React hooks should serve as **contracts** between your business logic and React's lifecycle. They orchestrate but don't implement.
+React hooks should serve as **contracts** between your business logic and
+React's lifecycle. They orchestrate but don't implement.
 
 ## The Problem
 
-Many developers write hooks that become junk drawers of business logic, making them:
+Many developers write hooks that become junk drawers of business logic, making
+them:
 
 - Hard to test
 - Difficult to reuse
@@ -32,7 +34,8 @@ Many developers write hooks that become junk drawers of business logic, making t
 
 ## Pattern: Hook as Orchestra Conductor
 
-Think of hooks as orchestra conductors - they coordinate the musicians (utils) but don't play the instruments.
+Think of hooks as orchestra conductors - they coordinate the musicians (utils)
+but don't play the instruments.
 
 ## Examples
 
@@ -378,6 +381,8 @@ Before approving a hook:
 
 ## Remember
 
-> "A hook should be so simple that it's boring. The interesting stuff happens in utils."
+> "A hook should be so simple that it's boring. The interesting stuff happens in
+> utils."
 
-Hooks are the glue, not the engine. Keep them thin, testable, and focused on React integration only.
+Hooks are the glue, not the engine. Keep them thin, testable, and focused on
+React integration only.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { kebabCase } from "./kebabCase";
+import { kebabCase } from "#changeCase/kebabCase";
 
 describe("kebabCase", () => {
   it("should convert camelCase to kebab-case", () => {

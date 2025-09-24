@@ -47,7 +47,7 @@ export type NodeParametersInput<T extends VRawShape> = {
 function createNodeParameters<T extends VRawShape>(
   nodeSchemaOrParams: T | NodeParameters,
   defaults?: VInfer<VObject<T>>,
-  fields?: NodeFieldsConfig
+  fields?: NodeFieldsConfig,
 ): NodeParameters<VInfer<VObject<T & typeof baseSchema.shape>>> {
   if (isNodeParameters(nodeSchemaOrParams)) {
     return nodeSchemaOrParams as NodeParameters<
@@ -69,9 +69,9 @@ function createNodeParameters<T extends VRawShape>(
   } as FullType;
 
   return {
-    schema  : fullSchema,
+    schema: fullSchema,
     defaults: fullDefaults,
-    fields  : fieldConfig,
+    fields: fieldConfig,
 
     parse(params: unknown): FullType {
       return fullSchema.parse(params);

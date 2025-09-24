@@ -2,7 +2,10 @@
 
 ## Overview
 
-The conductor's transport layer enables consistent Blueprint execution across different runtime environments by abstracting communication mechanisms. The same `conductor.execute()` API works identically whether running in Electron, browsers, or Node.js servers.
+The conductor's transport layer enables consistent Blueprint execution across
+different runtime environments by abstracting communication mechanisms. The same
+`conductor.execute()` API works identically whether running in Electron,
+browsers, or Node.js servers.
 
 ## Architecture Diagram
 
@@ -498,9 +501,13 @@ beforeEach(() => {
 ## Related Documentation
 
 - **[Conductor API](./CONDUCTOR_API.md)** - Unified API design and usage
-- **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Detailed Electron IPC flow
-- **[BENTO_BOX Implementation](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity principles
+- **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Detailed Electron IPC
+  flow
+- **[BENTO_BOX Implementation](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity
+  principles
 
 ---
 
-The transport architecture demonstrates the BENTO_BOX_PRINCIPLE: complex cross-environment communication hidden behind a simple, unified interface that "just works" everywhere.
+The transport architecture demonstrates the BENTO_BOX_PRINCIPLE: complex
+cross-environment communication hidden behind a simple, unified interface that
+"just works" everywhere.

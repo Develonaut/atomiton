@@ -11,14 +11,14 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false",
     "test": "vitest run",
-    "test:unit:main": "vitest run --config vitest.main.config.ts",
-    "test:integration": "vitest run src/__tests__/integration",
-    "test:benchmark": "vitest bench --run || echo 'No benchmarks yet'",
+    "test:watch": "vitest watch",
+    "test:integration": "vitest run src/integration",
     "kill": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\"",
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },
   "dependencies": {
     "@atomiton/conductor": "workspace:^",
+    "@atomiton/nodes": "workspace:^",
     "@atomiton/storage": "workspace:^"
   },
   "devDependencies": {

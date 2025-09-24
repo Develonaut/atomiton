@@ -2,9 +2,14 @@
 
 ## Mission Statement
 
-**Atomiton transforms complex workflows into visual "Blueprints" that anyone can create, understand, and execute.**
+**Atomiton transforms complex workflows into visual "Blueprints" that anyone can
+create, understand, and execute.**
 
-We're building a desktop-first, AI-native automation platform that makes workflow creation as intuitive as connecting LEGO blocks. Unlike enterprise automation platforms built for IT departments, Atomiton is designed for individual creators, developers, and small teams who need powerful automation without the complexity.
+We're building a desktop-first, AI-native automation platform that makes
+workflow creation as intuitive as connecting LEGO blocks. Unlike enterprise
+automation platforms built for IT departments, Atomiton is designed for
+individual creators, developers, and small teams who need powerful automation
+without the complexity.
 
 ### Core Values
 
@@ -62,8 +67,8 @@ atomiton/
     └── web/                 # Vite app (for demos)
 ```
 
-**Cost**: 0 hours of refactoring existing code
-**Benefit**: Clear boundaries, easier testing, better mental model
+**Cost**: 0 hours of refactoring existing code **Benefit**: Clear boundaries,
+easier testing, better mental model
 
 ### 2. TypeScript Patterns (Immediate - Better Code Quality)
 
@@ -81,8 +86,8 @@ interface IWorkflow {
 }
 ```
 
-**Cost**: Just better typing as we write new code
-**Benefit**: Fewer runtime bugs, better IntelliSense
+**Cost**: Just better typing as we write new code **Benefit**: Fewer runtime
+bugs, better IntelliSense
 
 ### 3. Testing Strategy (Immediate - Just Configuration)
 
@@ -97,8 +102,7 @@ interface IWorkflow {
 }
 ```
 
-**Cost**: Configuration files only
-**Benefit**: Catches bugs before users do
+**Cost**: Configuration files only **Benefit**: Catches bugs before users do
 
 ### 4. Build Pipeline (Already Have Turborepo)
 
@@ -113,15 +117,14 @@ interface IWorkflow {
 }
 ```
 
-**Cost**: Configuration tweaks
-**Benefit**: Faster builds, better caching
+**Cost**: Configuration tweaks **Benefit**: Faster builds, better caching
 
 ## How We Differentiate (Our Unique Advantages)
 
 ### 1. Desktop-First Architecture
 
-**n8n**: Web-first, server deployment complexity
-**Atomiton**: Desktop-first with web demos
+**n8n**: Web-first, server deployment complexity **Atomiton**: Desktop-first
+with web demos
 
 ```typescript
 // Platform detection built-in
@@ -136,12 +139,13 @@ if (platform === "desktop") {
 }
 ```
 
-**Why This Matters**: No deployment complexity, full system access, works offline
+**Why This Matters**: No deployment complexity, full system access, works
+offline
 
 ### 2. AI-Native Design
 
-**n8n**: AI features bolted on later
-**Atomiton**: AI assistance built into core architecture
+**n8n**: AI features bolted on later **Atomiton**: AI assistance built into core
+architecture
 
 ```typescript
 interface IAIAssistant {
@@ -155,8 +159,8 @@ interface IAIAssistant {
 
 ### 3. Simpler Feature Set
 
-**n8n**: 500+ nodes, enterprise features, complex deployments
-**Atomiton**: 20-50 essential nodes, focused on core automation
+**n8n**: 500+ nodes, enterprise features, complex deployments **Atomiton**:
+20-50 essential nodes, focused on core automation
 
 **Our Node Categories**:
 
@@ -170,8 +174,8 @@ interface IAIAssistant {
 
 ### 4. Modern Tech Stack
 
-**n8n**: Vue 2/3 migration debt, Webpack complexity
-**Atomiton**: Fresh start with 2025 best practices
+**n8n**: Vue 2/3 migration debt, Webpack complexity **Atomiton**: Fresh start
+with 2025 best practices
 
 ```json
 {
@@ -187,8 +191,8 @@ interface IAIAssistant {
 
 ### 5. Developer Learning Project
 
-**n8n**: Production system, can't experiment freely
-**Atomiton**: Learning project, can try new approaches
+**n8n**: Production system, can't experiment freely **Atomiton**: Learning
+project, can try new approaches
 
 **Advantages**:
 
@@ -351,9 +355,13 @@ const resources = {
 - Desktop apps have unique advantages (file access, performance, offline)
 - Electron has matured significantly
 
-**The bottom line**: We're not trying to replace n8n for enterprises. We're building something simpler, more focused, and more accessible for individual creators and small teams.
+**The bottom line**: We're not trying to replace n8n for enterprises. We're
+building something simpler, more focused, and more accessible for individual
+creators and small teams.
 
-By starting small, staying lean, and leveraging the user's own compute power, we can build something valuable without the complexity and costs that enterprise platforms require.
+By starting small, staying lean, and leveraging the user's own compute power, we
+can build something valuable without the complexity and costs that enterprise
+platforms require.
 
 ---
 

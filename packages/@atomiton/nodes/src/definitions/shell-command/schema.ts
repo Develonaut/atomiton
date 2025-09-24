@@ -65,10 +65,7 @@ export const shellCommandSchema = {
     .default("SIGTERM")
     .describe("Signal to use when killing the process"),
 
-  args: v
-    .array(v.string())
-    .default([])
-    .describe("Command arguments as array"),
+  args: v.array(v.string()).default([]).describe("Command arguments as array"),
 
   environment: v
     .record(v.string())
@@ -85,16 +82,16 @@ export const shellCommandSchema = {
  * Default values for shell command parameters
  */
 export const shellCommandDefaults = {
-  command      : "",
-  shell        : "bash" as const,
-  env          : {},
-  timeout      : 30000,
+  command: "",
+  shell: "bash" as const,
+  env: {},
+  timeout: 30000,
   captureOutput: true,
-  encoding     : "utf8" as const,
-  throwOnError : false,
-  maxBuffer    : 10485760,
-  killSignal   : "SIGTERM",
-  args         : [],
-  environment  : {},
-  inheritStdio : false,
+  encoding: "utf8" as const,
+  throwOnError: false,
+  maxBuffer: 10485760,
+  killSignal: "SIGTERM",
+  args: [],
+  environment: {},
+  inheritStdio: false,
 };

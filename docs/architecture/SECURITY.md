@@ -2,7 +2,9 @@
 
 ## Overview
 
-Atomiton's security architecture provides comprehensive protection for user data, API credentials, and Blueprint content across all deployment environments. The system prioritizes simplicity and reliability over complex security theater.
+Atomiton's security architecture provides comprehensive protection for user
+data, API credentials, and Blueprint content across all deployment environments.
+The system prioritizes simplicity and reliability over complex security theater.
 
 ## Security Principles
 
@@ -43,7 +45,8 @@ Atomiton's security architecture provides comprehensive protection for user data
 **Technology Stack:**
 
 - **Primary**: Electron `safeStorage` API (industry standard)
-- **Keychain**: OS-native credential storage (Keychain Access, Credential Manager, Secret Service)
+- **Keychain**: OS-native credential storage (Keychain Access, Credential
+  Manager, Secret Service)
 - **Storage**: Encrypted files in application data directory
 
 **Implementation:**
@@ -303,20 +306,25 @@ Desktop App → OAuth Provider → Supabase → Application Access
 ### Implementation Details
 
 - **[Storage Architecture](./STORAGE.md)** - Complete storage system design
-- **[Secure Token Storage Strategy](../strategies/SECURE_TOKEN_STORAGE_STRATEGY.md)** - Detailed implementation strategy
+- **[Secure Token Storage Strategy](../strategies/SECURE_TOKEN_STORAGE_STRATEGY.md)** -
+  Detailed implementation strategy
 
 ### Package Documentation
 
-- **Storage Package**: `/packages/@atomiton/storage/README.md` - Package usage and API
-- **Security Recommendations**: `/packages/@atomiton/storage/SECURITY_RECOMMENDATIONS.md` - Research and best practices
+- **Storage Package**: `/packages/@atomiton/storage/README.md` - Package usage
+  and API
+- **Security Recommendations**:
+  `/packages/@atomiton/storage/SECURITY_RECOMMENDATIONS.md` - Research and best
+  practices
 
 ### Development Guidelines
 
-- **[Development Principles](../guides/DEVELOPMENT_PRINCIPLES.md)** - Security-aware development practices
+- **[Development Principles](../guides/DEVELOPMENT_PRINCIPLES.md)** -
+  Security-aware development practices
 - **[Code Style](../guides/CODE_STYLE.md)** - Secure coding standards
 
 ---
 
-**Last Updated**: 2025-09-17
-**Security Review**: Required for all changes to this document
-**Compliance Status**: Internal security standards - SOC 2 assessment pending
+**Last Updated**: 2025-09-17 **Security Review**: Required for all changes to
+this document **Compliance Status**: Internal security standards - SOC 2
+assessment pending

@@ -4,7 +4,8 @@
 
 All workflow requirements are defined in:
 
-- **[MANDATORY_CHECKLIST.md](./MANDATORY_CHECKLIST.md)** - Required steps before work
+- **[MANDATORY_CHECKLIST.md](./MANDATORY_CHECKLIST.md)** - Required steps before
+  work
 - **[EXECUTION_PLAN.md](./EXECUTION_PLAN.md)** - Full workflow details
 
 ## Key Checks
@@ -19,7 +20,8 @@ Before starting:
 Cannot complete without:
 
 - [ ] Quality checks pass (exit code 0)
-- [ ] Review checklist completed (see [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md))
+- [ ] Review checklist completed (see
+      [REVIEW_CHECKLIST.md](../../docs/REVIEW_CHECKLIST.md))
 - [ ] No `any` types in code
 - [ ] No redundant comments
 - [ ] Files < 500 lines

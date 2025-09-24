@@ -1,11 +1,13 @@
 # General Development Guides
 
-This directory contains general development guides and principles that apply across the entire Atomiton platform.
+This directory contains general development guides and principles that apply
+across the entire Atomiton platform.
 
 ## 📚 Available Guides
 
 - **[CODE_STYLE.md](./CODE_STYLE.md)** - Code style guidelines and conventions
-- **[DEVELOPMENT_PRINCIPLES.md](./DEVELOPMENT_PRINCIPLES.md)** - Core development principles and practices
+- **[DEVELOPMENT_PRINCIPLES.md](./DEVELOPMENT_PRINCIPLES.md)** - Core
+  development principles and practices
 - **[MONETIZATION.md](./MONETIZATION.md)** - Ideas for sustainable monetization
 
 ## 📦 Package-Specific Guides
@@ -26,8 +28,10 @@ These guides contain:
 - Cross-cutting concerns
 - Business strategies
 
-Package-specific implementation details should go in the respective package's documentation.
+Package-specific implementation details should go in the respective package's
+documentation.
 
 ---
 
-**Note**: These are permanent reference documents. For temporary work-in-progress documentation, use `/docs/workspace/`.
+**Note**: These are permanent reference documents. For temporary
+work-in-progress documentation, use `/docs/workspace/`.

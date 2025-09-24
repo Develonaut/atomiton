@@ -6,20 +6,19 @@ Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ### 1. Pre-Implementation Review (MANDATORY)
 
-**When:** Before ANY new tool, script, or custom solution
-**Trigger Phrases:**
+**When:** Before ANY new tool, script, or custom solution **Trigger Phrases:**
 
 - "Let's write a script to..."
 - "We need a custom solution for..."
 - "I'll create a utility to handle..."
 - "We should build our own..."
 
-**Guilliman's Role:** Research and document existing solutions BEFORE any code is written
+**Guilliman's Role:** Research and document existing solutions BEFORE any code
+is written
 
 ### 2. Package.json Script Additions
 
-**When:** Adding or modifying any npm/pnpm scripts
-**Questions Guilliman Asks:**
+**When:** Adding or modifying any npm/pnpm scripts **Questions Guilliman Asks:**
 
 - Does the tool already provide this command?
 - Can we use pnpm filtering instead of a custom script?
@@ -27,8 +26,7 @@ Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ### 3. Testing Configuration Changes
 
-**When:** Modifying test setup or adding test utilities
-**Guilliman Checks:**
+**When:** Modifying test setup or adding test utilities **Guilliman Checks:**
 
 - Are we using Vitest projects correctly?
 - Are we leveraging Playwright's built-in features?
@@ -36,8 +34,8 @@ Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ### 4. Build/Dev Configuration
 
-**When:** Touching vite.config, tsconfig, or build scripts
-**Guilliman Ensures:**
+**When:** Touching vite.config, tsconfig, or build scripts **Guilliman
+Ensures:**
 
 - Using shared presets from @atomiton/vite-config
 - Not duplicating configuration across packages
@@ -45,8 +43,8 @@ Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ### 5. CI/CD Pipeline Changes
 
-**When:** Modifying GitHub Actions or deployment scripts
-**Guilliman Validates:**
+**When:** Modifying GitHub Actions or deployment scripts **Guilliman
+Validates:**
 
 - Using GitHub Actions features (matrices, caching, artifacts)
 - Not writing bash scripts for what Actions provides
@@ -106,19 +104,23 @@ Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ### For Testing
 
-"Vitest has projects for multi-package testing. Playwright has fixtures for test setup. Jest has built-in mocking. Which feature do you need?"
+"Vitest has projects for multi-package testing. Playwright has fixtures for test
+setup. Jest has built-in mocking. Which feature do you need?"
 
 ### For Building
 
-"Vite handles HMR, env variables, and proxying. Turbo/nx handle orchestration. What specific problem are we solving?"
+"Vite handles HMR, env variables, and proxying. Turbo/nx handle orchestration.
+What specific problem are we solving?"
 
 ### For Scripts
 
-"pnpm has filtering (-F), recursion (-r), and workspaces. GitHub Actions has matrices. What can't these handle?"
+"pnpm has filtering (-F), recursion (-r), and workspaces. GitHub Actions has
+matrices. What can't these handle?"
 
 ### For Configuration
 
-"We have shared configs in @atomiton/\*-config packages. Why do we need custom configuration?"
+"We have shared configs in @atomiton/\*-config packages. Why do we need custom
+configuration?"
 
 ## Workflow Integration Points
 
@@ -150,4 +152,5 @@ Guilliman should be invoked PROACTIVELY in these scenarios:
 
 ---
 
-**Remember:** Guilliman's job is to be the voice saying "The tool already does this" BEFORE we write code, not after.
+**Remember:** Guilliman's job is to be the voice saying "The tool already does
+this" BEFORE we write code, not after.

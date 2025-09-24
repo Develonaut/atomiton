@@ -474,7 +474,8 @@ Start with Button as the reference implementation:
 
 ### Phase 4: Standardize Complex Components
 
-Gradually refactor application-specific components to follow patterns where it makes sense.
+Gradually refactor application-specific components to follow patterns where it
+makes sense.
 
 ## Best Practices
 

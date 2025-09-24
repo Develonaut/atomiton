@@ -4,7 +4,8 @@
 
 ### 🎯 Primary Focus: Utility Expansion & Integration Support
 
-The hooks package is stable and well-utilized. Focus is on identifying common patterns across the codebase and extracting them into reusable hooks.
+The hooks package is stable and well-utilized. Focus is on identifying common
+patterns across the codebase and extracting them into reusable hooks.
 
 ## Upcoming Enhancements
 
@@ -188,6 +189,5 @@ Explore DX improvements:
 
 ---
 
-**Maintained by**: Atomiton Core Team
-**Last Updated**: January 2025
-**Next Review**: February 2025
+**Maintained by**: Atomiton Core Team **Last Updated**: January 2025 **Next
+Review**: February 2025

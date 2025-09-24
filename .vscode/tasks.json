@@ -63,14 +63,11 @@
       }
     },
     {
-      "label": "🧪 Run Specific Test",
-      "detail": "Run a specific test file or pattern",
+      "label": "Test: All Unit Tests",
+      "detail": "Run unit tests across all packages",
       "type": "shell",
       "command": "pnpm",
-      "args": [
-        "test",
-        "${input:testPattern}"
-      ],
+      "args": ["test"],
       "group": {
         "kind": "test",
         "isDefault": true
@@ -80,21 +77,274 @@
         "source": "vitest",
         "fileLocation": ["relative", "${workspaceFolder}"],
         "severity": "error",
-        "pattern": [
-          {
-            "regexp": "^\\s*(FAIL|ERROR)\\s+(.+)\\s+>\\s+(.+)$",
-            "severity": 1,
-            "file": 2,
-            "message": 3
-          },
-          {
-            "regexp": "^\\s+(.+):(\\d+):(\\d+)\\s*$",
+        "pattern": {
+          "regexp": "^\\s*❯\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: All Integration Tests",
+      "detail": "Run integration tests across packages",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:integration"],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "vitest",
+        "source": "vitest",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^\\s*❯\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: E2E Tests",
+      "detail": "Run end-to-end tests in the e2e package",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:e2e"],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "playwright",
+        "source": "playwright",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^\\s+at\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: E2E Tests (UI Mode)",
+      "detail": "Run E2E tests with Playwright UI for debugging",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:e2e:ui"],
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "never",
+        "focus": true,
+        "panel": "new",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: E2E Tests (Debug Mode)",
+      "detail": "Run E2E tests in debug mode with browser visible",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:e2e:debug"],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "playwright",
+        "source": "playwright",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^\\s+at\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": true,
+        "panel": "new",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: Watch Mode",
+      "detail": "Run tests in watch mode for development",
+      "type": "shell",
+      "command": "turbo",
+      "args": ["run", "test:watch"],
+      "group": "test",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "vitest",
+        "source": "vitest",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^\\s*❯\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*watching.*",
+          "endsPattern": ".*waiting for file changes.*"
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "dedicated",
+        "clear": false,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: Current File",
+      "detail": "Run tests for the currently open file",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "test",
+        "${relativeFile}"
+      ],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "vitest",
+        "source": "vitest",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^\\s*❯\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": true,
+        "panel": "new",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: All Tests",
+      "detail": "Run all test types sequentially (unit, integration, e2e)",
+      "type": "shell",
+      "command": "bash",
+      "args": ["-c", "pnpm test && pnpm test:integration && pnpm test:e2e"],
+      "group": "test",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Test: All Unit Tests",
+        "Test: All Integration Tests",
+        "Test: E2E Tests"
+      ],
+      "problemMatcher": [
+        {
+          "owner": "vitest",
+          "source": "vitest",
+          "fileLocation": ["relative", "${workspaceFolder}"],
+          "severity": "error",
+          "pattern": {
+            "regexp": "^\\s*❯\\s+([^:]+):(\\d+):(\\d+).*$",
             "file": 1,
             "line": 2,
             "column": 3,
-            "loop": true
+            "message": 0
           }
-        ]
+        },
+        {
+          "owner": "playwright",
+          "source": "playwright",
+          "fileLocation": ["relative", "${workspaceFolder}"],
+          "severity": "error",
+          "pattern": {
+            "regexp": "^\\s+at\\s+([^:]+):(\\d+):(\\d+).*$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "message": 0
+          }
+        }
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "shared",
+        "clear": true,
+        "close": false
+      }
+    },
+    {
+      "label": "Test: Run Specific Test",
+      "detail": "Run a specific test file or pattern",
+      "type": "shell",
+      "command": "pnpm",
+      "args": [
+        "test",
+        "${input:testPattern}"
+      ],
+      "group": "test",
+      "problemMatcher": {
+        "owner": "vitest",
+        "source": "vitest",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "severity": "error",
+        "pattern": {
+          "regexp": "^\\s*❯\\s+([^:]+):(\\d+):(\\d+).*$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 0
+        }
       },
       "presentation": {
         "echo": true,
@@ -114,44 +364,6 @@
       "args": ["build"],
       "group": "build",
       "problemMatcher": ["$tsc", "$eslint-stylish"],
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "revealProblems": "onProblem",
-        "focus": false,
-        "panel": "shared",
-        "clear": true,
-        "close": false
-      }
-    },
-    {
-      "label": "🧪 test",
-      "detail": "Run all tests",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["test"],
-      "group": "test",
-      "problemMatcher": {
-        "owner": "vitest",
-        "source": "vitest",
-        "fileLocation": ["relative", "${workspaceFolder}"],
-        "severity": "error",
-        "pattern": [
-          {
-            "regexp": "^\\s*(FAIL|ERROR)\\s+(.+)\\s+>\\s+(.+)$",
-            "severity": 1,
-            "file": 2,
-            "message": 3
-          },
-          {
-            "regexp": "^\\s+(.+):(\\d+):(\\d+)\\s*$",
-            "file": 1,
-            "line": 2,
-            "column": 3,
-            "loop": true
-          }
-        ]
-      },
       "presentation": {
         "echo": true,
         "reveal": "always",

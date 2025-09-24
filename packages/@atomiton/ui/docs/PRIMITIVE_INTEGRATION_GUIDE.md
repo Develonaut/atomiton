@@ -2,7 +2,9 @@
 
 ## Overview
 
-This guide establishes the pattern for integrating shadcn/ui primitives into our UI component library. We use shadcn as our primitive layer while maintaining a clear separation of concerns between base functionality and business logic.
+This guide establishes the pattern for integrating shadcn/ui primitives into our
+UI component library. We use shadcn as our primitive layer while maintaining a
+clear separation of concerns between base functionality and business logic.
 
 ## Architecture Pattern
 
@@ -36,7 +38,8 @@ When adding a new shadcn component:
 npx shadcn-ui@latest add button --path=src/primitives
 ```
 
-**Key Rule**: NEVER modify the shadcn primitive directly. It should remain as-is for:
+**Key Rule**: NEVER modify the shadcn primitive directly. It should remain as-is
+for:
 
 - Easy updates from shadcn
 - Clear separation of concerns
@@ -244,17 +247,16 @@ When shadcn releases updates:
 
 ## FAQ
 
-**Q: Should we edit the shadcn primitive's styles directly?**
-A: No. Keep primitives unmodified for maintainability.
+**Q: Should we edit the shadcn primitive's styles directly?** A: No. Keep
+primitives unmodified for maintainability.
 
-**Q: Where do custom variants go?**
-A: In your wrapper component's styles file.
+**Q: Where do custom variants go?** A: In your wrapper component's styles file.
 
-**Q: How do we handle conflicting styles?**
-A: CSS specificity and CVA's className merging handle this. Your wrapper styles override primitive styles.
+**Q: How do we handle conflicting styles?** A: CSS specificity and CVA's
+className merging handle this. Your wrapper styles override primitive styles.
 
-**Q: Can we use shadcn's variants in our wrapper?**
-A: Yes, pass them through or map them in your resolver.
+**Q: Can we use shadcn's variants in our wrapper?** A: Yes, pass them through or
+map them in your resolver.
 
-**Q: What about shadcn's cn() utility?**
-A: Use it in primitives, but prefer CVA in wrappers for consistency.
+**Q: What about shadcn's cn() utility?** A: Use it in primitives, but prefer CVA
+in wrappers for consistency.

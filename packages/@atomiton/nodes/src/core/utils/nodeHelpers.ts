@@ -14,14 +14,12 @@ export const hasChildren = (node: NodeDefinition): boolean =>
 /**
  * Check if a node is a leaf node (no children)
  */
-export const isLeafNode = (node: NodeDefinition): boolean =>
-  !hasChildren(node);
+export const isLeafNode = (node: NodeDefinition): boolean => !hasChildren(node);
 
 /**
  * Get the node type from metadata
  */
-export const getNodeType = (node: NodeDefinition): string =>
-  node.metadata.type;
+export const getNodeType = (node: NodeDefinition): string => node.metadata.type;
 
 /**
  * Check if a node has edges

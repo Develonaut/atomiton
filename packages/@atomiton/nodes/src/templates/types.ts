@@ -1,12 +1,12 @@
-import type { NodeDefinition } from '#core/types/definition';
+import type { NodeDefinition } from "#core/types/definition";
 
 /**
  * Templates are just group node definitions
  * No special type needed - just use NodeDefinition directly
  */
 export type Template = NodeDefinition & {
-  metadata: NodeDefinition['metadata'] & {
-    type: 'group';
+  metadata: NodeDefinition["metadata"] & {
+    type: "group";
   };
 };
 
@@ -21,4 +21,4 @@ export type TemplateMetadata = {
   keywords: string[];
   category: string;
   version: string;
-}
+};

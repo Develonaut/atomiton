@@ -1,13 +1,13 @@
-import type { NodeDefinition } from '#core/types/definition';
-import { loadTemplate } from '#templates/loader';
+import type { NodeDefinition } from "#core/types/definition";
+import { loadTemplate } from "#templates/loader";
 
 // Import YAML content as strings (will be handled by build system)
 // @ts-expect-error - Vite will handle these raw imports
-import helloWorldYaml from '#templates/yaml/hello-world.yaml?raw';
+import helloWorldYaml from "#templates/yaml/hello-world.yaml?raw";
 // @ts-expect-error - Vite will handle these raw imports
-import dataTransformYaml from '#templates/yaml/data-transform.yaml?raw';
+import dataTransformYaml from "#templates/yaml/data-transform.yaml?raw";
 // @ts-expect-error - Vite will handle these raw imports
-import imageProcessorYaml from '#templates/yaml/image-processor.yaml?raw';
+import imageProcessorYaml from "#templates/yaml/image-processor.yaml?raw";
 
 /**
  * Template registry - simple array of templates
@@ -48,7 +48,7 @@ export async function loadBuiltInTemplates(): Promise<void> {
  * Get template by ID
  */
 export function getTemplate(id: string): NodeDefinition | undefined {
-  return templates.find(t => t.id === id);
+  return templates.find((t) => t.id === id);
 }
 
 /**
@@ -62,14 +62,14 @@ export function getAllTemplates(): NodeDefinition[] {
  * Get templates by category
  */
 export function getTemplatesByCategory(category: string): NodeDefinition[] {
-  return templates.filter(t => t.metadata?.category === category);
+  return templates.filter((t) => t.metadata?.category === category);
 }
 
 /**
  * Get templates by tag
  */
 export function getTemplatesByTag(tag: string): NodeDefinition[] {
-  return templates.filter(t => t.metadata?.tags?.includes(tag));
+  return templates.filter((t) => t.metadata?.tags?.includes(tag));
 }
 
 /**
@@ -78,16 +78,18 @@ export function getTemplatesByTag(tag: string): NodeDefinition[] {
 export function searchTemplates(query: string): NodeDefinition[] {
   const lowerQuery = query.toLowerCase();
 
-  return templates.filter(template => {
-    const name = template.name?.toLowerCase() || '';
-    const description = template.metadata?.description?.toLowerCase() || '';
-    const keywords = template.metadata?.keywords?.join(' ').toLowerCase() || '';
-    const tags = template.metadata?.tags?.join(' ').toLowerCase() || '';
+  return templates.filter((template) => {
+    const name = template.name?.toLowerCase() || "";
+    const description = template.metadata?.description?.toLowerCase() || "";
+    const keywords = template.metadata?.keywords?.join(" ").toLowerCase() || "";
+    const tags = template.metadata?.tags?.join(" ").toLowerCase() || "";
 
-    return name.includes(lowerQuery) ||
-           description.includes(lowerQuery) ||
-           keywords.includes(lowerQuery) ||
-           tags.includes(lowerQuery);
+    return (
+      name.includes(lowerQuery) ||
+      description.includes(lowerQuery) ||
+      keywords.includes(lowerQuery) ||
+      tags.includes(lowerQuery)
+    );
   });
 }
 
@@ -95,14 +97,14 @@ export function searchTemplates(query: string): NodeDefinition[] {
  * Get all template IDs
  */
 export function getTemplateIds(): string[] {
-  return templates.map(t => t.id);
+  return templates.map((t) => t.id);
 }
 
 /**
  * Check if template exists
  */
 export function hasTemplate(id: string): boolean {
-  return templates.some(t => t.id === id);
+  return templates.some((t) => t.id === id);
 }
 
 /**
@@ -110,11 +112,11 @@ export function hasTemplate(id: string): boolean {
  */
 export function addTemplate(template: NodeDefinition): void {
   if (!template.children || template.children.length === 0) {
-    throw new Error('Only nodes with children can be added as templates');
+    throw new Error("Only nodes with children can be added as templates");
   }
 
   // Remove existing template with same ID
-  const existingIndex = templates.findIndex(t => t.id === template.id);
+  const existingIndex = templates.findIndex((t) => t.id === template.id);
   if (existingIndex !== -1) {
     templates.splice(existingIndex, 1);
   }
@@ -126,7 +128,7 @@ export function addTemplate(template: NodeDefinition): void {
  * Remove template from registry
  */
 export function removeTemplate(id: string): boolean {
-  const index = templates.findIndex(t => t.id === id);
+  const index = templates.findIndex((t) => t.id === id);
   if (index !== -1) {
     templates.splice(index, 1);
     return true;

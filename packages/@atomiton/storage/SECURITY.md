@@ -1,6 +1,8 @@
 # Storage Package Security Plans
 
-> **Note**: This document contains package-specific security planning. For the complete project security architecture, see [Security Architecture](../../docs/architecture/SECURITY.md).
+> **Note**: This document contains package-specific security planning. For the
+> complete project security architecture, see
+> [Security Architecture](../../docs/architecture/SECURITY.md).
 
 ## Current Security Status
 
@@ -53,7 +55,8 @@ export class ElectronSecureStorage implements ISecureStorage {
 
 **PLANNED Security Properties:**
 
-- Encryption keys stored in OS keychain (macOS Keychain, Windows Credential Manager, Linux Secret Service)
+- Encryption keys stored in OS keychain (macOS Keychain, Windows Credential
+  Manager, Linux Secret Service)
 - Additional encryption layer to prevent cross-app access
 - Data only accessible to current user account
 - Automatic cleanup on app uninstall
@@ -237,7 +240,6 @@ const apiKey = await storage.retrieveCredential("openai", "api-key");
 
 ---
 
-**Last Updated**: 2025-09-17
-**Owner**: @atomiton/storage package
-**Status**: PLANNING DOCUMENT ONLY - No security features implemented
-**Next Review**: When security implementation begins
+**Last Updated**: 2025-09-17 **Owner**: @atomiton/storage package **Status**:
+PLANNING DOCUMENT ONLY - No security features implemented **Next Review**: When
+security implementation begins

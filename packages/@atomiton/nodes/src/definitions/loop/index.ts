@@ -18,15 +18,15 @@ import { loopDefaults, loopSchema } from "#definitions/loop/schema";
  */
 export const loopDefinition: NodeDefinition = createNodeDefinition({
   metadata: createNodeMetadata({
-    id         : "loop",
-    name       : "Loop",
-    type       : "loop",
-    version    : "1.0.0",
-    author     : "Atomiton Core Team",
+    id: "loop",
+    name: "Loop",
+    type: "loop",
+    version: "1.0.0",
+    author: "Atomiton Core Team",
     description: "Loop and iterate over data items with various strategies",
-    category   : "logic",
-    icon       : "repeat",
-    keywords   : [
+    category: "logic",
+    icon: "repeat",
+    keywords: [
       "loop",
       "iterate",
       "foreach",
@@ -37,12 +37,12 @@ export const loopDefinition: NodeDefinition = createNodeDefinition({
       "control",
       "iteration",
     ],
-    tags        : ["loop", "iterate", "control", "repeat", "iteration"],
+    tags: ["loop", "iterate", "control", "repeat", "iteration"],
     experimental: false,
-    deprecated  : false,
+    deprecated: false,
   }),
-  parameters : createNodeParameters(loopSchema, loopDefaults, loopFields),
-  inputPorts : loopInputPorts,
+  parameters: createNodeParameters(loopSchema, loopDefaults, loopFields),
+  inputPorts: loopInputPorts,
   outputPorts: loopOutputPorts,
 });
 
@@ -52,10 +52,10 @@ export default loopDefinition;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullLoopSchema = v.object({
   ...loopSchema,
-  enabled    : v.boolean().default(true),
-  timeout    : v.number().positive().default(30000),
-  retries    : v.number().int().min(0).default(1),
-  label      : v.string().optional(),
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
   description: v.string().optional(),
 });
 

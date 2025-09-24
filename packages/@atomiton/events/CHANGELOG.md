@@ -1,22 +1,27 @@
 # Changelog
 
-All notable changes to the @atomiton/events package will be documented in this file.
+All notable changes to the @atomiton/events package will be documented in this
+file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.2.0] - 2025-01-19
 
 ### Added
 
-- New split export pattern with `/browser` and `/desktop` entry points for environment-specific builds
-- Factory functions: `createBrowserEventBus`, `createDesktopEventBus`, and `createLocalEventBus`
+- New split export pattern with `/browser` and `/desktop` entry points for
+  environment-specific builds
+- Factory functions: `createBrowserEventBus`, `createDesktopEventBus`, and
+  `createLocalEventBus`
 - Auto-forwarding setup for desktop IPC communication via `setupAutoForwarding`
 - Environment-specific event bus implementations optimized for each platform
 
 ### Changed
 
-- **BREAKING**: Removed default export - must now import from `/browser` or `/desktop` paths
+- **BREAKING**: Removed default export - must now import from `/browser` or
+  `/desktop` paths
   - Example: `import { createEventBus } from "@atomiton/events/desktop"`
 - Modernized to functional factory pattern from class-based approach
 - Refactored package.json exports to use explicit path-based exports

@@ -1,4 +1,4 @@
-import { createLocalEventBus } from '#desktop/bus/createDesktopEventBus';
+import { createLocalEventBus } from "#desktop/bus/createDesktopEventBus";
 export { createLocalEventBus };
 
 // Re-export the function with alternative name for clarity

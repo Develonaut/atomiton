@@ -2,7 +2,8 @@
 
 ## Use Semantic Layout Components
 
-Instead of using raw HTML elements, use the layout components from `@atomiton/ui`:
+Instead of using raw HTML elements, use the layout components from
+`@atomiton/ui`:
 
 ### ❌ Don't use raw divs:
 

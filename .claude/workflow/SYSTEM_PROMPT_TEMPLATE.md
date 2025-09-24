@@ -33,7 +33,8 @@ Remember: You MUST follow the workflow above. Start by reading the execution pla
 
 ## Key Enforcement Points
 
-1. **No Work Without Confirmation**: Agent must verbally confirm they've read the plan
+1. **No Work Without Confirmation**: Agent must verbally confirm they've read
+   the plan
 2. **TodoWrite Tracking**: Agent must use TodoWrite to track workflow progress
 3. **Worktree Creation**: Agent must create a worktree for isolation
 4. **Sequential Steps**: Agent cannot skip steps in the workflow

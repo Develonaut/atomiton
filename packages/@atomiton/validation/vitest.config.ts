@@ -1,3 +1,3 @@
-import { defineTestConfig } from "@atomiton/vite-config/vitest";
+import { defineTestConfig } from '@atomiton/vite-config/vitest';
 
 export default defineTestConfig();

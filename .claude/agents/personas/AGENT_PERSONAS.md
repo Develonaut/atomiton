@@ -1,6 +1,7 @@
 # Agent Personas - Team Directory
 
-This directory contains the complete team of specialized agents for the Atomiton project.
+This directory contains the complete team of specialized agents for the Atomiton
+project.
 
 ## Team Members
 
@@ -32,4 +33,5 @@ For detailed workflows and execution plans, see:
 
 ---
 
-**Note**: Each agent has specialized responsibilities and must coordinate through the defined workflow before making changes.
+**Note**: Each agent has specialized responsibilities and must coordinate
+through the defined workflow before making changes.

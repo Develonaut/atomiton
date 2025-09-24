@@ -24,4 +24,5 @@ export const CONDUCTOR_EVENTS = {
   WORKER_ERROR: "conductor:worker:error",
 } as const;
 
-export type ConductorEventName = typeof CONDUCTOR_EVENTS[keyof typeof CONDUCTOR_EVENTS];
+export type ConductorEventName =
+  (typeof CONDUCTOR_EVENTS)[keyof typeof CONDUCTOR_EVENTS];

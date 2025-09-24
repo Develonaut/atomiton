@@ -1,4 +1,4 @@
-import type { EventHandler, EventListener } from '#core/types';
+import type { EventHandler, EventListener } from "#core/types";
 
 export type EventContext = {
   emit(eventName: string, data: unknown): void;
@@ -20,7 +20,7 @@ export function createEventContext(
     off(event: string, listener: EventListener): unknown;
     removeAllListeners(event?: string): unknown;
     listenerCount(event: string): number;
-  }
+  },
 ): EventContext {
   return {
     emit: (eventName: string, data: unknown) => {
@@ -38,6 +38,6 @@ export function createEventContext(
     removeAllListeners: () => emitter.removeAllListeners(),
     listenerCount: (eventName: string) => emitter.listenerCount(eventName),
     listenerMap: new WeakMap(),
-    domain
+    domain,
   };
 }

@@ -1,5 +1,5 @@
 import { bench, describe } from 'vitest';
-import { v, validators } from "#index";
+import { v, validators } from '#index';
 
 describe('Validation Benchmarks', () => {
   const UserSchema = v.object({

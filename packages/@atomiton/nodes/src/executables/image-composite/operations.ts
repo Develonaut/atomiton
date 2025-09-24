@@ -32,7 +32,7 @@ export async function fileExists(filePath: string): Promise<boolean> {
  * Get image metadata (mock implementation)
  */
 export async function getImageMetadata(
-  imagePath: string
+  imagePath: string,
 ): Promise<{ width: number; height: number; format: string; size: number }> {
   try {
     const stats = await fs.promises.stat(imagePath);
@@ -65,14 +65,14 @@ export async function getImageMetadata(
     }
 
     return {
-      width : 1920, // Mock width
+      width: 1920, // Mock width
       height: 1080, // Mock height
       format,
-      size  : stats.size,
+      size: stats.size,
     };
   } catch (error) {
     throw new Error(
-      `Failed to get image metadata: ${error instanceof Error ? error.message : String(error)}`
+      `Failed to get image metadata: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }
@@ -83,7 +83,7 @@ export async function getImageMetadata(
 async function performOverlay(
   baseImagePath: string,
   overlayImagePath: string,
-  outputPath: string
+  outputPath: string,
 ): Promise<void> {
   // Check if input files exist
   if (!(await fileExists(baseImagePath))) {
@@ -102,7 +102,7 @@ async function performOverlay(
  */
 async function performMerge(
   images: ImageInput[],
-  outputPath: string
+  outputPath: string,
 ): Promise<void> {
   if (!images || images.length < 2) {
     throw new Error("Merge operation requires at least 2 images");
@@ -132,7 +132,7 @@ async function performComposite(
     baseImage?: ImageInput;
     images?: ImageInput[];
   },
-  outputPath: string
+  outputPath: string,
 ): Promise<void> {
   // Use base image if available, otherwise first image from array
   let sourceImage: ImageInput | undefined;
@@ -167,12 +167,12 @@ export async function performImageComposition(
   },
   outputPath: string,
   config: ImageCompositeParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<void> {
   context.log?.info?.(`Performing ${operation} operation`, {
     operation,
     outputFormat: config.outputFormat,
-    quality     : config.quality,
+    quality: config.quality,
     outputPath,
   });
 
@@ -183,13 +183,13 @@ export async function performImageComposition(
     case "overlay":
       if (!inputs.baseImage?.path || !inputs.overlayImage?.path) {
         throw new Error(
-          "Overlay operation requires both base and overlay images"
+          "Overlay operation requires both base and overlay images",
         );
       }
       await performOverlay(
         inputs.baseImage.path,
         inputs.overlayImage.path,
-        outputPath
+        outputPath,
       );
       break;
 

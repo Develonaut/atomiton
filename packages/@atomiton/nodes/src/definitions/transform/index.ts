@@ -10,23 +10,29 @@ import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
 import { transformFields } from "#definitions/transform/fields";
-import { transformInputPorts, transformOutputPorts } from "#definitions/transform/ports";
-import { transformDefaults, transformSchema } from "#definitions/transform/schema";
+import {
+  transformInputPorts,
+  transformOutputPorts,
+} from "#definitions/transform/ports";
+import {
+  transformDefaults,
+  transformSchema,
+} from "#definitions/transform/schema";
 
 /**
  * Transform node definition (browser-safe)
  */
 export const transformDefinition: NodeDefinition = createNodeDefinition({
   metadata: createNodeMetadata({
-    id         : "transform",
-    name       : "Transform",
-    type       : "transform",
-    version    : "1.0.0",
-    author     : "Atomiton Core Team",
+    id: "transform",
+    name: "Transform",
+    type: "transform",
+    version: "1.0.0",
+    author: "Atomiton Core Team",
     description: "Transform and manipulate data arrays",
-    category   : "data",
-    icon       : "wand-2",
-    keywords   : [
+    category: "data",
+    icon: "wand-2",
+    keywords: [
       "transform",
       "map",
       "filter",
@@ -39,16 +45,16 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
       "flatten",
       "unique",
     ],
-    tags        : ["transform", "data", "array", "manipulation", "processing"],
+    tags: ["transform", "data", "array", "manipulation", "processing"],
     experimental: false,
-    deprecated  : false,
+    deprecated: false,
   }),
   parameters: createNodeParameters(
     transformSchema,
     transformDefaults,
-    transformFields
+    transformFields,
   ),
-  inputPorts : transformInputPorts,
+  inputPorts: transformInputPorts,
   outputPorts: transformOutputPorts,
 });
 
@@ -58,10 +64,10 @@ export default transformDefinition;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullTransformSchema = v.object({
   ...transformSchema,
-  enabled    : v.boolean().default(true),
-  timeout    : v.number().positive().default(30000),
-  retries    : v.number().int().min(0).default(1),
-  label      : v.string().optional(),
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
   description: v.string().optional(),
 });
 

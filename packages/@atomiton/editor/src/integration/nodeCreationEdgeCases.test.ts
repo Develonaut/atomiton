@@ -132,7 +132,7 @@ describe("node-creation utils - edge cases", () => {
   describe("createNode edge cases", () => {
     it("should handle nodes with complex metadata", async () => {
       const { getNodeDefinition } = vi.mocked(
-        await import("@atomiton/nodes/definitions")
+        await import("@atomiton/nodes/definitions"),
       );
       getNodeDefinition.mockReturnValueOnce({
         metadata: {
@@ -173,7 +173,7 @@ describe("node-creation utils - edge cases", () => {
 
     it("should handle createAtomitonNode returning minimal data", async () => {
       const { createNodeDefinition: mockCreateNode } = vi.mocked(
-        await import("@atomiton/nodes/definitions")
+        await import("@atomiton/nodes/definitions"),
       );
       mockCreateNode.mockReturnValueOnce({
         id: "minimal-id",
@@ -194,9 +194,8 @@ describe("node-creation utils - edge cases", () => {
     });
 
     it("should override data with parameter defaults when available", async () => {
-      const { createNodeDefinition: mockCreateNode, getNodeDefinition } = vi.mocked(
-        await import("@atomiton/nodes/definitions")
-      );
+      const { createNodeDefinition: mockCreateNode, getNodeDefinition } =
+        vi.mocked(await import("@atomiton/nodes/definitions"));
       mockCreateNode.mockReturnValueOnce({
         id: "test-id",
         type: "atomic",
@@ -310,7 +309,7 @@ describe("node-creation utils - edge cases", () => {
           id: `node-${i}`,
           selected: true,
           position: { x: i, y: i },
-        })
+        }),
       ) as EditorNode[];
       const newNode = { id: "new-node", selected: true } as EditorNode;
 
@@ -320,7 +319,7 @@ describe("node-creation utils - edge cases", () => {
 
       expect(updatedNodes).toHaveLength(1001);
       expect(
-        updatedNodes.slice(0, 1000).every((node: EditorNode) => !node.selected)
+        updatedNodes.slice(0, 1000).every((node: EditorNode) => !node.selected),
       ).toBe(true);
       expect(updatedNodes[1000].selected).toBe(true);
       expect(end - start).toBeLessThan(50); // Should be fast

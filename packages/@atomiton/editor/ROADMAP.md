@@ -2,7 +2,10 @@
 
 ## Vision
 
-Create a powerful, extensible visual editor that enables users to build complex automation workflows through an intuitive node-based interface. The editor should be domain-agnostic, performant, and provide real-time feedback during workflow execution.
+Create a powerful, extensible visual editor that enables users to build complex
+automation workflows through an intuitive node-based interface. The editor
+should be domain-agnostic, performant, and provide real-time feedback during
+workflow execution.
 
 ## Long-term Goals
 
@@ -122,6 +125,5 @@ Polished user experience with advanced features like undo/redo and debugging.
 
 ---
 
-**Maintained by**: Atomiton Core Team
-**Last Updated**: January 2025
-**Next Review**: February 2025
+**Maintained by**: Atomiton Core Team **Last Updated**: January 2025 **Next
+Review**: February 2025

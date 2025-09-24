@@ -67,11 +67,11 @@ export const fileSystemSchema = {
  * Default values for file system parameters
  */
 export const fileSystemDefaults = {
-  operation        : "read" as const,
-  path             : "",
-  encoding         : "utf8" as const,
+  operation: "read" as const,
+  path: "",
+  encoding: "utf8" as const,
   createDirectories: false,
-  overwrite        : false,
-  recursive        : false,
-  fullPaths        : false,
+  overwrite: false,
+  recursive: false,
+  fullPaths: false,
 };

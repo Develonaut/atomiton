@@ -2,7 +2,10 @@
 
 ## Executive Summary
 
-n8n is a leading open-source workflow automation platform that combines visual node-based editing with code flexibility. This analysis examines n8n's node editor capabilities to identify features for MVP implementation and competitive advantages for Atomiton.
+n8n is a leading open-source workflow automation platform that combines visual
+node-based editing with code flexibility. This analysis examines n8n's node
+editor capabilities to identify features for MVP implementation and competitive
+advantages for Atomiton.
 
 ## Core Editor Features
 
@@ -10,15 +13,18 @@ n8n is a leading open-source workflow automation platform that combines visual n
 
 #### Strengths
 
-- **Multi-modal navigation**: Supports mouse drag, middle-button pan, touchpad gestures, and keyboard shortcuts
-- **Flexible zoom controls**: Mouse wheel, keyboard shortcuts (–/\_ for zoom out, Ctrl+wheel), and UI buttons
+- **Multi-modal navigation**: Supports mouse drag, middle-button pan, touchpad
+  gestures, and keyboard shortcuts
+- **Flexible zoom controls**: Mouse wheel, keyboard shortcuts (–/\_ for zoom
+  out, Ctrl+wheel), and UI buttons
 - **Canvas organization**: "Tidy up" feature for automatic node arrangement
 - **Sticky notes**: Built-in documentation directly on canvas
 - **Multi-selection**: Ctrl+A for all nodes, drag-select for multiple nodes
 
 #### Weaknesses
 
-- Limited undo/redo capabilities (no restore for accidentally deleted nodes with unsaved code)
+- Limited undo/redo capabilities (no restore for accidentally deleted nodes with
+  unsaved code)
 - Canvas performance can degrade with very large workflows (100+ nodes)
 
 ### Node System
@@ -26,11 +32,13 @@ n8n is a leading open-source workflow automation platform that combines visual n
 #### Strengths
 
 - **400+ pre-built integrations**: Extensive library of ready-to-use nodes
-- **Smart node connections**: Auto-connect when adding from panel with node selected
+- **Smart node connections**: Auto-connect when adding from panel with node
+  selected
 - **Visual feedback**: Real-time data preview at each step
 - **Partial execution**: Test individual nodes without running entire workflow
 - **Data pinning**: Save and replay test data without re-triggering events
-- **HTTP Request node**: Universal connector for any API without pre-built integration
+- **HTTP Request node**: Universal connector for any API without pre-built
+  integration
 
 #### Weaknesses
 
@@ -45,7 +53,8 @@ n8n is a leading open-source workflow automation platform that combines visual n
 - **Real-time data preview**: See outputs immediately next to settings
 - **Schema preview**: Understand data structures at each step
 - **Expression editor**: Powerful data mapping with JavaScript expressions
-- **Data transformation nodes**: Switches, if-conditions, loops, merges, deduplication
+- **Data transformation nodes**: Switches, if-conditions, loops, merges,
+  deduplication
 - **Multi-branch workflows**: Complex routing and conditional logic support
 
 #### Weaknesses
@@ -121,18 +130,24 @@ n8n is a leading open-source workflow automation platform that combines visual n
 
 ### vs Zapier
 
-- **n8n advantages**: Self-hosting, unlimited executions, code flexibility, 1000x cheaper
-- **Zapier advantages**: 5000+ integrations, easier for non-technical users, better support
+- **n8n advantages**: Self-hosting, unlimited executions, code flexibility,
+  1000x cheaper
+- **Zapier advantages**: 5000+ integrations, easier for non-technical users,
+  better support
 
 ### vs Make (Integromat)
 
-- **n8n advantages**: Open-source, self-hosting, better AI integration, no credit system
-- **Make advantages**: More visual canvas, easier branching logic, better templates
+- **n8n advantages**: Open-source, self-hosting, better AI integration, no
+  credit system
+- **Make advantages**: More visual canvas, easier branching logic, better
+  templates
 
 ### vs Node-RED
 
-- **n8n advantages**: Better for cloud services, modern UI, business automation focus
-- **Node-RED advantages**: Superior for IoT/hardware, better data visualization options
+- **n8n advantages**: Better for cloud services, modern UI, business automation
+  focus
+- **Node-RED advantages**: Superior for IoT/hardware, better data visualization
+  options
 
 ## MVP Requirements for Atomiton
 
@@ -160,7 +175,8 @@ n8n is a leading open-source workflow automation platform that combines visual n
 
 ### Innovation Opportunities
 
-1. **AI-assisted workflow building**: Suggest next nodes, auto-complete workflows
+1. **AI-assisted workflow building**: Suggest next nodes, auto-complete
+   workflows
 2. **Visual data transformations**: Drag-drop field mapping
 3. **Workflow analytics**: Usage patterns, optimization suggestions
 4. **Version control UI**: Visual diff, branching, merging
@@ -173,7 +189,9 @@ n8n is a leading open-source workflow automation platform that combines visual n
 
 ### For MVP
 
-Focus on core editor stability and user experience fundamentals. n8n's weaknesses in undo/redo, node organization, and debugging present immediate opportunities for differentiation.
+Focus on core editor stability and user experience fundamentals. n8n's
+weaknesses in undo/redo, node organization, and debugging present immediate
+opportunities for differentiation.
 
 ### Key Advantages to Leverage
 
@@ -190,4 +208,8 @@ Focus on core editor stability and user experience fundamentals. n8n's weaknesse
 
 ## Conclusion
 
-n8n sets a strong baseline for node-based workflow editors with its balance of visual simplicity and code power. Atomiton can compete by addressing n8n's UX pain points while maintaining its strengths in flexibility and extensibility. The key is to create a more refined, performant, and user-friendly experience without sacrificing power user capabilities.
+n8n sets a strong baseline for node-based workflow editors with its balance of
+visual simplicity and code power. Atomiton can compete by addressing n8n's UX
+pain points while maintaining its strengths in flexibility and extensibility.
+The key is to create a more refined, performant, and user-friendly experience
+without sacrificing power user capabilities.

@@ -92,7 +92,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         () => useEditorNode("test-lookup"),
         {
           wrapper: TestWrapper,
-        }
+        },
       );
 
       act(() => {
@@ -141,7 +141,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         }),
         {
           wrapper: TestWrapper,
-        }
+        },
       );
 
       act(() => {
@@ -152,7 +152,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
       console.log("Selected nodes:", result.current.selectedNodes);
       console.log(
         "Selected nodes length:",
-        result.current.selectedNodes.length
+        result.current.selectedNodes.length,
       );
 
       // These are failing in stress tests
@@ -175,7 +175,7 @@ describe.skip("Edge Case Analysis - ReactFlow Store Integration (requires full R
         },
         {
           wrapper: TestWrapper,
-        }
+        },
       );
 
       const testNode: EditorNode = {

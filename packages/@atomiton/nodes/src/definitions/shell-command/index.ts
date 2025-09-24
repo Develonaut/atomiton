@@ -10,23 +10,29 @@ import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
 import { shellCommandFields } from "#definitions/shell-command/fields";
-import { shellCommandInputPorts, shellCommandOutputPorts } from "#definitions/shell-command/ports";
-import { shellCommandDefaults, shellCommandSchema } from "#definitions/shell-command/schema";
+import {
+  shellCommandInputPorts,
+  shellCommandOutputPorts,
+} from "#definitions/shell-command/ports";
+import {
+  shellCommandDefaults,
+  shellCommandSchema,
+} from "#definitions/shell-command/schema";
 
 /**
  * Shell Command node definition (browser-safe)
  */
 export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
   metadata: createNodeMetadata({
-    id         : "shell-command",
-    name       : "Shell Command",
-    type       : "shell-command",
-    version    : "1.0.0",
-    author     : "Atomiton Core Team",
+    id: "shell-command",
+    name: "Shell Command",
+    type: "shell-command",
+    version: "1.0.0",
+    author: "Atomiton Core Team",
     description: "Execute shell commands and scripts",
-    category   : "system",
-    icon       : "terminal",
-    keywords   : [
+    category: "system",
+    icon: "terminal",
+    keywords: [
       "shell",
       "command",
       "terminal",
@@ -38,16 +44,16 @@ export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
       "powershell",
       "system",
     ],
-    tags        : ["shell", "system", "terminal", "command", "script"],
+    tags: ["shell", "system", "terminal", "command", "script"],
     experimental: false,
-    deprecated  : false,
+    deprecated: false,
   }),
   parameters: createNodeParameters(
     shellCommandSchema,
     shellCommandDefaults,
-    shellCommandFields
+    shellCommandFields,
   ),
-  inputPorts : shellCommandInputPorts,
+  inputPorts: shellCommandInputPorts,
   outputPorts: shellCommandOutputPorts,
 });
 
@@ -57,10 +63,10 @@ export default shellCommandDefinition;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullShellCommandSchema = v.object({
   ...shellCommandSchema,
-  enabled    : v.boolean().default(true),
-  timeout    : v.number().positive().default(30000),
-  retries    : v.number().int().min(0).default(1),
-  label      : v.string().optional(),
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
   description: v.string().optional(),
 });
 

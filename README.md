@@ -7,11 +7,16 @@
 
 > **⚠️ EARLY STAGE - ACTIVE DEVELOPMENT ⚠️**
 >
-> This project is in active development. While the core architecture is in place and the build system works, we're still implementing features and refining the user experience. Think of this as watching a house being built - the foundation and framework are solid, and we're now working on the rooms!
+> This project is in active development. While the core architecture is in place
+> and the build system works, we're still implementing features and refining the
+> user experience. Think of this as watching a house being built - the
+> foundation and framework are solid, and we're now working on the rooms!
 
 ## What Atomiton Will Be (Eventually)
 
-A beautiful, desktop-first automation platform that makes visual workflow creation simple and enjoyable. Think n8n meets Notion - powerful automation with an interface you'll actually enjoy using.
+A beautiful, desktop-first automation platform that makes visual workflow
+creation simple and enjoyable. Think n8n meets Notion - powerful automation with
+an interface you'll actually enjoy using.
 
 ## Current Reality Check
 
@@ -35,11 +40,14 @@ I could have kept this private until it was "ready," but:
 
 ## The Vision
 
-**For Individuals & Small Teams**: Not another enterprise tool, but something you'd actually use for personal projects.
+**For Individuals & Small Teams**: Not another enterprise tool, but something
+you'd actually use for personal projects.
 
-**Beautiful First**: Using Brainwave 2.0 aesthetics because automation tools don't have to be ugly.
+**Beautiful First**: Using Brainwave 2.0 aesthetics because automation tools
+don't have to be ugly.
 
-**Desktop Native**: Full file system access, no cloud required, your data stays yours.
+**Desktop Native**: Full file system access, no cloud required, your data stays
+yours.
 
 **Simple Over Complex**: 20-50 excellent nodes instead of 500+ mediocre ones.
 
@@ -79,7 +87,8 @@ atomiton/
 └── docs/            # Project documentation
 ```
 
-**Note**: The client app will have limited functionality on the web. Desktop app provides full file system access and native features.
+**Note**: The client app will have limited functionality on the web. Desktop app
+provides full file system access and native features.
 
 ## Want to Follow Along?
 
@@ -102,7 +111,8 @@ pnpm dev    # Start development servers
 
 ## Contributing
 
-While I appreciate the enthusiasm, the project is too early for contributions. For now:
+While I appreciate the enthusiasm, the project is too early for contributions.
+For now:
 
 - **Ideas & Feedback**: Yes please! Open an issue
 - **Code Contributions**: Not yet - still figuring out the basics
@@ -110,11 +120,13 @@ While I appreciate the enthusiasm, the project is too early for contributions. F
 
 ## Roadmap
 
-See [docs/project/ROADMAP.md](docs/project/ROADMAP.md) for the ambitious plan. Timeline: "When it's ready" (aka no idea).
+See [docs/project/ROADMAP.md](docs/project/ROADMAP.md) for the ambitious plan.
+Timeline: "When it's ready" (aka no idea).
 
 ## Why "Atomiton"?
 
-Atomic + Automaton = Atomiton. Small, indivisible units of automation that combine into complex workflows. Also, it sounds cool.
+Atomic + Automaton = Atomiton. Small, indivisible units of automation that
+combine into complex workflows. Also, it sounds cool.
 
 ## License
 
@@ -122,14 +134,17 @@ MIT - Because open source should be truly open.
 
 ## Credits
 
-See [CREDITS.md](CREDITS.md) for acknowledgments of the amazing projects and people that inspire Atomiton.
+See [CREDITS.md](CREDITS.md) for acknowledgments of the amazing projects and
+people that inspire Atomiton.
 
 ## Status
 
-Building in public from commit #1. Follow along as this transforms from hopes and dreams into (hopefully) something useful!
+Building in public from commit #1. Follow along as this transforms from hopes
+and dreams into (hopefully) something useful!
 
 ---
 
-**Remember**: This is a journey, not a destination. Nothing works yet, but that's part of the fun.
+**Remember**: This is a journey, not a destination. Nothing works yet, but
+that's part of the fun.
 
 _Last Updated: September 2025 - Foundation complete, building features_

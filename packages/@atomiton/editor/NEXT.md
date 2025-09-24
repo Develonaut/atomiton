@@ -2,21 +2,25 @@
 
 ## Overview
 
-Upcoming work for the @atomiton/editor package, prioritized by user impact and technical dependencies.
+Upcoming work for the @atomiton/editor package, prioritized by user impact and
+technical dependencies.
 
 ## Priority Queue
 
 ### 1. 🔴 Node Configuration System (Critical - Current Sprint)
 
-**Why Critical**: Users can add nodes but cannot fully configure them, limiting workflow creation capabilities.
+**Why Critical**: Users can add nodes but cannot fully configure them, limiting
+workflow creation capabilities.
 
-**Progress**: Architecture designed, basic display working, editable controls needed
+**Progress**: Architecture designed, basic display working, editable controls
+needed
 
 **Tasks**:
 
 - [x] Connect selection state to inspector display
 - [x] Design configuration system architecture
-- [ ] Build editable property field components (following [architecture](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)):
+- [ ] Build editable property field components (following
+      [architecture](../../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)):
   - [ ] `TextField` for string inputs with validation
   - [ ] `NumberField` with min/max validation
   - [ ] `SelectField` for enum dropdowns
@@ -40,7 +44,8 @@ Upcoming work for the @atomiton/editor package, prioritized by user impact and t
 
 ### 2. 🔴 Data Flow Connections (Critical - Next Sprint)
 
-**Why Critical**: Without connections, nodes are isolated and workflows cannot function.
+**Why Critical**: Without connections, nodes are isolated and workflows cannot
+function.
 
 **Tasks**:
 
@@ -203,6 +208,5 @@ Upcoming work for the @atomiton/editor package, prioritized by user impact and t
 
 ---
 
-**Last Updated**: 2025-01-10
-**Next Review**: 2025-01-17
-**Sprint Length**: 1 week
+**Last Updated**: 2025-01-10 **Next Review**: 2025-01-17 **Sprint Length**: 1
+week

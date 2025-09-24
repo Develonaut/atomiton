@@ -2,7 +2,9 @@
 
 ## Vision
 
-Create a comprehensive, type-safe event system that serves as the backbone for communication across the Atomiton platform, enabling real-time collaboration, workflow orchestration, and reactive user interfaces.
+Create a comprehensive, type-safe event system that serves as the backbone for
+communication across the Atomiton platform, enabling real-time collaboration,
+workflow orchestration, and reactive user interfaces.
 
 ## Q4 2025 - Foundation
 
@@ -105,5 +107,4 @@ Create a comprehensive, type-safe event system that serves as the backbone for c
 
 ---
 
-**Last Updated**: 2025-09-05
-**Next Review**: 2025-12-01
+**Last Updated**: 2025-09-05 **Next Review**: 2025-12-01

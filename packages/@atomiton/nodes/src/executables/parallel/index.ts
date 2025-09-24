@@ -28,7 +28,7 @@ export const parallelExecutable: NodeExecutable<ParallelParameters> =
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      config: ParallelParameters
+      config: ParallelParameters,
     ): Promise<NodeExecutionResult> {
       const startTime = Date.now();
 
@@ -39,9 +39,9 @@ export const parallelExecutable: NodeExecutable<ParallelParameters> =
         context.log?.info?.(
           `Starting parallel execution of ${operations.length} operations`,
           {
-            strategy   : config.strategy,
+            strategy: config.strategy,
             concurrency: config.concurrency,
-          }
+          },
         );
 
         if (operations.length === 0) {
@@ -55,16 +55,21 @@ export const parallelExecutable: NodeExecutable<ParallelParameters> =
         const operationResults = await executeStrategy(
           operations,
           config,
-          context
+          context,
         );
 
         // Calculate statistics and create output
         const { completed, failed, duration, results } = calculateStats(
           operationResults,
-          startTime
+          startTime,
         );
 
-        const output = createParallelOutput(completed, failed, duration, results);
+        const output = createParallelOutput(
+          completed,
+          failed,
+          duration,
+          results,
+        );
 
         context.log?.info?.(`Parallel execution completed in ${duration}ms`, {
           completed,
@@ -87,7 +92,7 @@ export const parallelExecutable: NodeExecutable<ParallelParameters> =
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
           outputs: createErrorOutput(Date.now() - startTime),
         };
       }

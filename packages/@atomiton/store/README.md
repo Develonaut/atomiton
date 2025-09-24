@@ -4,9 +4,13 @@ Simplified state management for the Atomiton Blueprint platform.
 
 ## Overview
 
-This package provides a clean, functional API for creating Zustand stores with built-in Immer support and optional persistence. Perfect for managing application state in the Blueprint editor, node configurations, and runtime execution state.
+This package provides a clean, functional API for creating Zustand stores with
+built-in Immer support and optional persistence. Perfect for managing
+application state in the Blueprint editor, node configurations, and runtime
+execution state.
 
-**Simplified from 473 to 111 lines of core code** - focusing on what you actually need.
+**Simplified from 473 to 111 lines of core code** - focusing on what you
+actually need.
 
 ## Installation
 
@@ -26,13 +30,15 @@ This package is part of the Atomiton monorepo and is not published separately.
 
 All stores automatically follow a consistent naming pattern:
 
-- **DevTools names**: Automatically prefixed with "atomiton-" and converted to kebab-case
+- **DevTools names**: Automatically prefixed with "atomiton-" and converted to
+  kebab-case
 - **Examples**:
   - `name: "BlueprintStore"` → DevTools shows `"atomiton-blueprint-store"`
   - `name: "Navigation"` → DevTools shows `"atomiton-navigation"`
   - `name: "Settings"` → DevTools shows `"atomiton-settings"`
 
-This ensures all Atomiton stores are easily identifiable in development tools and follows consistent naming conventions across the platform.
+This ensures all Atomiton stores are easily identifiable in development tools
+and follows consistent naming conventions across the platform.
 
 ## Quick Start
 
@@ -199,7 +205,9 @@ const increment = () =>
 const getCount = (state) => state.count;
 ```
 
-The store package simplifies state management while maintaining full type safety and the automatic "atomiton-" prefix ensures all stores are easily identifiable in development tools.
+The store package simplifies state management while maintaining full type safety
+and the automatic "atomiton-" prefix ensures all stores are easily identifiable
+in development tools.
 
 ## Development
 

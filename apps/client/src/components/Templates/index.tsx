@@ -15,7 +15,7 @@ type TemplateButtonProps = {
 function TemplateButton({ template, index }: TemplateButtonProps) {
   const defaultNodes =
     template.children?.map((node, nodeIndex) =>
-      convertNodeToEditorNode(node, nodeIndex)
+      convertNodeToEditorNode(node, nodeIndex),
     ) || [];
 
   const defaultEdges = template.edges?.map(convertEdgeToEditorEdge) || [];

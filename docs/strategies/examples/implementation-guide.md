@@ -495,4 +495,5 @@ Before marking a component as migrated:
 
 ---
 
-This guide provides practical examples for implementing the migration strategy. Follow each phase sequentially and test thoroughly at each step.
+This guide provides practical examples for implementing the migration strategy.
+Follow each phase sequentially and test thoroughly at each step.

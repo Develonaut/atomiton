@@ -14,7 +14,7 @@ import { getPathStats } from "#executables/file-system/utils";
 export async function createDirectoryOperation(
   dirPath: string,
   recursive: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -27,9 +27,9 @@ export async function createDirectoryOperation(
     if (stats.exists && stats.isDirectory) {
       context.log?.info?.(`Directory already exists: ${dirPath}`);
       return {
-        result : `Directory already exists: ${dirPath}`,
+        result: `Directory already exists: ${dirPath}`,
         success: true,
-        path   : dirPath,
+        path: dirPath,
         created: false,
       };
     }
@@ -39,9 +39,9 @@ export async function createDirectoryOperation(
     context.log?.info?.(`Created directory: ${dirPath}`, { recursive });
 
     return {
-      result : `Directory created: ${dirPath}`,
+      result: `Directory created: ${dirPath}`,
       success: true,
-      path   : dirPath,
+      path: dirPath,
       created: true,
     };
   } catch (error) {
@@ -60,7 +60,7 @@ export async function listDirectoryOperation(
   dirPath: string,
   recursive: boolean,
   includeHidden: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   files?: string[];
@@ -118,11 +118,11 @@ export async function listDirectoryOperation(
     });
 
     return {
-      result : files,
+      result: files,
       files,
       success: true,
-      path   : dirPath,
-      count  : files.length,
+      path: dirPath,
+      count: files.length,
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -140,7 +140,7 @@ export async function copyDirectoryOperation(
   sourcePath: string,
   destPath: string,
   overwrite: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -185,9 +185,9 @@ export async function copyDirectoryOperation(
     context.log?.info?.(`Copied directory from ${sourcePath} to ${destPath}`);
 
     return {
-      result : `Directory copied from ${sourcePath} to ${destPath}`,
+      result: `Directory copied from ${sourcePath} to ${destPath}`,
       success: true,
-      path   : destPath,
+      path: destPath,
       sourcePath,
       destPath,
     };
@@ -195,7 +195,7 @@ export async function copyDirectoryOperation(
     const errorMessage = error instanceof Error ? error.message : String(error);
     context.log?.error?.(
       `Failed to copy directory from ${sourcePath} to ${destPath}`,
-      { error: errorMessage }
+      { error: errorMessage },
     );
     throw new Error(`Copy directory failed: ${errorMessage}`);
   }

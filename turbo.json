@@ -16,6 +16,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_HEADED",
         "LEFTHOOK",
         "BUILD_TARGET"
       ]
@@ -31,6 +32,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_HEADED",
         "LEFTHOOK",
         "BUILD_TARGET"
       ]
@@ -46,6 +48,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_HEADED",
         "LEFTHOOK",
         "BUILD_TARGET"
       ]
@@ -61,6 +64,7 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_HEADED",
         "LEFTHOOK",
         "BUILD_TARGET"
       ]
@@ -76,13 +80,24 @@
         "ELECTRON_RENDERER_URL",
         "CI",
         "PLAYWRIGHT_BASE_URL",
+        "PLAYWRIGHT_HEADED",
         "LEFTHOOK",
         "BUILD_TARGET"
       ]
     },
     "test": {
-      "dependsOn": ["^test"],
-      "inputs": ["src/**", "package.json", "tsconfig.json", "vitest.config.ts"],
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**",
+        "test/**",
+        "tests/**",
+        "__tests__/**",
+        "*.test.*",
+        "*.spec.*",
+        "package.json",
+        "tsconfig.json",
+        "vitest.config.*"
+      ],
       "outputs": ["coverage/**"],
       "env": [
         "NODE_ENV",
@@ -106,14 +121,27 @@
     },
     "test:benchmark": {
       "dependsOn": [],
-      "inputs": ["src/**", "package.json", "tsconfig.json", "vitest.config.ts", "vitest.benchmark.config.ts"],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "tsconfig.json",
+        "vitest.config.ts",
+        "vitest.benchmark.config.ts"
+      ],
       "outputs": ["benchmark-results/**"],
       "env": ["NODE_ENV", "CI"]
     },
     "test:e2e": {
       "dependsOn": ["build"],
+      "inputs": [
+        "e2e/**",
+        "tests/e2e/**",
+        "playwright.config.*",
+        "package.json"
+      ],
+      "outputs": ["test-results/**", "playwright-report/**"],
       "cache": false,
-      "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL"]
+      "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL", "PLAYWRIGHT_WORKERS"]
     },
     "test:all": {
       "dependsOn": ["build"],
@@ -121,15 +149,28 @@
       "env": ["NODE_ENV", "CI"]
     },
     "test:watch": {
+      "dependsOn": [],
       "cache": false,
       "persistent": true,
       "env": ["NODE_ENV"]
     },
     "test:integration": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "package.json", "tsconfig.json", "vitest.config.ts", "vitest.integration.config.ts", "playwright.config.ts"],
-      "outputs": ["test-results/**"],
-      "env": ["NODE_ENV", "CI"]
+      "inputs": [
+        "src/**",
+        "test/**",
+        "tests/**",
+        "__tests__/**",
+        "*.integration.*",
+        "*.int.*",
+        "package.json",
+        "tsconfig.json",
+        "vitest.config.*",
+        "vitest.integration.config.*",
+        "playwright.config.*"
+      ],
+      "outputs": ["test-results/**", "coverage/**"],
+      "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL"]
     },
     "test:coverage": {
       "dependsOn": ["^build"],

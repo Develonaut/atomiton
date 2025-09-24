@@ -2,13 +2,16 @@
 
 ## Overview
 
-The conductor provides a unified API for Blueprint execution that works identically across all environments. It implements the factory pattern with automatic environment detection and transport selection.
+The conductor provides a unified API for Blueprint execution that works
+identically across all environments. It implements the factory pattern with
+automatic environment detection and transport selection.
 
 ## Core API
 
 ### createConductor Factory
 
-The `createConductor()` factory function is the primary entry point that provides consistent behavior across all environments:
+The `createConductor()` factory function is the primary entry point that
+provides consistent behavior across all environments:
 
 ```typescript
 import { createConductor } from "@atomiton/conductor";
@@ -58,7 +61,8 @@ interface ConductorInstance {
 
 ## Environment Detection
 
-The conductor automatically detects the runtime environment and selects the appropriate transport:
+The conductor automatically detects the runtime environment and selects the
+appropriate transport:
 
 ```typescript
 // Detection logic
@@ -330,10 +334,15 @@ await conductor.execute(request);
 
 ## Related Documentation
 
-- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Detailed transport layer implementation
-- **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Electron-specific integration patterns
-- **[BENTO_BOX Implementation](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity principles in practice
+- **[Transport Architecture](./TRANSPORT_ARCHITECTURE.md)** - Detailed transport
+  layer implementation
+- **[Electron Integration](./ELECTRON_ARCHITECTURE.md)** - Electron-specific
+  integration patterns
+- **[BENTO_BOX Implementation](./BENTO_BOX_IMPLEMENTATION.md)** - Simplicity
+  principles in practice
 
 ---
 
-The conductor API exemplifies our BENTO_BOX_PRINCIPLE: one simple, unified interface that works everywhere, with complexity hidden behind clean abstractions.
+The conductor API exemplifies our BENTO_BOX_PRINCIPLE: one simple, unified
+interface that works everywhere, with complexity hidden behind clean
+abstractions.

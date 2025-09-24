@@ -5,7 +5,8 @@
 ### 2025-09-05
 
 - ✅ **Type-safe event API** - Comprehensive TypeScript interface definitions
-- ✅ **Event emitter implementation** - Custom emitter with enhanced capabilities
+- ✅ **Event emitter implementation** - Custom emitter with enhanced
+  capabilities
 - ✅ **Subscription management** - Clean subscribe/unsubscribe patterns
 - ✅ **Testing infrastructure** - Vitest setup with coverage reporting
 

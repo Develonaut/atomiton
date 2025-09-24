@@ -26,7 +26,8 @@ The application will be available at http://localhost:3000
 
 ## Architecture
 
-This is the main client application that will be wrapped by Electron for desktop distribution. It provides:
+This is the main client application that will be wrapped by Electron for desktop
+distribution. It provides:
 
 - Blueprint visual editor (React Flow)
 - Node catalog and management

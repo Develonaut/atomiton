@@ -2,7 +2,10 @@
 
 ## Overview
 
-Atomiton's storage architecture provides a unified abstraction for storing and retrieving Blueprints, application data, and credentials across all supported platforms. The system automatically adapts to the runtime environment while maintaining a consistent API experience.
+Atomiton's storage architecture provides a unified abstraction for storing and
+retrieving Blueprints, application data, and credentials across all supported
+platforms. The system automatically adapts to the runtime environment while
+maintaining a consistent API experience.
 
 ## Design Principles
 
@@ -35,7 +38,8 @@ Atomiton's storage architecture provides a unified abstraction for storing and r
 
 ### Split Exports Factory Pattern
 
-The storage package uses split exports to optimize bundle sizes and provide platform-specific capabilities:
+The storage package uses split exports to optimize bundle sizes and provide
+platform-specific capabilities:
 
 ```typescript
 // Browser usage - optimized bundle without Node.js dependencies
@@ -489,16 +493,19 @@ const storage = createStorage({
 
 ### Implementation Details
 
-- **[Security Architecture](./SECURITY.md)** - Security implementation across storage systems
-- **[Storage Package](../../packages/@atomiton/storage/README.md)** - Package-specific usage and examples
+- **[Security Architecture](./SECURITY.md)** - Security implementation across
+  storage systems
+- **[Storage Package](../../packages/@atomiton/storage/README.md)** -
+  Package-specific usage and examples
 
 ### Integration Guides
 
-- **[Package Integration](../guides/PACKAGE_INTEGRATION.md)** - Using storage in applications
-- **[Development Principles](../guides/DEVELOPMENT_PRINCIPLES.md)** - Storage-aware development practices
+- **[Package Integration](../guides/PACKAGE_INTEGRATION.md)** - Using storage in
+  applications
+- **[Development Principles](../guides/DEVELOPMENT_PRINCIPLES.md)** -
+  Storage-aware development practices
 
 ---
 
-**Last Updated**: 2025-09-17
-**Architecture Review**: Required for significant changes
-**Performance Baseline**: See benchmarks section for current metrics
+**Last Updated**: 2025-09-17 **Architecture Review**: Required for significant
+changes **Performance Baseline**: See benchmarks section for current metrics

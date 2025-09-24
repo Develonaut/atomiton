@@ -4,9 +4,11 @@
 
 ### Changed
 
-- **BREAKING**: Refactored blueprint store to use ICompositeNode directly instead of extended Blueprint type
+- **BREAKING**: Refactored blueprint store to use ICompositeNode directly
+  instead of extended Blueprint type
 - Moved blueprint hooks to be co-located with store at `stores/blueprint/hooks/`
-- Replaced `useBlueprints` hook with separate `useComposites` and `useTemplates` hooks for better separation of concerns
+- Replaced `useBlueprints` hook with separate `useComposites` and `useTemplates`
+  hooks for better separation of concerns
 - Replaced template detection from keywords to ownership model using `authorId`
 
 ### Added
@@ -30,7 +32,8 @@
 
 ### Fixed
 
-- Fixed critical `useStore` import issue by exporting from @atomiton/store package
+- Fixed critical `useStore` import issue by exporting from @atomiton/store
+  package
 - Fixed type safety issues by removing `any` casts for author field
 - Fixed missing `/editor` route in router configuration
 - Fixed test selectors to match actual DOM structure

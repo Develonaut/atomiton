@@ -31,7 +31,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:benchmark": "vitest bench --run"
+    "test:watch": "vitest watch"
   },
   "keywords": [
     "events",

@@ -1,6 +1,7 @@
 # Atomiton Desktop
 
-Electron wrapper for the Atomiton Blueprint automation platform, providing native desktop capabilities.
+Electron wrapper for the Atomiton Blueprint automation platform, providing
+native desktop capabilities.
 
 ## 📊 Progress Tracking
 
@@ -14,7 +15,8 @@ Electron wrapper for the Atomiton Blueprint automation platform, providing nativ
 
 ## Overview
 
-This Electron application wraps the Atomiton web client to provide a native desktop experience with additional capabilities:
+This Electron application wraps the Atomiton web client to provide a native
+desktop experience with additional capabilities:
 
 - **Full file system access** - Read/write files without restrictions
 - **Native OS integration** - System tray, notifications, file associations
@@ -94,7 +96,8 @@ Unlike n8n which is primarily web-based:
 
 ## Contributing
 
-This app is currently on hold until the client application is feature-complete. Once active development begins, we'll need help with:
+This app is currently on hold until the client application is feature-complete.
+Once active development begins, we'll need help with:
 
 - Platform-specific features
 - Native module integration
@@ -108,6 +111,5 @@ MIT - See [LICENSE](../../LICENSE) for details
 
 ---
 
-**Package Status**: 🔴 On Hold
-**Depends On**: apps/client
-**Platform**: Electron 28+
+**Package Status**: 🔴 On Hold **Depends On**: apps/client **Platform**:
+Electron 28+

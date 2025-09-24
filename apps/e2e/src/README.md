@@ -2,9 +2,11 @@
 
 ## 🎯 Purpose
 
-These E2E tests simulate **real user journeys** through the application. Each test file represents a specific user persona completing a critical workflow.
+These E2E tests simulate **real user journeys** through the application. Each
+test file represents a specific user persona completing a critical workflow.
 
-**If any of these tests fail, it indicates that a critical user flow is broken.**
+**If any of these tests fail, it indicates that a critical user flow is
+broken.**
 
 ## 📝 Naming Convention
 
@@ -16,10 +18,13 @@ user-journey-[action-or-goal].spec.ts
 
 Examples:
 
-- `user-journey-template-to-editor.spec.ts` - User selecting a template and editing it
-- `user-journey-blueprint-creation.spec.ts` - User creating a new blueprint from scratch
+- `user-journey-template-to-editor.spec.ts` - User selecting a template and
+  editing it
+- `user-journey-blueprint-creation.spec.ts` - User creating a new blueprint from
+  scratch
 - `user-journey-homepage-navigation.spec.ts` - First-time user exploring the app
-- `user-journey-editor-node-connections.spec.ts` - User connecting nodes in the editor
+- `user-journey-editor-node-connections.spec.ts` - User connecting nodes in the
+  editor
 
 ## 👥 User Personas & Journeys
 
@@ -125,4 +130,5 @@ We aim to cover:
 - **90%** of common user paths
 - **70%** of edge cases
 
-If a user reports an issue, it should be added as a user journey test to prevent regression.
+If a user reports an issue, it should be added as a user journey test to prevent
+regression.

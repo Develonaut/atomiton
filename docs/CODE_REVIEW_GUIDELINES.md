@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This document defines what constitutes "done" for any code changes in the Atomiton codebase. Use this for self-review, peer review, and automated agent review.
+This document defines what constitutes "done" for any code changes in the
+Atomiton codebase. Use this for self-review, peer review, and automated agent
+review.
 
 ## Pre-Submission Checklist
 
@@ -12,7 +14,8 @@ This document defines what constitutes "done" for any code changes in the Atomit
 
 - [ ] **NO `any` types** - All `any` types must be replaced with proper types
 - [ ] **NO TypeScript errors** - `pnpm typecheck` passes
-- [ ] **NO TypeScript warnings** - Clean output, no suppressions without justification
+- [ ] **NO TypeScript warnings** - Clean output, no suppressions without
+      justification
 - [ ] **Strict mode compliance** - Code works with TypeScript strict mode
 
 #### Code Quality
@@ -65,7 +68,8 @@ user.name = sanitizeName(rawName);
 
 ### ⚛️ React Hooks Architecture
 
-- [ ] **Hooks as contracts** - Hooks are the glue between React and business logic
+- [ ] **Hooks as contracts** - Hooks are the glue between React and business
+      logic
 - [ ] **Extract to utils** - Complex logic lives in pure functions
 - [ ] **Testable logic** - Business logic testable without React
 - [ ] **Minimal hook body** - Hooks only manage state/effects/refs
@@ -338,4 +342,5 @@ Before marking any work as "done", verify:
 
 **"Done" means ready to ship to production without any additional work.**
 
-If you wouldn't be comfortable with this code running in production handling real user data, it's not done. Take the time to do it right.
+If you wouldn't be comfortable with this code running in production handling
+real user data, it's not done. Take the time to do it right.

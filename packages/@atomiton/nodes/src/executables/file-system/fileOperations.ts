@@ -14,7 +14,7 @@ import { getPathStats } from "#executables/file-system/utils";
 export async function readFileOperation(
   filePath: string,
   encoding: string,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   content?: string;
@@ -42,11 +42,11 @@ export async function readFileOperation(
     });
 
     return {
-      result  : content,
+      result: content,
       content,
-      success : true,
-      path    : filePath,
-      size    : stats.size,
+      success: true,
+      path: filePath,
+      size: stats.size,
       modified: stats.modified,
     };
   } catch (error) {
@@ -66,7 +66,7 @@ export async function writeFileOperation(
   content: string,
   encoding: string,
   createDirs: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -91,10 +91,10 @@ export async function writeFileOperation(
     });
 
     return {
-      result : `File written: ${filePath}`,
+      result: `File written: ${filePath}`,
       success: true,
-      path   : filePath,
-      size   : stats.size,
+      path: filePath,
+      size: stats.size,
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -112,7 +112,7 @@ export async function copyFileOperation(
   sourcePath: string,
   destPath: string,
   overwrite: boolean,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<{
   result: unknown;
   success: boolean;
@@ -147,9 +147,9 @@ export async function copyFileOperation(
     context.log?.info?.(`Copied file from ${sourcePath} to ${destPath}`);
 
     return {
-      result : `File copied from ${sourcePath} to ${destPath}`,
+      result: `File copied from ${sourcePath} to ${destPath}`,
       success: true,
-      path   : destPath,
+      path: destPath,
       sourcePath,
       destPath,
     };

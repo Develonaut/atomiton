@@ -2,7 +2,10 @@
 
 ## Overview
 
-This document tracks all completed features and milestones for the @atomiton/router package. The package has undergone a major simplification to become a clean, thin wrapper around TanStack Router without over-engineered abstractions.
+This document tracks all completed features and milestones for the
+@atomiton/router package. The package has undergone a major simplification to
+become a clean, thin wrapper around TanStack Router without over-engineered
+abstractions.
 
 ## Major Milestones
 
@@ -10,14 +13,18 @@ This document tracks all completed features and milestones for the @atomiton/rou
 
 **Status**: ✅ Complete
 
-**Achievement**: Massive simplification reducing codebase by 91% while maintaining essential functionality.
+**Achievement**: Massive simplification reducing codebase by 91% while
+maintaining essential functionality.
 
 #### Simplification Results
 
-- ✅ **Code Reduction**: From ~1930 lines across 19+ files to 174 lines across 4 files
-- ✅ **Removed Over-engineering**: Eliminated custom state management and complex abstractions
+- ✅ **Code Reduction**: From ~1930 lines across 19+ files to 174 lines across 4
+  files
+- ✅ **Removed Over-engineering**: Eliminated custom state management and
+  complex abstractions
 - ✅ **Clean Architecture**: 4 focused files with clear separation of concerns
-- ✅ **TanStack Router Wrapper**: Clean, thin wrapper without unnecessary complexity
+- ✅ **TanStack Router Wrapper**: Clean, thin wrapper without unnecessary
+  complexity
 - ✅ **Maintained Type Safety**: Full TypeScript support preserved
 
 #### Architecture Cleanup
@@ -60,16 +67,19 @@ This document tracks all completed features and milestones for the @atomiton/rou
 
 - ✅ **Factory Function**: Single function to create complete router setup
 - ✅ **Clean Return**: Returns router, navigate, hooks, and components
-- ✅ **TanStack Router Navigation**: Direct access to TanStack Router's navigate function
+- ✅ **TanStack Router Navigation**: Direct access to TanStack Router's navigate
+  function
 - ✅ **Component Exports**: Link and RouterProvider components
 - ✅ **Hook Exports**: useRouter, useNavigate, useParams, useLocation hooks
 
 #### React Hooks
 
 - ✅ **Standard Hooks**: All essential TanStack Router hooks exposed
-- ✅ **Custom Hooks**: Additional convenience hooks (usePathname, useCurrentRoute)
+- ✅ **Custom Hooks**: Additional convenience hooks (usePathname,
+  useCurrentRoute)
 - ✅ **Type Safety**: Full TypeScript support across all hooks
-- ✅ **Performance**: Direct pass-through to TanStack Router for optimal performance
+- ✅ **Performance**: Direct pass-through to TanStack Router for optimal
+  performance
 
 ## Integration Achievements
 
@@ -78,7 +88,8 @@ This document tracks all completed features and milestones for the @atomiton/rou
 - ✅ **Client App**: Primary routing for main application
 - ✅ **Navigation Helpers**: App-specific utilities moved to apps/client/router/
 - ✅ **Clean Separation**: Router package focused on core routing only
-- ✅ **Migration Success**: Smooth transition from complex to simple implementation
+- ✅ **Migration Success**: Smooth transition from complex to simple
+  implementation
 
 ### Simplification Benefits
 
@@ -119,7 +130,6 @@ This document tracks all completed features and milestones for the @atomiton/rou
 
 ---
 
-**Last Updated**: September 2025
-**Major Achievement**: 91% code reduction while maintaining functionality
-**Current Status**: Simplified & Production Ready
+**Last Updated**: September 2025 **Major Achievement**: 91% code reduction while
+maintaining functionality **Current Status**: Simplified & Production Ready
 **Next Steps**: [See NEXT.md](./NEXT.md)

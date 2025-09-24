@@ -1,17 +1,21 @@
 # Research & Analysis
 
-This directory contains research and analysis that informed the design and architecture of the Atomiton platform.
+This directory contains research and analysis that informed the design and
+architecture of the Atomiton platform.
 
 ## 📚 Available Research
 
 ### Platform Analysis
 
-- **[n8n Analysis](./n8n-analysis.md)** - Deep dive into n8n's architecture and what we can learn
-- **[Competitor Analysis](./competitor-analysis.md)** - Market research on automation platforms
+- **[n8n Analysis](./n8n-analysis.md)** - Deep dive into n8n's architecture and
+  what we can learn
+- **[Competitor Analysis](./competitor-analysis.md)** - Market research on
+  automation platforms
 
 ### Technical Research
 
-- **[UI Framework Analysis](./ui-framework-analysis.md)** - Research on modern UI frameworks (Radix, MUI, Mantine, etc.)
+- **[UI Framework Analysis](./ui-framework-analysis.md)** - Research on modern
+  UI frameworks (Radix, MUI, Mantine, etc.)
 
 ## 🎯 Purpose
 
@@ -41,4 +45,5 @@ When adding new research:
 
 ---
 
-**Note**: This is completed research. For active exploration, use `/docs/workspace/`.
+**Note**: This is completed research. For active exploration, use
+`/docs/workspace/`.

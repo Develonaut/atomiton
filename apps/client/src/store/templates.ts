@@ -4,7 +4,11 @@
  * Manages system-provided node templates (read-only)
  */
 
-import { loadBuiltInTemplates, getAllTemplates, getTemplate } from "@atomiton/nodes/definitions";
+import {
+  loadBuiltInTemplates,
+  getAllTemplates,
+  getTemplate,
+} from "@atomiton/nodes/definitions";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { createStore } from "@atomiton/store";
 
@@ -51,7 +55,7 @@ export const templateActions: TemplateActions = {
       const allTemplates = getAllTemplates();
       const uniqueTemplates = allTemplates.filter(
         (template, index, arr) =>
-          arr.findIndex(t => t.id === template.id) === index
+          arr.findIndex((t) => t.id === template.id) === index,
       );
 
       templateStore.setState((state: TemplateState) => {

@@ -2,13 +2,18 @@
 
 A clean, simplified wrapper around TanStack Router for React applications.
 
-> **Note**: This package has been significantly simplified from its previous complex implementation. It now consists of just 174 lines across 4 focused files, providing a clean wrapper around TanStack Router without over-engineered abstractions.
+> **Note**: This package has been significantly simplified from its previous
+> complex implementation. It now consists of just 174 lines across 4 focused
+> files, providing a clean wrapper around TanStack Router without
+> over-engineered abstractions.
 
 ## Features
 
-- **Simplified Architecture**: Clean wrapper around TanStack Router with minimal abstraction
+- **Simplified Architecture**: Clean wrapper around TanStack Router with minimal
+  abstraction
 - **Type Safety**: Full TypeScript support with auto-completion
-- **Component Lazy Loading**: Built-in support for code splitting with loading states
+- **Component Lazy Loading**: Built-in support for code splitting with loading
+  states
 - **Modular Design**: 4 focused files with clear separation of concerns
 - **Domain Agnostic**: No knowledge of business logic or app-specific concepts
 - **TanStack Router**: Leverages the power and reliability of TanStack Router

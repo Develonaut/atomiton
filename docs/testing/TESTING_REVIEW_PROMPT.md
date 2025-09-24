@@ -2,7 +2,10 @@
 
 ## Instructions for AI Agent
 
-You are conducting a testing compliance review of the Atomiton codebase. Your task is to analyze the test files and structure to ensure they follow our simplified testing guidelines. You will produce a detailed compliance report with specific issues and recommendations.
+You are conducting a testing compliance review of the Atomiton codebase. Your
+task is to analyze the test files and structure to ensure they follow our
+simplified testing guidelines. You will produce a detailed compliance report
+with specific issues and recommendations.
 
 ## Your Review Process
 
@@ -21,6 +24,7 @@ You are conducting a testing compliance review of the Atomiton codebase. Your ta
 ### Core Philosophy (MUST ENFORCE)
 
 **Testing Pyramid Target**:
+
 - E2E Tests: 60% (PRIMARY FOCUS)
 - Integration Tests: 30%
 - Unit Tests: 10% (MINIMAL)
@@ -30,10 +34,12 @@ You are conducting a testing compliance review of the Atomiton codebase. Your ta
 ### Simplified File Naming Rules (CRITICAL)
 
 **ONLY 2 file extensions allowed**:
+
 - `*.e2e.ts` - E2E Playwright tests (ONLY in `apps/e2e/tests/`)
 - `*.test.ts` - All other tests (unit/integration/contract/benchmark)
 
 **BANNED file names**:
+
 - ❌ `*.spec.ts` or `*.spec.tsx`
 - ❌ `*.int.test.ts`
 - ❌ `*.smoke.test.ts`
@@ -47,6 +53,7 @@ You are conducting a testing compliance review of the Atomiton codebase. Your ta
 ### Test Placement Rules (MUST FOLLOW)
 
 #### Electron/Desktop Features → MUST BE E2E
+
 ```typescript
 // ❌ VIOLATION: Testing Electron without UI
 // desktop/src/integration/electron.test.ts
@@ -65,6 +72,7 @@ test("desktop file save", async () => {
 ```
 
 #### UI Interactions → MUST BE E2E
+
 ```typescript
 // ❌ VIOLATION: Component unit test
 // src/components/Button.test.tsx
@@ -80,6 +88,7 @@ test("user clicks button", async ({ page }) => {
 ```
 
 #### Data Pipelines → Integration Tests
+
 ```typescript
 // ✅ CORRECT: Integration test in integration folder
 // packages/@atomiton/yaml/src/integration/transform.test.ts
@@ -90,6 +99,7 @@ test("YAML to JSON pipeline", () => {
 ```
 
 #### Complex Algorithms → Unit Tests (Co-located)
+
 ```typescript
 // ✅ CORRECT: Co-located unit test
 // packages/@atomiton/editor/src/utils/layout.test.ts
@@ -104,43 +114,51 @@ test("calculateNodeLayout handles circular graphs", () => {
 #### 🚫 CRITICAL VIOLATIONS (Must Fix Immediately)
 
 1. **Wrong File Extensions**
+
    ```typescript
    // VIOLATION: Using banned extensions
-   "src/api.int.test.ts"  // Should be: src/integration/api.test.ts
-   "src/ui.spec.ts"       // Should be: apps/e2e/tests/ui.e2e.ts
-   "src/math.unit.test.ts" // Should be: src/math.test.ts
+   "src/api.int.test.ts"; // Should be: src/integration/api.test.ts
+   "src/ui.spec.ts"; // Should be: apps/e2e/tests/ui.e2e.ts
+   "src/math.unit.test.ts"; // Should be: src/math.test.ts
    ```
+
    **Report as**: "Banned file extension - rename to .test.ts or .e2e.ts"
 
 2. **Electron Tests Without UI**
+
    ```typescript
    // VIOLATION: Testing Electron/Desktop without real UI
    test("electron main process", async () => {
      const main = await mockElectronMain();
    });
    ```
+
    **Report as**: "Electron must be tested via E2E - move to apps/e2e/tests/"
 
 3. **Component Unit Tests**
+
    ```typescript
    // VIOLATION: Testing React components directly
    test("Component renders", () => {
      render(<Component />);
    });
    ```
+
    **Report as**: "Component unit test found - convert to E2E test"
 
 4. **UI Tests Outside E2E**
+
    ```typescript
    // VIOLATION: UI interaction test not in E2E
    test("user fills form", () => {
      fireEvent.click(button);
    });
    ```
+
    **Report as**: "UI interaction must be E2E - move to apps/e2e/tests/"
 
 5. **Wrong Test Location**
-   - E2E tests (*.e2e.ts) NOT in `apps/e2e/tests/`
+   - E2E tests (\*.e2e.ts) NOT in `apps/e2e/tests/`
    - Integration tests NOT in `integration/` folder
    - Non-co-located unit tests
 
@@ -156,10 +174,12 @@ test("calculateNodeLayout handles circular graphs", () => {
 #### ⚠️ MAJOR VIOLATIONS (Should Fix)
 
 1. **Missing data-testid**
+
    ```typescript
    // VIOLATION: Using complex selectors
-   await page.click('.btn.primary:first-child');
+   await page.click(".btn.primary:first-child");
    ```
+
    **Report as**: "Missing data-testid - add semantic test identifiers"
 
 2. **Poor Test Organization**
@@ -168,12 +188,14 @@ test("calculateNodeLayout handles circular graphs", () => {
    - No clear folder structure
 
 3. **Inconsistent Naming Pattern**
+
    ```typescript
    // VIOLATION: Using 'test' instead of 'it' with describe
    describe("Feature", () => {
      test("should work", () => {}); // Should use 'it'
    });
    ```
+
    **Report as**: "Use describe/it pattern consistently"
 
 4. **Slow Tests**
@@ -184,6 +206,7 @@ test("calculateNodeLayout handles circular graphs", () => {
 #### ℹ️ MINOR VIOLATIONS (Nice to Fix)
 
 1. **No Parallel Execution**
+
    ```typescript
    test("action 1", async () => {});
    test("action 2", async () => {});
@@ -196,89 +219,100 @@ test("calculateNodeLayout handles circular graphs", () => {
 
 ## Report Template to Generate
 
-```markdown
+````markdown
 # Atomiton Testing Compliance Report
 
-**Date**: [Current Date]
-**Reviewed by**: AI Agent
-**Overall Compliance Score**: [X]% 
+**Date**: [Current Date] **Reviewed by**: AI Agent **Overall Compliance Score**:
+[X]%
 
 ## Executive Summary
 
-[Brief 2-3 sentence overview focusing on file naming compliance and test placement]
+[Brief 2-3 sentence overview focusing on file naming compliance and test
+placement]
 
 ## File Naming Compliance
 
 ### ❌ CRITICAL: Banned File Extensions Found ([count])
 
 **Files that MUST be renamed**:
+
 - `src/api.int.test.ts` → Rename to `src/integration/api.test.ts`
 - `src/button.spec.ts` → Move to `apps/e2e/tests/button.e2e.ts`
 - `src/calc.unit.test.ts` → Rename to `src/calc.test.ts`
 
-**Rule**: Only `.test.ts` and `.e2e.ts` allowed. Folder structure determines type.
+**Rule**: Only `.test.ts` and `.e2e.ts` allowed. Folder structure determines
+type.
 
 ### ❌ CRITICAL: Wrong File Locations ([count])
 
 **E2E tests in wrong location**:
+
 - `apps/client/src/ui.e2e.ts` → Move to `apps/e2e/tests/ui.e2e.ts`
 
 **Integration tests not in integration folder**:
-- `packages/@atomiton/yaml/src/transform.test.ts` → Move to `src/integration/transform.test.ts`
+
+- `packages/@atomiton/yaml/src/transform.test.ts` → Move to
+  `src/integration/transform.test.ts`
 
 ## Test Placement Violations
 
 ### 🚫 Electron/Desktop Tests Without UI ([count] found)
+
 **Severity**: CRITICAL - These MUST be E2E tests
 
 **Files affected**:
+
 - `apps/desktop/src/integration/electron.test.ts`
   - Line 15: Testing IPC without UI
-  - Line 45: Testing file system without UI
-  **Fix**: Delete and rewrite as E2E test in `apps/e2e/tests/desktop.e2e.ts`
+  - Line 45: Testing file system without UI **Fix**: Delete and rewrite as E2E
+    test in `apps/e2e/tests/desktop.e2e.ts`
 
 ### 🚫 UI Component Unit Tests ([count] found)
+
 **Severity**: CRITICAL - UI must be tested via E2E
 
 **Files affected**:
+
 - `packages/@atomiton/ui/src/Button.test.tsx`
-  - Testing render and props
-  **Fix**: Delete and add E2E test for button interactions
+  - Testing render and props **Fix**: Delete and add E2E test for button
+    interactions
 
 - `apps/client/src/components/Form.test.tsx`
-  - Testing form validation rendering
-  **Fix**: Convert to E2E test of form submission flow
+  - Testing form validation rendering **Fix**: Convert to E2E test of form
+    submission flow
 
 ## Testing Distribution Analysis
 
 ### Current Distribution
-- E2E Tests: [X]% ([count] tests in apps/e2e/tests/*.e2e.ts)
-- Integration Tests: [X]% ([count] tests in */integration/*.test.ts)
-- Unit Tests: [X]% ([count] co-located *.test.ts files)
+
+- E2E Tests: [X]% ([count] tests in apps/e2e/tests/\*.e2e.ts)
+- Integration Tests: [X]% ([count] tests in _/integration/_.test.ts)
+- Unit Tests: [X]% ([count] co-located \*.test.ts files)
 
 ### Target Distribution
+
 - E2E Tests: 60% (GOAL)
 - Integration Tests: 30% (GOAL)
 - Unit Tests: 10% (GOAL)
 
 ### Distribution Verdict: [PASS/FAIL]
+
 [Explanation focusing on whether there are enough E2E tests]
 
 ## Specific Migration Actions
 
 ### Files to Rename (This Week)
 
-| Current Name | New Name | Action |
-|-------------|----------|---------|
-| `api.int.test.ts` | `integration/api.test.ts` | Move to folder + rename |
-| `ui.spec.ts` | `apps/e2e/tests/ui.e2e.ts` | Convert to E2E |
-| `math.unit.test.ts` | `math.test.ts` | Simple rename |
+| Current Name        | New Name                   | Action                  |
+| ------------------- | -------------------------- | ----------------------- |
+| `api.int.test.ts`   | `integration/api.test.ts`  | Move to folder + rename |
+| `ui.spec.ts`        | `apps/e2e/tests/ui.e2e.ts` | Convert to E2E          |
+| `math.unit.test.ts` | `math.test.ts`             | Simple rename           |
 
 ### Tests to Convert to E2E (This Week)
 
 1. **All Electron/Desktop tests**
    - `desktop/src/integration/` → `apps/e2e/tests/desktop.e2e.ts`
-   
 2. **All UI component tests**
    - `*/components/*.test.tsx` → `apps/e2e/tests/[journey].e2e.ts`
 
@@ -290,6 +324,7 @@ test("calculateNodeLayout handles circular graphs", () => {
 ## Positive Findings
 
 ### ✅ What's Working Well
+
 - [List files following the new simplified structure]
 - [E2E tests properly in apps/e2e/tests/]
 - [Integration tests properly in integration/ folders]
@@ -298,6 +333,7 @@ test("calculateNodeLayout handles circular graphs", () => {
 ## Code Examples from Your Codebase
 
 ### ✅ Good Example Found
+
 ```typescript
 // From: apps/e2e/tests/workflow.e2e.ts
 // Correctly testing Electron+UI together
@@ -308,8 +344,10 @@ test("desktop app saves workflow", async () => {
   // Tests real user journey
 });
 ```
+````
 
 ### ❌ Bad Example Found
+
 ```typescript
 // From: apps/desktop/src/electron.int.test.ts
 // WRONG: Testing Electron without UI
@@ -321,12 +359,11 @@ test("IPC communication", async () => {
 
 ## Migration Effort Estimate
 
-**File renames needed**: [count]
-**Tests to convert to E2E**: [count]
-**Tests to move to integration/**: [count]
-**Estimated effort**: [X] developer days
+**File renames needed**: [count] **Tests to convert to E2E**: [count] **Tests to
+move to integration/**: [count] **Estimated effort**: [X] developer days
 
 **Priority order**:
+
 1. Rename all files with banned extensions (2 hours)
 2. Move Electron tests to E2E (1 day)
 3. Convert UI component tests to E2E (2 days)
@@ -343,11 +380,13 @@ test("IPC communication", async () => {
 ## Summary
 
 **Critical Issues**: [count]
+
 - Banned file extensions: [count]
 - Electron tests without UI: [count]
 - Component unit tests: [count]
 
-**Quick Wins**: 
+**Quick Wins**:
+
 - Rename [count] files to remove banned extensions
 - Move [count] integration tests to proper folders
 
@@ -355,10 +394,10 @@ test("IPC communication", async () => {
 
 ---
 
-*Generated by Atomiton Testing Compliance Reviewer*
-*Guidelines: /docs/testing/README.md*
-*Simplified rules: /docs/testing/WHEN_AND_WHERE.md*
-```
+_Generated by Atomiton Testing Compliance Reviewer_ _Guidelines:
+/docs/testing/README.md_ _Simplified rules: /docs/testing/WHEN_AND_WHERE.md_
+
+````
 
 ## Review Commands to Execute
 
@@ -378,7 +417,7 @@ grep -r "electron\|ipcMain\|ipcRenderer\|app\.quit" --include="*.test.ts" apps/d
 grep -r "render(<\|@testing-library/react" --include="*.test.ts" --include="*.test.tsx"
 
 # Find integration tests not in integration folders
-find . -path "*/src/*.test.ts" -not -path "*/integration/*" -not -path "*/node_modules/*" | xargs grep -l "mock\|stub\|fake" 
+find . -path "*/src/*.test.ts" -not -path "*/integration/*" -not -path "*/node_modules/*" | xargs grep -l "mock\|stub\|fake"
 
 # Check for excessive mocking
 grep -r "vi.mock\|jest.mock" --include="*.test.ts" | wc -l
@@ -388,12 +427,14 @@ grep -r "querySelector\|getElementsBy\|className" --include="*.e2e.ts"
 
 # Measure test execution time
 pnpm test:speed-check
-```
+````
 
 ## Success Criteria
 
 The codebase is compliant when:
-- ✅ **ZERO banned file extensions** (no .spec.ts, .int.test.ts, .smoke.test.ts, etc.)
+
+- ✅ **ZERO banned file extensions** (no .spec.ts, .int.test.ts, .smoke.test.ts,
+  etc.)
 - ✅ **Only 2 file types**: .test.ts and .e2e.ts
 - ✅ **All E2E tests in apps/e2e/tests/**
 - ✅ **All Electron/Desktop tests are E2E**
@@ -406,6 +447,7 @@ The codebase is compliant when:
 ## Common Fixes
 
 ### Renaming Files
+
 ```bash
 # Rename .spec.ts to .e2e.ts and move to E2E folder
 mv src/ui.spec.ts apps/e2e/tests/ui.e2e.ts
@@ -418,6 +460,7 @@ mv src/calc.unit.test.ts src/calc.test.ts
 ```
 
 ### Converting to E2E
+
 ```typescript
 // DELETE this component test
 test("Button renders", () => {
@@ -433,4 +476,5 @@ test("user clicks button to save", async ({ page }) => {
 
 ---
 
-*Use this prompt regularly to ensure testing practices follow the simplified Atomiton testing philosophy*
+_Use this prompt regularly to ensure testing practices follow the simplified
+Atomiton testing philosophy_

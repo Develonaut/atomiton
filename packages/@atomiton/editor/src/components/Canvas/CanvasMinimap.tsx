@@ -35,7 +35,7 @@ const StyledMiniMap = styled(MiniMap, { name: "CanvasMinimap" })(
       theme: "light",
       size: "md",
     },
-  }
+  },
 );
 
 /**

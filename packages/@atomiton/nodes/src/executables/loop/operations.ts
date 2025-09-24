@@ -5,8 +5,14 @@
 
 import type { NodeExecutionContext } from "#core/types/executable";
 import type { LoopParameters } from "#definitions/loop";
-import { executeConditionLoop, executeIterationLoop } from "#executables/loop/baseExecutor";
-import { type LoopResult, createIterationResult } from "#executables/loop/loopUtils";
+import {
+  executeConditionLoop,
+  executeIterationLoop,
+} from "#executables/loop/baseExecutor";
+import {
+  type LoopResult,
+  createIterationResult,
+} from "#executables/loop/loopUtils";
 
 /**
  * Execute forEach loop
@@ -14,17 +20,12 @@ import { type LoopResult, createIterationResult } from "#executables/loop/loopUt
 export async function executeForEach(
   items: unknown[],
   config: LoopParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<LoopResult> {
-  return executeIterationLoop(
-    items,
-    config,
-    context,
-    (item, index) => ({
-      result    : createIterationResult("item", item, { index }),
-      logMessage: `Processed item ${index}`,
-    })
-  );
+  return executeIterationLoop(items, config, context, (item, index) => ({
+    result: createIterationResult("item", item, { index }),
+    logMessage: `Processed item ${index}`,
+  }));
 }
 
 /**
@@ -33,10 +34,10 @@ export async function executeForEach(
 export async function executeWhile(
   condition: string,
   config: LoopParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<LoopResult> {
   return executeConditionLoop(condition, config, context, {
-    type          : "while",
+    type: "while",
     conditionValue: true,
   });
 }
@@ -47,7 +48,7 @@ export async function executeWhile(
 export async function executeDoWhile(
   condition: string,
   config: LoopParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<LoopResult> {
   return executeConditionLoop(condition, config, context, {
     type: "doWhile",
@@ -62,7 +63,7 @@ export async function executeForRange(
   end: number,
   step: number,
   config: LoopParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<LoopResult> {
   // Generate range values
   const values: number[] = [];
@@ -70,15 +71,10 @@ export async function executeForRange(
     values.push(i);
   }
 
-  return executeIterationLoop(
-    values,
-    config,
-    context,
-    (value, _index) => ({
-      result    : createIterationResult("index", value),
-      logMessage: `For range loop iteration ${value}`,
-    })
-  );
+  return executeIterationLoop(values, config, context, (value, _index) => ({
+    result: createIterationResult("index", value),
+    logMessage: `For range loop iteration ${value}`,
+  }));
 }
 
 /**
@@ -87,10 +83,10 @@ export async function executeForRange(
 export async function executeUntil(
   condition: string,
   config: LoopParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<LoopResult> {
   return executeConditionLoop(condition, config, context, {
-    type          : "until",
+    type: "until",
     conditionValue: false,
   });
 }
@@ -101,18 +97,13 @@ export async function executeUntil(
 export async function executeTimesLoop(
   times: number,
   config: LoopParameters,
-  context: NodeExecutionContext
+  context: NodeExecutionContext,
 ): Promise<LoopResult> {
   const maxTimes = Math.min(times, config.maxIterations as number);
   const indices = Array.from({ length: maxTimes }, (_, i) => i);
 
-  return executeIterationLoop(
-    indices,
-    config,
-    context,
-    (index, _) => ({
-      result    : createIterationResult("iteration", index),
-      logMessage: `Times loop iteration ${index + 1}/${times}`,
-    })
-  );
+  return executeIterationLoop(indices, config, context, (index, _) => ({
+    result: createIterationResult("iteration", index),
+    logMessage: `Times loop iteration ${index + 1}/${times}`,
+  }));
 }

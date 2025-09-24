@@ -23,7 +23,8 @@
 
 ### Simplicity First (Voorhees' Law)
 
-**"Cut through architectural complexity. What's the SIMPLEST possible solution that still meets all requirements?"**
+**"Cut through architectural complexity. What's the SIMPLEST possible solution
+that still meets all requirements?"**
 
 - **Simple is better than complex**
 - **Complex is better than complicated**
@@ -64,11 +65,13 @@
 
 ### Minimal Barrel Exports (Performance First)
 
-**Barrel exports (index.ts files) slow down builds and bundlers. Use sparingly.**
+**Barrel exports (index.ts files) slow down builds and bundlers. Use
+sparingly.**
 
 **ONLY use barrel exports for:**
 
-- Component composition and slot organization (UI components with variants/slots)
+- Component composition and slot organization (UI components with
+  variants/slots)
 - Public API surfaces of packages (single entry point)
 
 **NEVER use barrel exports for:**
@@ -250,15 +253,18 @@ import { capitalize } from "@/utils/string";
 
 ## Domain-Specific Applications
 
-While these principles apply globally, specific domains may have additional considerations:
+While these principles apply globally, specific domains may have additional
+considerations:
 
 - **UI Components**: Emphasis on reusability, accessibility, and consistent UX
 - **Data Layer**: Focus on integrity, validation, and efficient queries
-- **API Design**: RESTful principles, versioning strategies, and backward compatibility
+- **API Design**: RESTful principles, versioning strategies, and backward
+  compatibility
 - **Node System**: Composability, type safety, and clear contracts
 - **Theme System**: Flexibility, performance, and maintainability
 
-Refer to domain-specific documentation for additional principles and patterns relevant to each area.
+Refer to domain-specific documentation for additional principles and patterns
+relevant to each area.
 
 ## Decision Making Framework
 
@@ -284,4 +290,6 @@ When faced with architectural decisions:
 
 ---
 
-These principles guide our development but are not rigid rules. Use judgment and context to apply them appropriately. When principles conflict, discuss trade-offs with the team and document decisions.
+These principles guide our development but are not rigid rules. Use judgment and
+context to apply them appropriately. When principles conflict, discuss
+trade-offs with the team and document decisions.

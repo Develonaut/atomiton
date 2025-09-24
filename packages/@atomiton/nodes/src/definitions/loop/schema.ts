@@ -75,15 +75,15 @@ export const loopSchema = {
  * Default values for loop parameters
  */
 export const loopDefaults = {
-  loopType       : "forEach" as const,
-  batchSize      : 1,
-  maxIterations  : 1000,
-  delay          : 0,
+  loopType: "forEach" as const,
+  batchSize: 1,
+  maxIterations: 1000,
+  delay: 0,
   continueOnError: true,
-  startValue     : 0,
-  endValue       : 10,
-  stepSize       : 1,
-  times          : 10,
-  parallel       : false,
-  concurrency    : 5,
+  startValue: 0,
+  endValue: 10,
+  stepSize: 1,
+  times: 10,
+  parallel: false,
+  concurrency: 5,
 };

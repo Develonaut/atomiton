@@ -2,7 +2,10 @@
 
 ## Overview
 
-This guide covers the complete process of creating, implementing, and testing custom nodes for the Atomiton Blueprint platform. Nodes are the fundamental building blocks that execute specific tasks within a Blueprint workflow, following the unified `INode` interface pattern.
+This guide covers the complete process of creating, implementing, and testing
+custom nodes for the Atomiton Blueprint platform. Nodes are the fundamental
+building blocks that execute specific tasks within a Blueprint workflow,
+following the unified `INode` interface pattern.
 
 ## Node Architecture Fundamentals
 
@@ -10,8 +13,10 @@ This guide covers the complete process of creating, implementing, and testing cu
 
 **Node Types:**
 
-- **Atomic Nodes**: Leaf nodes that perform specific tasks (CSV reader, HTTP request, database operations)
-- **Composite Nodes**: Container nodes that orchestrate multiple child nodes (sub-workflows, reusable components)
+- **Atomic Nodes**: Leaf nodes that perform specific tasks (CSV reader, HTTP
+  request, database operations)
+- **Composite Nodes**: Container nodes that orchestrate multiple child nodes
+  (sub-workflows, reusable components)
 
 **Node Interface:**
 
@@ -33,8 +38,10 @@ interface INode {
 
 ### Node Mental Model
 
-**"All Things Are Nodes"**
-Both simple operations (read CSV file) and complex workflows (entire data processing pipelines) implement the same `INode` interface. This creates a powerful composition pattern where nodes can be combined infinitely without complexity.
+**"All Things Are Nodes"** Both simple operations (read CSV file) and complex
+workflows (entire data processing pipelines) implement the same `INode`
+interface. This creates a powerful composition pattern where nodes can be
+combined infinitely without complexity.
 
 ## Creating Custom Atomic Nodes
 
@@ -931,6 +938,5 @@ export class CsvReaderNode implements IAtomicNode {
 
 ---
 
-**Last Updated**: 2025-09-17
-**Version Compatibility**: @atomiton/nodes v1.0+
+**Last Updated**: 2025-09-17 **Version Compatibility**: @atomiton/nodes v1.0+
 **Review Schedule**: Monthly node development review

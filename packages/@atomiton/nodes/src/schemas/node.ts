@@ -8,14 +8,14 @@ import nodePositionSchema from "#schemas/nodePosition";
 
 // Create a base node schema without children for type inference
 const baseNodeSchema = v.object({
-  id         : v.string().min(1),
-  name       : v.string().min(1),
-  position   : nodePositionSchema,
-  metadata   : nodeMetadataSchema,
-  parameters : nodeParametersSchema,
-  inputPorts : v.array(nodePortSchema),
+  id: v.string().min(1),
+  name: v.string().min(1),
+  position: nodePositionSchema,
+  metadata: nodeMetadataSchema,
+  parameters: nodeParametersSchema,
+  inputPorts: v.array(nodePortSchema),
   outputPorts: v.array(nodePortSchema),
-  edges      : v.array(nodeEdgeSchema).optional(),
+  edges: v.array(nodeEdgeSchema).optional(),
 });
 
 // Infer the base node type

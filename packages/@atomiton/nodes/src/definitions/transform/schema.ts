@@ -64,10 +64,10 @@ export const transformSchema = {
  * Default values for transform parameters
  */
 export const transformDefaults = {
-  operation        : "map" as const,
+  operation: "map" as const,
   transformFunction: "item => item",
-  sortDirection    : "asc" as const,
-  reduceFunction   : "(acc, item) => acc + item",
-  reduceInitial    : "0",
-  flattenDepth     : 1,
+  sortDirection: "asc" as const,
+  reduceFunction: "(acc, item) => acc + item",
+  reduceInitial: "0",
+  flattenDepth: 1,
 };

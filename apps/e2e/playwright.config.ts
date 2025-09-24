@@ -11,7 +11,8 @@ const config = definePlaywrightConfig({
   webServerTimeout: 120000,
 });
 
-// Override testDir to use our flattened structure
-config.testDir = "./src/tests";
+// Override testDir to use new standardized structure
+config.testDir = "./tests";
+config.testMatch = "**/*.e2e.ts";
 
 export default config;

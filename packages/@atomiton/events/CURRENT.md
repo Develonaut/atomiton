@@ -45,9 +45,11 @@ None
 
 ## Notes
 
-This package provides a type-safe, performant event system for the Atomiton platform. Focus is on reliability and developer experience with comprehensive TypeScript support. The event system will be used across Blueprint workflows, UI interactions, and real-time collaboration features.
+This package provides a type-safe, performant event system for the Atomiton
+platform. Focus is on reliability and developer experience with comprehensive
+TypeScript support. The event system will be used across Blueprint workflows, UI
+interactions, and real-time collaboration features.
 
 ---
 
-**Last Updated**: 2025-09-05
-**Status**: 🟢 Active Development
+**Last Updated**: 2025-09-05 **Status**: 🟢 Active Development

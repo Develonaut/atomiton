@@ -1,6 +1,8 @@
 # Atomiton UI Components
 
-A comprehensive UI component library and design system for the Atomiton platform. This package contains reusable components implementing the Atomiton design system, built for desktop-first experiences.
+A comprehensive UI component library and design system for the Atomiton
+platform. This package contains reusable components implementing the Atomiton
+design system, built for desktop-first experiences.
 
 ## 📊 Progress Tracking
 
@@ -10,24 +12,33 @@ A comprehensive UI component library and design system for the Atomiton platform
 
 ## Overview
 
-The Atomiton UI package serves as both a component library and a visual development environment where components are showcased, tested, and validated. It's designed specifically for the Atomiton Blueprint automation platform and will be packaged as a desktop application.
+The Atomiton UI package serves as both a component library and a visual
+development environment where components are showcased, tested, and validated.
+It's designed specifically for the Atomiton Blueprint automation platform and
+will be packaged as a desktop application.
 
 ### Key Features
 
-- **Atomiton Design System**: Complete implementation of the modern Atomiton design language
+- **Atomiton Design System**: Complete implementation of the modern Atomiton
+  design language
 - **Desktop-First**: Optimized for desktop application experiences
-- **Component Showcase**: Interactive pages for testing and validating components
+- **Component Showcase**: Interactive pages for testing and validating
+  components
 - **Visual Regression Testing**: Automated screenshot testing with Playwright
 - **Theme Integration**: Built-in design system and theming
 - **Hot Reloading**: Real-time development with theme changes
 
 ## Technology Stack
 
-- **Build Tool**: [Vite](https://vitejs.dev) - Fast, modern development and build tooling
+- **Build Tool**: [Vite](https://vitejs.dev) - Fast, modern development and
+  build tooling
 - **Framework**: [React 19](https://react.dev) with TypeScript
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with custom Atomiton theme
-- **Routing**: [React Router v7](https://reactrouter.com) for client-side navigation
-- **UI Primitives**: [Headless UI](https://headlessui.com) for accessible components
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with custom Atomiton
+  theme
+- **Routing**: [React Router v7](https://reactrouter.com) for client-side
+  navigation
+- **UI Primitives**: [Headless UI](https://headlessui.com) for accessible
+  components
 - **Testing**: [Playwright](https://playwright.dev) for visual regression tests
 - **Monorepo**: Part of Turborepo-based Atomiton monorepo
 
@@ -83,7 +94,8 @@ pnpm dev
 pnpm dev
 ```
 
-Open [http://localhost:3002](http://localhost:3002) to view the component showcase.
+Open [http://localhost:3002](http://localhost:3002) to view the component
+showcase.
 
 ### Available Scripts
 
@@ -115,7 +127,8 @@ Components automatically inherit from the Atomiton theme via:
 
 - **Theme Provider**: `components/ThemeProvider` wraps the entire app
 - **Tailwind Config**: Built-in design tokens for consistent theming
-- **CSS Variables**: Theme-aware custom properties for colors, spacing, typography
+- **CSS Variables**: Theme-aware custom properties for colors, spacing,
+  typography
 
 ### Component Guidelines
 
@@ -158,9 +171,11 @@ Each component page has corresponding Playwright tests that:
 This UI package integrates with the larger Atomiton ecosystem:
 
 - **Design System**: Built-in design tokens and Tailwind configuration
-- **Core Package**: Components will be consumed by `@atomiton/core` Blueprint engine
+- **Core Package**: Components will be consumed by `@atomiton/core` Blueprint
+  engine
 - **Client App**: Final application in `apps/client` uses these components
-- **Desktop App**: `packages/electron` packages everything as a desktop application
+- **Desktop App**: `packages/electron` packages everything as a desktop
+  application
 
 ## Desktop-First Considerations
 
@@ -205,4 +220,5 @@ The components implement the complete Atomiton design system including:
 - **Interactions**: Smooth animations and micro-interactions
 - **Icons**: Comprehensive icon system integrated with components
 
-For detailed design specifications, see the built-in theme configuration in this package.
+For detailed design specifications, see the built-in theme configuration in this
+package.

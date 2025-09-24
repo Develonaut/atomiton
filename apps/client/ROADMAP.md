@@ -2,7 +2,8 @@
 
 ## Overview
 
-Main web client for the Atomiton Blueprint automation platform, providing the visual workflow editor and user interface.
+Main web client for the Atomiton Blueprint automation platform, providing the
+visual workflow editor and user interface.
 
 ## Current Architecture
 

@@ -2,7 +2,9 @@
 
 ## Overview
 
-n8n has built an impressive node-based automation platform with 500+ integrations. While we're taking a different approach focused on quality over quantity, there's much to learn from their patterns and decisions.
+n8n has built an impressive node-based automation platform with 500+
+integrations. While we're taking a different approach focused on quality over
+quantity, there's much to learn from their patterns and decisions.
 
 ## What n8n Does Exceptionally Well
 
@@ -20,7 +22,8 @@ interface INodeType {
 }
 ```
 
-**What we learned**: Consistency is crucial. Our `NodePackage` interface enforces similar consistency while adding type safety through generics.
+**What we learned**: Consistency is crucial. Our `NodePackage` interface
+enforces similar consistency while adding type safety through generics.
 
 ### 2. Credential Management
 
@@ -31,7 +34,8 @@ n8n's credential system is sophisticated:
 - Credential sharing between nodes
 - Test functionality
 
-**Our approach**: For desktop-first, we can leverage OS keychains and local secure storage, reducing complexity while maintaining security.
+**Our approach**: For desktop-first, we can leverage OS keychains and local
+secure storage, reducing complexity while maintaining security.
 
 ### 3. Expression Language
 
@@ -41,7 +45,8 @@ n8n's expression system (`{{ $json.field }}`) enables dynamic values:
 - JavaScript expressions
 - Built-in functions
 
-**Our consideration**: While powerful, this adds complexity. We're exploring typed expressions with autocomplete for better developer experience.
+**Our consideration**: While powerful, this adds complexity. We're exploring
+typed expressions with autocomplete for better developer experience.
 
 ### 4. Error Handling
 
@@ -52,7 +57,8 @@ n8n's error handling is robust:
 - Retry mechanisms
 - Error output pins
 
-**What we adopted**: Our `BaseNodeLogic` includes similar retry and error handling utilities, but with TypeScript-first design.
+**What we adopted**: Our `BaseNodeLogic` includes similar retry and error
+handling utilities, but with TypeScript-first design.
 
 ## Where We Diverge
 
@@ -223,8 +229,8 @@ Built for AI workflows from the ground up:
 
 ### 3. Quality Over Quantity
 
-**n8n**: 500+ nodes covering every possible service
-**Atomiton**: 20-50 exceptional nodes covering 80% of use cases
+**n8n**: 500+ nodes covering every possible service **Atomiton**: 20-50
+exceptional nodes covering 80% of use cases
 
 Rationale:
 
@@ -254,7 +260,8 @@ Focus on making node development delightful:
 ### From n8n's Challenges
 
 1. **Type safety prevents bugs** - Runtime errors are costly
-2. **Separation of concerns aids maintenance** - Monolithic nodes are hard to maintain
+2. **Separation of concerns aids maintenance** - Monolithic nodes are hard to
+   maintain
 3. **Performance matters at scale** - Streaming and efficiency are important
 4. **Documentation is part of the product** - Not an afterthought
 
@@ -313,9 +320,13 @@ Enable ecosystem growth:
 
 ## Conclusion
 
-n8n has paved the way for node-based automation, and we respect their achievements. By learning from both their successes and challenges, we're building something different but complementary:
+n8n has paved the way for node-based automation, and we respect their
+achievements. By learning from both their successes and challenges, we're
+building something different but complementary:
 
 - **n8n**: Broad, cloud-first, integration-focused
 - **Atomiton**: Focused, desktop-first, quality-obsessed
 
-Both approaches have their place, and we're excited to push the boundaries of what's possible with desktop automation while maintaining the simplicity and elegance that makes node-based programming accessible to everyone.
+Both approaches have their place, and we're excited to push the boundaries of
+what's possible with desktop automation while maintaining the simplicity and
+elegance that makes node-based programming accessible to everyone.

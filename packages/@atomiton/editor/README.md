@@ -4,7 +4,9 @@ Blueprint visual editor for the Atomiton platform.
 
 ## Overview
 
-This package provides the React-based visual editor for creating and editing Blueprint workflows. It includes a node-based interface for designing automation workflows with drag-and-drop functionality.
+This package provides the React-based visual editor for creating and editing
+Blueprint workflows. It includes a node-based interface for designing automation
+workflows with drag-and-drop functionality.
 
 ## Features
 

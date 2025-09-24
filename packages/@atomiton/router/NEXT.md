@@ -4,7 +4,8 @@
 
 ### 🎯 Primary Focus: Stability & Maintenance
 
-The router package has been significantly simplified and is production-ready. Focus is on maintaining stability and keeping dependencies up to date.
+The router package has been significantly simplified and is production-ready.
+Focus is on maintaining stability and keeping dependencies up to date.
 
 ## Maintenance Tasks
 
@@ -59,6 +60,5 @@ Any proposed enhancements must meet ALL of these criteria:
 
 ---
 
-**Maintained by**: Atomiton Core Team
-**Last Updated**: September 2025
+**Maintained by**: Atomiton Core Team **Last Updated**: September 2025
 **Status**: Simplified & Stable

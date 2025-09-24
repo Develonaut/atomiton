@@ -2,7 +2,9 @@
 
 ## Vision
 
-The @atomiton/utils package serves as the foundational utility library for the entire Atomiton ecosystem, providing consistent, well-tested, and performant utility functions that all other packages can rely on.
+The @atomiton/utils package serves as the foundational utility library for the
+entire Atomiton ecosystem, providing consistent, well-tested, and performant
+utility functions that all other packages can rely on.
 
 ## Strategic Goals
 

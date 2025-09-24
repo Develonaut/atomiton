@@ -1,6 +1,6 @@
 import { electronAPI } from "@electron-toolkit/preload";
 import { contextBridge } from "electron";
-import "./preload.d";
+import "@/preload/preload.d";
 
 if (process.contextIsolated) {
   try {

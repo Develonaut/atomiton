@@ -29,13 +29,14 @@ Is it a complex pure function?
 *.e2e.ts    - E2E Playwright tests
 ```
 
-That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`, `.spec.ts`
+That's it. No more `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`,
+`.spec.ts`
 
 ## Folder Structure
 
 ```
 apps/e2e/tests/           # All E2E tests (*.e2e.ts)
-src/integration/          # Integration tests (*.test.ts)  
+src/integration/          # Integration tests (*.test.ts)
 src/[file].test.ts       # Co-located unit tests (*.test.ts)
 ```
 
@@ -44,7 +45,7 @@ src/[file].test.ts       # Co-located unit tests (*.test.ts)
 ```bash
 # Run tests
 pnpm test                    # Run unit tests
-pnpm test:integration        # Run integration tests  
+pnpm test:integration        # Run integration tests
 pnpm test:e2e               # Run E2E tests
 pnpm test:e2e --headed      # See browser while testing
 
@@ -57,6 +58,7 @@ pnpm test:speed-check       # Find slow tests
 ## Writing Tests
 
 ### E2E Test (User Journey)
+
 ```typescript
 // apps/e2e/tests/workflow.e2e.ts
 test("user creates workflow", async ({ page }) => {
@@ -66,6 +68,7 @@ test("user creates workflow", async ({ page }) => {
 ```
 
 ### Integration Test (API/Pipeline)
+
 ```typescript
 // src/integration/transform.test.ts
 test("factory pipeline transforms data correctly", () => {
@@ -75,6 +78,7 @@ test("factory pipeline transforms data correctly", () => {
 ```
 
 ### Unit Test (Pure Function)
+
 ```typescript
 // src/utils/calculate.test.ts (co-located)
 test("calculatePosition handles edge cases", () => {
@@ -90,17 +94,18 @@ test("calculatePosition handles edge cases", () => {
 ```
 
 Pattern: `[context]-[element]-[variant]`
+
 - `editor-canvas`
 - `node-properties-panel`
 - `template-button-hello-world`
 
 ## Speed Limits
 
-| Type | Limit | Blocks |
-|------|-------|--------|
-| Unit | <100ms | Never |
+| Type        | Limit        | Blocks     |
+| ----------- | ------------ | ---------- |
+| Unit        | <100ms       | Never      |
 | Integration | <10s/package | Pre-commit |
-| E2E | <60s/journey | Pre-push |
+| E2E         | <60s/journey | Pre-push   |
 
 ## What NOT to Test
 
@@ -114,7 +119,7 @@ Pattern: `[context]-[element]-[variant]`
 ## Quick Rules
 
 1. **Electron/Desktop?** → Always E2E
-2. **UI interaction?** → Always E2E  
+2. **UI interaction?** → Always E2E
 3. **Data transformation?** → Integration
 4. **Complex algorithm?** → Unit
 5. **When unsure?** → Try E2E first

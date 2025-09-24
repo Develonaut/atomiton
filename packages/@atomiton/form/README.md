@@ -1,12 +1,15 @@
 # @atomiton/form
 
-A minimal, focused form library for the Atomiton ecosystem. Built on **React Hook Form** + **Zod** with automatic field generation from schemas and seamless integration with Atomiton's node system.
+A minimal, focused form library for the Atomiton ecosystem. Built on **React
+Hook Form** + **Zod** with automatic field generation from schemas and seamless
+integration with Atomiton's node system.
 
 ## Features
 
 - 🚀 **Minimal & Focused** - Only ~150 lines of code, zero over-engineering
 - 🎯 **Schema-First** - Generate forms automatically from Zod schemas
-- 🔗 **Node Integration** - Direct compatibility with Atomiton node field configurations
+- 🔗 **Node Integration** - Direct compatibility with Atomiton node field
+  configurations
 - 🎨 **Flexible UI** - Schema inference with UI metadata override support
 - ⚡ **Performance** - Built on React Hook Form for optimal performance
 - 🛡️ **Type Safety** - Full TypeScript support with inferred types
@@ -129,7 +132,8 @@ Automatically inferred from Zod schema:
 
 All Atomiton node control types supported:
 
-`text` • `textarea` • `number` • `boolean` • `select` • `file` • `email` • `password` • `tel` • `url` • `date` • `datetime` • `color` • `range` • `json`
+`text` • `textarea` • `number` • `boolean` • `select` • `file` • `email` •
+`password` • `tel` • `url` • `date` • `datetime` • `color` • `range` • `json`
 
 ## Advanced Usage
 
@@ -234,7 +238,8 @@ form.fields[0].type; // 'text' | 'number' | 'boolean' | ...
 
 ## Integration with React Hook Form
 
-This package is a thin wrapper around React Hook Form. All React Hook Form features are available:
+This package is a thin wrapper around React Hook Form. All React Hook Form
+features are available:
 
 ```typescript
 const form = useForm({ schema });

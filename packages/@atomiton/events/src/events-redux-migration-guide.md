@@ -2,11 +2,15 @@
 
 ## Overview
 
-This guide outlines the refactoring of the events package to improve organization, flexibility, and maintainability while preserving all existing functionality. The refactor focuses on creating a cleaner separation between browser and desktop implementations while adding new capabilities.
+This guide outlines the refactoring of the events package to improve
+organization, flexibility, and maintainability while preserving all existing
+functionality. The refactor focuses on creating a cleaner separation between
+browser and desktop implementations while adding new capabilities.
 
 ## Current Analysis
 
 ### Strengths of Current Implementation
+
 - Clean `EventContext` pattern for abstraction
 - Domain-based event isolation
 - Type-safe event definitions
@@ -15,6 +19,7 @@ This guide outlines the refactoring of the events package to improve organizatio
 - Comprehensive test coverage
 
 ### Areas for Improvement
+
 1. Browser implementation locked to "global" domain
 2. Auto-forwarding defined but not integrated into main API
 3. No base class to reduce duplication
@@ -100,6 +105,7 @@ packages/events-redux/
 ### 1. Enhanced EventBus Interface
 
 **New Type Definition** (`src/core/types/bus.ts`):
+
 ```typescript
 export interface EventBus<T extends EventMap = EventMap> {
   // Existing methods
@@ -110,19 +116,22 @@ export interface EventBus<T extends EventMap = EventMap> {
   removeAllListeners(): void;
   listenerCount<K extends keyof T>(event: K): number;
   getDomain(): string;
-  
+
   // New bridge API for cross-environment communication
   bridge?: EventBridge<T>;
-  
+
   // New middleware support
   middleware?: EventMiddleware;
 }
 
 export interface EventBridge<T extends EventMap = EventMap> {
-  forward<K extends keyof T>(event: K, target: 'browser' | 'desktop'): void;
+  forward<K extends keyof T>(event: K, target: "browser" | "desktop"): void;
   isForwarded<K extends keyof T>(event: K): boolean;
-  stopForwarding<K extends keyof T>(event: K, target?: 'browser' | 'desktop'): void;
-  getForwardingRules(): Map<keyof T, Set<'browser' | 'desktop'>>;
+  stopForwarding<K extends keyof T>(
+    event: K,
+    target?: "browser" | "desktop",
+  ): void;
+  getForwardingRules(): Map<keyof T, Set<"browser" | "desktop">>;
 }
 
 export interface EventMiddleware {
@@ -135,9 +144,15 @@ export interface EventMiddleware {
 ### 2. Shared Factory Helpers (No Classes!)
 
 **Create** `src/shared/createBaseEventBus.ts`:
+
 ```typescript
-import type { EventBus, EventMap, EventBridge, EventMiddleware } from '#core/types';
-import type { EventContext } from './EventContext';
+import type {
+  EventBus,
+  EventMap,
+  EventBridge,
+  EventMiddleware,
+} from "#core/types";
+import type { EventContext } from "./EventContext";
 
 export interface BaseEventBusOptions {
   domain: string;
@@ -148,51 +163,58 @@ export interface BaseEventBusOptions {
 
 // Factory that creates the shared event bus functionality
 export function createBaseEventBus<T extends EventMap = EventMap>(
-  options: BaseEventBusOptions
+  options: BaseEventBusOptions,
 ): EventBus<T> {
   const { domain, context, enableBridge, enableMiddleware } = options;
-  const forwarding = new Map<keyof T, Set<'browser' | 'desktop'>>();
+  const forwarding = new Map<keyof T, Set<"browser" | "desktop">>();
   const middlewares: Array<(event: string, data: any) => any> = [];
-  
+
   // Create bridge implementation if enabled
-  const bridge: EventBridge<T> | undefined = enableBridge ? {
-    forward: (event, target) => {
-      if (!forwarding.has(event)) {
-        forwarding.set(event, new Set());
+  const bridge: EventBridge<T> | undefined = enableBridge
+    ? {
+        forward: (event, target) => {
+          if (!forwarding.has(event)) {
+            forwarding.set(event, new Set());
+          }
+          forwarding.get(event)!.add(target);
+          // Hook into context to setup forwarding
+        },
+        isForwarded: (event) => forwarding.has(event),
+        stopForwarding: (event, target) => {
+          if (target) {
+            forwarding.get(event)?.delete(target);
+          } else {
+            forwarding.delete(event);
+          }
+        },
+        getForwardingRules: () => new Map(forwarding),
       }
-      forwarding.get(event)!.add(target);
-      // Hook into context to setup forwarding
-    },
-    isForwarded: (event) => forwarding.has(event),
-    stopForwarding: (event, target) => {
-      if (target) {
-        forwarding.get(event)?.delete(target);
-      } else {
-        forwarding.delete(event);
-      }
-    },
-    getForwardingRules: () => new Map(forwarding)
-  } : undefined;
-  
+    : undefined;
+
   // Create middleware implementation if enabled
-  const middleware: EventMiddleware | undefined = enableMiddleware ? {
-    use: (fn) => middlewares.push(fn),
-    remove: (fn) => {
-      const index = middlewares.indexOf(fn);
-      if (index !== -1) middlewares.splice(index, 1);
-    },
-    clear: () => middlewares.length = 0
-  } : undefined;
-  
+  const middleware: EventMiddleware | undefined = enableMiddleware
+    ? {
+        use: (fn) => middlewares.push(fn),
+        remove: (fn) => {
+          const index = middlewares.indexOf(fn);
+          if (index !== -1) middlewares.splice(index, 1);
+        },
+        clear: () => (middlewares.length = 0),
+      }
+    : undefined;
+
   // Apply middleware to emit
   const originalEmit = context.emit;
   if (enableMiddleware) {
     context.emit = (eventName, data) => {
-      const processedData = middlewares.reduce((d, fn) => fn(eventName, d), data);
+      const processedData = middlewares.reduce(
+        (d, fn) => fn(eventName, d),
+        data,
+      );
       originalEmit(eventName, processedData);
     };
   }
-  
+
   // Return the complete EventBus implementation
   return {
     emit: createEmit<T>(context),
@@ -203,7 +225,7 @@ export function createBaseEventBus<T extends EventMap = EventMap>(
     listenerCount: createListenerCount<T>(context),
     getDomain: () => domain,
     bridge,
-    middleware
+    middleware,
   };
 }
 ```
@@ -211,11 +233,12 @@ export function createBaseEventBus<T extends EventMap = EventMap>(
 ### 3. Browser Implementation with Factory
 
 **Create** `src/browser/bus/createBrowserEventBus.ts`:
+
 ```typescript
-import { EventEmitter as EventEmitter3 } from 'eventemitter3';
-import { createBaseEventBus } from '#shared/createBaseEventBus';
-import { createBrowserIPCBridge } from '#browser/bridge';
-import type { EventBus, EventMap } from '#core/types';
+import { EventEmitter as EventEmitter3 } from "eventemitter3";
+import { createBaseEventBus } from "#shared/createBaseEventBus";
+import { createBrowserIPCBridge } from "#browser/bridge";
+import type { EventBus, EventMap } from "#core/types";
 
 export interface BrowserEventBusOptions {
   domain?: string;
@@ -225,17 +248,17 @@ export interface BrowserEventBusOptions {
 }
 
 export function createBrowserEventBus<T extends EventMap = EventMap>(
-  options?: BrowserEventBusOptions
+  options?: BrowserEventBusOptions,
 ): EventBus<T> {
-  const { 
-    domain = 'global', 
+  const {
+    domain = "global",
     enableBridge = false,
     enableMiddleware = false,
-    ipcConfig 
+    ipcConfig,
   } = options ?? {};
-  
+
   const emitter = new EventEmitter3();
-  
+
   // Create the event context using EventEmitter3
   const context: EventContext = {
     emit: (eventName, data) => emitter.emit(eventName, data),
@@ -245,23 +268,23 @@ export function createBrowserEventBus<T extends EventMap = EventMap>(
     removeAllListeners: () => emitter.removeAllListeners(),
     listenerCount: (eventName) => emitter.listenerCount(eventName),
     listenerMap: new WeakMap(),
-    domain
+    domain,
   };
-  
+
   // Create the base event bus with shared functionality
   const bus = createBaseEventBus<T>({
     domain,
     context,
     enableBridge,
-    enableMiddleware
+    enableMiddleware,
   });
-  
+
   // If bridge is enabled, set up IPC
   if (enableBridge && bus.bridge) {
     const ipcBridge = createBrowserIPCBridge(ipcConfig);
     // Wire up the bridge to IPC...
   }
-  
+
   return bus;
 }
 ```
@@ -269,11 +292,12 @@ export function createBrowserEventBus<T extends EventMap = EventMap>(
 ### 4. Desktop Implementation with Factory
 
 **Create** `src/desktop/bus/createDesktopEventBus.ts`:
+
 ```typescript
-import { EventEmitter } from 'node:events';
-import { createBaseEventBus } from '#shared/createBaseEventBus';
-import { createDesktopIPCHandler } from '#desktop/bridge';
-import type { EventBus, EventMap } from '#core/types';
+import { EventEmitter } from "node:events";
+import { createBaseEventBus } from "#shared/createBaseEventBus";
+import { createDesktopIPCHandler } from "#desktop/bridge";
+import type { EventBus, EventMap } from "#core/types";
 
 export interface DesktopEventBusOptions {
   domain?: string;
@@ -287,19 +311,19 @@ export interface DesktopEventBusOptions {
 }
 
 export function createDesktopEventBus<T extends EventMap = EventMap>(
-  options?: DesktopEventBusOptions
+  options?: DesktopEventBusOptions,
 ): EventBus<T> & { ipc: IPCBridge } {
-  const { 
-    domain = 'global',
+  const {
+    domain = "global",
     maxListeners = 100,
     enableBridge = true,
     enableMiddleware = false,
-    autoForward
+    autoForward,
   } = options ?? {};
-  
+
   const emitter = new EventEmitter();
   emitter.setMaxListeners(maxListeners);
-  
+
   // Create the event context using Node's EventEmitter
   const context: EventContext = {
     emit: (eventName, data) => emitter.emit(eventName, data),
@@ -309,31 +333,31 @@ export function createDesktopEventBus<T extends EventMap = EventMap>(
     removeAllListeners: () => emitter.removeAllListeners(),
     listenerCount: (eventName) => emitter.listenerCount(eventName),
     listenerMap: new WeakMap(),
-    domain
+    domain,
   };
-  
+
   // Create the base event bus
   const bus = createBaseEventBus<T>({
     domain,
     context,
     enableBridge,
-    enableMiddleware
+    enableMiddleware,
   });
-  
+
   // Add IPC support
   const ipc = createDesktopIPCHandler();
-  
+
   // Set up auto-forwarding if configured
   if (autoForward && bus.bridge) {
     setupAutoForwarding(bus, ipc, autoForward);
   }
-  
+
   return Object.assign(bus, { ipc });
 }
 
 // Local bus without IPC
 export function createLocalEventBus<T extends EventMap = EventMap>(
-  options?: Omit<DesktopEventBusOptions, 'autoForward'>
+  options?: Omit<DesktopEventBusOptions, "autoForward">,
 ): EventBus<T> {
   // Same as desktop but without IPC
   const opts = { ...options, enableBridge: false };
@@ -344,14 +368,16 @@ export function createLocalEventBus<T extends EventMap = EventMap>(
 ### 5. Factory Composition Pattern
 
 **Browser** (`src/browser/index.ts`):
+
 ```typescript
-export { createBrowserEventBus as createEventBus } from '#browser/bus/createBrowserEventBus';
-export type { EventBus, EventMap } from '#core/types';
+export { createBrowserEventBus as createEventBus } from "#browser/bus/createBrowserEventBus";
+export type { EventBus, EventMap } from "#core/types";
 ```
 
 **Desktop** (`src/desktop/index.ts`):
+
 ```typescript
-import { createDesktopEventBus, createLocalEventBus } from '#desktop/bus';
+import { createDesktopEventBus, createLocalEventBus } from "#desktop/bus";
 
 export function createEventBus<T extends EventMap = EventMap>(options?: {
   domain?: string;
@@ -361,35 +387,34 @@ export function createEventBus<T extends EventMap = EventMap>(options?: {
   autoForward?: AutoForwardConfig;
 }): EventBus<T> {
   const { useIPC = true, ...rest } = options ?? {};
-  
-  return useIPC 
-    ? createDesktopEventBus<T>(rest)
-    : createLocalEventBus<T>(rest);
+
+  return useIPC ? createDesktopEventBus<T>(rest) : createLocalEventBus<T>(rest);
 }
 
-export type { EventBus, EventMap } from '#core/types';
+export type { EventBus, EventMap } from "#core/types";
 ```
 
 ## Migration Mapping
 
-| Current File | New Location | Notes |
-|-------------|--------------|-------|
-| `types.ts` | Split → `src/core/types/` | Separate into bus.ts, events.ts, ipc.ts |
-| `utils.ts` | Split → `src/core/utils/` | Separate utilities into individual files |
-| `shared.ts` | `src/shared/createBaseEventBus.ts` + `EventContext.ts` | Convert to factory functions |
-| `ipc.ts` | Split → Browser & Desktop bridge folders | Environment-specific implementations |
-| `ipc.test.ts` | `src/desktop/bridge/DesktopIPCHandler.test.ts` | Co-locate with implementation |
-| `eventBus.test.ts` | `src/desktop/bus/createDesktopEventBus.test.ts` | Co-locate with factory |
-| `eventBus.bench.ts` | `src/desktop/bus/createDesktopEventBus.bench.ts` | Co-locate with factory |
-| `exports/browser/createBrowserEventBus.ts` | `src/browser/bus/createBrowserEventBus.ts` | Keep as factory |
-| `exports/browser/index.ts` | `src/browser/index.ts` | Export factory |
-| `exports/desktop/createDesktopEventBus.ts` | `src/desktop/bus/createDesktopEventBus.ts` | Keep as factory |
-| `exports/desktop/createLocalEventBus.ts` | `src/desktop/bus/createLocalEventBus.ts` | Keep as factory |
-| `exports/desktop/setupAutoForwarding.ts` | `src/desktop/bridge/setupAutoForwarding.ts` | Keep as utility function |
+| Current File                               | New Location                                           | Notes                                    |
+| ------------------------------------------ | ------------------------------------------------------ | ---------------------------------------- |
+| `types.ts`                                 | Split → `src/core/types/`                              | Separate into bus.ts, events.ts, ipc.ts  |
+| `utils.ts`                                 | Split → `src/core/utils/`                              | Separate utilities into individual files |
+| `shared.ts`                                | `src/shared/createBaseEventBus.ts` + `EventContext.ts` | Convert to factory functions             |
+| `ipc.ts`                                   | Split → Browser & Desktop bridge folders               | Environment-specific implementations     |
+| `ipc.test.ts`                              | `src/desktop/bridge/DesktopIPCHandler.test.ts`         | Co-locate with implementation            |
+| `eventBus.test.ts`                         | `src/desktop/bus/createDesktopEventBus.test.ts`        | Co-locate with factory                   |
+| `eventBus.bench.ts`                        | `src/desktop/bus/createDesktopEventBus.bench.ts`       | Co-locate with factory                   |
+| `exports/browser/createBrowserEventBus.ts` | `src/browser/bus/createBrowserEventBus.ts`             | Keep as factory                          |
+| `exports/browser/index.ts`                 | `src/browser/index.ts`                                 | Export factory                           |
+| `exports/desktop/createDesktopEventBus.ts` | `src/desktop/bus/createDesktopEventBus.ts`             | Keep as factory                          |
+| `exports/desktop/createLocalEventBus.ts`   | `src/desktop/bus/createLocalEventBus.ts`               | Keep as factory                          |
+| `exports/desktop/setupAutoForwarding.ts`   | `src/desktop/bridge/setupAutoForwarding.ts`            | Keep as utility function                 |
 
 ## Package Configuration
 
 ### package.json
+
 ```json
 {
   "name": "@yourorg/events-redux",
@@ -427,11 +452,15 @@ export type { EventBus, EventMap } from '#core/types';
 
 ## Benefits of This Refactor (Functional Approach)
 
-1. **No Class Inheritance**: Using factory functions and composition instead of classes
-2. **Better Organization**: Clear separation between environments with co-located tests
+1. **No Class Inheritance**: Using factory functions and composition instead of
+   classes
+2. **Better Organization**: Clear separation between environments with
+   co-located tests
 3. **Increased Flexibility**: Browser can now use custom domains
-4. **Integrated Features**: Auto-forwarding and IPC bridge are first-class citizens
-5. **Composition Over Inheritance**: Shared logic via `createBaseEventBus` factory
+4. **Integrated Features**: Auto-forwarding and IPC bridge are first-class
+   citizens
+5. **Composition Over Inheritance**: Shared logic via `createBaseEventBus`
+   factory
 6. **Enhanced API**: Bridge API makes cross-environment communication explicit
 7. **Improved Testing**: Co-located tests are easier to maintain
 8. **Type Safety**: Using `implements` pattern with interfaces
@@ -440,6 +469,7 @@ export type { EventBus, EventMap } from '#core/types';
 ## Breaking Changes
 
 None! The refactor maintains backward compatibility:
+
 - Factory functions keep the same signature
 - All existing methods work identically
 - New features are additive (bridge API, middleware)
@@ -468,9 +498,14 @@ None! The refactor maintains backward compatibility:
 
 **Instructions for Claude Code:**
 
-I have an events package that provides cross-environment event emitter functionality with IPC bridging between browser and desktop. All the existing code has been moved to `src/ORGANIZE_ME/` folder. Your task is to reorganize it following a FUNCTIONAL PROGRAMMING approach outlined in this document - NO CLASSES, only factory functions and composition.
+I have an events package that provides cross-environment event emitter
+functionality with IPC bridging between browser and desktop. All the existing
+code has been moved to `src/ORGANIZE_ME/` folder. Your task is to reorganize it
+following a FUNCTIONAL PROGRAMMING approach outlined in this document - NO
+CLASSES, only factory functions and composition.
 
 **Current files in ORGANIZE_ME:**
+
 - `eventBus.bench.ts` - Benchmarks for the event bus
 - `eventBus.test.ts` - Unit tests for the event bus
 - `exports/browser/createBrowserEventBus.ts` - Browser event bus factory
@@ -490,33 +525,39 @@ Please help me reorganize using FACTORY FUNCTIONS and COMPOSITION (no classes):
 
 1. **Create the new folder structure** as specified in the document
 2. **Reorganize and refactor the code using factories**:
-   - Split `types.ts` into `core/types/bus.ts`, `core/types/events.ts`, and `core/types/ipc.ts`
+   - Split `types.ts` into `core/types/bus.ts`, `core/types/events.ts`, and
+     `core/types/ipc.ts`
    - Split `utils.ts` into separate files in `core/utils/`
    - Create `createBaseEventBus` factory function for shared logic (NOT a class)
    - Keep all implementations as factory functions
    - Split IPC implementation for browser and desktop
 3. **Co-locate tests and benchmarks** with their source files
 4. **Add the new bridge API** to the EventBus interface:
-   - Create `EventBridge` interface with `forward()`, `isForwarded()`, `stopForwarding()` methods
+   - Create `EventBridge` interface with `forward()`, `isForwarded()`,
+     `stopForwarding()` methods
    - Implement as an object returned by factories when `enableBridge: true`
 5. **Make browser implementation flexible** (accept domain parameter)
-6. **Integrate auto-forwarding** as a utility function that enhances the event bus
-7. **Update all imports** to use Node.js subpath imports (`#core/*`, `#browser/*`, etc.)
+6. **Integrate auto-forwarding** as a utility function that enhances the event
+   bus
+7. **Update all imports** to use Node.js subpath imports (`#core/*`,
+   `#browser/*`, etc.)
 8. **Keep factory functions** in browser/index.ts and desktop/index.ts
 9. **Move integration tests** to `tests/integration/` folder
 
 **Key Requirements:**
+
 - NO ES6 CLASSES - use factory functions and object composition
 - Use `implements` pattern with TypeScript interfaces, not class inheritance
 - Maintain backward compatibility - existing API must continue to work
 - Browser code must have NO Node.js dependencies
-- Desktop code can use Node.js APIs freely  
+- Desktop code can use Node.js APIs freely
 - EventEmitter3 for browser, Node's EventEmitter for desktop
 - Preserve domain-based event isolation
 - Keep type safety throughout
 - Tests should remain passing after refactor
 
 **Factory Pattern Example to Follow:**
+
 ```typescript
 // Instead of: class BrowserEventBus extends BaseEventBus
 // Use: factory functions with shared logic
@@ -538,6 +579,7 @@ function createBrowserEventBus<T>(options) {
 ```
 
 **After reorganizing, provide:**
+
 1. Summary of files moved and created
 2. Any issues encountered
 3. How you maintained the functional approach

@@ -4,13 +4,15 @@
 
 ### Barrel Exports (index.ts) - Use Minimally
 
-**⚠️ CRITICAL PERFORMANCE CONSIDERATION: Barrel exports significantly impact build times and bundle sizes.**
+**⚠️ CRITICAL PERFORMANCE CONSIDERATION: Barrel exports significantly impact
+build times and bundle sizes.**
 
 #### When to Use Barrel Exports (LIMITED CASES)
 
 ✅ **ONLY use for:**
 
-1. **Component composition** - When components have variants/slots that work together
+1. **Component composition** - When components have variants/slots that work
+   together
 
    ```typescript
    // components/Card/index.ts - ACCEPTABLE
@@ -79,7 +81,9 @@ If the answer to the last question is yes, DO NOT create the barrel export.
 
 ### Philosophy: Code Should Speak for Itself
 
-Our codebase follows the principle that **good code is self-documenting**. Comments should be used sparingly and strategically, not as a crutch for unclear code.
+Our codebase follows the principle that **good code is self-documenting**.
+Comments should be used sparingly and strategically, not as a crutch for unclear
+code.
 
 ### When NOT to Comment
 
@@ -228,4 +232,5 @@ function processUser(user: User) {
 
 ### Implementation Note
 
-Our ESLint configuration enforces this policy by prohibiting comments unless explicitly requested during code review.
+Our ESLint configuration enforces this policy by prohibiting comments unless
+explicitly requested during code review.

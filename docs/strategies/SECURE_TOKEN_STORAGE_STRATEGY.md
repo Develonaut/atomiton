@@ -1,6 +1,8 @@
 # Secure Token Storage Strategy
 
-> **Note**: This document contains detailed implementation strategy. For the complete security architecture, see [Security Architecture](../architecture/SECURITY.md).
+> **Note**: This document contains detailed implementation strategy. For the
+> complete security architecture, see
+> [Security Architecture](../architecture/SECURITY.md).
 
 **Complexity Filter**: 25-line core implementation, ships in 2 days
 
@@ -12,7 +14,8 @@ Atomiton needs to store API keys and authentication tokens securely across:
 - Web app (browser storage)
 - Development environments
 
-Without over-engineering a NASA-grade security system for a Blueprint automation platform.
+Without over-engineering a NASA-grade security system for a Blueprint automation
+platform.
 
 ## The Solution: Keep It Simple
 
@@ -212,7 +215,8 @@ async retrieve(key: string): Promise<string | null> {
 
 ### Desktop Security
 
-- **Keychain Access**: Only the signed Atomiton app can access its keychain entries
+- **Keychain Access**: Only the signed Atomiton app can access its keychain
+  entries
 - **Process Isolation**: Tokens never written to disk in plaintext
 - **User Control**: User can revoke access via OS keychain manager
 
@@ -369,10 +373,9 @@ const logger = {
 
 ### Migration Plan
 
-**Week 1**: Implement secure storage package
-**Week 2**: Integrate with existing token usage
-**Week 3**: Remove plaintext storage
-**Week 4**: Documentation and team training
+**Week 1**: Implement secure storage package **Week 2**: Integrate with existing
+token usage **Week 3**: Remove plaintext storage **Week 4**: Documentation and
+team training
 
 ### Backward Compatibility
 
@@ -420,7 +423,8 @@ Before adding complexity, ask:
 ## Implementation Prompt for Claude Code
 
 ```markdown
-I need to implement the secure token storage system for Atomiton based on the SECURE_TOKEN_STORAGE_STRATEGY document.
+I need to implement the secure token storage system for Atomiton based on the
+SECURE_TOKEN_STORAGE_STRATEGY document.
 
 Requirements:
 
@@ -453,13 +457,13 @@ Files to create:
 - packages/@atomiton/secure-storage/tests/desktop.test.ts
 - packages/@atomiton/secure-storage/tests/web.test.ts
 
-Please implement this exactly as specified in the strategy document, keeping the complexity minimal and the implementation rock-solid.
+Please implement this exactly as specified in the strategy document, keeping the
+complexity minimal and the implementation rock-solid.
 ```
 
 ---
 
-**Strategy Status**: Ready for Implementation
-**Complexity Level**: Minimal (25-line core implementations)
-**Ship Timeline**: 2 days
-**Dependencies**: keytar (desktop), Web Crypto API (web)
-**Risk Level**: Low (using platform-provided security)
+**Strategy Status**: Ready for Implementation **Complexity Level**: Minimal
+(25-line core implementations) **Ship Timeline**: 2 days **Dependencies**:
+keytar (desktop), Web Crypto API (web) **Risk Level**: Low (using
+platform-provided security)

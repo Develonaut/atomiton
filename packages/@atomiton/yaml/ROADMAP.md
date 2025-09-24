@@ -2,14 +2,16 @@
 
 ## Vision
 
-Build the most performant, developer-friendly, and feature-complete YAML processing library for the JavaScript/TypeScript ecosystem, specifically optimized for configuration management, Blueprint processing, and large-scale YAML operations.
+Build the most performant, developer-friendly, and feature-complete YAML
+processing library for the JavaScript/TypeScript ecosystem, specifically
+optimized for configuration management, Blueprint processing, and large-scale
+YAML operations.
 
 ## Long-term Goals
 
 ### Phase 1: Foundation (Complete ✅)
 
-**Timeline**: Q3-Q4 2024
-**Status**: Complete
+**Timeline**: Q3-Q4 2024 **Status**: Complete
 
 - [x] High-performance YAML parsing and stringification
 - [x] Comprehensive type safety with TypeScript
@@ -99,7 +101,8 @@ Enterprise and scale features:
 
 #### Comment Preservation System
 
-- **Intelligent Comment Handling**: Preserve comments during parse/stringify cycles
+- **Intelligent Comment Handling**: Preserve comments during parse/stringify
+  cycles
   - Comment association with data structures
   - Position tracking for accurate preservation
   - Format-aware comment handling
@@ -336,7 +339,5 @@ Enterprise and scale features:
 
 ---
 
-**Maintained by**: Atomiton Core Team
-**Last Updated**: January 2025
-**Next Review**: April 2025
-**Status**: Active Development
+**Maintained by**: Atomiton Core Team **Last Updated**: January 2025 **Next
+Review**: April 2025 **Status**: Active Development

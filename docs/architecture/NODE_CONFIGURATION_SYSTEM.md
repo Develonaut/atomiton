@@ -2,18 +2,26 @@
 
 ## Overview
 
-The Atomiton node configuration system provides a declarative way to define configurable properties for Blueprint nodes using Zod schemas. The system automatically generates editable property forms in the editor, allowing users to configure node behavior through a type-safe, schema-driven interface.
+The Atomiton node configuration system provides a declarative way to define
+configurable properties for Blueprint nodes using Zod schemas. The system
+automatically generates editable property forms in the editor, allowing users to
+configure node behavior through a type-safe, schema-driven interface.
 
-This architecture uses **React Hook Form + Zod** as the foundation, with a custom abstraction layer for dynamic form generation, providing optimal performance, flexibility, and developer experience.
+This architecture uses **React Hook Form + Zod** as the foundation, with a
+custom abstraction layer for dynamic form generation, providing optimal
+performance, flexibility, and developer experience.
 
-**Status**: ✅ **IMPLEMENTED** - Core system with UI metadata support is live and functional.
+**Status**: ✅ **IMPLEMENTED** - Core system with UI metadata support is live
+and functional.
 
 ## System Requirements
 
 ### Core Capabilities
 
-1. **Schema-driven forms** - Generate property panels from Zod schemas in node configurations
-2. **Dynamic field rendering** - Automatically map data types to appropriate UI controls
+1. **Schema-driven forms** - Generate property panels from Zod schemas in node
+   configurations
+2. **Dynamic field rendering** - Automatically map data types to appropriate UI
+   controls
 3. **Conditional logic** - Show/hide fields based on other field values
 4. **Performance** - Handle complex forms without re-render issues
 5. **Extensibility** - Support custom controls and validation rules
@@ -200,7 +208,8 @@ function NodeProperties({ selectedNode }: { selectedNode: Node }) {
 - ✅ Basic text/number/boolean controls
 - ✅ Core schema analyzer and control mapper
 - ✅ React Hook Form integration
-- ✅ Support for 13 control types: text, number, boolean, select, textarea, file, password, email, url, date, time, datetime-local, color
+- ✅ Support for 13 control types: text, number, boolean, select, textarea,
+  file, password, email, url, date, time, datetime-local, color
 - ✅ Intelligent type inference from Zod schemas
 - ✅ Form validation and error handling
 - ✅ Live form updates with onChange callbacks

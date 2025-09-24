@@ -41,15 +41,18 @@ function createNodeExecutor() {
 
 // Inline minimal store (previously createExecutionStore)
 function createExecutionStore() {
-  const records = new Map<string, {
-    id: string;
-    request: ExecutionRequest;
-    status: string;
-    startTime: number;
-    result?: ExecutionResult;
-    error?: string;
-    endTime?: number;
-  }>();
+  const records = new Map<
+    string,
+    {
+      id: string;
+      request: ExecutionRequest;
+      status: string;
+      startTime: number;
+      result?: ExecutionResult;
+      error?: string;
+      endTime?: number;
+    }
+  >();
 
   return {
     recordStart(id: string, request: ExecutionRequest) {

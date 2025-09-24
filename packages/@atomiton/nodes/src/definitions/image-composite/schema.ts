@@ -39,7 +39,17 @@ export const imageCompositeSchema = {
     .describe("Output image height in pixels"),
 
   position: v
-    .enum(["center", "top", "bottom", "left", "right", "top-left", "top-right", "bottom-left", "bottom-right"])
+    .enum([
+      "center",
+      "top",
+      "bottom",
+      "left",
+      "right",
+      "top-left",
+      "top-right",
+      "bottom-left",
+      "bottom-right",
+    ])
     .default("center")
     .describe("Position for overlay operations"),
 
@@ -51,7 +61,16 @@ export const imageCompositeSchema = {
     .describe("Opacity for overlay/blend operations"),
 
   blendMode: v
-    .enum(["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn"])
+    .enum([
+      "normal",
+      "multiply",
+      "screen",
+      "overlay",
+      "darken",
+      "lighten",
+      "color-dodge",
+      "color-burn",
+    ])
     .default("normal")
     .describe("Blend mode for composition"),
 
@@ -76,13 +95,13 @@ export const imageCompositeSchema = {
  * Default values for image composite parameters
  */
 export const imageCompositeDefaults = {
-  operation          : "overlay" as const,
-  outputFormat       : "png" as const,
-  quality            : 90,
-  position           : "center" as const,
-  opacity            : 1,
-  blendMode          : "normal" as const,
-  backgroundColor    : "transparent",
+  operation: "overlay" as const,
+  outputFormat: "png" as const,
+  quality: 90,
+  position: "center" as const,
+  opacity: 1,
+  blendMode: "normal" as const,
+  backgroundColor: "transparent",
   maintainAspectRatio: true,
-  padding            : 0,
+  padding: 0,
 };

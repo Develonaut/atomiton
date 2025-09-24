@@ -2,13 +2,17 @@
 
 ## Overview
 
-Clean, simplified wrapper around TanStack Router providing type-safe routing with minimal abstraction. The package has been significantly simplified to eliminate over-engineering while maintaining essential functionality.
+Clean, simplified wrapper around TanStack Router providing type-safe routing
+with minimal abstraction. The package has been significantly simplified to
+eliminate over-engineering while maintaining essential functionality.
 
 ## Current Status: September 2025
 
 ### 🎯 Package State: Simplified & Production Ready
 
-Major simplification completed - reduced from ~1930 lines across 19+ files to 174 lines across 4 focused files (91% reduction). The package now serves as a thin, clean wrapper around TanStack Router without unnecessary abstractions.
+Major simplification completed - reduced from ~1930 lines across 19+ files to
+174 lines across 4 focused files (91% reduction). The package now serves as a
+thin, clean wrapper around TanStack Router without unnecessary abstractions.
 
 ### 📊 Implementation Status
 
@@ -43,7 +47,8 @@ Major simplification completed - reduced from ~1930 lines across 19+ files to 17
 Currently being used by:
 
 - **apps/client**: Primary application routing and navigation
-- **Navigation helpers**: App-specific navigation utilities moved to apps/client/router/
+- **Navigation helpers**: App-specific navigation utilities moved to
+  apps/client/router/
 
 ### 🎯 Current Focus: Stability & Simplicity
 
@@ -155,8 +160,6 @@ App-specific navigation utilities have been moved to `apps/client/router/`:
 
 ---
 
-**Last Updated**: September 2025
-**Package Version**: 0.1.0
-**Build Status**: ✅ Passing
-**Production Ready**: ✅ Yes (Karen Approved)
-**Architecture**: Simplified (91% code reduction)
+**Last Updated**: September 2025 **Package Version**: 0.1.0 **Build Status**: ✅
+Passing **Production Ready**: ✅ Yes (Karen Approved) **Architecture**:
+Simplified (91% code reduction)

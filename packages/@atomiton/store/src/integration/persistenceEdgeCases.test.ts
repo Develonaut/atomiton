@@ -3,8 +3,8 @@
  * Tests the integration points where our code interacts with dependencies
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createStore } from "../index";
+import { createStore } from "#index";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Edge Cases and Error Boundaries", () => {
   // Mock console.error to test error handling without noise

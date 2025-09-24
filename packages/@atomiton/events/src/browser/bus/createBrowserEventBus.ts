@@ -1,8 +1,8 @@
-import { EventEmitter as EventEmitter3 } from 'eventemitter3';
-import { createBaseEventBus } from '#shared/createBaseEventBus';
-import { createEventContext } from '#shared/eventContext';
-import { createBrowserIPCBridge } from '#browser/bridge';
-import type { EventBus, EventMap } from '#core/types';
+import { EventEmitter as EventEmitter3 } from "eventemitter3";
+import { createBaseEventBus } from "#shared/createBaseEventBus";
+import { createEventContext } from "#shared/eventContext";
+import { createBrowserIPCBridge } from "#browser/bridge";
+import type { EventBus, EventMap } from "#core/types";
 
 export type IPCConfig = {
   targetOrigin?: string;
@@ -17,13 +17,13 @@ export type BrowserEventBusOptions = {
 };
 
 export function createBrowserEventBus<T extends EventMap = EventMap>(
-  options?: BrowserEventBusOptions
+  options?: BrowserEventBusOptions,
 ): EventBus<T> {
   const {
-    domain = 'global',
+    domain = "global",
     enableBridge = false,
     enableMiddleware = false,
-    ipcConfig
+    ipcConfig,
   } = options ?? {};
 
   const emitter = new EventEmitter3();
@@ -34,7 +34,7 @@ export function createBrowserEventBus<T extends EventMap = EventMap>(
     domain,
     context,
     enableBridge,
-    enableMiddleware
+    enableMiddleware,
   });
 
   if (enableBridge && bus.bridge) {
@@ -42,7 +42,7 @@ export function createBrowserEventBus<T extends EventMap = EventMap>(
     const originalForward = bus.bridge.forward;
     bus.bridge.forward = (event, target) => {
       originalForward(event, target);
-      if (target === 'desktop') {
+      if (target === "desktop") {
         ipcBridge.send(`${domain}:${String(event)}`, null);
       }
     };

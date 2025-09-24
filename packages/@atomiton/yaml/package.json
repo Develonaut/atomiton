@@ -33,7 +33,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:benchmark": "vitest bench --run"
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "yaml": "^2.6.1"

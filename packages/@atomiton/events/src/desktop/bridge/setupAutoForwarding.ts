@@ -1,22 +1,22 @@
-import type { EventBus, EventMap, IPCBridge } from '#core/types';
-import type { AutoForwardConfig } from '#desktop/bus';
+import type { EventBus, EventMap, IPCBridge } from "#core/types";
+import type { AutoForwardConfig } from "#desktop/bus";
 
 export function setupAutoForwarding<T extends EventMap>(
   bus: EventBus<T>,
   ipc: IPCBridge,
-  config: AutoForwardConfig
+  config: AutoForwardConfig,
 ): () => void {
   const cleanupFns: Array<() => void> = [];
 
   if (!ipc.isAvailable()) {
-    console.warn('IPC not available, auto-forwarding disabled');
+    console.warn("IPC not available, auto-forwarding disabled");
     return () => {};
   }
 
   const environment = ipc.getEnvironment();
 
   // Forward events TO browser (from main process)
-  if (config.toBrowser && environment === 'main') {
+  if (config.toBrowser && environment === "main") {
     for (const event of config.toBrowser) {
       // Listen to local events and forward to browser
       const unsubscribe = bus.on(event as keyof T, (data: T[keyof T]) => {
@@ -27,13 +27,13 @@ export function setupAutoForwarding<T extends EventMap>(
 
       // Mark event as forwarded if bridge is available
       if (bus.bridge) {
-        bus.bridge.forward(event as keyof T, 'browser');
+        bus.bridge.forward(event as keyof T, "browser");
       }
     }
   }
 
   // Forward events FROM browser (in renderer process)
-  if (config.fromBrowser && environment === 'renderer') {
+  if (config.fromBrowser && environment === "renderer") {
     for (const event of config.fromBrowser) {
       // Listen for IPC events and emit locally
       const ipcCleanup = ipc.on(`${bus.getDomain()}:${event}`, (ipcEvent) => {
@@ -43,11 +43,10 @@ export function setupAutoForwarding<T extends EventMap>(
 
       // Mark event as forwarded if bridge is available
       if (bus.bridge) {
-        bus.bridge.forward(event as keyof T, 'desktop');
+        bus.bridge.forward(event as keyof T, "desktop");
       }
     }
   }
-
 
   return () => {
     for (const cleanup of cleanupFns) {
@@ -58,12 +57,12 @@ export function setupAutoForwarding<T extends EventMap>(
     if (bus.bridge) {
       if (config.toBrowser) {
         for (const event of config.toBrowser) {
-          bus.bridge.stopForwarding(event as keyof T, 'browser');
+          bus.bridge.stopForwarding(event as keyof T, "browser");
         }
       }
       if (config.fromBrowser) {
         for (const event of config.fromBrowser) {
-          bus.bridge.stopForwarding(event as keyof T, 'desktop');
+          bus.bridge.stopForwarding(event as keyof T, "desktop");
         }
       }
     }
@@ -75,19 +74,19 @@ export type AutoForwarder = {
   start(): void;
   stop(): void;
   isActive(): boolean;
-  addEvent(event: string, direction: 'toBrowser' | 'fromBrowser'): void;
-  removeEvent(event: string, direction: 'toBrowser' | 'fromBrowser'): void;
+  addEvent(event: string, direction: "toBrowser" | "fromBrowser"): void;
+  removeEvent(event: string, direction: "toBrowser" | "fromBrowser"): void;
 };
 
 export function createAutoForwarder<T extends EventMap>(
   bus: EventBus<T>,
-  ipc: IPCBridge
+  ipc: IPCBridge,
 ): AutoForwarder {
   let isActive = false;
   let cleanup: (() => void) | null = null;
   const config: AutoForwardConfig = {
     toBrowser: [],
-    fromBrowser: []
+    fromBrowser: [],
   };
 
   return {
@@ -110,8 +109,9 @@ export function createAutoForwarder<T extends EventMap>(
       return isActive;
     },
 
-    addEvent(event: string, direction: 'toBrowser' | 'fromBrowser'): void {
-      const list = direction === 'toBrowser' ? config.toBrowser : config.fromBrowser;
+    addEvent(event: string, direction: "toBrowser" | "fromBrowser"): void {
+      const list =
+        direction === "toBrowser" ? config.toBrowser : config.fromBrowser;
       if (list && !list.includes(event)) {
         list.push(event);
         // Restart if active to apply changes
@@ -122,8 +122,9 @@ export function createAutoForwarder<T extends EventMap>(
       }
     },
 
-    removeEvent(event: string, direction: 'toBrowser' | 'fromBrowser'): void {
-      const list = direction === 'toBrowser' ? config.toBrowser : config.fromBrowser;
+    removeEvent(event: string, direction: "toBrowser" | "fromBrowser"): void {
+      const list =
+        direction === "toBrowser" ? config.toBrowser : config.fromBrowser;
       if (list) {
         const index = list.indexOf(event);
         if (index !== -1) {
@@ -135,6 +136,6 @@ export function createAutoForwarder<T extends EventMap>(
           }
         }
       }
-    }
+    },
   };
 }

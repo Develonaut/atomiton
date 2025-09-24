@@ -10,23 +10,29 @@ import type { NodeDefinition } from "#core/types/definition";
 import type { VInfer } from "@atomiton/validation";
 import v from "@atomiton/validation";
 import { imageCompositeFields } from "#definitions/image-composite/fields";
-import { imageCompositeInputPorts, imageCompositeOutputPorts } from "#definitions/image-composite/ports";
-import { imageCompositeDefaults, imageCompositeSchema } from "#definitions/image-composite/schema";
+import {
+  imageCompositeInputPorts,
+  imageCompositeOutputPorts,
+} from "#definitions/image-composite/ports";
+import {
+  imageCompositeDefaults,
+  imageCompositeSchema,
+} from "#definitions/image-composite/schema";
 
 /**
  * Image Composite node definition (browser-safe)
  */
 export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
   metadata: createNodeMetadata({
-    id         : "image-composite",
-    name       : "Image Composite",
-    type       : "image-composite",
-    version    : "1.0.0",
-    author     : "Atomiton Core Team",
+    id: "image-composite",
+    name: "Image Composite",
+    type: "image-composite",
+    version: "1.0.0",
+    author: "Atomiton Core Team",
     description: "Combine, overlay, and manipulate images",
-    category   : "media",
-    icon       : "image",
-    keywords   : [
+    category: "media",
+    icon: "image",
+    keywords: [
       "image",
       "composite",
       "overlay",
@@ -38,16 +44,16 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
       "media",
       "manipulation",
     ],
-    tags        : ["image", "media", "composite", "graphics", "manipulation"],
+    tags: ["image", "media", "composite", "graphics", "manipulation"],
     experimental: false,
-    deprecated  : false,
+    deprecated: false,
   }),
   parameters: createNodeParameters(
     imageCompositeSchema,
     imageCompositeDefaults,
-    imageCompositeFields
+    imageCompositeFields,
   ),
-  inputPorts : imageCompositeInputPorts,
+  inputPorts: imageCompositeInputPorts,
   outputPorts: imageCompositeOutputPorts,
 });
 
@@ -57,10 +63,10 @@ export default imageCompositeDefinition;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullImageCompositeSchema = v.object({
   ...imageCompositeSchema,
-  enabled    : v.boolean().default(true),
-  timeout    : v.number().positive().default(30000),
-  retries    : v.number().int().min(0).default(1),
-  label      : v.string().optional(),
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(30000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
   description: v.string().optional(),
 });
 

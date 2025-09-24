@@ -2,7 +2,8 @@
 
 ## Overview
 
-We use Knip for dead code detection and ESLint rules for unreachable code detection.
+We use Knip for dead code detection and ESLint rules for unreachable code
+detection.
 
 ## Quick Commands
 

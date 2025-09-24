@@ -46,11 +46,11 @@ export async function getPathStats(filePath: string): Promise<PathStats> {
   try {
     const stats = await fs.stat(filePath);
     return {
-      exists     : true,
+      exists: true,
       isDirectory: stats.isDirectory(),
-      isFile     : stats.isFile(),
-      size       : stats.size,
-      modified   : stats.mtime.toISOString(),
+      isFile: stats.isFile(),
+      size: stats.size,
+      modified: stats.mtime.toISOString(),
     };
   } catch {
     return { exists: false };
@@ -62,7 +62,7 @@ export async function getPathStats(filePath: string): Promise<PathStats> {
  */
 export async function deleteOperation(
   targetPath: string,
-  recursive: boolean
+  recursive: boolean,
 ): Promise<void> {
   const stats = await getPathStats(targetPath);
 
@@ -83,7 +83,7 @@ export async function deleteOperation(
 export async function moveOperation(
   sourcePath: string,
   destPath: string,
-  overwrite: boolean
+  overwrite: boolean,
 ): Promise<void> {
   const sourceStats = await getPathStats(sourcePath);
 

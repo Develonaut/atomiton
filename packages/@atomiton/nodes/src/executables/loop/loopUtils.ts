@@ -27,7 +27,7 @@ export type LoopContext = {
  */
 export function evaluateCondition(
   condition: string,
-  context: Record<string, unknown>
+  context: Record<string, unknown>,
 ): boolean {
   try {
     // Simple condition evaluation - in production, use a proper sandbox like vm2
@@ -35,7 +35,7 @@ export function evaluateCondition(
     return Boolean(func(...Object.values(context)));
   } catch (error) {
     throw new Error(
-      `Invalid condition: ${error instanceof Error ? error.message : String(error)}`
+      `Invalid condition: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
 }
@@ -57,18 +57,19 @@ export function handleIterationError(
   index: number,
   errors: unknown[],
   continueOnError: boolean,
-  item?: unknown
+  item?: unknown,
 ): boolean {
-  const errorInfo = item !== undefined
-    ? {
-        index,
-        item,
-        error: error instanceof Error ? error.message : String(error),
-      }
-    : {
-        iteration: index,
-        error    : error instanceof Error ? error.message : String(error),
-      };
+  const errorInfo =
+    item !== undefined
+      ? {
+          index,
+          item,
+          error: error instanceof Error ? error.message : String(error),
+        }
+      : {
+          iteration: index,
+          error: error instanceof Error ? error.message : String(error),
+        };
 
   errors.push(errorInfo);
   return continueOnError;
@@ -80,7 +81,7 @@ export function handleIterationError(
 export function logIteration(
   context: NodeExecutionContext,
   message: string,
-  data?: Record<string, unknown>
+  data?: Record<string, unknown>,
 ): void {
   context.log?.debug?.(message, data);
 }
@@ -91,7 +92,7 @@ export function logIteration(
 export function createIterationResult(
   type: "index" | "iteration" | "item",
   value: unknown,
-  extra?: Record<string, unknown>
+  extra?: Record<string, unknown>,
 ): unknown {
   const base = {
     timestamp: new Date().toISOString(),

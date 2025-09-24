@@ -2,16 +2,22 @@
 
 ## Vision
 
-Build a lightweight, composable, and beautiful React UI framework that combines the best patterns from leading libraries while maintaining zero runtime overhead through CSS-first architecture.
+Build a lightweight, composable, and beautiful React UI framework that combines
+the best patterns from leading libraries while maintaining zero runtime overhead
+through CSS-first architecture.
 
 ## 📚 Essential Documentation
 
 ### Start Here
 
-1. **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Our approach to simplicity, style props, and API design
-2. **[Component Building Guide](./COMPONENT_BUILDING_GUIDE.md)** - Complete step-by-step guide with all patterns
-3. **[Component Organization](./COMPONENT_ORGANIZATION.md)** - The "bento box" principle for file structure
-4. **[Primitive Integration Guide](./PRIMITIVE_INTEGRATION_GUIDE.md)** - How to integrate shadcn/ui primitives and maintain separation of concerns
+1. **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Our approach to
+   simplicity, style props, and API design
+2. **[Component Building Guide](./COMPONENT_BUILDING_GUIDE.md)** - Complete
+   step-by-step guide with all patterns
+3. **[Component Organization](./COMPONENT_ORGANIZATION.md)** - The "bento box"
+   principle for file structure
+4. **[Primitive Integration Guide](./PRIMITIVE_INTEGRATION_GUIDE.md)** - How to
+   integrate shadcn/ui primitives and maintain separation of concerns
 
 ### Progress Tracking
 
@@ -23,8 +29,10 @@ Build a lightweight, composable, and beautiful React UI framework that combines 
 ## What Makes Us Different
 
 1. **Zero Runtime Overhead**: Pure CSS with Tailwind, no CSS-in-JS
-2. **Props-Driven API**: Developer-friendly props (`variant="primary"`), not utility classes
-3. **Compound Components**: Intuitive dot notation for clear component relationships
+2. **Props-Driven API**: Developer-friendly props (`variant="primary"`), not
+   utility classes
+3. **Compound Components**: Intuitive dot notation for clear component
+   relationships
 4. **Smallest Bundle**: < 50KB for core components
 5. **Beautiful by Default**: Brainwave 2.0 aesthetic out of the box
 
@@ -84,8 +92,10 @@ Build a lightweight, composable, and beautiful React UI framework that combines 
 
 We're currently in **Phase 2: Refactor Core Components** (Started Sept 4, 2025).
 
-See [CURRENT.md](../CURRENT.md) for active tasks and [NEXT.md](../NEXT.md) for upcoming work.
+See [CURRENT.md](../CURRENT.md) for active tasks and [NEXT.md](../NEXT.md) for
+upcoming work.
 
 ---
 
-**Getting Started?** → Read [Component Philosophy](./COMPONENT_PHILOSOPHY.md) first, then dive into the [Building Guide](./COMPONENT_BUILDING_GUIDE.md).
+**Getting Started?** → Read [Component Philosophy](./COMPONENT_PHILOSOPHY.md)
+first, then dive into the [Building Guide](./COMPONENT_BUILDING_GUIDE.md).

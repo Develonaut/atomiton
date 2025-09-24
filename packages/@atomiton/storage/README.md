@@ -1,6 +1,8 @@
 # @atomiton/storage
 
-Universal storage abstraction for Composites and application data across platforms. Features split exports for optimized bundle sizes and platform-specific capabilities.
+Universal storage abstraction for Composites and application data across
+platforms. Features split exports for optimized bundle sizes and
+platform-specific capabilities.
 
 ## 📊 Current Status
 
@@ -18,7 +20,8 @@ Universal storage abstraction for Composites and application data across platfor
 
 ## 📦 Split Exports Pattern
 
-The storage package uses split exports to optimize bundle sizes and provide platform-specific functionality:
+The storage package uses split exports to optimize bundle sizes and provide
+platform-specific functionality:
 
 ### Available Exports
 
@@ -38,7 +41,8 @@ import {
 
 ### Why Split Exports?
 
-- **Bundle Optimization**: Browser builds exclude Node.js filesystem dependencies
+- **Bundle Optimization**: Browser builds exclude Node.js filesystem
+  dependencies
 - **Platform Safety**: Prevents importing incompatible engines
 - **Future-Proof**: Easy to add new platform-specific engines
 - **Consistent with Ecosystem**: Follows same pattern as `@atomiton/nodes`
@@ -359,8 +363,10 @@ pnpm dev
 
 ### Architecture Documentation
 
-- **[Storage Architecture](../../docs/architecture/STORAGE.md)** - Complete system design and cross-platform strategy
-- **[Package Integration Guide](../../docs/guides/PACKAGE_INTEGRATION.md)** - Using storage in your applications
+- **[Storage Architecture](../../docs/architecture/STORAGE.md)** - Complete
+  system design and cross-platform strategy
+- **[Package Integration Guide](../../docs/guides/PACKAGE_INTEGRATION.md)** -
+  Using storage in your applications
 
 ## 🤝 Contributing
 

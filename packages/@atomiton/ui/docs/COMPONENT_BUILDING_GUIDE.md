@@ -1,11 +1,14 @@
 # The Complete Component Building Guide
 
-**This is your single source of truth for building components in the Atomiton UI framework.**
+**This is your single source of truth for building components in the Atomiton UI
+framework.**
 
 ## Quick Links to Supporting Docs
 
-- 📖 **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Why we build components this way (simplicity, style props, 3-5 variants max, API patterns)
-- 🍱 **[Component Organization](./COMPONENT_ORGANIZATION.md)** - How to structure files (the "bento box" principle)
+- 📖 **[Component Philosophy](./COMPONENT_PHILOSOPHY.md)** - Why we build
+  components this way (simplicity, style props, 3-5 variants max, API patterns)
+- 🍱 **[Component Organization](./COMPONENT_ORGANIZATION.md)** - How to
+  structure files (the "bento box" principle)
 - 🗺️ **[Roadmap](../ROADMAP.md)** - What we're actually building and why
 
 ## Table of Contents
@@ -225,7 +228,8 @@ What it does:
 
 1. **Extracts style props** - Removes mb, px, etc. and converts to classes
 2. **Handles prop normalization** - Manages shorthands and aliases
-3. **Composes className** - Merges base, variants, style props, and user className
+3. **Composes className** - Merges base, variants, style props, and user
+   className
 4. **Namespaces component** - Adds `atomiton-{name}` class
 5. **Returns clean props** - Props without style/className pollution
 
@@ -572,7 +576,8 @@ Before marking a component complete:
 ## Need More Details?
 
 - **Philosophy questions?** → [Component Philosophy](./COMPONENT_PHILOSOPHY.md)
-- **Organization questions?** → [Component Organization](./COMPONENT_ORGANIZATION.md)
+- **Organization questions?** →
+  [Component Organization](./COMPONENT_ORGANIZATION.md)
 - **What to build?** → [Roadmap](../ROADMAP.md)
 
 ## TypeScript Best Practices
@@ -835,4 +840,5 @@ data-disabled={disabled || undefined}
 
 ---
 
-**Remember**: This guide is your single source of truth. When building components, start here and reference other docs as needed.
+**Remember**: This guide is your single source of truth. When building
+components, start here and reference other docs as needed.

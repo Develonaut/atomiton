@@ -1,4 +1,3 @@
-
 import { createNodeDefinition } from "#core/factories/createNodeDefinition";
 import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
@@ -14,15 +13,15 @@ import { codeDefaults, codeSchema } from "#definitions/code/schema";
  */
 export const codeDefinition: NodeDefinition = createNodeDefinition({
   metadata: createNodeMetadata({
-    id         : "code",
-    name       : "Code",
-    type       : "code",
-    version    : "1.0.0",
-    author     : "Atomiton Core Team",
+    id: "code",
+    name: "Code",
+    type: "code",
+    version: "1.0.0",
+    author: "Atomiton Core Team",
     description: "Execute safe JavaScript expressions with input data",
-    category   : "logic",
-    icon       : "code-2",
-    keywords   : [
+    category: "logic",
+    icon: "code-2",
+    keywords: [
       "code",
       "javascript",
       "js",
@@ -34,16 +33,12 @@ export const codeDefinition: NodeDefinition = createNodeDefinition({
       "calculate",
       "transform",
     ],
-    tags        : ["code", "logic", "javascript", "expression"],
+    tags: ["code", "logic", "javascript", "expression"],
     experimental: false,
-    deprecated  : false,
+    deprecated: false,
   }),
-  parameters: createNodeParameters(
-    codeSchema,
-    codeDefaults,
-    codeFields
-  ),
-  inputPorts : codeInputPorts,
+  parameters: createNodeParameters(codeSchema, codeDefaults, codeFields),
+  inputPorts: codeInputPorts,
   outputPorts: codeOutputPorts,
 });
 
@@ -53,10 +48,10 @@ export default codeDefinition;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fullCodeSchema = v.object({
   ...codeSchema,
-  enabled    : v.boolean().default(true),
-  timeout    : v.number().positive().default(5000),
-  retries    : v.number().int().min(0).default(1),
-  label      : v.string().optional(),
+  enabled: v.boolean().default(true),
+  timeout: v.number().positive().default(5000),
+  retries: v.number().int().min(0).default(1),
+  label: v.string().optional(),
   description: v.string().optional(),
 });
 

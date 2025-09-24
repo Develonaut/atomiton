@@ -38,7 +38,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:benchmark": "vitest bench --run --passWithNoTests || echo \"No benchmark tests for config package\""
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@vitejs/plugin-react": "catalog:",

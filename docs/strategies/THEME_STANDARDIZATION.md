@@ -2,7 +2,9 @@
 
 ## Executive Summary
 
-Based on the theme investigation worktree analysis, we need to consolidate our theme architecture from the current fragmented approach to a unified, scalable system that supports both custom design tokens and shadcn/ui compatibility.
+Based on the theme investigation worktree analysis, we need to consolidate our
+theme architecture from the current fragmented approach to a unified, scalable
+system that supports both custom design tokens and shadcn/ui compatibility.
 
 ## Current State Analysis
 
@@ -11,8 +13,10 @@ Based on the theme investigation worktree analysis, we need to consolidate our t
 **Successful Patterns:**
 
 - Tailwind CSS v4 `@theme` configuration provides clean design token management
-- Comprehensive spacing scale with calc()-based custom spacing (280+ spacing values)
-- Well-defined typography system with letter-spacing and font-weight specifications
+- Comprehensive spacing scale with calc()-based custom spacing (280+ spacing
+  values)
+- Well-defined typography system with letter-spacing and font-weight
+  specifications
 - Semantic color mapping with RGB values for alpha support
 - shadcn/ui integration via theme-aware CSS variables
 
@@ -56,7 +60,8 @@ Based on the theme investigation worktree analysis, we need to consolidate our t
 
 **Component Migration Support:**
 
-- Utility classes for gradual migration: `.bg-theme-primary`, `.text-theme-foreground`
+- Utility classes for gradual migration: `.bg-theme-primary`,
+  `.text-theme-foreground`
 - CVA (Class Variance Authority) integration for variant management
 - TypeScript definitions for theme tokens
 
@@ -147,10 +152,10 @@ packages/@atomiton/ui/
 
 ## Migration Timeline
 
-**Week 1:** Foundation setup and theme extraction
-**Week 2:** shadcn integration and compatibility layer  
-**Week 3:** Package creation and distribution setup
-**Week 4+:** Gradual component migration and optimization
+**Week 1:** Foundation setup and theme extraction **Week 2:** shadcn integration
+and compatibility layer  
+**Week 3:** Package creation and distribution setup **Week 4+:** Gradual
+component migration and optimization
 
 ## Required Resources
 
@@ -161,9 +166,11 @@ packages/@atomiton/ui/
 
 ## Benefits of UI Package Integration
 
-- **Simplified Dependencies**: Apps only need `@atomiton/ui` for both components and theming
+- **Simplified Dependencies**: Apps only need `@atomiton/ui` for both components
+  and theming
 - **Cohesive Design System**: Theme and components evolve together
-- **Better Tree Shaking**: Bundlers can optimize unused theme tokens with components
+- **Better Tree Shaking**: Bundlers can optimize unused theme tokens with
+  components
 - **Reduced Complexity**: No separate package to maintain and version
 - **Faster Development**: Components and theme co-located for easier iteration
 

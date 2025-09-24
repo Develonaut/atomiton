@@ -11,9 +11,9 @@ import type { NodeFieldsConfig } from "#core/types/definition";
 export const transformFields: NodeFieldsConfig = {
   operation: {
     controlType: "select",
-    label      : "Operation",
-    helpText   : "Type of transformation to perform",
-    options    : [
+    label: "Operation",
+    helpText: "Type of transformation to perform",
+    options: [
       { value: "map", label: "Map - Transform each item" },
       { value: "filter", label: "Filter - Keep items matching condition" },
       {
@@ -29,58 +29,58 @@ export const transformFields: NodeFieldsConfig = {
   },
   transformFunction: {
     controlType: "code",
-    label      : "Transform Function",
+    label: "Transform Function",
     placeholder: "item => ({ ...item, processed: true })",
-    helpText   : "JavaScript function for map/filter transformation",
-    rows       : 5,
+    helpText: "JavaScript function for map/filter transformation",
+    rows: 5,
   },
   filterCondition: {
     controlType: "code",
-    label      : "Filter Condition",
+    label: "Filter Condition",
     placeholder: "item => item.value > 0",
-    helpText   : "Condition function for filter operation",
-    rows       : 3,
+    helpText: "Condition function for filter operation",
+    rows: 3,
   },
   sortKey: {
     controlType: "text",
-    label      : "Sort Key",
+    label: "Sort Key",
     placeholder: "name",
-    helpText   : "Property to sort by (leave empty to sort primitive values)",
+    helpText: "Property to sort by (leave empty to sort primitive values)",
   },
   sortDirection: {
     controlType: "select",
-    label      : "Sort Direction",
-    helpText   : "Sort order direction",
-    options    : [
+    label: "Sort Direction",
+    helpText: "Sort order direction",
+    options: [
       { value: "asc", label: "Ascending" },
       { value: "desc", label: "Descending" },
     ],
   },
   groupBy: {
     controlType: "text",
-    label      : "Group By",
+    label: "Group By",
     placeholder: "category",
-    helpText   : "Property to group by",
+    helpText: "Property to group by",
   },
   reduceFunction: {
     controlType: "code",
-    label      : "Reduce Function",
+    label: "Reduce Function",
     placeholder:
       "(accumulator, currentItem, index) => accumulator + currentItem",
     helpText: "Function to combine array items",
-    rows    : 3,
+    rows: 3,
   },
   reduceInitial: {
     controlType: "text",
-    label      : "Initial Value",
+    label: "Initial Value",
     placeholder: "0",
-    helpText   : "Initial value for reduce operation (JSON format)",
+    helpText: "Initial value for reduce operation (JSON format)",
   },
   flattenDepth: {
     controlType: "number",
-    label      : "Flatten Depth",
-    helpText   : "How many levels deep to flatten",
-    min        : 1,
-    max        : 10,
+    label: "Flatten Depth",
+    helpText: "How many levels deep to flatten",
+    min: 1,
+    max: 10,
   },
 };

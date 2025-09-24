@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document provides specific instructions for AI agents working on the Atomiton codebase. Follow these guidelines to ensure your code meets our quality standards.
+This document provides specific instructions for AI agents working on the
+Atomiton codebase. Follow these guidelines to ensure your code meets our quality
+standards.
 
 ## Before Starting Any Task
 
@@ -25,11 +27,14 @@ This document provides specific instructions for AI agents working on the Atomit
 ### Simplified Testing Rules
 
 **Only 2 file extensions allowed:**
+
 - `*.test.ts` - Unit/Integration tests (folder determines type)
 - `*.spec.ts` - E2E Playwright tests (ONLY in apps/e2e/tests/)
 
 **BANNED file names:**
-- ❌ Never use: `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`, `.e2e.test.ts`, `.unit.test.ts`
+
+- ❌ Never use: `.int.test.ts`, `.smoke.test.ts`, `.bench.test.ts`,
+  `.e2e.test.ts`, `.unit.test.ts`
 
 ### Test Placement Decision Tree
 
@@ -282,7 +287,7 @@ You may only mark work as complete when:
 ✅ E2E tests for UI/Electron features  
 ✅ No component unit tests  
 ✅ Tests in correct locations  
-✅ Proper error handling implemented  
+✅ Proper error handling implemented
 
 ## Example Workflow
 
@@ -314,13 +319,17 @@ pnpm lint && pnpm typecheck && pnpm test && pnpm build
 ## Testing Compliance Review
 
 Periodically verify testing compliance using:
-- [TESTING_REVIEW_PROMPT](./testing/TESTING_REVIEW_PROMPT.md) - Run comprehensive audit
+
+- [TESTING_REVIEW_PROMPT](./testing/TESTING_REVIEW_PROMPT.md) - Run
+  comprehensive audit
 
 ## Remember
 
-**Quality over speed.** It's better to take time to do it right than to submit code that needs multiple rounds of fixes.
+**Quality over speed.** It's better to take time to do it right than to submit
+code that needs multiple rounds of fixes.
 
-**Test at the highest level possible.** E2E > Integration > Unit. When in doubt, write an E2E test.
+**Test at the highest level possible.** E2E > Integration > Unit. When in doubt,
+write an E2E test.
 
 When in doubt, refer to:
 

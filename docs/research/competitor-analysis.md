@@ -2,7 +2,11 @@
 
 ## Executive Summary
 
-The automation industry has incredible leaders who've paved the way for tools like Atomiton. This analysis studies what makes them successful and identifies an underserved niche: **simple, beautiful, and approachable** automation for individuals and small teams. We're not here to compete but to complement the ecosystem by serving users these platforms may have outgrown.
+The automation industry has incredible leaders who've paved the way for tools
+like Atomiton. This analysis studies what makes them successful and identifies
+an underserved niche: **simple, beautiful, and approachable** automation for
+individuals and small teams. We're not here to compete but to complement the
+ecosystem by serving users these platforms may have outgrown.
 
 ## The Market Landscape
 
@@ -27,7 +31,9 @@ The automation industry has incredible leaders who've paved the way for tools li
 - Focus on business integrations over local files
 - Optimized for business workflows
 
-**What We Learn**: Zapier proved that simplicity has immense value. They've built an amazing business platform. We can serve the individual creators they've graduated from.
+**What We Learn**: Zapier proved that simplicity has immense value. They've
+built an amazing business platform. We can serve the individual creators they've
+graduated from.
 
 #### Make (Integromat)
 
@@ -48,7 +54,8 @@ The automation industry has incredible leaders who've paved the way for tools li
 - Execution limits
 - Learning curve
 
-**What We Learn**: Visual builders work, but UI complexity scares away non-technical users
+**What We Learn**: Visual builders work, but UI complexity scares away
+non-technical users
 
 #### Power Automate
 
@@ -69,7 +76,8 @@ The automation industry has incredible leaders who've paved the way for tools li
 - Steep learning curve
 - Windows-centric
 
-**What We Learn**: Desktop automation is valuable, but enterprise features add complexity
+**What We Learn**: Desktop automation is valuable, but enterprise features add
+complexity
 
 ### Developer-Focused Tools
 
@@ -93,7 +101,8 @@ The automation industry has incredible leaders who've paved the way for tools li
 - Heavy resource usage
 - Dated UI
 
-**What We Learn**: Open source attracts developers, but setup complexity limits adoption
+**What We Learn**: Open source attracts developers, but setup complexity limits
+adoption
 
 #### Pipedream
 
@@ -333,7 +342,8 @@ The automation industry has incredible leaders who've paved the way for tools li
 
 ## Conclusion
 
-The automation market has a gap: **Simple, beautiful, desktop-first tools for individuals**.
+The automation market has a gap: **Simple, beautiful, desktop-first tools for
+individuals**.
 
 - Zapier is simple but expensive and cloud-only
 - n8n is powerful but complex and overwhelming
@@ -348,7 +358,8 @@ Atomiton fills this gap by being:
 - **Free enough** for individuals
 - **Desktop-native** for privacy and power
 
-We're not trying to beat Zapier or n8n. We're creating the tool we wish existed: **Simple, beautiful, and just works**.
+We're not trying to beat Zapier or n8n. We're creating the tool we wish existed:
+**Simple, beautiful, and just works**.
 
 ---
 

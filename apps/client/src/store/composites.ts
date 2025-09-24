@@ -67,7 +67,7 @@ export const compositeActions: CompositeActions = {
   update: (id: string, updates: Partial<NodeDefinition>) => {
     compositeStore.setState((state: CompositeState) => {
       const index = state.composites.findIndex(
-        (comp: NodeDefinition) => comp.id === id
+        (comp: NodeDefinition) => comp.id === id,
       );
       if (index === -1) {
         state.error = `Node ${id} not found`;
@@ -91,7 +91,7 @@ export const compositeActions: CompositeActions = {
   remove: (id: string) => {
     compositeStore.setState((state: CompositeState) => {
       const index = state.composites.findIndex(
-        (comp: NodeDefinition) => comp.id === id
+        (comp: NodeDefinition) => comp.id === id,
       );
       if (index === -1) {
         state.error = `Node ${id} not found`;

@@ -1,12 +1,15 @@
 # Contributing to Atomiton
 
-First off, thank you for your interest in contributing to Atomiton! While the project is in very early stages, your feedback and ideas are invaluable.
+First off, thank you for your interest in contributing to Atomiton! While the
+project is in very early stages, your feedback and ideas are invaluable.
 
 ## Current Project Status
 
 ⚠️ **VERY EARLY STAGE PROJECT** ⚠️
 
-Atomiton is currently in the "hopes and dreams" phase. Most features don't exist yet, and the codebase is rapidly evolving. Because of this, we have specific guidelines about contributions.
+Atomiton is currently in the "hopes and dreams" phase. Most features don't exist
+yet, and the codebase is rapidly evolving. Because of this, we have specific
+guidelines about contributions.
 
 ## How You Can Help Right Now
 
@@ -86,15 +89,18 @@ Note: Expect things to be broken!
 
 ## Code of Conduct
 
-Please note we have a [Code of Conduct](CODE_OF_CONDUCT.md). Please follow it in all your interactions with the project.
+Please note we have a [Code of Conduct](CODE_OF_CONDUCT.md). Please follow it in
+all your interactions with the project.
 
 ## Questions?
 
-Feel free to open an issue for any questions about contributing. We appreciate your patience as the project grows from dreams to reality!
+Feel free to open an issue for any questions about contributing. We appreciate
+your patience as the project grows from dreams to reality!
 
 ## License
 
-By contributing ideas and feedback, you agree that your contributions will be licensed under the MIT License.
+By contributing ideas and feedback, you agree that your contributions will be
+licensed under the MIT License.
 
 ---
 

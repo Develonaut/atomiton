@@ -17,10 +17,10 @@ export {
   loadBuiltInTemplates,
   removeTemplate,
   searchTemplates,
-} from '#templates/registry';
+} from "#templates/registry";
 
 // Loader functions
-export { loadTemplate, loadTemplateFromFile } from '#templates/loader';
+export { loadTemplate, loadTemplateFromFile } from "#templates/loader";
 
 // Types
-export type { Template, TemplateMetadata } from '#templates/types';
+export type { Template, TemplateMetadata } from "#templates/types";

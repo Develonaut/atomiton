@@ -1,6 +1,7 @@
 # Credits & Acknowledgments
 
-Atomiton stands on the shoulders of giants. This document acknowledges the projects, designs, and people that inspire and enable our work.
+Atomiton stands on the shoulders of giants. This document acknowledges the
+projects, designs, and people that inspire and enable our work.
 
 ## Design Inspiration
 
@@ -11,7 +12,8 @@ Atomiton stands on the shoulders of giants. This document acknowledges the proje
 - **Demo**: https://brainwave2-app.vercel.app/
 - **License**: Commercial license purchased
 - **Usage**: Design inspiration and visual language for our UI
-- **Note**: We're adapting their beautiful aesthetic to create a functional automation tool
+- **Note**: We're adapting their beautiful aesthetic to create a functional
+  automation tool
 
 ## Open Source Projects We Learn From
 
@@ -20,7 +22,8 @@ Atomiton stands on the shoulders of giants. This document acknowledges the proje
 - **Website**: https://n8n.io
 - **GitHub**: https://github.com/n8n-io/n8n
 - **What We Learned**: Package architecture, DI patterns, node system design
-- **Our Approach**: Respectfully learning from their excellent patterns while building something simpler
+- **Our Approach**: Respectfully learning from their excellent patterns while
+  building something simpler
 
 ### Zapier
 
@@ -88,8 +91,10 @@ All third-party resources are used in compliance with their respective licenses:
 
 ## Contributing
 
-If we've missed crediting your work or inspiration, please open an issue. We believe in giving credit where it's due.
+If we've missed crediting your work or inspiration, please open an issue. We
+believe in giving credit where it's due.
 
 ---
 
-_"If I have seen further, it is by standing on the shoulders of giants." - Isaac Newton_
+_"If I have seen further, it is by standing on the shoulders of giants." - Isaac
+Newton_

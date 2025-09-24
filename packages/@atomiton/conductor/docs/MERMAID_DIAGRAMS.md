@@ -1,6 +1,7 @@
 # Conductor Architecture - Mermaid Diagrams
 
-Visual documentation of the Conductor package architecture using Mermaid diagrams that render natively on GitHub.
+Visual documentation of the Conductor package architecture using Mermaid
+diagrams that render natively on GitHub.
 
 ## Table of Contents
 
@@ -436,12 +437,15 @@ graph BT
 
 ## Usage in Documentation
 
-These Mermaid diagrams will render automatically when viewed on GitHub. You can reference them in other documentation files or include them in README files throughout the project.
+These Mermaid diagrams will render automatically when viewed on GitHub. You can
+reference them in other documentation files or include them in README files
+throughout the project.
 
 ### Example Usage in README:
 
 ```markdown
-See the [Conductor Architecture Diagrams](./CONDUCTOR_MERMAID_DIAGRAMS.md) for visual representations of how the system works.
+See the [Conductor Architecture Diagrams](./CONDUCTOR_MERMAID_DIAGRAMS.md) for
+visual representations of how the system works.
 ```
 
 ### Benefits of Mermaid on GitHub:
@@ -452,4 +456,5 @@ See the [Conductor Architecture Diagrams](./CONDUCTOR_MERMAID_DIAGRAMS.md) for v
 - 📱 **Responsive**: Works on all devices
 - 🔗 **Linkable**: Can link to specific diagrams
 
-These diagrams provide a clear visual understanding of the conductor's architecture and make it easy for new developers to understand the system!
+These diagrams provide a clear visual understanding of the conductor's
+architecture and make it easy for new developers to understand the system!

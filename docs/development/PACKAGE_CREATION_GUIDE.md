@@ -1,14 +1,18 @@
 # Package Creation Guide
 
-A comprehensive guide for creating new packages in the `@atomiton` namespace, following established conventions and patterns across the monorepo.
+A comprehensive guide for creating new packages in the `@atomiton` namespace,
+following established conventions and patterns across the monorepo.
 
 ## Overview
 
-This guide documents the common patterns identified across all packages in `/packages/@atomiton/` and provides step-by-step instructions for creating new packages that follow these conventions.
+This guide documents the common patterns identified across all packages in
+`/packages/@atomiton/` and provides step-by-step instructions for creating new
+packages that follow these conventions.
 
 ## Package Analysis Summary
 
-Based on analysis of 15 existing packages, the following patterns have been identified:
+Based on analysis of 15 existing packages, the following patterns have been
+identified:
 
 ### Common Package Types
 
@@ -17,7 +21,8 @@ Based on analysis of 15 existing packages, the following patterns have been iden
    - Comprehensive build and test configurations
    - Full export/import patterns
 
-2. **Configuration Packages** (`@atomiton/eslint-config`, `@atomiton/typescript-config`)
+2. **Configuration Packages** (`@atomiton/eslint-config`,
+   `@atomiton/typescript-config`)
    - Shared configuration files with multiple presets
    - Minimal build requirements
    - Focus on reusable settings
@@ -474,7 +479,8 @@ cd packages/@atomiton/[package-name]
 - [ ] Create `src/types.ts` for type definitions
 - [ ] Create `src/__tests__/` directory with initial unit test
 - [ ] Create `src/__tests__/api.smoke.test.ts` for smoke tests (REQUIRED)
-- [ ] Create `src/__benchmarks__/api.bench.ts` for benchmarks (REQUIRED for API packages)
+- [ ] Create `src/__benchmarks__/api.bench.ts` for benchmarks (REQUIRED for API
+      packages)
 
 ### 4. Create Documentation
 
@@ -489,8 +495,10 @@ cd packages/@atomiton/[package-name]
 - [ ] Run `pnpm lint` to verify ESLint setup
 - [ ] Run `pnpm build` to verify build setup (if applicable)
 - [ ] Run `pnpm test:unit` to verify unit tests
-- [ ] Run `pnpm test:smoke` to verify smoke tests (MUST have actual tests, not just echo)
-- [ ] Run `pnpm test:benchmark` to verify benchmarks (MUST have actual benchmarks for API packages)
+- [ ] Run `pnpm test:smoke` to verify smoke tests (MUST have actual tests, not
+      just echo)
+- [ ] Run `pnpm test:benchmark` to verify benchmarks (MUST have actual
+      benchmarks for API packages)
 - [ ] Run `pnpm test:all` to verify complete test suite
 
 ### 6. Integration
@@ -534,7 +542,8 @@ For configuration packages:
 
 ### 🚨 MANDATORY Testing Requirements
 
-**ALL packages MUST include the complete test script suite.** This is non-negotiable.
+**ALL packages MUST include the complete test script suite.** This is
+non-negotiable.
 
 #### Required Test Types
 
@@ -660,4 +669,5 @@ describe("API Performance", () => {
 - Use Terser for minification with class name preservation
 - Bundle analysis with rollup-plugin-visualizer
 
-This guide ensures consistency across all packages while providing flexibility for different package types and requirements.
+This guide ensures consistency across all packages while providing flexibility
+for different package types and requirements.

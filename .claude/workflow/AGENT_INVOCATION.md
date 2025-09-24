@@ -2,11 +2,13 @@
 
 ## The Problem
 
-Agents often skip the AGENT_EXECUTION_PLAN.md workflow, leading to incomplete or non-compliant work.
+Agents often skip the AGENT_EXECUTION_PLAN.md workflow, leading to incomplete or
+non-compliant work.
 
 ## The Solution
 
-When using the Task tool to invoke any agent, you MUST include the mandatory workflow instructions in your prompt.
+When using the Task tool to invoke any agent, you MUST include the mandatory
+workflow instructions in your prompt.
 
 ## Template for Agent Invocation
 
@@ -115,4 +117,5 @@ If an agent doesn't follow the workflow:
 
 ## Remember
 
-The workflow is NOT optional. It's the foundation of our quality assurance process. Every agent, every time, no exceptions.
+The workflow is NOT optional. It's the foundation of our quality assurance
+process. Every agent, every time, no exceptions.

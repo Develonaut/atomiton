@@ -42,7 +42,7 @@ export type LoopOutput = {
  */
 function getInputValue<T>(
   context: NodeExecutionContext,
-  key: string
+  key: string,
 ): T | undefined {
   return context.inputs?.[key] as T | undefined;
 }
@@ -54,7 +54,7 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
   createNodeExecutable({
     async execute(
       context: NodeExecutionContext,
-      config: LoopParameters
+      config: LoopParameters,
     ): Promise<NodeExecutionResult> {
       const startTime = Date.now();
 
@@ -66,8 +66,8 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
 
         context.log?.info?.(`Starting ${loopType} loop`, {
           maxIterations: config.maxIterations,
-          parallel     : config.parallel,
-          concurrency  : config.concurrency,
+          parallel: config.parallel,
+          concurrency: config.concurrency,
         });
 
         switch (loopType) {
@@ -107,7 +107,7 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
               end,
               step,
               config,
-              context
+              context,
             );
             results = loopResult.results;
             errors = loopResult.errors;
@@ -176,27 +176,27 @@ export const loopExecutable: NodeExecutable<LoopParameters> =
           error instanceof Error ? error.message : String(error);
 
         context.log?.error?.(`Loop execution failed`, {
-          error   : errorMessage,
+          error: errorMessage,
           loopType: config.loopType,
         });
 
         return {
           success: false,
-          error  : errorMessage,
+          error: errorMessage,
           outputs: {
             result: {
-              results       : [],
+              results: [],
               iterationCount: 0,
-              errors        : [errorMessage],
-              success       : false,
+              errors: [errorMessage],
+              success: false,
               duration,
-              completed     : false,
-              stopped       : true,
+              completed: false,
+              stopped: true,
             },
-            results       : [],
+            results: [],
             iterationCount: 0,
-            errors        : [errorMessage],
-            success       : false,
+            errors: [errorMessage],
+            success: false,
             duration,
           },
         };
