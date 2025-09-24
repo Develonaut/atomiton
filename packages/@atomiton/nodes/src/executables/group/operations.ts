@@ -7,7 +7,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { GroupParameters } from "#definitions/group";
+import type { GroupParameters } from "#schemas/group";
 import {
   createChildContext,
   createErrorResult,

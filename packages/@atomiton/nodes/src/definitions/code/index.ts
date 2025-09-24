@@ -1,12 +1,24 @@
+/**
+ * Code Node Definition
+ * Browser-safe configuration for code execution node
+ */
+
 import { createNodeDefinition } from "#core/factories/createNodeDefinition";
 import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
-import type { VInfer } from "@atomiton/validation";
-import v from "@atomiton/validation";
 import { codeFields } from "#definitions/code/fields";
 import { codeInputPorts, codeOutputPorts } from "#definitions/code/ports";
-import { codeDefaults, codeSchema } from "#definitions/code/schema";
+
+/**
+ * Default values for code execution parameters
+ */
+export const codeDefaults = {
+  code: "input.value",
+  timeout: 5000,
+  returnType: "auto" as const,
+  memoryLimit: 32,
+};
 
 /**
  * Code execution node definition (browser-safe)
@@ -37,23 +49,9 @@ export const codeDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(codeSchema, codeDefaults, codeFields),
+  parameters: createNodeParameters(codeDefaults, codeFields),
   inputPorts: codeInputPorts,
   outputPorts: codeOutputPorts,
 });
 
 export default codeDefinition;
-
-// Create the full schema with base parameters
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fullCodeSchema = v.object({
-  ...codeSchema,
-  enabled: v.boolean().default(true),
-  timeout: v.number().positive().default(5000),
-  retries: v.number().int().min(0).default(1),
-  label: v.string().optional(),
-  description: v.string().optional(),
-});
-
-// Export the parameter type for use in the executable
-export type CodeParameters = VInfer<typeof fullCodeSchema>;

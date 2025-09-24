@@ -7,17 +7,26 @@ import { createNodeDefinition } from "#core/factories/createNodeDefinition";
 import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
-import type { VInfer } from "@atomiton/validation";
-import v from "@atomiton/validation";
 import { imageCompositeFields } from "#definitions/image-composite/fields";
 import {
   imageCompositeInputPorts,
   imageCompositeOutputPorts,
 } from "#definitions/image-composite/ports";
-import {
-  imageCompositeDefaults,
-  imageCompositeSchema,
-} from "#definitions/image-composite/schema";
+
+/**
+ * Default values for image composite parameters
+ */
+export const imageCompositeDefaults = {
+  operation: "overlay" as const,
+  outputFormat: "png" as const,
+  quality: 90,
+  position: "center" as const,
+  opacity: 1,
+  blendMode: "normal" as const,
+  backgroundColor: "transparent",
+  maintainAspectRatio: true,
+  padding: 0,
+};
 
 /**
  * Image Composite node definition (browser-safe)
@@ -49,7 +58,6 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
     deprecated: false,
   }),
   parameters: createNodeParameters(
-    imageCompositeSchema,
     imageCompositeDefaults,
     imageCompositeFields,
   ),
@@ -58,17 +66,3 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
 });
 
 export default imageCompositeDefinition;
-
-// Create the full schema with base parameters
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fullImageCompositeSchema = v.object({
-  ...imageCompositeSchema,
-  enabled: v.boolean().default(true),
-  timeout: v.number().positive().default(30000),
-  retries: v.number().int().min(0).default(1),
-  label: v.string().optional(),
-  description: v.string().optional(),
-});
-
-// Export the parameter type for use in the executable
-export type ImageCompositeParameters = VInfer<typeof fullImageCompositeSchema>;

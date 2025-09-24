@@ -1,14 +1,16 @@
 /**
  * Image Composite Schema
- * Parameter validation schema for image composite node
+ * Runtime validation schema for image composite node
  */
 
 import v from "@atomiton/validation";
+import type { VInfer } from "@atomiton/validation";
+import { baseSchema } from "#schemas/node";
 
 /**
- * Image composite parameter schema
+ * Image Composite specific schema (without base fields)
  */
-export const imageCompositeSchema = {
+export const imageCompositeSchemaShape = {
   operation: v
     .enum(["overlay", "merge", "composite", "blend"])
     .default("overlay")
@@ -92,16 +94,18 @@ export const imageCompositeSchema = {
 };
 
 /**
- * Default values for image composite parameters
+ * Full Image Composite schema including base fields
  */
-export const imageCompositeDefaults = {
-  operation: "overlay" as const,
-  outputFormat: "png" as const,
-  quality: 90,
-  position: "center" as const,
-  opacity: 1,
-  blendMode: "normal" as const,
-  backgroundColor: "transparent",
-  maintainAspectRatio: true,
-  padding: 0,
-};
+export const imageCompositeSchema = baseSchema.extend(
+  imageCompositeSchemaShape,
+);
+
+/**
+ * Type for Image Composite parameters
+ */
+export type ImageCompositeParameters = VInfer<typeof imageCompositeSchema>;
+
+/**
+ * Default export for registry
+ */
+export default imageCompositeSchemaShape;

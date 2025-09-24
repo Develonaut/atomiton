@@ -9,7 +9,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { ShellCommandParameters } from "#definitions/shell-command";
+import type { ShellCommandParameters } from "#schemas/shell-command";
 import { executeCommand } from "#executables/shell-command/executor";
 import {
   createCommandOutput,

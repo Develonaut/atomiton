@@ -9,8 +9,6 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { TransformParameters } from "#definitions/transform";
-import { transformDefinition } from "#definitions/transform";
 import { executeTransformation } from "#executables/transform/operations";
 import {
   createErrorOutput,
@@ -19,6 +17,8 @@ import {
   logTransformResult,
   type TransformOutput,
 } from "#executables/transform/utils";
+import { getNodeSchema } from "#schemas/registry";
+import type { TransformParameters } from "#schemas/transform";
 
 export type { TransformOutput };
 
@@ -89,13 +89,17 @@ export const transformExecutable: NodeExecutable<TransformParameters> =
     },
 
     validateConfig(config: unknown): TransformParameters {
-      const result = transformDefinition.parameters.safeParse(config);
+      const schema = getNodeSchema("transform");
+      if (!schema) {
+        throw new Error("Transform schema not found in registry");
+      }
+      const result = schema.safeParse(config);
       if (!result.success) {
         throw new Error(
           `Invalid transform parameters: ${result.error?.message || "Unknown validation error"}`,
         );
       }
-      return result.data;
+      return result.data as TransformParameters;
     },
   });
 

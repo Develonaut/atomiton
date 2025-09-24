@@ -7,17 +7,29 @@ import { createNodeDefinition } from "#core/factories/createNodeDefinition";
 import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
-import type { VInfer } from "@atomiton/validation";
-import v from "@atomiton/validation";
 import { shellCommandFields } from "#definitions/shell-command/fields";
 import {
   shellCommandInputPorts,
   shellCommandOutputPorts,
 } from "#definitions/shell-command/ports";
-import {
-  shellCommandDefaults,
-  shellCommandSchema,
-} from "#definitions/shell-command/schema";
+
+/**
+ * Default values for shell command parameters
+ */
+export const shellCommandDefaults = {
+  command: "",
+  shell: "bash" as const,
+  env: {},
+  timeout: 30000,
+  captureOutput: true,
+  encoding: "utf8" as const,
+  throwOnError: false,
+  maxBuffer: 10485760,
+  killSignal: "SIGTERM",
+  args: [],
+  environment: {},
+  inheritStdio: false,
+};
 
 /**
  * Shell Command node definition (browser-safe)
@@ -48,27 +60,9 @@ export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(
-    shellCommandSchema,
-    shellCommandDefaults,
-    shellCommandFields,
-  ),
+  parameters: createNodeParameters(shellCommandDefaults, shellCommandFields),
   inputPorts: shellCommandInputPorts,
   outputPorts: shellCommandOutputPorts,
 });
 
 export default shellCommandDefinition;
-
-// Create the full schema with base parameters
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fullShellCommandSchema = v.object({
-  ...shellCommandSchema,
-  enabled: v.boolean().default(true),
-  timeout: v.number().positive().default(30000),
-  retries: v.number().int().min(0).default(1),
-  label: v.string().optional(),
-  description: v.string().optional(),
-});
-
-// Export the parameter type for use in the executable
-export type ShellCommandParameters = VInfer<typeof fullShellCommandSchema>;

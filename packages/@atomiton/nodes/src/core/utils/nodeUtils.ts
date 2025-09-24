@@ -48,11 +48,9 @@ export function isNodeParameters(obj: unknown): obj is NodeParameters {
   return (
     obj !== null &&
     typeof obj === "object" &&
-    "parse" in obj &&
-    "safeParse" in obj &&
-    "isValid" in obj &&
-    typeof (obj as Record<string, unknown>).parse === "function" &&
-    typeof (obj as Record<string, unknown>).safeParse === "function" &&
-    typeof (obj as Record<string, unknown>).isValid === "function"
+    "defaults" in obj &&
+    "fields" in obj &&
+    typeof (obj as Record<string, unknown>).defaults === "object" &&
+    typeof (obj as Record<string, unknown>).fields === "object"
   );
 }

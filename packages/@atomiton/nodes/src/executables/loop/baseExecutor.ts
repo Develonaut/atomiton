@@ -4,7 +4,7 @@
  */
 
 import type { NodeExecutionContext } from "#core/types/executable";
-import type { LoopParameters } from "#definitions/loop";
+import type { LoopParameters } from "#schemas/loop";
 import {
   type LoopContext,
   type LoopResult,

@@ -9,7 +9,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { CSVReaderParameters } from "#definitions/csv-reader";
+import type { CSVReaderParameters } from "#schemas/csv-reader";
 
 /**
  * Simple CSV parser utility

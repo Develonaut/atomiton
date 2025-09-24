@@ -1,9 +1,16 @@
+/**
+ * Code Node Schema
+ * Runtime validation schema for code execution node
+ */
+
 import v from "@atomiton/validation";
+import type { VInfer } from "@atomiton/validation";
+import { baseSchema } from "#schemas/node";
 
 /**
- * Code execution parameter schema
+ * Code node specific schema (without base fields)
  */
-export const codeSchema = {
+export const codeSchemaShape = {
   code: v
     .string()
     .min(1, "Code expression is required")
@@ -30,11 +37,16 @@ export const codeSchema = {
 };
 
 /**
- * Default values for code execution parameters
+ * Full Code schema including base fields
  */
-export const codeDefaults = {
-  code: "input.value",
-  timeout: 5000,
-  returnType: "auto" as const,
-  memoryLimit: 32,
-};
+export const codeSchema = baseSchema.extend(codeSchemaShape);
+
+/**
+ * Type for Code parameters
+ */
+export type CodeParameters = VInfer<typeof codeSchema>;
+
+/**
+ * Default export for registry
+ */
+export default codeSchemaShape;

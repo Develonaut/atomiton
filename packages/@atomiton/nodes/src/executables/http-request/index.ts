@@ -9,7 +9,8 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { HttpRequestParameters } from "#definitions/http-request";
+import { getNodeSchema } from "#schemas/registry";
+import type { HttpRequestParameters } from "#schemas/http-request";
 import {
   addAuthenticationHeaders,
   executeRequestWithRetries,
@@ -202,9 +203,11 @@ export const httpRequestExecutable: NodeExecutable<HttpRequestParameters> =
     },
 
     validateConfig(config: unknown): HttpRequestParameters {
-      // In a real implementation, this would validate using the schema
-      // For now, just cast it
-      return config as HttpRequestParameters;
+      const schema = getNodeSchema("http-request");
+      if (!schema) {
+        throw new Error("HTTP Request schema not found in registry");
+      }
+      return schema.parse(config) as HttpRequestParameters;
     },
   });
 

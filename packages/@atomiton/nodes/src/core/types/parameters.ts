@@ -3,8 +3,6 @@
  * Field controls, configurations, and parameter definitions
  */
 
-import type { VParseResult, VType } from "@atomiton/validation";
-
 /**
  * UI control types for node parameter fields
  */
@@ -74,27 +72,13 @@ export type NodeFieldConfig = {
 export type NodeFieldsConfig = Record<string, NodeFieldConfig>;
 
 /**
- * Node parameters structure with validation and defaults
+ * Node parameters structure (serializable)
+ * Contains only pure data - validation logic is in the schema registry
  */
-export type NodeParameters<T = Record<string, unknown>> = {
-  /** The Zod schema for parameter validation */
-  schema: VType<T>;
-
+export type NodeParameters = {
   /** Default parameter values */
-  defaults: T;
+  defaults: Record<string, unknown>;
 
   /** UI field configurations for form rendering */
   fields: NodeFieldsConfig;
-
-  /** Parse and validate a parameters object */
-  parse(params: unknown): T;
-
-  /** Safely parse a parameters object */
-  safeParse(params: unknown): VParseResult<T>;
-
-  /** Check if a parameters object is valid */
-  isValid(params: unknown): boolean;
-
-  /** Merge partial parameters with defaults */
-  withDefaults(partialParams?: Partial<T>): T;
 };

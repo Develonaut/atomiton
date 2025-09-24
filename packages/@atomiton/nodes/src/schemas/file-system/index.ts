@@ -1,14 +1,16 @@
 /**
  * File System Schema
- * Parameter validation schema for file system operations node
+ * Runtime validation schema for file system operations node
  */
 
 import v from "@atomiton/validation";
+import type { VInfer } from "@atomiton/validation";
+import { baseSchema } from "#schemas/node";
 
 /**
- * File system parameter schema
+ * File System specific schema (without base fields)
  */
-export const fileSystemSchema = {
+export const fileSystemSchemaShape = {
   operation: v
     .enum([
       "read",
@@ -64,14 +66,16 @@ export const fileSystemSchema = {
 };
 
 /**
- * Default values for file system parameters
+ * Full File System schema including base fields
  */
-export const fileSystemDefaults = {
-  operation: "read" as const,
-  path: "",
-  encoding: "utf8" as const,
-  createDirectories: false,
-  overwrite: false,
-  recursive: false,
-  fullPaths: false,
-};
+export const fileSystemSchema = baseSchema.extend(fileSystemSchemaShape);
+
+/**
+ * Type for File System parameters
+ */
+export type FileSystemParameters = VInfer<typeof fileSystemSchema>;
+
+/**
+ * Default export for registry
+ */
+export default fileSystemSchemaShape;

@@ -4,7 +4,7 @@
  */
 
 import type { NodeExecutionContext } from "#core/types/executable";
-import type { TransformParameters } from "#definitions/transform";
+import type { TransformParameters } from "#schemas/transform";
 import {
   createSafeFunction,
   parseInitialValue,

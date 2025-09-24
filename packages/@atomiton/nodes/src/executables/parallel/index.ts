@@ -9,7 +9,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { ParallelParameters } from "#definitions/parallel";
+import type { ParallelParameters } from "#schemas/parallel";
 import { executeStrategy } from "#executables/parallel/operations";
 import {
   calculateStats,

@@ -12,12 +12,19 @@ import {
   fileSystemInputPorts,
   fileSystemOutputPorts,
 } from "#definitions/file-system/ports";
-import {
-  fileSystemDefaults,
-  fileSystemSchema,
-} from "#definitions/file-system/schema";
-import type { VInfer } from "@atomiton/validation";
-import v from "@atomiton/validation";
+
+/**
+ * Default values for file system parameters
+ */
+export const fileSystemDefaults = {
+  operation: "read" as const,
+  path: "",
+  encoding: "utf8" as const,
+  createDirectories: false,
+  overwrite: false,
+  recursive: false,
+  fullPaths: false,
+};
 
 /**
  * File System node definition (browser-safe)
@@ -50,27 +57,9 @@ export const fileSystemDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(
-    fileSystemSchema,
-    fileSystemDefaults,
-    fileSystemFields,
-  ),
+  parameters: createNodeParameters(fileSystemDefaults, fileSystemFields),
   inputPorts: fileSystemInputPorts,
   outputPorts: fileSystemOutputPorts,
 });
 
 export default fileSystemDefinition;
-
-// Create the full schema with base parameters
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fullFileSystemSchema = v.object({
-  ...fileSystemSchema,
-  enabled: v.boolean().default(true),
-  timeout: v.number().positive().default(30000),
-  retries: v.number().int().min(0).default(1),
-  label: v.string().optional(),
-  description: v.string().optional(),
-});
-
-// Export the parameter type for use in the executable
-export type FileSystemParameters = VInfer<typeof fullFileSystemSchema>;

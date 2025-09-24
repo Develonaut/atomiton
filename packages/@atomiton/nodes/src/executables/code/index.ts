@@ -4,7 +4,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { CodeParameters } from "#definitions/code";
+import type { CodeParameters } from "#schemas/code";
 import {
   convertToType,
   executeSecureCode,

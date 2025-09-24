@@ -9,7 +9,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { ImageCompositeParameters } from "#definitions/image-composite";
+import type { ImageCompositeParameters } from "#schemas/image-composite";
 import {
   type ImageInput,
   getImageMetadata,

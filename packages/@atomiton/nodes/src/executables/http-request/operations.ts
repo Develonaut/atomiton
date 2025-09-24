@@ -4,7 +4,7 @@
  */
 
 import type { NodeExecutionContext } from "#core/types/executable";
-import type { HttpRequestParameters } from "#definitions/http-request";
+import type { HttpRequestParameters } from "#schemas/http-request";
 
 /**
  * Parse response based on content type

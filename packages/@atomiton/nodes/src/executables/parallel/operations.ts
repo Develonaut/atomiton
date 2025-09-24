@@ -4,7 +4,7 @@
  */
 
 import type { NodeExecutionContext } from "#core/types/executable";
-import type { ParallelParameters } from "#definitions/parallel";
+import type { ParallelParameters } from "#schemas/parallel";
 
 /**
  * Operation execution result

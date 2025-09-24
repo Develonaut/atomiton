@@ -1,14 +1,16 @@
 /**
  * Shell Command Schema
- * Parameter validation schema for shell command node
+ * Runtime validation schema for shell command node
  */
 
 import v from "@atomiton/validation";
+import type { VInfer } from "@atomiton/validation";
+import { baseSchema } from "#schemas/node";
 
 /**
- * Shell command parameter schema
+ * Shell Command specific schema (without base fields)
  */
-export const shellCommandSchema = {
+export const shellCommandSchemaShape = {
   command: v
     .string()
     .min(1, "Command is required")
@@ -79,19 +81,16 @@ export const shellCommandSchema = {
 };
 
 /**
- * Default values for shell command parameters
+ * Full Shell Command schema including base fields
  */
-export const shellCommandDefaults = {
-  command: "",
-  shell: "bash" as const,
-  env: {},
-  timeout: 30000,
-  captureOutput: true,
-  encoding: "utf8" as const,
-  throwOnError: false,
-  maxBuffer: 10485760,
-  killSignal: "SIGTERM",
-  args: [],
-  environment: {},
-  inheritStdio: false,
-};
+export const shellCommandSchema = baseSchema.extend(shellCommandSchemaShape);
+
+/**
+ * Type for Shell Command parameters
+ */
+export type ShellCommandParameters = VInfer<typeof shellCommandSchema>;
+
+/**
+ * Default export for registry
+ */
+export default shellCommandSchemaShape;

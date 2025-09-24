@@ -1,14 +1,16 @@
 /**
  * Loop Schema
- * Parameter validation schema for loop node
+ * Runtime validation schema for loop node
  */
 
 import v from "@atomiton/validation";
+import type { VInfer } from "@atomiton/validation";
+import { baseSchema } from "#schemas/node";
 
 /**
- * Loop parameter schema
+ * Loop specific schema (without base fields)
  */
-export const loopSchema = {
+export const loopSchemaShape = {
   loopType: v
     .enum(["forEach", "forRange", "while", "doWhile", "until", "times"])
     .default("forEach")
@@ -72,18 +74,16 @@ export const loopSchema = {
 };
 
 /**
- * Default values for loop parameters
+ * Full Loop schema including base fields
  */
-export const loopDefaults = {
-  loopType: "forEach" as const,
-  batchSize: 1,
-  maxIterations: 1000,
-  delay: 0,
-  continueOnError: true,
-  startValue: 0,
-  endValue: 10,
-  stepSize: 1,
-  times: 10,
-  parallel: false,
-  concurrency: 5,
-};
+export const loopSchema = baseSchema.extend(loopSchemaShape);
+
+/**
+ * Type for Loop parameters
+ */
+export type LoopParameters = VInfer<typeof loopSchema>;
+
+/**
+ * Default export for registry
+ */
+export default loopSchemaShape;

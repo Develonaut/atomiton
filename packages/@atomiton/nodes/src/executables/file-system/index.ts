@@ -9,7 +9,7 @@ import type {
   NodeExecutionContext,
   NodeExecutionResult,
 } from "#core/types/executable";
-import type { FileSystemParameters } from "#definitions/file-system";
+import type { FileSystemParameters } from "#schemas/file-system";
 import {
   copyOperation,
   createDirectoryOperation,

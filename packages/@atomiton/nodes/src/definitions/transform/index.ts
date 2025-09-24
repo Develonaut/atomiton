@@ -7,17 +7,23 @@ import { createNodeDefinition } from "#core/factories/createNodeDefinition";
 import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
-import type { VInfer } from "@atomiton/validation";
-import v from "@atomiton/validation";
 import { transformFields } from "#definitions/transform/fields";
 import {
   transformInputPorts,
   transformOutputPorts,
 } from "#definitions/transform/ports";
-import {
-  transformDefaults,
-  transformSchema,
-} from "#definitions/transform/schema";
+
+/**
+ * Default values for transform parameters
+ */
+export const transformDefaults = {
+  operation: "map" as const,
+  transformFunction: "item => item",
+  sortDirection: "asc" as const,
+  reduceFunction: "(acc, item) => acc + item",
+  reduceInitial: "0",
+  flattenDepth: 1,
+};
 
 /**
  * Transform node definition (browser-safe)
@@ -49,27 +55,9 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(
-    transformSchema,
-    transformDefaults,
-    transformFields,
-  ),
+  parameters: createNodeParameters(transformDefaults, transformFields),
   inputPorts: transformInputPorts,
   outputPorts: transformOutputPorts,
 });
 
 export default transformDefinition;
-
-// Create the full schema with base parameters
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fullTransformSchema = v.object({
-  ...transformSchema,
-  enabled: v.boolean().default(true),
-  timeout: v.number().positive().default(30000),
-  retries: v.number().int().min(0).default(1),
-  label: v.string().optional(),
-  description: v.string().optional(),
-});
-
-// Export the parameter type for use in the executable
-export type TransformParameters = VInfer<typeof fullTransformSchema>;

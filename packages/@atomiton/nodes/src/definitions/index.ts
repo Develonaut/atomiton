@@ -37,17 +37,17 @@ export { default as parallelDefinition } from "#definitions/parallel";
 export { default as shellCommandDefinition } from "#definitions/shell-command";
 export { default as transformDefinition } from "#definitions/transform";
 
-// Export parameter types for each node
-export type { CodeParameters } from "#definitions/code";
-export type { GroupParameters } from "#definitions/group";
-export type { CSVReaderParameters } from "#definitions/csv-reader";
-export type { FileSystemParameters } from "#definitions/file-system";
-export type { HttpRequestParameters } from "#definitions/http-request";
-export type { ImageCompositeParameters } from "#definitions/image-composite";
-export type { LoopParameters } from "#definitions/loop";
-export type { ParallelParameters } from "#definitions/parallel";
-export type { ShellCommandParameters } from "#definitions/shell-command";
-export type { TransformParameters } from "#definitions/transform";
+// Export parameter types from schemas module
+export type { CodeParameters } from "#schemas/code";
+export type { GroupParameters } from "#schemas/group";
+export type { CSVReaderParameters } from "#schemas/csv-reader";
+export type { FileSystemParameters } from "#schemas/file-system";
+export type { HttpRequestParameters } from "#schemas/http-request";
+export type { ImageCompositeParameters } from "#schemas/image-composite";
+export type { LoopParameters } from "#schemas/loop";
+export type { ParallelParameters } from "#schemas/parallel";
+export type { ShellCommandParameters } from "#schemas/shell-command";
+export type { TransformParameters } from "#schemas/transform";
 
 // Export shared schemas
 export * from "#schemas";

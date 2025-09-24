@@ -1,14 +1,16 @@
 /**
  * HTTP Request Schema
- * Parameter validation schema for HTTP request node
+ * Runtime validation schema for HTTP request node
  */
 
 import v from "@atomiton/validation";
+import type { VInfer } from "@atomiton/validation";
+import { baseSchema } from "#schemas/node";
 
 /**
- * HTTP Request parameter schema
+ * HTTP Request specific schema (without base fields)
  */
-export const httpRequestSchema = {
+export const httpRequestSchemaShape = {
   method: v
     .enum(["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"])
     .default("GET")
@@ -59,15 +61,16 @@ export const httpRequestSchema = {
 };
 
 /**
- * Default values for HTTP request parameters
+ * Full HTTP Request schema including base fields
  */
-export const httpRequestDefaults = {
-  method: "GET" as const,
-  url: "https://api.example.com",
-  headers: {},
-  followRedirects: true,
-  validateSSL: true,
-  timeout: 30000,
-  retries: 0,
-  retryDelay: 1000,
-};
+export const httpRequestSchema = baseSchema.extend(httpRequestSchemaShape);
+
+/**
+ * Type for HTTP Request parameters
+ */
+export type HttpRequestParameters = VInfer<typeof httpRequestSchema>;
+
+/**
+ * Default export for registry
+ */
+export default httpRequestSchemaShape;

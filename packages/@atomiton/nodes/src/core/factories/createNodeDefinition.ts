@@ -11,6 +11,7 @@ import createNodeMetadata, {
 import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodePortInput } from "#core/factories/createNodePorts";
 import createNodePorts from "#core/factories/createNodePorts";
+import { isNodeParameters } from "#core/utils/nodeUtils";
 import type {
   NodeDefinition,
   NodeEdge,
@@ -48,15 +49,9 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     "Unnamed Node";
   const position = input.position || { x: 0, y: 0 };
   const metadata = createNodeMetadata(input.metadata || {});
-  const parameters = createNodeParameters(
-    input.parameters || {},
-    input.parameters && "defaults" in input.parameters
-      ? (input.parameters as NodeParameters).defaults
-      : undefined,
-    input.parameters && "fields" in input.parameters
-      ? (input.parameters as NodeParameters).fields
-      : undefined,
-  );
+  const parameters = isNodeParameters(input.parameters)
+    ? input.parameters
+    : createNodeParameters(input.parameters || {}, undefined);
 
   const ports = createNodePorts({
     input: input.inputPorts,

@@ -8,29 +8,14 @@ import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import { createNodePort } from "#core/factories/createNodePorts";
 import type { NodeDefinition } from "#core/types/definition";
-import type { VInfer } from "@atomiton/validation";
-import v from "@atomiton/validation";
 
-// Parameter schema using validation library
-const groupSchema = {
-  timeout: v
-    .number()
-    .min(1000)
-    .max(300000)
-    .default(30000)
-    .describe("Maximum execution time in milliseconds"),
-
-  retries: v
-    .number()
-    .min(0)
-    .max(10)
-    .default(1)
-    .describe("Number of retry attempts on failure"),
-
-  parallel: v
-    .boolean()
-    .default(false)
-    .describe("Execute child nodes in parallel when possible"),
+/**
+ * Default values for group parameters
+ */
+export const groupDefaults = {
+  timeout: 30000,
+  retries: 1,
+  parallel: false,
 };
 
 /**
@@ -55,35 +40,27 @@ export const groupDefinition: NodeDefinition = createNodeDefinition({
     deprecated: false,
   }),
 
-  parameters: createNodeParameters(
-    groupSchema,
-    {
-      timeout: 30000,
-      retries: 1,
-      parallel: false,
+  parameters: createNodeParameters(groupDefaults, {
+    timeout: {
+      controlType: "number",
+      label: "Timeout (ms)",
+      helpText: "Maximum execution time in milliseconds",
+      min: 1000,
+      max: 300000,
     },
-    {
-      timeout: {
-        controlType: "number",
-        label: "Timeout (ms)",
-        helpText: "Maximum execution time in milliseconds",
-        min: 1000,
-        max: 300000,
-      },
-      retries: {
-        controlType: "number",
-        label: "Retries",
-        helpText: "Number of retry attempts on failure",
-        min: 0,
-        max: 10,
-      },
-      parallel: {
-        controlType: "boolean",
-        label: "Parallel Execution",
-        helpText: "Execute child nodes in parallel when possible",
-      },
+    retries: {
+      controlType: "number",
+      label: "Retries",
+      helpText: "Number of retry attempts on failure",
+      min: 0,
+      max: 10,
     },
-  ),
+    parallel: {
+      controlType: "boolean",
+      label: "Parallel Execution",
+      helpText: "Execute child nodes in parallel when possible",
+    },
+  }),
 
   inputPorts: [
     createNodePort("trigger", {
@@ -117,17 +94,3 @@ export const groupDefinition: NodeDefinition = createNodeDefinition({
 });
 
 export default groupDefinition;
-
-// Create the full schema with base parameters
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fullGroupSchema = v.object({
-  ...groupSchema,
-  enabled: v.boolean().default(true),
-  timeout: v.number().positive().default(30000),
-  retries: v.number().int().min(0).default(1),
-  label: v.string().optional(),
-  description: v.string().optional(),
-});
-
-// Export the parameter type for use in the executable
-export type GroupParameters = VInfer<typeof fullGroupSchema>;

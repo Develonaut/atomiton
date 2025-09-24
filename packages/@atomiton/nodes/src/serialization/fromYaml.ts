@@ -14,7 +14,6 @@ import type {
   NodePort,
   NodeRuntime,
 } from "#core/types/definition.js";
-import v, { type VType } from "@atomiton/validation";
 import yaml from "js-yaml";
 import type {
   YamlEdge,
@@ -132,12 +131,10 @@ function parseMetadata(data: YamlNodeDefinition) {
  */
 function parseParameters(params?: Record<string, YamlParameter>) {
   if (!params) {
-    // Return a minimal parameters object with empty schema
-    return createNodeParameters({}, {}, {});
+    // Return a minimal parameters object with empty defaults and fields
+    return createNodeParameters({}, {});
   }
 
-  // Build Valibot schema from YAML parameter definitions
-  const schemaShape: Record<string, VType> = {};
   const defaults: Record<string, unknown> = {};
   const fields: NodeFieldsConfig = {};
 
@@ -162,14 +159,9 @@ function parseParameters(params?: Record<string, YamlParameter>) {
           (param.options as Array<{ value: string; label: string }>) || [],
       };
     }
-
-    // Build Valibot schema based on type
-    // Since we're deserializing, we'll create a simple schema
-    // In production, this would need more robust type mapping
-    schemaShape[key] = v.unknown().optional();
   });
 
-  return createNodeParameters(schemaShape, defaults, fields);
+  return createNodeParameters(defaults, fields);
 }
 
 /**

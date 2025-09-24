@@ -1,5 +1,7 @@
+import type * as IsolatedVM from "isolated-vm";
+
 // Dynamic import to handle Electron compatibility
-let ivm: typeof import("isolated-vm");
+let ivm: typeof IsolatedVM;
 
 /**
  * Secure code executor using isolated-vm
@@ -60,7 +62,7 @@ export async function executeSecureCode(
 /**
  * Create a safe copy of data for the isolated context
  */
-async function createSafeCopy(value: unknown): Promise<any> {
+async function createSafeCopy(value: unknown): Promise<unknown> {
   // Handle different types safely
   if (value === null || value === undefined) {
     return new ivm.ExternalCopy(value);
