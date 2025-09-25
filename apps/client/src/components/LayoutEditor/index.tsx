@@ -5,7 +5,6 @@ import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
 import { Canvas, Editor } from "@atomiton/editor";
 import { Box } from "@atomiton/ui";
-import type { Node, Edge } from "@xyflow/react";
 
 function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();
@@ -15,11 +14,11 @@ function LayoutEditor() {
   // Pass raw nodes directly to Canvas - let it handle transformation
   // Canvas accepts both NodeDefinition and EditorNode types internally
   const defaultNodes = Array.isArray(editorState?.defaultNodes)
-    ? (editorState.defaultNodes as Node[])
+    ? (editorState.defaultNodes as unknown[])
     : [];
 
   const defaultEdges = Array.isArray(editorState?.defaultEdges)
-    ? (editorState.defaultEdges as Edge[])
+    ? (editorState.defaultEdges as unknown[])
     : [];
 
   // TODO: Implement complete file lifecycle:

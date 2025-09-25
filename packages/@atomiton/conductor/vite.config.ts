@@ -9,10 +9,9 @@ export default defineLibraryConfig({
   },
   external: [
     "@atomiton/events",
-    // Bundle @atomiton/nodes to avoid module resolution issues in Electron
-    // "@atomiton/nodes",
-    // "@atomiton/nodes/executables",
-    // "@atomiton/nodes/definitions",
+    "@atomiton/nodes",
+    "@atomiton/nodes/executables",
+    "@atomiton/nodes/definitions",
     "@atomiton/storage",
     "@atomiton/store",
     "@atomiton/utils",
