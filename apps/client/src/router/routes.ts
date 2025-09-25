@@ -77,6 +77,11 @@ export const routes: RouteConfig[] = [
     component: () => import("../templates/Assets/MaterialsPage"),
   },
   {
+    name: "testIPC",
+    path: "/test/ipc",
+    component: () => import("../templates/TestIPCPage"),
+  },
+  {
     name: "notFound",
     path: "*",
     component: () => import("../templates/NotFoundPage"),

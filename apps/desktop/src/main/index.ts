@@ -1,4 +1,5 @@
 import { initializeServices } from "@/main/services";
+import { setupIPC } from "@atomiton/ipc/main";
 import { createDesktopLogger } from "@atomiton/logger/desktop";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
@@ -157,6 +158,12 @@ app.whenReady().then(async () => {
   });
 
   createWindow();
+
+  // Set up IPC handlers after window creation
+  if (mainWindow) {
+    setupIPC(mainWindow);
+    logger.info("IPC handlers initialized");
+  }
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

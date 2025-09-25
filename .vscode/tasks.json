@@ -45,6 +45,25 @@
       "dependsOn": []
     },
     {
+      "label": "📜 Tail Logs",
+      "detail": "Tail Atomiton logs in real-time",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["dev:logs"],
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "never",
+        "focus": true,
+        "panel": "new",
+        "clear": true,
+        "close": false
+      },
+      "isBackground": true
+    },
+    {
       "label": "🔌 kill-ports",
       "detail": "Kill all processes on dev ports (cross-platform)",
       "type": "shell",

@@ -75,15 +75,15 @@ agents/
 ```markdown
 Use the Task tool with:
 
-- subagent_type: "ui-component-architect" (Ryan)
-- subagent_type: "blueprint-system-architect" (Michael)
-- subagent_type: "platform-integration-orchestrator" (Parker)
-- subagent_type: "devops-deployment-engineer" (Jeeves)
-- subagent_type: "standards-simplicity-guardian" (Guilliman)
-- subagent_type: "ui-comprehensive-tester" (Brian)
-- subagent_type: "task-completion-validator" (Karen)
-- subagent_type: "ultrathink-debugger" (Megamind)
-- subagent_type: "code-quality-pragmatist" (Voorhees)
+- subagent_type: Ryan
+- subagent_type: Michael
+- subagent_type: Parker
+- subagent_type: Jeeves
+- subagent_type: Guilliman
+- subagent_type: Brian
+- subagent_type: Karen
+- subagent_type: Megamind
+- subagent_type: Voorhees
 ```
 
 #### Validation Pipeline
@@ -138,7 +138,7 @@ See also:
 - Use Mantine UI v7 components
 - Every component should be reusable and beautiful
 
-### 🧪 Brian (ui-comprehensive-tester)
+### 🧪 Brian
 
 - Test EVERYTHING - edge cases, cross-browser, mobile
 - **CRITICAL**: Performance benchmarking - integration tests must run quickly
@@ -146,14 +146,14 @@ See also:
 - Use Playwright for comprehensive testing
 - Verify all user flows and interactions
 
-### 🧠 Megamind (ultrathink-debugger)
+### 🧠 Megamind
 
 - Handle the "impossible" bugs
 - Deep dive into complex issues
 - Trace through multiple layers of abstraction
 - "My brain is massive... and it's telling me the bug is here"
 
-### 👮‍♀️ Karen (task-completion-validator)
+### 👮‍♀️ Karen
 
 - Brutally honest validation
 - Cut through BS and verify ACTUAL completion
@@ -164,7 +164,7 @@ See also:
 - **CRITICAL**: Coordinates with Barbara after validation to update
   documentation
 
-### 🔌 Parker (platform-integration-orchestrator)
+### 🔌 Parker
 
 - **EXCLUSIVE AUTHORITY**: Only agent authorized to modify
   environment/repository configurations
@@ -173,14 +173,14 @@ See also:
 - Ensure cross-platform compatibility
 - "Let me connect those systems for you"
 
-### 🔪 Voorhees (code-quality-pragmatist)
+### 🔪 Voorhees
 
 - Ruthlessly slash complexity
 - Zero tolerance for over-engineering
 - "Time to cut this complexity down... permanently"
 - Weapon of choice: The delete key
 
-### 📚 Barbara (Documentation Orchestrator)
+### 📚 Barbara
 
 - **EXCLUSIVE AUTHORITY**: Only agent authorized to create, move, or restructure
   .claude or /docs directory documents
@@ -247,9 +247,8 @@ This ensures:
 ---
 
 **Guidelines**: All agents must follow `/docs/guides/` for environment
-restrictions and common standards.  
-**Authority**: Only Parker can modify environment/repository configurations.
-Only Barbara can modify .claude or /docs documentation.  
-**Documentation**: ALL agents must coordinate with Barbara before
-creating/moving/restructuring any .claude or project documentation.  
-**Last Updated**: 2025-09-17
+restrictions and common standards. **Authority**: Only Parker can modify
+environment/repository configurations. Only Barbara can modify .claude or /docs
+documentation. **Documentation**: ALL agents must coordinate with Barbara before
+creating/moving/restructuring any .claude or project documentation. **Last
+Updated**: 2025-09-17

@@ -1,0 +1,43 @@
+{
+  "name": "@atomiton/ipc",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./main": {
+      "types": "./dist/main/index.d.ts",
+      "import": "./dist/main/index.js",
+      "require": "./dist/main/index.cjs"
+    },
+    "./preload": {
+      "types": "./dist/preload/index.d.ts",
+      "import": "./dist/preload/index.js",
+      "require": "./dist/preload/index.cjs"
+    },
+    "./renderer": {
+      "types": "./dist/renderer/index.d.ts",
+      "import": "./dist/renderer/index.js",
+      "require": "./dist/renderer/index.cjs"
+    },
+    "./shared": {
+      "types": "./dist/shared/index.d.ts",
+      "import": "./dist/shared/index.js",
+      "require": "./dist/shared/index.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "electron": "^38.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
+  }
+}
