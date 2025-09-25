@@ -7,7 +7,11 @@
     "#*": "./src/*"
   },
   "scripts": {
+    "pretest:electron": "cd ../desktop && pnpm run build",
     "test": "playwright test",
+    "test:browser": "playwright test --config=playwright.config.ts",
+    "test:electron": "playwright test --config=playwright.electron.config.ts",
+    "test:all": "npm run test:browser && npm run test:electron",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
     "test:headed": "cross-env PLAYWRIGHT_HEADED=true playwright test",
@@ -20,6 +24,7 @@
     "install": "playwright install chromium"
   },
   "devDependencies": {
+    "@atomiton/logger": "workspace:*",
     "@atomiton/typescript-config": "workspace:^",
     "@atomiton/vite-config": "workspace:*",
     "@playwright/test": "catalog:",
