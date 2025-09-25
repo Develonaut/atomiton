@@ -4,7 +4,8 @@ import { defineLibraryConfig } from "@atomiton/vite-config";
 export default defineLibraryConfig({
   name: "AtomitonStorage",
   external: [
-    "@atomiton/nodes",
+    // Bundle @atomiton/nodes to avoid module resolution issues in Electron
+    // "@atomiton/nodes",
     "fs",
     "fs/promises",
     "path",

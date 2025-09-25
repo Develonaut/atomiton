@@ -13,12 +13,13 @@ function LayoutEditor() {
 
   // Pass raw nodes directly to Canvas - let it handle transformation
   // Canvas accepts both NodeDefinition and EditorNode types internally
+  // Using 'any' here is intentional as Canvas internally handles the transformation
   const defaultNodes = Array.isArray(editorState?.defaultNodes)
-    ? (editorState.defaultNodes as unknown[])
+    ? (editorState.defaultNodes as any[])
     : [];
 
   const defaultEdges = Array.isArray(editorState?.defaultEdges)
-    ? (editorState.defaultEdges as unknown[])
+    ? (editorState.defaultEdges as any[])
     : [];
 
   // TODO: Implement complete file lifecycle:
