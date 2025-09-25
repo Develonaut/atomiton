@@ -1,7 +1,11 @@
+import { initializeServices } from "@/main/services";
+import { createDesktopLogger } from "@atomiton/logger/desktop";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { join } from "path";
-import { initializeServices } from "@/main/services";
+
+const logger = createDesktopLogger({ namespace: "desktop:main" });
+logger.info("Desktop application starting up");
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -22,6 +26,7 @@ function createWindow(): void {
   });
 
   mainWindow.on("ready-to-show", () => {
+    logger.info("Window ready to show");
     mainWindow?.show();
   });
 
@@ -99,10 +104,13 @@ if (is.dev) {
 }
 
 app.whenReady().then(async () => {
+  logger.info("Electron app ready, initializing desktop application");
   electronApp.setAppUserModelId("com.atomiton.desktop");
 
   // Initialize application services
+  logger.info("Initializing application services");
   initializeServices();
+  logger.info("Application services initialized");
 
   // Set a proper CSP for development that allows DevTools but maintains security
   if (is.dev) {

@@ -1,8 +1,9 @@
-import { EventEmitter as EventEmitter3 } from "eventemitter3";
-import { createBaseEventBus } from "#shared/createBaseEventBus";
-import { createEventContext } from "#shared/eventContext";
 import { createBrowserIPCBridge } from "#browser/bridge";
 import type { EventBus, EventMap } from "#core/types";
+import { createBaseEventBus } from "#shared/createBaseEventBus";
+import { createEventContext } from "#shared/eventContext";
+import { createBrowserLogger } from "@atomiton/logger/browser";
+import { EventEmitter as EventEmitter3 } from "eventemitter3";
 
 export type IPCConfig = {
   targetOrigin?: string;
@@ -16,6 +17,8 @@ export type BrowserEventBusOptions = {
   ipcConfig?: IPCConfig;
 };
 
+const logger = createBrowserLogger({ namespace: "events:browser" });
+
 export function createBrowserEventBus<T extends EventMap = EventMap>(
   options?: BrowserEventBusOptions,
 ): EventBus<T> {
@@ -25,6 +28,11 @@ export function createBrowserEventBus<T extends EventMap = EventMap>(
     enableMiddleware = false,
     ipcConfig,
   } = options ?? {};
+
+  logger.debug(`Creating browser event bus for domain: ${domain}`, {
+    enableBridge,
+    enableMiddleware,
+  });
 
   const emitter = new EventEmitter3();
 
@@ -43,9 +51,15 @@ export function createBrowserEventBus<T extends EventMap = EventMap>(
     bus.bridge.forward = (event, target) => {
       originalForward(event, target);
       if (target === "desktop") {
+        logger.debug(`Forwarding event to desktop`, {
+          domain,
+          event: String(event),
+          target,
+        });
         ipcBridge.send(`${domain}:${String(event)}`, null);
       }
     };
+    logger.info(`Browser event bus bridge enabled for domain: ${domain}`);
   }
 
   return bus;

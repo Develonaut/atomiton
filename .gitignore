@@ -68,3 +68,7 @@ electron.vite.config.*.mjs
 *.timestamp-*.mjs
 node_modules/.vite-temp/
 **/.vite-temp/
+
+# Temporary files and logs
+tmp/
+**/tmp/

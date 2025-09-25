@@ -42,6 +42,7 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
+    "@atomiton/logger": "workspace:*",
     "eventemitter3": "^5.0.0"
   },
   "devDependencies": {

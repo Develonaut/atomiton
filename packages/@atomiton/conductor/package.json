@@ -19,7 +19,8 @@
     "#core/*": "./src/core/*.ts",
     "#browser/*": "./src/browser/*.ts",
     "#desktop/*": "./src/desktop/*.ts",
-    "#shared/*": "./src/shared/*.ts"
+    "#shared/*": "./src/shared/*.ts",
+    "#utils/*": "./src/utils/*.ts"
   },
   "scripts": {
     "dev": "vite build --watch",
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "@atomiton/events": "workspace:*",
+    "@atomiton/logger": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/storage": "workspace:*",
     "@atomiton/store": "workspace:*",

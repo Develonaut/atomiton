@@ -1,9 +1,10 @@
-import { EventEmitter } from "node:events";
-import { createBaseEventBus } from "#shared/createBaseEventBus";
-import { createEventContext } from "#shared/eventContext";
+import type { EventBus, EventMap, IPCBridge } from "#core/types";
 import { createDesktopIPCHandler } from "#desktop/bridge";
 import { setupAutoForwarding } from "#desktop/bridge/setupAutoForwarding";
-import type { EventBus, EventMap, IPCBridge } from "#core/types";
+import { createBaseEventBus } from "#shared/createBaseEventBus";
+import { createEventContext } from "#shared/eventContext";
+import { createDesktopLogger } from "@atomiton/logger/desktop";
+import { EventEmitter } from "node:events";
 
 export type AutoForwardConfig = {
   toBrowser?: string[];
@@ -18,6 +19,8 @@ export type DesktopEventBusOptions = {
   autoForward?: AutoForwardConfig;
 };
 
+const logger = createDesktopLogger({ namespace: "events:desktop" });
+
 export function createDesktopEventBus<T extends EventMap = EventMap>(
   options?: DesktopEventBusOptions,
 ): EventBus<T> & { ipc: IPCBridge } {
@@ -28,6 +31,12 @@ export function createDesktopEventBus<T extends EventMap = EventMap>(
     enableMiddleware = false,
     autoForward,
   } = options ?? {};
+
+  logger.debug(`Creating desktop event bus for domain: ${domain}`, {
+    enableBridge,
+    enableMiddleware,
+    autoForward,
+  });
 
   const emitter = new EventEmitter();
   emitter.setMaxListeners(maxListeners);
@@ -43,8 +52,10 @@ export function createDesktopEventBus<T extends EventMap = EventMap>(
 
   // Add IPC support
   const ipc = createDesktopIPCHandler();
+  logger.info(`Desktop event bus IPC handler created for domain: ${domain}`);
 
   if (autoForward && bus.bridge) {
+    logger.debug(`Setting up auto-forwarding`, autoForward);
     setupAutoForwarding(bus, ipc, autoForward);
   }
 
