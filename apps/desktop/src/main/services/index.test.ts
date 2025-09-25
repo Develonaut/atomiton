@@ -1,16 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { initializeServices } from "@/main/services";
 import { initializeStorage } from "@/main/services/storage";
-import { initializeConductor } from "@/main/services/conductor";
 import type { IStorageEngine } from "@atomiton/storage";
 
 // Mock the individual service modules
 vi.mock("@/main/services/storage", () => ({
   initializeStorage: vi.fn(),
-}));
-
-vi.mock("@/main/services/conductor", () => ({
-  initializeConductor: vi.fn(),
 }));
 
 describe("Services Integration", () => {
@@ -19,7 +14,7 @@ describe("Services Integration", () => {
   });
 
   describe("Given services initialization", () => {
-    it("When called, Then should initialize storage and conductor in correct order", () => {
+    it("When called, Then should initialize storage", () => {
       // Arrange
       const mockStorage: IStorageEngine = {
         save: vi.fn(),
@@ -29,17 +24,9 @@ describe("Services Integration", () => {
         exists: vi.fn(),
         getInfo: vi.fn(),
       };
-      const mockConductor = {
-        execute: vi.fn(),
-        configureTransport: vi.fn(),
-        cleanup: vi.fn(),
-      };
 
       (initializeStorage as ReturnType<typeof vi.fn>).mockReturnValue(
         mockStorage as IStorageEngine,
-      );
-      (initializeConductor as ReturnType<typeof vi.fn>).mockReturnValue(
-        mockConductor,
       );
 
       // Act
@@ -47,14 +34,12 @@ describe("Services Integration", () => {
 
       // Assert
       expect(initializeStorage).toHaveBeenCalledTimes(1);
-      expect(initializeConductor).toHaveBeenCalledWith(mockStorage);
       expect(result).toEqual({
         storage: mockStorage,
-        conductor: mockConductor,
       });
     });
 
-    it("When services are initialized, Then should pass storage to conductor", () => {
+    it("When services are initialized, Then should return storage service", () => {
       // Arrange
       const mockStorage: IStorageEngine = {
         save: vi.fn(),
@@ -64,24 +49,16 @@ describe("Services Integration", () => {
         exists: vi.fn(),
         getInfo: vi.fn(),
       };
-      const mockConductor = {
-        execute: vi.fn(),
-        configureTransport: vi.fn(),
-        cleanup: vi.fn(),
-      };
 
       (initializeStorage as ReturnType<typeof vi.fn>).mockReturnValue(
         mockStorage as IStorageEngine,
       );
-      (initializeConductor as ReturnType<typeof vi.fn>).mockReturnValue(
-        mockConductor,
-      );
 
       // Act
-      initializeServices();
+      const result = initializeServices();
 
       // Assert
-      expect(initializeConductor).toHaveBeenCalledWith(mockStorage);
+      expect(result.storage).toBe(mockStorage);
     });
   });
 });

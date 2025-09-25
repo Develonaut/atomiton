@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev:client": "turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/editor\"",
-    "dev:conductor": "turbo run dev --filter=\"@atomiton/conductor\"",
+    "dev:ipc": "turbo run dev --filter=\"@atomiton/ipc\"",
     "dev:desktop": "turbo run dev --filter=\"@atomiton/desktop\"",
     "dev:editor": "turbo run dev:serve --filter=\"@atomiton/editor\"",
     "dev:storage": "turbo run dev --filter=\"@atomiton/storage\"",

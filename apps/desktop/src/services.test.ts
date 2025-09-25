@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
 import { initializeServices } from "@/main/services";
-import { initializeConductor } from "@/main/services/conductor";
 import { initializeStorage } from "@/main/services/storage";
 
 // Mock Electron and dependencies for smoke test
@@ -9,11 +8,6 @@ vi.mock("@atomiton/storage/desktop", () => ({
   createStorage: vi.fn(
     (config) => config?.engine || { save: vi.fn(), load: vi.fn() },
   ),
-}));
-
-vi.mock("@atomiton/conductor/desktop", () => ({
-  createConductor: vi.fn(() => ({ execute: vi.fn() })),
-  setupMainProcessHandler: vi.fn(() => ({ cleanup: vi.fn() })),
 }));
 
 describe("Desktop Services Smoke Test", () => {
@@ -25,6 +19,5 @@ describe("Desktop Services Smoke Test", () => {
   it("Should export required service functions", () => {
     expect(initializeServices).toBeDefined();
     expect(initializeStorage).toBeDefined();
-    expect(initializeConductor).toBeDefined();
   });
 });
