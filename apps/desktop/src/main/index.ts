@@ -76,12 +76,19 @@ function createWindow(): void {
     });
   }
 
-  // Always load from a URL - localhost in dev, CDN in production
-  const appUrl = is.dev
-    ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
-    : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
+  // Load desktop test page for development/debugging
+  if (process.env.DESKTOP_TEST === "true") {
+    const testFile = join(__dirname, "../../desktop-test.html");
+    logger.info(`Loading desktop test page: ${testFile}`);
+    mainWindow?.loadFile(testFile);
+  } else {
+    // Always load from a URL - localhost in dev, CDN in production
+    const appUrl = is.dev
+      ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
+      : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
 
-  mainWindow?.loadURL(appUrl);
+    mainWindow?.loadURL(appUrl);
+  }
 }
 
 const gotTheLock = app.requestSingleInstanceLock();

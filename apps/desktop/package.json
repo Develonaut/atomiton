@@ -5,6 +5,7 @@
   "main": "./out/main/index.js",
   "scripts": {
     "dev": "wait-on http://localhost:5173 && electron-vite dev",
+    "dev:desktop": "electron-vite build && cross-env DESKTOP_TEST=true electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "lint": "eslint .",

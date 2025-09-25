@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Atomiton Desktop Test & Debug</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .status {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 4px;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+      .info {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .section h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      button {
+        padding: 8px 16px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚀 Atomiton Desktop Test & Debug</h1>
+    <p>
+      This page helps test and debug the Atomiton Desktop wrapper functionality.
+    </p>
+
+    <div class="section">
+      <h3>🔌 IPC System Status</h3>
+      <div id="status" class="status info">Checking IPC availability...</div>
+    </div>
+
+    <div class="section">
+      <h3>📡 Available APIs</h3>
+      <pre id="api-list">Loading...</pre>
+    </div>
+
+    <div class="section">
+      <h3>🧪 Environment Info</h3>
+      <div id="env-info">
+        <pre id="environment-details">Loading environment details...</pre>
+      </div>
+    </div>
+
+    <div class="section" id="controls" style="display: none">
+      <h3>🔧 IPC Function Tests</h3>
+      <button onclick="testPing()">Test Ping</button>
+      <button onclick="testNode()">Test Node Execute</button>
+      <button onclick="testStorage()">Test Storage</button>
+      <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="section">
+      <h3>📝 Test Results & Logs</h3>
+      <pre id="result-log"></pre>
+    </div>
+
+    <script>
+      const statusEl = document.getElementById("status");
+      const controlsEl = document.getElementById("controls");
+      const apiListEl = document.getElementById("api-list");
+      const resultLog = document.getElementById("result-log");
+
+      function log(message, type = "info") {
+        const timestamp = new Date().toLocaleTimeString();
+        resultLog.textContent += `[${timestamp}] ${message}\n`;
+        console.log(message);
+      }
+
+      function clearLog() {
+        resultLog.textContent = "";
+        log("Log cleared");
+      }
+
+      function displayEnvironmentInfo() {
+        const envDetails = document.getElementById("environment-details");
+        const info = [];
+
+        // Process info
+        if (typeof process !== "undefined") {
+          info.push("🔧 Process Environment:");
+          if (process.versions) {
+            info.push(`  Node.js: ${process.versions.node}`);
+            info.push(`  Electron: ${process.versions.electron}`);
+            info.push(`  Chrome: ${process.versions.chrome}`);
+            info.push(`  V8: ${process.versions.v8}`);
+          }
+          info.push(`  Platform: ${process.platform}`);
+          info.push(`  Architecture: ${process.arch}`);
+          info.push("");
+        }
+
+        // Window object analysis
+        info.push("🪟 Window Object Analysis:");
+        const windowProps = Object.getOwnPropertyNames(window).filter(
+          (prop) => prop.startsWith("electron") || prop.startsWith("atomiton"),
+        );
+        if (windowProps.length > 0) {
+          windowProps.forEach((prop) => {
+            info.push(`  ${prop}: ${typeof window[prop]}`);
+          });
+        } else {
+          info.push("  No Electron/Atomiton properties found");
+        }
+        info.push("");
+
+        // Context isolation info
+        info.push("🔒 Security Context:");
+        info.push(
+          `  Context isolation: ${typeof process !== "undefined" && process.contextIsolated !== undefined ? process.contextIsolated : "unknown"}`,
+        );
+        info.push(
+          `  Node integration: ${typeof require !== "undefined" ? "enabled" : "disabled"}`,
+        );
+        info.push("");
+
+        // User agent
+        info.push("🌐 User Agent:");
+        info.push(`  ${navigator.userAgent}`);
+
+        envDetails.textContent = info.join("\n");
+      }
+
+      // Check what's available on window
+      function checkEnvironment() {
+        displayEnvironmentInfo();
+        const apis = [];
+
+        // Check for Electron API
+        if (typeof window.electron !== "undefined") {
+          apis.push("window.electron");
+          log("✓ Electron API detected");
+        }
+
+        // Check for our IPC API
+        if (typeof window.atomitonIPC !== "undefined") {
+          apis.push("window.atomitonIPC");
+          log("✓ Atomiton IPC API detected");
+
+          // List available methods
+          const methods = Object.keys(window.atomitonIPC).filter(
+            (key) => typeof window.atomitonIPC[key] === "function",
+          );
+          apis.push(`  Methods: ${methods.join(", ")}`);
+        }
+
+        // Check for other Electron indicators
+        if (
+          typeof process !== "undefined" &&
+          process.versions &&
+          process.versions.electron
+        ) {
+          apis.push(`Electron version: ${process.versions.electron}`);
+          apis.push(`Node version: ${process.versions.node}`);
+        }
+
+        apiListEl.textContent =
+          apis.length > 0 ? apis.join("\n") : "No Electron/IPC APIs detected";
+
+        if (typeof window.atomitonIPC !== "undefined") {
+          statusEl.className = "status success";
+          statusEl.textContent =
+            "✅ Desktop wrapper is functional! IPC system is available and ready.";
+          controlsEl.style.display = "block";
+          log("✅ Desktop wrapper initialized successfully");
+        } else {
+          statusEl.className = "status error";
+          statusEl.textContent =
+            "❌ Desktop wrapper issues detected. IPC system is not available.";
+          log(
+            "❌ window.atomitonIPC is undefined - preload script may have failed",
+            "error",
+          );
+
+          // Provide troubleshooting info
+          if (typeof window.electron === "undefined") {
+            log(
+              "❌ window.electron is also undefined - context bridge may not be working",
+              "error",
+            );
+          } else {
+            log(
+              "ℹ️ window.electron is available, but atomitonIPC is missing",
+              "warning",
+            );
+          }
+        }
+      }
+
+      async function testPing() {
+        try {
+          log("Testing ping...");
+          const result = await window.atomitonIPC.ping();
+          log(`✓ Ping successful: ${result}`, "success");
+        } catch (error) {
+          log(`✗ Ping failed: ${error.message}`, "error");
+        }
+      }
+
+      async function testNode() {
+        try {
+          log("Testing node execution...");
+          const request = {
+            id: "test-" + Date.now(),
+            nodeId: "test-node",
+            inputs: { test: true },
+          };
+          const result = await window.atomitonIPC.executeNode(request);
+          log(
+            `✓ Node execution successful: ${JSON.stringify(result)}`,
+            "success",
+          );
+        } catch (error) {
+          log(`✗ Node execution failed: ${error.message}`, "error");
+        }
+      }
+
+      async function testStorage() {
+        try {
+          log("Testing storage...");
+          const key = "test-key-" + Date.now();
+
+          // Set
+          const setResult = await window.atomitonIPC.storageSet({
+            key,
+            value: "test value",
+          });
+          log(
+            `✓ Storage set successful: ${JSON.stringify(setResult)}`,
+            "success",
+          );
+
+          // Get
+          const getResult = await window.atomitonIPC.storageGet({ key });
+          log(
+            `✓ Storage get successful: ${JSON.stringify(getResult)}`,
+            "success",
+          );
+        } catch (error) {
+          log(`✗ Storage test failed: ${error.message}`, "error");
+        }
+      }
+
+      // Check environment on load
+      window.addEventListener("DOMContentLoaded", checkEnvironment);
+
+      // Also check immediately
+      checkEnvironment();
+    </script>
+  </body>
+</html>
