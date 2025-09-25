@@ -45,6 +45,25 @@
       "dependsOn": []
     },
     {
+      "label": "🧪 Desktop Debug Page",
+      "detail": "Start Electron with desktop debug/test page",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["--filter", "@atomiton/desktop", "run", "dev:desktop"],
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "revealProblems": "onProblem",
+        "focus": false,
+        "panel": "new",
+        "clear": false,
+        "close": false
+      },
+      "dependsOn": []
+    },
+    {
       "label": "📜 Tail Logs",
       "detail": "Tail Atomiton logs in real-time",
       "type": "shell",
