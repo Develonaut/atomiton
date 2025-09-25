@@ -14,7 +14,6 @@ export default defineLibraryConfig({
     plugins: [
       dts({
         insertTypesEntry: true,
-        rollupTypes: true,
         include: ["src/**/*.ts"],
         exclude: ["src/**/*.test.ts", "src/**/*.bench.ts"],
       }),

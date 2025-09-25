@@ -1,5 +1,5 @@
 import { styled } from "@atomiton/ui";
-import type { ReactFlowProps } from "@xyflow/react";
+import type { ReactFlowProps, Node, Edge } from "@xyflow/react";
 import { ReactFlow } from "@xyflow/react";
 import {
   DELETE_KEY_CODES,
@@ -24,7 +24,7 @@ export function CanvasRoot({
 }: ReactFlowProps) {
   // Transform raw node definitions or pass through editor nodes
   const transformedNodes = useMemo(() => {
-    return defaultNodes.map((node: unknown, index) => {
+    return defaultNodes.map((node: unknown, index): Node => {
       // Type guard for NodeDefinition
       const nodeObj = node as Record<string, unknown>;
       if (nodeObj.metadata && nodeObj.inputPorts && !nodeObj.data) {
@@ -40,13 +40,13 @@ export function CanvasRoot({
         );
       }
       // Already an EditorNode
-      return node;
+      return node as Node;
     });
   }, [defaultNodes]);
 
   // Transform edges to ensure they have all required properties
   const transformedEdges = useMemo(() => {
-    return defaultEdges.map((edge: unknown) => {
+    return defaultEdges.map((edge: unknown): Edge => {
       const edgeObj = edge as Record<string, unknown>;
       return {
         id: edgeObj.id as string,

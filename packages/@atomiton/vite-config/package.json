@@ -16,14 +16,14 @@
       "types": "./dist/index.d.ts"
     },
     "./vitest": {
+      "types": "./dist/vitest.d.ts",
       "import": "./dist/vitest.js",
-      "require": "./dist/vitest.cjs",
-      "types": "./dist/vitest.d.ts"
+      "require": "./dist/vitest.cjs"
     },
     "./playwright": {
+      "types": "./dist/playwright.d.ts",
       "import": "./dist/playwright.js",
-      "require": "./dist/playwright.cjs",
-      "types": "./dist/playwright.d.ts"
+      "require": "./dist/playwright.cjs"
     },
     "./package.json": "./package.json"
   },
