@@ -13,13 +13,13 @@ function LayoutEditor() {
 
   // Pass raw nodes directly to Canvas - let it handle transformation
   // Canvas accepts both NodeDefinition and EditorNode types internally
-  // Using 'any' here is intentional as Canvas internally handles the transformation
+  // Using 'unknown' here as Canvas internally handles the transformation
   const defaultNodes = Array.isArray(editorState?.defaultNodes)
-    ? (editorState.defaultNodes as any[])
+    ? (editorState.defaultNodes as unknown[])
     : [];
 
   const defaultEdges = Array.isArray(editorState?.defaultEdges)
-    ? (editorState.defaultEdges as any[])
+    ? (editorState.defaultEdges as unknown[])
     : [];
 
   // TODO: Implement complete file lifecycle:
@@ -48,7 +48,10 @@ function LayoutEditor() {
       <Editor>
         <Box className="absolute inset-0">
           <Box className="relative w-full h-full">
-            <Canvas defaultNodes={defaultNodes} defaultEdges={defaultEdges}>
+            <Canvas
+              defaultNodes={defaultNodes as never}
+              defaultEdges={defaultEdges as never}
+            >
               <Canvas.Grid variant="dots" gap={12} size={1} />
               <Canvas.Minimap
                 placement="bottom-right"

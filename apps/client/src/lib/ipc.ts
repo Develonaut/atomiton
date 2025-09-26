@@ -12,17 +12,34 @@ export type NodeProgress = {
 export type NodeExecuteResponse = {
   id: string;
   success: boolean;
-  outputs?: any;
+  outputs?: unknown;
   error?: string;
 };
 
+type AtomitonIPC = {
+  ping: () => Promise<string>;
+  executeNode: (request: unknown) => Promise<NodeExecuteResponse>;
+  onNodeProgress: (callback: (progress: NodeProgress) => void) => () => void;
+  onNodeComplete: (
+    callback: (response: NodeExecuteResponse) => void,
+  ) => () => void;
+  onNodeError: (
+    callback: (response: NodeExecuteResponse) => void,
+  ) => () => void;
+};
+
 class IPCClient {
-  private ipcAPI: any = null;
+  private ipcAPI: AtomitonIPC | null = null;
 
   constructor() {
     // Check if we're in Electron environment
-    if (typeof window !== "undefined" && (window as any).atomitonIPC) {
-      this.ipcAPI = (window as any).atomitonIPC;
+    if (
+      typeof window !== "undefined" &&
+      (window as Window & { atomitonIPC?: AtomitonIPC }).atomitonIPC
+    ) {
+      this.ipcAPI = (
+        window as Window & { atomitonIPC?: AtomitonIPC }
+      ).atomitonIPC!;
     }
   }
 
@@ -37,7 +54,10 @@ class IPCClient {
     return this.ipcAPI.ping();
   }
 
-  async executeNode(nodeId: string, inputs: any): Promise<NodeExecuteResponse> {
+  async executeNode(
+    nodeId: string,
+    inputs: unknown,
+  ): Promise<NodeExecuteResponse> {
     if (!this.ipcAPI) {
       throw new Error("IPC not available - not running in Electron");
     }

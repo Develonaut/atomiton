@@ -6,7 +6,7 @@ export function IPCTest() {
   const [pingResult, setPingResult] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState<NodeProgress | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<unknown>(null);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -124,7 +124,7 @@ export function IPCTest() {
           </div>
         )}
 
-        {result && (
+        {result !== null && (
           <div
             data-testid="execution-result"
             className="bg-green-50 rounded p-2"

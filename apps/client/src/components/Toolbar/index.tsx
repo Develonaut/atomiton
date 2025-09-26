@@ -62,7 +62,7 @@ function Toolbar() {
       const response = await ipc.executeNode("blueprint-runner", {
         nodes: nodeDefinitions,
         edges: [],
-        startNodeId: nodeDefinitions[0]?.id,
+        startNodeId: (nodeDefinitions[0] as { id?: string })?.id,
         blueprint: {
           id: "current-blueprint",
           name: "Current Blueprint",
@@ -208,7 +208,7 @@ function Toolbar() {
                 {output.error && (
                   <p className="text-sm text-error">{output.error}</p>
                 )}
-                {output.outputs && (
+                {output.outputs !== null && (
                   <div className="mt-2">
                     <p className="text-xs text-secondary mb-1">Result:</p>
                     <pre className="text-xs bg-surface-02 p-2 rounded overflow-x-auto">

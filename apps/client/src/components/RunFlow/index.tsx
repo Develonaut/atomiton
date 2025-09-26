@@ -2,7 +2,9 @@ import { useEditorNodes } from "@atomiton/editor";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { Button, Icon } from "@atomiton/ui";
 
-export type ExecuteHandler = (nodeDefinitions: any[]) => void | Promise<void>;
+export type ExecuteHandler = (
+  nodeDefinitions: unknown[],
+) => void | Promise<void>;
 
 type RunFlowProps = {
   onClick?: ExecuteHandler;

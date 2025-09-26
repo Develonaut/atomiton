@@ -15,7 +15,8 @@ const getDebugOutputPath = () => {
   // For E2E tests, use a fixed path
   if (
     process.env.NODE_ENV === "test" ||
-    (typeof window !== "undefined" && (window as any).electron)
+    (typeof window !== "undefined" &&
+      (window as Window & { electron?: unknown }).electron)
   ) {
     return `/Users/Ryan/Desktop/atomiton-e2e-test/execute-test-result.txt`;
   }
@@ -57,12 +58,24 @@ function Export({ disabled = false }: ExportProps) {
 
   const handleOnClick = async () => {
     const isElectron =
-      typeof window !== "undefined" && (window as any).electron;
+      typeof window !== "undefined" &&
+      (
+        window as Window & {
+          electron?: {
+            ipcRenderer?: { send: (channel: string, data: unknown) => void };
+          };
+        }
+      ).electron;
 
     // In Electron, send IPC message directly for file system operations
     if (isElectron) {
-      const electronIPC = (window as any).electron.ipcRenderer;
-      electronIPC.send("ipc-bridge-message", {
+      const electronWindow = window as Window & {
+        electron?: {
+          ipcRenderer?: { send: (channel: string, data: unknown) => void };
+        };
+      };
+      const electronIPC = electronWindow.electron?.ipcRenderer;
+      electronIPC?.send("ipc-bridge-message", {
         channel: "conductor:execute",
         data: {
           definition: {

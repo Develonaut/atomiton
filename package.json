@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:client": "pnpm --filter @atomiton/utils build && pnpm --filter @atomiton/logger build && pnpm --filter @atomiton/hooks build && pnpm --filter @atomiton/store build && pnpm --filter @atomiton/router build && pnpm --filter @atomiton/ui build && pnpm --filter @atomiton/nodes build && pnpm --filter @atomiton/editor build && pnpm --filter @atomiton/client build",
+    "build:desktop": "pnpm --filter @atomiton/logger build && pnpm --filter @atomiton/ipc build && pnpm --filter @atomiton/storage build && pnpm --filter @atomiton/nodes build && pnpm --filter @atomiton/desktop build",
     "dev:client": "turbo run dev --filter=\"@atomiton/client\" --filter=\"@atomiton/editor\"",
     "dev:ipc": "turbo run dev --filter=\"@atomiton/ipc\"",
     "dev:desktop": "turbo run dev --filter=\"@atomiton/desktop\"",
@@ -31,6 +33,7 @@
     "test:e2e:headed": "pnpm --filter @atomiton/e2e test:headed",
     "test:e2e:ui": "pnpm --filter @atomiton/e2e test:ui",
     "test:e2e": "pnpm --filter @atomiton/e2e test",
+    "test:e2e:ci": "CI=true pnpm --filter @atomiton/e2e test",
     "test:integration": "turbo run test:integration",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",

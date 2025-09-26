@@ -36,7 +36,7 @@ export default function DebugPage() {
   const [nodeResult, setNodeResult] = useState<NodeExecuteResponse | null>(
     null,
   );
-  const [storageTestResult, setStorageTestResult] = useState<any>(null);
+  const [storageTestResult, setStorageTestResult] = useState<unknown>(null);
   const [logs, setLogs] = useState<string[]>([]);
 
   const addLog = (message: string) => {
@@ -48,24 +48,35 @@ export default function DebugPage() {
     // Detect environment on mount
     const detectEnvironment = () => {
       const isElectron =
-        !!(window as any).electron || !!(window as any).atomitonIPC;
+        !!(window as Window & { electron?: unknown; atomitonIPC?: unknown })
+          .electron ||
+        !!(window as Window & { electron?: unknown; atomitonIPC?: unknown })
+          .atomitonIPC;
       const ipcAvailable = ipc.isAvailable();
       const apiMethods: string[] = [];
 
-      if ((window as any).atomitonIPC) {
+      const windowWithIPC = window as Window & {
+        atomitonIPC?: Record<string, unknown>;
+      };
+      if (windowWithIPC.atomitonIPC) {
         apiMethods.push(
-          ...Object.keys((window as any).atomitonIPC).filter(
-            (key) => typeof (window as any).atomitonIPC[key] === "function",
+          ...Object.keys(windowWithIPC.atomitonIPC).filter(
+            (key) => typeof windowWithIPC.atomitonIPC![key] === "function",
           ),
         );
       }
 
       // Try to get version information from process if available
       let nodeVersion, electronVersion, chromeVersion;
-      if ((window as any).process?.versions) {
-        nodeVersion = (window as any).process.versions.node;
-        electronVersion = (window as any).process.versions.electron;
-        chromeVersion = (window as any).process.versions.chrome;
+      const windowWithProcess = window as Window & {
+        process?: {
+          versions?: { node?: string; electron?: string; chrome?: string };
+        };
+      };
+      if (windowWithProcess.process?.versions) {
+        nodeVersion = windowWithProcess.process.versions.node;
+        electronVersion = windowWithProcess.process.versions.electron;
+        chromeVersion = windowWithProcess.process.versions.chrome;
       }
 
       const info: EnvironmentInfo = {
@@ -191,7 +202,13 @@ export default function DebugPage() {
     const startTime = Date.now();
     addLog("Starting storage test...");
 
-    if (!(window as any).atomitonIPC) {
+    const windowWithIPC = window as Window & {
+      atomitonIPC?: {
+        storageSet: (data: { key: string; value: unknown }) => Promise<void>;
+        storageGet: (data: { key: string }) => Promise<unknown>;
+      };
+    };
+    if (!windowWithIPC.atomitonIPC) {
       addLog("❌ Storage API not available");
       return;
     }
@@ -206,14 +223,14 @@ export default function DebugPage() {
 
       // Test set
       addLog(`Setting storage: ${testKey}`);
-      await (window as any).atomitonIPC.storageSet({
+      await windowWithIPC.atomitonIPC.storageSet({
         key: testKey,
         value: testValue,
       });
 
       // Test get
       addLog(`Getting storage: ${testKey}`);
-      const retrieved = await (window as any).atomitonIPC.storageGet({
+      const retrieved = await windowWithIPC.atomitonIPC.storageGet({
         key: testKey,
       });
 
@@ -487,7 +504,7 @@ export default function DebugPage() {
             )}
 
             {/* Result Display */}
-            {(pingResult || nodeResult || storageTestResult) && (
+            {(pingResult || nodeResult || storageTestResult !== null) && (
               <div className="space-y-3">
                 {pingResult && (
                   <div className="p-3 bg-surface-01 rounded-xl">
@@ -511,7 +528,7 @@ export default function DebugPage() {
                   </div>
                 )}
 
-                {storageTestResult && (
+                {storageTestResult !== null && (
                   <div className="p-3 bg-surface-01 rounded-xl">
                     <p className="text-sm font-medium text-primary mb-1">
                       Storage Result

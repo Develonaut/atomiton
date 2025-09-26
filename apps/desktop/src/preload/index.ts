@@ -17,41 +17,58 @@ const IPC = {
   PING: "system:ping",
 } as const;
 
+// Type definitions for IPC
+type IPCRequest = Record<string, unknown>;
+type IPCResponse = unknown;
+type IPCProgress = Record<string, unknown>;
+type IPCError = {
+  message: string;
+  code?: string;
+  [key: string]: unknown;
+};
+
 // Define the IPC API
 const atomitonIPC = {
   // System
   ping: (): Promise<string> => ipcRenderer.invoke(IPC.PING),
 
   // Node execution
-  executeNode: (request: any): Promise<any> =>
+  executeNode: (request: IPCRequest): Promise<IPCResponse> =>
     ipcRenderer.invoke(IPC.EXECUTE_NODE, request),
 
   // Storage
-  storageGet: (request: any): Promise<any> =>
+  storageGet: (request: IPCRequest): Promise<IPCResponse> =>
     ipcRenderer.invoke(IPC.STORAGE_GET, request),
 
-  storageSet: (request: any): Promise<any> =>
+  storageSet: (request: IPCRequest): Promise<IPCResponse> =>
     ipcRenderer.invoke(IPC.STORAGE_SET, request),
 
   // Event listeners with cleanup
-  onNodeProgress: (callback: (progress: any) => void) => {
-    const listener = (_event: any, progress: any) => callback(progress);
+  onNodeProgress: (callback: (progress: IPCProgress) => void) => {
+    const listener = (
+      _event: Electron.IpcRendererEvent,
+      progress: IPCProgress,
+    ) => callback(progress);
     ipcRenderer.on(IPC.NODE_PROGRESS, listener);
     return () => {
       ipcRenderer.removeListener(IPC.NODE_PROGRESS, listener);
     };
   },
 
-  onNodeComplete: (callback: (response: any) => void) => {
-    const listener = (_event: any, response: any) => callback(response);
+  onNodeComplete: (callback: (response: IPCResponse) => void) => {
+    const listener = (
+      _event: Electron.IpcRendererEvent,
+      response: IPCResponse,
+    ) => callback(response);
     ipcRenderer.on(IPC.NODE_COMPLETE, listener);
     return () => {
       ipcRenderer.removeListener(IPC.NODE_COMPLETE, listener);
     };
   },
 
-  onNodeError: (callback: (response: any) => void) => {
-    const listener = (_event: any, response: any) => callback(response);
+  onNodeError: (callback: (response: IPCError) => void) => {
+    const listener = (_event: Electron.IpcRendererEvent, response: IPCError) =>
+      callback(response);
     ipcRenderer.on(IPC.NODE_ERROR, listener);
     return () => {
       ipcRenderer.removeListener(IPC.NODE_ERROR, listener);
@@ -78,7 +95,9 @@ if (process.contextIsolated) {
     "[PRELOAD] Context isolation disabled, setting APIs directly on window",
   );
   window.electron = electronAPI;
-  (window as any).atomitonIPC = atomitonIPC;
+  (
+    window as unknown as Window & { atomitonIPC: typeof atomitonIPC }
+  ).atomitonIPC = atomitonIPC;
 }
 
 console.log("[PRELOAD] Preload script completed");
