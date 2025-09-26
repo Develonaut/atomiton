@@ -158,9 +158,6 @@ importers:
       '@atomiton/hooks':
         specifier: workspace:*
         version: link:../../packages/@atomiton/hooks
-      '@atomiton/logger':
-        specifier: workspace:*
-        version: link:../../packages/@atomiton/logger
       '@atomiton/nodes':
         specifier: workspace:*
         version: link:../../packages/@atomiton/nodes
@@ -282,9 +279,6 @@ importers:
       '@atomiton/ipc':
         specifier: workspace:^
         version: link:../../packages/@atomiton/ipc
-      '@atomiton/logger':
-        specifier: workspace:^
-        version: link:../../packages/@atomiton/logger
       '@atomiton/nodes':
         specifier: workspace:^
         version: link:../../packages/@atomiton/nodes
@@ -340,9 +334,6 @@ importers:
 
   apps/e2e:
     devDependencies:
-      '@atomiton/logger':
-        specifier: workspace:*
-        version: link:../../packages/@atomiton/logger
       '@atomiton/typescript-config':
         specifier: workspace:^
         version: link:../../packages/@atomiton/typescript-config
@@ -558,46 +549,6 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.16
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.2
-      vite:
-        specifier: 'catalog:'
-        version: 7.1.5(@types/node@20.19.16)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
-      vite-plugin-dts:
-        specifier: 'catalog:'
-        version: 4.5.4(@types/node@20.19.16)(rollup@4.50.2)(typescript@5.9.2)(vite@7.1.5(@types/node@20.19.16)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1))
-
-  packages/@atomiton/logger:
-    dependencies:
-      electron-log:
-        specifier: ^5.2.5
-        version: 5.4.3
-      tslog:
-        specifier: ^4.9.3
-        version: 4.9.3
-    devDependencies:
-      '@atomiton/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
-      '@atomiton/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@atomiton/vite-config':
-        specifier: workspace:*
-        version: link:../vite-config
-      '@types/node':
-        specifier: 'catalog:'
-        version: 20.19.16
-      eslint:
-        specifier: 'catalog:'
-        version: 9.35.0(jiti@2.5.1)
-      rollup-plugin-visualizer:
-        specifier: 'catalog:'
-        version: 6.0.3(rollup@4.50.2)
-      terser:
-        specifier: 'catalog:'
-        version: 5.44.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
@@ -2818,10 +2769,6 @@ packages:
   electron-devtools-installer@4.0.0:
     resolution: {integrity: sha512-9Tntu/jtfSn0n6N/ZI6IdvRqXpDyLQiDuuIbsBI+dL+1Ef7C8J2JwByw58P3TJiNeuqyV3ZkphpNWuZK5iSY2w==}
 
-  electron-log@5.4.3:
-    resolution: {integrity: sha512-sOUsM3LjZdugatazSQ/XTyNcw8dfvH1SYhXWiJyfYodAAKOZdHs0txPiLDXFzOZbhXgAgshQkshH2ccq0feyLQ==}
-    engines: {node: '>= 14'}
-
   electron-to-chromium@1.5.221:
     resolution: {integrity: sha512-/1hFJ39wkW01ogqSyYoA4goOXOtMRy6B+yvA1u42nnsEGtHzIzmk93aPISumVQeblj47JUHLC9coCjUxb1EvtQ==}
 
@@ -4813,10 +4760,6 @@ packages:
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
-
-  tslog@4.9.3:
-    resolution: {integrity: sha512-oDWuGVONxhVEBtschLf2cs/Jy8i7h1T+CpdkTNWQgdAF7DhRo2G8vMCgILKe7ojdEkLhICWgI1LYSSKaJsRgcw==}
-    engines: {node: '>=16'}
 
   tsx@4.20.5:
     resolution: {integrity: sha512-+wKjMNU9w/EaQayHXb7WA7ZaHY6hN8WgfvHNQ3t1PnU91/7O8TcTnIhCDYTZwnt8JsO9IBqZ30Ln1r7pPF52Aw==}
@@ -6996,8 +6939,6 @@ snapshots:
   electron-devtools-installer@4.0.0:
     dependencies:
       unzip-crx-3: 0.2.0
-
-  electron-log@5.4.3: {}
 
   electron-to-chromium@1.5.221: {}
 
@@ -9201,8 +9142,6 @@ snapshots:
       typescript: 5.9.2
 
   tslib@2.8.1: {}
-
-  tslog@4.9.3: {}
 
   tsx@4.20.5:
     dependencies:

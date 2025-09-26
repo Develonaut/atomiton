@@ -1,12 +1,10 @@
 import { initializeServices } from "@/main/services";
 import { setupIPC } from "@atomiton/ipc/main";
-import { createDesktopLogger } from "@atomiton/logger/desktop";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { join } from "path";
 
-const logger = createDesktopLogger({ namespace: "desktop:main" });
-logger.info("Desktop application starting up");
+console.log("Desktop application starting up");
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -27,18 +25,18 @@ function createWindow(): void {
   });
 
   mainWindow.on("ready-to-show", () => {
-    logger.info("Window ready to show");
+    console.log("Window ready to show");
     mainWindow?.show();
   });
 
   mainWindow.webContents.on("did-finish-load", () => {
-    logger.info("Page finished loading");
+    console.log("Page finished loading");
   });
 
   mainWindow.webContents.on(
     "did-fail-load",
     (event, errorCode, errorDescription) => {
-      logger.error(
+      console.error(
         `Page failed to load: ${errorDescription} (code: ${errorCode})`,
       );
     },
@@ -101,7 +99,7 @@ function createWindow(): void {
     : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
 
   console.log(`[DESKTOP] Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
-  logger.info(`Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
+  console.log(`Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
   mainWindow?.loadURL(appUrl);
 }
 
@@ -126,13 +124,13 @@ if (is.dev) {
 }
 
 app.whenReady().then(async () => {
-  logger.info("Electron app ready, initializing desktop application");
+  console.log("Electron app ready, initializing desktop application");
   electronApp.setAppUserModelId("com.atomiton.desktop");
 
   // Initialize application services
-  logger.info("Initializing application services");
+  console.log("Initializing application services");
   initializeServices();
-  logger.info("Application services initialized");
+  console.log("Application services initialized");
 
   // Set a proper CSP for development that allows DevTools but maintains security
   if (is.dev) {
@@ -183,7 +181,7 @@ app.whenReady().then(async () => {
   // Set up IPC handlers after window creation
   if (mainWindow) {
     setupIPC(mainWindow);
-    logger.info("IPC handlers initialized");
+    console.log("IPC handlers initialized");
   }
 
   app.on("activate", function () {

@@ -3,9 +3,6 @@ import Menu from "#components/Export/Menu";
 import Object3D from "#components/Export/Object3D";
 import Preview from "#components/Export/Preview";
 import Video from "#components/Export/Video";
-// TODO: Replace with IPC implementation
-// import { getConductor } from "#services/conductor";
-import { createBrowserLogger } from "@atomiton/logger/browser";
 import { Box, Button } from "@atomiton/ui";
 import { Popover, PopoverPanel } from "@headlessui/react";
 import { useState } from "react";
@@ -54,7 +51,6 @@ type ExportProps = {
 
 function Export({ disabled = false }: ExportProps) {
   const [active, setActive] = useState(0);
-  const logger = createBrowserLogger({ namespace: "execute:ui" });
 
   const handleOnClick = async () => {
     const isElectron =
@@ -94,7 +90,7 @@ function Export({ disabled = false }: ExportProps) {
 
     // TODO: Replace with IPC implementation
     // For web-only mode, previously used conductor - now needs IPC
-    logger.info("Web-only mode execution not yet implemented with IPC");
+    console.log("Web-only mode execution not yet implemented with IPC");
     // try {
     //   const conductor = getConductor();
     //   const testNode = {
@@ -127,13 +123,13 @@ function Export({ disabled = false }: ExportProps) {
     //   };
 
     //   const testInput = {};
-    //   logger.info("Executing File System node", { nodeId: testNode.id });
+    //   console.log("Executing File System node", { nodeId: testNode.id });
 
     //   const result = await conductor.execute(testNode, testInput);
 
-    //   logger.info("Execute finished successfully", { result });
+    //   console.log("Execute finished successfully", { result });
     // } catch (error) {
-    //   logger.error("Execute failed with error", { error });
+    //   console.error("Execute failed with error", { error });
     // }
   };
 

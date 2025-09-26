@@ -1,4 +1,3 @@
-import { createDesktopLogger } from "@atomiton/logger/desktop";
 import {
   _electron as electron,
   type ElectronApplication,
@@ -6,8 +5,6 @@ import {
 } from "@playwright/test";
 import path from "path";
 import { fileURLToPath } from "url";
-
-const logger = createDesktopLogger({ namespace: "E2E:ELECTRON" });
 
 // Get __dirname equivalent in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -22,7 +19,7 @@ export class ElectronTestHelper {
   ): Promise<{ app: ElectronApplication; page: Page }> {
     const isHeadless = options.headless ?? true; // Default to headless for tests
 
-    logger.info("Launching Electron application for testing", {
+    console.log("Launching Electron application for testing", {
       headless: isHeadless,
     });
 
@@ -32,7 +29,7 @@ export class ElectronTestHelper {
       "../../../../apps/desktop/out/main/index.js",
     );
 
-    logger.info("Electron main path:", { electronMain });
+    console.log("Electron main path:", { electronMain });
 
     // Use Playwright's built-in Electron support
     this.app = await electron.launch({
@@ -49,24 +46,24 @@ export class ElectronTestHelper {
       timeout: 30000,
     });
 
-    logger.info("Electron app launched, waiting for first window");
+    console.log("Electron app launched, waiting for first window");
 
     // Get the first window
     this.page = await this.app.firstWindow();
 
-    logger.info("First window obtained, waiting for load");
+    console.log("First window obtained, waiting for load");
 
     // Wait for the app to load
     await this.page.waitForLoadState("networkidle");
 
-    logger.info("Electron app fully loaded");
+    console.log("Electron app fully loaded");
 
     return { app: this.app, page: this.page };
   }
 
   async close(): Promise<void> {
     if (this.app) {
-      logger.info("Closing Electron application");
+      console.log("Closing Electron application");
       await this.app.close();
       this.app = null;
       this.page = null;
@@ -76,7 +73,7 @@ export class ElectronTestHelper {
   async waitForElectronAPI(): Promise<void> {
     if (!this.page) throw new Error("Page not available");
 
-    logger.info("Waiting for window.electron API to be available");
+    console.log("Waiting for window.electron API to be available");
 
     // Wait for window.electron to be available
     await this.page.waitForFunction(
@@ -89,7 +86,7 @@ export class ElectronTestHelper {
       { timeout: 10000 },
     );
 
-    logger.info("window.electron API is available");
+    console.log("window.electron API is available");
   }
 
   async verifyIPCBridge(): Promise<boolean> {

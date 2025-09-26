@@ -18,7 +18,6 @@
     "install": "playwright install chromium"
   },
   "devDependencies": {
-    "@atomiton/logger": "workspace:*",
     "@atomiton/typescript-config": "workspace:^",
     "@atomiton/vite-config": "workspace:*",
     "@playwright/test": "catalog:",

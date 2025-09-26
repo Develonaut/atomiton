@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@atomiton/ipc": "workspace:^",
-    "@atomiton/logger": "workspace:^",
     "@atomiton/nodes": "workspace:^",
     "@atomiton/storage": "workspace:^",
     "dotenv": "^17.2.2"

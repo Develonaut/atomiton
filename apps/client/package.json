@@ -27,7 +27,6 @@
   "dependencies": {
     "@atomiton/editor": "workspace:*",
     "@atomiton/hooks": "workspace:*",
-    "@atomiton/logger": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/router": "workspace:*",
     "@atomiton/store": "workspace:*",
