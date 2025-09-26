@@ -17,18 +17,24 @@ export class ElectronTestHelper {
   private app: ElectronApplication | null = null;
   private page: Page | null = null;
 
-  async launch(): Promise<{ app: ElectronApplication; page: Page }> {
-    logger.info("Launching Electron application for testing");
+  async launch(
+    options: { headless?: boolean } = {},
+  ): Promise<{ app: ElectronApplication; page: Page }> {
+    const isHeadless = options.headless ?? true; // Default to headless for tests
 
-    // Path to the built Electron app - let Playwright handle server lifecycle
+    logger.info("Launching Electron application for testing", {
+      headless: isHeadless,
+    });
+
+    // Navigate to desktop from e2e/tests/helpers (4 levels up to root, then into apps/desktop)
     const electronMain = path.join(
       __dirname,
-      "../../../desktop/out/main/index.js",
+      "../../../../apps/desktop/out/main/index.js",
     );
 
     logger.info("Electron main path:", { electronMain });
 
-    // Use Playwright's built-in Electron support with minimal configuration
+    // Use Playwright's built-in Electron support
     this.app = await electron.launch({
       args: [electronMain],
       env: {
@@ -37,6 +43,8 @@ export class ElectronTestHelper {
         ELECTRON_RENDERER_URL: "http://localhost:5173", // Client server managed by webServer
         CI: "false",
         LEFTHOOK: "false",
+        // Control window visibility via environment variable
+        ELECTRON_E2E_HEADLESS: isHeadless ? "true" : "false",
       },
       timeout: 30000,
     });

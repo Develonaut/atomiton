@@ -36,7 +36,6 @@ export default function DebugPage() {
   const [nodeResult, setNodeResult] = useState<NodeExecuteResponse | null>(
     null,
   );
-  const [storageTestResult, setStorageTestResult] = useState<unknown>(null);
   const [logs, setLogs] = useState<string[]>([]);
 
   const addLog = (message: string) => {
@@ -198,73 +197,6 @@ export default function DebugPage() {
     }
   };
 
-  const testStorage = async () => {
-    const startTime = Date.now();
-    addLog("Starting storage test...");
-
-    const windowWithIPC = window as Window & {
-      atomitonIPC?: {
-        storageSet: (data: { key: string; value: unknown }) => Promise<void>;
-        storageGet: (data: { key: string }) => Promise<unknown>;
-      };
-    };
-    if (!windowWithIPC.atomitonIPC) {
-      addLog("❌ Storage API not available");
-      return;
-    }
-
-    try {
-      const testKey = "debug-test-key";
-      const testValue = {
-        message: "Debug test value",
-        timestamp: Date.now(),
-        random: Math.random(),
-      };
-
-      // Test set
-      addLog(`Setting storage: ${testKey}`);
-      await windowWithIPC.atomitonIPC.storageSet({
-        key: testKey,
-        value: testValue,
-      });
-
-      // Test get
-      addLog(`Getting storage: ${testKey}`);
-      const retrieved = await windowWithIPC.atomitonIPC.storageGet({
-        key: testKey,
-      });
-
-      const duration = Date.now() - startTime;
-      const success = JSON.stringify(retrieved) === JSON.stringify(testValue);
-
-      const testResult: TestResult = {
-        name: "Storage Test",
-        success,
-        message: success
-          ? "Storage operations work correctly"
-          : "Storage values don't match",
-        timestamp: Date.now(),
-        duration,
-      };
-
-      setTestResults((prev) => [...prev, testResult]);
-      setStorageTestResult({ set: testValue, get: retrieved });
-      addLog(`✅ Storage test completed (${duration}ms)`);
-    } catch (error) {
-      const duration = Date.now() - startTime;
-      const testResult: TestResult = {
-        name: "Storage Test",
-        success: false,
-        message: error instanceof Error ? error.message : "Unknown error",
-        timestamp: Date.now(),
-        duration,
-      };
-
-      setTestResults((prev) => [...prev, testResult]);
-      addLog(`❌ Storage test failed: ${testResult.message}`);
-    }
-  };
-
   const runAllTests = async () => {
     setIsRunningTests(true);
     setTestResults([]);
@@ -274,9 +206,6 @@ export default function DebugPage() {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     await testNodeExecution();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    await testStorage();
 
     setIsRunningTests(false);
     addLog("✨ All tests completed");
@@ -288,7 +217,6 @@ export default function DebugPage() {
     setPingResult("");
     setNodeProgress(null);
     setNodeResult(null);
-    setStorageTestResult(null);
   };
 
   return (
@@ -434,14 +362,6 @@ export default function DebugPage() {
                 Test Node
               </Button>
 
-              <Button
-                onClick={testStorage}
-                disabled={isRunningTests || !environment?.ipcAvailable}
-                variant="outline"
-              >
-                Test Storage
-              </Button>
-
               <Button onClick={clearLogs} variant="ghost">
                 Clear Logs
               </Button>
@@ -504,7 +424,7 @@ export default function DebugPage() {
             )}
 
             {/* Result Display */}
-            {(pingResult || nodeResult || storageTestResult !== null) && (
+            {(pingResult || nodeResult) && (
               <div className="space-y-3">
                 {pingResult && (
                   <div className="p-3 bg-surface-01 rounded-xl">
@@ -524,17 +444,6 @@ export default function DebugPage() {
                     </p>
                     <pre className="font-mono text-xs text-secondary overflow-auto">
                       {JSON.stringify(nodeResult, null, 2)}
-                    </pre>
-                  </div>
-                )}
-
-                {storageTestResult !== null && (
-                  <div className="p-3 bg-surface-01 rounded-xl">
-                    <p className="text-sm font-medium text-primary mb-1">
-                      Storage Result
-                    </p>
-                    <pre className="font-mono text-xs text-secondary overflow-auto">
-                      {JSON.stringify(storageTestResult, null, 2)}
                     </pre>
                   </div>
                 )}

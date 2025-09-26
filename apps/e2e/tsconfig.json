@@ -4,11 +4,11 @@
     "types": ["@playwright/test", "node"],
     "noEmit": true,
     "rootDir": ".",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "#*": ["./*"]
+      "#*": ["./tests/*"]
     }
   },
-  "include": ["src/**/*", "playwright.config.ts"],
-  "exclude": ["node_modules", "dist", "test-results"]
+  "include": ["tests/**/*", "playwright.config.ts"],
+  "exclude": ["node_modules", "dist", "test-results", "playwright-report"]
 }

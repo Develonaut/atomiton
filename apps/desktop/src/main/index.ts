@@ -28,12 +28,7 @@ function createWindow(): void {
 
   mainWindow.on("ready-to-show", () => {
     logger.info("Window ready to show");
-    // Only show window if not in headless test mode
-    if (process.env.ELECTRON_TEST_HEADLESS !== "true") {
-      mainWindow?.show();
-    } else {
-      logger.info("Running in headless test mode - window remains hidden");
-    }
+    mainWindow?.show();
   });
 
   mainWindow.webContents.on("did-finish-load", () => {

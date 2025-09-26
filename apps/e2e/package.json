@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "imports": {
-    "#*": "./src/*"
+    "#*": "./tests/*"
   },
   "scripts": {
     "test": "playwright test",
