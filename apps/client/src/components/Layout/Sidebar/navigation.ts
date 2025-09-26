@@ -1,4 +1,5 @@
-export const navigation = [
+// Base navigation items
+const baseNavigation = [
   {
     title: "Explore",
     icon: "explore",
@@ -35,6 +36,18 @@ export const navigation = [
     href: "/likes",
   },
 ];
+
+// Add debug item only in development
+export const navigation = import.meta.env.DEV
+  ? [
+      ...baseNavigation,
+      {
+        title: "Debug",
+        icon: "bug",
+        href: "/debug",
+      },
+    ]
+  : baseNavigation;
 
 export const folders = [
   {
