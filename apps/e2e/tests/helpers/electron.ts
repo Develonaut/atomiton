@@ -26,9 +26,16 @@ export class ElectronTestHelper {
 
     logger.info("Electron paths:", { desktopPath, electronMain });
 
+    // Check if we should run in background (CI or headless mode)
+    const isHeadless = !process.env.PLAYWRIGHT_HEADED && process.env.CI !== 'true';
+
     // Launch Electron app using npx electron
     this.app = await electron.launch({
-      args: [electronMain],
+      args: [
+        electronMain,
+        // Add flags to minimize window visibility in headless mode
+        ...(isHeadless ? ['--no-sandbox', '--disable-gpu'] : [])
+      ],
       executablePath: path.join(desktopPath, "node_modules/.bin/electron"),
       env: {
         ...process.env,
@@ -36,6 +43,8 @@ export class ElectronTestHelper {
         ELECTRON_RENDERER_URL: "http://localhost:5173",
         CI: "false",
         LEFTHOOK: "false",
+        // Signal to the app to minimize/hide windows in test mode
+        ELECTRON_TEST_HEADLESS: isHeadless ? "true" : "false",
       },
       timeout: 30000,
     });

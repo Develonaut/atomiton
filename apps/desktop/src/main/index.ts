@@ -28,7 +28,12 @@ function createWindow(): void {
 
   mainWindow.on("ready-to-show", () => {
     logger.info("Window ready to show");
-    mainWindow?.show();
+    // Only show window if not in headless test mode
+    if (process.env.ELECTRON_TEST_HEADLESS !== "true") {
+      mainWindow?.show();
+    } else {
+      logger.info("Running in headless test mode - window remains hidden");
+    }
   });
 
   mainWindow.webContents.on("did-finish-load", () => {
@@ -89,29 +94,20 @@ function createWindow(): void {
     });
   }
 
-  // Load desktop test page for development/debugging
-  console.log("[DESKTOP] DESKTOP_TEST env:", process.env.DESKTOP_TEST);
+  // Always load from a URL - localhost in dev, CDN in production
   console.log("[DESKTOP] is.dev:", is.dev);
   console.log(
     "[DESKTOP] ELECTRON_RENDERER_URL:",
     process.env.ELECTRON_RENDERER_URL,
   );
 
-  if (process.env.DESKTOP_TEST === "true") {
-    const testFile = join(__dirname, "../../desktop-test.html");
-    console.log(`[DESKTOP] Loading desktop test page: ${testFile}`);
-    logger.info(`Loading desktop test page: ${testFile}`);
-    mainWindow?.loadFile(testFile);
-  } else {
-    // Always load from a URL - localhost in dev, CDN in production
-    const appUrl = is.dev
-      ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
-      : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
+  const appUrl = is.dev
+    ? process.env.ELECTRON_RENDERER_URL || "http://localhost:5173"
+    : process.env.ELECTRON_RENDERER_URL || "https://app.atomiton.io"; // TODO: Replace with actual CDN URL
 
-    console.log(`[DESKTOP] Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
-    logger.info(`Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
-    mainWindow?.loadURL(appUrl);
-  }
+  console.log(`[DESKTOP] Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
+  logger.info(`Loading UI from: ${appUrl} (dev mode: ${is.dev})`);
+  mainWindow?.loadURL(appUrl);
 }
 
 const gotTheLock = app.requestSingleInstanceLock();

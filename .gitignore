@@ -15,13 +15,14 @@ node_modules
 # Testing
 coverage
 
-# Playwright Test Artifacts  
+# Playwright Test Artifacts
 playwright-report/
 playwright/.cache/
 test-results/
 trace.zip
 *.trace.zip
 videos/
+.test-data/
 
 # Playwright temporary files
 test-snapshots.sh
