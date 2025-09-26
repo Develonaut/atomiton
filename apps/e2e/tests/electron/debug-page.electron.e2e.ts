@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { ElectronTestHelper } from "../helpers/electron";
 
 // Force serial execution for Electron tests to share a single instance
-test.describe.configure({ mode: 'serial' });
+test.describe.configure({ mode: "serial" });
 
 const logger = createDesktopLogger({ namespace: "E2E:ELECTRON:DEBUG-PAGE" });
 
@@ -27,7 +27,7 @@ class DesktopDebugElectronHelper extends ElectronTestHelper {
     const userDataDir = path.join(
       __dirname,
       "../../../.test-data",
-      `electron-${Date.now()}-${Math.random().toString(36).substring(7)}`
+      `electron-${Date.now()}-${Math.random().toString(36).substring(7)}`,
     );
 
     // Launch Electron app pointing to dev server with debug route
@@ -44,9 +44,7 @@ class DesktopDebugElectronHelper extends ElectronTestHelper {
       timeout: 30000,
     });
 
-    logger.info(
-      "Electron app launched, waiting for first window",
-    );
+    logger.info("Electron app launched, waiting for first window");
 
     // Get the first window
     const page = await app.firstWindow();
@@ -58,7 +56,7 @@ class DesktopDebugElectronHelper extends ElectronTestHelper {
 
     // Navigate to debug if not already there
     const url = await page.url();
-    if (!url.includes('/debug')) {
+    if (!url.includes("/debug")) {
       logger.info("Navigating to /debug route");
       await page.goto("http://localhost:5173/debug");
       await page.waitForLoadState("networkidle");
@@ -111,7 +109,7 @@ test.describe.serial("Electron Debug Page", () => {
         hasAtomitonIPC: !!(window as any).atomitonIPC,
         ipcMethods: (window as any).atomitonIPC
           ? Object.keys((window as any).atomitonIPC).filter(
-              (key) => typeof (window as any).atomitonIPC[key] === "function"
+              (key) => typeof (window as any).atomitonIPC[key] === "function",
             )
           : [],
       };
@@ -127,9 +125,7 @@ test.describe.serial("Electron Debug Page", () => {
   });
 
   test("debug page IPC functions work", async () => {
-    logger.info(
-      "🚀 Testing IPC functions through debug page...",
-    );
+    logger.info("🚀 Testing IPC functions through debug page...");
 
     // Using shared app and page from beforeAll
     await page.waitForLoadState("networkidle");
@@ -154,11 +150,14 @@ test.describe.serial("Electron Debug Page", () => {
 
       try {
         // The storage API expects a data object with key and value
-        const setResult = await ipc.storageSet({ key: "test-key", value: "test-value-e2e" });
+        const setResult = await ipc.storageSet({
+          key: "test-key",
+          value: "test-value-e2e",
+        });
         const getResult = await ipc.storageGet({ key: "test-key" });
         return {
           set: setResult?.success !== false,
-          get: getResult?.value || getResult
+          get: getResult?.value || getResult,
         };
       } catch (err) {
         return { set: false, get: null, error: err.message };
@@ -185,9 +184,7 @@ test.describe.serial("Electron Debug Page", () => {
     expect(nodeResult).toBeTruthy();
     logger.info("✅ Node execution works");
 
-    logger.info(
-      "🎉 All IPC functions tested successfully!",
-    );
+    logger.info("🎉 All IPC functions tested successfully!");
   });
 
   test("debug page environment detection works", async () => {

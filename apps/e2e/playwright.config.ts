@@ -19,8 +19,8 @@ config.testIgnore = ["**/.disabled/**", "**/disabled/**"];
 // Configure Electron tests to run with a single worker
 config.projects = [
   {
-    name: 'electron',
-    testMatch: '**/electron/**/*.e2e.ts',
+    name: "electron",
+    testMatch: "**/electron/**/*.e2e.ts",
     use: {
       ...config.use,
     },
@@ -29,9 +29,13 @@ config.projects = [
     fullyParallel: false,
   },
   {
-    name: 'chromium',
-    testMatch: ['**/*.e2e.ts'],
-    testIgnore: ['**/electron/**/*.e2e.ts', '**/.disabled/**', '**/disabled/**'],
+    name: "chromium",
+    testMatch: ["**/*.e2e.ts"],
+    testIgnore: [
+      "**/electron/**/*.e2e.ts",
+      "**/.disabled/**",
+      "**/disabled/**",
+    ],
     use: {
       ...config.use,
     },

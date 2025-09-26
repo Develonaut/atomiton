@@ -29,17 +29,12 @@ function RunFlow({ onClick, isRunning = false }: RunFlowProps) {
         // Strip out editor-specific properties and keep only definition data
         return createNodeDefinition({
           id: node.id,
-          name: node.data?.customLabel || node.data?.label || node.type,
-          category: node.data?.category || "general",
-          version: "1.0.0",
-          metadata: {
-            ...node.data?.metadata,
-            nodeType: node.type,
-          },
-          inputPorts: node.data?.inputs || [],
-          outputPorts: node.data?.outputs || [],
+          name: node.data?.name || node.type,
+          position: node.position,
+          metadata: node.data?.metadata || {},
+          inputPorts: node.data?.inputPorts || [],
+          outputPorts: node.data?.outputPorts || [],
           parameters: node.data?.parameters || {},
-          data: node.data || {},
         });
       });
 
