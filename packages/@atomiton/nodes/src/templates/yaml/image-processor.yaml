@@ -384,7 +384,8 @@ nodes:
         type: "string"
         default: "bottom-right"
         control: "select"
-        options: ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
+        options:
+          ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
       opacity:
         type: "number"
         default: 0.7
@@ -501,32 +502,22 @@ edges:
   - id: "source-to-loop"
     source: "image-source"
     target: "image-loop"
-    sourceHandle: "output"
-    targetHandle: "input"
 
   - id: "loop-to-parallel"
     source: "image-loop"
     target: "parallel-processor"
-    sourceHandle: "item"
-    targetHandle: "input"
 
   - id: "parallel-to-resize"
     source: "parallel-processor"
     target: "image-resize"
-    sourceHandle: "output"
-    targetHandle: "input"
 
   - id: "resize-to-watermark"
     source: "image-resize"
     target: "image-watermark"
-    sourceHandle: "output"
-    targetHandle: "input"
 
   - id: "watermark-to-save"
     source: "image-watermark"
     target: "save-processed"
-    sourceHandle: "output"
-    targetHandle: "input"
 
 variables:
   inputFolder:

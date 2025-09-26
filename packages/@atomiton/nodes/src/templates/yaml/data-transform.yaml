@@ -332,20 +332,14 @@ edges:
   - id: "csv-to-filter"
     source: "csv-source"
     target: "filter-transform"
-    sourceHandle: "data"
-    targetHandle: "input"
 
   - id: "filter-to-aggregate"
     source: "filter-transform"
     target: "aggregate-code"
-    sourceHandle: "output"
-    targetHandle: "input"
 
   - id: "aggregate-to-output"
     source: "aggregate-code"
     target: "output-file"
-    sourceHandle: "output"
-    targetHandle: "input"
 
 variables:
   inputPath:

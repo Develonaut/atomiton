@@ -163,8 +163,6 @@ edges:
   - id: "greeting-code-display-transform"
     source: "greeting-code"
     target: "display-transform"
-    sourceHandle: "output"
-    targetHandle: "input"
 
 variables:
   greeting:
