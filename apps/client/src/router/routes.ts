@@ -81,6 +81,16 @@ export const routes: RouteConfig[] = [
     path: "/test/ipc",
     component: () => import("../templates/TestIPCPage"),
   },
+  // Debug route only available in development
+  ...(import.meta.env.DEV
+    ? [
+        {
+          name: "debug",
+          path: "/debug",
+          component: () => import("../templates/DebugPage"),
+        },
+      ]
+    : []),
   {
     name: "notFound",
     path: "*",

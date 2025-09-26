@@ -1,5 +1,5 @@
-import Icon from "#components/Icon";
 import { Link, usePathname } from "#router";
+import { Icon } from "@atomiton/ui";
 
 type NavLinkProps = {
   value: {
@@ -33,7 +33,7 @@ function NavLink({ value, onClick }: NavLinkProps) {
       >
         <Icon
           className={`transition-colors group-hover:fill-t-primary ${
-            isActive(value.href) ? "fill-primary" : "fill-secondary"
+            isActive(value.href) ? "opacity-100" : "opacity-50"
           }`}
           name={value.icon}
         />

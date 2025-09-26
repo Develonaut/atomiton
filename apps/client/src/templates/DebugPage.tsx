@@ -294,7 +294,11 @@ export default function DebugPage() {
             {import.meta.env.MODE !== "development" && (
               <div className="mt-4 p-3 bg-warning/10 border border-warning/20 rounded-xl">
                 <p className="text-warning text-sm flex items-center gap-2">
-                  <Icon name="alert-circle" size={16} className="text-warning" />
+                  <Icon
+                    name="alert-circle"
+                    size={16}
+                    className="text-warning"
+                  />
                   This page is only intended for development mode
                 </p>
               </div>
@@ -445,7 +449,9 @@ export default function DebugPage() {
                       <Icon
                         name={result.success ? "check" : "x"}
                         size={20}
-                        className={result.success ? "text-success" : "text-error"}
+                        className={
+                          result.success ? "text-success" : "text-error"
+                        }
                       />
                       <span className="font-medium text-primary">
                         {result.name}
@@ -542,7 +548,11 @@ export default function DebugPage() {
           {environment && !environment.isElectron && (
             <div className="bg-warning/10 border border-warning/20 rounded-2xl p-6">
               <h3 className="text-warning font-semibold mb-2 flex items-center gap-2">
-                <Icon name="alert-triangle" size={20} className="text-warning" />
+                <Icon
+                  name="alert-triangle"
+                  size={20}
+                  className="text-warning"
+                />
                 Running in Browser Mode
               </h3>
               <p className="text-secondary text-sm">
