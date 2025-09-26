@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
+  "imports": {
+    "#shared/*": "./src/shared/*",
+    "#main/*": "./src/main/*",
+    "#preload/*": "./src/preload/*",
+    "#renderer/*": "./src/renderer/*"
+  },
   "exports": {
     "./main": {
       "types": "./dist/main/index.d.ts",
@@ -32,7 +38,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "electron": "^38.0.0"
+    "@trpc/client": "^11.0.0",
+    "@trpc/server": "^11.0.0",
+    "electron": "^38.0.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/node": "catalog:",

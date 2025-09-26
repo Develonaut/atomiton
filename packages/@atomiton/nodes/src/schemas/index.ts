@@ -8,7 +8,6 @@ export * from "#schemas/node";
 
 // Registry and registration
 export * from "#schemas/registry";
-export * from "#schemas/register-all";
 
 // Individual node parameter schemas
 export { default as codeSchemaShape, type CodeParameters } from "#schemas/code";

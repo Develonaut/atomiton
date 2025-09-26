@@ -7,15 +7,16 @@ import type { NodeDefinition } from "#core/types/definition";
 
 // Import all node definitions
 import codeDefinition from "#definitions/code";
-import parallelDefinition from "#definitions/parallel";
 import csvReaderDefinition from "#definitions/csv-reader";
-import groupDefinition from "#definitions/group";
-import imageCompositeDefinition from "#definitions/image-composite";
-import httpRequestDefinition from "#definitions/http-request";
+import editFieldsDefinition from "#definitions/edit-fields";
 import fileSystemDefinition from "#definitions/file-system";
-import transformDefinition from "#definitions/transform";
-import shellCommandDefinition from "#definitions/shell-command";
+import groupDefinition from "#definitions/group";
+import httpRequestDefinition from "#definitions/http-request";
+import imageCompositeDefinition from "#definitions/image-composite";
 import loopDefinition from "#definitions/loop";
+import parallelDefinition from "#definitions/parallel";
+import shellCommandDefinition from "#definitions/shell-command";
+import transformDefinition from "#definitions/transform";
 
 /**
  * Registry of all available node definitions
@@ -28,6 +29,7 @@ export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
   ["image-composite", imageCompositeDefinition],
   ["http-request", httpRequestDefinition],
   ["file-system", fileSystemDefinition],
+  ["edit-fields", editFieldsDefinition],
   ["transform", transformDefinition],
   ["shell-command", shellCommandDefinition],
   ["loop", loopDefinition],
@@ -120,13 +122,14 @@ export function searchNodeDefinitions(query: string): NodeDefinition[] {
 // Export all definitions for convenience
 export {
   codeDefinition,
-  parallelDefinition,
   csvReaderDefinition,
-  groupDefinition,
-  imageCompositeDefinition,
-  httpRequestDefinition,
+  editFieldsDefinition,
   fileSystemDefinition,
-  transformDefinition,
-  shellCommandDefinition,
+  groupDefinition,
+  httpRequestDefinition,
+  imageCompositeDefinition,
   loopDefinition,
+  parallelDefinition,
+  shellCommandDefinition,
+  transformDefinition,
 };

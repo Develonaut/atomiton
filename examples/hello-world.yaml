@@ -1,0 +1,80 @@
+blueprint:
+  metadata:
+    name: "Hello World Example"
+    version: "1.0.0"
+    description: "Simple blueprint that creates data and writes it to a file"
+    author: "Atomiton"
+    tags: ["example", "beginner", "hello-world"]
+
+  nodes:
+    # Edit Fields node - creates the hello world data
+    create_message:
+      type: "edit-fields"
+      parameters:
+        values:
+          message: "Hello World from Atomiton!"
+          description: "This is a simple example showing how Blueprint nodes work together."
+          timestamp: "{{$now}}"
+          author: "Atomiton Blueprint System"
+        keepOnlySet: true
+      position:
+        x: 100
+        y: 200
+
+    # Transform node - formats the message for output
+    format_content:
+      type: "transform"
+      parameters:
+        operation: "map"
+        transformFunction: |
+          item => {
+            return `${item.message}
+
+            ${item.description}
+
+            Created by: ${item.author}
+            Generated at: ${item.timestamp}`;
+          }
+      position:
+        x: 300
+        y: 200
+
+    # File system node - writes the formatted content to a file
+    write_to_file:
+      type: "file-system"
+      parameters:
+        operation: "write"
+        path: "/Users/Ryan/Desktop/hello-world.txt"
+        encoding: "utf8"
+        createDirectories: true
+        overwrite: true
+      position:
+        x: 500
+        y: 200
+
+  edges:
+    # Connect edit fields node to transform node
+    - id: "data_to_transform"
+      source:
+        nodeId: "create_message"
+        portId: "data"
+      target:
+        nodeId: "format_content"
+        portId: "data"
+
+    # Connect transform node to file system node
+    - id: "content_to_file"
+      source:
+        nodeId: "format_content"
+        portId: "result"
+      target:
+        nodeId: "write_to_file"
+        portId: "content"
+
+  settings:
+    execution:
+      mode: "sequential"
+      errorHandling: "stop"
+    ui:
+      theme: "light"
+      gridSize: 20

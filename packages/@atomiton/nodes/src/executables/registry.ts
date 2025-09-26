@@ -9,6 +9,7 @@ import type { NodeExecutable } from "#core/types/executable";
 import codeExecutable from "#executables/code";
 import groupExecutable from "#executables/group";
 import csvReaderExecutable from "#executables/csv-reader";
+import editFieldsExecutable from "#executables/edit-fields";
 import fileSystemExecutable from "#executables/file-system";
 import httpRequestExecutable from "#executables/http-request";
 import imageCompositeExecutable from "#executables/image-composite";
@@ -36,6 +37,10 @@ nodeExecutableRegistry.set(
   csvReaderExecutable as NodeExecutable<unknown>,
 );
 nodeExecutableRegistry.set("group", groupExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set(
+  "edit-fields",
+  editFieldsExecutable as NodeExecutable<unknown>,
+);
 nodeExecutableRegistry.set(
   "image-composite",
   imageCompositeExecutable as NodeExecutable<unknown>,
@@ -91,9 +96,10 @@ export function getNodeExecutableIds(): string[] {
 // Export all executables for convenience
 export {
   codeExecutable,
-  groupExecutable,
   csvReaderExecutable,
+  editFieldsExecutable,
   fileSystemExecutable,
+  groupExecutable,
   httpRequestExecutable,
   imageCompositeExecutable,
   loopExecutable,
