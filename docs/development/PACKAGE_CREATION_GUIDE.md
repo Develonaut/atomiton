@@ -49,6 +49,9 @@ Every package MUST include these files:
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -63,14 +66,10 @@ Every package MUST include these files:
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "pnpm test:unit",
-    "test:unit": "vitest run",
+    "test": "vitest run",
+    "test:integration": "vitest run src/integration",
     "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage",
-    "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
-    "test:benchmark": "vitest bench --run",
-    "test:e2e": "echo \"No E2E tests for this package\"",
-    "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": ["keyword1", "keyword2"],
   "author": "Atomiton",
@@ -92,7 +91,7 @@ Every package MUST include these files:
 
 ### 2. `tsconfig.json`
 
-**For React packages using @/ path aliases:**
+**For React packages using #\* path alias:**
 
 ```json
 {
@@ -109,7 +108,7 @@ Every package MUST include these files:
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*", "./*"]
+      "#*": ["src/*"]
     }
   },
   "include": ["src/**/*"],
@@ -117,7 +116,7 @@ Every package MUST include these files:
 }
 ```
 
-**For Node packages using @/ path aliases:**
+**For Node packages using #\* path alias:**
 
 ```json
 {
@@ -130,13 +129,17 @@ Every package MUST include these files:
     "types": ["node", "vitest/globals"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*", "./*"]
+      "#*": ["src/*"]
     }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
 ```
+
+**Note:** The `#*` import alias is Node.js native subpath imports (requires
+Node.js 12.19.0+) and provides better compatibility with Node.js tooling and
+doesn't require additional build tool configuration.
 
 **For configuration packages (no @/ imports needed):**
 
@@ -174,8 +177,6 @@ export default config;
 ```
 
 ### 4. `vite.config.ts` (for library packages)
-
-**For packages using @/ path aliases:**
 
 ```ts
 import { defineConfig } from "vite";
@@ -236,7 +237,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "#": resolve(__dirname, "./src"),
     },
   },
   test: {
@@ -246,7 +247,8 @@ export default defineConfig({
 });
 ```
 
-**For simple packages without @/ aliases:**
+**Note:** This second example shows a configuration without any import aliases
+(if you don't need them):
 
 ```ts
 import { defineConfig } from "vite";
@@ -316,11 +318,17 @@ export default defineConfig({
 
 ```ts
 import { defineConfig } from "vitest/config";
+import { resolve } from "path";
 
 export default defineConfig({
   test: {
     environment: "node", // or "jsdom" for React packages
     globals: true,
+  },
+  resolve: {
+    alias: {
+      "#": resolve(__dirname, "./src"),
+    },
   },
 });
 ```
@@ -358,6 +366,35 @@ packages/@atomiton/[package-name]/
 - **UI packages**: Add `components/`, `theme/`, `primitives/`
 - **Node packages**: Add `atomic/`, `composite/`, `base/`
 - **Testing packages**: Add `test-utils/`, `mocks/`
+
+## Import Alias Usage
+
+### Node.js Subpath Imports (#\*)
+
+The `#*` syntax is Node.js native subpath imports (requires Node.js 12.19.0+):
+
+```ts
+// Instead of relative imports:
+import { someUtil } from "../../../utils/someUtil";
+
+// Use subpath imports:
+import { someUtil } from "#utils/someUtil";
+```
+
+### Benefits of Using #\* Imports
+
+1. **Native Node.js support** - No additional build tool configuration needed
+2. **Better compatibility** - Works with Node.js tooling out of the box
+3. **Cleaner imports** - Avoids deep relative path navigation
+4. **Consistent paths** - Same import path regardless of file location
+
+### Best Practices
+
+1. **Always use `#*` for internal package imports** - It's the standard across
+   all Atomiton packages
+2. **Configure in three places**: package.json "imports", tsconfig.json "paths",
+   and vite/vitest config "alias"
+3. **Be consistent** - All imports within a package should use the `#*` pattern
 
 ## Export Patterns
 
@@ -477,10 +514,10 @@ cd packages/@atomiton/[package-name]
 - [ ] Create `src/index.ts` as main entry point
 - [ ] Create `src/api.ts` if using API pattern
 - [ ] Create `src/types.ts` for type definitions
-- [ ] Create `src/__tests__/` directory with initial unit test
-- [ ] Create `src/__tests__/api.smoke.test.ts` for smoke tests (REQUIRED)
-- [ ] Create `src/__benchmarks__/api.bench.ts` for benchmarks (REQUIRED for API
-      packages)
+- [ ] Create `src/integration/` directory for integration tests
+- [ ] Create `src/integration/api.test.ts` for API integration tests
+- [ ] Create co-located unit tests (e.g., `src/utils.test.ts`) ONLY for complex
+      algorithms
 
 ### 4. Create Documentation
 
@@ -494,12 +531,9 @@ cd packages/@atomiton/[package-name]
 - [ ] Run `pnpm typecheck` to verify TypeScript setup
 - [ ] Run `pnpm lint` to verify ESLint setup
 - [ ] Run `pnpm build` to verify build setup (if applicable)
-- [ ] Run `pnpm test:unit` to verify unit tests
-- [ ] Run `pnpm test:smoke` to verify smoke tests (MUST have actual tests, not
-      just echo)
-- [ ] Run `pnpm test:benchmark` to verify benchmarks (MUST have actual
-      benchmarks for API packages)
-- [ ] Run `pnpm test:all` to verify complete test suite
+- [ ] Run `pnpm test` to verify all tests
+- [ ] Run `pnpm test:integration` to verify integration tests
+- [ ] Run `pnpm test:coverage` to check test coverage
 
 ### 6. Integration
 
@@ -540,36 +574,28 @@ For configuration packages:
 
 ## Testing Conventions
 
-### 🚨 MANDATORY Testing Requirements
+### 🚨 IMPORTANT: Simplified Testing Strategy
 
-**ALL packages MUST include the complete test script suite.** This is
-non-negotiable.
+**Following our testing documentation standards, we use ONLY 2 test file
+types:**
 
-#### Required Test Types
+#### File Naming Convention - Only 2 Types
 
-1. **Smoke Tests** (`*.smoke.test.ts`)
-   - Small, fast suite of critical functionality tests
-   - Act as "canary in the coal mine" for package health
-   - Should run in < 5 seconds
-   - **REQUIRED for API packages**: Must test core API methods
+```
+*.test.ts   - Unit/Integration tests (folder determines type)
+*.e2e.ts    - E2E Playwright tests (always in apps/e2e/tests/)
+```
 
-2. **Benchmark Tests** (`*.bench.ts`)
-   - Track performance of critical operations
-   - Early warning system for performance degradation
-   - **REQUIRED for API packages**: Must benchmark main operations
-   - **REQUIRED for data processing packages**: Must benchmark transformations
-
-3. **Unit Tests** (`*.test.ts`)
-   - Comprehensive testing of individual functions/components
-   - Should aim for >80% code coverage
-   - All public APIs must have tests
+**No more**: `.smoke.test.ts`, `.bench.test.ts`, `.spec.ts`,
+`.integration.test.ts` The folder structure tells us what type of test it is.
 
 ### Test File Organization
 
-- Unit tests: `src/**/*.test.ts`
-- Smoke tests: `src/**/*.smoke.test.ts`
-- Benchmark tests: `src/**/*.bench.ts`
-- Integration tests: `src/**/*.integration.test.ts`
+````
+packages/@atomiton/[package]/src/
+├── integration/          # Integration tests (*.test.ts)
+│   └── api.test.ts      # Test package public API
+└── [file].test.ts       # Co-located unit tests (minimal)
 
 ### Standard Test Scripts
 
@@ -577,73 +603,76 @@ non-negotiable.
 
 ```json
 {
-  "test": "pnpm test:unit",
-  "test:unit": "vitest run",
+  "test": "vitest run",
+  "test:integration": "vitest run src/integration",
   "test:watch": "vitest watch",
-  "test:coverage": "vitest run --coverage",
-  "test:smoke": "vitest run src/**/*.smoke.test.{ts,tsx} --passWithNoTests || echo \"No smoke tests yet\"",
-  "test:benchmark": "vitest bench --run",
-  "test:e2e": "echo \"No E2E tests for this package\"",
-  "test:all": "pnpm test:unit && pnpm test:smoke && pnpm test:benchmark && pnpm test:e2e"
+  "test:coverage": "vitest run --coverage"
+}
+````
+
+Apps additionally have:
+
+```json
+{
+  "test:e2e": "playwright test",
+  "test:e2e:headed": "playwright test --headed",
+  "test:e2e:debug": "playwright test --debug"
 }
 ```
 
 ### Example Test Implementations
 
-#### Smoke Test Example (`src/__tests__/api.smoke.test.ts`)
+#### Integration Test Example (`src/integration/api.test.ts`)
 
 ```typescript
 import { describe, it, expect } from "vitest";
-import api from "../api";
+import { createFlow, createNode, isValidFlow } from "../index";
 
-describe("API Smoke Tests", () => {
-  it("should initialize without errors", async () => {
-    await expect(api.initialize()).resolves.not.toThrow();
+describe("Package API Integration", () => {
+  it("should create valid flows with nodes", () => {
+    const flow = createFlow({ label: "Test Flow" });
+    const node = createNode({
+      type: "processor",
+      label: "Process",
+      position: { x: 0, y: 0 },
+    });
+
+    flow.nodes.push(node);
+    expect(isValidFlow(flow)).toBe(true);
   });
 
-  it("should expose core methods", () => {
-    expect(api.getVersion).toBeDefined();
-    expect(api.process).toBeDefined();
-  });
-
-  it("should handle basic operation", async () => {
-    const result = await api.process({ data: "test" });
-    expect(result).toBeDefined();
-    expect(result.success).toBe(true);
+  it("should handle complete workflow", async () => {
+    const result = await executeWorkflow(testWorkflow);
+    expect(result.status).toBe("success");
+    expect(result.completedNodes).toHaveLength(3);
   });
 });
 ```
 
-#### Benchmark Example (`src/__benchmarks__/api.bench.ts`)
+#### Unit Test Example (`src/utils.test.ts`) - Co-located
 
 ```typescript
-import { bench, describe } from "vitest";
-import api from "../api";
+import { describe, it, expect } from "vitest";
+import { calculateNodePosition } from "./utils";
 
-describe("API Performance", () => {
-  bench("initialization", async () => {
-    await api.initialize();
-  });
-
-  bench("data processing (small)", () => {
-    api.process({ size: "small", data: testData.small });
-  });
-
-  bench("data processing (large)", () => {
-    api.process({ size: "large", data: testData.large });
+// Only test complex algorithms as unit tests
+describe("calculateNodePosition", () => {
+  it("should handle overlapping nodes", () => {
+    const result = calculateNodePosition(overlappingNodes, 20);
+    expect(result.x % 20).toBe(0);
+    expect(result.y % 20).toBe(0);
   });
 });
 ```
 
-### Testing Enforcement
+### Testing Best Practices
 
-**Karen will REJECT packages that:**
-
-- Don't have all test scripts defined in package.json
-- Have placeholder test scripts without actual test files
-- API packages without smoke tests and benchmarks
-- Data processing packages without performance benchmarks
-- Any package with failing smoke tests
+1. **Test at the highest level practical** - Prefer integration over unit tests
+2. **Use real data and environments** - Avoid mocking when possible
+3. **Test behavior, not implementation** - Focus on what users can do
+4. **Keep tests fast** - Integration tests should run in <10s per package
+5. **Use folder structure** - `src/integration/` for integration, co-locate unit
+   tests
 
 ## Common Patterns Summary
 
