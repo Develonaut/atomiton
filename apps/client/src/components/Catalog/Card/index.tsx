@@ -23,7 +23,7 @@ function Card({ value }: Props) {
     if (value.type === "template" && template) {
       // Pass raw NodeDefinitions and edges - let the editor handle transformation
       const templateState: EditorRouteState = {
-        defaultNodes: template.children || [],
+        defaultNodes: template.nodes || [],
         defaultEdges: template.edges || [],
         name: template.name,
         description: template.metadata.description,

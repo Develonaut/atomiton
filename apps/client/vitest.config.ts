@@ -28,11 +28,11 @@ export default defineTestConfig({
       ),
       "@atomiton/nodes/definitions": path.resolve(
         __dirname,
-        "../../packages/@atomiton/nodes/src/exports/browser",
+        "../../packages/@atomiton/nodes/src/definitions",
       ),
-      "@atomiton/nodes/executable": path.resolve(
+      "@atomiton/nodes/executables": path.resolve(
         __dirname,
-        "../../packages/@atomiton/nodes/src/exports/executable",
+        "../../packages/@atomiton/nodes/src/executables",
       ),
       "@atomiton/nodes": path.resolve(
         __dirname,

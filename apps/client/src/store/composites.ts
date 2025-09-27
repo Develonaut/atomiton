@@ -47,7 +47,7 @@ export const compositeActions: CompositeActions = {
       ...nodeDefinition,
       name: nodeDefinition.name || "Untitled Node",
       position: nodeDefinition.position || { x: 0, y: 0 },
-      children: nodeDefinition.children || [],
+      nodes: nodeDefinition.nodes || [],
       edges: nodeDefinition.edges || [],
       metadata: {
         ...nodeDefinition.metadata,

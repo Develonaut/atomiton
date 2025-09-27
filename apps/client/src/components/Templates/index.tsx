@@ -10,7 +10,7 @@ type TemplateButtonProps = {
 
 function TemplateButton({ template, index }: TemplateButtonProps) {
   // Pass raw NodeDefinitions and edges - let the editor handle transformation
-  const defaultNodes = template.children || [];
+  const defaultNodes = template.nodes || [];
   const defaultEdges = template.edges || [];
 
   const linkProps = useLink({
