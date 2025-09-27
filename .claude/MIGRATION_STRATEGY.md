@@ -376,10 +376,10 @@ The conductor owns execution - other packages import execution types from here.
 ### Phase 2: Convert IPC to tRPC-based RPC (Week 3)
 
 #### Step 2.1: Install tRPC Dependencies
-- [ ] Add tRPC packages
-- [ ] Add Zod for validation
-- [ ] Update build config
-- [ ] Test imports
+- [X] Add tRPC packages
+- [X] Add Zod for validation
+- [X] Update build config
+- [X] Test imports
 
 **Claude Code Prompt:**
 ```
@@ -392,13 +392,13 @@ Add tRPC dependencies to the @atomiton/ipc package:
    - @trpc/react-query (^11.0.0)
    - electron-trpc (^0.6.1)
    - superjson (for Date serialization)
-   - zod (^3.23.8)
+   - @atomiton/validation
 
 2. Update package.json with these dependencies
 
 3. Create src/trpc/index.ts to verify imports work:
    - Import initTRPC from @trpc/server
-   - Import z from zod
+   - Import v from @atomiton/validation
    - Export a simple test to ensure build works
 
 4. Update vite config if needed for these packages

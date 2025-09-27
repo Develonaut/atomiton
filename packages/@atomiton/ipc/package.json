@@ -36,9 +36,13 @@
   },
   "dependencies": {
     "@atomiton/nodes": "workspace:^",
-    "@trpc/client": "^11.0.0",
-    "@trpc/server": "^11.0.0",
+    "@atomiton/validation": "workspace:^",
+    "@trpc/client": "^11.6.0",
+    "@trpc/react-query": "^11.6.0",
+    "@trpc/server": "^11.6.0",
     "electron": "^38.0.0",
+    "electron-trpc": "^0.6.1",
+    "superjson": "^2.2.2",
     "zod": "^4.1.11"
   },
   "devDependencies": {
