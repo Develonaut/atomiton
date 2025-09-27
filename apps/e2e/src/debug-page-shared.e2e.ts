@@ -11,12 +11,12 @@ test.describe("Electron Debug Page (Shared)", () => {
   test("debug page loads and detects desktop wrapper functionality", async ({
     sharedElectronPage,
   }) => {
-    console.log("🚀 Starting debug page E2E test...");
+    // Starting debug page E2E test...
 
     // Verify we're on the debug page
     const pageContent = await sharedElectronPage.textContent("body");
     expect(pageContent).toContain("Debug");
-    console.log("✅ Debug page loaded");
+    // Debug page loaded
 
     // Check for IPC availability through page evaluation
     const ipcInfo = await sharedElectronPage.evaluate(() => {
@@ -35,14 +35,14 @@ test.describe("Electron Debug Page (Shared)", () => {
     expect(ipcInfo.hasAtomitonIPC).toBe(true);
     expect(ipcInfo.ipcMethods).toContain("ping");
     expect(ipcInfo.ipcMethods).toContain("executeNode");
-    console.log("✅ IPC availability and methods detected correctly");
+    // IPC availability and methods detected correctly
   });
 
   test("debug page IPC functions work", async ({ sharedElectronPage }) => {
-    console.log("🚀 Testing IPC functions through debug page...");
+    // Testing IPC functions through debug page...
 
     // Test IPC functions directly through page evaluation
-    console.log("Testing IPC ping...");
+    // Testing IPC ping...
     const pingResult = await sharedElectronPage.evaluate(async () => {
       if ((window as any).atomitonIPC?.ping) {
         return await (window as any).atomitonIPC.ping();
@@ -50,13 +50,13 @@ test.describe("Electron Debug Page (Shared)", () => {
       return null;
     });
     expect(pingResult).toBe("pong");
-    console.log("✅ Ping works");
+    // Ping works
   });
 
   test("debug page UI elements are interactive", async ({
     sharedElectronPage,
   }) => {
-    console.log("🚀 Testing debug page UI elements...");
+    // Testing debug page UI elements...
 
     // Check for debug page specific elements
     const hasDebugContent = await sharedElectronPage.evaluate(() => {
@@ -69,6 +69,6 @@ test.describe("Electron Debug Page (Shared)", () => {
     });
     expect(hasDebugContent).toBe(true);
 
-    console.log("✅ Debug page UI elements are present");
+    // Debug page UI elements are present
   });
 });

@@ -161,9 +161,7 @@ export async function verifyNoReactFlowErrors(page: Page) {
     "connection",
   ]);
 
-  if (errors.length > 0) {
-    console.log("React Flow Errors Found:", errors);
-  }
+  // Check for React Flow errors silently
 
   expect(errors).toHaveLength(0);
 }

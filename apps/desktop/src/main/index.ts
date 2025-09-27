@@ -25,8 +25,13 @@ function createWindow(): void {
   });
 
   mainWindow.on("ready-to-show", () => {
-    console.log("Window ready to show");
-    mainWindow?.show();
+    const isHeadless =
+      app.commandLine.hasSwitch("headless") ||
+      app.commandLine.hasSwitch("hidden");
+
+    if (!isHeadless) {
+      mainWindow?.show();
+    }
   });
 
   mainWindow.webContents.on("did-finish-load", () => {

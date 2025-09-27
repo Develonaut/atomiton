@@ -17,53 +17,46 @@ export class ElectronTestHelper {
   async launch(
     options: { headless?: boolean } = {},
   ): Promise<{ app: ElectronApplication; page: Page }> {
-    const isHeadless = options.headless ?? true; // Default to headless for tests
+    const isHeadless = options.headless ?? true;
 
-    console.log("Launching Electron application for testing", {
-      headless: isHeadless,
-    });
-
-    // Navigate to desktop from e2e/tests/helpers (4 levels up to root, then into apps/desktop)
     const electronMain = path.join(
       __dirname,
       "../../../../apps/desktop/out/main/index.js",
     );
 
-    console.log("Electron main path:", { electronMain });
-
-    // Use Playwright's built-in Electron support
     this.app = await electron.launch({
-      args: [electronMain],
+      args: [
+        electronMain,
+        ...(isHeadless ? ["--headless"] : []),
+      ],
       env: {
         ...process.env,
         NODE_ENV: "test",
-        ELECTRON_RENDERER_URL: "http://localhost:5173", // Client server managed by webServer
+        ELECTRON_RENDERER_URL: "http://localhost:5173",
         CI: "false",
         LEFTHOOK: "false",
-        // Control window visibility via environment variable
-        ELECTRON_E2E_HEADLESS: isHeadless ? "true" : "false",
       },
       timeout: 30000,
     });
 
-    console.log("Electron app launched, waiting for first window");
+    // Electron app launched, waiting for first window
 
     // Get the first window
     this.page = await this.app.firstWindow();
 
-    console.log("First window obtained, waiting for load");
+    // First window obtained, waiting for load
 
     // Wait for the app to load
     await this.page.waitForLoadState("networkidle");
 
-    console.log("Electron app fully loaded");
+    // Electron app fully loaded
 
     return { app: this.app, page: this.page };
   }
 
   async close(): Promise<void> {
     if (this.app) {
-      console.log("Closing Electron application");
+      // Closing Electron application
       await this.app.close();
       this.app = null;
       this.page = null;
@@ -73,7 +66,7 @@ export class ElectronTestHelper {
   async waitForElectronAPI(): Promise<void> {
     if (!this.page) throw new Error("Page not available");
 
-    console.log("Waiting for window.electron API to be available");
+    // Waiting for window.electron API to be available
 
     // Wait for window.electron to be available
     await this.page.waitForFunction(
@@ -86,7 +79,7 @@ export class ElectronTestHelper {
       { timeout: 10000 },
     );
 
-    console.log("window.electron API is available");
+    // window.electron API is available
   }
 
   async verifyIPCBridge(): Promise<boolean> {

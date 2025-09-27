@@ -13,6 +13,10 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined, // Use default workers locally, 1 in CI
   timeout: 60000,
 
+  reporter: process.env.CI
+    ? [["github"], ["html", { open: "never" }]]
+    : [["list"]],
+
   // Official Playwright webServer configuration
   // Only start the client dev server (not desktop) - tests will launch Electron
   webServer: {
