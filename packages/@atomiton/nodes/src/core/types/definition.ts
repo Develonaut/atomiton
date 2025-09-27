@@ -10,10 +10,7 @@ export * from "#core/types/parameters";
 export * from "#core/types/ports";
 
 import type { NodeEdge } from "#core/types/edges";
-import type {
-  FlatNodeMetadata,
-  LegacyNodeMetadata,
-} from "#core/types/metadata";
+import type { NodeMetadata } from "#core/types/metadata";
 import type { NodeParameters } from "#core/types/parameters";
 import type { NodePort } from "#core/types/ports";
 
@@ -26,50 +23,12 @@ export type NodePosition = {
   y: number;
 };
 
-/**
- * Legacy Node Definition (nested structure)
- * @deprecated Use NodeDefinition (flat structure) for new code
- *
- * Static, serializable structure defining a node's configuration.
- * All nodes share this interface - some may have nodes, some may not.
- */
-export type LegacyNodeDefinition = {
-  /** Unique identifier for this node */
-  readonly id: string;
-
-  /** Human-readable name */
-  readonly name: string;
-
-  /** Position of the node in the editor */
-  position: NodePosition;
-
-  /** Metadata about this node */
-  metadata: LegacyNodeMetadata;
-
-  /** Parameters schema, defaults, and field definitions */
-  parameters: NodeParameters;
-
-  /** Input port definitions */
-  inputPorts: NodePort[];
-
-  /** Output port definitions */
-  outputPorts: NodePort[];
-
-  /** Nodes contained within this node (optional - makes this a group/flow) */
-  nodes?: LegacyNodeDefinition[];
-
-  /** Edges connecting nodes */
-  edges?: NodeEdge[];
-};
 
 /**
- * Modern Node Definition (flat structure)
+ * Node Definition
  *
  * Static, serializable structure defining a node's configuration.
- * Uses a flat structure with parentId references for hierarchy.
- *
- * Nodes can optionally contain other nodes (making them a group/flow).
- * The contained nodes use the flat array structure with parentId references.
+ * Uses parentId references for hierarchy.
  */
 export type NodeDefinition = {
   /** Unique identifier for this node */
@@ -91,7 +50,7 @@ export type NodeDefinition = {
   position: NodePosition;
 
   /** Metadata about this node (without type and version) */
-  metadata: FlatNodeMetadata;
+  metadata: NodeMetadata;
 
   /** Parameters schema, defaults, and field definitions */
   parameters: NodeParameters;
@@ -102,9 +61,9 @@ export type NodeDefinition = {
   /** Output port definitions */
   outputPorts: NodePort[];
 
-  /** Contained nodes (optional - makes this a group/flow) - flat array with parentId */
+  /** Contained nodes (flows only) */
   nodes?: NodeDefinition[];
 
-  /** Edges connecting contained nodes */
+  /** Edges connecting contained nodes (flows only) */
   edges?: NodeEdge[];
 };

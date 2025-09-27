@@ -108,27 +108,6 @@ export function reactFlowToFlow(
   } as unknown as Flow;
 }
 
-export type HierarchicalNode = {
-  children: HierarchicalNode[];
-} & NodeDefinition;
-
-export function getNodeHierarchy(nodes: NodeDefinition[]): HierarchicalNode[] {
-  const roots = nodes.filter((n) => !n.parentId);
-
-  const buildTree = (parentId?: string): HierarchicalNode[] => {
-    return nodes
-      .filter((n) => n.parentId === parentId)
-      .map((n) => ({
-        ...n,
-        children: buildTree(n.id),
-      }));
-  };
-
-  return roots.map((root) => ({
-    ...root,
-    children: buildTree(root.id),
-  }));
-}
 
 export function findNodeById(
   nodes: NodeDefinition[],

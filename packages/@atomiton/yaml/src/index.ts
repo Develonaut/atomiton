@@ -45,13 +45,9 @@ export { getVersion } from "#version.js";
 
 // Flow-specific exports
 export {
-  parseFlowYaml,
-  flowToYaml,
+  parseFlow,
+  toYaml as flowToYaml,
   validateFlowYaml,
-  migrateNestedToFlat,
-  flatToNested,
-  registerMigrationUtilities,
-  flowYamlNeedsMigration,
 } from "#flow.js";
 
 // Type exports

@@ -20,8 +20,6 @@ export type {
 // Constants
 export { CURRENT_FLOW_VERSION } from "#types";
 
-// Migration types
-export type { FlowMigration } from "#migrations";
 
 // Factory functions
 export {
@@ -82,10 +80,3 @@ export {
   getTopologicalOrder,
 } from "#utils/flowOperations";
 
-// Migration functions
-export {
-  migrations,
-  migrateFlow,
-  needsMigration,
-  getFlowSchemaVersion,
-} from "#migrations";

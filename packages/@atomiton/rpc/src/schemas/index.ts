@@ -22,12 +22,12 @@ export const NodeMetadataSchema = v.object({
   deprecated: v.boolean().optional(),
 });
 
-// Node definition schema with flat structure
+// Node definition schema
 export const NodeDefinitionSchema = v.object({
   id: v.string(),
   type: v.string(),
   version: v.string(), // At top level
-  parentId: v.string().optional(), // Flat structure
+  parentId: v.string().optional(), // Parent reference
   metadata: NodeMetadataSchema.optional(),
   ports: v
     .object({
@@ -77,7 +77,7 @@ export const FlowNodeSchema = ExecutableSchema.extend({
 export const FlowSchema = ExecutableSchema.extend({
   type: v.literal("flow"),
   name: v.string(),
-  nodes: v.array(FlowNodeSchema), // Flat array
+  nodes: v.array(FlowNodeSchema), // Node array
   connections: v.array(ConnectionSchema),
   metadata: v
     .object({

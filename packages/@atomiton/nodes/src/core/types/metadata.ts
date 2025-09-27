@@ -113,55 +113,13 @@ export type NodeMetadataSource =
   | "organization"
   | "marketplace";
 
-/**
- * Legacy Node Metadata Interface
- * @deprecated Use FlatNodeMetadata for new code
- *
- * Comprehensive metadata for node discovery, display, and documentation
- */
-export type LegacyNodeMetadata = {
-  // Core identification
-  id: string;
-  name: string;
-  type: NodeMetadataType;
-  version: string;
-
-  // Attribution
-  author: string;
-  authorId?: string;
-  source?: NodeMetadataSource;
-
-  // Categorization & Discovery
-  description: string;
-  category: NodeCategory;
-  icon: NodeIcon;
-  keywords?: string[];
-  tags?: string[];
-
-  // Runtime information
-  runtime?: {
-    language: NodeRuntime;
-  };
-
-  // Status flags
-  experimental?: boolean;
-  deprecated?: boolean;
-
-  // Documentation
-  documentationUrl?: string;
-  examples?: Array<{
-    name: string;
-    description: string;
-    config: Record<string, unknown>;
-  }>;
-};
 
 /**
- * Flat Node Metadata Interface
+ * Node Metadata Interface
  *
- * Metadata for the flat node structure (without type and version)
+ * Metadata for nodes (without type and version which are at top level)
  */
-export type FlatNodeMetadata = {
+export type NodeMetadata = {
   // Core identification
   id: string;
   name: string;
@@ -196,8 +154,3 @@ export type FlatNodeMetadata = {
   }>;
 };
 
-/**
- * Node Metadata type alias for backward compatibility
- * Points to FlatNodeMetadata for new code
- */
-export type NodeMetadata = FlatNodeMetadata;

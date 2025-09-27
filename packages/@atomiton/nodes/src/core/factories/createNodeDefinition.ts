@@ -37,7 +37,7 @@ export type CreateNodeInput = {
 };
 
 /**
- * Create a node definition using flat structure
+ * Create a node definition
  *
  * Simple factory that combines parts into a node.
  * Delegates validation and creation to sub-factories.

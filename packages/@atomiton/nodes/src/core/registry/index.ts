@@ -3,7 +3,7 @@
  */
 
 export {
-  createFlatNodeRegistry,
-  flatNodeRegistryFromJSON,
-  type FlatNodeRegistry,
-} from "#core/registry/flatNodeRegistry";
+  createNodeRegistry,
+  nodeRegistryFromJSON,
+  type NodeRegistry,
+} from "#core/registry/nodeRegistry";

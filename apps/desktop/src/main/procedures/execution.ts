@@ -1,4 +1,5 @@
 import { createConductor } from "@atomiton/conductor";
+import type { NodeDefinition } from "@atomiton/rpc/shared";
 import { EventEmitter } from "events";
 
 const conductor = createConductor();
@@ -9,7 +10,7 @@ export const executionProcedures = {
     input,
   }: {
     input: {
-      executable: Record<string, unknown>;
+      executable: NodeDefinition;
       context?: Record<string, unknown>;
     };
   }) => {

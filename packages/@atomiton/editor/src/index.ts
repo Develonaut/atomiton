@@ -13,7 +13,6 @@ export { useSelectedNodes } from "#hooks/useSelectedNodes";
 export {
   flowToReactFlow,
   reactFlowToFlow,
-  getNodeHierarchy,
   findNodeById,
   getChildNodes,
   getRootNodes,
@@ -26,5 +25,4 @@ export type { EditorNode, NodeData, NodePosition } from "#types/EditorNode";
 export type {
   ReactFlowData,
   TransformedFlow,
-  HierarchicalNode,
 } from "#utils/transform";

@@ -40,7 +40,7 @@ export const protectedProcedure = publicProcedure.use(isAuthed);
 export const appRouter = router({
   nodes: router({
     list: publicProcedure.query(async () => {
-      // Return flat array of node definitions
+      // Return array of node definitions
       // This will be implemented by desktop/client
       return [];
     }),

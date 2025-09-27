@@ -1,6 +1,6 @@
 import type { NodeDefinition } from "#core/types/definition";
 
-export type FlatNodeRegistry = {
+export type NodeRegistry = {
   register: (node: NodeDefinition) => void;
   unregister: (nodeId: string) => boolean;
   get: (nodeId: string) => NodeDefinition | undefined;
@@ -20,9 +20,9 @@ export type FlatNodeRegistry = {
   toJSON: () => NodeDefinition[];
 };
 
-export function createFlatNodeRegistry(
+export function createNodeRegistry(
   initialNodes?: NodeDefinition[],
-): FlatNodeRegistry {
+): NodeRegistry {
   const nodes = new Map<string, NodeDefinition>();
   const parentToChildren = new Map<string, Set<string>>();
   const childToParent = new Map<string, string>();
@@ -207,8 +207,8 @@ export function createFlatNodeRegistry(
   };
 }
 
-export function flatNodeRegistryFromJSON(
+export function nodeRegistryFromJSON(
   nodes: NodeDefinition[],
-): FlatNodeRegistry {
-  return createFlatNodeRegistry(nodes);
+): NodeRegistry {
+  return createNodeRegistry(nodes);
 }

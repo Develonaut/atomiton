@@ -5,7 +5,7 @@
 import type {
   NodeCategory,
   NodeIcon,
-  FlatNodeMetadata,
+  NodeMetadata,
   NodeRuntime,
 } from "#core/types/definition";
 import { isNodeMetadata } from "#core/utils/nodeUtils";
@@ -34,8 +34,8 @@ export type NodeMetadataInput = {
 };
 
 function createNodeMetadata(
-  input: NodeMetadataInput | FlatNodeMetadata,
-): FlatNodeMetadata {
+  input: NodeMetadataInput | NodeMetadata,
+): NodeMetadata {
   if (isNodeMetadata(input)) {
     return input;
   }
