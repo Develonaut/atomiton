@@ -7,28 +7,41 @@ env:
 
 # Fast pre-commit hooks for staged files only
 pre-commit:
-  parallel: false
+  parallel: true
   commands:
-    # Format and fix linting issues on staged files
-    format-and-lint:
+    # Format staged files with Prettier
+    format:
       glob: "*.{ts,tsx,js,jsx,md,json,yml,yaml}"
-      run: |
-        echo "🔧 Formatting and fixing lint issues for staged files..."
-        pnpm run fix
+      run: pnpm format
       stage_fixed: true
-      fail_text: "❌ Formatting and linting fixes failed"
+      fail_text: "❌ Formatting failed"
 
-    # Type check affected packages (uses turbo's smart filtering)
-    type-check:
-      run: |
-        echo "🔍 Type checking affected packages..."
-        pnpm typecheck
-      fail_text: "❌ Type checking failed"
+    # Fix linting issues on staged TypeScript/JavaScript files
+    lint-fix:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: pnpm lint:fix
+      stage_fixed: true
+      fail_text: "❌ Linting fixes failed"
+
+    # Format markdown tables in staged markdown files
+    markdown-tables:
+      glob: "*.md"
+      run: npx markdown-table-prettify {staged_files}
+      stage_fixed: true
+      fail_text: "❌ Markdown table formatting failed"
+
 
 # More comprehensive pre-push hooks - full test suite must pass
 pre-push:
   parallel: true
   commands:
+    # Type check affected packages (moved from pre-commit for speed)
+    type-check:
+      run: |
+        echo "🔍 Type checking affected packages..."
+        pnpm typecheck --filter=[HEAD^]
+      fail_text: "❌ Type checking failed"
+
     # Full lint check (ensures nothing was missed)
     lint-check:
       run: |
