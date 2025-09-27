@@ -1,4 +1,4 @@
-import { buildClassName } from "#buildClassname";
+import { buildClassName } from "#/system/utils/buildClassname";
 import { describe, expect, it, vi } from "vitest";
 
 // Mock the cn utility

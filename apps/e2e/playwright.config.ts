@@ -6,7 +6,7 @@ import { defineConfig } from "@playwright/test";
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: "./tests",
+  testDir: "./src",
   testMatch: "**/*.e2e.ts",
   testIgnore: ["**/.disabled/**", "**/disabled/**"],
   fullyParallel: true, // Enable parallel execution

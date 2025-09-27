@@ -1,4 +1,4 @@
-import { extractSystemProps } from "#extractSystemProps";
+import { extractSystemProps } from "#/system/utils/extractSystemProps";
 import { describe, expect, it } from "vitest";
 
 describe("extractSystemProps", () => {

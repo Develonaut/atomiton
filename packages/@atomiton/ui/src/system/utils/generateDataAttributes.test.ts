@@ -1,4 +1,4 @@
-import { generateDataAttributes } from "#generateDataAttributes";
+import { generateDataAttributes } from "#/system/utils/generateDataAttributes";
 import { describe, expect, it } from "vitest";
 
 describe("generateDataAttributes", () => {

@@ -1,4 +1,4 @@
-import { systemPropsMap } from "#systemPropsMap";
+import { systemPropsMap } from "#system/constants/systemPropsMap";
 import { describe, expect, it } from "vitest";
 
 describe("systemPropsMap", () => {

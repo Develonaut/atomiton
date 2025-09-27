@@ -6,9 +6,9 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "#*": ["./tests/*"]
+      "#*": ["./src/*"]
     }
   },
-  "include": ["tests/**/*", "playwright.config.ts"],
+  "include": ["src/**/*", "playwright.config.ts"],
   "exclude": ["node_modules", "dist", "test-results", "playwright-report"]
 }

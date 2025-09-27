@@ -1,4 +1,4 @@
-import { filterDOMProps } from "#filterDOMProps";
+import { filterDOMProps } from "#/system/utils/filterDOMProps";
 import { describe, expect, it } from "vitest";
 
 describe("filterDOMProps", () => {

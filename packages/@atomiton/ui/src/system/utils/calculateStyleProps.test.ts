@@ -1,4 +1,4 @@
-import { calculateStyleProps } from "#calculateStyleProps";
+import { calculateStyleProps } from "#/system/utils/calculateStyleProps";
 import { describe, expect, it } from "vitest";
 
 describe("calculateStyleProps", () => {
