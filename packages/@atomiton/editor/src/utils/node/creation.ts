@@ -56,7 +56,7 @@ function createEditorNodeDefaults(
 
   return {
     id: nodeId || generateNodeId(),
-    type: nodeDefinition.metadata?.type || nodeType,
+    type: nodeDefinition.type || nodeType,
     position,
     selected: true,
     draggable: true,

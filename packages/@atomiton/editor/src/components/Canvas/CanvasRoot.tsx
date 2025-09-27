@@ -10,21 +10,40 @@ import {
 import "#components/Canvas/styles.css";
 import { createEditorNode } from "#utils/node/creation";
 import { useMemo } from "react";
+import type { Flow } from "@atomiton/flow";
+import { flowToReactFlow } from "#utils/transform";
 
 const CanvasStyled = styled("div", {
   name: "Canvas",
 })("atomiton-canvas relative w-full h-full overflow-hidden bg-background");
 
+type CanvasRootProps = {
+  flow?: Flow;
+  defaultNodes?: ReactFlowProps['defaultNodes'];
+  defaultEdges?: ReactFlowProps['defaultEdges'];
+} & Omit<ReactFlowProps, 'defaultNodes' | 'defaultEdges'>
+
 export function CanvasRoot({
   children,
   className,
+  flow,
   defaultNodes = [],
   defaultEdges = [],
   ...other
-}: ReactFlowProps) {
+}: CanvasRootProps) {
+  // Transform Flow to React Flow format if flow prop is provided
+  const { nodes: flowNodes, edges: flowEdges } = useMemo(() => {
+    if (flow) {
+      return flowToReactFlow(flow);
+    }
+    return { nodes: [], edges: [] };
+  }, [flow]);
+
   // Transform raw node definitions or pass through editor nodes
   const transformedNodes = useMemo(() => {
-    return defaultNodes.map((node: unknown, index): Node => {
+    // Use flow nodes if available
+    const nodesToTransform = flow ? flowNodes : defaultNodes;
+    return nodesToTransform.map((node: unknown, index): Node => {
       // Type guard for NodeDefinition
       const nodeObj = node as Record<string, unknown>;
       if (nodeObj.metadata && nodeObj.inputPorts && !nodeObj.data) {
@@ -42,11 +61,13 @@ export function CanvasRoot({
       // Already an EditorNode
       return node as Node;
     });
-  }, [defaultNodes]);
+  }, [flow, flowNodes, defaultNodes]);
 
   // Transform edges to ensure they have all required properties
   const transformedEdges = useMemo(() => {
-    return defaultEdges.map((edge: unknown): Edge => {
+    // Use flow edges if available
+    const edgesToTransform = flow ? flowEdges : defaultEdges;
+    return edgesToTransform.map((edge: unknown): Edge => {
       const edgeObj = edge as Record<string, unknown>;
       return {
         id: edgeObj.id as string,
@@ -63,7 +84,7 @@ export function CanvasRoot({
         type: (edgeObj.type as string | undefined) || "default",
       };
     });
-  }, [defaultEdges]);
+  }, [flow, flowEdges, defaultEdges]);
 
   return (
     <CanvasStyled className={className}>

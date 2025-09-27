@@ -15,8 +15,6 @@ describe("EditorNode type guards", () => {
           metadata: {
             id: "test-node",
             name: "Test Node",
-            type: "test",
-            version: "1.0.0",
             category: "utility",
             description: "Test description",
             author: "test",
@@ -42,8 +40,6 @@ describe("EditorNode type guards", () => {
           metadata: {
             id: "test-node",
             name: "Test Node",
-            type: "test",
-            version: "1.0.0",
             category: "utility",
             description: "Test description",
             author: "test",
@@ -302,8 +298,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",
@@ -330,8 +324,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",
@@ -368,8 +360,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",
@@ -394,8 +384,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",
@@ -420,8 +408,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",
@@ -448,8 +434,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",
@@ -483,8 +467,6 @@ describe("EditorNode type guards", () => {
             metadata: {
               id: "test",
               name: "Test",
-              type: "test",
-              version: "1.0.0",
               category: "utility",
               description: "Test",
               author: "test",

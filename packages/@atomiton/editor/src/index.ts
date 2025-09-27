@@ -10,6 +10,17 @@ export { useEditorViewport } from "#hooks/useEditorViewport";
 export { useSelectedNode } from "#hooks/useSelectedNode";
 export { useSelectedNodes } from "#hooks/useSelectedNodes";
 
+export {
+  flowToReactFlow,
+  reactFlowToFlow,
+  getNodeHierarchy,
+  findNodeById,
+  getChildNodes,
+  getRootNodes,
+  isValidHierarchy,
+} from "#utils/transform";
+
 export type { EditorEdge } from "#hooks/useEditorEdges";
 export type { ViewportOptions } from "#hooks/useEditorViewport";
 export type { EditorNode, NodeData, NodePosition } from "#types/EditorNode";
+export type { ReactFlowData, TransformedFlow, HierarchicalNode } from "#utils/transform";
