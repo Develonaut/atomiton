@@ -1,6 +1,7 @@
 import "@/preload/preload.d";
 import { electronAPI } from "@electron-toolkit/preload";
 import { contextBridge, ipcRenderer } from "electron";
+import { exposeElectronTRPC } from "electron-trpc/preload";
 
 console.log("[PRELOAD] Starting preload script");
 console.log("[PRELOAD] contextIsolated:", process.contextIsolated);
@@ -95,11 +96,16 @@ const atomitonIPC = {
 // Expose electron API
 if (process.contextIsolated) {
   try {
+    // Expose electron-trpc
+    console.log("[PRELOAD] Exposing electron-trpc via contextBridge");
+    exposeElectronTRPC();
+    console.log("[PRELOAD] Electron-trpc exposed successfully");
+
     console.log("[PRELOAD] Exposing electron API via contextBridge");
     contextBridge.exposeInMainWorld("electron", electronAPI);
     console.log("[PRELOAD] Electron API exposed successfully");
 
-    // Expose Atomiton IPC
+    // Expose Atomiton IPC for backward compatibility
     console.log("[PRELOAD] Exposing atomiton IPC API via contextBridge");
     contextBridge.exposeInMainWorld("atomitonIPC", atomitonIPC);
     console.log("[PRELOAD] Atomiton IPC API exposed successfully");
