@@ -173,7 +173,7 @@ Benefits:
 The key insight: Flow doesn't need its own node types - it just uses Node from
 @atomiton/nodes and adds execution concepts on top.
 
-```
+````
 
 #### Step 1.3: Update NodeDefinition Structure in @atomiton/nodes
 
@@ -184,14 +184,14 @@ The key insight: Flow doesn't need its own node types - it just uses Node from
 
 **Claude Code Prompt:**
 
-```
+
 
 Update the NodeDefinition structure in @atomiton/nodes package to use a flat
 structure:
 
 1. Update NodeDefinition interface: OLD structure:
    ```typescript
-   interface NodeDefinition {
+   type NodeDefinition {
      type: string;
      metadata: {
        version: string;
@@ -199,14 +199,12 @@ structure:
      };
      children?: NodeDefinition[]; // REMOVE THIS
    }
-   ```
-
-`````
+````
 
 NEW structure:
 
 ```typescript
-interface NodeDefinition {
+type NodeDefinition {
   id: string; // Unique identifier
   type: string; // Node type
   version: string; // Moved to top level from metadata
@@ -275,15 +273,18 @@ Benefits of flat structure:
 
 **Claude Code Prompt:**
 ```
-Create a new package @atomiton/conductor following the package creation standards.
+
+Create a new package @atomiton/conductor following the package creation
+standards.
 
 The conductor OWNS all execution types and executes any Node:
 
 1. Define execution types in src/types.ts:
+
    ```typescript
    // Execution context for any node
    export interface ExecutionContext {
-     nodeId: string;  // Not flowId - any node can be executed
+     nodeId: string; // Not flowId - any node can be executed
      executionId: string;
      variables: Record<string, any>;
      input: any;
@@ -293,14 +294,19 @@ The conductor OWNS all execution types and executes any Node:
      endTime?: Date;
    }
 
-   export type ExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+   export type ExecutionStatus =
+     | "pending"
+     | "running"
+     | "completed"
+     | "failed"
+     | "cancelled";
 
    export interface ExecutionResult<T = any> {
      success: boolean;
      data?: T;
      error?: ExecutionError;
      duration?: number;
-     executedNodes?: string[];  // For composite nodes
+     executedNodes?: string[]; // For composite nodes
    }
 
    export interface ExecutionError {
@@ -312,22 +318,26 @@ The conductor OWNS all execution types and executes any Node:
    ```
 
 2. Create the conductor:
+
    ```typescript
-   import { Node, isComposite, isAtomic } from '@atomiton/nodes';
-   import { ExecutionContext, ExecutionResult } from './types';
+   import { Node, isComposite, isAtomic } from "@atomiton/nodes";
+   import { ExecutionContext, ExecutionResult } from "./types";
 
    export function createConductor(config?: ConductorConfig) {
      return {
-       async execute(node: Node, context?: Partial<ExecutionContext>): Promise<ExecutionResult> {
+       async execute(
+         node: Node,
+         context?: Partial<ExecutionContext>,
+       ): Promise<ExecutionResult> {
          // Create execution context
          const executionContext: ExecutionContext = {
            nodeId: node.id,
            executionId: `exec-${Date.now()}`,
            variables: context?.variables || {},
            input: context?.input,
-           status: 'running',
+           status: "running",
            startTime: new Date(),
-           ...context
+           ...context,
          };
 
          // Execute based on node type
@@ -338,7 +348,7 @@ The conductor OWNS all execution types and executes any Node:
          }
 
          throw new Error(`Unknown node type: ${node.type}`);
-       }
+       },
      };
    }
    ```
@@ -355,11 +365,12 @@ The conductor OWNS all execution types and executes any Node:
 5. Export all execution types for other packages to use:
    ```typescript
    // src/index.ts
-   export * from './types';  // Export all execution types
-   export { createConductor } from './conductor';
+   export * from "./types"; // Export all execution types
+   export { createConductor } from "./conductor";
    ```
 
 The conductor owns execution - other packages import execution types from here.
+
 ```
 
 ### Phase 2: Convert IPC to tRPC-based RPC (Week 3)
@@ -1926,7 +1937,9 @@ Complete final testing and documentation for flat node structure:
      { id: "3", type: "transform", version: "1.5.0", parentId: "1" },
    ];
    ```
-`````
+   ````
+
+````
 
 ```
 
@@ -2045,3 +2058,4 @@ This completes the migration to flat node structure with full documentation.
 
 These structural improvements combined with tRPC give you a much cleaner, more performant system!
 ```
+````
