@@ -1,6 +1,7 @@
 import { useEditorNodes } from "@atomiton/editor";
-import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { Button, Icon } from "@atomiton/ui";
+import { useExecuteFlow } from "#hooks/useFlow";
+import type { Flow } from "#lib/rpcTypes";
 
 export type ExecuteHandler = (
   nodeDefinitions: unknown[],
@@ -9,57 +10,65 @@ export type ExecuteHandler = (
 type RunFlowProps = {
   onClick?: ExecuteHandler;
   isRunning?: boolean;
+  flow?: Flow;
 };
 
-function RunFlow({ onClick, isRunning = false }: RunFlowProps) {
+function RunFlow({ onClick, isRunning = false, flow }: RunFlowProps) {
   const nodes = useEditorNodes();
+  const executeFlow = useExecuteFlow();
 
   const handleRun = async () => {
+    if (flow) {
+      executeFlow.mutate({
+        executable: flow,
+        context: { variables: { source: "editor" } },
+      });
+      return;
+    }
+
     if (!onClick) {
-      console.error("No onClick handler provided to RunFlow");
+      console.error("No onClick handler or flow provided to RunFlow");
       return;
     }
 
     try {
-      // Convert nodes to array - nodes is an object with nodes property
       const nodeArray = nodes.nodes || [];
 
       console.log("Nodes from editor:", nodeArray);
 
-      // Convert editor nodes to clean node definitions
-      const nodeDefinitions = nodeArray.map((node) => {
-        // Strip out editor-specific properties and keep only definition data
-        return createNodeDefinition({
-          id: node.id,
-          name: node.data?.name || node.type,
-          position: node.position,
-          metadata: node.data?.metadata || {},
-          inputPorts: node.data?.inputPorts || [],
-          outputPorts: node.data?.outputPorts || [],
-          parameters: node.data?.parameters || {},
-        });
-      });
+      const nodeDefinitions = nodeArray.map((node) => ({
+        id: node.id,
+        type: node.data?.name || node.type,
+        version: node.data?.version || "1.0.0",
+        parentId: node.data?.parentId,
+        position: node.position,
+        metadata: node.data?.metadata || {},
+        inputs: node.data?.inputPorts || [],
+        outputs: node.data?.outputPorts || [],
+        configuration: node.data?.parameters || {},
+      }));
 
-      // Call the onClick handler with clean node definitions
       await onClick(nodeDefinitions);
     } catch (error) {
       console.error("Failed to prepare flow for execution:", error);
     }
   };
 
+  const isExecuting = executeFlow.isPending || isRunning;
+
   return (
     <Button
       variant="default"
       onClick={handleRun}
-      disabled={isRunning || !onClick}
+      disabled={isExecuting || (!onClick && !flow)}
       className="flex items-center gap-2"
     >
       <Icon
-        name={isRunning ? "loader" : "play"}
+        name={isExecuting ? "loader" : "play"}
         size={16}
-        className={isRunning ? "animate-spin" : ""}
+        className={isExecuting ? "animate-spin" : ""}
       />
-      {isRunning ? "Running..." : "Run"}
+      {isExecuting ? "Running..." : "Run"}
     </Button>
   );
 }
