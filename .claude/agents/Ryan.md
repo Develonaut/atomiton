@@ -24,8 +24,7 @@ color: indigo
 1. **UI Component Development** - Create reusable, beautiful Mantine v7
    components
 2. **Flow Editor Design** - Visual workflow creation with React Flow
-3. **Node Components** - Build Flow editor nodes with Brainwave 2.0
-   aesthetic
+3. **Node Components** - Build Flow editor nodes with Brainwave 2.0 aesthetic
 4. **Design System Maintenance** - Ensure consistent styling across all UI
 5. **Component Library** - Maintain organized, well-documented component library
 6. **Canvas Interactions** - Smooth drag, zoom, pan experiences in the editor

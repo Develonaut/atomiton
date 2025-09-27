@@ -4,8 +4,8 @@
 
 ### Changed
 
-- **BREAKING**: Refactored flow store to use ICompositeNode directly
-  instead of extended Flow type
+- **BREAKING**: Refactored flow store to use ICompositeNode directly instead of
+  extended Flow type
 - Moved flow hooks to be co-located with store at `stores/flow/hooks/`
 - Replaced `useFlows` hook with separate `useComposites` and `useTemplates`
   hooks for better separation of concerns

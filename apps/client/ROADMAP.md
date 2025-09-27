@@ -2,8 +2,8 @@
 
 ## Overview
 
-Main web client for the Atomiton Flow automation platform, providing the
-visual workflow editor and user interface.
+Main web client for the Atomiton Flow automation platform, providing the visual
+workflow editor and user interface.
 
 ## Current Architecture
 

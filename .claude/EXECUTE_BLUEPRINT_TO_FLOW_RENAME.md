@@ -2,8 +2,8 @@
 
 ## Task
 
-Rename all instances of "Flow/flow" to "Flow/flow" across the entire
-Atomiton monorepo. This is a terminology change only - no logic changes.
+Rename all instances of "Flow/flow" to "Flow/flow" across the entire Atomiton
+monorepo. This is a terminology change only - no logic changes.
 
 ## Execution Steps
 
