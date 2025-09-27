@@ -6,7 +6,6 @@
 export type {
   // Core flow types
   Flow,
-  FlowMetadata,
   ValidationResult,
 
   // Execution types

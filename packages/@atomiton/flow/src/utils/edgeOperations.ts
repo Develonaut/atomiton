@@ -1,5 +1,5 @@
 import type { NodeEdge } from "@atomiton/nodes/definitions";
-import type { Flow, FlowMetadata } from "#types";
+import type { Flow } from "#types";
 import { generateId } from "@atomiton/utils";
 
 export const addEdge =
@@ -32,10 +32,6 @@ export const addEdge =
     return {
       ...flow,
       edges: [...(flow.edges || []), edge],
-      metadata: {
-        ...flow.metadata,
-        updatedAt: new Date(),
-      } as FlowMetadata,
     };
   };
 
@@ -45,10 +41,6 @@ export const removeEdge =
     return {
       ...flow,
       edges: flow.edges?.filter((e) => e.id !== edgeId),
-      metadata: {
-        ...flow.metadata,
-        updatedAt: new Date(),
-      } as FlowMetadata,
     };
   };
 

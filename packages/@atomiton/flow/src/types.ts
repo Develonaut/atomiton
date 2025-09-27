@@ -1,19 +1,9 @@
-import type { NodeDefinition, NodeMetadata } from "@atomiton/nodes/definitions";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 /**
  * Flow is just a type alias - a flow IS a node definition
  */
 export type Flow = NodeDefinition;
-
-/**
- * Flow-specific metadata extensions
- */
-export type FlowMetadata = NodeMetadata & {
-  createdAt: Date;
-  updatedAt: Date;
-  entryNodeId?: string;
-  exitNodeIds?: string[];
-};
 
 /**
  * Execution context passed through the flow

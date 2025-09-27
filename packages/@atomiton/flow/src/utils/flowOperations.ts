@@ -1,5 +1,5 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import type { Flow, FlowMetadata } from "#types";
+import type { Flow } from "#types";
 import { pipe } from "#utils/functionalCore";
 
 export const getConnectedNodes = (
@@ -25,10 +25,6 @@ export const clearEdges = (flow: Flow): Flow => {
   return {
     ...flow,
     edges: [],
-    metadata: {
-      ...flow.metadata,
-      updatedAt: new Date(),
-    } as FlowMetadata,
   };
 };
 
@@ -37,10 +33,6 @@ export const clearNodes = (flow: Flow): Flow => {
     ...flow,
     nodes: [],
     edges: [],
-    metadata: {
-      ...flow.metadata,
-      updatedAt: new Date(),
-    } as FlowMetadata,
   };
 };
 

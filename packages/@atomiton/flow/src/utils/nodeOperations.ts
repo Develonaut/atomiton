@@ -1,5 +1,5 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import type { Flow, FlowMetadata } from "#types";
+import type { Flow } from "#types";
 import { isNode } from "#guards";
 
 export const addNode =
@@ -17,10 +17,6 @@ export const addNode =
     return {
       ...flow,
       nodes: [...(flow.nodes || []), node],
-      metadata: {
-        ...flow.metadata,
-        updatedAt: new Date(),
-      } as FlowMetadata,
     };
   };
 
@@ -40,10 +36,6 @@ export const removeNode =
       edges: flow.edges?.filter(
         (e) => e.source !== nodeId && e.target !== nodeId,
       ),
-      metadata: {
-        ...flow.metadata,
-        updatedAt: new Date(),
-      } as FlowMetadata,
     };
   };
 
@@ -66,10 +58,6 @@ export const updateNode =
     return {
       ...flow,
       nodes: updatedNodes,
-      metadata: {
-        ...flow.metadata,
-        updatedAt: new Date(),
-      } as FlowMetadata,
     };
   };
 

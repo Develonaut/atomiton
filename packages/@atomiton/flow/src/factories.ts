@@ -6,7 +6,6 @@ import {
 import { generateId } from "@atomiton/utils";
 import type {
   Flow,
-  FlowMetadata,
   ValidationResult,
   ExecutionContext,
   ExecutionResult,
@@ -22,29 +21,24 @@ export const createFlow = (params: {
   name?: string;
   nodes?: NodeDefinition[];
   edges?: NodeEdge[];
-  metadata?: Partial<FlowMetadata>;
 }): Flow => {
-  const now = new Date();
+  const flowId = params.id || generateId();
+  const flowName = params.name || "New Flow";
 
-  // Create flow metadata (extending NodeMetadata)
+  // Create flow metadata
   const metadata = createNodeMetadata({
-    id: params.id || generateId(),
-    name: params.name || "New Flow",
+    id: flowId,
+    name: flowName,
     type: "group", // Flows are group nodes
     category: "group",
     icon: "layers",
     description: "Flow container node",
-    ...params.metadata,
-  }) as FlowMetadata;
-
-  // Add flow-specific metadata
-  metadata.createdAt = metadata.createdAt || now;
-  metadata.updatedAt = metadata.updatedAt || now;
+  });
 
   // Create the flow node using the universal factory
   return createNodeDefinition({
-    id: params.id || generateId(),
-    name: params.name || "New Flow",
+    id: flowId,
+    name: flowName,
     metadata,
     nodes: params.nodes,
     edges: params.edges,
@@ -96,16 +90,10 @@ export const createSequentialFlow = (
     }
   }
 
-  const metadata: Partial<FlowMetadata> = {
-    entryNodeId: nodes[0]?.id,
-    exitNodeIds: nodes.length > 0 ? [nodes[nodes.length - 1].id] : [],
-  };
-
   return createFlow({
     name,
     nodes,
     edges,
-    metadata,
   });
 };
 
@@ -113,7 +101,6 @@ export const createSequentialFlow = (
  * Clone a flow with a new ID
  */
 export const cloneFlow = (flow: Flow, newId?: string): Flow => {
-  const now = new Date();
   const clonedNodes = flow.nodes?.map((node) => cloneNode(node)) || [];
   const clonedEdges = flow.edges?.map((edge) => cloneEdge(edge)) || [];
 
@@ -122,11 +109,6 @@ export const cloneFlow = (flow: Flow, newId?: string): Flow => {
     name: `${flow.name} (Copy)`,
     nodes: clonedNodes,
     edges: clonedEdges,
-    metadata: {
-      ...flow.metadata,
-      createdAt: now,
-      updatedAt: now,
-    } as Partial<FlowMetadata>,
   });
 };
 
