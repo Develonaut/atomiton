@@ -1217,40 +1217,15 @@ Update client to use Flow types with tRPC and flat nodes:
    }
    ```
 
-3. Create node tree component for hierarchical display:
-
-   ```typescript
-   function NodeTree({ nodes }) {
-     const rootNodes = nodes.filter(n => !n.parentId);
-
-     const renderNode = (node) => {
-       const children = nodes.filter(n => n.parentId === node.id);
-
-       return (
-         <div key={node.id}>
-           <div>{node.type} v{node.version}</div>
-           {children.length > 0 && (
-             <div style={{ marginLeft: 20 }}>
-               {children.map(renderNode)}
-             </div>
-           )}
-         </div>
-       );
-     };
-
-     return <div>{rootNodes.map(renderNode)}</div>;
-   }
-   ```
-
 This gives you fully type-safe Flow operations with flat node structure.
 
 ```
 
 #### Step 3.3: Update YAML Package
-- [ ] Add Flow type imports
-- [ ] Create flow-specific serialization
-- [ ] Handle flat node structure
-- [ ] Add tests
+- [X] Add Flow type imports
+- [X] Create flow-specific serialization
+- [X] Handle flat node structure
+- [X] Add tests
 
 **Claude Code Prompt:**
 ```

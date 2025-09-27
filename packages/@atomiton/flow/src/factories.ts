@@ -4,11 +4,12 @@ import {
   createNodeMetadata,
 } from "@atomiton/nodes/definitions";
 import { generateId } from "@atomiton/utils";
-import type {
-  Flow,
-  ValidationResult,
-  ExecutionContext,
-  ExecutionResult,
+import {
+  type Flow,
+  type ValidationResult,
+  type ExecutionContext,
+  type ExecutionResult,
+  CURRENT_FLOW_VERSION,
 } from "#types";
 
 /**
@@ -29,15 +30,16 @@ export const createFlow = (params: {
   const metadata = createNodeMetadata({
     id: flowId,
     name: flowName,
-    type: "group", // Flows are group nodes
     category: "group",
     icon: "layers",
     description: "Flow container node",
   });
 
   // Create the flow node using the universal factory
-  return createNodeDefinition({
+  const flow = createNodeDefinition({
     id: flowId,
+    type: "group", // Flows are group nodes
+    version: "1.0.0",
     name: flowName,
     metadata,
     nodes: params.nodes,
@@ -50,7 +52,12 @@ export const createFlow = (params: {
     },
     inputPorts: [],
     outputPorts: [],
-  });
+  }) as Flow;
+
+  // Add schema version
+  flow.schemaVersion = CURRENT_FLOW_VERSION;
+
+  return flow;
 };
 
 /**

@@ -1,9 +1,18 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 /**
- * Flow is just a type alias - a flow IS a node definition
+ * Current schema version for flows
  */
-export type Flow = NodeDefinition;
+export const CURRENT_FLOW_VERSION = 1;
+
+/**
+ * Flow extends NodeDefinition with schema versioning
+ * The 'version' field in NodeDefinition is for the node version
+ * The 'schemaVersion' field tracks the flow schema structure version
+ */
+export type Flow = NodeDefinition & {
+  schemaVersion?: number;
+};
 
 /**
  * Execution context passed through the flow

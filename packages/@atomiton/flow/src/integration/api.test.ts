@@ -18,7 +18,7 @@ describe("Flow Package API Integration", () => {
     });
 
     expect(isFlow(flow)).toBe(true);
-    expect(flow.metadata.type).toBe("group");
+    expect(flow.type).toBe("group");
     expect(flow.name).toBe("Smoke Test Flow");
   });
 
