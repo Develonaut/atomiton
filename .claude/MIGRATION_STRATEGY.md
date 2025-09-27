@@ -28,12 +28,12 @@ Current Structure:
 
 ### Phase 1: Foundation - Create Missing Packages (Week 1-2)
 
-#### Step 1.1: Create @atomiton/flow Package
+#### Step 1.1: Create @atomiton/flow Package ✅ COMPLETED
 
-- [ ] Create package structure
-- [ ] Add type definitions
-- [ ] Add utilities and factories
-- [ ] Add tests
+- [x] Create package structure
+- [x] Add type definitions
+- [x] Add utilities and factories
+- [x] Add tests
 
 **Claude Code Prompt:**
 
@@ -62,7 +62,120 @@ Types to create:
 Follow functional programming patterns - no classes, use factory functions and type guards.
 ```
 
-#### Step 1.2: Update NodeDefinition Structure in @atomiton/nodes
+#### Step 1.2: Refactor Flow Package to Use Node Types
+
+- [ ] Move Node type to @atomiton/nodes
+- [ ] Remove duplicate types from Flow
+- [ ] Import and extend Node types
+- [ ] Update factories and guards
+
+**Claude Code Prompt:**
+
+````
+Refactor the @atomiton/flow package to use Node as the base type from @atomiton/nodes, eliminating all duplication:
+
+1. Update @atomiton/flow to import Node types and be minimal:
+   ```typescript
+   // @atomiton/flow/src/types.ts
+   import { Node, Connection, NodeMetadata } from '@atomiton/nodes';
+
+   // Flow is just a type alias - a flow IS a node
+   export type Flow = Node;
+
+   // Flow-specific metadata extensions (if needed)
+   export type FlowMetadata = NodeMetadata & {
+     createdAt: Date;
+     updatedAt: Date;
+   };
+
+   export const isFlow = (node: Node): boolean =>
+     node.type === 'flow'
+````
+
+3. Update factory functions to be minimal:
+
+   ```typescript
+   // @atomiton/flow/src/factories.ts
+   import type{ Node, NodeEdge } from '@atomiton/nodes';
+   import { createNodeDefinition, createNodeMetadata, createNodeEdges } from '@atomiton/nodes';
+   import type { Flow } from './types';
+   import { generateId } from '@atomiton/utils';
+
+    // Create a new flow using the factories from @atomiton/nodes
+   export const createFlow = (params: {
+     name: string;
+     nodes?: Node[];
+     edges?: NodeEdge[];
+   }): Flow => createNodeDefinition({...})
+
+   // Flow-specific utilities
+   export const validateFlow = (flow: Flow): ValidationResult => {
+     const errors: string[] = [];
+
+     if (!flow.nodes || flow.nodes.length === 0) {
+       errors.push('Flow must have at least one node');
+     }
+
+     // Validate edges reference existing nodes
+     const nodeIds = new Set(flow.nodes?.map(n => n.id) || []);
+     flow.edges?.forEach(edge => {
+       if (!nodeIds.has(edge.source)) {
+         errors.push(`Edge references non-existent source: ${edge.source}`);
+       }
+       if (!nodeIds.has(edge.target)) {
+         errors.push(`Edge references non-existent target: ${edge.target}`);
+       }
+     });
+
+     return {
+       valid: errors.length === 0,
+       errors: errors.length > 0 ? errors : undefined
+     };
+   };
+   ```
+
+4. Update package.json dependencies:
+
+   ```json
+   {
+     "dependencies": {
+       "@atomiton/nodes": "workspace:*"
+     }
+   }
+   ```
+
+5. Remove all duplicate type definitions from @atomiton/flow:
+   - Remove FlowNode (use Node from @atomiton/nodes)
+   - Remove Edge/Connection (use Connection from @atomiton/nodes)
+   - Remove PortDefinition (use from @atomiton/nodes)
+   - Remove duplicate Position type
+   - Keep only execution-specific types
+
+6. Update all imports in the flow package to use Node:
+
+   ```typescript
+   // Before
+   import { FlowNode, Flow } from "./types";
+
+   // After
+   import { Node } from "@atomiton/nodes";
+   import { Flow, ExecutionContext } from "./types";
+   ```
+
+Benefits:
+
+- No duplicate type definitions
+- Single source of truth for Node
+- Flow package focuses only on execution
+- Recursive node structure enables infinite composition
+- Cleaner dependency graph
+
+The key insight: Flow doesn't need its own node types - it just uses Node from
+@atomiton/nodes and adds execution concepts on top.
+
+```
+
+#### Step 1.3: Update NodeDefinition Structure in @atomiton/nodes
 
 - [ ] Migrate from nested children to flat structure with parentId
 - [ ] Move version to top level
@@ -71,11 +184,12 @@ Follow functional programming patterns - no classes, use factory functions and t
 
 **Claude Code Prompt:**
 
-````
-Update the NodeDefinition structure in @atomiton/nodes package to use a flat structure:
+```
 
-1. Update NodeDefinition interface:
-   OLD structure:
+Update the NodeDefinition structure in @atomiton/nodes package to use a flat
+structure:
+
+1. Update NodeDefinition interface: OLD structure:
    ```typescript
    interface NodeDefinition {
      type: string;
@@ -83,9 +197,11 @@ Update the NodeDefinition structure in @atomiton/nodes package to use a flat str
        version: string;
        // other metadata
      };
-     children?: NodeDefinition[];  // REMOVE THIS
+     children?: NodeDefinition[]; // REMOVE THIS
    }
-````
+   ```
+
+`````
 
 NEW structure:
 
@@ -151,7 +267,7 @@ Benefits of flat structure:
 
 ```
 
-#### Step 1.3: Create @atomiton/conductor Package
+#### Step 1.4: Create @atomiton/conductor Package
 - [ ] Create package structure
 - [ ] Add execution logic
 - [ ] Add factory functions
@@ -159,41 +275,91 @@ Benefits of flat structure:
 
 **Claude Code Prompt:**
 ```
+Create a new package @atomiton/conductor following the package creation standards.
 
-Create a new package @atomiton/conductor following the package creation
-standards.
+The conductor OWNS all execution types and executes any Node:
 
-The conductor should:
+1. Define execution types in src/types.ts:
+   ```typescript
+   // Execution context for any node
+   export interface ExecutionContext {
+     nodeId: string;  // Not flowId - any node can be executed
+     executionId: string;
+     variables: Record<string, any>;
+     input: any;
+     output?: any;
+     status: ExecutionStatus;
+     startTime: Date;
+     endTime?: Date;
+   }
 
-1. Export a createConductor() factory function (not a class)
-2. Have a single execute() method that accepts any Executable (Flow or FlowNode)
-3. Use type guards internally to determine if it's executing a Flow or single
-   Node
-4. Return ExecutionResult with success, outputs, error, duration, executedNodes
-5. For Flows, execute nodes in topological order based on connections
-6. Pass outputs from one node as inputs to connected nodes
-7. Import node executables dynamically from @atomiton/nodes/executables
-8. Work with the new flat NodeDefinition structure (using parentId instead of
-   children)
+   export type ExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 
-The API should be simple: const conductor = createConductor(config); const
-result = await conductor.execute(anyExecutable);
+   export interface ExecutionResult<T = any> {
+     success: boolean;
+     data?: T;
+     error?: ExecutionError;
+     duration?: number;
+     executedNodes?: string[];  // For composite nodes
+   }
 
-When working with nodes, remember they now have:
+   export interface ExecutionError {
+     nodeId?: string;
+     message: string;
+     timestamp: Date;
+     stack?: string;
+   }
+   ```
 
-- version at top level (node.version not node.metadata.version)
-- parentId instead of nested children
+2. Create the conductor:
+   ```typescript
+   import { Node, isComposite, isAtomic } from '@atomiton/nodes';
+   import { ExecutionContext, ExecutionResult } from './types';
 
-Use functional composition patterns. Support middleware via
-beforeExecute/afterExecute hooks.
+   export function createConductor(config?: ConductorConfig) {
+     return {
+       async execute(node: Node, context?: Partial<ExecutionContext>): Promise<ExecutionResult> {
+         // Create execution context
+         const executionContext: ExecutionContext = {
+           nodeId: node.id,
+           executionId: `exec-${Date.now()}`,
+           variables: context?.variables || {},
+           input: context?.input,
+           status: 'running',
+           startTime: new Date(),
+           ...context
+         };
 
-Key files:
+         // Execute based on node type
+         if (isAtomic(node)) {
+           return executeAtomic(node, executionContext);
+         } else if (isComposite(node)) {
+           return executeComposite(node, executionContext);
+         }
 
-- src/index.ts with createConductor factory
-- src/types.ts with ExecutionResult, ExecutionContext
-- Default node and flow executors
-- Helper functions for node ordering and input mapping
+         throw new Error(`Unknown node type: ${node.type}`);
+       }
+     };
+   }
+   ```
 
+3. Implement recursive execution for composite nodes:
+   - For atomic nodes: Look up NodeDefinition and execute
+   - For composite nodes: Execute children in topological order
+   - Pass outputs between connected nodes
+
+4. Work with the new flat NodeDefinition structure:
+   - version at top level (node.version not node.metadata.version)
+   - parentId for hierarchies (not nested children)
+
+5. Export all execution types for other packages to use:
+   ```typescript
+   // src/index.ts
+   export * from './types';  // Export all execution types
+   export { createConductor } from './conductor';
+   ```
+
+The conductor owns execution - other packages import execution types from here.
 ```
 
 ### Phase 2: Convert IPC to tRPC-based RPC (Week 3)
@@ -1760,11 +1926,11 @@ Complete final testing and documentation for flat node structure:
      { id: "3", type: "transform", version: "1.5.0", parentId: "1" },
    ];
    ```
-   ````
+`````
 
-   ```
+```
 
-   ```
+```
 
 3. Document migration guide:
 
@@ -1825,8 +1991,9 @@ This completes the migration to flat node structure with full documentation.
 
 ### Phase 1: Foundation ⏳
 - [ ] Step 1.1: Create @atomiton/flow package
-- [ ] Step 1.2: Update NodeDefinition structure (nested → flat, version to top)
-- [ ] Step 1.3: Create @atomiton/conductor package
+- [ ] Step 1.2: Refactor Flow to use Node types from @atomiton/nodes
+- [ ] Step 1.3: Update NodeDefinition structure (nested → flat, version to top)
+- [ ] Step 1.4: Create @atomiton/conductor package
 
 ### Phase 2: Convert to tRPC ⏳
 - [ ] Step 2.1: Install tRPC dependencies
