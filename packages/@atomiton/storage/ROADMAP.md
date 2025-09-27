@@ -50,9 +50,9 @@ const fileStorage = createFileSystem({ baseDir: "./data" });
 const memoryStorage = createMemory();
 
 // Universal interface
-await storage.save("blueprint-123", compositeData);
-const data = await storage.load("blueprint-123");
-const items = await storage.list("blueprint-");
+await storage.save("flow-123", compositeData);
+const data = await storage.load("flow-123");
+const items = await storage.list("flow-");
 ```
 
 ## Future Storage Types
@@ -217,7 +217,7 @@ const mockStorage = createMock({
 
 **Success Metrics:**
 
-- Handle 10,000+ Blueprints per user
+- Handle 10,000+ Flows per user
 - Multi-provider failover < 2 seconds
 - Encryption/decryption < 100ms overhead
 - Enterprise-grade security compliance

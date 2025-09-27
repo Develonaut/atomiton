@@ -29,7 +29,7 @@ Nothing currently - this app is on hold until the web UI is complete.
 ## Blockers
 
 - Waiting for apps/client to be feature-complete
-- Need Blueprint editor working in browser first
+- Need Flow editor working in browser first
 - UI framework must be finalized
 
 ## Notes

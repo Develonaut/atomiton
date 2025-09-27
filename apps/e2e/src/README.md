@@ -20,7 +20,7 @@ Examples:
 
 - `user-journey-template-to-editor.spec.ts` - User selecting a template and
   editing it
-- `user-journey-blueprint-creation.spec.ts` - User creating a new blueprint from
+- `user-journey-flow-creation.spec.ts` - User creating a new flow from
   scratch
 - `user-journey-homepage-navigation.spec.ts` - First-time user exploring the app
 - `user-journey-editor-node-connections.spec.ts` - User connecting nodes in the
@@ -43,13 +43,13 @@ Examples:
 - Makes modifications
 - **Critical Flow**: Template selection → Editor workflow
 
-### 3. **Blueprint Creator** (`user-journey-blueprint-creation.spec.ts`)
+### 3. **Flow Creator** (`user-journey-flow-creation.spec.ts`)
 
-- Creates new blueprint
+- Creates new flow
 - Adds nodes
 - Configures connections
-- Saves blueprint
-- **Critical Flow**: Complete blueprint creation workflow
+- Saves flow
+- **Critical Flow**: Complete flow creation workflow
 
 ### 4. **Power User** (`user-journey-editor-node-connections.spec.ts`)
 

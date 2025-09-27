@@ -1,18 +1,18 @@
 # @atomiton/editor
 
-Blueprint visual editor for the Atomiton platform.
+Flow visual editor for the Atomiton platform.
 
 ## Overview
 
 This package provides the React-based visual editor for creating and editing
-Blueprint workflows. It includes a node-based interface for designing automation
+Flow workflows. It includes a node-based interface for designing automation
 workflows with drag-and-drop functionality.
 
 ## Features
 
-- Visual node-based Blueprint editor
+- Visual node-based Flow editor
 - Drag-and-drop interface for workflow creation
-- Real-time Blueprint validation
+- Real-time Flow validation
 - Canvas-based editing with zoom and pan
 - Component library for editor UI elements
 

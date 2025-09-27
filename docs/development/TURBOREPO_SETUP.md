@@ -25,7 +25,7 @@ atomiton/
     ├── editor/          # Visual editor (build-watch)
     ├── conductor/       # Execution orchestrator (build-watch)
     ├── storage/         # Storage abstraction (build-watch)
-    ├── core/            # Core Blueprint engine
+    ├── core/            # Core Flow engine
     ├── nodes/           # Node implementations
     └── [other packages] # Additional libraries
 ```

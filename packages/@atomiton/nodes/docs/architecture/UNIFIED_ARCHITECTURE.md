@@ -30,7 +30,7 @@ scalable, and conceptually consistent system.
             │ Individual     │      │ Group Nodes     │
             │ Nodes          │      │                 │
             │ • CSV Reader   │      │ • GroupNode     │
-            │ • HTTP Request │      │ • Blueprint     │
+            │ • HTTP Request │      │ • Flow     │
             │ • Transform    │      │ • Sub-workflows │
             │ • Shell Cmd    │      │                 │
             └────────────────┘      └─────────────────┘
@@ -86,11 +86,11 @@ class DataPipelineNode extends Node implements IGroupNode {
 
 ## 📊 Visual Execution Flow
 
-### Level 1: Blueprint Editor View (UI Domain)
+### Level 1: Flow Editor View (UI Domain)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Blueprint: "Data Pipeline"                   │
+│                    Flow: "Data Pipeline"                   │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐         │
@@ -99,7 +99,7 @@ class DataPipelineNode extends Node implements IGroupNode {
 │  └─────────────┘    └─────────────┘    └─────────────┘         │
 │                                                                 │
 ├─────────────────────────────────────────────────────────────────┤
-│ Users see: Blueprint as collection of connected nodes          │
+│ Users see: Flow as collection of connected nodes          │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -141,7 +141,7 @@ class DataPipelineNode extends Node implements IGroupNode {
 
 | Domain           | Term            | Implementation   | Interface    |
 | ---------------- | --------------- | ---------------- | ------------ |
-| **UI/Marketing** | Blueprint       | `GroupNode`      | `INode`      |
+| **UI/Marketing** | Flow       | `GroupNode`      | `INode`      |
 | **Code/System**  | Group Node      | `GroupNode`      | `IGroupNode` |
 | **Code/System**  | Individual Node | `CSVReaderNode`  | `INode`      |
 | **Execution**    | Any Node        | `node.execute()` | Same method! |
@@ -154,7 +154,7 @@ abstraction levels:
 ### High-Level Workflow Management
 
 ```typescript
-// Working with blueprints as single units
+// Working with flows as single units
 const pipeline: INode = await nodes.getNode("data-pipeline");
 const result = await pipeline.execute(context);
 ```
@@ -162,7 +162,7 @@ const result = await pipeline.execute(context);
 ### Detail-Level Node Management
 
 ```typescript
-// Working with individual nodes within blueprints
+// Working with individual nodes within flows
 const group = pipeline as GroupNode;
 const childNodes = group.getChildNodes();
 for (const child of childNodes) {
@@ -183,12 +183,12 @@ async function executeAnyNode(node: INode, context: NodeExecutionContext) {
 
 The unified architecture enables powerful UI patterns:
 
-### Current: Blueprint Editing
+### Current: Flow Editing
 
 - Drag and drop individual nodes
 - Connect nodes with edges
 - Configure node properties
-- Execute entire blueprint
+- Execute entire flow
 
 ### Future: Node Editing (same editor!)
 
@@ -230,7 +230,7 @@ function NodeEditor({ node }: { node: INode }) {
 
 ### 3. **Composition Power**
 
-- Blueprints become reusable components
+- Flows become reusable components
 - Hierarchical composition enables powerful abstractions
 - Complex workflows simplified into single nodes
 
@@ -274,7 +274,7 @@ if (dataPipeline.hasChildren()) {
 
 This unified architecture creates a **powerful abstraction** where:
 
-- **Blueprint** = UI term for what users create and manage
+- **Flow** = UI term for what users create and manage
 - **Group Node** = Code term for the same thing
 - **Individual Node** = Functionality building blocks
 - **INode** = Universal interface for everything

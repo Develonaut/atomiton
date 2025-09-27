@@ -3,7 +3,7 @@
 ## Vision
 
 Build a powerful, type-safe state management system that handles all aspects of
-Atomiton's complex application state, from Blueprint workflows to real-time
+Atomiton's complex application state, from Flow workflows to real-time
 collaboration, with exceptional developer experience and performance.
 
 ## Q4 2025 - Foundation ✅ COMPLETE
@@ -47,7 +47,7 @@ collaboration, with exceptional developer experience and performance.
 ### System Integration
 
 - [ ] Event system integration for state changes
-- [ ] Blueprint workflow state management
+- [ ] Flow workflow state management
 - [ ] API integration patterns
 - [ ] Store persistence and hydration
 

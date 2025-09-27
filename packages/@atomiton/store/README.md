@@ -1,12 +1,12 @@
 # @atomiton/store
 
-Simplified state management for the Atomiton Blueprint platform.
+Simplified state management for the Atomiton Flow platform.
 
 ## Overview
 
 This package provides a clean, functional API for creating Zustand stores with
 built-in Immer support and optional persistence. Perfect for managing
-application state in the Blueprint editor, node configurations, and runtime
+application state in the Flow editor, node configurations, and runtime
 execution state.
 
 **Simplified from 473 to 111 lines of core code** - focusing on what you
@@ -33,7 +33,7 @@ All stores automatically follow a consistent naming pattern:
 - **DevTools names**: Automatically prefixed with "atomiton-" and converted to
   kebab-case
 - **Examples**:
-  - `name: "BlueprintStore"` → DevTools shows `"atomiton-blueprint-store"`
+  - `name: "FlowStore"` → DevTools shows `"atomiton-flow-store"`
   - `name: "Navigation"` → DevTools shows `"atomiton-navigation"`
   - `name: "Settings"` → DevTools shows `"atomiton-settings"`
 
@@ -89,20 +89,20 @@ const settingsStore = createStore(
 ### Complex State Updates
 
 ```typescript
-// Blueprint store example
-const blueprintStore = createStore(
+// Flow store example
+const flowStore = createStore(
   () => ({
     nodes: new Map(),
     connections: [],
     selectedNodeId: null as string | null,
   }),
   {
-    name: "BlueprintStore", // DevTools name becomes "atomiton-blueprint-store"
+    name: "FlowStore", // DevTools name becomes "atomiton-flow-store"
   },
 );
 
 // Add a new node
-blueprintStore.setState((state) => {
+flowStore.setState((state) => {
   const nodeId = generateId();
   state.nodes.set(nodeId, {
     id: nodeId,

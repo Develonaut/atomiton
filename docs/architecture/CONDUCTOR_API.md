@@ -2,7 +2,7 @@
 
 ## Overview
 
-The conductor provides a unified API for Blueprint execution that works
+The conductor provides a unified API for Flow execution that works
 identically across all environments. It implements the factory pattern with
 automatic environment detection and transport selection.
 
@@ -21,7 +21,7 @@ const conductor = createConductor();
 
 // Same API everywhere!
 const result = await conductor.execute({
-  blueprintId: "my-workflow",
+  flowId: "my-workflow",
   inputs: { data: "test" },
 });
 ```
@@ -92,7 +92,7 @@ function detectEnvironment(): TransportType {
 
 ```typescript
 interface ExecutionRequest {
-  blueprintId: string; // Blueprint identifier
+  flowId: string; // Flow identifier
   inputs?: Record<string, any>; // Input parameters
   context?: ExecutionContext; // Execution context
   options?: ExecutionOptions; // Runtime options
@@ -119,7 +119,7 @@ const conductor = createConductor();
 
 // Execute data processing workflow
 const result = await conductor.execute({
-  blueprintId: "data-processing",
+  flowId: "data-processing",
   inputs: {
     file: "/path/to/data.csv",
     format: "json",
@@ -140,7 +140,7 @@ const conductor = createConductor();
 
 // Execute HTTP processing pipeline
 const result = await conductor.execute({
-  blueprintId: "api-processing",
+  flowId: "api-processing",
   inputs: {
     url: "https://api.example.com/data",
     method: "GET",
@@ -155,7 +155,7 @@ const conductor = createConductor();
 
 // Complex multi-step workflow
 const result = await conductor.execute({
-  blueprintId: "complex-automation",
+  flowId: "complex-automation",
   inputs: {
     source: "database",
     destination: "webhook",
@@ -212,7 +212,7 @@ import { conductor } from '@atomiton/conductor';
 function WorkflowButton() {
   const handleClick = async () => {
     const result = await conductor.execute({
-      blueprintId: 'file-processor',
+      flowId: 'file-processor',
       inputs: { path: '/selected/file.csv' }
     });
   };
@@ -229,7 +229,7 @@ import { conductor } from "@atomiton/conductor";
 
 async function runWebWorkflow() {
   const result = await conductor.execute({
-    blueprintId: "web-scraper",
+    flowId: "web-scraper",
     inputs: { url: "https://example.com" },
   });
 }
@@ -288,7 +288,7 @@ CONDUCTOR_TIMEOUT=30000
 ```typescript
 // Automatic retry and error recovery
 const result = await conductor.execute({
-  blueprintId: "unreliable-api",
+  flowId: "unreliable-api",
   options: {
     retries: 3,
     timeout: 10000,
@@ -316,7 +316,7 @@ interface ExecutionError {
 // Old approach (deprecated)
 import { ExecutionEngine } from "@atomiton/conductor";
 const engine = new ExecutionEngine(config);
-await engine.execute(blueprint);
+await engine.execute(flow);
 
 // New approach (current)
 import { createConductor } from "@atomiton/conductor";

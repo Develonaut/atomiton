@@ -26,7 +26,7 @@
 **What Storage Package Plans to Own:**
 
 - Secure credential storage (API keys, tokens, passwords) - NOT IMPLEMENTED
-- Blueprint content encryption at rest - NOT IMPLEMENTED
+- Flow content encryption at rest - NOT IMPLEMENTED
 - Cross-platform secure storage abstraction - NOT IMPLEMENTED
 - Platform-specific keychain/credential manager integration - NOT IMPLEMENTED
 - Data encryption/decryption for sensitive content - NOT IMPLEMENTED
@@ -118,9 +118,9 @@ export interface ISecureStorage {
   deleteCredential(service: string, key: string): Promise<void>;
   listCredentials(service?: string): Promise<string[]>;
 
-  // Encrypted Blueprint data
-  storeEncrypted(path: string, data: Blueprint): Promise<void>;
-  retrieveEncrypted(path: string): Promise<Blueprint | null>;
+  // Encrypted Flow data
+  storeEncrypted(path: string, data: Flow): Promise<void>;
+  retrieveEncrypted(path: string): Promise<Flow | null>;
 
   // Storage health and diagnostics
   isSecureStorageAvailable(): boolean;
@@ -224,10 +224,10 @@ await storage.storeCredential("openai", "api-key", userApiKey);
 const apiKey = await storage.retrieveCredential("openai", "api-key");
 ```
 
-**With Blueprint Engine:**
+**With Flow Engine:**
 
-- Automatic encryption for Blueprints containing sensitive data
-- Transparent decryption during Blueprint loading
+- Automatic encryption for Flows containing sensitive data
+- Transparent decryption during Flow loading
 - Secure handling of node configurations with credentials
 
 ## Success Metrics

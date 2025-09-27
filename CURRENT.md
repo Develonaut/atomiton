@@ -14,25 +14,25 @@ selected nodes to enable workflow creation
 
 ### 📦 Package Status
 
-| Package                         | Status    | Current Focus                 | Build Status |
-| ------------------------------- | --------- | ----------------------------- | ------------ |
-| **@atomiton/editor**            | 🔴 Active | **Node Inspector (Critical)** | ✅ Passing   |
-| **@atomiton/ui**                | 🟢 Active | Component library             | ✅ Passing   |
-| **@atomiton/core**              | 🟢 Active | Blueprint engine              | ✅ Passing   |
-| **@atomiton/nodes**             | 🟢 Active | Node implementations          | ✅ Passing   |
-| **@atomiton/store**             | 🟢 Active | State management              | ✅ Passing   |
-| **@atomiton/events**            | 🟢 Active | Event system                  | ✅ Passing   |
-| **@atomiton/di**                | 🟢 Active | Dependency injection          | ✅ Passing   |
-| **@atomiton/validation**        | ✅ Stable | Centralized validation        | ✅ Passing   |
-| **@atomiton/eslint-config**     | ✅ Stable | Shared ESLint config          | ✅ Passing   |
-| **@atomiton/typescript-config** | ✅ Stable | Shared TypeScript config      | ✅ Passing   |
+| Package                         | Status   | Current Focus                 | Build Status |
+| ------------------------------- | -------- | ----------------------------- | ------------ |
+| **@atomiton/editor**            | 🔴 Active | **Node Inspector (Critical)** | ✅ Passing    |
+| **@atomiton/ui**                | 🟢 Active | Component library             | ✅ Passing    |
+| **@atomiton/core**              | 🟢 Active | Flow engine                   | ✅ Passing    |
+| **@atomiton/nodes**             | 🟢 Active | Node implementations          | ✅ Passing    |
+| **@atomiton/store**             | 🟢 Active | State management              | ✅ Passing    |
+| **@atomiton/events**            | 🟢 Active | Event system                  | ✅ Passing    |
+| **@atomiton/di**                | 🟢 Active | Dependency injection          | ✅ Passing    |
+| **@atomiton/validation**        | ✅ Stable | Centralized validation        | ✅ Passing    |
+| **@atomiton/eslint-config**     | ✅ Stable | Shared ESLint config          | ✅ Passing    |
+| **@atomiton/typescript-config** | ✅ Stable | Shared TypeScript config      | ✅ Passing    |
 
 ### 📱 Apps Status
 
-| App         | Status    | Current Focus          | Build Status |
-| ----------- | --------- | ---------------------- | ------------ |
-| **client**  | 🟢 Active | Vite-based React app   | ✅ Passing   |
-| **desktop** | 🟢 Ready  | Electron wrapper ready | ✅ Passing   |
+| App         | Status   | Current Focus          | Build Status |
+| ----------- | -------- | ---------------------- | ------------ |
+| **client**  | 🟢 Active | Vite-based React app   | ✅ Passing    |
+| **desktop** | 🟢 Ready  | Electron wrapper ready | ✅ Passing    |
 
 ### 🚀 Recent Achievements
 
@@ -51,57 +51,57 @@ selected nodes to enable workflow creation
 
 ### 📊 Current Priorities
 
-## 🎯 TOP PRIORITY: Blueprint Workflow Implementation
+## 🎯 TOP PRIORITY: Flow Workflow Implementation
 
-### Phase 1: Blueprint Loading & Editing System
+### Phase 1: Flow Loading & Editing System
 
 **Development Strategy**: Each step below should be developed in its own git
 worktree to enable parallel development without conflicts.
 
-#### Step 1: Blueprint Template Creation
+#### Step 1: Flow Template Creation
 
-**Worktree**: `wtnew blueprint-templates` **Status**: 🔴 **CRITICAL - START
+**Worktree**: `wtnew flow-templates` **Status**: 🔴 **CRITICAL - START
 HERE**
 
-Create example blueprints that appear in the Explore Gallery:
+Create example flows that appear in the Explore Gallery:
 
-- HelloWorld blueprint (simple console.log node)
-- DataTransform blueprint (CSV → HTTP → Transform chain)
-- ImageProcessor blueprint (FileSystem → ImageComposite → FileSystem)
+- HelloWorld flow (simple console.log node)
+- DataTransform flow (CSV → HTTP → Transform chain)
+- ImageProcessor flow (FileSystem → ImageComposite → FileSystem)
 
 **Agent Prompt**:
 
 ```
-Create three example YAML blueprint templates for the Explore Gallery. Use the existing @atomiton/nodes package (9 node types available: code, csvReader, fileSystem, httpRequest, imageComposite, loop, parallel, shellCommand, transform) to build:
+Create three example YAML flow templates for the Explore Gallery. Use the existing @atomiton/nodes package (9 node types available: code, csvReader, fileSystem, httpRequest, imageComposite, loop, parallel, shellCommand, transform) to build:
 1. HelloWorld - Simple greeting workflow
 2. DataTransform - CSV processing pipeline
 3. ImageProcessor - Image manipulation workflow
 
-Store templates in apps/client/src/data/blueprints/ and update Explore Gallery to load them. Follow the mandatory workflow and coordinate with agents as required.
+Store templates in apps/client/src/data/flows/ and update Explore Gallery to load them. Follow the mandatory workflow and coordinate with agents as required.
 ```
 
 #### Step 2: Gallery-to-Editor Loading
 
 **Worktree**: `wtnew gallery-editor-integration` **Status**: 🔴 **CRITICAL**
 
-Enable clicking blueprints in gallery to load them into the React Flow editor:
+Enable clicking flows in gallery to load them into the React Flow editor:
 
 - Update Gallery Item click handlers
-- Implement blueprint→ReactFlow conversion using @atomiton/yaml package
-- Route to editor with loaded blueprint
+- Implement flow→ReactFlow conversion using @atomiton/yaml package
+- Route to editor with loaded flow
 - Display nodes on canvas with proper positioning
 
 **Agent Prompt**:
 
 ```
-Implement loading blueprints from Explore Gallery into the React Flow editor. The gallery already exists, YAML conversion exists in @atomiton/yaml package, and basic React Flow editor exists in @atomiton/editor package. Connect these pieces to load selected blueprints into the editor canvas with proper node positioning and connections. Follow the mandatory workflow and coordinate with agents as required.
+Implement loading flows from Explore Gallery into the React Flow editor. The gallery already exists, YAML conversion exists in @atomiton/yaml package, and basic React Flow editor exists in @atomiton/editor package. Connect these pieces to load selected flows into the editor canvas with proper node positioning and connections. Follow the mandatory workflow and coordinate with agents as required.
 ```
 
-#### Step 3: Blueprint Save/Restore
+#### Step 3: Flow Save/Restore
 
-**Worktree**: `wtnew blueprint-persistence` **Status**: 🔴 **CRITICAL**
+**Worktree**: `wtnew flow-persistence` **Status**: 🔴 **CRITICAL**
 
-Implement saving edited blueprints:
+Implement saving edited flows:
 
 - Save current editor state to YAML format using @atomiton/yaml
 - Implement React Flow save/restore patterns from
@@ -112,7 +112,7 @@ Implement saving edited blueprints:
 **Agent Prompt**:
 
 ```
-Implement blueprint save/restore functionality for the React Flow editor. Use the @atomiton/yaml package for conversion and follow React Flow save/restore patterns. Add save/load UI controls and localStorage persistence. Editor package already has React Flow setup. Follow the mandatory workflow and coordinate with agents as required.
+Implement flow save/restore functionality for the React Flow editor. Use the @atomiton/yaml package for conversion and follow React Flow save/restore patterns. Add save/load UI controls and localStorage persistence. Editor package already has React Flow setup. Follow the mandatory workflow and coordinate with agents as required.
 ```
 
 #### Step 4a: Individual Node Testing
@@ -132,13 +132,13 @@ Enable testing individual nodes during editing:
 Add individual node testing capability to the editor. When a node is selected, provide a "Test Node" button that executes just that node using the @atomiton/conductor execution engine. Display results inline and handle cases where nodes can't run in isolation. The conductor package exists with execution capabilities. Follow the mandatory workflow and coordinate with agents as required.
 ```
 
-#### Step 4b: Full Blueprint Execution
+#### Step 4b: Full Flow Execution
 
-**Worktree**: `wtnew blueprint-execution` **Status**: 🟡 **HIGH**
+**Worktree**: `wtnew flow-execution` **Status**: 🟡 **HIGH**
 
-Implement full blueprint execution:
+Implement full flow execution:
 
-- Add "Run Blueprint" button to editor toolbar
+- Add "Run Flow" button to editor toolbar
 - Execute entire workflow using @atomiton/conductor
 - Show real-time execution status on nodes
 - Display final results and any errors
@@ -146,27 +146,27 @@ Implement full blueprint execution:
 **Agent Prompt**:
 
 ```
-Implement full blueprint execution in the editor. Add a "Run Blueprint" button that executes the entire workflow using @atomiton/conductor, shows real-time status on nodes, and displays results. The conductor package has execution capabilities and the editor has React Flow integration. Follow the mandatory workflow and coordinate with agents as required.
+Implement full flow execution in the editor. Add a "Run Flow" button that executes the entire workflow using @atomiton/conductor, shows real-time status on nodes, and displays results. The conductor package has execution capabilities and the editor has React Flow integration. Follow the mandatory workflow and coordinate with agents as required.
 ```
 
 #### Step 5: My Scenes Integration
 
 **Worktree**: `wtnew my-scenes-integration` **Status**: 🟢 **MEDIUM**
 
-Enable saving custom blueprints to My Scenes:
+Enable saving custom flows to My Scenes:
 
 - Create My Scenes page layout (similar to Explore Gallery)
-- Save user-created/modified blueprints separately from templates
-- Enable loading saved blueprints back into editor
-- Add blueprint management (rename, delete, duplicate)
+- Save user-created/modified flows separately from templates
+- Enable loading saved flows back into editor
+- Add flow management (rename, delete, duplicate)
 
 **Agent Prompt**:
 
 ```
-Create My Scenes functionality for user-created blueprints. Build a page similar to Explore Gallery that shows user-saved blueprints, enables loading them into the editor, and provides management features (rename, delete, duplicate). Integrate with the existing persistence system from Step 3. Follow the mandatory workflow and coordinate with agents as required.
+Create My Scenes functionality for user-created flows. Build a page similar to Explore Gallery that shows user-saved flows, enables loading them into the editor, and provides management features (rename, delete, duplicate). Integrate with the existing persistence system from Step 3. Follow the mandatory workflow and coordinate with agents as required.
 ```
 
-### Secondary Priorities (After Blueprint System)
+### Secondary Priorities (After Flow System)
 
 1. **🔴 Node Package Separation** - Implement n8n-inspired workflow/nodes
    separation for browser safety
@@ -318,7 +318,7 @@ Fix the @atomiton/store package to meet our testing requirements per docs/develo
 CRITICAL: Simplify store package - remove unnecessary abstractions
 - The current @atomiton/store package is overcomplicated with custom APIs
 - Should be simplified to basic Zustand utilities/helpers instead of complex abstraction
-- Currently used by blueprint store but should be refactored to direct Zustand usage
+- Currently used by flow store but should be refactored to direct Zustand usage
 - Store package should provide common patterns, not reinvent Zustand's API
 ```
 
@@ -458,7 +458,7 @@ The editor is currently **~50% complete**. Users can:
 - ❌ **Configure node properties** (Current blocker)
 - ❌ Connect nodes for data flow
 - ❌ Execute workflows
-- ❌ Save/load Blueprints
+- ❌ Save/load Flows
 
 **Next Milestone**: Functional workflow creation with configured, connected
 nodes.
@@ -473,14 +473,14 @@ URLs.
 ### Application Routes
 
 - `/` - Home page with My Scenes gallery
-- `/explore` - Explore Gallery with blueprint templates
-- `/editor` - Blueprint editor (React Flow canvas)
-- `/editor/:id` - Edit specific blueprint by ID
+- `/explore` - Explore Gallery with flow templates
+- `/editor` - Flow editor (React Flow canvas)
+- `/editor/:id` - Edit specific flow by ID
 
 ### API Endpoints (Future)
 
-- `/api/blueprints` - Blueprint CRUD operations
-- `/api/blueprints/:id` - Individual blueprint operations
+- `/api/flows` - Flow CRUD operations
+- `/api/flows/:id` - Individual flow operations
 - `/api/templates` - Template listing
 - `/api/users` - User management
 

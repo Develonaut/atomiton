@@ -12,7 +12,7 @@ and this project adheres to
 ### Added
 
 - Reusable React hooks for common functionality
-- Blueprint and editor-specific hooks
+- Flow and editor-specific hooks
 - State management and utility hooks
 
 ## [0.0.1] - 2025-01-11

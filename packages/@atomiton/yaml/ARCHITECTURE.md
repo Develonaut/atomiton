@@ -9,15 +9,15 @@ runtime formats:
 
 - **When**: Persisted to disk, version control, configuration files
 - **Why**: Human-readable, comments support, clean diffs in git
-- **Use Cases**: Blueprint definitions, configuration files, saved states
+- **Use Cases**: Flow definitions, configuration files, saved states
 
 ### Runtime Format: JSON
 
 - **When**: In-memory processing, editing, execution
 - **Why**: Native JavaScript format, fast processing, single data structure
 - **Use Cases**:
-  - Editor: Editing blueprints, real-time updates
-  - Conductor: Executing blueprints, runtime processing
+  - Editor: Editing flows, real-time updates
+  - Conductor: Executing flows, runtime processing
 
 ## Data Flow Patterns
 
@@ -56,10 +56,10 @@ The yaml API provides explicit conversion methods to support this pattern:
 
 ```typescript
 // Loading from storage
-const blueprint = yaml.fromYaml(yamlString); // YAML → JSON
+const flow = yaml.fromYaml(yamlString); // YAML → JSON
 
 // Saving to storage
-const yamlString = yaml.toYaml(blueprint); // JSON → YAML
+const yamlString = yaml.toYaml(flow); // JSON → YAML
 
 // JSON operations (for API compatibility)
 const data = yaml.fromJson(jsonString); // JSON string → Object
@@ -80,21 +80,21 @@ const jsonString = yaml.toJson(data); // Object → JSON string
 
 ## Implementation Guidelines
 
-### For Blueprint Package
+### For Flow Package
 
 ```typescript
-// Loading a blueprint from disk
-async function loadBlueprint(path: string): Promise<Blueprint> {
+// Loading a flow from disk
+async function loadFlow(path: string): Promise<Flow> {
   const yamlContent = await fs.readFile(path, "utf-8");
-  return yaml.fromYaml<Blueprint>(yamlContent);
+  return yaml.fromYaml<Flow>(yamlContent);
 }
 
-// Saving a blueprint to disk
-async function saveBlueprint(
+// Saving a flow to disk
+async function saveFlow(
   path: string,
-  blueprint: Blueprint,
+  flow: Flow,
 ): Promise<void> {
-  const yamlContent = yaml.toYaml(blueprint, {
+  const yamlContent = yaml.toYaml(flow, {
     lineWidth: 80,
     indent: 2,
   });
@@ -106,18 +106,18 @@ async function saveBlueprint(
 
 ```typescript
 // Editor receives JSON from storage
-const blueprint = await loadBlueprint(path); // Already JSON
-// ... user edits the blueprint ...
-await saveBlueprint(path, blueprint); // Converts to YAML
+const flow = await loadFlow(path); // Already JSON
+// ... user edits the flow ...
+await saveFlow(path, flow); // Converts to YAML
 ```
 
 ### For Conductor
 
 ```typescript
 // Conductor receives JSON from storage
-const blueprint = await loadBlueprint(path); // Already JSON
+const flow = await loadFlow(path); // Already JSON
 // Execute using the same JSON structure
-await conductor.execute(blueprint);
+await conductor.execute(flow);
 ```
 
 ## Type Safety
@@ -126,7 +126,7 @@ The conversion methods are fully typed to ensure type safety across the
 pipeline:
 
 ```typescript
-interface Blueprint {
+interface Flow {
   name: string;
   version: string;
   nodes: Node[];
@@ -134,8 +134,8 @@ interface Blueprint {
 }
 
 // Type-safe conversions
-const blueprint = yaml.fromYaml<Blueprint>(yamlString);
-const yamlString = yaml.toYaml(blueprint);
+const flow = yaml.fromYaml<Flow>(yamlString);
+const yamlString = yaml.toYaml(flow);
 ```
 
 ## Error Handling
@@ -148,14 +148,14 @@ const result = yaml.safeParse(yamlString);
 if (result.errors) {
   console.error("Parse errors:", result.errors);
 } else {
-  const blueprint = result.data;
-  // Process blueprint
+  const flow = result.data;
+  // Process flow
 }
 ```
 
 ## Future Considerations
 
-1. **Schema Validation**: Validate blueprints during conversion
+1. **Schema Validation**: Validate flows during conversion
 2. **Migration Support**: Handle version upgrades during fromYaml
-3. **Compression**: Optional compression for large blueprints
+3. **Compression**: Optional compression for large flows
 4. **Streaming**: Stream processing for very large files

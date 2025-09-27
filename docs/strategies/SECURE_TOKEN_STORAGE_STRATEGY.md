@@ -14,7 +14,7 @@ Atomiton needs to store API keys and authentication tokens securely across:
 - Web app (browser storage)
 - Development environments
 
-Without over-engineering a NASA-grade security system for a Blueprint automation
+Without over-engineering a NASA-grade security system for a Flow automation
 platform.
 
 ## The Solution: Keep It Simple

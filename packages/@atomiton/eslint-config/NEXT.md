@@ -31,6 +31,6 @@
 ## Future Considerations
 
 - Integration with other @atomiton packages
-- Custom rules for Blueprint-specific patterns
+- Custom rules for Flow-specific patterns
 - AI/automation linting rules
 - Performance monitoring integration

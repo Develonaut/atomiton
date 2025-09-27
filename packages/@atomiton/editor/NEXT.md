@@ -89,13 +89,13 @@ function.
 
 ---
 
-### 4. 🟡 Save/Load Blueprints (High Priority)
+### 4. 🟡 Save/Load Flows (High Priority)
 
 **Why Important**: Users need to persist their work.
 
 **Tasks**:
 
-- [ ] Implement Blueprint serialization format
+- [ ] Implement Flow serialization format
 - [ ] Add Save button/command
 - [ ] Add Load dialog
 - [ ] Support .atom file format
@@ -105,7 +105,7 @@ function.
 
 **Acceptance Criteria**:
 
-- Blueprints can be saved to files
+- Flows can be saved to files
 - Loading restores exact state
 - File format is human-readable
 - Auto-save prevents data loss
@@ -197,7 +197,7 @@ function.
 ### Medium Term (1 month)
 
 - ✅ Workflows can execute
-- ✅ Blueprints can be saved/loaded
+- ✅ Flows can be saved/loaded
 - ✅ 10+ example workflows created
 
 ### Long Term (3 months)

@@ -27,7 +27,7 @@ workflow execution.
 - [ ] Real-time workflow validation
 - [ ] Advanced connection system with type checking
 - [ ] Workflow execution with visual feedback
-- [ ] Blueprint templates and sharing
+- [ ] Flow templates and sharing
 - [ ] Undo/redo system
 - [ ] Copy/paste and duplication
 
@@ -63,7 +63,7 @@ workflow execution.
 
 - **Canvas Performance**: 60fps with 500+ nodes
 - **Memory Usage**: < 100MB for typical workflows
-- **Load Time**: < 2s for large blueprints
+- **Load Time**: < 2s for large flows
 - **Real-time Updates**: < 100ms latency for property changes
 
 ## Key Milestones
@@ -82,7 +82,7 @@ Integration with core execution engine for running workflows in the editor.
 
 ### M4: Persistence & Templates (April 2025)
 
-Save/load functionality with blueprint templates and sharing.
+Save/load functionality with flow templates and sharing.
 
 ### M5: Advanced UI (May 2025)
 

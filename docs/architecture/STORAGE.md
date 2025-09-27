@@ -3,7 +3,7 @@
 ## Overview
 
 Atomiton's storage architecture provides a unified abstraction for storing and
-retrieving Blueprints, application data, and credentials across all supported
+retrieving Flows, application data, and credentials across all supported
 platforms. The system automatically adapts to the runtime environment while
 maintaining a consistent API experience.
 
@@ -154,7 +154,7 @@ const storage = createFileSystem({
 
 ```
 ~/.atomiton/
-├── blueprints/
+├── flows/
 │   ├── workflow-1.json
 │   └── data-pipeline.json
 ├── templates/
@@ -208,7 +208,7 @@ import { createIndexedDB } from "@atomiton/storage/browser";
 const storage = createIndexedDB({
   dbName: "atomiton-storage",
   version: 1,
-  stores: ["blueprints", "templates", "preferences"],
+  stores: ["flows", "templates", "preferences"],
 });
 ```
 
@@ -226,37 +226,37 @@ const storage = createIndexedDB({
 ```
 Supabase Database
 ├── users (authentication)
-├── blueprints (metadata)
+├── flows (metadata)
 ├── shares (collaboration)
 └── versions (history)
 
 File Storage (S3-compatible)
-├── blueprints/
+├── flows/
 ├── templates/
 └── exports/
 ```
 
 ## Data Organization
 
-### Blueprint Storage
+### Flow Storage
 
 **Structure Hierarchy:**
 
 ```
 storage://
-├── blueprints/
-│   ├── {user-id}/          # Personal blueprints
-│   ├── shared/             # Team/public blueprints
+├── flows/
+│   ├── {user-id}/          # Personal flows
+│   ├── shared/             # Team/public flows
 │   └── templates/          # Reusable templates
 ├── credentials/            # Encrypted API keys
 ├── preferences/            # User settings
 └── cache/                  # Temporary data
 ```
 
-**Blueprint Metadata:**
+**Flow Metadata:**
 
 ```typescript
-interface BlueprintMeta {
+interface FlowMeta {
   id: string;
   name: string;
   description?: string;
@@ -282,7 +282,7 @@ interface BlueprintMeta {
 **Access Control:**
 
 - User-based isolation for personal data
-- Role-based access for shared blueprints
+- Role-based access for shared flows
 - Audit logging for sensitive operations
 - Secure sharing and collaboration features
 
@@ -332,7 +332,7 @@ interface BlueprintMeta {
 - Real-time collaborative editing
 - Version history and conflict resolution
 - Team workspace management
-- Public blueprint sharing
+- Public flow sharing
 
 **Sync Strategies:**
 
@@ -379,8 +379,8 @@ await migrator.migrate({
 
 | Operation      | Desktop | Browser | Cloud  | Target     |
 | -------------- | ------- | ------- | ------ | ---------- |
-| Save Blueprint | <50ms   | <100ms  | <500ms | Invisible  |
-| Load Blueprint | <20ms   | <50ms   | <200ms | Invisible  |
+| Save Flow | <50ms   | <100ms  | <500ms | Invisible  |
+| Load Flow | <20ms   | <50ms   | <200ms | Invisible  |
 | List Items     | <100ms  | <200ms  | <1s    | Responsive |
 | Search         | <200ms  | <500ms  | <2s    | Responsive |
 | Sync           | <1s     | <2s     | <5s    | Background |
@@ -398,7 +398,7 @@ await migrator.migrate({
 
 - Progressive loading of large datasets
 - On-demand credential decryption
-- Streaming for large blueprint files
+- Streaming for large flow files
 - Background prefetching of likely-needed data
 
 ## Error Handling & Recovery
@@ -448,7 +448,7 @@ const storage = createStorage({
 
 **User Experience:**
 
-- Time to first blueprint load
+- Time to first flow load
 - Offline availability metrics
 - Collaboration effectiveness measures
 - Migration success rates

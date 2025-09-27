@@ -2,7 +2,7 @@
 
 ## Overview
 
-The conductor's transport layer enables consistent Blueprint execution across
+The conductor's transport layer enables consistent Flow execution across
 different runtime environments by abstracting communication mechanisms. The same
 `conductor.execute()` API works identically whether running in Electron,
 browsers, or Node.js servers.
@@ -123,7 +123,7 @@ export function createIPCTransport(): IExecutionTransport {
 
 - RESTful API communication
 - Standard HTTP/HTTPS protocols
-- Works with any Blueprint API server
+- Works with any Flow API server
 - Configurable endpoints and headers
 
 **Implementation**:
@@ -260,7 +260,7 @@ POST /api/execute
 Content-Type: application/json
 
 {
-  "blueprintId": "workflow-id",
+  "flowId": "workflow-id",
   "inputs": { "key": "value" },
   "context": { "userId": "123" },
   "options": { "timeout": 30000 }
@@ -289,7 +289,7 @@ const conductor = createConductor();
 
 // Works the same everywhere!
 const result = await conductor.execute({
-  blueprintId: "my-workflow",
+  flowId: "my-workflow",
   inputs: { data: "test" },
 });
 ```
@@ -453,7 +453,7 @@ const conductor = createConductor({
 
 ### IPC Security
 
-- Renderer process never executes Blueprint code directly
+- Renderer process never executes Flow code directly
 - All execution happens in main process with full Node.js access
 - IPC messages are scoped to conductor operations only
 - Request/response correlation prevents message hijacking

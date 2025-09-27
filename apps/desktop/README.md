@@ -1,6 +1,6 @@
 # Atomiton Desktop
 
-Electron wrapper for the Atomiton Blueprint automation platform, providing
+Electron wrapper for the Atomiton Flow automation platform, providing
 native desktop capabilities.
 
 ## 📊 Progress Tracking

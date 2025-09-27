@@ -2,7 +2,7 @@
 
 ## Overview
 
-Visual editor package for the Atomiton Blueprint automation platform. Provides
+Visual editor package for the Atomiton Flow automation platform. Provides
 domain-agnostic components for building node-based editors with React Flow
 integration.
 
@@ -63,7 +63,7 @@ Based on our [Architecture Documentation](./src/docs/README.md):
    yet
 2. **No Data Connections** - Can't connect nodes for data flow
 3. **No Execution** - Can't run workflows
-4. **No Persistence** - Can't save/load Blueprints
+4. **No Persistence** - Can't save/load Flows
 5. **No Visual Feedback** - No indication of node status during execution
 
 ## Active Development

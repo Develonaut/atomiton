@@ -330,7 +330,7 @@ mainWindow.webContents.send("test:message", { from: "main" });
 
 ### **What's Failing** ❌
 
-- **Visual E2E Test**: `/editor/test-blueprint` route returns error page
+- **Visual E2E Test**: `/editor/test-flow` route returns error page
 - **Desktop App Startup**: ESM module error - `__dirname` not defined in
   electron-trpc vendor code
 - **IPC Communication**: Can't test - app doesn't start due to ESM error

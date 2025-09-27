@@ -7,7 +7,7 @@ focusing on core components, patterns, and integration strategies.
 
 ## Core Architecture
 
-### Conductor - Blueprint Execution Engine
+### Conductor - Flow Execution Engine
 
 The conductor is Atomiton's unified execution engine that works consistently
 across all environments.
@@ -31,7 +31,7 @@ across all environments.
 ### Node System
 
 - **[Node Configuration System](./NODE_CONFIGURATION_SYSTEM.md)** -
-  Configuration patterns for Blueprint nodes
+  Configuration patterns for Flow nodes
 
 ## Key Principles
 

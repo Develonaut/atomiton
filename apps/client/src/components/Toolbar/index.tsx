@@ -24,17 +24,17 @@ function Toolbar() {
 
     const unsubProgress = ipc.onProgress((p) => {
       setProgress(p);
-      console.log("Blueprint execution progress:", p);
+      console.log("Flow execution progress:", p);
     });
 
     const unsubComplete = ipc.onComplete((response) => {
-      console.log("Blueprint execution complete:", response);
+      console.log("Flow execution complete:", response);
       setOutput(response);
       setIsRunning(false);
     });
 
     const unsubError = ipc.onError((response) => {
-      console.log("Blueprint execution error:", response);
+      console.log("Flow execution error:", response);
       setOutput(response);
       setIsRunning(false);
     });
@@ -60,25 +60,25 @@ function Toolbar() {
     try {
       // Execute via IPC
       const response = await ipc.executeNode({
-        id: "blueprint-runner",
-        type: "blueprint-runner",
+        id: "flow-runner",
+        type: "flow-runner",
         config: {
           nodes: nodeDefinitions,
           edges: [],
           startNodeId: (nodeDefinitions[0] as { id?: string })?.id,
-          blueprint: {
-            id: "current-blueprint",
-            name: "Current Blueprint",
+          flow: {
+            id: "current-flow",
+            name: "Current Flow",
             nodes: nodeDefinitions,
             edges: [],
           },
         },
       });
 
-      console.log("Blueprint execution response:", response);
+      console.log("Flow execution response:", response);
       setOutput(response);
     } catch (error) {
-      console.error("Failed to execute blueprint:", error);
+      console.error("Failed to execute flow:", error);
       setOutput({
         id: "error",
         success: false,

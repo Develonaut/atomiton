@@ -2,7 +2,7 @@
 
 ## Mission Statement
 
-**Atomiton transforms complex workflows into visual "Blueprints" that anyone can
+**Atomiton transforms complex workflows into visual "Flows" that anyone can
 create, understand, and execute.**
 
 We're building a desktop-first, AI-native automation platform that makes

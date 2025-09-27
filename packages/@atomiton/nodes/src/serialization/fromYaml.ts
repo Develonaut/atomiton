@@ -36,7 +36,7 @@ import {
  * Used for:
  * - Loading node templates
  * - Importing node definitions
- * - Parsing serialized Blueprints
+ * - Parsing serialized Flows
  */
 export function fromYaml(yamlContent: string): NodeDefinition {
   try {

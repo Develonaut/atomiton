@@ -89,9 +89,9 @@ voluntary support. This might be the only monetization ever needed.
 
 **What**: Optional cloud features for those who want them
 
-- Backup blueprints to cloud
+- Backup flows to cloud
 - Sync between devices
-- Share blueprints via links
+- Share flows via links
 - Version history
 
 **Why This Works**:
@@ -107,7 +107,7 @@ voluntary support. This might be the only monetization ever needed.
 
 - Video course: "Master Atomiton"
 - Advanced automation patterns
-- Blueprint templates pack
+- Flow templates pack
 - Private Discord channel
 
 **Why This Works**:
@@ -121,7 +121,7 @@ voluntary support. This might be the only monetization ever needed.
 
 **What**: Features specifically for teams (not individuals)
 
-- Team blueprint sharing
+- Team flow sharing
 - Role-based permissions
 - Audit logs
 - SSO/SAML (if requested)
@@ -174,7 +174,7 @@ voluntary support. This might be the only monetization ever needed.
 
 ### Core Platform
 
-- Blueprint editor
+- Flow editor
 - Execution engine
 - 20-50 essential nodes
 - Desktop application
@@ -293,7 +293,7 @@ voluntary support. This might be the only monetization ever needed.
 - Active users (more important than revenue)
 - GitHub stars and contributions
 - Discord engagement
-- Blueprint sharing
+- Flow sharing
 
 ### Balance
 

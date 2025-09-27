@@ -40,7 +40,7 @@ const { router, navigate, useRouter, Link, RouterProvider } = createRouter({
     },
     {
       name: "editor",
-      path: "/editor/$blueprintId",
+      path: "/editor/$flowId",
       component: () => import("./pages/EditorPage"),
     },
     {
@@ -53,7 +53,7 @@ const { router, navigate, useRouter, Link, RouterProvider } = createRouter({
 
 // Use TanStack Router's navigation methods
 navigate({ to: "/" }); // Navigate to home
-navigate({ to: "/editor/$blueprintId", params: { blueprintId: "123" } }); // Navigate to editor
+navigate({ to: "/editor/$flowId", params: { flowId: "123" } }); // Navigate to editor
 navigate({ to: "/profile/$userId", params: { userId: "456" } }); // Navigate to profile
 ```
 
@@ -71,8 +71,8 @@ function MyComponent() {
       <button
         onClick={() =>
           navigate({
-            to: "/editor/$blueprintId",
-            params: { blueprintId: "123" },
+            to: "/editor/$flowId",
+            params: { flowId: "123" },
           })
         }
       >
@@ -98,7 +98,7 @@ const { RouterProvider } = createRouter({
     },
     {
       name: "editor",
-      path: "/editor/$blueprintId",
+      path: "/editor/$flowId",
       component: () => import("./pages/EditorPage"),
     },
   ],

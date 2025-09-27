@@ -13,7 +13,7 @@ Chrome:
 1. Open http://localhost:5173 in Chrome
 2. Open Redux DevTools Extension
 3. You'll see all Zustand stores listed with "atomiton-" prefix (e.g.,
-   "atomiton-blueprint-store", "atomiton-navigation", etc.)
+   "atomiton-flow-store", "atomiton-navigation", etc.)
 4. State changes are tracked in real-time
 
 ## ⚠️ Electron Limitations
@@ -86,7 +86,7 @@ export function createStore<T extends object>(
    and converted to kebab-case
 3. **Proper Middleware Order** - immer → persist → devtools
 4. **Named Stores** - Each store has a descriptive name in DevTools (e.g.,
-   "atomiton-blueprint-store")
+   "atomiton-flow-store")
 5. **Map Support** - enableMapSet() called on module load for Map/Set
    serialization
 

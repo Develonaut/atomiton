@@ -17,7 +17,7 @@ environments. Here's how execution flows in the Electron desktop app:
 │  │                                                    │     │
 │  │  // Same API everywhere!                           │     │
 │  │  conductor.execute({                               │     │
-│  │    blueprintId: 'my-workflow',                     │     │
+│  │    flowId: 'my-workflow',                     │     │
 │  │    inputs: { data: 'test' }                        │     │
 │  │  })                                                │     │
 │  └──────────────────┬─────────────────────────────────┘     │
@@ -61,7 +61,7 @@ environments. Here's how execution flows in the Electron desktop app:
 │                     │                                        │
 │  ┌──────────────────▼─────────────────────────────────┐     │
 │  │  Execution Engine                                  │     │
-│  │  - Runs blueprints                                 │     │
+│  │  - Runs flows                                 │     │
 │  │  - Manages state                                   │     │
 │  │  - Handles node execution                          │     │
 │  └────────────────────────────────────────────────────┘     │
@@ -140,7 +140,7 @@ function WorkflowEditor() {
     try {
       // Same API as browser or server!
       const result = await conductor.execute({
-        blueprintId: 'data-processing',
+        flowId: 'data-processing',
         inputs: {
           file: '/path/to/data.csv',
           format: 'json'
@@ -155,7 +155,7 @@ function WorkflowEditor() {
 
   return (
     <button onClick={runWorkflow}>
-      Run Blueprint
+      Run Flow
     </button>
   );
 }

@@ -38,7 +38,7 @@
 - [ ] Context menus
 - [ ] System tray icon
 - [ ] Dock/taskbar integration
-- [ ] File associations (.blueprint files)
+- [ ] File associations (.flow files)
 
 ## Priority 6: Auto-Updates
 

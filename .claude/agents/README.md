@@ -32,7 +32,7 @@ agents/
 ### Core Development Team
 
 - **🎯 Ryan** - The Component Perfectionist & Visual Artist - UI components,
-  nodes, and Blueprint editor
+  nodes, and Flow editor
 - **🏗️ Michael** - The System Architect - Backend architecture and APIs
 - **🔌 Parker** - The Integration Orchestrator - Platform integration and
   environment
@@ -118,7 +118,7 @@ See also:
 - [BENTO_BOX_PRINCIPLES.md](../../docs/BENTO_BOX_PRINCIPLES.md)
 - [AGENT_INSTRUCTIONS.md](../../docs/AGENT_INSTRUCTIONS.md)
 
-### 🏗️ Michael (blueprint-system-architect)
+### 🏗️ Michael (flow-system-architect)
 
 - **MUST** review system requirements in UI package documentation
 - Ensure API follows RESTful patterns
@@ -133,7 +133,7 @@ See also:
   3. `/packages/ui/docs/COMPONENT_ORGANIZATION.md` - File organization
   4. `/packages/theme/src/colors/brainwave.ts` - Use exact colors
   5. `/docs/guides/PACKAGE_INTEGRATION.md` - Integration patterns
-- Handles ALL UI components including nodes and Blueprint editor
+- Handles ALL UI components including nodes and Flow editor
 - Focus on React Flow integration with Brainwave 2.0 aesthetic
 - Use Mantine UI v7 components
 - Every component should be reusable and beautiful

@@ -125,14 +125,14 @@ const detectEnvironment = (): TransportType => {
 ```typescript
 // simple/simpleExecutor.ts - 50 lines total
 export class SimpleExecutor {
-  async executeBlueprint(
-    blueprint: SimpleBlueprint,
+  async executeFlow(
+    flow: SimpleFlow,
     input?: unknown,
   ): Promise<SimpleResult> {
     try {
       let currentInput = input;
 
-      for (const node of blueprint.nodes) {
+      for (const node of flow.nodes) {
         currentInput = await node.logic(currentInput);
       }
 
@@ -146,8 +146,8 @@ export class SimpleExecutor {
 
 **BENTO_BOX Applied**:
 
-- **Single responsibility**: Execute Blueprints sequentially
-- **Clear interface**: Blueprint + input → result
+- **Single responsibility**: Execute Flows sequentially
+- **Clear interface**: Flow + input → result
 - **Self-contained**: No external state or dependencies
 - **Small**: Core logic in 15 lines, file under 50 lines
 

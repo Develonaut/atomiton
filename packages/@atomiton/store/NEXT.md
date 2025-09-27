@@ -24,7 +24,7 @@
 ## Priority 4: Integration Features
 
 - [ ] Event system integration for state change notifications
-- [ ] Blueprint workflow state management
+- [ ] Flow workflow state management
 - [ ] Real-time collaboration state synchronization
 - [ ] Undo/redo system implementation
 

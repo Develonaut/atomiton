@@ -86,11 +86,11 @@ describe("Preloading Functionality", () => {
     it("should preload editor route with parameters", async () => {
       const { preloadEditor } = await import("./navigation");
 
-      await preloadEditor("test-blueprint-123");
+      await preloadEditor("test-flow-123");
 
       expect(vi.mocked(router.preloadRoute)).toHaveBeenCalledWith({
         to: "/editor/$id",
-        params: { id: "test-blueprint-123" },
+        params: { id: "test-flow-123" },
       });
     });
 
@@ -159,7 +159,7 @@ describe("Preloading Functionality", () => {
     it("should handle preloading routes with special characters", async () => {
       const { preloadEditor } = await import("./navigation");
 
-      const specialId = "blueprint-with-dashes_and_underscores.123";
+      const specialId = "flow-with-dashes_and_underscores.123";
       await preloadEditor(specialId);
 
       expect(vi.mocked(router.preloadRoute)).toHaveBeenCalledWith({

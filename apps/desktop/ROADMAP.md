@@ -2,7 +2,7 @@
 
 ## Vision
 
-Create a performant, secure desktop application for the Atomiton Blueprint
+Create a performant, secure desktop application for the Atomiton Flow
 editor that provides native OS integration, offline capabilities, and enhanced
 developer experience beyond what's possible in a web browser.
 
@@ -50,9 +50,9 @@ replacement working.
 - Notifications
 - File associations
 
-## Phase 3: Blueprint Integration (Q4 2025)
+## Phase 3: Flow Integration (Q4 2025)
 
-**Goal**: Full Blueprint editor integration
+**Goal**: Full Flow editor integration
 
 ### Architecture
 

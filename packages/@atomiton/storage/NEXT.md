@@ -9,7 +9,7 @@
 - [ ] **FilesystemStorage class** - Desktop file system storage implementation
 - [ ] **Storage factory** - createStorage() with platform auto-detection
 - [ ] **AbstractStorageEngine** - Base class with common functionality
-- [ ] **Migration utilities** - Move BlueprintStorage from conductor package
+- [ ] **Migration utilities** - Move FlowStorage from conductor package
 - [ ] **Basic testing** - Unit tests for filesystem storage operations
 
 ### 🔧 Core Components
@@ -36,13 +36,13 @@
 
 ### Required First
 
-- Move existing BlueprintStorage from @atomiton/conductor
+- Move existing FlowStorage from @atomiton/conductor
 - Platform detection utilities
 - Serialization utilities (YAML/JSON)
 
 ### Will Enable
 
-- Universal Blueprint storage across platforms
+- Universal Flow storage across platforms
 - Future browser app support
 - Cloud storage provider integration
 - User choice of storage location

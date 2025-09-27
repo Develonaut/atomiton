@@ -1,8 +1,8 @@
-# Rename Blueprint to Flow Throughout Monorepo
+# Rename Flow to Flow Throughout Monorepo
 
 ## Task
 
-Rename all instances of "Blueprint/blueprint" to "Flow/flow" across the entire
+Rename all instances of "Flow/flow" to "Flow/flow" across the entire
 Atomiton monorepo. This is a terminology change only - no logic changes.
 
 ## Execution Steps
@@ -13,72 +13,72 @@ Execute these find/replace operations in this exact order across all files
 (excluding node_modules, .git, dist, .turbo):
 
 1. **Exact case replacements:**
-   - `Blueprint` → `Flow`
-   - `Blueprints` → `Flows`
-   - `blueprint` → `flow`
-   - `blueprints` → `flows`
-   - `BLUEPRINT` → `FLOW`
-   - `BLUEPRINTS` → `FLOWS`
+   - `Flow` → `Flow`
+   - `Flows` → `Flows`
+   - `flow` → `flow`
+   - `flows` → `flows`
+   - `FLOW` → `FLOW`
+   - `FLOWS` → `FLOWS`
 
 2. **Compound terms:**
-   - `BlueprintStore` → `FlowStore`
-   - `BlueprintEngine` → `FlowEngine`
-   - `BlueprintExecutor` → `FlowExecutor`
-   - `BlueprintValidator` → `FlowValidator`
-   - `BlueprintConfig` → `FlowConfig`
-   - `BlueprintNode` → `FlowNode`
-   - `BlueprintState` → `FlowState`
-   - `BlueprintAction` → `FlowAction`
-   - `BlueprintTemplate` → `FlowTemplate`
-   - `BlueprintGallery` → `FlowGallery`
-   - `BlueprintEditor` → `FlowEditor`
-   - `BlueprintWorkflow` → `FlowWorkflow`
-   - `MyBlueprints` → `MyFlows`
-   - `useBlueprintStore` → `useFlowStore`
-   - `createBlueprint` → `createFlow`
-   - `loadBlueprint` → `loadFlow`
-   - `saveBlueprint` → `saveFlow`
-   - `executeBlueprint` → `executeFlow`
-   - `validateBlueprint` → `validateFlow`
-   - `blueprintData` → `flowData`
-   - `setBlueprintData` → `setFlowData`
-   - `blueprintTemplates` → `flowTemplates`
-   - `blueprintId` → `flowId`
-   - `blueprintName` → `flowName`
-   - `blueprintPath` → `flowPath`
-   - `blueprintConfig` → `flowConfig`
-   - `blueprintSchema` → `flowSchema`
-   - `blueprintToYaml` → `flowToYaml`
-   - `yamlToBlueprint` → `yamlToFlow`
+   - `FlowStore` → `FlowStore`
+   - `FlowEngine` → `FlowEngine`
+   - `FlowExecutor` → `FlowExecutor`
+   - `FlowValidator` → `FlowValidator`
+   - `FlowConfig` → `FlowConfig`
+   - `FlowNode` → `FlowNode`
+   - `FlowState` → `FlowState`
+   - `FlowAction` → `FlowAction`
+   - `FlowTemplate` → `FlowTemplate`
+   - `FlowGallery` → `FlowGallery`
+   - `FlowEditor` → `FlowEditor`
+   - `FlowWorkflow` → `FlowWorkflow`
+   - `MyFlows` → `MyFlows`
+   - `useFlowStore` → `useFlowStore`
+   - `createFlow` → `createFlow`
+   - `loadFlow` → `loadFlow`
+   - `saveFlow` → `saveFlow`
+   - `executeFlow` → `executeFlow`
+   - `validateFlow` → `validateFlow`
+   - `flowData` → `flowData`
+   - `setFlowData` → `setFlowData`
+   - `flowTemplates` → `flowTemplates`
+   - `flowId` → `flowId`
+   - `flowName` → `flowName`
+   - `flowPath` → `flowPath`
+   - `flowConfig` → `flowConfig`
+   - `flowSchema` → `flowSchema`
+   - `flowToYaml` → `flowToYaml`
+   - `yamlToFlow` → `yamlToFlow`
 
 ### Step 2: Rename Files
 
-Find and rename all files containing "blueprint" in their name:
+Find and rename all files containing "flow" in their name:
 
 ```bash
-# Find all files with blueprint in the name
-find . -type f -name "*blueprint*" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/dist/*" -not -path "*/.turbo/*"
+# Find all files with flow in the name
+find . -type f -name "*flow*" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/dist/*" -not -path "*/.turbo/*"
 
 # Rename pattern examples:
-# blueprint-store.ts → flow-store.ts
-# BlueprintEditor.tsx → FlowEditor.tsx
-# blueprint.types.ts → flow.types.ts
-# blueprint-utils.test.ts → flow-utils.test.ts
-# BLUEPRINT_CONSTANTS.ts → FLOW_CONSTANTS.ts
+# flow-store.ts → flow-store.ts
+# FlowEditor.tsx → FlowEditor.tsx
+# flow.types.ts → flow.types.ts
+# flow-utils.test.ts → flow-utils.test.ts
+# FLOW_CONSTANTS.ts → FLOW_CONSTANTS.ts
 ```
 
 ### Step 3: Rename Directories
 
-Find and rename all directories containing "blueprint":
+Find and rename all directories containing "flow":
 
 ```bash
-# Find all directories with blueprint in the name
-find . -type d -name "*blueprint*" -not -path "*/node_modules/*" -not -path "*/.git/*"
+# Find all directories with flow in the name
+find . -type d -name "*flow*" -not -path "*/node_modules/*" -not -path "*/.git/*"
 
 # Rename pattern examples:
-# blueprints/ → flows/
-# blueprint-templates/ → flow-templates/
-# blueprint-examples/ → flow-examples/
+# flows/ → flows/
+# flow-templates/ → flow-templates/
+# flow-examples/ → flow-examples/
 ```
 
 ### Step 4: Update Import Paths
@@ -88,9 +88,9 @@ reference the old paths:
 
 ```typescript
 // Before
-import { Blueprint } from "./blueprints/Blueprint";
-import { useBlueprintStore } from "@/stores/blueprint-store";
-import { BlueprintEditor } from "../components/BlueprintEditor";
+import { Flow } from "./flows/Flow";
+import { useFlowStore } from "@/stores/flow-store";
+import { FlowEditor } from "../components/FlowEditor";
 
 // After
 import { Flow } from "./flows/Flow";
@@ -105,7 +105,7 @@ Check and update these configuration files:
 - `package.json` files (descriptions, scripts)
 - `tsconfig.json` files (path mappings)
 - `vite.config.ts` files (aliases)
-- `.env` files (environment variables like `BLUEPRINT_API_URL` → `FLOW_API_URL`)
+- `.env` files (environment variables like `FLOW_API_URL` → `FLOW_API_URL`)
 
 ### Step 6: Update Documentation
 
@@ -122,9 +122,9 @@ Update test descriptions and mock data:
 
 ```typescript
 // Before
-describe('Blueprint validation', () => {
-  it('should validate blueprint schema', () => {
-    const mockBlueprint = { ... };
+describe('Flow validation', () => {
+  it('should validate flow schema', () => {
+    const mockFlow = { ... };
   });
 });
 
@@ -142,9 +142,9 @@ Update all user-facing strings:
 
 ```typescript
 // Before
-const message = "Blueprint saved successfully";
-const error = "Failed to load blueprint";
-const label = "Create new blueprint";
+const message = "Flow saved successfully";
+const error = "Failed to load flow";
+const label = "Create new flow";
 
 // After
 const message = "Flow saved successfully";
@@ -157,8 +157,8 @@ const label = "Create new flow";
 After completing the replacements, run these commands to verify:
 
 ```bash
-# 1. Search for any remaining instances of "blueprint"
-grep -ri "blueprint" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=.turbo --exclude="BLUEPRINT_TO_FLOW_MIGRATION.md" --exclude="IMPLEMENT_LEFTHOOK_PERFORMANCE.md" --exclude="REMOVE_LINT_STAGED_KEEP_LEFTHOOK.md" --exclude="FIX_PRECOMMIT_HOOKS.md"
+# 1. Search for any remaining instances of "flow"
+grep -ri "flow" . --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=dist --exclude-dir=.turbo --exclude="FLOW_TO_FLOW_MIGRATION.md" --exclude="IMPLEMENT_LEFTHOOK_PERFORMANCE.md" --exclude="REMOVE_LINT_STAGED_KEEP_LEFTHOOK.md" --exclude="FIX_PRECOMMIT_HOOKS.md"
 
 # 2. Build the project
 pnpm build
@@ -185,8 +185,8 @@ pnpm lint
    - External package names
 
 3. **BE CAREFUL** with:
-   - Case sensitivity (Blueprint vs blueprint vs BLUEPRINT)
-   - Partial word matches (ensure "blueprint" in "blueprinted" isn't changed)
+   - Case sensitivity (Flow vs flow vs FLOW)
+   - Partial word matches (ensure "flow" in "flowed" isn't changed)
    - Context (some instances might be in comments about old versions)
 
 4. **PRESERVE** functionality:
@@ -212,9 +212,9 @@ After all changes are complete and verified:
 
 ```bash
 git add .
-git commit -m "refactor: rename Blueprint to Flow throughout monorepo
+git commit -m "refactor: rename Flow to Flow throughout monorepo
 
-- Renamed all Blueprint references to Flow
+- Renamed all Flow references to Flow
 - Updated file and directory names
 - Updated imports and documentation
 - No functional changes, terminology update only"
@@ -222,7 +222,7 @@ git commit -m "refactor: rename Blueprint to Flow throughout monorepo
 
 ## Success Criteria
 
-- [ ] No instances of "blueprint" remain (except in excluded files)
+- [ ] No instances of "flow" remain (except in excluded files)
 - [ ] All packages build successfully
 - [ ] All tests pass
 - [ ] No TypeScript errors

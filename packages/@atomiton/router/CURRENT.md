@@ -71,7 +71,7 @@ Simple route configuration with minimal abstraction:
 ```typescript
 {
   name: "editor",
-  path: "/editor/$blueprintId",
+  path: "/editor/$flowId",
   component: () => import("./pages/EditorPage"),
   pendingComponent: LoadingSpinner,
   errorComponent: ErrorBoundary

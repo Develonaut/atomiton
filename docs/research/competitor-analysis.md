@@ -242,7 +242,7 @@ adoption
 4. **Free core**: No monthly fees for personal use
 5. **AI-native**: Built for LLMs from day one
 6. **Performance**: 10-30x faster than n8n
-7. **Portability**: Share Blueprints as files
+7. **Portability**: Share Flows as files
 
 #### We Deliberately Lose On:
 
@@ -329,7 +329,7 @@ adoption
 ### Year 2: Growth
 
 - Mentioned as "Zapier alternative for desktop"
-- Community shares Blueprints organically
+- Community shares Flows organically
 - First revenue from power users
 - 100+ weekly active users
 

@@ -1,7 +1,7 @@
 {
   "name": "@atomiton/nodes",
   "version": "0.4.0",
-  "description": "Atomiton Blueprint node implementations",
+  "description": "Atomiton Flow node implementations",
   "type": "module",
   "private": true,
   "sideEffects": false,
@@ -32,7 +32,7 @@
   },
   "keywords": [
     "nodes",
-    "blueprint",
+    "flow",
     "automation",
     "workflow"
   ],

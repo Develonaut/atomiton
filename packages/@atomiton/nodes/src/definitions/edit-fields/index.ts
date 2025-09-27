@@ -20,7 +20,7 @@ export const editFieldsDefaults = {
   values: {
     message: "Hello World from Atomiton!",
     timestamp: "{{$now}}",
-    author: "Atomiton Blueprint System",
+    author: "Atomiton Flow System",
   },
   keepOnlySet: false,
 };

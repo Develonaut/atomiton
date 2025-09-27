@@ -48,7 +48,7 @@ accommodate different package types and development workflows.
 
 ### Custom Rules
 
-- [ ] Blueprint-specific linting rules
+- [ ] Flow-specific linting rules
 - [ ] Atomiton naming conventions
 - [ ] API consistency checks
 - [ ] Documentation completeness checks

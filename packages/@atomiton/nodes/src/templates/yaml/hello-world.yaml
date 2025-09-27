@@ -2,7 +2,7 @@ flow:
   metadata:
     name: "Hello World Example"
     version: "1.0.0"
-    description: "Simple blueprint that creates data and writes it to a file"
+    description: "Simple flow that creates data and writes it to a file"
     author: "Atomiton"
     tags: ["example", "beginner", "hello-world"]
 
@@ -13,9 +13,9 @@ flow:
       parameters:
         values:
           message: "Hello World from Atomiton!"
-          description: "This is a simple example showing how Blueprint nodes work together."
+          description: "This is a simple example showing how Flow nodes work together."
           timestamp: "{{$now}}"
-          author: "Atomiton Blueprint System"
+          author: "Atomiton Flow System"
         keepOnlySet: true
       position:
         x: 100

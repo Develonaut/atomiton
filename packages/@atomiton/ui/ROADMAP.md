@@ -61,9 +61,9 @@ create a clean, maintainable component system for our specific needs.
 - Export system - File workflows
 - Notification system
 
-## Phase 4: Blueprint Editor Components (Q1 2026)
+## Phase 4: Flow Editor Components (Q1 2026)
 
-**Goal**: Specialized components for the Blueprint editor
+**Goal**: Specialized components for the Flow editor
 
 ### Editor Components
 

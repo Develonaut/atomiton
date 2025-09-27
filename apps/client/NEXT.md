@@ -9,7 +9,7 @@ Once packages/ui custom framework is ready:
 - [ ] Setup global styles
 - [ ] Create layout components
 
-## Priority 2: Blueprint Editor
+## Priority 2: Flow Editor
 
 - [ ] Create editor page/route
 - [ ] Integrate React Flow
@@ -33,7 +33,7 @@ Once packages/ui custom framework is ready:
 
 ## Priority 5: Workflow Features
 
-- [ ] Blueprint save/load functionality
+- [ ] Flow save/load functionality
 - [ ] Execution control (play/pause/stop)
 - [ ] Debug panel
 - [ ] Output/logs viewer
@@ -42,7 +42,7 @@ Once packages/ui custom framework is ready:
 ## Future Enhancements
 
 - [ ] Multi-tab editor support
-- [ ] Blueprint templates gallery
+- [ ] Flow templates gallery
 - [ ] Keyboard shortcuts
 - [ ] Command palette (CMD+K)
 - [ ] Settings/preferences page

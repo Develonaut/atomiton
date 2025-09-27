@@ -72,7 +72,7 @@ export function toEditor(
   state?: {
     defaultNodes?: unknown[]; // TODO: Replace with types from Editor Package
     defaultEdges?: unknown[]; // TODO: Replace with types from Editor Package
-    blueprint?: unknown;
+    flow?: unknown;
   },
 ) {
   navigate({

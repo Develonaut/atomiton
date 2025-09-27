@@ -34,10 +34,10 @@ and this project adheres to
 ### Added
 
 - FilesystemStorage class for desktop file system storage
-- BlueprintSerializer for YAML ↔ JSON conversion
+- FlowSerializer for YAML ↔ JSON conversion
 - SerializationError and StorageError with context tracking
 - Complete storage engine implementation with universal API
-- Blueprint metadata extraction and automatic timestamping
+- Flow metadata extraction and automatic timestamping
 - Package structure and TypeScript configuration
 - Core IStorageEngine interface with universal API
 - Storage type definitions for multi-platform support
@@ -48,7 +48,7 @@ and this project adheres to
 
 ### Changed
 
-- Migrated Blueprint storage functionality from @atomiton/conductor
+- Migrated Flow storage functionality from @atomiton/conductor
 - Unified storage abstraction across all storage types
 
 ## [0.0.1] - 2025-01-11

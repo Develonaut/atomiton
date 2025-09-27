@@ -1,6 +1,6 @@
 # Atomiton Client
 
-The main desktop application for Atomiton Blueprint automation platform.
+The main desktop application for Atomiton Flow automation platform.
 
 ## 📊 Progress Tracking
 
@@ -29,7 +29,7 @@ The application will be available at http://localhost:3000
 This is the main client application that will be wrapped by Electron for desktop
 distribution. It provides:
 
-- Blueprint visual editor (React Flow)
+- Flow visual editor (React Flow)
 - Node catalog and management
 - Workflow execution interface
 - Settings and configuration

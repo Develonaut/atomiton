@@ -53,10 +53,10 @@ The package provides explicit conversion methods following the
 import { yaml } from "@atomiton/yaml";
 
 // Loading from storage (YAML → JSON)
-const blueprint = yaml.fromYaml(yamlString);
+const flow = yaml.fromYaml(yamlString);
 
 // Saving to storage (JSON → YAML)
-const yamlString = yaml.toYaml(blueprint);
+const yamlString = yaml.toYaml(flow);
 
 // JSON operations (for API consistency)
 const data = yaml.fromJson(jsonString);

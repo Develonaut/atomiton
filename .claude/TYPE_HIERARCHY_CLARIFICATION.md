@@ -233,7 +233,7 @@ const result = await definition.execute(context, flowNode.config);
 
 ## Summary
 
-- **NodeDefinition** = The blueprint (what a node type can do)
+- **NodeDefinition** = The flow (what a node type can do)
 - **FlowNode** = An instance (a specific usage of that type)
 - They don't share inheritance, FlowNode just references NodeDefinition by type
 - This is like the difference between a class and an object instance

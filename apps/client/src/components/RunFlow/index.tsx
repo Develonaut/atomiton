@@ -43,7 +43,7 @@ function RunFlow({ onClick, isRunning = false }: RunFlowProps) {
       // Call the onClick handler with clean node definitions
       await onClick(nodeDefinitions);
     } catch (error) {
-      console.error("Failed to prepare blueprint for execution:", error);
+      console.error("Failed to prepare flow for execution:", error);
     }
   };
 

@@ -2,7 +2,7 @@ import type { Page, Locator } from "@playwright/test";
 import { BasePage } from "#pages/base-page";
 
 /**
- * Explore page object model (Gallery of blueprint templates)
+ * Explore page object model (Gallery of flow templates)
  */
 export class ExplorePage extends BasePage {
   readonly galleryItems: Locator;
@@ -14,7 +14,7 @@ export class ExplorePage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    // Gallery items (template blueprints)
+    // Gallery items (template flows)
     this.galleryItems = page.locator('a[href="/explore/details"]');
     this.firstItem = this.galleryItems.first();
 

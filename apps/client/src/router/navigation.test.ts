@@ -21,7 +21,7 @@ describe("Navigation Utilities", () => {
 
   describe("Navigation Functions", () => {
     it("should navigate to editor with correct parameters", () => {
-      const testId = "test-blueprint-123";
+      const testId = "test-flow-123";
       const testState = {
         defaultNodes: [{ id: "node1" }],
         defaultEdges: [{ id: "edge1" }],
@@ -37,7 +37,7 @@ describe("Navigation Utilities", () => {
     });
 
     it("should navigate to editor without state", () => {
-      const testId = "test-blueprint-456";
+      const testId = "test-flow-456";
 
       navigationModule.toEditor(testId);
 
@@ -163,7 +163,7 @@ describe("Navigation Utilities", () => {
 
   describe("Preloading Functions", () => {
     it("should preload editor route with id", () => {
-      const testId = "test-blueprint-789";
+      const testId = "test-flow-789";
 
       navigationModule.preloadEditor(testId);
 

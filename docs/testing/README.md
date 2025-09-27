@@ -51,7 +51,7 @@ environment
 
 ```typescript
 // Example: Gallery to Editor Flow
-test("user creates blueprint from template", async ({ page }) => {
+test("user creates flow from template", async ({ page }) => {
   // Real user actions in real environment
   await page.goto("/");
   await page.click('[data-testid="template-button-hello-world"]');
@@ -182,12 +182,12 @@ All interactive elements MUST have `data-testid` attributes:
 
 ```typescript
 // Component
-<button data-testid="create-blueprint-button">
-  Create Blueprint
+<button data-testid="create-flow-button">
+  Create Flow
 </button>
 
 // Test
-await page.click('[data-testid="create-blueprint-button"]');
+await page.click('[data-testid="create-flow-button"]');
 ```
 
 ### Naming Convention

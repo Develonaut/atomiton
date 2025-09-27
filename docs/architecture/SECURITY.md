@@ -3,7 +3,7 @@
 ## Overview
 
 Atomiton's security architecture provides comprehensive protection for user
-data, API credentials, and Blueprint content across all deployment environments.
+data, API credentials, and Flow content across all deployment environments.
 The system prioritizes simplicity and reliability over complex security theater.
 
 ## Security Principles
@@ -29,7 +29,7 @@ The system prioritizes simplicity and reliability over complex security theater.
 - Casual access to stored credentials and API keys
 - Basic malware scanning local storage
 - Accidental credential exposure in logs or version control
-- Unauthorized access to Blueprint content
+- Unauthorized access to Flow content
 
 ### What We Don't Protect Against
 
@@ -97,7 +97,7 @@ const retrieved = await storage.retrieve("api-key");
 | API Keys        | OS Keychain | Encrypted Local | Permanent  | User-provided    |
 | Auth Tokens     | OS Keychain | Encrypted Local | Session    | OAuth/JWT        |
 | Session Data    | Memory Only | Session Storage | Tab        | Non-sensitive    |
-| Blueprint Data  | File System | IndexedDB       | Persistent | Optional encrypt |
+| Flow Data  | File System | IndexedDB       | Persistent | Optional encrypt |
 
 ### Implementation Components
 
@@ -169,23 +169,23 @@ Desktop App → OAuth Provider → Supabase → Application Access
 **Supabase Integration:**
 
 - Row-level security for user data isolation
-- Encrypted storage for sensitive Blueprint content
+- Encrypted storage for sensitive Flow content
 - Audit logging for administrative operations
 - Regular security updates and monitoring
 
-## Blueprint Content Security
+## Flow Content Security
 
 ### Sensitive Data Handling
 
 **Classification:**
 
-- **Public**: Blueprint structure and logic (unencrypted)
+- **Public**: Flow structure and logic (unencrypted)
 - **Private**: API keys and credentials (encrypted)
 - **Confidential**: Proprietary business logic (optional encryption)
 
 **Storage Strategy:**
 
-- Automatic detection of sensitive content in Blueprints
+- Automatic detection of sensitive content in Flows
 - Selective encryption of credential-containing nodes
 - Clear indication of security status in UI
 - User control over encryption preferences
@@ -194,14 +194,14 @@ Desktop App → OAuth Provider → Supabase → Application Access
 
 **Desktop Storage:**
 
-- Blueprints stored in user documents directory
+- Flows stored in user documents directory
 - Sensitive content encrypted using secure storage
 - Regular file system permissions
-- Optional full-Blueprint encryption
+- Optional full-Flow encryption
 
 **Cloud Storage:**
 
-- End-to-end encryption for synchronized Blueprints
+- End-to-end encryption for synchronized Flows
 - User-controlled encryption keys
 - Secure backup and recovery processes
 - Geographic data residency options
@@ -213,7 +213,7 @@ Desktop App → OAuth Provider → Supabase → Application Access
 **Events Logged:**
 
 - Credential access and modifications
-- Blueprint encryption/decryption operations
+- Flow encryption/decryption operations
 - Authentication events and failures
 - Security-related configuration changes
 
@@ -245,7 +245,7 @@ Desktop App → OAuth Provider → Supabase → Application Access
 ### Phase 2: Enhanced Features
 
 - Web browser secure storage
-- Advanced Blueprint encryption options
+- Advanced Flow encryption options
 - Team credential sharing capabilities
 - Comprehensive audit logging
 

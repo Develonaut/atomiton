@@ -23,20 +23,20 @@ function LayoutEditor() {
     : [];
 
   // TODO: Implement complete file lifecycle:
-  // - Save: Serialize editor state back to Blueprint (YAML) format
-  // - Save As: Export blueprint with new name/location
+  // - Save: Serialize editor state back to Flow (YAML) format
+  // - Save As: Export flow with new name/location
   // - Auto-save: Periodic saves of working state
   // - Export: Convert to other formats if needed
   if (!id) {
     return (
       <Box className="relative min-h-screen bg-surface-02 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-2">Blueprint Not Found</h2>
+          <h2 className="text-xl font-bold mb-2">Flow Not Found</h2>
           <p className="text-secondary mb-4">
-            The blueprint with ID {id} could not be loaded.
+            The flow with ID {id} could not be loaded.
           </p>
           <a href="/editor" className="text-primary underline">
-            Create a new blueprint
+            Create a new flow
           </a>
         </div>
       </Box>

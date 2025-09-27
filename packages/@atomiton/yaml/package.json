@@ -1,7 +1,7 @@
 {
   "name": "@atomiton/yaml",
   "version": "0.1.0",
-  "description": "YAML parsing utilities for Atomiton Blueprint system",
+  "description": "YAML parsing utilities for Atomiton Flow system",
   "type": "module",
   "private": true,
   "imports": {
@@ -20,7 +20,7 @@
   "keywords": [
     "yaml",
     "parser",
-    "blueprint",
+    "flow",
     "automation"
   ],
   "author": "Atomiton",

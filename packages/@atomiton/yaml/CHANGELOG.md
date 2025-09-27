@@ -6,6 +6,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Initial YAML parsing utilities for Blueprint system
+- Initial YAML parsing utilities for Flow system
 - Safe YAML parsing with error handling
-- Integration with Blueprint configuration system
+- Integration with Flow configuration system

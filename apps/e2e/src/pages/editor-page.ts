@@ -2,7 +2,7 @@ import type { Page, Locator } from "@playwright/test";
 import { BasePage } from "#pages/base-page";
 
 /**
- * Editor page object model for blueprint editor
+ * Editor page object model for flow editor
  */
 export class EditorPage extends BasePage {
   readonly canvas: Locator;
@@ -55,11 +55,11 @@ export class EditorPage extends BasePage {
   }
 
   /**
-   * Navigate to the editor page with optional blueprint ID
+   * Navigate to the editor page with optional flow ID
    */
-  async visit(blueprintId?: string) {
-    if (blueprintId) {
-      await this.goto(`/editor/${blueprintId}`);
+  async visit(flowId?: string) {
+    if (flowId) {
+      await this.goto(`/editor/${flowId}`);
     } else {
       await this.goto("/editor");
     }
@@ -132,9 +132,9 @@ export class EditorPage extends BasePage {
   }
 
   /**
-   * Save the blueprint
+   * Save the flow
    */
-  async saveBlueprint() {
+  async saveFlow() {
     await this.saveButton.click();
   }
 
@@ -153,9 +153,9 @@ export class EditorPage extends BasePage {
   }
 
   /**
-   * Run/execute the blueprint
+   * Run/execute the flow
    */
-  async runBlueprint() {
+  async runFlow() {
     await this.playButton.click();
   }
 

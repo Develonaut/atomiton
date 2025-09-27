@@ -160,19 +160,19 @@ interface IStorageEngine {
 
 ```typescript
 // Save data
-await storage.save("blueprint-123", compositeData);
+await storage.save("flow-123", compositeData);
 
 // Load data
-const composite = await storage.load("blueprint-123");
+const composite = await storage.load("flow-123");
 
 // Check existence
-const exists = await storage.exists("blueprint-123");
+const exists = await storage.exists("flow-123");
 
 // List items with prefix
-const blueprints = await storage.list("blueprint-");
+const flows = await storage.list("flow-");
 
 // Delete item
-await storage.delete("blueprint-123");
+await storage.delete("flow-123");
 
 // Get storage information
 const info = storage.getInfo(); // { type: "filesystem", platform: "desktop" }

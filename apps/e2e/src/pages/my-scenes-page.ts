@@ -2,7 +2,7 @@ import type { Page, Locator } from "@playwright/test";
 import { BasePage } from "#pages/base-page";
 
 /**
- * My Scenes page object model (Home page with user's blueprints)
+ * My Scenes page object model (Home page with user's flows)
  */
 export class MyScenesPage extends BasePage {
   readonly createButton: Locator;
@@ -17,7 +17,7 @@ export class MyScenesPage extends BasePage {
     // Create button in header
     this.createButton = page.getByRole("link", { name: "Create" });
 
-    // Blueprint cards in catalog
+    // Flow cards in catalog
     this.catalogCards = page.locator('a[href^="/editor/"]');
     this.firstCard = this.catalogCards.first();
 
@@ -34,16 +34,16 @@ export class MyScenesPage extends BasePage {
   }
 
   /**
-   * Click the Create button to create a new blueprint
+   * Click the Create button to create a new flow
    */
   async clickCreateButton() {
     await this.createButton.click();
   }
 
   /**
-   * Get the count of blueprint cards displayed
+   * Get the count of flow cards displayed
    */
-  async getBlueprintCount(): Promise<number> {
+  async getFlowCount(): Promise<number> {
     await this.catalogCards
       .first()
       .waitFor({ state: "visible", timeout: 5000 })
@@ -52,25 +52,25 @@ export class MyScenesPage extends BasePage {
   }
 
   /**
-   * Click on a blueprint card by index
+   * Click on a flow card by index
    */
-  async clickBlueprintCard(index: number = 0) {
+  async clickFlowCard(index: number = 0) {
     const card = this.catalogCards.nth(index);
     await card.click();
   }
 
   /**
-   * Get the href of a blueprint card
+   * Get the href of a flow card
    */
-  async getBlueprintCardHref(index: number = 0): Promise<string | null> {
+  async getFlowCardHref(index: number = 0): Promise<string | null> {
     const card = this.catalogCards.nth(index);
     return await card.getAttribute("href");
   }
 
   /**
-   * Get blueprint card details
+   * Get flow card details
    */
-  async getBlueprintCardDetails(index: number = 0) {
+  async getFlowCardDetails(index: number = 0) {
     const card = this.catalogCards.nth(index);
 
     const title = await card.locator(".text-body-md-str").textContent();
@@ -97,10 +97,10 @@ export class MyScenesPage extends BasePage {
   }
 
   /**
-   * Check if any blueprint cards are displayed
+   * Check if any flow cards are displayed
    */
-  async hasBlueprintCards(): Promise<boolean> {
-    const count = await this.getBlueprintCount();
+  async hasFlowCards(): Promise<boolean> {
+    const count = await this.getFlowCount();
     return count > 0;
   }
 
@@ -119,7 +119,7 @@ export class MyScenesPage extends BasePage {
   }
 
   /**
-   * Filter blueprints by a specific filter option
+   * Filter flows by a specific filter option
    */
   async applyFilter(filterName: string) {
     await this.filters.click();

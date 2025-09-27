@@ -24,7 +24,7 @@ an interface you'll actually enjoy using.
 - ✅ Build system fully operational (TypeScript, Vite, Turbo)
 - ✅ Core architecture implemented
 - ✅ UI components library with Mantine v7
-- 🚧 Blueprint editor in development
+- 🚧 Flow editor in development
 - 🚧 Node system being integrated
 - ⏳ Desktop app wrapper ready for integration
 
@@ -76,7 +76,7 @@ atomiton/
 │   └── desktop/      # Electron wrapper for desktop experience
 ├── packages/
 │   └── @atomiton/    # Scoped packages
-│       ├── core/     # Core Blueprint engine
+│       ├── core/     # Core Flow engine
 │       ├── nodes/    # Node implementations
 │       ├── ui/       # UI components & design system
 │       ├── store/    # State management

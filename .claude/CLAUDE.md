@@ -31,7 +31,7 @@ Work that doesn't follow this workflow will be rejected. No exceptions.
 
 ## 🎯 Project Overview
 
-Atomiton is a Blueprint automation platform that enables visual workflow
+Atomiton is a Flow automation platform that enables visual workflow
 creation through a node-based editor. The project uses a monorepo structure with
 separate UI and API packages.
 
@@ -87,17 +87,14 @@ atomiton/                       # Project root
 ### Technical Architecture
 
 - [Architecture Overview](../docs/architecture/README.md)
-- [Blueprint Specification](../docs/architecture/BLUEPRINT_SPECIFICATION.md)
-- [API Architecture](../docs/architecture/API_ARCHITECTURE.md)
-- [Data Model](../docs/architecture/DATA_MODEL.md)
+- [Application Document Architecture](../docs/architecture/APPLICATION_DOCUMENT_ARCHITECTURE.md)
+- [BENTO BOX Implementation](../docs/architecture/BENTO_BOX_IMPLEMENTATION.md)
+- [Conductor API](../docs/architecture/CONDUCTOR_API.md)
+- [Electron Architecture](../docs/architecture/ELECTRON_ARCHITECTURE.md)
+- [Node Configuration System](../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)
 - [Security Configuration](../docs/architecture/SECURITY.md)
 - [Storage Implementation](../docs/architecture/STORAGE.md)
-- [WebSocket Protocol](../docs/architecture/WEBSOCKET_PROTOCOL.md)
-- [Conductor API](../docs/architecture/CONDUCTOR_API.md)
 - [Transport Architecture](../docs/architecture/TRANSPORT_ARCHITECTURE.md)
-- [Electron Architecture](../docs/architecture/ELECTRON_ARCHITECTURE.md)
-- [BENTO BOX Implementation](../docs/architecture/BENTO_BOX_IMPLEMENTATION.md)
-- [Node Configuration System](../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)
 
 ### Domain-Specific Documentation
 
@@ -111,9 +108,10 @@ atomiton/                       # Project root
 
 Migration plans are documented in package-specific ROADMAP files:
 
-- UI Migration: `/packages/@atomiton/ui/ROADMAP.md`
-- Nodes Development: `/packages/@atomiton/nodes/ROADMAP.md`
-- DI System: `/packages/@atomiton/di/ROADMAP.md`
+- UI Framework: `/packages/@atomiton/ui/ROADMAP.md`
+- Configuration: `/packages/@atomiton/vite-config/ROADMAP.md`
+- Storage: `/packages/@atomiton/storage/ROADMAP.md`
+- Project Roadmap: `/docs/project/ROADMAP.md`
 
 ## ✅ Permissions
 
@@ -128,16 +126,33 @@ This project has comprehensive permissions configured in
 
 Packages are organized under `packages/@atomiton/`:
 
+### Core Flow System
+- `packages/@atomiton/flow` - Core Flow engine and execution
+- `packages/@atomiton/nodes` - Node implementations and registry
+- `packages/@atomiton/editor` - Visual Flow editor components
+
+### State & Storage
+- `packages/@atomiton/store` - State management with Redux Toolkit
+- `packages/@atomiton/storage` - Universal storage abstraction
+
+### UI & Components
 - `packages/@atomiton/ui` - UI components and design system
-- `packages/@atomiton/core` - Core Blueprint engine
-- `packages/@atomiton/nodes` - Node implementations
-- `packages/@atomiton/store` - State management
-- `packages/@atomiton/events` - Event system
-- `packages/@atomiton/di` - Dependency injection
+- `packages/@atomiton/hooks` - Reusable React hooks
+
+### Development Tools
 - `packages/@atomiton/vite-config` - Unified Vite configuration presets
-  (library, react, app)
 - `packages/@atomiton/eslint-config` - Shared ESLint configuration
 - `packages/@atomiton/typescript-config` - Shared TypeScript configuration
+- `packages/@atomiton/testing` - Testing utilities and helpers
+
+### Utilities
+- `packages/@atomiton/utils` - Utility functions and helpers
+- `packages/@atomiton/validation` - Validation schemas and utilities
+- `packages/@atomiton/yaml` - YAML parsing and serialization
+- `packages/@atomiton/router` - Application routing
+- `packages/@atomiton/ipc` - Inter-process communication for Electron
+
+### Applications
 - `apps/client` - Main Vite React application (includes Playwright E2E tests)
 - `apps/desktop` - Electron desktop wrapper
 

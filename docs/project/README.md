@@ -9,13 +9,13 @@
 ## 🎯 What is Atomiton?
 
 Atomiton is a desktop-first, AI-native automation platform that transforms
-complex workflows into visual Blueprints. Think of it as n8n's simpler, faster,
+complex workflows into visual Flows. Think of it as n8n's simpler, faster,
 more modern cousin - built for individual creators and small teams who want
 powerful automation without enterprise complexity.
 
 ### Our Mission
 
-> Transform complex workflows into visual Blueprints that anyone can create,
+> Transform complex workflows into visual Flows that anyone can create,
 > with AI assistance at every step, running entirely on your machine with zero
 > infrastructure costs.
 
@@ -56,7 +56,7 @@ powerful automation without enterprise complexity.
 - 🚧 10-15 essential nodes
 - 🚧 Electron desktop app
 - 🚧 AI workflow assistance
-- 🚧 Blueprint file format (.atom files)
+- 🚧 Flow file format (.atom files)
 
 ## 💡 Key Differentiators
 
@@ -76,7 +76,7 @@ powerful automation without enterprise complexity.
 2. **Modern Stack**: Vite, React 18, Mantine UI (not webpack legacy)
 3. **Desktop Power**: Full file system access, OS integration
 4. **AI-First**: Natural language to workflow, smart debugging
-5. **Developer Friendly**: YAML Blueprints, Git-friendly, hot reload
+5. **Developer Friendly**: YAML Flows, Git-friendly, hot reload
 
 ## 🛠️ Tech Stack
 
@@ -104,7 +104,7 @@ atomiton/
 ├── apps/
 │   └── client/          # Main Vite application
 ├── packages/
-│   ├── ui/             # React components & Blueprint editor
+│   ├── ui/             # React components & Flow editor
 │   ├── core/           # Workflow engine
 │   ├── nodes/          # Node implementations
 │   ├── theme/          # Dracula theme system
@@ -132,7 +132,7 @@ atomiton/
 
 ### Phase 3: Growth (Q3-Q4 2025)
 
-- Blueprint marketplace
+- Flow marketplace
 - Plugin system
 - Community features
 - Sustainable monetization
@@ -149,7 +149,7 @@ open to experimentation and new ideas.
 1. **Report bugs** or suggest features via GitHub Issues
 2. **Build nodes** - easiest way to start contributing
 3. **Improve docs** - help others understand the project
-4. **Share Blueprints** - build cool automations
+4. **Share Flows** - build cool automations
 
 ### Development Setup
 
@@ -237,7 +237,7 @@ pnpm test
 ### Phase 3 (12 months)
 
 - ✅ 100+ active users
-- ✅ 50+ community Blueprints
+- ✅ 50+ community Flows
 - ✅ Sustainable revenue model
 - ✅ Mentioned in "n8n alternatives"
 

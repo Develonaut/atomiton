@@ -1,6 +1,6 @@
 # Atomiton Packages
 
-This directory contains all shared packages for the Atomiton Blueprint
+This directory contains all shared packages for the Atomiton Flow
 automation platform.
 
 ## Package Organization Philosophy
@@ -32,7 +32,7 @@ packages/
 ### Core Functionality
 
 - **`@atomiton/core`** - Service aggregator providing unified API access
-  - Blueprint management
+  - Flow management
   - Execution engine
   - Storage clients
   - Platform detection
@@ -63,8 +63,8 @@ import { Button, Card } from "@atomiton/ui";
 import { Core } from "@atomiton/core";
 
 // Use Core as service aggregator
-const blueprint = await Core.Blueprint.create();
-const result = await Core.Execution.run(blueprint);
+const flow = await Core.Flow.create();
+const result = await Core.Execution.run(flow);
 ```
 
 ### For Internal Packages

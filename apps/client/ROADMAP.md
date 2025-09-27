@@ -2,7 +2,7 @@
 
 ## Overview
 
-Main web client for the Atomiton Blueprint automation platform, providing the
+Main web client for the Atomiton Flow automation platform, providing the
 visual workflow editor and user interface.
 
 ## Current Architecture
@@ -17,7 +17,7 @@ visual workflow editor and user interface.
 
 ### Phase 1: Core Application (Current)
 
-- [ ] Blueprint visual editor integration
+- [ ] Flow visual editor integration
 - [ ] Node palette and library system
 - [ ] Workflow execution dashboard
 - [ ] User authentication and session management
@@ -25,13 +25,13 @@ visual workflow editor and user interface.
 ### Phase 2: Advanced Features
 
 - [ ] Real-time collaboration features
-- [ ] Advanced Blueprint debugging tools
+- [ ] Advanced Flow debugging tools
 - [ ] Plugin marketplace integration
-- [ ] Export/import Blueprint functionality
+- [ ] Export/import Flow functionality
 
 ### Phase 3: Performance & UX
 
-- [ ] Performance optimization for large Blueprints
+- [ ] Performance optimization for large Flows
 - [ ] Mobile-responsive design improvements
 - [ ] Accessibility compliance (WCAG 2.1)
 - [ ] Progressive Web App features
@@ -45,7 +45,7 @@ visual workflow editor and user interface.
 
 ## Key Features
 
-### Blueprint Editor
+### Flow Editor
 
 - Visual node-based workflow designer
 - Drag-and-drop interface for node creation

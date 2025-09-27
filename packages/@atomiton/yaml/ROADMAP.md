@@ -4,7 +4,7 @@
 
 Build the most performant, developer-friendly, and feature-complete YAML
 processing library for the JavaScript/TypeScript ecosystem, specifically
-optimized for configuration management, Blueprint processing, and large-scale
+optimized for configuration management, Flow processing, and large-scale
 YAML operations.
 
 ## Long-term Goals
@@ -256,7 +256,7 @@ Enterprise and scale features:
 
 #### Current Integrations
 
-- Atomiton Blueprint system (primary use case)
+- Atomiton Flow system (primary use case)
 - Build tools and configuration management
 - Development and testing tools
 - CI/CD pipeline integration

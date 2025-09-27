@@ -3,7 +3,7 @@
 ## Overview
 
 The Atomiton node configuration system provides a declarative way to define
-configurable properties for Blueprint nodes using Zod schemas. The system
+configurable properties for Flow nodes using Zod schemas. The system
 automatically generates editable property forms in the editor, allowing users to
 configure node behavior through a type-safe, schema-driven interface.
 

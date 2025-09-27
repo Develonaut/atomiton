@@ -51,7 +51,7 @@ through simplicity, performance, and modern architecture
 - **Missing Core Package**: Brain/API from previous repo needs integration
 - **Tech Debt**: Next.js overhead, Tailwind complexity
 - **No Node System**: Need basic nodes for MVP
-- **No Persistence**: Can't save/load Blueprints
+- **No Persistence**: Can't save/load Flows
 
 ---
 
@@ -133,7 +133,7 @@ has 500+ but most unused):
 
 **Week 11-12: Developer Experience**
 
-- [ ] Blueprint file format (.atom files)
+- [ ] Flow file format (.atom files)
   - YAML-based (human-readable unlike n8n's JSON)
   - Git-friendly (mergeable)
   - Portable (share via GitHub gists)
@@ -184,7 +184,7 @@ has 500+ but most unused):
 
 - [ ] Natural language to workflow generation
   - "Download all PDFs from this website and summarize them"
-  - Generates complete Blueprint automatically
+  - Generates complete Flow automatically
 - [ ] Smart node suggestions
   - Learns from user patterns
   - Suggests next logical node
@@ -237,11 +237,11 @@ has 500+ but most unused):
 
 ### Q3 2025: Community Building (July-September)
 
-**Month 7-8: Blueprint Marketplace**
+**Month 7-8: Flow Marketplace**
 
 - [ ] GitHub-based sharing (no infrastructure needed)
 - [ ] Cloudflare Pages hosting for marketplace UI
-- [ ] One-click Blueprint installation
+- [ ] One-click Flow installation
 - [ ] Rating/review system (GitHub stars)
 - [ ] Categories and search (Cloudflare Workers KV)
 - [ ] Version management
@@ -280,7 +280,7 @@ has 500+ but most unused):
 ### Success Metrics for Phase 3
 
 - ✅ 100+ active users
-- ✅ 50+ community Blueprints
+- ✅ 50+ community Flows
 - ✅ 5+ regular contributors
 - ✅ First revenue (even if just $100/month)
 - ✅ Mentioned in "n8n alternatives" articles
@@ -402,7 +402,7 @@ has 500+ but most unused):
 - Bug fixes
 - Feature development
 - Community support
-- Blueprint templates
+- Flow templates
 
 ---
 

@@ -140,7 +140,7 @@ const isValidSignature = validateWebhookSignature(payload, signature);
 
 ```typescript
 /**
- * Blueprint Node Engine
+ * Flow Node Engine
  *
  * Manages the execution flow of visual programming nodes,
  * handling dependency resolution, parallel processing,

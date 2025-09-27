@@ -30,4 +30,4 @@ None - waiting for UI framework development in packages/ui
 - Main application shell is ready
 - Router structure in place with layout system
 - Ready to integrate components once UI framework is built
-- Will serve as primary development environment for Blueprint editor
+- Will serve as primary development environment for Flow editor

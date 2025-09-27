@@ -4,7 +4,7 @@
 
 High-performance YAML parsing and serialization utilities for the Atomiton
 ecosystem. Provides a clean singleton API with comprehensive type safety, error
-handling, and advanced features for Blueprint configuration management.
+handling, and advanced features for Flow configuration management.
 
 ## Current Status: January 2025
 
@@ -12,7 +12,7 @@ handling, and advanced features for Blueprint configuration management.
 
 The YAML package provides a complete YAML processing solution with high
 performance, type safety, and comprehensive utilities. Currently serves as the
-foundational YAML abstraction for all Blueprint and configuration operations.
+foundational YAML abstraction for all Flow and configuration operations.
 
 ### 📊 Implementation Status
 
@@ -65,7 +65,7 @@ foundational YAML abstraction for all Blueprint and configuration operations.
 
 Currently being used by:
 
-- **Blueprint System**: All Blueprint YAML parsing and serialization
+- **Flow System**: All Flow YAML parsing and serialization
 - **Configuration Management**: Application and package configuration
 - **Development Tools**: Build scripts and configuration processing
 - **Testing Infrastructure**: Test data and fixture management
@@ -73,7 +73,7 @@ Currently being used by:
 ### 🎯 Current Focus: Performance & Reliability
 
 **Primary Goal**: Maintain high performance while ensuring bulletproof
-reliability for Blueprint operations
+reliability for Flow operations
 
 **Recent Work**:
 
@@ -110,8 +110,8 @@ Clear data conversion patterns for storage and runtime:
 
 ```typescript
 // Storage ↔ Runtime pattern
-const blueprint = yaml.fromYaml(yamlString); // Storage → Runtime
-const yamlString = yaml.toYaml(blueprint); // Runtime → Storage
+const flow = yaml.fromYaml(yamlString); // Storage → Runtime
+const yamlString = yaml.toYaml(flow); // Runtime → Storage
 
 // JSON operations for API consistency
 const data = yaml.fromJson(jsonString);
@@ -156,14 +156,14 @@ const validator = yaml.createValidator<Config>((data): data is Config => {
 
 ## Integration Points
 
-### Blueprint System
+### Flow System
 
-Primary integration for Blueprint configuration management:
+Primary integration for Flow configuration management:
 
-- Blueprint YAML file parsing and serialization
+- Flow YAML file parsing and serialization
 - Configuration validation and error reporting
-- Performance-critical Blueprint loading operations
-- Schema validation for Blueprint structure
+- Performance-critical Flow loading operations
+- Schema validation for Flow structure
 
 ### Configuration Management
 

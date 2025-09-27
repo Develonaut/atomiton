@@ -14,7 +14,7 @@ design system, built for desktop-first experiences.
 
 The Atomiton UI package serves as both a component library and a visual
 development environment where components are showcased, tested, and validated.
-It's designed specifically for the Atomiton Blueprint automation platform and
+It's designed specifically for the Atomiton Flow automation platform and
 will be packaged as a desktop application.
 
 ### Key Features
@@ -171,7 +171,7 @@ Each component page has corresponding Playwright tests that:
 This UI package integrates with the larger Atomiton ecosystem:
 
 - **Design System**: Built-in design tokens and Tailwind configuration
-- **Core Package**: Components will be consumed by `@atomiton/core` Blueprint
+- **Core Package**: Components will be consumed by `@atomiton/core` Flow
   engine
 - **Client App**: Final application in `apps/client` uses these components
 - **Desktop App**: `packages/electron` packages everything as a desktop

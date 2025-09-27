@@ -13,7 +13,7 @@
 - [x] **FileSystemStorage** - Renamed from FilesystemStorage and updated to use
       nodes serialization
 - [x] **Export updates** - Updated package exports to remove
-      BlueprintSerializer, use FileSystemStorage
+      FlowSerializer, use FileSystemStorage
 - [x] **Dependencies** - Removed yaml dependency (handled by @atomiton/nodes
       package)
 
