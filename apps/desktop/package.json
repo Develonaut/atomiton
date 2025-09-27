@@ -18,7 +18,7 @@
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },
   "dependencies": {
-    "@atomiton/ipc": "workspace:^",
+    "@atomiton/rpc": "workspace:^",
     "@atomiton/nodes": "workspace:^",
     "@atomiton/storage": "workspace:^",
     "dotenv": "^17.2.2"
