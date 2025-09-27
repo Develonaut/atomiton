@@ -1042,6 +1042,7 @@ Update client to use Flow types with tRPC and flat nodes:
    ```
 
 3. Create node tree component for hierarchical display:
+
    ```typescript
    function NodeTree({ nodes }) {
      const rootNodes = nodes.filter(n => !n.parentId);
@@ -1175,6 +1176,7 @@ Update @atomiton/yaml package to work with Flow types and flat nodes:
    ```
 
 4. Add migration for old nested structure:
+
    ```typescript
    export function migrateNestedToFlat(oldFlow: any): Flow {
      const flatNodes = [];
@@ -1646,6 +1648,7 @@ Optimize performance with the flat node structure:
    ```
 
 4. Add performance benchmarks:
+
    ```typescript
    describe("Flat vs Nested Performance", () => {
      const createLargeTree = (depth: number, breadth: number) => {
