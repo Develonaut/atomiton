@@ -1,7 +1,6 @@
 import "@/preload/preload.d";
 import { electronAPI } from "@electron-toolkit/preload";
 import { contextBridge, ipcRenderer } from "electron";
-import { exposeElectronTRPC } from "electron-trpc/preload";
 
 console.log("[PRELOAD] Starting preload script");
 console.log("[PRELOAD] contextIsolated:", process.contextIsolated);
@@ -94,16 +93,41 @@ const atomitonIPC = {
 };
 
 // Expose electron API
+const rpcAPI = {
+  node: {
+    execute: (input: any) => {
+      console.log("[PRELOAD-RPC] node.execute called with:", input);
+      return ipcRenderer.invoke("rpc", { method: "node.execute", input });
+    },
+  },
+  flow: {
+    execute: (input: any) => {
+      console.log("[PRELOAD-RPC] flow.execute called with:", input);
+      return ipcRenderer.invoke("rpc", { method: "flow.execute", input });
+    },
+  },
+  system: {
+    health: () => {
+      console.log("[PRELOAD-RPC] system.health called");
+      return ipcRenderer.invoke("rpc", { method: "system.health" });
+    },
+    info: () => {
+      console.log("[PRELOAD-RPC] system.info called");
+      return ipcRenderer.invoke("rpc", { method: "system.info" });
+    },
+  },
+};
+
 if (process.contextIsolated) {
   try {
-    // Expose electron-trpc
-    console.log("[PRELOAD] Exposing electron-trpc via contextBridge");
-    exposeElectronTRPC();
-    console.log("[PRELOAD] Electron-trpc exposed successfully");
-
     console.log("[PRELOAD] Exposing electron API via contextBridge");
     contextBridge.exposeInMainWorld("electron", electronAPI);
     console.log("[PRELOAD] Electron API exposed successfully");
+
+    // Expose native RPC API
+    console.log("[PRELOAD] Exposing native RPC API via contextBridge");
+    contextBridge.exposeInMainWorld("rpc", rpcAPI);
+    console.log("[PRELOAD] Native RPC API exposed successfully");
 
     // Expose Atomiton IPC for backward compatibility
     console.log("[PRELOAD] Exposing atomiton IPC API via contextBridge");
@@ -117,6 +141,7 @@ if (process.contextIsolated) {
     "[PRELOAD] Context isolation disabled, setting APIs directly on window",
   );
   window.electron = electronAPI;
+  (window as unknown as Window & { rpc: typeof rpcAPI }).rpc = rpcAPI;
   (
     window as unknown as Window & { atomitonIPC: typeof atomitonIPC }
   ).atomitonIPC = atomitonIPC;

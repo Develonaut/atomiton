@@ -69,7 +69,6 @@ import { parseYaml } from '@atomiton/yaml';
 import { migrateFlow } from '@atomiton/flow/migrations';
 
 const rawFlow = parseYaml(yamlContent);
-const flow = migrateFlow(rawFlow); // Apply migrations if needed
 /*
 {
   version: 1,

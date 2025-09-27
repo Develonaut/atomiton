@@ -1,33 +1,148 @@
-import { trpc } from "#lib/trpc";
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
+interface RPCExecuteInput {
+  executable: {
+    id: string;
+    type: string;
+    version: string;
+  };
+  context: {
+    variables: Record<string, any>;
+  };
+}
 
-export const rpc = {
-  async execute(executable: NodeDefinition) {
-    return trpc.execution.execute.mutate({
-      executable,
-      context: { user: "current-user" },
-    });
-  },
+interface RPCExecuteResult {
+  success: boolean;
+  error?: string;
+  data?: any;
+}
 
-  async getNodeDefinitions() {
-    return trpc.nodes.list.query();
-  },
+interface RPCHealthResult {
+  status: string;
+  timestamp: number;
+}
 
-  async getNodeChildren(parentId: string) {
-    return trpc.nodes.getChildren.query(parentId);
-  },
+interface RPCInfoResult {
+  version: string;
+  environment: string;
+}
 
-  async saveFlow(flow: NodeDefinition) {
-    return trpc.storage.save.mutate(flow);
-  },
+interface NativeRPC {
+  node: {
+    execute: (input: RPCExecuteInput) => Promise<RPCExecuteResult>;
+  };
+  flow: {
+    execute: (input: RPCExecuteInput) => Promise<RPCExecuteResult>;
+  };
+  system: {
+    health: () => Promise<RPCHealthResult>;
+    info: () => Promise<RPCInfoResult>;
+  };
+}
 
-  async loadFlow(id: string) {
-    return trpc.storage.load.query(id);
-  },
+declare global {
+  interface Window {
+    rpc?: NativeRPC;
+  }
+}
 
-  executeNode: function (node: NodeDefinition) {
-    return this.execute(node);
+const createFallbackRPC = (): NativeRPC => ({
+  node: {
+    execute: async (input: RPCExecuteInput) => {
+      console.log("[RPC] Fallback node.execute called with:", input);
+      throw new Error(
+        "RPC not available - not running in Electron environment",
+      );
+    },
   },
+  flow: {
+    execute: async (input: RPCExecuteInput) => {
+      console.log("[RPC] Fallback flow.execute called with:", input);
+      throw new Error(
+        "RPC not available - not running in Electron environment",
+      );
+    },
+  },
+  system: {
+    health: async () => {
+      console.log("[RPC] Fallback system.health called");
+      throw new Error(
+        "RPC not available - not running in Electron environment",
+      );
+    },
+    info: async () => {
+      console.log("[RPC] Fallback system.info called");
+      throw new Error(
+        "RPC not available - not running in Electron environment",
+      );
+    },
+  },
+});
+
+const createLoggedRPC = (nativeRPC: NativeRPC): NativeRPC => ({
+  node: {
+    execute: async (input: RPCExecuteInput) => {
+      console.log("[RPC] node.execute called with:", input);
+      try {
+        const result = await nativeRPC.node.execute(input);
+        console.log("[RPC] node.execute result:", result);
+        return result;
+      } catch (error) {
+        console.error("[RPC] node.execute error:", error);
+        throw error;
+      }
+    },
+  },
+  flow: {
+    execute: async (input: RPCExecuteInput) => {
+      console.log("[RPC] flow.execute called with:", input);
+      try {
+        const result = await nativeRPC.flow.execute(input);
+        console.log("[RPC] flow.execute result:", result);
+        return result;
+      } catch (error) {
+        console.error("[RPC] flow.execute error:", error);
+        throw error;
+      }
+    },
+  },
+  system: {
+    health: async () => {
+      console.log("[RPC] system.health called");
+      try {
+        const result = await nativeRPC.system.health();
+        console.log("[RPC] system.health result:", result);
+        return result;
+      } catch (error) {
+        console.error("[RPC] system.health error:", error);
+        throw error;
+      }
+    },
+    info: async () => {
+      console.log("[RPC] system.info called");
+      try {
+        const result = await nativeRPC.system.info();
+        console.log("[RPC] system.info result:", result);
+        return result;
+      } catch (error) {
+        console.error("[RPC] system.info error:", error);
+        throw error;
+      }
+    },
+  },
+});
+
+export const rpc: NativeRPC = window.rpc
+  ? createLoggedRPC(window.rpc)
+  : createFallbackRPC();
+
+export const isRPCAvailable = (): boolean => {
+  const available = !!window.rpc;
+  console.log("[RPC] Availability check:", available);
+  return available;
 };
 
-export const ipc = rpc;
+export type {
+  RPCExecuteInput,
+  RPCExecuteResult,
+  RPCHealthResult,
+  RPCInfoResult,
+};

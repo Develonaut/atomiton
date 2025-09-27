@@ -149,6 +149,9 @@ importers:
 
   apps/client:
     dependencies:
+      '@atomiton/conductor':
+        specifier: workspace:*
+        version: link:../../packages/@atomiton/conductor
       '@atomiton/editor':
         specifier: workspace:*
         version: link:../../packages/@atomiton/editor
@@ -161,6 +164,9 @@ importers:
       '@atomiton/router':
         specifier: workspace:*
         version: link:../../packages/@atomiton/router
+      '@atomiton/rpc':
+        specifier: workspace:*
+        version: link:../../packages/@atomiton/rpc
       '@atomiton/store':
         specifier: workspace:*
         version: link:../../packages/@atomiton/store
@@ -173,18 +179,6 @@ importers:
       '@headlessui/react':
         specifier: ^2.2.4
         version: 2.2.8(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@tanstack/react-query':
-        specifier: ^5.90.2
-        version: 5.90.2(react@19.1.1)
-      '@trpc/client':
-        specifier: ^11.6.0
-        version: 11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2)
-      '@trpc/react-query':
-        specifier: ^11.6.0
-        version: 11.6.0(@tanstack/react-query@5.90.2(react@19.1.1))(@trpc/client@11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.6.0(typescript@5.9.2))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
-      electron-trpc:
-        specifier: ^0.6.1
-        version: 0.6.2(@trpc/client@11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.6.0(typescript@5.9.2))(electron@38.1.2)
       framer-motion:
         specifier: ^12.17.0
         version: 12.23.13(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -218,9 +212,6 @@ importers:
       react-use:
         specifier: ^17.6.0
         version: 17.6.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      superjson:
-        specifier: ^2.2.2
-        version: 2.2.2
       swiper:
         specifier: ^11.2.8
         version: 11.2.10
@@ -288,6 +279,9 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@atomiton/conductor':
+        specifier: workspace:^
+        version: link:../../packages/@atomiton/conductor
       '@atomiton/nodes':
         specifier: workspace:^
         version: link:../../packages/@atomiton/nodes
@@ -300,9 +294,6 @@ importers:
       dotenv:
         specifier: ^17.2.2
         version: 17.2.2
-      electron-trpc:
-        specifier: ^0.6.1
-        version: 0.6.2(@trpc/client@11.6.0(@trpc/server@11.6.0(typescript@5.9.2))(typescript@5.9.2))(@trpc/server@11.6.0(typescript@5.9.2))(electron@38.1.2)
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:^
@@ -1130,9 +1121,6 @@ importers:
 
   packages/@atomiton/yaml:
     dependencies:
-      '@atomiton/flow':
-        specifier: workspace:*
-        version: link:../flow
       yaml:
         specifier: ^2.6.1
         version: 2.8.1

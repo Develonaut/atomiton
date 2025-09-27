@@ -1,6 +1,5 @@
 import { initializeServices } from "@/main/services";
-import { setupIPC } from "@atomiton/rpc/main";
-import { createTRPCHandler } from "@/main/trpc/handler";
+import { createRPCBridge } from "@/main/trpc-bridge";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { join } from "path";
@@ -186,13 +185,14 @@ app.whenReady().then(async () => {
 
   // Set up IPC handlers after window creation
   if (mainWindow) {
-    // Set up tRPC handler
-    createTRPCHandler(mainWindow);
-    console.log("tRPC handler initialized");
-
-    // Legacy IPC handlers for backward compatibility
+    // Set up legacy IPC for backward compatibility
+    const { setupIPC } = await import("@atomiton/rpc/main");
     setupIPC(mainWindow);
     console.log("Legacy IPC handlers initialized");
+
+    // Set up native RPC bridge
+    createRPCBridge(mainWindow);
+    console.log("Native RPC bridge initialized");
   }
 
   app.on("activate", function () {

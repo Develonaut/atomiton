@@ -1,11 +1,13 @@
 import Layout from "#components/Layout";
 import { ipc, type NodeExecuteResponse, type NodeProgress } from "#lib/ipc";
+import { rpc, isRPCAvailable } from "#lib/rpc";
 import { Button, Icon } from "@atomiton/ui";
 import { useEffect, useState } from "react";
 
 type EnvironmentInfo = {
   isElectron: boolean;
   ipcAvailable: boolean;
+  rpcAvailable: boolean;
   userAgent: string;
   platform: string;
   nodeVersion?: string;
@@ -32,6 +34,7 @@ export default function DebugPage() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isRunningTests, setIsRunningTests] = useState(false);
   const [pingResult, setPingResult] = useState<string>("");
+  const [healthResult, setHealthResult] = useState<any>(null);
   const [nodeProgress, setNodeProgress] = useState<NodeProgress | null>(null);
   const [nodeResult, setNodeResult] = useState<NodeExecuteResponse | null>(
     null,
@@ -52,6 +55,7 @@ export default function DebugPage() {
         !!(window as Window & { electron?: unknown; atomitonIPC?: unknown })
           .atomitonIPC;
       const ipcAvailable = ipc.isAvailable();
+      const rpcAvailable = isRPCAvailable();
       const apiMethods: string[] = [];
 
       const windowWithIPC = window as Window & {
@@ -62,6 +66,15 @@ export default function DebugPage() {
           ...Object.keys(windowWithIPC.atomitonIPC).filter(
             (key) => typeof windowWithIPC.atomitonIPC![key] === "function",
           ),
+        );
+      }
+
+      // Also add RPC methods if available
+      if (rpcAvailable) {
+        apiMethods.push(
+          "rpc.node.execute",
+          "rpc.flow.execute",
+          "rpc.system.health",
         );
       }
 
@@ -81,6 +94,7 @@ export default function DebugPage() {
       const info: EnvironmentInfo = {
         isElectron,
         ipcAvailable,
+        rpcAvailable,
         userAgent: navigator.userAgent,
         platform: navigator.platform,
         nodeVersion,
@@ -97,6 +111,7 @@ export default function DebugPage() {
       setEnvironment(info);
       addLog(`Environment detected: ${isElectron ? "Electron" : "Browser"}`);
       addLog(`IPC Available: ${ipcAvailable}`);
+      addLog(`RPC Available: ${rpcAvailable}`);
     };
 
     detectEnvironment();
@@ -136,6 +151,42 @@ export default function DebugPage() {
     }
   };
 
+  const testHealth = async () => {
+    const startTime = Date.now();
+    addLog("Starting RPC health check...");
+
+    try {
+      const result = await rpc.system.health();
+      const duration = Date.now() - startTime;
+      setHealthResult(result);
+
+      const testResult: TestResult = {
+        name: "RPC Health Check",
+        success: true,
+        message: `Status: ${result.status}`,
+        timestamp: Date.now(),
+        duration,
+      };
+
+      setTestResults((prev) => [...prev, testResult]);
+      addLog(
+        `✅ RPC health check successful: ${result.status} (${duration}ms)`,
+      );
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      const testResult: TestResult = {
+        name: "RPC Health Check",
+        success: false,
+        message: error instanceof Error ? error.message : "Unknown error",
+        timestamp: Date.now(),
+        duration,
+      };
+
+      setTestResults((prev) => [...prev, testResult]);
+      addLog(`❌ RPC health check failed: ${testResult.message}`);
+    }
+  };
+
   const testNodeExecution = async () => {
     const startTime = Date.now();
     addLog("Starting node execution test...");
@@ -161,8 +212,8 @@ export default function DebugPage() {
     try {
       // Get output path from environment variable, fallback to repo root .tmp
       const outputPath = import.meta.env.VITE_OUTPUT_PATH || ".tmp";
-      // Let the desktop resolve relative paths using its project root detection logic
       const filePath = `${outputPath}/debug-test-output.txt`;
+
       // Create a write-file node data that writes to configured output path
       const writeFileNodeData = {
         id: "write-file-test",
@@ -218,7 +269,7 @@ export default function DebugPage() {
     setTestResults([]);
     addLog("🚀 Starting all tests...");
 
-    await testPing();
+    await testHealth();
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     await testNodeExecution();
@@ -230,8 +281,7 @@ export default function DebugPage() {
   const clearLogs = () => {
     setLogs([]);
     setTestResults([]);
-    setPingResult("");
-    setNodeProgress(null);
+    setHealthResult(null);
     setNodeResult(null);
   };
 
@@ -277,9 +327,9 @@ export default function DebugPage() {
                     Electron
                   </span>
                 )}
-                {environment.ipcAvailable && (
+                {environment.rpcAvailable && (
                   <span className="text-xs px-2 py-1 bg-success/10 text-success rounded-lg">
-                    IPC Ready
+                    RPC Ready
                   </span>
                 )}
               </h2>
@@ -328,7 +378,7 @@ export default function DebugPage() {
 
                 {environment.apiMethods.length > 0 && (
                   <div className="col-span-2">
-                    <p className="text-secondary mb-2">Available IPC Methods</p>
+                    <p className="text-secondary mb-2">Available RPC Methods</p>
                     <div className="flex flex-wrap gap-2">
                       {environment.apiMethods.map((method) => (
                         <span
@@ -349,13 +399,13 @@ export default function DebugPage() {
           <div className="bg-surface-02 rounded-2xl p-6 border border-s-01">
             <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
               <Icon name="flask" size={20} className="text-secondary" />
-              IPC Tests
+              RPC Tests
             </h2>
 
             <div className="flex flex-wrap gap-3 mb-6">
               <Button
                 onClick={runAllTests}
-                disabled={isRunningTests || !environment?.ipcAvailable}
+                disabled={isRunningTests || !environment?.rpcAvailable}
                 variant="default"
               >
                 <Icon name="play" size={16} className="text-white mr-2" />
@@ -363,17 +413,17 @@ export default function DebugPage() {
               </Button>
 
               <Button
-                onClick={testPing}
-                disabled={isRunningTests || !environment?.ipcAvailable}
+                onClick={testHealth}
+                disabled={isRunningTests || !environment?.rpcAvailable}
                 variant="outline"
               >
-                Test Ping
+                Test Health
               </Button>
 
               <Button
                 onClick={testNodeExecution}
                 data-testid="test-node-execution"
-                disabled={isRunningTests || !environment?.ipcAvailable}
+                disabled={isRunningTests || !environment?.rpcAvailable}
                 variant="outline"
               >
                 Test Node
@@ -441,16 +491,16 @@ export default function DebugPage() {
             )}
 
             {/* Result Display */}
-            {(pingResult || nodeResult) && (
+            {(healthResult || nodeResult) && (
               <div className="space-y-3">
-                {pingResult && (
+                {healthResult && (
                   <div className="p-3 bg-surface-01 rounded-xl">
                     <p className="text-sm font-medium text-primary mb-1">
-                      Ping Result
+                      Health Check Result
                     </p>
-                    <p className="font-mono text-xs text-secondary">
-                      {pingResult}
-                    </p>
+                    <pre className="font-mono text-xs text-secondary overflow-auto">
+                      {JSON.stringify(healthResult, null, 2)}
+                    </pre>
                   </div>
                 )}
 
@@ -499,8 +549,8 @@ export default function DebugPage() {
                 Running in Browser Mode
               </h3>
               <p className="text-secondary text-sm">
-                IPC features are not available when running in a browser. To
-                test IPC functionality, run the application through the Electron
+                RPC features are not available when running in a browser. To
+                test RPC functionality, run the application through the Electron
                 desktop wrapper.
               </p>
               <p className="text-secondary text-sm mt-2">

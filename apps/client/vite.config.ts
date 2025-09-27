@@ -7,6 +7,8 @@ export default defineAppConfig({
     "@atomiton/editor",
     "@atomiton/form",
     "@atomiton/store",
+    "@atomiton/rpc",
+    "@atomiton/conductor",
   ],
   enableTailwind: true,
   assetsInlineLimit: 4096,

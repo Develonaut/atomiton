@@ -18,11 +18,11 @@
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },
   "dependencies": {
+    "@atomiton/conductor": "workspace:^",
     "@atomiton/nodes": "workspace:^",
     "@atomiton/rpc": "workspace:^",
     "@atomiton/storage": "workspace:^",
-    "dotenv": "^17.2.2",
-    "electron-trpc": "^0.6.1"
+    "dotenv": "^17.2.2"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",
