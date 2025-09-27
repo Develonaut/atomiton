@@ -1,177 +1,80 @@
-id: "550e8400-e29b-41d4-a716-446655440001"
-name: "Hello World"
-description: "A simple greeting workflow that demonstrates basic node connectivity"
-category: "tutorial"
-type: "group"
-version: "1.0.0"
-
-metadata:
-  created: "2025-01-15T00:00:00Z"
-  modified: "2025-01-15T00:00:00Z"
-  author: "Atomiton Team"
-  authorId: "atomiton-team"
-  source: "system"
-  type: "hello-world"
-  icon: "message-square"
-  tags:
-    - "example"
-    - "beginner"
-    - "text"
-  keywords:
-    - "hello"
-    - "world"
-    - "greeting"
-    - "starter"
-    - "tutorial"
-  runtime:
-    language: "typescript"
-  experimental: false
-  deprecated: false
-  documentationUrl: "https://docs.atomiton.com/nodes/hello-world"
-
-nodes:
-  - id: "greeting-code"
-    type: "code"
-    name: "Generate Greeting"
-    category: "logic"
+flow:
+  metadata:
+    name: "Hello World Example"
     version: "1.0.0"
+    description: "Simple blueprint that creates data and writes it to a file"
+    author: "Atomiton"
+    tags: ["example", "beginner", "hello-world"]
 
-    metadata:
-      id: "code"
-      name: "Code"
-      type: "code"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Execute custom JavaScript/TypeScript code"
-      category: "logic"
-      icon: "code-2"
-      source: "system"
-      experimental: false
-      deprecated: false
+    nodes:
+    # Edit Fields node - creates the hello world data
+    create_message:
+      type: "edit-fields"
+      parameters:
+        values:
+          message: "Hello World from Atomiton!"
+          description: "This is a simple example showing how Blueprint nodes work together."
+          timestamp: "{{$now}}"
+          author: "Atomiton Blueprint System"
+        keepOnlySet: true
+      position:
+        x: 100
+        y: 200
 
-    inputPorts:
-      - id: "input"
-        name: "Input"
-        type: "input"
-        dataType: "any"
-        required: false
-
-    outputPorts:
-      - id: "output"
-        name: "Output"
-        type: "output"
-        dataType: "any"
-
-    parameters:
-      code:
-        type: "string"
-        default: "// Write your JavaScript code here\nreturn data;"
-        control: "code"
-      inputParams:
-        type: "string"
-        default: "data"
-      returnType:
-        type: "string"
-        default: "any"
-        options: ["any", "string", "number", "boolean", "object", "array"]
-      async:
-        type: "boolean"
-        default: false
-
-    data:
-      code: "// Greeting function\nconst greeting = 'Hello, World!';\nreturn { message: greeting };"
-      inputParams: "data"
-      returnType: "object"
-      async: false
-      customLabel: "Generate Greeting"
-      lastModified: "2025-01-15T10:00:00Z"
-
-    position:
-      x: 100
-      y: 100
-
-    settings:
-      ui:
-        position:
-          x: 100
-          y: 100
-
-  - id: "display-transform"
-    type: "transform"
-    name: "Transform to Uppercase"
-    category: "data"
-    version: "1.0.0"
-
-    metadata:
-      id: "transform"
-      name: "Transform"
+    # Transform node - formats the message for output
+    format_content:
       type: "transform"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Transform data using JavaScript expressions"
-      category: "data"
-      icon: "wand-2"
-      source: "system"
-      experimental: false
-      deprecated: false
+      parameters:
+        operation: "map"
+        transformFunction: |
+          item => {
+            return `${item.message}
 
-    inputPorts:
-      - id: "input"
-        name: "Input"
-        type: "input"
-        dataType: "any"
-        required: true
+            ${item.description}
 
-    outputPorts:
-      - id: "output"
-        name: "Output"
-        type: "output"
-        dataType: "any"
+            Created by: ${item.author}
+            Generated at: ${item.timestamp}`;
+          }
+      position:
+        x: 300
+        y: 200
 
-    parameters:
-      expression:
-        type: "string"
-        default: "return data;"
-        control: "code"
-      inputType:
-        type: "string"
-        default: "any"
-        options: ["any", "string", "number", "boolean", "object", "array"]
-      outputType:
-        type: "string"
-        default: "any"
-        options: ["any", "string", "number", "boolean", "object", "array"]
+    # File system node - writes the formatted content to a file
+    write_to_file:
+      type: "file-system"
+      parameters:
+        operation: "write"
+        path: "/Users/Ryan/Desktop/hello-world.txt"
+        encoding: "utf8"
+        createDirectories: true
+        overwrite: true
+      position:
+        x: 500
+        y: 200
 
-    data:
-      expression: "// Transform to uppercase\nreturn data.message.toUpperCase();"
-      inputType: "object"
-      outputType: "string"
-      customLabel: "Transform to Uppercase"
-      lastModified: "2025-01-15T10:00:00Z"
+  edges:
+    # Connect edit fields node to transform node
+    - id: "data_to_transform"
+      source:
+        nodeId: "create_message"
+        portId: "data"
+      target:
+        nodeId: "format_content"
+        portId: "data"
 
-    position:
-      x: 400
-      y: 100
+    # Connect transform node to file system node
+    - id: "content_to_file"
+      source:
+        nodeId: "format_content"
+        portId: "result"
+      target:
+        nodeId: "write_to_file"
+        portId: "content"
 
-    settings:
-      ui:
-        position:
-          x: 400
-          y: 100
-
-edges:
-  - id: "greeting-code-display-transform"
-    source: "greeting-code"
-    target: "display-transform"
-
-variables:
-  greeting:
-    type: "string"
-    defaultValue: "Hello, World!"
-    description: "The greeting message to display"
-
-settings:
-  runtime:
-    timeout: 5000
-  ui:
-    color: "#4CAF50"
+  settings:
+    execution:
+      mode: "sequential"
+      errorHandling: "stop"
+    ui:
+      theme: "light"
+      gridSize: 20

@@ -23,6 +23,7 @@ export {
 export { default as codeExecutable } from "#executables/code";
 export { default as groupExecutable } from "#executables/group";
 export { default as csvReaderExecutable } from "#executables/csv-reader";
+export { default as editFieldsExecutable } from "#executables/edit-fields";
 export { default as fileSystemExecutable } from "#executables/file-system";
 export { default as httpRequestExecutable } from "#executables/http-request";
 export { default as imageCompositeExecutable } from "#executables/image-composite";
