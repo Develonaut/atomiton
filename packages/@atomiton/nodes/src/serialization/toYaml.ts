@@ -77,8 +77,8 @@ export function toYaml(definition: NodeDefinition): string {
     };
 
     // Add nodes if group
-    if (definition.children && definition.children.length > 0) {
-      yamlStructure.nodes = definition.children.map(serializeNode);
+    if (definition.nodes && definition.nodes.length > 0) {
+      yamlStructure.nodes = definition.nodes.map(serializeNode);
     }
 
     // Add edges if present

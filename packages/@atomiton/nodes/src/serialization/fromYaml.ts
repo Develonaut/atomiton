@@ -72,7 +72,7 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
   const outputPorts = parsePorts(data.outputPorts || []);
 
   // Parse child nodes if group
-  const children = data.nodes ? data.nodes.map(parseNodeDefinition) : undefined;
+  const nodes = data.nodes ? data.nodes.map(parseNodeDefinition) : undefined;
 
   // Parse edges
   const edges = data.edges ? parseEdges(data.edges) : undefined;
@@ -86,7 +86,7 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
     parameters,
     inputPorts,
     outputPorts,
-    children,
+    nodes,
     edges,
   });
 }

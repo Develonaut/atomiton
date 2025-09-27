@@ -29,7 +29,7 @@ export type CreateNodeInput = {
   parameters?: NodeParameters | Parameters<typeof createNodeParameters>[0];
   inputPorts?: NodePort[] | NodePortInput[];
   outputPorts?: NodePort[] | NodePortInput[];
-  children?: NodeDefinition[];
+  nodes?: NodeDefinition[];
   edges?: NodeEdge[];
 };
 
@@ -68,9 +68,9 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     outputPorts: ports.output,
   };
 
-  // Add children/edges if provided (any node can have them)
-  if (input.children) {
-    node.children = input.children;
+  // Add nodes/edges if provided (any node can have them)
+  if (input.nodes) {
+    node.nodes = input.nodes;
   }
   if (input.edges) {
     node.edges = input.edges;

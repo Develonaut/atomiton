@@ -2,7 +2,7 @@ import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
 import type { Flow } from "#types";
 
 /**
- * Check if a node is a flow (has children nodes)
+ * Check if a node is a flow (has nodes)
  */
 export const isFlow = (node: unknown): node is Flow => {
   if (typeof node !== "object" || node === null) {
@@ -10,10 +10,8 @@ export const isFlow = (node: unknown): node is Flow => {
   }
 
   const n = node as NodeDefinition;
-  // A flow is a node with children
-  return Boolean(
-    n.children && Array.isArray(n.children) && n.children.length > 0,
-  );
+  // A flow is a node with nodes
+  return Boolean(n.nodes && Array.isArray(n.nodes) && n.nodes.length > 0);
 };
 
 /**
@@ -72,7 +70,7 @@ export const isEdge = (value: unknown): value is NodeEdge => {
  */
 export const isValidFlow = (flow: Flow): boolean => {
   // Check all nodes are valid
-  if (flow.children && !flow.children.every(isNode)) {
+  if (flow.nodes && !flow.nodes.every(isNode)) {
     return false;
   }
 
@@ -82,7 +80,7 @@ export const isValidFlow = (flow: Flow): boolean => {
   }
 
   // Check all edge endpoints exist
-  const nodeIds = new Set(flow.children?.map((n) => n.id) || []);
+  const nodeIds = new Set(flow.nodes?.map((n) => n.id) || []);
 
   if (flow.edges) {
     for (const edge of flow.edges) {
@@ -113,21 +111,21 @@ export const hasOutputs = (node: NodeDefinition): boolean => {
  * Check if a flow is empty (no nodes)
  */
 export const isEmptyFlow = (flow: Flow): boolean => {
-  return !flow.children || flow.children.length === 0;
+  return !flow.nodes || flow.nodes.length === 0;
 };
 
 /**
  * Check if a flow has cycles
  */
 export const hasCycles = (flow: Flow): boolean => {
-  if (!flow.children || !flow.edges) {
+  if (!flow.nodes || !flow.edges) {
     return false;
   }
 
   const adjacencyList: Map<string, string[]> = new Map();
 
   // Build adjacency list
-  flow.children.forEach((node) => {
+  flow.nodes.forEach((node) => {
     adjacencyList.set(node.id, []);
   });
 

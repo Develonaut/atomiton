@@ -6,8 +6,8 @@ export const addEdge =
   (edge: NodeEdge) =>
   (flow: Flow): Flow => {
     // Validate nodes exist
-    const sourceNodeExists = flow.children?.some((n) => n.id === edge.source);
-    const targetNodeExists = flow.children?.some((n) => n.id === edge.target);
+    const sourceNodeExists = flow.nodes?.some((n) => n.id === edge.source);
+    const targetNodeExists = flow.nodes?.some((n) => n.id === edge.target);
 
     if (!sourceNodeExists) {
       throw new Error(`Source node ${edge.source} not found in flow`);

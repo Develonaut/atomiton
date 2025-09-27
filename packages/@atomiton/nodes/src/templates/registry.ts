@@ -111,8 +111,8 @@ export function hasTemplate(id: string): boolean {
  * Add template to registry
  */
 export function addTemplate(template: NodeDefinition): void {
-  if (!template.children || template.children.length === 0) {
-    throw new Error("Only nodes with children can be added as templates");
+  if (!template.nodes || template.nodes.length === 0) {
+    throw new Error("Only nodes with nodes can be added as templates");
   }
 
   // Remove existing template with same ID

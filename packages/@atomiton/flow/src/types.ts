@@ -81,8 +81,8 @@ export type FlowExecutor<TInput = unknown, TOutput = unknown> = (
  * Type guard to check if a node is a flow
  */
 export const isFlow = (node: NodeDefinition): boolean => {
-  // A node is a flow if it has children nodes
-  return Boolean(node.children && node.children.length > 0);
+  // A node is a flow if it has nodes
+  return Boolean(node.nodes && node.nodes.length > 0);
 };
 
 /**

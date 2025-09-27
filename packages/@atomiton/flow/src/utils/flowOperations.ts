@@ -18,7 +18,7 @@ export const getConnectedNodes = (
     ?.filter((e) => e.target === nodeId)
     .forEach((e) => connectedNodeIds.add(e.source));
 
-  return flow.children?.filter((n) => connectedNodeIds.has(n.id)) || [];
+  return flow.nodes?.filter((n) => connectedNodeIds.has(n.id)) || [];
 };
 
 export const clearEdges = (flow: Flow): Flow => {
@@ -35,7 +35,7 @@ export const clearEdges = (flow: Flow): Flow => {
 export const clearNodes = (flow: Flow): Flow => {
   return {
     ...flow,
-    children: [],
+    nodes: [],
     edges: [],
     metadata: {
       ...flow.metadata,
@@ -52,7 +52,7 @@ export const transformFlow = (
 };
 
 export const getTopologicalOrder = (flow: Flow): NodeDefinition[] => {
-  if (!flow.children || flow.children.length === 0) {
+  if (!flow.nodes || flow.nodes.length === 0) {
     return [];
   }
 
@@ -60,7 +60,7 @@ export const getTopologicalOrder = (flow: Flow): NodeDefinition[] => {
   const adjacencyList = new Map<string, string[]>();
 
   // Initialize
-  flow.children.forEach((node) => {
+  flow.nodes.forEach((node) => {
     inDegree.set(node.id, 0);
     adjacencyList.set(node.id, []);
   });
@@ -86,7 +86,7 @@ export const getTopologicalOrder = (flow: Flow): NodeDefinition[] => {
 
   while (queue.length > 0) {
     const nodeId = queue.shift()!;
-    const node = flow.children.find((n) => n.id === nodeId);
+    const node = flow.nodes.find((n) => n.id === nodeId);
 
     if (node) {
       result.push(node);
@@ -105,7 +105,7 @@ export const getTopologicalOrder = (flow: Flow): NodeDefinition[] => {
   }
 
   // If not all nodes are included, there's a cycle
-  if (result.length !== flow.children.length) {
+  if (result.length !== flow.nodes.length) {
     throw new Error("Flow contains cycles and cannot be topologically sorted");
   }
 

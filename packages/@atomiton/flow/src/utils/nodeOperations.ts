@@ -10,13 +10,13 @@ export const addNode =
     }
 
     // Check for duplicate ID
-    if (flow.children?.some((n) => n.id === node.id)) {
+    if (flow.nodes?.some((n) => n.id === node.id)) {
       throw new Error(`Node with ID ${node.id} already exists in flow`);
     }
 
     return {
       ...flow,
-      children: [...(flow.children || []), node],
+      nodes: [...(flow.nodes || []), node],
       metadata: {
         ...flow.metadata,
         updatedAt: new Date(),
@@ -27,7 +27,7 @@ export const addNode =
 export const removeNode =
   (nodeId: string) =>
   (flow: Flow): Flow => {
-    const nodeExists = flow.children?.some((n) => n.id === nodeId);
+    const nodeExists = flow.nodes?.some((n) => n.id === nodeId);
 
     if (!nodeExists) {
       return flow; // No-op if node doesn't exist
@@ -35,7 +35,7 @@ export const removeNode =
 
     return {
       ...flow,
-      children: flow.children?.filter((n) => n.id !== nodeId),
+      nodes: flow.nodes?.filter((n) => n.id !== nodeId),
       // Remove edges involving this node
       edges: flow.edges?.filter(
         (e) => e.source !== nodeId && e.target !== nodeId,
@@ -50,13 +50,13 @@ export const removeNode =
 export const updateNode =
   (nodeId: string, updates: Partial<NodeDefinition>) =>
   (flow: Flow): Flow => {
-    const nodeIndex = flow.children?.findIndex((n) => n.id === nodeId) ?? -1;
+    const nodeIndex = flow.nodes?.findIndex((n) => n.id === nodeId) ?? -1;
 
     if (nodeIndex === -1) {
       throw new Error(`Node with ID ${nodeId} not found in flow`);
     }
 
-    const updatedNodes = [...(flow.children || [])];
+    const updatedNodes = [...(flow.nodes || [])];
     updatedNodes[nodeIndex] = {
       ...updatedNodes[nodeIndex],
       ...updates,
@@ -65,7 +65,7 @@ export const updateNode =
 
     return {
       ...flow,
-      children: updatedNodes,
+      nodes: updatedNodes,
       metadata: {
         ...flow.metadata,
         updatedAt: new Date(),
@@ -76,23 +76,23 @@ export const updateNode =
 export const mapNodes =
   <T>(fn: (node: NodeDefinition) => T) =>
   (flow: Flow): T[] => {
-    return flow.children?.map(fn) || [];
+    return flow.nodes?.map(fn) || [];
   };
 
 export const filterNodes =
   (predicate: (node: NodeDefinition) => boolean) =>
   (flow: Flow): NodeDefinition[] => {
-    return flow.children?.filter(predicate) || [];
+    return flow.nodes?.filter(predicate) || [];
   };
 
 export const findNode =
   (predicate: (node: NodeDefinition) => boolean) =>
   (flow: Flow): NodeDefinition | undefined => {
-    return flow.children?.find(predicate);
+    return flow.nodes?.find(predicate);
   };
 
 export const getNodeById =
   (nodeId: string) =>
   (flow: Flow): NodeDefinition | undefined => {
-    return flow.children?.find((n) => n.id === nodeId);
+    return flow.nodes?.find((n) => n.id === nodeId);
   };

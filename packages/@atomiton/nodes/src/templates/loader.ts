@@ -35,8 +35,8 @@ function validateTemplateStructure(definition: NodeDefinition): void {
     throw new Error("Template must have metadata");
   }
 
-  if (!definition.children || definition.children.length === 0) {
-    throw new Error("Templates must have children nodes");
+  if (!definition.nodes || definition.nodes.length === 0) {
+    throw new Error("Templates must have nodes");
   }
 }
 
@@ -44,11 +44,11 @@ function validateTemplateStructure(definition: NodeDefinition): void {
  * Validate that all edge references point to valid nodes
  */
 function validateNodeReferences(definition: NodeDefinition): void {
-  if (!definition.children || !definition.edges) {
+  if (!definition.nodes || !definition.edges) {
     return; // No nodes or edges to validate
   }
 
-  const nodeIds = new Set(definition.children.map((n) => n.id));
+  const nodeIds = new Set(definition.nodes.map((n) => n.id));
 
   for (const edge of definition.edges) {
     if (!nodeIds.has(edge.source)) {

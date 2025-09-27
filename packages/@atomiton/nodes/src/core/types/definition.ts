@@ -27,7 +27,7 @@ export type NodePosition = {
  * Universal Node Definition
  *
  * Static, serializable structure defining a node's configuration.
- * All nodes share this interface - some may have children, some may not.
+ * All nodes share this interface - some may have nodes, some may not.
  */
 export type NodeDefinition = {
   /** Unique identifier for this node */
@@ -51,8 +51,8 @@ export type NodeDefinition = {
   /** Output port definitions */
   outputPorts: NodePort[];
 
-  /** Child nodes (optional - only some nodes have children) */
-  children?: NodeDefinition[];
+  /** Nodes contained within this node (optional - makes this a group/flow) */
+  nodes?: NodeDefinition[];
 
   /** Edges connecting nodes */
   edges?: NodeEdge[];

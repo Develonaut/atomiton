@@ -6,13 +6,13 @@
 import type { NodeDefinition } from "#core/types/definition";
 
 /**
- * Check if a node has children
+ * Check if a node has nodes (is a container/group/flow)
  */
 export const hasChildren = (node: NodeDefinition): boolean =>
-  Boolean(node.children && node.children.length > 0);
+  Boolean(node.nodes && node.nodes.length > 0);
 
 /**
- * Check if a node is a leaf node (no children)
+ * Check if a node is a leaf node (no contained nodes)
  */
 export const isLeafNode = (node: NodeDefinition): boolean => !hasChildren(node);
 
@@ -35,8 +35,8 @@ export const getChildCount = (node: NodeDefinition): number => {
     return 0;
   }
 
-  let count = node.children!.length;
-  for (const child of node.children!) {
+  let count = node.nodes!.length;
+  for (const child of node.nodes!) {
     count += getChildCount(child);
   }
 

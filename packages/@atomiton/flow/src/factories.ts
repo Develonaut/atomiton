@@ -46,7 +46,7 @@ export const createFlow = (params: {
     id: params.id || generateId(),
     name: params.name || "New Flow",
     metadata,
-    children: params.nodes,
+    nodes: params.nodes,
     edges: params.edges,
     parameters: {
       schema: {},
@@ -114,7 +114,7 @@ export const createSequentialFlow = (
  */
 export const cloneFlow = (flow: Flow, newId?: string): Flow => {
   const now = new Date();
-  const clonedNodes = flow.children?.map((node) => cloneNode(node)) || [];
+  const clonedNodes = flow.nodes?.map((node) => cloneNode(node)) || [];
   const clonedEdges = flow.edges?.map((edge) => cloneEdge(edge)) || [];
 
   return createFlow({
@@ -140,7 +140,7 @@ export const cloneNode = (
   return createNodeDefinition({
     ...node,
     id: newId || generateId(),
-    children: node.children?.map((child) => cloneNode(child)),
+    nodes: node.nodes?.map((child) => cloneNode(child)),
     edges: node.edges?.map((edge) => cloneEdge(edge)),
   });
 };
@@ -163,12 +163,12 @@ export const validateFlow = (flow: Flow): ValidationResult => {
   const errors: string[] = [];
 
   // Check if flow has at least one node
-  if (!flow.children || flow.children.length === 0) {
+  if (!flow.nodes || flow.nodes.length === 0) {
     errors.push("Flow must have at least one node");
   }
 
   // Validate edges reference existing nodes
-  const nodeIds = new Set(flow.children?.map((n) => n.id) || []);
+  const nodeIds = new Set(flow.nodes?.map((n) => n.id) || []);
   flow.edges?.forEach((edge) => {
     if (!nodeIds.has(edge.source)) {
       errors.push(`Edge references non-existent source: ${edge.source}`);
@@ -180,8 +180,8 @@ export const validateFlow = (flow: Flow): ValidationResult => {
 
   // Validate port connections
   flow.edges?.forEach((edge) => {
-    const sourceNode = flow.children?.find((n) => n.id === edge.source);
-    const targetNode = flow.children?.find((n) => n.id === edge.target);
+    const sourceNode = flow.nodes?.find((n) => n.id === edge.source);
+    const targetNode = flow.nodes?.find((n) => n.id === edge.target);
 
     if (sourceNode && edge.sourceHandle) {
       const sourcePort = sourceNode.outputPorts.find(
