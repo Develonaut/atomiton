@@ -207,8 +207,6 @@ export function createNodeRegistry(
   };
 }
 
-export function nodeRegistryFromJSON(
-  nodes: NodeDefinition[],
-): NodeRegistry {
+export function nodeRegistryFromJSON(nodes: NodeDefinition[]): NodeRegistry {
   return createNodeRegistry(nodes);
 }

@@ -95,13 +95,13 @@ const atomitonIPC = {
 // Expose electron API
 const rpcAPI = {
   node: {
-    execute: (input: any) => {
+    execute: (input: unknown) => {
       console.log("[PRELOAD-RPC] node.execute called with:", input);
       return ipcRenderer.invoke("rpc", { method: "node.execute", input });
     },
   },
   flow: {
-    execute: (input: any) => {
+    execute: (input: unknown) => {
       console.log("[PRELOAD-RPC] flow.execute called with:", input);
       return ipcRenderer.invoke("rpc", { method: "flow.execute", input });
     },

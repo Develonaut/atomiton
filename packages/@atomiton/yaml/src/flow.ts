@@ -73,15 +73,14 @@ export function validateFlowYaml(content: string): boolean {
   try {
     const flow = parseFlow(content);
     return (
-      (!flow.nodes ||
-        flow.nodes.every(
-          (node) =>
-            typeof node.version === "string" &&
-            (!node.parentId || typeof node.parentId === "string"),
-        ))
+      !flow.nodes ||
+      flow.nodes.every(
+        (node) =>
+          typeof node.version === "string" &&
+          (!node.parentId || typeof node.parentId === "string"),
+      )
     );
   } catch {
     return false;
   }
 }
-

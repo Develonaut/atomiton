@@ -113,7 +113,6 @@ export type NodeMetadataSource =
   | "organization"
   | "marketplace";
 
-
 /**
  * Node Metadata Interface
  *
@@ -153,4 +152,3 @@ export type NodeMetadata = {
     config: Record<string, unknown>;
   }>;
 };
-

@@ -1,7 +1,7 @@
 import { ipcMain, type BrowserWindow } from "electron";
 import { getNodeExecutable } from "@atomiton/nodes/executables";
 
-export function createRPCBridge(window: BrowserWindow) {
+export function createRPCBridge(_window: BrowserWindow) {
   ipcMain.handle("rpc", async (event, { method, input }) => {
     const startTime = Date.now();
     console.log(`[RPC-MAIN] 🚀 Request received - Method: ${method}`, input);
@@ -33,9 +33,9 @@ export function createRPCBridge(window: BrowserWindow) {
             inputs: {}, // No inputs for file-system nodes
             parameters: context.variables,
             log: {
-              info: (message: string, meta?: any) =>
+              info: (message: string, meta?: unknown) =>
                 console.log(`[RPC-NODE] ℹ️  ${message}`, meta),
-              error: (message: string, meta?: any) =>
+              error: (message: string, meta?: unknown) =>
                 console.error(`[RPC-NODE] ❌ ${message}`, meta),
             },
           };

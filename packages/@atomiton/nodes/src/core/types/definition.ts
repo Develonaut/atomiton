@@ -23,7 +23,6 @@ export type NodePosition = {
   y: number;
 };
 
-
 /**
  * Node Definition
  *

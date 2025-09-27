@@ -10,9 +10,7 @@ export const CURRENT_FLOW_VERSION = 1;
  * The 'version' field in NodeDefinition is for the node version
  * The 'schemaVersion' field tracks the flow schema structure version
  */
-export type Flow = NodeDefinition & {
-  schemaVersion?: number;
-};
+export type Flow = NodeDefinition;
 
 /**
  * Execution context passed through the flow

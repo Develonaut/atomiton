@@ -13,10 +13,10 @@ export const storageProcedures = {
     const flow = input;
     const flatFlow = {
       ...flow,
-      nodes: flow.nodes?.map((n: any) => ({
+      nodes: flow.nodes?.map((n: Record<string, unknown>) => ({
         ...n,
-        version: n.version || "1.0.0",
-        parentId: n.parentId || undefined,
+        version: (n.version as string) || "1.0.0",
+        parentId: (n.parentId as string) || undefined,
       })),
     };
 
