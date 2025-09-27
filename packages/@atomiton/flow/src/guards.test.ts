@@ -1,5 +1,4 @@
-import { describe, expect, it } from "vitest";
-import { createEdge, createFlow, createNode } from "#factories";
+import { createFlow } from "#factories";
 import {
   hasCycles,
   hasInputs,
@@ -7,44 +6,51 @@ import {
   isEdge,
   isEmptyFlow,
   isEntryNode,
-  isExecutable,
   isExitNode,
   isFlow,
   isNode,
   isValidFlow,
 } from "#guards";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
+import { describe, expect, it } from "vitest";
 
 describe("Type Guards", () => {
-  describe("isExecutable", () => {
-    it("should return true for valid executable", () => {
-      const node = createNode({
-        type: "test",
-        label: "Test",
+  describe("isNode", () => {
+    it("should return true for valid node", () => {
+      const node = createNodeDefinition({
+        name: "Test",
         position: { x: 0, y: 0 },
       });
 
-      expect(isExecutable(node)).toBe(true);
+      expect(isNode(node)).toBe(true);
     });
 
     it("should return false for invalid objects", () => {
-      expect(isExecutable(null)).toBe(false);
-      expect(isExecutable(undefined)).toBe(false);
-      expect(isExecutable({})).toBe(false);
-      expect(isExecutable({ id: "123" })).toBe(false);
-      expect(isExecutable({ id: "123", type: "test" })).toBe(false);
+      expect(isNode(null)).toBe(false);
+      expect(isNode(undefined)).toBe(false);
+      expect(isNode({})).toBe(false);
+      expect(isNode({ id: "123" })).toBe(false);
+      expect(isNode({ id: "123", name: "test" })).toBe(false);
     });
   });
 
   describe("isFlow", () => {
-    it("should return true for valid flow", () => {
-      const flow = createFlow({ label: "Test Flow" });
+    it("should return true for flow with nodes", () => {
+      const flow = createFlow({
+        name: "Test Flow",
+        nodes: [createNodeDefinition({ name: "Node1" })],
+      });
       expect(isFlow(flow)).toBe(true);
     });
 
-    it("should return false for nodes", () => {
-      const node = createNode({
-        type: "test",
-        label: "Test",
+    it("should return false for empty flow", () => {
+      const flow = createFlow({ name: "Empty Flow" });
+      expect(isFlow(flow)).toBe(false);
+    });
+
+    it("should return false for leaf nodes", () => {
+      const node = createNodeDefinition({
+        name: "Test",
         position: { x: 0, y: 0 },
       });
       expect(isFlow(node)).toBe(false);
@@ -56,31 +62,21 @@ describe("Type Guards", () => {
     });
   });
 
-  describe("isNode", () => {
-    it("should return true for valid node", () => {
-      const node = createNode({
-        type: "processor",
-        label: "Process",
-        position: { x: 10, y: 20 },
+  describe("isNode - additional tests", () => {
+    it("should return true for flows (flows are nodes)", () => {
+      const flow = createFlow({
+        name: "Test Flow",
+        nodes: [createNodeDefinition({ name: "Child" })],
       });
-      expect(isNode(node)).toBe(true);
+      expect(isNode(flow)).toBe(true);
     });
 
-    it("should return false for flows", () => {
-      const flow = createFlow({ label: "Test Flow" });
-      expect(isNode(flow)).toBe(false);
-    });
-
-    it("should return false for invalid objects", () => {
-      expect(isNode(null)).toBe(false);
-      expect(isNode({})).toBe(false);
+    it("should validate node structure", () => {
       expect(
         isNode({
           id: "123",
-          type: "test",
-          version: "1.0.0",
-          label: "Test",
-          // Missing position and config
+          position: { x: 0, y: 0 },
+          // Missing other required fields like metadata, parameters, ports
         }),
       ).toBe(false);
     });
@@ -88,12 +84,13 @@ describe("Type Guards", () => {
 
   describe("isEdge", () => {
     it("should return true for valid edge", () => {
-      const edge = createEdge({
+      const edge = {
+        id: "edge-1",
         source: "node1",
         sourceHandle: "out",
         target: "node2",
         targetHandle: "in",
-      });
+      };
       expect(isEdge(edge)).toBe(true);
     });
 
@@ -112,29 +109,28 @@ describe("Type Guards", () => {
 
   describe("isValidFlow", () => {
     it("should return true for valid flow", () => {
-      const node1 = createNode({
+      const node1 = createNodeDefinition({
         id: "node1",
-        type: "start",
-        label: "Start",
+        name: "Start",
         position: { x: 0, y: 0 },
       });
 
-      const node2 = createNode({
+      const node2 = createNodeDefinition({
         id: "node2",
-        type: "end",
-        label: "End",
+        name: "End",
         position: { x: 100, y: 0 },
       });
 
-      const edge = createEdge({
+      const edge = {
+        id: "edge-1",
         source: "node1",
         sourceHandle: "out",
         target: "node2",
         targetHandle: "in",
-      });
+      };
 
       const flow = createFlow({
-        label: "Valid Flow",
+        name: "Valid Flow",
         nodes: [node1, node2],
         edges: [edge],
       });
@@ -143,22 +139,22 @@ describe("Type Guards", () => {
     });
 
     it("should return false for flow with invalid edge", () => {
-      const node = createNode({
+      const node = createNodeDefinition({
         id: "node1",
-        type: "test",
-        label: "Test",
+        name: "Test",
         position: { x: 0, y: 0 },
       });
 
-      const edge = createEdge({
+      const edge = {
+        id: "edge-1",
         source: "node1",
         sourceHandle: "out",
         target: "nonexistent",
         targetHandle: "in",
-      });
+      };
 
       const flow = createFlow({
-        label: "Invalid Flow",
+        name: "Invalid Flow",
         nodes: [node],
         edges: [edge],
       });
@@ -169,17 +165,33 @@ describe("Type Guards", () => {
 
   describe("hasInputs / hasOutputs", () => {
     it("should check for node ports", () => {
-      const nodeWithPorts = createNode({
-        type: "processor",
-        label: "Process",
+      const nodeWithPorts = createNodeDefinition({
+        name: "Process",
         position: { x: 0, y: 0 },
-        inputs: [{ id: "in", label: "Input", type: "any" }],
-        outputs: [{ id: "out", label: "Output", type: "any" }],
+        inputPorts: [
+          {
+            id: "in",
+            name: "Input",
+            type: "input",
+            dataType: "any",
+            required: true,
+            multiple: false,
+          },
+        ],
+        outputPorts: [
+          {
+            id: "out",
+            name: "Output",
+            type: "output",
+            dataType: "any",
+            required: false,
+            multiple: false,
+          },
+        ],
       });
 
-      const nodeWithoutPorts = createNode({
-        type: "display",
-        label: "Display",
+      const nodeWithoutPorts = createNodeDefinition({
+        name: "Display",
         position: { x: 0, y: 0 },
       });
 
@@ -192,17 +204,16 @@ describe("Type Guards", () => {
 
   describe("isEmptyFlow", () => {
     it("should return true for empty flow", () => {
-      const flow = createFlow({ label: "Empty" });
+      const flow = createFlow({ name: "Empty" });
       expect(isEmptyFlow(flow)).toBe(true);
     });
 
     it("should return false for flow with nodes", () => {
       const flow = createFlow({
-        label: "Not Empty",
+        name: "Not Empty",
         nodes: [
-          createNode({
-            type: "test",
-            label: "Test",
+          createNodeDefinition({
+            name: "Test",
             position: { x: 0, y: 0 },
           }),
         ],
@@ -214,49 +225,49 @@ describe("Type Guards", () => {
   describe("hasCycles", () => {
     it("should detect cycles in flow", () => {
       const nodes = [
-        createNode({
+        createNodeDefinition({
           id: "a",
-          type: "test",
-          label: "A",
+          name: "A",
           position: { x: 0, y: 0 },
         }),
-        createNode({
+        createNodeDefinition({
           id: "b",
-          type: "test",
-          label: "B",
+          name: "B",
           position: { x: 0, y: 0 },
         }),
-        createNode({
+        createNodeDefinition({
           id: "c",
-          type: "test",
-          label: "C",
+          name: "C",
           position: { x: 0, y: 0 },
         }),
       ];
 
       const edges = [
-        createEdge({
+        {
+          id: "e1",
           source: "a",
           sourceHandle: "out",
           target: "b",
           targetHandle: "in",
-        }),
-        createEdge({
+        },
+        {
+          id: "e2",
           source: "b",
           sourceHandle: "out",
           target: "c",
           targetHandle: "in",
-        }),
-        createEdge({
+        },
+        {
+          id: "e3",
           source: "c",
           sourceHandle: "out",
           target: "a",
           targetHandle: "in",
-        }),
+        },
       ];
 
       const flow = createFlow({
-        label: "Cyclic Flow",
+        name: "Cyclic Flow",
         nodes,
         edges,
       });
@@ -266,43 +277,42 @@ describe("Type Guards", () => {
 
     it("should not detect cycles in DAG", () => {
       const nodes = [
-        createNode({
+        createNodeDefinition({
           id: "a",
-          type: "test",
-          label: "A",
+          name: "A",
           position: { x: 0, y: 0 },
         }),
-        createNode({
+        createNodeDefinition({
           id: "b",
-          type: "test",
-          label: "B",
+          name: "B",
           position: { x: 0, y: 0 },
         }),
-        createNode({
+        createNodeDefinition({
           id: "c",
-          type: "test",
-          label: "C",
+          name: "C",
           position: { x: 0, y: 0 },
         }),
       ];
 
       const edges = [
-        createEdge({
+        {
+          id: "e1",
           source: "a",
           sourceHandle: "out",
           target: "b",
           targetHandle: "in",
-        }),
-        createEdge({
+        },
+        {
+          id: "e2",
           source: "b",
           sourceHandle: "out",
           target: "c",
           targetHandle: "in",
-        }),
+        },
       ];
 
       const flow = createFlow({
-        label: "DAG Flow",
+        name: "DAG Flow",
         nodes,
         edges,
       });
@@ -314,43 +324,42 @@ describe("Type Guards", () => {
   describe("isEntryNode / isExitNode", () => {
     it("should identify entry and exit nodes", () => {
       const nodes = [
-        createNode({
+        createNodeDefinition({
           id: "entry",
-          type: "start",
-          label: "Start",
+          name: "Start",
           position: { x: 0, y: 0 },
         }),
-        createNode({
+        createNodeDefinition({
           id: "middle",
-          type: "process",
-          label: "Process",
+          name: "Process",
           position: { x: 100, y: 0 },
         }),
-        createNode({
+        createNodeDefinition({
           id: "exit",
-          type: "end",
-          label: "End",
+          name: "End",
           position: { x: 200, y: 0 },
         }),
       ];
 
       const edges = [
-        createEdge({
+        {
+          id: "e1",
           source: "entry",
           sourceHandle: "out",
           target: "middle",
           targetHandle: "in",
-        }),
-        createEdge({
+        },
+        {
+          id: "e2",
           source: "middle",
           sourceHandle: "out",
           target: "exit",
           targetHandle: "in",
-        }),
+        },
       ];
 
       const flow = createFlow({
-        label: "Linear Flow",
+        name: "Linear Flow",
         nodes,
         edges,
       });

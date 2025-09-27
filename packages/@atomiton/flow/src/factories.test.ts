@@ -1,132 +1,143 @@
-import { describe, it, expect } from "vitest";
 import {
-  createFlow,
-  createNode,
-  createEdge,
-  createEmptyFlow,
-  createSequentialFlow,
+  cloneEdge,
   cloneFlow,
   cloneNode,
+  createEmptyFlow,
+  createFlow,
+  createSequentialFlow,
 } from "#factories";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
+import { describe, expect, it } from "vitest";
 
 describe("Factory Functions", () => {
   describe("createFlow", () => {
     it("should create a flow with default values", () => {
-      const flow = createFlow({ label: "Test Flow" });
+      const flow = createFlow({ name: "Test Flow" });
 
       expect(flow).toMatchObject({
-        type: "flow",
-        label: "Test Flow",
-        version: "1.0.0",
-        nodes: [],
-        edges: [],
-        variables: {},
+        name: "Test Flow",
+        metadata: {
+          type: "group",
+          category: "group",
+        },
       });
       expect(flow.id).toBeDefined();
-      expect(flow.metadata).toBeDefined();
+      expect(flow.nodes).toBeUndefined();
+      expect(flow.edges).toBeUndefined();
     });
 
     it("should create a flow with custom options", () => {
       const nodes = [
-        createNode({
-          type: "test",
-          label: "Test Node",
+        createNodeDefinition({
+          name: "Test Node",
           position: { x: 0, y: 0 },
         }),
       ];
 
+      const edges = [
+        {
+          id: "edge-1",
+          source: nodes[0].id,
+          target: nodes[0].id,
+        },
+      ];
+
       const flow = createFlow({
         id: "custom-id",
-        label: "Custom Flow",
-        version: "2.0.0",
+        name: "Custom Flow",
         nodes,
-        variables: { foo: "bar" },
+        edges,
       });
 
       expect(flow.id).toBe("custom-id");
-      expect(flow.version).toBe("2.0.0");
+      expect(flow.name).toBe("Custom Flow");
       expect(flow.nodes).toEqual(nodes);
-      expect(flow.variables).toEqual({ foo: "bar" });
+      expect(flow.edges).toEqual(edges);
     });
   });
 
-  describe("createNode", () => {
+  describe("createNodeDefinition", () => {
     it("should create a node with required fields", () => {
-      const node = createNode({
-        type: "processor",
-        label: "Process Data",
+      const node = createNodeDefinition({
+        name: "Process Data",
         position: { x: 100, y: 200 },
       });
 
       expect(node).toMatchObject({
-        type: "processor",
-        label: "Process Data",
+        name: "Process Data",
         position: { x: 100, y: 200 },
-        config: {},
       });
       expect(node.id).toBeDefined();
       expect(node.metadata).toBeDefined();
+      expect(node.parameters).toBeDefined();
     });
 
     it("should create a node with ports", () => {
-      const node = createNode({
-        type: "filter",
-        label: "Filter",
+      const node = createNodeDefinition({
+        name: "Filter",
         position: { x: 0, y: 0 },
-        inputs: [
+        inputPorts: [
           {
             id: "in",
-            label: "Input",
-            type: "any",
+            name: "Input",
+            type: "input",
+            dataType: "any",
             required: true,
+            multiple: false,
           },
         ],
-        outputs: [
+        outputPorts: [
           {
             id: "out",
-            label: "Output",
-            type: "any",
+            name: "Output",
+            type: "output",
+            dataType: "any",
+            required: false,
+            multiple: false,
           },
         ],
       });
 
-      expect(node.inputs).toHaveLength(1);
-      expect(node.outputs).toHaveLength(1);
+      expect(node.inputPorts).toHaveLength(1);
+      expect(node.outputPorts).toHaveLength(1);
     });
   });
 
-  describe("createEdge", () => {
-    it("should create a edge between nodes", () => {
-      const edge = createEdge({
+  describe("cloneEdge", () => {
+    it("should clone an edge with a new ID", () => {
+      const originalEdge = {
+        id: "edge-1",
         source: "node1",
         target: "node2",
         sourceHandle: "out",
         targetHandle: "in",
-      });
+      };
 
-      expect(edge).toMatchObject({
+      const clonedEdge = cloneEdge(originalEdge);
+
+      expect(clonedEdge).toMatchObject({
         source: "node1",
         target: "node2",
         sourceHandle: "out",
         targetHandle: "in",
       });
-      expect(edge.id).toBeDefined();
+      expect(clonedEdge.id).not.toBe(originalEdge.id);
     });
 
-    it("should create a edge with label and style", () => {
-      const edge = createEdge({
+    it("should clone an edge with custom ID", () => {
+      const originalEdge = {
+        id: "edge-1",
         source: "node1",
         target: "node2",
-        sourceHandle: "out",
-        targetHandle: "in",
-        label: "Data Flow",
-        type: "step",
+        type: "step" as const,
         animated: true,
-      });
+      };
 
-      expect(edge.label).toBe("Data Flow");
-      expect(edge.type).toBe("step");
-      expect(edge.animated).toBe(true);
+      const clonedEdge = cloneEdge(originalEdge, "custom-edge-id");
+
+      expect(clonedEdge.id).toBe("custom-edge-id");
+      expect(clonedEdge.type).toBe("step");
+      expect(clonedEdge.animated).toBe(true);
     });
   });
 
@@ -134,39 +145,72 @@ describe("Factory Functions", () => {
     it("should create an empty flow", () => {
       const flow = createEmptyFlow();
 
-      expect(flow.label).toBe("New Flow");
-      expect(flow.nodes).toHaveLength(0);
-      expect(flow.edges).toHaveLength(0);
+      expect(flow.name).toBe("New Flow");
+      expect(flow.nodes).toBeUndefined();
+      expect(flow.edges).toBeUndefined();
     });
 
-    it("should create an empty flow with custom label", () => {
+    it("should create an empty flow with custom name", () => {
       const flow = createEmptyFlow("My Flow");
 
-      expect(flow.label).toBe("My Flow");
+      expect(flow.name).toBe("My Flow");
     });
   });
 
   describe("createSequentialFlow", () => {
     it("should create a sequential flow from nodes", () => {
       const nodes = [
-        createNode({
-          type: "start",
-          label: "Start",
+        createNodeDefinition({
+          name: "Start",
           position: { x: 0, y: 0 },
-          outputs: [{ id: "out", label: "Output", type: "any" }],
+          outputPorts: [
+            {
+              id: "out",
+              name: "Output",
+              type: "output",
+              dataType: "any",
+              required: false,
+              multiple: false,
+            },
+          ],
         }),
-        createNode({
-          type: "process",
-          label: "Process",
+        createNodeDefinition({
+          name: "Process",
           position: { x: 100, y: 0 },
-          inputs: [{ id: "in", label: "Input", type: "any" }],
-          outputs: [{ id: "out", label: "Output", type: "any" }],
+          inputPorts: [
+            {
+              id: "in",
+              name: "Input",
+              type: "input",
+              dataType: "any",
+              required: true,
+              multiple: false,
+            },
+          ],
+          outputPorts: [
+            {
+              id: "out",
+              name: "Output",
+              type: "output",
+              dataType: "any",
+              required: false,
+              multiple: false,
+            },
+          ],
         }),
-        createNode({
-          type: "end",
-          label: "End",
+        createNodeDefinition({
+          name: "End",
           position: { x: 200, y: 0 },
-          inputs: [{ id: "in", label: "Input", type: "any" }],
+          inputPorts: [
+            {
+              id: "in",
+              name: "Input",
+              type: "input",
+              dataType: "any",
+              required: true,
+              multiple: false,
+            },
+          ],
         }),
       ];
 
@@ -174,8 +218,8 @@ describe("Factory Functions", () => {
 
       expect(flow.nodes).toHaveLength(3);
       expect(flow.edges).toHaveLength(2);
-      expect(flow.metadata?.entryNodeId).toBe(nodes[0].id);
-      expect(flow.metadata?.exitNodeIds).toEqual([nodes[2].id]);
+      // Entry/exit nodes are no longer stored in metadata
+      expect(flow.name).toBe("Sequential Flow");
     });
   });
 
@@ -183,11 +227,10 @@ describe("Factory Functions", () => {
     it("should clone a flow with new IDs", () => {
       const originalFlow = createFlow({
         id: "original",
-        label: "Original Flow",
+        name: "Original Flow",
         nodes: [
-          createNode({
-            type: "test",
-            label: "Test",
+          createNodeDefinition({
+            name: "Test",
             position: { x: 0, y: 0 },
           }),
         ],
@@ -196,26 +239,24 @@ describe("Factory Functions", () => {
       const clonedFlow = cloneFlow(originalFlow);
 
       expect(clonedFlow.id).not.toBe(originalFlow.id);
-      expect(clonedFlow.label).toBe(originalFlow.label);
+      expect(clonedFlow.name).toBe("Original Flow (Copy)");
       expect(clonedFlow.nodes).toHaveLength(1);
-      expect(clonedFlow.nodes[0].id).not.toBe(originalFlow.nodes[0].id);
+      expect(clonedFlow.nodes![0].id).not.toBe(originalFlow.nodes![0].id);
     });
   });
 
   describe("cloneNode", () => {
     it("should clone a node with new ID", () => {
-      const originalNode = createNode({
+      const originalNode = createNodeDefinition({
         id: "original",
-        type: "processor",
-        label: "Original",
+        name: "Original",
         position: { x: 50, y: 50 },
       });
 
       const clonedNode = cloneNode(originalNode);
 
       expect(clonedNode.id).not.toBe(originalNode.id);
-      expect(clonedNode.type).toBe(originalNode.type);
-      expect(clonedNode.label).toBe(originalNode.label);
+      expect(clonedNode.name).toBe(originalNode.name);
       expect(clonedNode.position).toEqual(originalNode.position);
     });
   });
