@@ -39,18 +39,12 @@
       "project": []
     },
     "apps/client": {
-      "entry": [
-        "src/main.tsx",
-        "src/routes.tsx"
-      ],
+      "entry": ["src/main.tsx", "src/routes.tsx"],
       "project": ["src/**/*.{ts,tsx}"],
       "ignoreBinaries": ["kill-dev-servers.sh"]
     },
     "apps/desktop": {
-      "entry": [
-        "src/main/index.ts",
-        "src/preload/index.ts"
-      ],
+      "entry": ["src/main/index.ts", "src/preload/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]
     }
   },
@@ -77,12 +71,7 @@
     "type": true,
     "enum": true
   },
-  "ignoreDependencies": [
-    "@atomiton/*",
-    "husky",
-    "lint-staged",
-    "@types/node"
-  ],
+  "ignoreDependencies": ["@atomiton/*", "@types/node"],
   "ignoreWorkspaces": [],
   "rules": {
     "files": "error",
@@ -97,7 +86,5 @@
     "nsExports": "warn",
     "duplicates": "error"
   },
-  "exclude": [
-    "unresolved"
-  ]
+  "exclude": ["unresolved"]
 }
