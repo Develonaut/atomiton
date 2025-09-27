@@ -16,8 +16,8 @@ describe("Factory Functions", () => {
 
       expect(flow).toMatchObject({
         name: "Test Flow",
+        type: "group",
         metadata: {
-          type: "group",
           category: "group",
         },
       });

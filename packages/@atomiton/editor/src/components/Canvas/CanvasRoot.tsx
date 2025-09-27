@@ -19,9 +19,9 @@ const CanvasStyled = styled("div", {
 
 type CanvasRootProps = {
   flow?: Flow;
-  defaultNodes?: ReactFlowProps['defaultNodes'];
-  defaultEdges?: ReactFlowProps['defaultEdges'];
-} & Omit<ReactFlowProps, 'defaultNodes' | 'defaultEdges'>
+  defaultNodes?: ReactFlowProps["defaultNodes"];
+  defaultEdges?: ReactFlowProps["defaultEdges"];
+} & Omit<ReactFlowProps, "defaultNodes" | "defaultEdges">;
 
 export function CanvasRoot({
   children,

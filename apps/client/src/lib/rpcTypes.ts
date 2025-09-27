@@ -8,7 +8,7 @@ import type {
   ExecutionResult as ExecutionResultType,
   Connection as ConnectionType,
   FlowNode as FlowNodeType,
-  NodeDefinition as NodeDefinitionType
+  NodeDefinition as NodeDefinitionType,
 } from "../../../../packages/@atomiton/rpc/src/schemas";
 
 export type AppRouter = TRPCRouter;

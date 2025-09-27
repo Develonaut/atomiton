@@ -12,7 +12,10 @@ export const createTRPCHandler = (mainWindow: BrowserWindow) => {
     createContext: async () => ({
       user: null,
       platform: "desktop" as const,
-      environment: (process.env.NODE_ENV || "production") as "development" | "production" | "test",
+      environment: (process.env.NODE_ENV || "production") as
+        | "development"
+        | "production"
+        | "test",
       version: "0.2.0",
       capabilities: {
         fileSystem: true,
@@ -20,7 +23,7 @@ export const createTRPCHandler = (mainWindow: BrowserWindow) => {
         storage: true,
       },
     }),
-    async resolve(opts: any) {
+    async resolve(opts: { input: unknown; path: string }) {
       const { input, path } = opts;
 
       if (path === "execution.execute") {

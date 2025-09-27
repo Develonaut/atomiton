@@ -1,5 +1,9 @@
 import { trpcReact } from "#lib/trpc";
-import type { Flow, StorageItem } from "#lib/rpcTypes";
+import type { Flow } from "#lib/rpcTypes";
+import {
+  migrateFlow,
+  needsMigration,
+} from "@atomiton/flow/migrations";
 
 export const useExecuteFlow = () => {
   return trpcReact.execution.execute.useMutation({
@@ -15,15 +19,9 @@ export const useExecuteFlow = () => {
 export const useSaveFlow = () => {
   return trpcReact.storage.save.useMutation({
     onMutate: (flow: Flow) => {
-      const flatFlow = {
-        ...flow,
-        nodes: flow.nodes.map((n: any) => ({
-          ...n,
-          version: n.version || "1.0.0",
-          parentId: n.parentId || undefined,
-        })),
-      };
-      return { flatFlow };
+      // Always migrate flows before saving
+      const migratedFlow = migrateFlow(flow);
+      return { migratedFlow };
     },
   });
 };
@@ -31,15 +29,17 @@ export const useSaveFlow = () => {
 export const useLoadFlow = (id: string) => {
   return trpcReact.storage.load.useQuery(id, {
     select: (flow: Flow) => {
-      return {
-        ...flow,
-        nodes:
-          flow.nodes?.map((n: any) => ({
-            ...n,
-            version: n.version || "1.0.0",
-            parentId: n.parentId,
-          })) || [],
-      };
+      // The backend already migrates flows on load, but ensure consistency
+      const migratedFlow = migrateFlow(flow);
+
+      // Log if additional migration was needed (shouldn't happen if backend is working correctly)
+      if (needsMigration(flow)) {
+        console.warn(
+          `Flow "${id}" required additional migration on client side`,
+        );
+      }
+
+      return migratedFlow;
     },
   });
 };

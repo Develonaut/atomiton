@@ -77,7 +77,9 @@ function FlowListItem({ flow, isSelected, onSelect }: FlowListItemProps) {
           {hasParentNodes && " (with hierarchy)"}
         </div>
         {flow.metadata?.description && (
-          <div className="text-sm text-gray-600 mt-1">{flow.metadata.description}</div>
+          <div className="text-sm text-gray-600 mt-1">
+            {flow.metadata.description}
+          </div>
         )}
       </div>
       <Icon name="chevron-right" size={16} />

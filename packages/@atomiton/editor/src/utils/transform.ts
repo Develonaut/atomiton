@@ -1,18 +1,21 @@
 import type { Flow } from "@atomiton/flow";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import type { Node as ReactFlowNode, Edge as ReactFlowEdge } from "@xyflow/react";
+import type {
+  Node as ReactFlowNode,
+  Edge as ReactFlowEdge,
+} from "@xyflow/react";
 
 export type ReactFlowData = {
   label?: string;
   config?: Record<string, unknown>;
   version?: string;
   parentId?: string;
-} & Record<string, unknown>
+} & Record<string, unknown>;
 
 export type TransformedFlow = {
   nodes: ReactFlowNode<ReactFlowData>[];
   edges: ReactFlowEdge[];
-}
+};
 
 export function flowToReactFlow(flow: Flow): TransformedFlow {
   const nodes = (flow.nodes || []).map((node) => ({
@@ -42,30 +45,33 @@ export function flowToReactFlow(flow: Flow): TransformedFlow {
 export function reactFlowToFlow(
   nodes: ReactFlowNode<ReactFlowData>[],
   edges: ReactFlowEdge[],
-  baseFlow?: Partial<Flow>
+  baseFlow?: Partial<Flow>,
 ): Flow {
-  const flowNodes: NodeDefinition[] = nodes.map((node) => ({
-    id: node.id,
-    type: node.type || "default",
-    version: node.data?.version || "1.0.0",
-    name: node.data?.label || node.type || "Untitled",
-    position: node.position,
-    parentId: node.data?.parentId,
-    metadata: {
-      id: node.id,
-      name: node.data?.label || node.type || "Untitled",
-      author: "editor",
-      icon: "default",
-      category: "default",
-      description: "",
-    },
-    parameters: {
-      defaults: node.data?.config || {},
-      fields: {},
-    },
-    inputPorts: [],
-    outputPorts: [],
-  } as unknown as NodeDefinition));
+  const flowNodes: NodeDefinition[] = nodes.map(
+    (node) =>
+      ({
+        id: node.id,
+        type: node.type || "default",
+        version: node.data?.version || "1.0.0",
+        name: node.data?.label || node.type || "Untitled",
+        position: node.position,
+        parentId: node.data?.parentId,
+        metadata: {
+          id: node.id,
+          name: node.data?.label || node.type || "Untitled",
+          author: "editor",
+          icon: "default",
+          category: "default",
+          description: "",
+        },
+        parameters: {
+          defaults: node.data?.config || {},
+          fields: {},
+        },
+        inputPorts: [],
+        outputPorts: [],
+      }) as unknown as NodeDefinition,
+  );
 
   const flowEdges = edges.map((edge) => ({
     id: edge.id,
@@ -104,7 +110,7 @@ export function reactFlowToFlow(
 
 export type HierarchicalNode = {
   children: HierarchicalNode[];
-} & NodeDefinition
+} & NodeDefinition;
 
 export function getNodeHierarchy(nodes: NodeDefinition[]): HierarchicalNode[] {
   const roots = nodes.filter((n) => !n.parentId);
@@ -124,11 +130,17 @@ export function getNodeHierarchy(nodes: NodeDefinition[]): HierarchicalNode[] {
   }));
 }
 
-export function findNodeById(nodes: NodeDefinition[], nodeId: string): NodeDefinition | undefined {
+export function findNodeById(
+  nodes: NodeDefinition[],
+  nodeId: string,
+): NodeDefinition | undefined {
   return nodes.find((n) => n.id === nodeId);
 }
 
-export function getChildNodes(nodes: NodeDefinition[], parentId: string): NodeDefinition[] {
+export function getChildNodes(
+  nodes: NodeDefinition[],
+  parentId: string,
+): NodeDefinition[] {
   return nodes.filter((n) => n.parentId === parentId);
 }
 

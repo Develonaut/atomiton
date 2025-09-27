@@ -50,6 +50,8 @@ export {
   validateFlowYaml,
   migrateNestedToFlat,
   flatToNested,
+  registerMigrationUtilities,
+  flowYamlNeedsMigration,
 } from "#flow.js";
 
 // Type exports

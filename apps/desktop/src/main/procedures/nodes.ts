@@ -19,7 +19,10 @@ export const nodeProcedures = {
 
   getChildren: async ({ input: parentId }: { input: string }) => {
     const nodes = getAllNodeDefinitions();
-    return nodes.filter((n) => (n as NodeDefinition & { parentId?: string }).parentId === parentId);
+    return nodes.filter(
+      (n) =>
+        (n as NodeDefinition & { parentId?: string }).parentId === parentId,
+    );
   },
 
   getByVersion: async ({

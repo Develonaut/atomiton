@@ -9,7 +9,7 @@ export const executionProcedures = {
     input,
   }: {
     input: {
-      executable: any;
+      executable: Record<string, unknown>;
       context?: Record<string, unknown>;
     };
   }) => {
@@ -50,7 +50,7 @@ export const executionProcedures = {
     }
   },
 
-  onProgress: ({ input }: { input: string }) => {
+  onProgress: ({ input: _input }: { input: string }) => {
     // TODO: Implement progress subscription when observable is available
     return null;
   },

@@ -157,6 +157,171 @@ const sequentialFlow = createSequentialFlow("Sequential Pipeline", nodes);
 // Automatically creates connections between consecutive nodes
 ```
 
+## Flow Migration System
+
+The flow package includes a comprehensive migration system that automatically
+handles structural changes and schema updates. This ensures backward
+compatibility while enabling evolution of the flow format.
+
+### Migration Features
+
+- **Structure Detection**: Automatically detects nested vs flat node structures
+- **Field Migration**: Moves version and type from metadata to top level
+- **Schema Versioning**: Tracks flow schema versions for incremental updates
+- **Automatic Migration**: All load operations automatically apply migrations
+- **Comprehensive Logging**: Reports migration activities for debugging
+
+### Migration Types
+
+#### Structural Migration (Nested → Flat)
+
+Legacy flows used a nested structure where nodes contained children:
+
+```typescript
+// Legacy nested structure
+{
+  nodes: [
+    {
+      id: "root",
+      type: "group",
+      children: [
+        {
+          id: "child",
+          metadata: { type: "http", version: "1.0.0" }
+        }
+      ]
+    }
+  ]
+}
+
+// Migrated to flat structure
+{
+  schemaVersion: 1,
+  nodes: [
+    {
+      id: "root",
+      type: "group",
+      version: "1.0.0"
+    },
+    {
+      id: "child",
+      type: "http",
+      version: "1.0.0",
+      parentId: "root"
+    }
+  ]
+}
+```
+
+#### Field Migration (metadata → top-level)
+
+```typescript
+// Before: version and type in metadata
+{
+  id: "node1",
+  metadata: {
+    type: "http",
+    version: "2.0.0",
+    description: "HTTP Request"
+  }
+}
+
+// After: version and type at top level
+{
+  id: "node1",
+  type: "http",
+  version: "2.0.0",
+  metadata: {
+    description: "HTTP Request"
+  }
+}
+```
+
+### Using Migrations
+
+#### Automatic Migration on Load
+
+```typescript
+import { migrateFlow, needsMigration } from "@atomiton/flow/migrations";
+import { loadFlow } from "@atomiton/yaml/flow";
+
+// YAML and storage packages automatically migrate
+const flow = await loadFlow("./my-flow.yaml");
+// Flow is automatically migrated to latest schema
+
+// Check if a flow needs migration
+if (needsMigration(rawFlow)) {
+  console.log("Flow will be migrated");
+}
+```
+
+#### Manual Migration
+
+```typescript
+import {
+  migrateFlow,
+  detectNodeStructure,
+  detectVersionLocation,
+} from "@atomiton/flow/migrations";
+
+// Detect current structure
+const structure = detectNodeStructure(flow.nodes);
+console.log(`Structure: ${structure}`); // "nested" | "flat" | "unknown"
+
+// Detect version location
+const versionLocation = detectVersionLocation(node);
+console.log(`Version location: ${versionLocation}`); // "top" | "metadata" | "none"
+
+// Apply migrations manually
+const migratedFlow = migrateFlow(rawFlow);
+```
+
+#### Migration Utilities
+
+```typescript
+import {
+  getFlowSchemaVersion,
+  needsMigration,
+  detectNodeStructure,
+  detectVersionLocation,
+  detectTypeLocation,
+} from "@atomiton/flow/migrations";
+
+// Get current schema version
+const version = getFlowSchemaVersion(flow); // 0 for unversioned, 1+ for versioned
+
+// Check if migration is needed
+const needsUpdate = needsMigration(flow);
+
+// Detect structure and field locations
+const structure = detectNodeStructure(flow.nodes);
+const versionLoc = detectVersionLocation(node);
+const typeLoc = detectTypeLocation(node);
+```
+
+### Schema Versions
+
+- **Version 0** (Unversioned): Legacy flows without schema versioning
+- **Version 1** (Current): Flat node structure with top-level type/version
+  fields
+
+### Migration Strategy
+
+1. **Always Migrate on Load**: All loading operations automatically apply
+   migrations
+2. **Preserve Original Files**: Original files can be optionally updated after
+   migration
+3. **Incremental Updates**: Schema versions allow for incremental migration
+   paths
+4. **Comprehensive Detection**: Structure and field location detection ensures
+   accurate migration
+5. **Detailed Logging**: Migration activities are logged for transparency and
+   debugging
+
+Migrations handle both structural changes (nested→flat) and field location
+changes (metadata.version→version) in a single operation, ensuring all flows
+conform to the latest schema regardless of their original format.
+
 ## API Reference
 
 ### Factory Functions
