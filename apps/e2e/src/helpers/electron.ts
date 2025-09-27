@@ -25,10 +25,7 @@ export class ElectronTestHelper {
     );
 
     this.app = await electron.launch({
-      args: [
-        electronMain,
-        ...(isHeadless ? ["--headless"] : []),
-      ],
+      args: [electronMain, ...(isHeadless ? ["--headless"] : [])],
       env: {
         ...process.env,
         NODE_ENV: "test",

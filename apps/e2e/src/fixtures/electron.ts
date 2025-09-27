@@ -20,7 +20,6 @@ type WorkerFixtures = {
 export const test = base.extend<{}, WorkerFixtures>({
   sharedElectronApp: [
     async ({}, use) => {
-
       const electronMain = path.join(
         __dirname,
         "../../../../apps/desktop/out/main/index.js",

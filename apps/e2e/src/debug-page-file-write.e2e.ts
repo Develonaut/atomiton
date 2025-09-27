@@ -2,7 +2,6 @@ import { expect, test } from "#fixtures/electron";
 import fs from "fs";
 import path from "path";
 
-
 test.describe("Debug Page File Write Functionality", () => {
   const testOutputDir = "/tmp/atomiton-e2e-test";
   const testFilePath = path.join(testOutputDir, "debug-test-output.txt");
