@@ -1,151 +1,79 @@
+import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
+import {
+  createNodeDefinition,
+  createNodeMetadata,
+} from "@atomiton/nodes/definitions";
+import { generateId } from "@atomiton/utils";
 import type {
   Flow,
-  FlowNode,
-  Edge,
-  CreateFlowOptions,
-  CreateNodeOptions,
-  CreateEdgeOptions,
   FlowMetadata,
-  ExecutableMetadata,
+  ValidationResult,
+  ExecutionContext,
+  ExecutionResult,
 } from "#types";
 
-const generateId = (): string => {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-};
-
-const createDefaultMetadata = (
-  partial?: Partial<ExecutableMetadata>,
-): ExecutableMetadata => {
-  const now = new Date();
-  return {
-    createdAt: now,
-    updatedAt: now,
-    ...partial,
-  };
-};
-
-export const createFlow = (options: CreateFlowOptions): Flow => {
+/**
+ * Create a new flow using the factories from @atomiton/nodes
+ *
+ * A flow is just a node that contains other nodes
+ */
+export const createFlow = (params: {
+  id?: string;
+  name?: string;
+  nodes?: NodeDefinition[];
+  edges?: NodeEdge[];
+  metadata?: Partial<FlowMetadata>;
+}): Flow => {
   const now = new Date();
 
-  const defaultMetadata: FlowMetadata = {
-    createdAt: now,
-    updatedAt: now,
-    version: options.version || "1.0.0",
-    ...options.metadata,
-  };
+  // Create flow metadata (extending NodeMetadata)
+  const metadata = createNodeMetadata({
+    id: params.id || generateId(),
+    name: params.name || "New Flow",
+    type: "group", // Flows are group nodes
+    category: "group",
+    icon: "layers",
+    description: "Flow container node",
+    ...params.metadata,
+  }) as FlowMetadata;
 
-  return {
-    id: options.id || generateId(),
-    type: "flow",
-    version: options.version || "1.0.0",
-    label: options.label,
-    nodes: options.nodes || [],
-    edges: options.edges || [],
-    variables: options.variables || {},
-    metadata: defaultMetadata,
-  };
-};
+  // Add flow-specific metadata
+  metadata.createdAt = metadata.createdAt || now;
+  metadata.updatedAt = metadata.updatedAt || now;
 
-export const createNode = (options: CreateNodeOptions): FlowNode => {
-  return {
-    id: options.id || generateId(),
-    type: options.type,
-    version: options.version || "1.0.0",
-    label: options.label,
-    position: options.position,
-    config: options.config || {},
-    inputs: options.inputs,
-    outputs: options.outputs,
-    metadata: createDefaultMetadata(options.metadata),
-  };
-};
-
-export const createEdge = (options: CreateEdgeOptions): Edge => {
-  return {
-    id: options.id || generateId(),
-    source: options.source,
-    target: options.target,
-    type: options.type,
-    sourceHandle: options.sourceHandle,
-    targetHandle: options.targetHandle,
-    animated: options.animated,
-    hidden: options.hidden,
-    selected: options.selected,
-    data: options.data,
-    markerStart: options.markerStart,
-    markerEnd: options.markerEnd,
-    style: options.style,
-    label: options.label,
-  };
-};
-
-export const createFlowFromNodes = (
-  label: string,
-  nodes: FlowNode[],
-  edges: Edge[],
-  options?: Partial<CreateFlowOptions>,
-): Flow => {
-  return createFlow({
-    ...options,
-    label,
-    nodes,
-    edges,
+  // Create the flow node using the universal factory
+  return createNodeDefinition({
+    id: params.id || generateId(),
+    name: params.name || "New Flow",
+    metadata,
+    children: params.nodes,
+    edges: params.edges,
+    parameters: {
+      schema: {},
+      defaults: {},
+      values: {},
+      fields: {},
+    },
+    inputPorts: [],
+    outputPorts: [],
   });
 };
 
-export const cloneFlow = (flow: Flow, newId?: string): Flow => {
-  const now = new Date();
-  return {
-    ...flow,
-    id: newId || generateId(),
-    nodes: flow.nodes.map((node) => cloneNode(node)),
-    edges: flow.edges.map((edge) => cloneEdge(edge)),
-    metadata: flow.metadata
-      ? {
-          ...flow.metadata,
-          createdAt: now,
-          updatedAt: now,
-        }
-      : undefined,
-  };
+/**
+ * Create an empty flow
+ */
+export const createEmptyFlow = (name: string = "New Flow"): Flow => {
+  return createFlow({ name });
 };
 
-export const cloneNode = (node: FlowNode, newId?: string): FlowNode => {
-  const now = new Date();
-  return {
-    ...node,
-    id: newId || generateId(),
-    config: { ...node.config },
-    metadata: node.metadata
-      ? {
-          ...node.metadata,
-          createdAt: now,
-          updatedAt: now,
-        }
-      : undefined,
-  };
-};
-
-export const cloneEdge = (edge: Edge, newId?: string): Edge => {
-  return {
-    ...edge,
-    id: newId || generateId(),
-    data: edge.data ? { ...edge.data } : undefined,
-    style: edge.style ? { ...edge.style } : undefined,
-    markerStart: edge.markerStart ? { ...edge.markerStart } : undefined,
-    markerEnd: edge.markerEnd ? { ...edge.markerEnd } : undefined,
-  };
-};
-
-export const createEmptyFlow = (label: string = "New Flow"): Flow => {
-  return createFlow({ label });
-};
-
+/**
+ * Create a sequential flow from nodes
+ */
 export const createSequentialFlow = (
-  label: string,
-  nodes: FlowNode[],
+  name: string,
+  nodes: NodeDefinition[],
 ): Flow => {
-  const edges: Edge[] = [];
+  const edges: NodeEdge[] = [];
 
   // Create edges between consecutive nodes
   for (let i = 0; i < nodes.length - 1; i++) {
@@ -153,28 +81,177 @@ export const createSequentialFlow = (
     const targetNode = nodes[i + 1];
 
     // Assume first output connects to first input
-    const sourcePort = sourceNode.outputs?.[0];
-    const targetPort = targetNode.inputs?.[0];
+    const sourcePort = sourceNode.outputPorts?.[0];
+    const targetPort = targetNode.inputPorts?.[0];
 
     if (sourcePort && targetPort) {
-      edges.push(
-        createEdge({
-          source: sourceNode.id,
-          target: targetNode.id,
-          sourceHandle: sourcePort.id,
-          targetHandle: targetPort.id,
-        }),
-      );
+      edges.push({
+        id: generateId(),
+        source: sourceNode.id,
+        target: targetNode.id,
+        sourceHandle: sourcePort.id,
+        targetHandle: targetPort.id,
+        type: "bezier",
+      });
     }
   }
 
+  const metadata: Partial<FlowMetadata> = {
+    entryNodeId: nodes[0]?.id,
+    exitNodeIds: nodes.length > 0 ? [nodes[nodes.length - 1].id] : [],
+  };
+
   return createFlow({
-    label,
+    name,
     nodes,
     edges,
-    metadata: {
-      entryNodeId: nodes[0]?.id,
-      exitNodeIds: nodes.length > 0 ? [nodes[nodes.length - 1].id] : [],
-    },
+    metadata,
   });
+};
+
+/**
+ * Clone a flow with a new ID
+ */
+export const cloneFlow = (flow: Flow, newId?: string): Flow => {
+  const now = new Date();
+  const clonedNodes = flow.children?.map((node) => cloneNode(node)) || [];
+  const clonedEdges = flow.edges?.map((edge) => cloneEdge(edge)) || [];
+
+  return createFlow({
+    id: newId || generateId(),
+    name: `${flow.name} (Copy)`,
+    nodes: clonedNodes,
+    edges: clonedEdges,
+    metadata: {
+      ...flow.metadata,
+      createdAt: now,
+      updatedAt: now,
+    } as Partial<FlowMetadata>,
+  });
+};
+
+/**
+ * Clone a node with a new ID
+ */
+export const cloneNode = (
+  node: NodeDefinition,
+  newId?: string,
+): NodeDefinition => {
+  return createNodeDefinition({
+    ...node,
+    id: newId || generateId(),
+    children: node.children?.map((child) => cloneNode(child)),
+    edges: node.edges?.map((edge) => cloneEdge(edge)),
+  });
+};
+
+/**
+ * Clone an edge with a new ID
+ */
+export const cloneEdge = (edge: NodeEdge, newId?: string): NodeEdge => {
+  return {
+    ...edge,
+    id: newId || generateId(),
+    data: edge.data ? { ...edge.data } : undefined,
+  };
+};
+
+/**
+ * Validate a flow
+ */
+export const validateFlow = (flow: Flow): ValidationResult => {
+  const errors: string[] = [];
+
+  // Check if flow has at least one node
+  if (!flow.children || flow.children.length === 0) {
+    errors.push("Flow must have at least one node");
+  }
+
+  // Validate edges reference existing nodes
+  const nodeIds = new Set(flow.children?.map((n) => n.id) || []);
+  flow.edges?.forEach((edge) => {
+    if (!nodeIds.has(edge.source)) {
+      errors.push(`Edge references non-existent source: ${edge.source}`);
+    }
+    if (!nodeIds.has(edge.target)) {
+      errors.push(`Edge references non-existent target: ${edge.target}`);
+    }
+  });
+
+  // Validate port connections
+  flow.edges?.forEach((edge) => {
+    const sourceNode = flow.children?.find((n) => n.id === edge.source);
+    const targetNode = flow.children?.find((n) => n.id === edge.target);
+
+    if (sourceNode && edge.sourceHandle) {
+      const sourcePort = sourceNode.outputPorts.find(
+        (p) => p.id === edge.sourceHandle,
+      );
+      if (!sourcePort) {
+        errors.push(
+          `Edge references non-existent source port: ${edge.sourceHandle} on node ${edge.source}`,
+        );
+      }
+    }
+
+    if (targetNode && edge.targetHandle) {
+      const targetPort = targetNode.inputPorts.find(
+        (p) => p.id === edge.targetHandle,
+      );
+      if (!targetPort) {
+        errors.push(
+          `Edge references non-existent target port: ${edge.targetHandle} on node ${edge.target}`,
+        );
+      }
+    }
+  });
+
+  return {
+    valid: errors.length === 0,
+    errors: errors.length > 0 ? errors : undefined,
+  };
+};
+
+/**
+ * Helper to create a simple execution context
+ */
+export const createExecutionContext = (
+  flowId: string,
+  input: unknown = {},
+): ExecutionContext => {
+  return {
+    flowId,
+    executionId: generateId(),
+    variables: {},
+    input,
+    errors: [],
+    startTime: new Date(),
+    status: "pending",
+  };
+};
+
+/**
+ * Helper to create an execution result
+ */
+export const createExecutionResult = <T = unknown>(
+  success: boolean,
+  data?: T,
+  error?: string,
+): ExecutionResult<T> => {
+  const result: ExecutionResult<T> = {
+    success,
+  };
+
+  if (data !== undefined) {
+    result.data = data;
+  }
+
+  if (error) {
+    result.error = {
+      message: error,
+      timestamp: new Date(),
+    };
+  }
+
+  return result;
 };

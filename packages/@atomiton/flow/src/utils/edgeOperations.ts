@@ -1,12 +1,13 @@
-import type { Flow, Edge } from "#types";
-import { createEdge } from "#factories";
+import type { NodeEdge } from "@atomiton/nodes/definitions";
+import type { Flow, FlowMetadata } from "#types";
+import { generateId } from "@atomiton/utils";
 
 export const addEdge =
-  (edge: Edge) =>
+  (edge: NodeEdge) =>
   (flow: Flow): Flow => {
     // Validate nodes exist
-    const sourceNodeExists = flow.nodes.some((n) => n.id === edge.source);
-    const targetNodeExists = flow.nodes.some((n) => n.id === edge.target);
+    const sourceNodeExists = flow.children?.some((n) => n.id === edge.source);
+    const targetNodeExists = flow.children?.some((n) => n.id === edge.target);
 
     if (!sourceNodeExists) {
       throw new Error(`Source node ${edge.source} not found in flow`);
@@ -16,7 +17,7 @@ export const addEdge =
     }
 
     // Check for duplicate edge
-    const isDuplicate = flow.edges.some(
+    const isDuplicate = flow.edges?.some(
       (e) =>
         e.source === edge.source &&
         e.sourceHandle === edge.sourceHandle &&
@@ -30,13 +31,11 @@ export const addEdge =
 
     return {
       ...flow,
-      edges: [...flow.edges, edge],
-      metadata: flow.metadata
-        ? {
-            ...flow.metadata,
-            updatedAt: new Date(),
-          }
-        : undefined,
+      edges: [...(flow.edges || []), edge],
+      metadata: {
+        ...flow.metadata,
+        updatedAt: new Date(),
+      } as FlowMetadata,
     };
   };
 
@@ -45,13 +44,11 @@ export const removeEdge =
   (flow: Flow): Flow => {
     return {
       ...flow,
-      edges: flow.edges.filter((e) => e.id !== edgeId),
-      metadata: flow.metadata
-        ? {
-            ...flow.metadata,
-            updatedAt: new Date(),
-          }
-        : undefined,
+      edges: flow.edges?.filter((e) => e.id !== edgeId),
+      metadata: {
+        ...flow.metadata,
+        updatedAt: new Date(),
+      } as FlowMetadata,
     };
   };
 
@@ -63,20 +60,22 @@ export const connectNodes =
     targetPortId: string,
   ) =>
   (flow: Flow): Flow => {
-    const edge = createEdge({
+    const edge: NodeEdge = {
+      id: generateId(),
       source: sourceNodeId,
       target: targetNodeId,
       sourceHandle: sourcePortId,
       targetHandle: targetPortId,
-    });
+      type: "bezier",
+    };
 
     return addEdge(edge)(flow);
   };
 
-export const getIncomingEdges = (nodeId: string, flow: Flow): Edge[] => {
-  return flow.edges.filter((e) => e.target === nodeId);
+export const getIncomingEdges = (nodeId: string, flow: Flow): NodeEdge[] => {
+  return flow.edges?.filter((e) => e.target === nodeId) || [];
 };
 
-export const getOutgoingEdges = (nodeId: string, flow: Flow): Edge[] => {
-  return flow.edges.filter((e) => e.source === nodeId);
+export const getOutgoingEdges = (nodeId: string, flow: Flow): NodeEdge[] => {
+  return flow.edges?.filter((e) => e.source === nodeId) || [];
 };

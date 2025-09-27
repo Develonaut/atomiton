@@ -1,109 +1,19 @@
-import type { CSSProperties } from "react";
+import type { NodeDefinition, NodeMetadata } from "@atomiton/nodes/definitions";
 
 /**
- * Base interface for all executable entities (nodes and flows)
+ * Flow is just a type alias - a flow IS a node definition
  */
-export type Executable = {
-  id: string;
-  type: string;
-  version: string;
-  metadata?: ExecutableMetadata;
-};
+export type Flow = NodeDefinition;
 
 /**
- * Metadata common to all executable entities
+ * Flow-specific metadata extensions
  */
-export type ExecutableMetadata = {
+export type FlowMetadata = NodeMetadata & {
   createdAt: Date;
   updatedAt: Date;
-  description?: string;
-  tags?: string[];
-};
-
-/**
- * Position in 2D space for visual representation
- */
-export type Position = {
-  x: number;
-  y: number;
-};
-
-/**
- * A single node that performs a specific operation
- */
-export type FlowNode = {
-  label: string;
-  position: Position;
-  config: Record<string, unknown>;
-  inputs?: PortDefinition[];
-  outputs?: PortDefinition[];
-} & Executable;
-
-/**
- * Port definition for node inputs/outputs
- */
-export type PortDefinition = {
-  id: string;
-  label: string;
-  type: string;
-  required?: boolean;
-  multiple?: boolean;
-};
-
-/**
- * Edge between nodes
- */
-export type Edge = {
-  id: string;
-  source: string;
-  target: string;
-  type?: "default" | "straight" | "step" | "smoothstep" | string;
-  sourceHandle?: string;
-  targetHandle?: string;
-  animated?: boolean;
-  hidden?: boolean;
-  selected?: boolean;
-  data?: Record<string, unknown>;
-  markerStart?: EdgeMarker;
-  markerEnd?: EdgeMarker;
-  style?: CSSProperties;
-  label?: string;
-};
-
-/**
- * Edge marker configuration
- */
-export type EdgeMarker = {
-  type: "arrow" | "arrowclosed" | string;
-  color?: string;
-  width?: number;
-  height?: number;
-  markerUnits?: string;
-  orient?: string;
-  strokeWidth?: number;
-};
-
-/**
- * A flow is a composite node containing other nodes and their edges
- */
-export type Flow = {
-  type: "flow";
-  label: string;
-  nodes: FlowNode[];
-  edges: Edge[];
-  variables?: Record<string, unknown>;
-  metadata?: FlowMetadata;
-} & Executable;
-
-/**
- * Extended metadata for flows
- */
-export type FlowMetadata = {
-  author?: string;
-  version?: string;
   entryNodeId?: string;
   exitNodeIds?: string[];
-} & ExecutableMetadata;
+};
 
 /**
  * Execution context passed through the flow
@@ -168,49 +78,19 @@ export type FlowExecutor<TInput = unknown, TOutput = unknown> = (
 ) => Promise<ExecutionResult<TOutput>>;
 
 /**
- * Options for creating a flow
+ * Type guard to check if a node is a flow
  */
-export type CreateFlowOptions = {
-  id?: string;
-  label: string;
-  version?: string;
-  nodes?: FlowNode[];
-  edges?: Edge[];
-  variables?: Record<string, unknown>;
-  metadata?: Partial<FlowMetadata>;
+export const isFlow = (node: NodeDefinition): boolean => {
+  // A node is a flow if it has children nodes
+  return Boolean(node.children && node.children.length > 0);
 };
 
 /**
- * Options for creating a node
+ * Validation result for flows
  */
-export type CreateNodeOptions = {
-  id?: string;
-  type: string;
-  label: string;
-  version?: string;
-  position: Position;
-  config?: Record<string, unknown>;
-  inputs?: PortDefinition[];
-  outputs?: PortDefinition[];
-  metadata?: Partial<ExecutableMetadata>;
+export type ValidationResult = {
+  valid: boolean;
+  errors?: string[];
 };
 
-/**
- * Options for creating an edge
- */
-export type CreateEdgeOptions = {
-  id?: string;
-  source: string;
-  target: string;
-  type?: "default" | "straight" | "step" | "smoothstep" | string;
-  sourceHandle?: string;
-  targetHandle?: string;
-  animated?: boolean;
-  hidden?: boolean;
-  selected?: boolean;
-  data?: Record<string, unknown>;
-  markerStart?: EdgeMarker;
-  markerEnd?: EdgeMarker;
-  style?: CSSProperties;
-  label?: string;
-};
+// Note: Import Node types directly from @atomiton/nodes/definitions when needed

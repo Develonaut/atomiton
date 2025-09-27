@@ -39,7 +39,10 @@
   ],
   "author": "Atomiton",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@atomiton/nodes": "workspace:*",
+    "@atomiton/utils": "workspace:*"
+  },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",

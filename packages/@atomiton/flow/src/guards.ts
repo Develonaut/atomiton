@@ -1,70 +1,57 @@
-import type { Edge, Executable, Flow, FlowNode } from "#types";
+import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
+import type { Flow } from "#types";
 
 /**
- * Check if an object is an Executable
+ * Check if a node is a flow (has children nodes)
  */
-export const isExecutable = (value: unknown): value is Executable => {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "id" in value &&
-    "type" in value &&
-    "version" in value &&
-    typeof (value as Record<string, unknown>).id === "string" &&
-    typeof (value as Record<string, unknown>).type === "string" &&
-    typeof (value as Record<string, unknown>).version === "string"
-  );
-};
-
-/**
- * Check if an executable is a Flow
- */
-export const isFlow = (value: unknown): value is Flow => {
-  if (!isExecutable(value)) {
+export const isFlow = (node: unknown): node is Flow => {
+  if (typeof node !== "object" || node === null) {
     return false;
   }
 
-  const flow = value as Record<string, unknown>;
-  return (
-    flow.type === "flow" &&
-    "label" in flow &&
-    "nodes" in flow &&
-    "edges" in flow &&
-    typeof flow.label === "string" &&
-    Array.isArray(flow.nodes) &&
-    Array.isArray(flow.edges)
+  const n = node as NodeDefinition;
+  // A flow is a node with children
+  return Boolean(
+    n.children && Array.isArray(n.children) && n.children.length > 0,
   );
 };
 
 /**
- * Check if an executable is a FlowNode
+ * Check if an object is a Node
  */
-export const isNode = (value: unknown): value is FlowNode => {
-  if (!isExecutable(value)) {
+export const isNode = (value: unknown): value is NodeDefinition => {
+  if (typeof value !== "object" || value === null) {
     return false;
   }
 
   const node = value as Record<string, unknown>;
   return (
-    node.type !== "flow" && // A node is any executable that is not a flow
-    "label" in node &&
+    "id" in node &&
+    "name" in node &&
     "position" in node &&
-    "config" in node &&
-    typeof node.label === "string" &&
+    "metadata" in node &&
+    "parameters" in node &&
+    "inputPorts" in node &&
+    "outputPorts" in node &&
+    typeof node.id === "string" &&
+    typeof node.name === "string" &&
     typeof node.position === "object" &&
     node.position !== null &&
     "x" in node.position &&
     "y" in node.position &&
-    typeof node.position.x === "number" &&
-    typeof node.position.y === "number" &&
-    typeof node.config === "object"
+    typeof (node.position as Record<string, unknown>).x === "number" &&
+    typeof (node.position as Record<string, unknown>).y === "number" &&
+    typeof node.metadata === "object" &&
+    typeof node.parameters === "object" &&
+    Array.isArray(node.inputPorts) &&
+    Array.isArray(node.outputPorts)
   );
 };
 
 /**
- * Check if an object is an Edge
+ * Check if an object is a NodeEdge
  */
-export const isEdge = (value: unknown): value is Edge => {
+export const isEdge = (value: unknown): value is NodeEdge => {
   if (typeof value !== "object" || value === null) {
     return false;
   }
@@ -85,21 +72,23 @@ export const isEdge = (value: unknown): value is Edge => {
  */
 export const isValidFlow = (flow: Flow): boolean => {
   // Check all nodes are valid
-  if (!flow.nodes.every(isNode)) {
+  if (flow.children && !flow.children.every(isNode)) {
     return false;
   }
 
   // Check all edges are valid
-  if (!flow.edges.every(isEdge)) {
+  if (flow.edges && !flow.edges.every(isEdge)) {
     return false;
   }
 
   // Check all edge endpoints exist
-  const nodeIds = new Set(flow.nodes.map((n) => n.id));
+  const nodeIds = new Set(flow.children?.map((n) => n.id) || []);
 
-  for (const edge of flow.edges) {
-    if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) {
-      return false;
+  if (flow.edges) {
+    for (const edge of flow.edges) {
+      if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) {
+        return false;
+      }
     }
   }
 
@@ -109,32 +98,36 @@ export const isValidFlow = (flow: Flow): boolean => {
 /**
  * Check if a node has inputs
  */
-export const hasInputs = (node: FlowNode): boolean => {
-  return Array.isArray(node.inputs) && node.inputs.length > 0;
+export const hasInputs = (node: NodeDefinition): boolean => {
+  return Array.isArray(node.inputPorts) && node.inputPorts.length > 0;
 };
 
 /**
  * Check if a node has outputs
  */
-export const hasOutputs = (node: FlowNode): boolean => {
-  return Array.isArray(node.outputs) && node.outputs.length > 0;
+export const hasOutputs = (node: NodeDefinition): boolean => {
+  return Array.isArray(node.outputPorts) && node.outputPorts.length > 0;
 };
 
 /**
  * Check if a flow is empty (no nodes)
  */
 export const isEmptyFlow = (flow: Flow): boolean => {
-  return flow.nodes.length === 0;
+  return !flow.children || flow.children.length === 0;
 };
 
 /**
  * Check if a flow has cycles
  */
 export const hasCycles = (flow: Flow): boolean => {
+  if (!flow.children || !flow.edges) {
+    return false;
+  }
+
   const adjacencyList: Map<string, string[]> = new Map();
 
   // Build adjacency list
-  flow.nodes.forEach((node) => {
+  flow.children.forEach((node) => {
     adjacencyList.set(node.id, []);
   });
 
@@ -183,6 +176,9 @@ export const hasCycles = (flow: Flow): boolean => {
  * Check if a node is an entry node (has no incoming edges)
  */
 export const isEntryNode = (nodeId: string, flow: Flow): boolean => {
+  if (!flow.edges) {
+    return true; // If no edges, all nodes are entry nodes
+  }
   return !flow.edges.some((edge) => edge.target === nodeId);
 };
 
@@ -190,5 +186,8 @@ export const isEntryNode = (nodeId: string, flow: Flow): boolean => {
  * Check if a node is an exit node (has no outgoing edges)
  */
 export const isExitNode = (nodeId: string, flow: Flow): boolean => {
+  if (!flow.edges) {
+    return true; // If no edges, all nodes are exit nodes
+  }
   return !flow.edges.some((edge) => edge.source === nodeId);
 };

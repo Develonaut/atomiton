@@ -4,55 +4,45 @@
 
 // Type exports
 export type {
-  Edge,
-  EdgeMarker,
-  CreateEdgeOptions,
-  // Factory option types
-  CreateFlowOptions,
-  CreateNodeOptions,
-  // Core types
-  Executable,
-  ExecutableMetadata,
+  // Core flow types
+  Flow,
+  FlowMetadata,
+  ValidationResult,
+
   // Execution types
   ExecutionContext,
   ExecutionError,
   ExecutionResult,
   ExecutionStatus,
-  Flow,
-  FlowExecutor,
-  FlowMetadata,
-  FlowNode,
   NodeExecutor,
-  PortDefinition,
-  Position,
+  FlowExecutor,
 } from "#types";
 
 // Factory functions
 export {
-  cloneEdge,
+  createFlow,
+  createEmptyFlow,
+  createSequentialFlow,
   cloneFlow,
   cloneNode,
-  createEdge,
-  createEmptyFlow,
-  createFlow,
-  createFlowFromNodes,
-  createNode,
-  createSequentialFlow,
+  cloneEdge,
+  validateFlow,
+  createExecutionContext,
+  createExecutionResult,
 } from "#factories";
 
 // Type guards
 export {
-  hasCycles,
-  hasInputs,
-  hasOutputs,
-  isEdge,
-  isEmptyFlow,
-  isEntryNode,
-  isExecutable,
-  isExitNode,
   isFlow,
   isNode,
+  isEdge,
   isValidFlow,
+  hasInputs,
+  hasOutputs,
+  isEmptyFlow,
+  hasCycles,
+  isEntryNode,
+  isExitNode,
 } from "#guards";
 
 // Core functional utilities
