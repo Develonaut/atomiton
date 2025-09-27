@@ -4,5 +4,6 @@
 
 export {
   createFlatNodeRegistry,
-  flatNodeRegistryFromJSON, type FlatNodeRegistry
+  flatNodeRegistryFromJSON,
+  type FlatNodeRegistry,
 } from "#core/registry/flatNodeRegistry";

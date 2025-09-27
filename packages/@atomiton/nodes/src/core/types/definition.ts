@@ -10,7 +10,10 @@ export * from "#core/types/parameters";
 export * from "#core/types/ports";
 
 import type { NodeEdge } from "#core/types/edges";
-import type { FlatNodeMetadata, LegacyNodeMetadata } from "#core/types/metadata";
+import type {
+  FlatNodeMetadata,
+  LegacyNodeMetadata,
+} from "#core/types/metadata";
 import type { NodeParameters } from "#core/types/parameters";
 import type { NodePort } from "#core/types/ports";
 

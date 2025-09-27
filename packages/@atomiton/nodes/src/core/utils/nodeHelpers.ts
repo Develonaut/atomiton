@@ -6,7 +6,10 @@
  * For legacy support, use the compatibility utils.
  */
 
-import type { LegacyNodeDefinition, NodeDefinition } from "#core/types/definition";
+import type {
+  LegacyNodeDefinition,
+  NodeDefinition,
+} from "#core/types/definition";
 
 /**
  * Check if a node has nodes (is a container/group/flow)
@@ -19,17 +22,20 @@ export const hasChildren = (node: LegacyNodeDefinition): boolean =>
  * Check if a node is a leaf node (no contained nodes)
  * @deprecated Use FlatNodeRegistry.getChildren() for flat structure
  */
-export const isLeafNode = (node: LegacyNodeDefinition): boolean => !hasChildren(node);
+export const isLeafNode = (node: LegacyNodeDefinition): boolean =>
+  !hasChildren(node);
 
 /**
  * Get the node type from metadata (works with flat structure)
  */
-export const getNodeType = (node: NodeDefinition | LegacyNodeDefinition): string => {
-  if ('type' in node && typeof node.type === 'string') {
+export const getNodeType = (
+  node: NodeDefinition | LegacyNodeDefinition,
+): string => {
+  if ("type" in node && typeof node.type === "string") {
     return node.type;
   }
   // Fallback for legacy nodes
-  return (node as LegacyNodeDefinition).metadata?.type || 'unknown';
+  return (node as LegacyNodeDefinition).metadata?.type || "unknown";
 };
 
 /**
@@ -59,8 +65,11 @@ export const getChildCount = (node: LegacyNodeDefinition): number => {
 /**
  * Check if a node is of a specific type (works with both formats)
  */
-export const isNodeType = (node: NodeDefinition | LegacyNodeDefinition, type: string): boolean => {
-  if ('type' in node && typeof node.type === 'string') {
+export const isNodeType = (
+  node: NodeDefinition | LegacyNodeDefinition,
+  type: string,
+): boolean => {
+  if ("type" in node && typeof node.type === "string") {
     return node.type === type;
   }
   // Fallback for legacy nodes

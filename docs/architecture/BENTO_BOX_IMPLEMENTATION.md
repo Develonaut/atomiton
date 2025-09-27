@@ -125,10 +125,7 @@ const detectEnvironment = (): TransportType => {
 ```typescript
 // simple/simpleExecutor.ts - 50 lines total
 export class SimpleExecutor {
-  async executeFlow(
-    flow: SimpleFlow,
-    input?: unknown,
-  ): Promise<SimpleResult> {
+  async executeFlow(flow: SimpleFlow, input?: unknown): Promise<SimpleResult> {
     try {
       let currentInput = input;
 

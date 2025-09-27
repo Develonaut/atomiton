@@ -12,8 +12,8 @@
       using @atomiton/nodes
 - [x] **FileSystemStorage** - Renamed from FilesystemStorage and updated to use
       nodes serialization
-- [x] **Export updates** - Updated package exports to remove
-      FlowSerializer, use FileSystemStorage
+- [x] **Export updates** - Updated package exports to remove FlowSerializer, use
+      FileSystemStorage
 - [x] **Dependencies** - Removed yaml dependency (handled by @atomiton/nodes
       package)
 

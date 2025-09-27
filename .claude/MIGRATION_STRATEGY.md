@@ -64,10 +64,10 @@ Follow functional programming patterns - no classes, use factory functions and t
 
 #### Step 1.2: Refactor Flow Package to Use Node Types
 
-- [ ] Move Node type to @atomiton/nodes
-- [ ] Remove duplicate types from Flow
-- [ ] Import and extend Node types
-- [ ] Update factories and guards
+- [x] Move Node type to @atomiton/nodes
+- [x] Remove duplicate types from Flow
+- [x] Import and extend Node types
+- [x] Update factories and guards
 
 **Claude Code Prompt:**
 
@@ -177,10 +177,10 @@ The key insight: Flow doesn't need its own node types - it just uses Node from
 
 #### Step 1.3: Update NodeDefinition Structure in @atomiton/nodes
 
-- [ ] Migrate from nested children to flat structure with parentId
-- [ ] Move version to top level
-- [ ] Update all existing node definitions
-- [ ] Add migration utilities
+- [X] Migrate from nested children to flat structure with parentId
+- [X] Move version to top level
+- [X] Update all existing node definitions
+- [x] Add migration utilities
 
 **Claude Code Prompt:**
 
@@ -266,10 +266,10 @@ Benefits of flat structure:
 ```
 
 #### Step 1.4: Create @atomiton/conductor Package
-- [ ] Create package structure
-- [ ] Add execution logic
-- [ ] Add factory functions
-- [ ] Add tests
+- [X] Create package structure
+- [X] Add execution logic
+- [X] Add factory functions
+- [X] Add tests
 
 **Claude Code Prompt:**
 ```
@@ -545,7 +545,6 @@ The router handles the new flat node structure with parentId and top-level
 version.
 
 ```
-
 #### Step 2.3: Rename IPC to RPC Package
 - [ ] Rename directory
 - [ ] Update package.json

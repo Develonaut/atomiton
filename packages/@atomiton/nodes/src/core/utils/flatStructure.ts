@@ -2,7 +2,10 @@ import type {
   NodeDefinition,
   LegacyNodeDefinition,
 } from "#core/types/definition";
-import type { LegacyNodeMetadata, FlatNodeMetadata } from "#core/types/metadata";
+import type {
+  LegacyNodeMetadata,
+  FlatNodeMetadata,
+} from "#core/types/metadata";
 
 export function convertLegacyToFlat(
   nodes: LegacyNodeDefinition[],

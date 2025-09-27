@@ -37,8 +37,8 @@ None
 
 This package provides state management utilities built on Zustand and Immer for
 the Atomiton platform. Focus is on type safety, performance, and developer
-experience. The store will handle Flow states, UI states, and application
-data with support for real-time collaboration.
+experience. The store will handle Flow states, UI states, and application data
+with support for real-time collaboration.
 
 ---
 

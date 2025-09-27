@@ -2,8 +2,8 @@
 
 ## Vision
 
-Create a performant, secure desktop application for the Atomiton Flow
-editor that provides native OS integration, offline capabilities, and enhanced
+Create a performant, secure desktop application for the Atomiton Flow editor
+that provides native OS integration, offline capabilities, and enhanced
 developer experience beyond what's possible in a web browser.
 
 ## Current State (v0.1.0)

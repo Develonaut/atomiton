@@ -14,8 +14,8 @@ folder:
   utilities
 - **[packages/ui/](../packages/ui/)** - UI components and design system
 - **[packages/nodes/](../packages/nodes/)** - Node system and implementations
-- **[packages/flows/](../packages/@atomiton/flows/)** - Flow
-  definition and validation
+- **[packages/flows/](../packages/@atomiton/flows/)** - Flow definition and
+  validation
 - **[packages/theme/](../packages/theme/)** - Framework-agnostic theme system
 - **[packages/di/](../packages/di/)** - Dependency injection system
 

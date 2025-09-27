@@ -4,8 +4,8 @@
 
 Build the most performant, developer-friendly, and feature-complete YAML
 processing library for the JavaScript/TypeScript ecosystem, specifically
-optimized for configuration management, Flow processing, and large-scale
-YAML operations.
+optimized for configuration management, Flow processing, and large-scale YAML
+operations.
 
 ## Long-term Goals
 

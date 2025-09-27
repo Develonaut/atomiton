@@ -3,8 +3,8 @@
 ## Overview
 
 Atomiton's security architecture provides comprehensive protection for user
-data, API credentials, and Flow content across all deployment environments.
-The system prioritizes simplicity and reliability over complex security theater.
+data, API credentials, and Flow content across all deployment environments. The
+system prioritizes simplicity and reliability over complex security theater.
 
 ## Security Principles
 
@@ -97,7 +97,7 @@ const retrieved = await storage.retrieve("api-key");
 | API Keys        | OS Keychain | Encrypted Local | Permanent  | User-provided    |
 | Auth Tokens     | OS Keychain | Encrypted Local | Session    | OAuth/JWT        |
 | Session Data    | Memory Only | Session Storage | Tab        | Non-sensitive    |
-| Flow Data  | File System | IndexedDB       | Persistent | Optional encrypt |
+| Flow Data       | File System | IndexedDB       | Persistent | Optional encrypt |
 
 ### Implementation Components
 

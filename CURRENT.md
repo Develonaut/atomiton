@@ -14,25 +14,25 @@ selected nodes to enable workflow creation
 
 ### 📦 Package Status
 
-| Package                         | Status   | Current Focus                 | Build Status |
-| ------------------------------- | -------- | ----------------------------- | ------------ |
-| **@atomiton/editor**            | 🔴 Active | **Node Inspector (Critical)** | ✅ Passing    |
-| **@atomiton/ui**                | 🟢 Active | Component library             | ✅ Passing    |
-| **@atomiton/core**              | 🟢 Active | Flow engine                   | ✅ Passing    |
-| **@atomiton/nodes**             | 🟢 Active | Node implementations          | ✅ Passing    |
-| **@atomiton/store**             | 🟢 Active | State management              | ✅ Passing    |
-| **@atomiton/events**            | 🟢 Active | Event system                  | ✅ Passing    |
-| **@atomiton/di**                | 🟢 Active | Dependency injection          | ✅ Passing    |
-| **@atomiton/validation**        | ✅ Stable | Centralized validation        | ✅ Passing    |
-| **@atomiton/eslint-config**     | ✅ Stable | Shared ESLint config          | ✅ Passing    |
-| **@atomiton/typescript-config** | ✅ Stable | Shared TypeScript config      | ✅ Passing    |
+| Package                         | Status    | Current Focus                 | Build Status |
+| ------------------------------- | --------- | ----------------------------- | ------------ |
+| **@atomiton/editor**            | 🔴 Active | **Node Inspector (Critical)** | ✅ Passing   |
+| **@atomiton/ui**                | 🟢 Active | Component library             | ✅ Passing   |
+| **@atomiton/core**              | 🟢 Active | Flow engine                   | ✅ Passing   |
+| **@atomiton/nodes**             | 🟢 Active | Node implementations          | ✅ Passing   |
+| **@atomiton/store**             | 🟢 Active | State management              | ✅ Passing   |
+| **@atomiton/events**            | 🟢 Active | Event system                  | ✅ Passing   |
+| **@atomiton/di**                | 🟢 Active | Dependency injection          | ✅ Passing   |
+| **@atomiton/validation**        | ✅ Stable | Centralized validation        | ✅ Passing   |
+| **@atomiton/eslint-config**     | ✅ Stable | Shared ESLint config          | ✅ Passing   |
+| **@atomiton/typescript-config** | ✅ Stable | Shared TypeScript config      | ✅ Passing   |
 
 ### 📱 Apps Status
 
-| App         | Status   | Current Focus          | Build Status |
-| ----------- | -------- | ---------------------- | ------------ |
-| **client**  | 🟢 Active | Vite-based React app   | ✅ Passing    |
-| **desktop** | 🟢 Ready  | Electron wrapper ready | ✅ Passing    |
+| App         | Status    | Current Focus          | Build Status |
+| ----------- | --------- | ---------------------- | ------------ |
+| **client**  | 🟢 Active | Vite-based React app   | ✅ Passing   |
+| **desktop** | 🟢 Ready  | Electron wrapper ready | ✅ Passing   |
 
 ### 🚀 Recent Achievements
 
@@ -60,8 +60,7 @@ worktree to enable parallel development without conflicts.
 
 #### Step 1: Flow Template Creation
 
-**Worktree**: `wtnew flow-templates` **Status**: 🔴 **CRITICAL - START
-HERE**
+**Worktree**: `wtnew flow-templates` **Status**: 🔴 **CRITICAL - START HERE**
 
 Create example flows that appear in the Explore Gallery:
 

@@ -9,14 +9,14 @@
 ## 🎯 What is Atomiton?
 
 Atomiton is a desktop-first, AI-native automation platform that transforms
-complex workflows into visual Flows. Think of it as n8n's simpler, faster,
-more modern cousin - built for individual creators and small teams who want
-powerful automation without enterprise complexity.
+complex workflows into visual Flows. Think of it as n8n's simpler, faster, more
+modern cousin - built for individual creators and small teams who want powerful
+automation without enterprise complexity.
 
 ### Our Mission
 
-> Transform complex workflows into visual Flows that anyone can create,
-> with AI assistance at every step, running entirely on your machine with zero
+> Transform complex workflows into visual Flows that anyone can create, with AI
+> assistance at every step, running entirely on your machine with zero
 > infrastructure costs.
 
 ## 🚀 Why Atomiton?

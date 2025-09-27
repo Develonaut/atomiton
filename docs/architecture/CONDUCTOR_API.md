@@ -2,9 +2,9 @@
 
 ## Overview
 
-The conductor provides a unified API for Flow execution that works
-identically across all environments. It implements the factory pattern with
-automatic environment detection and transport selection.
+The conductor provides a unified API for Flow execution that works identically
+across all environments. It implements the factory pattern with automatic
+environment detection and transport selection.
 
 ## Core API
 

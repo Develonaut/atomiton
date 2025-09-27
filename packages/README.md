@@ -1,7 +1,7 @@
 # Atomiton Packages
 
-This directory contains all shared packages for the Atomiton Flow
-automation platform.
+This directory contains all shared packages for the Atomiton Flow automation
+platform.
 
 ## Package Organization Philosophy
 

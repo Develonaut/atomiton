@@ -1,7 +1,7 @@
 # Atomiton Desktop
 
-Electron wrapper for the Atomiton Flow automation platform, providing
-native desktop capabilities.
+Electron wrapper for the Atomiton Flow automation platform, providing native
+desktop capabilities.
 
 ## 📊 Progress Tracking
 

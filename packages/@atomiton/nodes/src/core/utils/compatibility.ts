@@ -1,6 +1,12 @@
-import type { NodeDefinition, LegacyNodeDefinition } from "#core/types/definition";
+import type {
+  NodeDefinition,
+  LegacyNodeDefinition,
+} from "#core/types/definition";
 import type { LegacyNodeMetadata } from "#core/types/metadata";
-import { convertLegacyToFlat, convertFlatToLegacy } from "#core/utils/flatStructure";
+import {
+  convertLegacyToFlat,
+  convertFlatToLegacy,
+} from "#core/utils/flatStructure";
 
 /**
  * Type guard to check if a node is using the legacy format
@@ -36,7 +42,11 @@ export function isFlatNode(node: unknown): node is NodeDefinition {
  * Normalize a node or array of nodes to the flat format
  */
 export function normalizeToFlat(
-  nodes: NodeDefinition | LegacyNodeDefinition | NodeDefinition[] | LegacyNodeDefinition[],
+  nodes:
+    | NodeDefinition
+    | LegacyNodeDefinition
+    | NodeDefinition[]
+    | LegacyNodeDefinition[],
 ): NodeDefinition[] {
   const nodeArray = Array.isArray(nodes) ? nodes : [nodes];
 
@@ -54,7 +64,11 @@ export function normalizeToFlat(
  * Normalize a node or array of nodes to the legacy format
  */
 export function normalizeToLegacy(
-  nodes: NodeDefinition | LegacyNodeDefinition | NodeDefinition[] | LegacyNodeDefinition[],
+  nodes:
+    | NodeDefinition
+    | LegacyNodeDefinition
+    | NodeDefinition[]
+    | LegacyNodeDefinition[],
 ): LegacyNodeDefinition[] {
   const nodeArray = Array.isArray(nodes) ? nodes : [nodes];
 
@@ -71,7 +85,9 @@ export function normalizeToLegacy(
 /**
  * Helper to check if a node has children (works with both formats)
  */
-export function nodeHasChildren(node: NodeDefinition | LegacyNodeDefinition): boolean {
+export function nodeHasChildren(
+  node: NodeDefinition | LegacyNodeDefinition,
+): boolean {
   if (isLegacyNode(node)) {
     return Array.isArray(node.nodes) && node.nodes.length > 0;
   }
@@ -83,7 +99,9 @@ export function nodeHasChildren(node: NodeDefinition | LegacyNodeDefinition): bo
 /**
  * Helper to get node type (works with both formats)
  */
-export function getNodeType(node: NodeDefinition | LegacyNodeDefinition): string {
+export function getNodeType(
+  node: NodeDefinition | LegacyNodeDefinition,
+): string {
   if (isLegacyNode(node)) {
     return node.metadata.type;
   }
@@ -93,7 +111,9 @@ export function getNodeType(node: NodeDefinition | LegacyNodeDefinition): string
 /**
  * Helper to get node version (works with both formats)
  */
-export function getNodeVersion(node: NodeDefinition | LegacyNodeDefinition): string {
+export function getNodeVersion(
+  node: NodeDefinition | LegacyNodeDefinition,
+): string {
   if (isLegacyNode(node)) {
     return node.metadata.version;
   }

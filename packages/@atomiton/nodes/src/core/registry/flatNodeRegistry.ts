@@ -20,7 +20,9 @@ export type FlatNodeRegistry = {
   toJSON: () => NodeDefinition[];
 };
 
-export function createFlatNodeRegistry(initialNodes?: NodeDefinition[]): FlatNodeRegistry {
+export function createFlatNodeRegistry(
+  initialNodes?: NodeDefinition[],
+): FlatNodeRegistry {
   const nodes = new Map<string, NodeDefinition>();
   const parentToChildren = new Map<string, Set<string>>();
   const childToParent = new Map<string, string>();
@@ -127,7 +129,9 @@ export function createFlatNodeRegistry(initialNodes?: NodeDefinition[]): FlatNod
     );
   };
 
-  const search = (predicate: (node: NodeDefinition) => boolean): NodeDefinition[] => {
+  const search = (
+    predicate: (node: NodeDefinition) => boolean,
+  ): NodeDefinition[] => {
     return Array.from(nodes.values()).filter(predicate);
   };
 
@@ -203,6 +207,8 @@ export function createFlatNodeRegistry(initialNodes?: NodeDefinition[]): FlatNod
   };
 }
 
-export function flatNodeRegistryFromJSON(nodes: NodeDefinition[]): FlatNodeRegistry {
+export function flatNodeRegistryFromJSON(
+  nodes: NodeDefinition[],
+): FlatNodeRegistry {
   return createFlatNodeRegistry(nodes);
 }

@@ -141,7 +141,7 @@ class DataPipelineNode extends Node implements IGroupNode {
 
 | Domain           | Term            | Implementation   | Interface    |
 | ---------------- | --------------- | ---------------- | ------------ |
-| **UI/Marketing** | Flow       | `GroupNode`      | `INode`      |
+| **UI/Marketing** | Flow            | `GroupNode`      | `INode`      |
 | **Code/System**  | Group Node      | `GroupNode`      | `IGroupNode` |
 | **Code/System**  | Individual Node | `CSVReaderNode`  | `INode`      |
 | **Execution**    | Any Node        | `node.execute()` | Same method! |

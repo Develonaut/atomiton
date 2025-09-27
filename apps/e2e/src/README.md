@@ -20,8 +20,7 @@ Examples:
 
 - `user-journey-template-to-editor.spec.ts` - User selecting a template and
   editing it
-- `user-journey-flow-creation.spec.ts` - User creating a new flow from
-  scratch
+- `user-journey-flow-creation.spec.ts` - User creating a new flow from scratch
 - `user-journey-homepage-navigation.spec.ts` - First-time user exploring the app
 - `user-journey-editor-node-connections.spec.ts` - User connecting nodes in the
   editor

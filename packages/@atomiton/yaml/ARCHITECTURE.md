@@ -90,10 +90,7 @@ async function loadFlow(path: string): Promise<Flow> {
 }
 
 // Saving a flow to disk
-async function saveFlow(
-  path: string,
-  flow: Flow,
-): Promise<void> {
+async function saveFlow(path: string, flow: Flow): Promise<void> {
   const yamlContent = yaml.toYaml(flow, {
     lineWidth: 80,
     indent: 2,

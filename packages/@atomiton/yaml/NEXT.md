@@ -5,8 +5,7 @@
 ### 🎯 Primary Focus: Advanced Features & Integration Enhancement
 
 The YAML package is production-ready and performant. Focus is on advanced
-features that support complex Flow scenarios and enhanced developer
-experience.
+features that support complex Flow scenarios and enhanced developer experience.
 
 ## Upcoming Enhancements
 

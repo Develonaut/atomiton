@@ -6,8 +6,8 @@ Simplified state management for the Atomiton Flow platform.
 
 This package provides a clean, functional API for creating Zustand stores with
 built-in Immer support and optional persistence. Perfect for managing
-application state in the Flow editor, node configurations, and runtime
-execution state.
+application state in the Flow editor, node configurations, and runtime execution
+state.
 
 **Simplified from 473 to 111 lines of core code** - focusing on what you
 actually need.

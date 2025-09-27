@@ -377,13 +377,13 @@ await migrator.migrate({
 
 ### Benchmarks by Platform
 
-| Operation      | Desktop | Browser | Cloud  | Target     |
-| -------------- | ------- | ------- | ------ | ---------- |
-| Save Flow | <50ms   | <100ms  | <500ms | Invisible  |
-| Load Flow | <20ms   | <50ms   | <200ms | Invisible  |
-| List Items     | <100ms  | <200ms  | <1s    | Responsive |
-| Search         | <200ms  | <500ms  | <2s    | Responsive |
-| Sync           | <1s     | <2s     | <5s    | Background |
+| Operation  | Desktop | Browser | Cloud  | Target     |
+| ---------- | ------- | ------- | ------ | ---------- |
+| Save Flow  | <50ms   | <100ms  | <500ms | Invisible  |
+| Load Flow  | <20ms   | <50ms   | <200ms | Invisible  |
+| List Items | <100ms  | <200ms  | <1s    | Responsive |
+| Search     | <200ms  | <500ms  | <2s    | Responsive |
+| Sync       | <1s     | <2s     | <5s    | Background |
 
 ### Optimization Strategies
 

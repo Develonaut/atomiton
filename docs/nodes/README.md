@@ -3,9 +3,9 @@
 ## Overview
 
 This guide covers the complete process of creating, implementing, and testing
-custom nodes for the Atomiton Flow platform. Nodes are the fundamental
-building blocks that execute specific tasks within a Flow workflow,
-following the unified `INode` interface pattern.
+custom nodes for the Atomiton Flow platform. Nodes are the fundamental building
+blocks that execute specific tasks within a Flow workflow, following the unified
+`INode` interface pattern.
 
 ## Node Architecture Fundamentals
 
