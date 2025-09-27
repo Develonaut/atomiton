@@ -1130,6 +1130,9 @@ importers:
 
   packages/@atomiton/yaml:
     dependencies:
+      '@atomiton/flow':
+        specifier: workspace:*
+        version: link:../flow
       yaml:
         specifier: ^2.6.1
         version: 2.8.1

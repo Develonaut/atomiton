@@ -43,5 +43,14 @@ export { isYamlValue } from "#value.js";
 // Version
 export { getVersion } from "#version.js";
 
+// Flow-specific exports
+export {
+  parseFlowYaml,
+  flowToYaml,
+  validateFlowYaml,
+  migrateNestedToFlat,
+  flatToNested,
+} from "#flow.js";
+
 // Type exports
 export * from "#types.js";

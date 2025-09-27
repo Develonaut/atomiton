@@ -36,6 +36,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
+    "@atomiton/flow": "workspace:*",
     "yaml": "^2.6.1"
   },
   "devDependencies": {
