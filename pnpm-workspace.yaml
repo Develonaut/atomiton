@@ -3,6 +3,9 @@ packages:
   - "packages/*"
   - "packages/@atomiton/*"
 
+onlyBuiltDependencies:
+  - "lefthook"
+
 catalog:
   # React and related types
   react: ^19.1.1
@@ -45,7 +48,6 @@ catalog:
 
   # Additional tooling dependencies
   cross-env: ^10.0.0
-  husky: ^9.1.7
   knip: ^5.63.1
   lint-staged: ^16.1.6
   playwright: ^1.55.0

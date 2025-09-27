@@ -47,6 +47,7 @@
     "fkill": "^9.0.0",
     "kill-port": "catalog:",
     "knip": "catalog:",
+    "lefthook": "^1.13.4",
     "lint-staged": "catalog:",
     "markdown-table-prettify": "^3.7.0",
     "playwright": "catalog:",
@@ -59,5 +60,10 @@
   "packageManager": "pnpm@9.14.4",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "lefthook"
+    ]
   }
 }
