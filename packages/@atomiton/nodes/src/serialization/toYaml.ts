@@ -64,7 +64,8 @@ export function toYaml(definition: NodeDefinition): string {
       // Core identification
       id: definition.id,
       name: definition.name,
-      version: definition.metadata?.version || "1.0.0",
+      type: definition.type,
+      version: definition.version,
 
       // Description at top level for readability
       description: definition.metadata?.description || "",
@@ -129,10 +130,10 @@ export function toYaml(definition: NodeDefinition): string {
 function serializeNode(node: NodeDefinition): SerializedNode {
   const serialized: SerializedNode = {
     id: node.id,
-    type: node.metadata?.type,
+    type: node.type,
     name: node.name,
     category: node.metadata?.category,
-    version: node.metadata?.version,
+    version: node.version,
   };
 
   // Add metadata if it has custom values

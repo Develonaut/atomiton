@@ -35,11 +35,11 @@ export const shellCommandDefaults = {
  * Shell Command node definition (browser-safe)
  */
 export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
+  type: "shell-command",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "shell-command",
     name: "Shell Command",
-    type: "shell-command",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Execute shell commands and scripts",
     category: "system",

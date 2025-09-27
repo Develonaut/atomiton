@@ -29,11 +29,11 @@ export const editFieldsDefaults = {
  * Edit Fields node definition (browser-safe)
  */
 export const editFieldsDefinition: NodeDefinition = createNodeDefinition({
+  type: "transform",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "edit-fields",
     name: "Edit Fields",
-    type: "transform",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Edit existing fields or create new data fields",
     category: "data",

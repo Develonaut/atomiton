@@ -23,6 +23,9 @@ import { generateNodeId } from "@atomiton/utils";
 
 export type CreateNodeInput = {
   id?: string;
+  type?: string;
+  version?: string;
+  parentId?: string;
   name?: string;
   position?: { x: number; y: number };
   metadata?: NodeMetadata | NodeMetadataInput;
@@ -34,13 +37,17 @@ export type CreateNodeInput = {
 };
 
 /**
- * Create a node definition
+ * Create a node definition using flat structure
  *
  * Simple factory that combines parts into a node.
  * Delegates validation and creation to sub-factories.
  */
 function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
   const id = input.id || generateNodeId();
+  const type = input.type || "unknown";
+  const version = input.version || "1.0.0";
+  const parentId = input.parentId;
+
   const name =
     input.name ||
     (input.metadata && "name" in input.metadata
@@ -60,6 +67,9 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
 
   const node: NodeDefinition = {
     id,
+    type,
+    version,
+    parentId,
     name,
     position,
     metadata,
@@ -68,7 +78,7 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     outputPorts: ports.output,
   };
 
-  // Add nodes/edges if provided (any node can have them)
+  // Add nodes/edges if provided (makes this a container/group node)
   if (input.nodes) {
     node.nodes = input.nodes;
   }

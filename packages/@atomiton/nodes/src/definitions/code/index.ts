@@ -24,11 +24,11 @@ export const codeDefaults = {
  * Code execution node definition (browser-safe)
  */
 export const codeDefinition: NodeDefinition = createNodeDefinition({
+  type: "code",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "code",
     name: "Code",
-    type: "code",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Execute safe JavaScript expressions with input data",
     category: "logic",

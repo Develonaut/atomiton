@@ -30,11 +30,11 @@ export const fileSystemDefaults = {
  * File System node definition (browser-safe)
  */
 export const fileSystemDefinition: NodeDefinition = createNodeDefinition({
+  type: "file-system",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "file-system",
     name: "File System",
-    type: "file-system",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "File system operations (read, write, manage directories)",
     category: "io",

@@ -29,11 +29,11 @@ export const transformDefaults = {
  * Transform node definition (browser-safe)
  */
 export const transformDefinition: NodeDefinition = createNodeDefinition({
+  type: "transform",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "transform",
     name: "Transform",
-    type: "transform",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Transform and manipulate data arrays",
     category: "data",

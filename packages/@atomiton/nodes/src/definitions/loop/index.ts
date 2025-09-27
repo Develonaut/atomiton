@@ -31,11 +31,11 @@ export const loopDefaults = {
  * Loop node definition (browser-safe)
  */
 export const loopDefinition: NodeDefinition = createNodeDefinition({
+  type: "loop",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "loop",
     name: "Loop",
-    type: "loop",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Loop and iterate over data items with various strategies",
     category: "logic",

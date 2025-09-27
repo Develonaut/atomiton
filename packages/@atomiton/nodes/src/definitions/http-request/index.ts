@@ -31,11 +31,11 @@ export const httpRequestDefaults = {
  * HTTP Request node definition (browser-safe)
  */
 export const httpRequestDefinition: NodeDefinition = createNodeDefinition({
+  type: "http-request",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "http-request",
     name: "HTTP Request",
-    type: "http-request",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Make HTTP requests (GET, POST, PUT, DELETE, etc.)",
     category: "io",

@@ -1,36 +1,49 @@
 /**
  * Node Helper Functions
  * Utility functions for working with node definitions
+ *
+ * NOTE: These helpers work with the new flat structure.
+ * For legacy support, use the compatibility utils.
  */
 
-import type { NodeDefinition } from "#core/types/definition";
+import type { LegacyNodeDefinition, NodeDefinition } from "#core/types/definition";
 
 /**
  * Check if a node has nodes (is a container/group/flow)
+ * @deprecated Use FlatNodeRegistry.getChildren() for flat structure
  */
-export const hasChildren = (node: NodeDefinition): boolean =>
+export const hasChildren = (node: LegacyNodeDefinition): boolean =>
   Boolean(node.nodes && node.nodes.length > 0);
 
 /**
  * Check if a node is a leaf node (no contained nodes)
+ * @deprecated Use FlatNodeRegistry.getChildren() for flat structure
  */
-export const isLeafNode = (node: NodeDefinition): boolean => !hasChildren(node);
+export const isLeafNode = (node: LegacyNodeDefinition): boolean => !hasChildren(node);
 
 /**
- * Get the node type from metadata
+ * Get the node type from metadata (works with flat structure)
  */
-export const getNodeType = (node: NodeDefinition): string => node.metadata.type;
+export const getNodeType = (node: NodeDefinition | LegacyNodeDefinition): string => {
+  if ('type' in node && typeof node.type === 'string') {
+    return node.type;
+  }
+  // Fallback for legacy nodes
+  return (node as LegacyNodeDefinition).metadata?.type || 'unknown';
+};
 
 /**
  * Check if a node has edges
+ * @deprecated Edges are now managed separately in flat structure
  */
-export const hasEdges = (node: NodeDefinition): boolean =>
+export const hasEdges = (node: LegacyNodeDefinition): boolean =>
   Boolean(node.edges && node.edges.length > 0);
 
 /**
  * Get the total number of child nodes recursively
+ * @deprecated Use FlatNodeRegistry.getDescendants() for flat structure
  */
-export const getChildCount = (node: NodeDefinition): number => {
+export const getChildCount = (node: LegacyNodeDefinition): number => {
   if (!hasChildren(node)) {
     return 0;
   }
@@ -44,7 +57,12 @@ export const getChildCount = (node: NodeDefinition): number => {
 };
 
 /**
- * Check if a node is of a specific type
+ * Check if a node is of a specific type (works with both formats)
  */
-export const isNodeType = (node: NodeDefinition, type: string): boolean =>
-  node.metadata.type === type;
+export const isNodeType = (node: NodeDefinition | LegacyNodeDefinition, type: string): boolean => {
+  if ('type' in node && typeof node.type === 'string') {
+    return node.type === type;
+  }
+  // Fallback for legacy nodes
+  return (node as LegacyNodeDefinition).metadata?.type === type;
+};

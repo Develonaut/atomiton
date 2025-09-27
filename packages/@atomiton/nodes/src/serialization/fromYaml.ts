@@ -28,7 +28,6 @@ import {
   validateIcon,
   validateRuntime,
   validateSource,
-  validateType,
 } from "#serialization/validators";
 
 /**
@@ -61,7 +60,11 @@ export function fromYaml(yamlContent: string): NodeDefinition {
  * Parse a node definition from YAML data
  */
 function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
-  // Parse metadata
+  // Extract type and version from either top-level or metadata
+  const type = data.type || data.metadata?.type || "transform";
+  const version = data.version || data.metadata?.version || "1.0.0";
+
+  // Parse metadata (without type and version)
   const metadata = parseMetadata(data);
 
   // Parse parameters
@@ -77,9 +80,11 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
   // Parse edges
   const edges = data.edges ? parseEdges(data.edges) : undefined;
 
-  // Create the node definition
+  // Create the node definition with type and version at top level
   return createNodeDefinition({
     id: data.id,
+    type,
+    version,
     name: data.name,
     position: data.position || { x: 0, y: 0 },
     metadata,
@@ -100,8 +105,6 @@ function parseMetadata(data: YamlNodeDefinition) {
   return createNodeMetadata({
     id: yamlMeta.id || data.id,
     name: yamlMeta.name || data.name,
-    type: validateType(yamlMeta.type),
-    version: yamlMeta.version || data.version || "1.0.0",
     author: yamlMeta.author,
     authorId: yamlMeta.authorId,
     source: validateSource(yamlMeta.source),

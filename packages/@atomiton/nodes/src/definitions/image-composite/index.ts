@@ -32,11 +32,11 @@ export const imageCompositeDefaults = {
  * Image Composite node definition (browser-safe)
  */
 export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
+  type: "image-composite",
+  version: "1.0.0",
   metadata: createNodeMetadata({
     id: "image-composite",
     name: "Image Composite",
-    type: "image-composite",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "Combine, overlay, and manipulate images",
     category: "media",

@@ -24,12 +24,12 @@ export const groupDefaults = {
 export const groupDefinition: NodeDefinition = createNodeDefinition({
   id: "group",
   name: "Group",
+  type: "group",
+  version: "1.0.0",
 
   metadata: createNodeMetadata({
     id: "group",
     name: "Group",
-    type: "group",
-    version: "1.0.0",
     author: "Atomiton Core Team",
     description: "A node that groups other nodes together",
     category: "group",
