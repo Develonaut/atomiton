@@ -546,10 +546,10 @@ version.
 
 ```
 #### Step 2.3: Rename IPC to RPC Package
-- [ ] Rename directory
-- [ ] Update package.json
-- [ ] Update imports
-- [ ] Keep backward compatibility
+- [X] Rename directory
+- [X] Update package.json
+- [X] Update imports
+- [X] Keep backward compatibility
 
 **Claude Code Prompt:**
 ```
@@ -588,10 +588,10 @@ This renames the package while maintaining backward compatibility.
 ```
 
 #### Step 2.4: Set up electron-trpc in Desktop
-- [ ] Configure electron-trpc
-- [ ] Create IPC handlers
-- [ ] Set up in main process
-- [ ] Update preload
+- [X] Configure electron-trpc
+- [X] Create IPC handlers
+- [X] Set up in main process
+- [X] Update preload
 
 **Claude Code Prompt:**
 ```
@@ -681,10 +681,10 @@ This sets up tRPC with support for the new flat node structure.
 ```
 
 #### Step 2.5: Update Client to Use tRPC
-- [ ] Set up tRPC client
-- [ ] Create hooks
-- [ ] Update RPC calls
-- [ ] Keep backward compatibility
+- [X] Set up tRPC client
+- [X] Create hooks
+- [X] Update RPC calls
+- [X] Keep backward compatibility
 
 **Claude Code Prompt:**
 ```
