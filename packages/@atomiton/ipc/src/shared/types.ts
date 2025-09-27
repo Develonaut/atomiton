@@ -1,39 +1,46 @@
 // Node execution types
-export interface NodeExecuteRequest {
+export type SimpleNodeData = {
   id: string;
-  nodeId: string;
-  inputs: Record<string, unknown>;
-  options?: {
-    timeout?: number;
-  };
-}
+  type: string;
+  config: Record<string, unknown>;
+};
 
-export interface NodeExecuteResponse {
+export type NodeExecuteRequestPayload = {
+  nodeData: SimpleNodeData;
+};
+
+export type NodeExecuteRequest = {
+  id: string;
+  version: string;
+  payload: NodeExecuteRequestPayload;
+};
+
+export type NodeExecuteResponse = {
   id: string;
   success: boolean;
   outputs?: Record<string, unknown>;
   error?: string;
   duration?: number;
-}
+};
 
-export interface NodeProgress {
+export type NodeProgress = {
   id: string;
   nodeId: string;
   progress: number;
   message?: string;
-}
+};
 
 // Storage types
-export interface StorageRequest {
+export type StorageRequest = {
   key: string;
   value?: unknown;
-}
+};
 
-export interface StorageResponse {
+export type StorageResponse = {
   success: boolean;
   value?: unknown;
   error?: string;
-}
+};
 
 // Re-export from index
-export * from "./channels";
+export * from "#shared/channels";

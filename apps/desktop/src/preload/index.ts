@@ -18,6 +18,22 @@ const IPC = {
 } as const;
 
 // Type definitions for IPC
+type SimpleNodeData = {
+  id: string;
+  type: string;
+  config: Record<string, unknown>;
+};
+
+type NodeExecuteRequestPayload = {
+  nodeData: SimpleNodeData;
+};
+
+type NodeExecuteRequest = {
+  id: string;
+  version: string;
+  payload: NodeExecuteRequestPayload;
+};
+
 type IPCRequest = Record<string, unknown>;
 type IPCResponse = unknown;
 type IPCProgress = Record<string, unknown>;
@@ -33,7 +49,7 @@ const atomitonIPC = {
   ping: (): Promise<string> => ipcRenderer.invoke(IPC.PING),
 
   // Node execution
-  executeNode: (request: IPCRequest): Promise<IPCResponse> =>
+  executeNode: (request: NodeExecuteRequest): Promise<IPCResponse> =>
     ipcRenderer.invoke(IPC.EXECUTE_NODE, request),
 
   // Storage

@@ -1,2 +1,2 @@
-export * from "./channels";
-export * from "./types";
+export * from "#shared/channels";
+export * from "#shared/types";

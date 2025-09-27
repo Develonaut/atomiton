@@ -159,10 +159,26 @@ export default function DebugPage() {
     });
 
     try {
-      const response = await ipc.executeNode("test-node", {
-        testData: "Debug test input",
-        timestamp: Date.now(),
-      });
+      // Get output path from environment variable, fallback to repo root .tmp
+      const outputPath = import.meta.env.VITE_OUTPUT_PATH || ".tmp";
+      // Let the desktop resolve relative paths using its project root detection logic
+      const filePath = `${outputPath}/debug-test-output.txt`;
+      // Create a write-file node data that writes to configured output path
+      const writeFileNodeData = {
+        id: "write-file-test",
+        type: "file-system",
+        config: {
+          operation: "write",
+          path: filePath,
+          content: `Debug test executed at ${new Date().toISOString()}\nTest data: Hello from Debug Page!`,
+          createDirectories: true,
+          encoding: "utf8",
+        },
+      };
+
+      const response = await ipc.executeNode(writeFileNodeData);
+
+      console.log({ response });
 
       const duration = Date.now() - startTime;
       const testResult: TestResult = {
@@ -356,6 +372,7 @@ export default function DebugPage() {
 
               <Button
                 onClick={testNodeExecution}
+                data-testid="test-node-execution"
                 disabled={isRunningTests || !environment?.ipcAvailable}
                 variant="outline"
               >

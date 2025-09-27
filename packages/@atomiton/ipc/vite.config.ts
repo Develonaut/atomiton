@@ -3,7 +3,12 @@ import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [dts()],
+  plugins: [
+    dts({
+      outDir: "dist",
+      entryRoot: "src",
+    }),
+  ],
   build: {
     lib: {
       entry: {
@@ -15,7 +20,17 @@ export default defineConfig({
       formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: ["electron", "path", "fs", "crypto"],
+      external: [
+        "electron",
+        "path",
+        "fs",
+        "crypto",
+        "@atomiton/nodes/executables",
+        "fs/promises",
+        "os",
+        "child_process",
+        "isolated-vm",
+      ],
     },
   },
   resolve: {

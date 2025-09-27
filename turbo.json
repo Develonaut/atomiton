@@ -192,7 +192,7 @@
     "dev#@atomiton/desktop": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["@atomiton/client#dev", "@atomiton/editor#dev", "^build"]
+      "dependsOn": ["@atomiton/client#dev", "@atomiton/editor#dev", "@atomiton/ipc#dev", "^build"]
     },
     "watch": {
       "cache": false,

@@ -1,12 +1,12 @@
-import { contextBridge, ipcRenderer } from "electron";
-import { IPC } from "../shared/channels";
+import { IPC } from "#shared/channels";
 import type {
   NodeExecuteRequest,
   NodeExecuteResponse,
   NodeProgress,
   StorageRequest,
   StorageResponse,
-} from "../shared/types";
+} from "#shared/types";
+import { contextBridge, ipcRenderer } from "electron";
 
 // Define the IPC API
 const ipcAPI = {

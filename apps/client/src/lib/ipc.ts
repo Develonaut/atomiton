@@ -1,3 +1,5 @@
+import { generateId } from "@atomiton/utils";
+
 // Browser-safe IPC client wrapper
 // This module provides IPC functionality when running in Electron
 // and a mock implementation when running in browser
@@ -9,6 +11,22 @@ export type NodeProgress = {
   message: string;
 };
 
+type SimpleNodeData = {
+  id: string;
+  type: string;
+  config: Record<string, unknown>;
+};
+
+type NodeExecuteRequestPayload = {
+  nodeData: SimpleNodeData;
+};
+
+export type NodeExecuteRequest = {
+  id: string;
+  version: string;
+  payload: NodeExecuteRequestPayload;
+};
+
 export type NodeExecuteResponse = {
   id: string;
   success: boolean;
@@ -18,7 +36,7 @@ export type NodeExecuteResponse = {
 
 type AtomitonIPC = {
   ping: () => Promise<string>;
-  executeNode: (request: unknown) => Promise<NodeExecuteResponse>;
+  executeNode: (request: NodeExecuteRequest) => Promise<NodeExecuteResponse>;
   onNodeProgress: (callback: (progress: NodeProgress) => void) => () => void;
   onNodeComplete: (
     callback: (response: NodeExecuteResponse) => void,
@@ -54,18 +72,21 @@ class IPCClient {
     return this.ipcAPI.ping();
   }
 
-  async executeNode(
-    nodeId: string,
-    inputs: unknown,
-  ): Promise<NodeExecuteResponse> {
+  createExecuteFlowRequest(
+    payload: NodeExecuteRequestPayload,
+  ): NodeExecuteRequest {
+    return {
+      id: generateId("request"),
+      version: "1",
+      payload,
+    };
+  }
+
+  async executeNode(nodeData: SimpleNodeData): Promise<NodeExecuteResponse> {
     if (!this.ipcAPI) {
       throw new Error("IPC not available - not running in Electron");
     }
-    const request = {
-      id: `node-${Date.now()}`,
-      nodeId,
-      inputs,
-    };
+    const request = this.createExecuteFlowRequest({ nodeData });
     return this.ipcAPI.executeNode(request);
   }
 

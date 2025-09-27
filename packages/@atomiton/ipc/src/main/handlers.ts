@@ -1,11 +1,12 @@
-import { IPC } from "../shared/channels";
+import { IPC } from "#shared/channels";
 import type {
   NodeExecuteRequest,
   NodeExecuteResponse,
   NodeProgress,
   StorageRequest,
   StorageResponse,
-} from "../shared/types";
+} from "#shared/types";
+import { getNodeExecutable } from "@atomiton/nodes/executables";
 import type { BrowserWindow } from "electron";
 import { ipcMain } from "electron";
 
@@ -25,128 +26,86 @@ export function setupHandlers(mainWindow: BrowserWindow) {
       _event,
       request: NodeExecuteRequest,
     ): Promise<NodeExecuteResponse> => {
-      console.log("[IPC] Execute node:", request.nodeId);
+      console.log(
+        "[IPC] Execute node request:",
+        JSON.stringify(request, null, 2),
+      );
 
       try {
-        // Handle blueprint runner specially
-        if (
-          request.nodeId === "blueprint-runner" &&
-          request.inputs?.blueprint
-        ) {
-          const blueprint = request.inputs.blueprint;
-          const nodes = (request.inputs.nodes as any[]) || [];
-          const startNodeId = request.inputs.startNodeId;
-
-          console.log("[IPC] Running blueprint with", nodes.length, "nodes");
-
-          // Send initial progress
-          mainWindow.webContents.send(IPC.NODE_PROGRESS, {
-            id: request.id,
-            nodeId: request.nodeId,
-            progress: 0,
-            message: `Starting blueprint execution with ${nodes.length} nodes...`,
-          });
-
-          // Simulate executing the hello world example
-          const results: any = {};
-
-          // Execute each node based on what's in the blueprint
-          for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
-            const progressPercent = Math.floor(((i + 1) / nodes.length) * 100);
-
-            mainWindow.webContents.send(IPC.NODE_PROGRESS, {
-              id: request.id,
-              nodeId: request.nodeId,
-              progress: progressPercent,
-              message: `Executing ${node.type} node: ${node.id}...`,
-            });
-
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            // Simulate execution based on node type
-            if (node.type === "code" && node.id === "greeting-code") {
-              // Execute the greeting code from the node's data
-              const nodeCode =
-                node.data?.code ||
-                "// Greeting function\\nconst greeting = 'Hello, World!';\\nreturn { message: greeting };";
-              results[node.id] = { message: "Hello, World!" };
-            } else if (
-              node.type === "transform" &&
-              node.id === "display-transform"
-            ) {
-              // Transform the input based on the node's expression
-              const input = results["greeting-code"];
-              if (input?.message) {
-                results[node.id] = input.message.toUpperCase();
-              }
-            } else {
-              // Generic node execution
-              results[node.id] = {
-                executed: true,
-                type: node.type,
-                data: node.data,
-              };
-            }
-          }
-
-          mainWindow.webContents.send(IPC.NODE_PROGRESS, {
-            id: request.id,
-            nodeId: request.nodeId,
-            progress: 100,
-            message: "Blueprint execution complete!",
-          });
-
-          // Create response with actual results
-          const response: NodeExecuteResponse = {
-            id: request.id,
-            success: true,
-            outputs: {
-              ...results,
-              finalOutput:
-                results["display-transform"] || results["greeting-code"],
-              executedNodes: Object.keys(results),
-            },
-          };
-
-          mainWindow.webContents.send(IPC.NODE_COMPLETE, response);
-          return response;
+        const nodeData = request.payload?.nodeData;
+        if (!nodeData) {
+          throw new Error("Missing nodeData in request payload");
         }
 
-        // Regular node execution (existing logic)
-        const progress: NodeProgress = {
+        const nodeType = nodeData.type;
+        const nodeId = nodeData.id;
+
+        console.log(`[IPC] Executing ${nodeType} node: ${nodeId}`);
+
+        // Get the executable for this node type
+        const executable = getNodeExecutable(nodeType);
+        if (!executable) {
+          throw new Error(`Node type not found: ${nodeType}`);
+        }
+
+        // Send initial progress
+        const initialProgress: NodeProgress = {
           id: request.id,
-          nodeId: request.nodeId,
+          nodeId: nodeId,
           progress: 0,
-          message: "Starting execution...",
+          message: `Starting ${nodeType} execution...`,
         };
-        mainWindow.webContents.send(IPC.NODE_PROGRESS, progress);
+        mainWindow.webContents.send(IPC.NODE_PROGRESS, initialProgress);
 
-        // TODO: Import and use actual node execution logic
-        // const executable = getNodeExecutable(request.nodeId);
-        // if (!executable) throw new Error(`Node not found: ${request.nodeId}`);
-
-        // Simulate execution for testing
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Create execution context - use paths as provided (absolute from client or .tmp relative to desktop working dir)
+        const context = {
+          nodeId: nodeId,
+          inputs: {}, // No inputs for file-system nodes
+          parameters: nodeData.config,
+          log: {
+            info: (message: string, meta?: any) =>
+              console.log(`[NODE] ${message}`, meta),
+            error: (message: string, meta?: any) =>
+              console.error(`[NODE] ${message}`, meta),
+          },
+        };
 
         // Send progress update
         mainWindow.webContents.send(IPC.NODE_PROGRESS, {
           id: request.id,
-          nodeId: request.nodeId,
-          progress: 50,
-          message: "Processing...",
+          nodeId: nodeId,
+          progress: 25,
+          message: "Validating configuration...",
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Get validated parameters from the execution context
+        const config = executable.getValidatedParams(context);
+
+        // Send progress update
+        mainWindow.webContents.send(IPC.NODE_PROGRESS, {
+          id: request.id,
+          nodeId: nodeId,
+          progress: 50,
+          message: "Executing node...",
+        });
+
+        // Execute the node
+        const result = await executable.execute(context, config);
+
+        // Send final progress
+        mainWindow.webContents.send(IPC.NODE_PROGRESS, {
+          id: request.id,
+          nodeId: nodeId,
+          progress: 100,
+          message: "Execution complete!",
+        });
 
         // Create response
         const response: NodeExecuteResponse = {
           id: request.id,
-          success: true,
-          outputs: {
-            result: "Test output from node execution",
-            timestamp: Date.now(),
-          },
+          success: result.success,
+          outputs: result.outputs,
+          error: result.error,
         };
 
         // Send completion event
@@ -154,10 +113,14 @@ export function setupHandlers(mainWindow: BrowserWindow) {
 
         return response;
       } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+        console.error("[IPC] Node execution failed:", errorMessage);
+
         const errorResponse: NodeExecuteResponse = {
           id: request.id,
           success: false,
-          error: error instanceof Error ? error.message : "Unknown error",
+          error: errorMessage,
         };
 
         // Send error event

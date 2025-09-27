@@ -4,10 +4,7 @@
   "type": "module",
   "private": true,
   "imports": {
-    "#shared/*": "./src/shared/*",
-    "#main/*": "./src/main/*",
-    "#preload/*": "./src/preload/*",
-    "#renderer/*": "./src/renderer/*"
+    "#*": "./src/*"
   },
   "exports": {
     "./main": {
@@ -38,6 +35,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@atomiton/nodes": "workspace:^",
     "@trpc/client": "^11.0.0",
     "@trpc/server": "^11.0.0",
     "electron": "^38.0.0",

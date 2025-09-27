@@ -1,5 +1,5 @@
-import { BrowserWindow } from "electron";
-import { setupHandlers } from "./handlers";
+import { setupHandlers } from "#main/handlers";
+import type { BrowserWindow } from "electron";
 
 export function setupIPC(mainWindow: BrowserWindow) {
   setupHandlers(mainWindow);
@@ -12,4 +12,4 @@ export type {
   NodeProgress,
   StorageRequest,
   StorageResponse,
-} from "../shared/types";
+} from "#shared/types";

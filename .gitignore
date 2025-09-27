@@ -73,3 +73,5 @@ node_modules/.vite-temp/
 # Temporary files and logs
 tmp/
 **/tmp/
+.tmp/
+**/.tmp/

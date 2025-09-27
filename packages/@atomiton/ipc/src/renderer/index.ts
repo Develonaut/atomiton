@@ -2,7 +2,8 @@ import type {
   NodeExecuteRequest,
   NodeExecuteResponse,
   NodeProgress,
-} from "../shared/types";
+  SimpleNodeData,
+} from "#shared/types";
 
 /**
  * Client-side IPC wrapper
@@ -35,18 +36,15 @@ class IPCClient {
   /**
    * Execute a node
    */
-  async executeNode(
-    nodeId: string,
-    inputs: Record<string, unknown>,
-    options?: { timeout?: number },
-  ): Promise<NodeExecuteResponse> {
+  async executeNode(nodeData: SimpleNodeData): Promise<NodeExecuteResponse> {
     if (!this.api) throw new Error("IPC not available");
 
     const request: NodeExecuteRequest = {
       id: crypto.randomUUID(),
-      nodeId,
-      inputs,
-      options,
+      version: "1",
+      payload: {
+        nodeData,
+      },
     };
 
     return await this.api.executeNode(request);

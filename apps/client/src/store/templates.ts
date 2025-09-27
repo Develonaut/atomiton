@@ -4,12 +4,12 @@
  * Manages system-provided node templates (read-only)
  */
 
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import {
-  loadBuiltInTemplates,
   getAllTemplates,
   getTemplate,
+  loadBuiltInTemplates,
 } from "@atomiton/nodes/definitions";
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { createStore } from "@atomiton/store";
 
 // Types
@@ -34,9 +34,6 @@ const initialState: TemplateState = {
 // Store
 export const templateStore = createStore<TemplateState>(() => initialState, {
   name: "Templates",
-  persist: {
-    key: "templates",
-  },
 });
 
 // Actions
@@ -67,6 +64,7 @@ export const templateActions: TemplateActions = {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to load templates";
 
+      console.error(errorMessage);
       templateStore.setState((state: TemplateState) => {
         state.isLoading = false;
         state.error = errorMessage;

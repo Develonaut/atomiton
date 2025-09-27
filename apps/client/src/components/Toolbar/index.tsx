@@ -59,15 +59,19 @@ function Toolbar() {
 
     try {
       // Execute via IPC
-      const response = await ipc.executeNode("blueprint-runner", {
-        nodes: nodeDefinitions,
-        edges: [],
-        startNodeId: (nodeDefinitions[0] as { id?: string })?.id,
-        blueprint: {
-          id: "current-blueprint",
-          name: "Current Blueprint",
+      const response = await ipc.executeNode({
+        id: "blueprint-runner",
+        type: "blueprint-runner",
+        config: {
           nodes: nodeDefinitions,
           edges: [],
+          startNodeId: (nodeDefinitions[0] as { id?: string })?.id,
+          blueprint: {
+            id: "current-blueprint",
+            name: "Current Blueprint",
+            nodes: nodeDefinitions,
+            edges: [],
+          },
         },
       });
 
