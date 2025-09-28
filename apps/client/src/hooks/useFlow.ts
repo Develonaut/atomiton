@@ -59,40 +59,6 @@ export function useSaveFlow() {
 }
 
 /**
- * Hook for loading a flow by ID - placeholder until storage is properly integrated
- */
-export function useLoadFlow(_id: string) {
-  const [data] = useState<unknown>(null);
-  const [isLoading] = useState(false);
-  const [error] = useState<Error | null>(null);
-
-  // TODO: Implement actual load via storage package
-  // For now, return mock data
-  return {
-    data,
-    isLoading,
-    error,
-  };
-}
-
-/**
- * Hook for listing flows - placeholder until storage is properly integrated
- */
-export function useFlowList() {
-  const [data] = useState<unknown[]>([]);
-  const [isLoading] = useState(false);
-  const [error] = useState<Error | null>(null);
-
-  // TODO: Implement actual list via storage package
-  // For now, return empty list
-  return {
-    data,
-    isLoading,
-    error,
-  };
-}
-
-/**
  * Original useFlow hook - now using conductor for execution
  */
 export function useFlow() {

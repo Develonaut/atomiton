@@ -25,6 +25,7 @@
       "dependsOn": ["^lint"],
       "env": [
         "NODE_ENV",
+        "MODE",
         "DEV",
         "HOME",
         "USERPROFILE",
