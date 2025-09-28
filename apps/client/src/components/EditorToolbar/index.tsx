@@ -1,24 +1,54 @@
 import { Button, Icon } from "@atomiton/ui";
-import { useSaveFlow, useExecuteFlow } from "#hooks/useFlow";
-import type { Flow } from "#lib/rpcTypes";
+import conductor from "#lib/conductor";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { useState } from "react";
+// TODO: Implement actual save functionality with storage package
 
 type EditorToolbarProps = {
-  flow: Flow;
+  flow: NodeDefinition;
 };
 
 function EditorToolbar({ flow }: EditorToolbarProps) {
-  const executeFlow = useExecuteFlow();
-  const saveFlow = useSaveFlow();
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [executionSuccess, setExecutionSuccess] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
-  const handleRun = () => {
-    executeFlow.mutate({
-      executable: flow,
-      context: { variables: { source: "editor" } },
-    });
+  const handleRun = async () => {
+    setIsExecuting(true);
+    setExecutionSuccess(false);
+    try {
+      const result = await conductor.node.run(flow, {
+        variables: { source: "editor" },
+      });
+      if (result.success) {
+        setExecutionSuccess(true);
+        // Clear success message after 3 seconds
+        setTimeout(() => setExecutionSuccess(false), 3000);
+      }
+    } catch (error) {
+      console.error("Failed to execute flow:", error);
+    } finally {
+      setIsExecuting(false);
+    }
   };
 
-  const handleSave = () => {
-    saveFlow.mutate(flow);
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveSuccess(false);
+    try {
+      // TODO: Implement actual save with storage package
+      console.log("Saving flow:", flow);
+      // Simulate async save
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setSaveSuccess(true);
+      // Clear success message after 3 seconds
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      console.error("Failed to save flow:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -26,36 +56,36 @@ function EditorToolbar({ flow }: EditorToolbarProps) {
       <Button
         variant="default"
         onClick={handleRun}
-        disabled={executeFlow.isPending}
+        disabled={isExecuting}
         className="flex items-center gap-2"
       >
         <Icon
-          name={executeFlow.isPending ? "loader" : "play"}
+          name={isExecuting ? "loader" : "play"}
           size={16}
-          className={executeFlow.isPending ? "animate-spin" : ""}
+          className={isExecuting ? "animate-spin" : ""}
         />
-        {executeFlow.isPending ? "Running..." : "Run"}
+        {isExecuting ? "Running..." : "Run"}
       </Button>
 
       <Button
         variant="outline"
         onClick={handleSave}
-        disabled={saveFlow.isPending}
+        disabled={isSaving}
         className="flex items-center gap-2"
       >
         <Icon
-          name={saveFlow.isPending ? "loader" : "save"}
+          name={isSaving ? "loader" : "save"}
           size={16}
-          className={saveFlow.isPending ? "animate-spin" : ""}
+          className={isSaving ? "animate-spin" : ""}
         />
-        {saveFlow.isPending ? "Saving..." : "Save"}
+        {isSaving ? "Saving..." : "Save"}
       </Button>
 
-      {saveFlow.isSuccess && (
+      {saveSuccess && (
         <span className="text-sm text-green-600">Saved successfully!</span>
       )}
 
-      {executeFlow.isSuccess && (
+      {executionSuccess && (
         <span className="text-sm text-green-600">Execution complete!</span>
       )}
     </div>

@@ -1,5 +1,5 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import type { FlowFile, FlowMetadata } from "./types/flowFile.js";
+import type { FlowFile, FlowMetadata } from "#types/flowFile";
 import { promises as fs } from "fs";
 import yaml from "js-yaml";
 import path from "path";

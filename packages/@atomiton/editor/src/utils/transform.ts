@@ -100,7 +100,7 @@ export function reactFlowToFlow(
       target: edge.target,
       sourceHandle: edge.sourceHandle,
       targetHandle: edge.targetHandle,
-      type: (edge.type as any) === "smoothstep" ? "smoothstep" : "bezier",
+      type: edge.type === "smoothstep" ? "smoothstep" : "bezier",
     })),
   });
 }

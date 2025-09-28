@@ -3,7 +3,7 @@
  * Read, write, and file-specific operations
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import * as fs from "fs/promises";
 import * as path from "path";
 import { getPathStats } from "#executables/file-system/utils";

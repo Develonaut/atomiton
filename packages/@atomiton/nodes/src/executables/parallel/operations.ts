@@ -3,7 +3,7 @@
  * Core logic for parallel execution strategies
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import type { ParallelParameters } from "#schemas/parallel";
 
 /**

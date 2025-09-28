@@ -20,11 +20,11 @@ export type NodeRunPayload = {
   node: {
     id?: string;
     type?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   context?: {
     executionId?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 };
 
@@ -37,7 +37,7 @@ export type HealthCheckResponse = {
 /**
  * Logging helper for consistent IPC logging
  */
-export function logIPC(context: string, message: string, data?: any) {
+export function logIPC(context: string, message: string, data?: unknown) {
   const timestamp = new Date().toISOString();
   console.log(`[${context}] ${message}:`, { ...data, timestamp });
 }
@@ -46,7 +46,7 @@ export function logIPCError(
   context: string,
   message: string,
   error: unknown,
-  data?: any,
+  data?: unknown,
 ) {
   const timestamp = new Date().toISOString();
   console.error(`[${context}] ${message}:`, {
@@ -61,10 +61,10 @@ export function logIPCError(
  */
 export function registerHandlers(
   ipcMain: IpcMain,
-  handlers: Record<string, Function>,
+  handlers: Record<string, (...args: unknown[]) => unknown>,
 ): void {
   Object.entries(handlers).forEach(([channel, handler]) => {
     console.log(`[CONDUCTOR] Registering handler: ${channel}`);
-    ipcMain.handle(channel, handler as any);
+    ipcMain.handle(channel, handler as (...args: unknown[]) => unknown);
   });
 }

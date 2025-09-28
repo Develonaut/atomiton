@@ -21,61 +21,32 @@ import transformExecutable from "#executables/transform";
 /**
  * Registry of all available node executables
  */
-export const nodeExecutableRegistry = new Map<
-  string,
-  NodeExecutable<unknown>
->();
+export const nodeExecutableRegistry = new Map<string, NodeExecutable>();
 
 // Register all executables
-nodeExecutableRegistry.set("code", codeExecutable as NodeExecutable<unknown>);
-nodeExecutableRegistry.set(
-  "parallel",
-  parallelExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set(
-  "csv-reader",
-  csvReaderExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set("group", groupExecutable as NodeExecutable<unknown>);
-nodeExecutableRegistry.set(
-  "edit-fields",
-  editFieldsExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set(
-  "image-composite",
-  imageCompositeExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set(
-  "http-request",
-  httpRequestExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set(
-  "file-system",
-  fileSystemExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set(
-  "transform",
-  transformExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set(
-  "shell-command",
-  shellCommandExecutable as NodeExecutable<unknown>,
-);
-nodeExecutableRegistry.set("loop", loopExecutable as NodeExecutable<unknown>);
+nodeExecutableRegistry.set("code", codeExecutable);
+nodeExecutableRegistry.set("parallel", parallelExecutable);
+nodeExecutableRegistry.set("csv-reader", csvReaderExecutable);
+nodeExecutableRegistry.set("group", groupExecutable);
+nodeExecutableRegistry.set("edit-fields", editFieldsExecutable);
+nodeExecutableRegistry.set("image-composite", imageCompositeExecutable);
+nodeExecutableRegistry.set("http-request", httpRequestExecutable);
+nodeExecutableRegistry.set("file-system", fileSystemExecutable);
+nodeExecutableRegistry.set("transform", transformExecutable);
+nodeExecutableRegistry.set("shell-command", shellCommandExecutable);
+nodeExecutableRegistry.set("loop", loopExecutable);
 
 /**
  * Get a node executable by ID
  */
-export function getNodeExecutable(
-  nodeId: string,
-): NodeExecutable<unknown> | undefined {
+export function getNodeExecutable(nodeId: string): NodeExecutable | undefined {
   return nodeExecutableRegistry.get(nodeId);
 }
 
 /**
  * Get all node executables
  */
-export function getAllNodeExecutables(): NodeExecutable<unknown>[] {
+export function getAllNodeExecutables(): NodeExecutable[] {
   return Array.from(nodeExecutableRegistry.values());
 }
 

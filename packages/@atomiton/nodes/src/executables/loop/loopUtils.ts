@@ -3,7 +3,7 @@
  * Common utilities for loop operations
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 
 /**
  * Loop execution result

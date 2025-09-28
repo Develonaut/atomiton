@@ -3,7 +3,7 @@
  * Helper functions for shell command execution
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 
 /**
  * Get input value safely

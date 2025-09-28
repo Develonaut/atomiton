@@ -3,10 +3,7 @@
  * Common utilities for group node execution
  */
 
-import type {
-  NodeExecutionContext,
-  NodeExecutionResult,
-} from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import type {
   ExecutableNode,
   ExecutionMetadata,
@@ -20,7 +17,7 @@ export async function executeWithRetries(
   context: NodeExecutionContext,
   retries: number,
   timeout: number,
-): Promise<NodeExecutionResult> {
+): Promise<unknown> {
   let lastError: Error | undefined;
 
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -40,23 +37,8 @@ export async function executeWithRetries(
         timeoutPromise,
       ]);
 
-      if (result.success) {
-        return result;
-      }
-
-      // If this is the last attempt, return the failed result
-      if (attempt === retries) {
-        return result;
-      }
-
-      // Log retry attempt
-      context.log?.warn?.(
-        `Node ${node.name} failed, retrying (attempt ${attempt + 1}/${retries})`,
-        {
-          error: result.error,
-          nodeId: node.id,
-        },
-      );
+      // If execution succeeded, return the result
+      return result;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
 
@@ -111,14 +93,10 @@ export function createErrorResult(
   nodeName: string,
   error: string,
   metadata: ExecutionMetadata,
-): NodeExecutionResult {
+): { error: string; metadata: ExecutionMetadata } {
   return {
-    success: false,
     error: `Child node ${nodeName} failed: ${error}`,
-    outputs: {
-      result: undefined,
-      metadata,
-    },
+    metadata,
   };
 }
 
@@ -128,11 +106,12 @@ export function createErrorResult(
 export function createChildContext(
   baseContext: NodeExecutionContext,
   nodeId: string,
-  previousResult?: NodeExecutionResult,
+  previousResult?: unknown,
 ): NodeExecutionContext {
   return {
     ...baseContext,
     nodeId,
-    inputs: previousResult?.outputs || baseContext.inputs || {},
+    inputs:
+      (previousResult as Record<string, unknown>) || baseContext.inputs || {},
   };
 }

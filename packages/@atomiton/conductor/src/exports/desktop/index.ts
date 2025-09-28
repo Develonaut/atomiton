@@ -23,10 +23,9 @@ export { registerHandlers } from "#desktop/ipc";
 /**
  * Desktop conductor with IPC setup methods
  */
-export interface DesktopConductor
-  extends ReturnType<typeof createBaseConductor> {
-  createMainHandlers(): Record<string, Function>;
-}
+export type DesktopConductor = {
+  createMainHandlers(): Record<string, (...args: unknown[]) => unknown>;
+} & ReturnType<typeof createBaseConductor>
 
 /**
  * Creates a desktop conductor with Node.js execution capabilities

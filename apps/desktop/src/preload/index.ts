@@ -17,10 +17,11 @@ const CONDUCTOR_CHANNELS = {
  */
 const atomitonRPC = {
   node: {
-    run: (payload: any) => {
+    run: (payload: unknown) => {
+      const typedPayload = payload as { node?: { id?: string; type?: string } };
       console.log("[PRELOAD:IPC] Node.run invoked", {
-        nodeId: payload.node?.id,
-        nodeType: payload.node?.type,
+        nodeId: typedPayload.node?.id,
+        nodeType: typedPayload.node?.type,
       });
       return ipcRenderer.invoke(CONDUCTOR_CHANNELS.NODE_RUN, payload);
     },
@@ -45,7 +46,7 @@ if (process.contextIsolated) {
   console.log(
     "[PRELOAD] Context isolation disabled, setting atomitonRPC on window",
   );
-  (window as any).atomitonRPC = atomitonRPC;
+  (window as Window & { atomitonRPC?: typeof atomitonRPC }).atomitonRPC = atomitonRPC;
 }
 
 console.log("[PRELOAD] Conductor preload script completed");

@@ -3,10 +3,7 @@
  * Type definitions for group node execution
  */
 
-import type {
-  NodeExecutionContext,
-  NodeExecutionResult,
-} from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 
 /**
  * Executable node definition
@@ -14,7 +11,7 @@ import type {
 export type ExecutableNode = {
   id: string;
   name: string;
-  execute: (context: NodeExecutionContext) => Promise<NodeExecutionResult>;
+  execute: (context: NodeExecutionContext) => Promise<unknown>;
 };
 
 /**

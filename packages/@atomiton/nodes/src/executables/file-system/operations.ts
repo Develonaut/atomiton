@@ -8,7 +8,7 @@ export * from "#executables/file-system/directoryOperations";
 export * from "#executables/file-system/fileOperations";
 export * from "#executables/file-system/utils";
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import { copyDirectoryOperation } from "#executables/file-system/directoryOperations";
 import { copyFileOperation } from "#executables/file-system/fileOperations";
 import {

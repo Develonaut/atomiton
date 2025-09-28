@@ -1,28 +1,34 @@
+import conductor from "#lib/conductor/index.js";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { useEditorNodes } from "@atomiton/editor";
 import { Button, Icon } from "@atomiton/ui";
-import { useExecuteFlow } from "#hooks/useFlow";
-import type { Flow } from "#lib/rpcTypes";
+import { useState } from "react";
 
 export type ExecuteHandler = (
-  nodeDefinitions: unknown[],
+  node: NodeDefinition,
 ) => void | Promise<void>;
 
 type RunFlowProps = {
   onClick?: ExecuteHandler;
   isRunning?: boolean;
-  flow?: Flow;
+  flow?: NodeDefinition;
 };
 
 function RunFlow({ onClick, isRunning = false, flow }: RunFlowProps) {
   const nodes = useEditorNodes();
-  const executeFlow = useExecuteFlow();
+  const [isExecuting, setIsExecuting] = useState(false);
 
   const handleRun = async () => {
     if (flow) {
-      executeFlow.mutate({
-        executable: flow,
-        context: { variables: { source: "editor" } },
-      });
+      setIsExecuting(true);
+      try {
+        await conductor.node.run(flow);
+      } catch (error) {
+        console.error("Failed to execute flow:", error);
+      } finally {
+        setIsExecuting(false);
+      }
       return;
     }
 
@@ -36,39 +42,45 @@ function RunFlow({ onClick, isRunning = false, flow }: RunFlowProps) {
 
       console.log("Nodes from editor:", nodeArray);
 
-      const nodeDefinitions = nodeArray.map((node) => ({
-        id: node.id,
-        type: node.data?.name || node.type,
-        version: node.data?.version || "1.0.0",
-        parentId: node.data?.parentId,
-        position: node.position,
-        metadata: node.data?.metadata || {},
-        inputs: node.data?.inputPorts || [],
-        outputs: node.data?.outputPorts || [],
-        configuration: node.data?.parameters || {},
-      }));
+      // Convert editor nodes to a single NodeDefinition (group/flow)
+      const flowNode = createNodeDefinition({
+        id: `flow-${Date.now()}`,
+        type: "group",
+        version: "1.0.0",
+        name: "Editor Flow",
+        position: { x: 0, y: 0 },
+        nodes: nodeArray.map((node) => createNodeDefinition({
+          id: node.id,
+          type: (node.data as Record<string, unknown>)?.name as string || node.type || "unknown",
+          version: ((node.data as Record<string, unknown>)?.version as string) || "1.0.0",
+          name: ((node.data as Record<string, unknown>)?.label || (node.data as Record<string, unknown>)?.name || node.type) as string,
+          position: node.position,
+          metadata: ((node.data as Record<string, unknown>)?.metadata as Record<string, unknown>) || {},
+          parameters: ((node.data as Record<string, unknown>)?.parameters || (node.data as Record<string, unknown>)?.config) as Record<string, unknown> || {},
+        })),
+      });
 
-      await onClick(nodeDefinitions);
+      await onClick(flowNode);
     } catch (error) {
       console.error("Failed to prepare flow for execution:", error);
     }
   };
 
-  const isExecuting = executeFlow.isPending || isRunning;
+  const executing = isExecuting || isRunning;
 
   return (
     <Button
       variant="default"
       onClick={handleRun}
-      disabled={isExecuting || (!onClick && !flow)}
+      disabled={executing || (!onClick && !flow)}
       className="flex items-center gap-2"
     >
       <Icon
-        name={isExecuting ? "loader" : "play"}
+        name={executing ? "loader" : "play"}
         size={16}
-        className={isExecuting ? "animate-spin" : ""}
+        className={executing ? "animate-spin" : ""}
       />
-      {isExecuting ? "Running..." : "Run"}
+      {executing ? "Running..." : "Run"}
     </Button>
   );
 }

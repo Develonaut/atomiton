@@ -1,5 +1,5 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import type { AtomitonFile } from "./file.js";
+import type { AtomitonFile } from "#types/file";
 
 // "Flow" is just what users call a saved node tree
 export type FlowFile = AtomitonFile<NodeDefinition>;

@@ -3,7 +3,7 @@
  * Extracted image processing logic
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import type { ImageCompositeParameters } from "#schemas/image-composite";
 import * as fs from "fs";
 import * as path from "path";

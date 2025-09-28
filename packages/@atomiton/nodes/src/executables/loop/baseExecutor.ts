@@ -3,7 +3,7 @@
  * Common execution patterns for all loop types
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import type { LoopParameters } from "#schemas/loop";
 import {
   type LoopContext,

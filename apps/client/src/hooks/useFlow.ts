@@ -1,68 +1,16 @@
 /**
- * Flow execution hooks using the new Conductor API
- * Provides compatibility layer for components using the old tRPC hooks
+ * Flow hooks for execution and storage operations
+ * Uses conductor for execution
  */
 
 import conductor from "#lib/conductor";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { useState, useCallback } from "react";
 
-export interface FlowExecutionState {
+export type FlowExecutionState = {
   isExecuting: boolean;
   error: Error | null;
-  result: any | null;
-}
-
-/**
- * Hook for executing flows - compatible with tRPC mutation pattern
- */
-export function useExecuteFlow() {
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  const [data, setData] = useState<any>(null);
-
-  const mutate = useCallback(
-    async ({
-      executable,
-      context,
-    }: {
-      executable: NodeDefinition | any;
-      context?: any;
-    }) => {
-      setIsPending(true);
-      setError(null);
-
-      try {
-        // Use the new conductor.node.run() API
-        const result = await conductor.node.run(executable, context);
-
-        setData(result);
-        setIsPending(false);
-
-        // Call onSuccess if provided
-        console.log("Execution complete:", result);
-
-        return result;
-      } catch (err) {
-        const errorObj = err instanceof Error ? err : new Error(String(err));
-        setError(errorObj);
-        setIsPending(false);
-
-        // Call onError if provided
-        console.error("Execution failed:", errorObj);
-
-        throw errorObj;
-      }
-    },
-    [],
-  );
-
-  return {
-    mutate,
-    isPending,
-    error,
-    data,
-  };
+  result: unknown | null;
 }
 
 /**
@@ -71,8 +19,9 @@ export function useExecuteFlow() {
 export function useSaveFlow() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const mutate = useCallback(async (flow: any) => {
+  const mutate = useCallback(async (flow: unknown) => {
     setIsPending(true);
     setError(null);
 
@@ -85,7 +34,11 @@ export function useSaveFlow() {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       setIsPending(false);
+      setIsSuccess(true);
       console.log("Flow saved successfully");
+
+      // Clear success after 3 seconds
+      setTimeout(() => setIsSuccess(false), 3000);
 
       return { success: true };
     } catch (err) {
@@ -101,16 +54,17 @@ export function useSaveFlow() {
     mutate,
     isPending,
     error,
+    isSuccess,
   };
 }
 
 /**
  * Hook for loading a flow by ID - placeholder until storage is properly integrated
  */
-export function useLoadFlow(id: string) {
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+export function useLoadFlow(_id: string) {
+  const [data] = useState<unknown>(null);
+  const [isLoading] = useState(false);
+  const [error] = useState<Error | null>(null);
 
   // TODO: Implement actual load via storage package
   // For now, return mock data
@@ -125,9 +79,9 @@ export function useLoadFlow(id: string) {
  * Hook for listing flows - placeholder until storage is properly integrated
  */
 export function useFlowList() {
-  const [data, setData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [data] = useState<unknown[]>([]);
+  const [isLoading] = useState(false);
+  const [error] = useState<Error | null>(null);
 
   // TODO: Implement actual list via storage package
   // For now, return empty list
@@ -139,7 +93,7 @@ export function useFlowList() {
 }
 
 /**
- * Original useFlow hook for backward compatibility
+ * Original useFlow hook - now using conductor for execution
  */
 export function useFlow() {
   const [state, setState] = useState<FlowExecutionState>({
@@ -148,23 +102,19 @@ export function useFlow() {
     result: null,
   });
 
-  const executeFlow = useCallback(async (flow: NodeDefinition) => {
+  const runFlow = useCallback(async (flow: NodeDefinition) => {
     setState({ isExecuting: true, error: null, result: null });
 
     try {
-      // Use the new conductor.node.run() API
       const result = await conductor.node.run(flow);
-
       setState({
         isExecuting: false,
         error: null,
         result,
       });
-
       return result;
     } catch (error) {
-      const errorObj =
-        error instanceof Error ? error : new Error(String(error));
+      const errorObj = error instanceof Error ? error : new Error(String(error));
       setState({
         isExecuting: false,
         error: errorObj,
@@ -179,7 +129,7 @@ export function useFlow() {
   }, []);
 
   return {
-    executeFlow,
+    runFlow,
     resetFlow,
     isExecuting: state.isExecuting,
     error: state.error,

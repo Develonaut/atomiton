@@ -3,7 +3,7 @@
  * Core transformation operation implementations
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import type { TransformParameters } from "#schemas/transform";
 import {
   createSafeFunction,

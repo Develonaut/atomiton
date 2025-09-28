@@ -3,7 +3,7 @@
  * Helper functions for transform operations
  */
 
-import type { NodeExecutionContext } from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 
 /**
  * Transform output structure

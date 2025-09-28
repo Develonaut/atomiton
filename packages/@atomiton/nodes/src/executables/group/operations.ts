@@ -3,10 +3,7 @@
  * Extracted execution logic for group workflow execution
  */
 
-import type {
-  NodeExecutionContext,
-  NodeExecutionResult,
-} from "#core/types/executable";
+import type { NodeExecutionContext } from "#core/utils/executable";
 import type { GroupParameters } from "#schemas/group";
 import {
   createChildContext,
@@ -29,8 +26,8 @@ export async function executeSequential(
   graph: GroupGraph,
   context: NodeExecutionContext,
   params: GroupParameters,
-): Promise<NodeExecutionResult> {
-  let previousResult: NodeExecutionResult | undefined;
+): Promise<unknown> {
+  let previousResult: unknown;
   let totalExecutionTime = 0;
 
   for (const node of graph.nodes) {
@@ -49,21 +46,6 @@ export async function executeSequential(
       );
 
       totalExecutionTime += Date.now() - startTime;
-
-      if (!result.success) {
-        const metadata = createExecutionMetadata(
-          context,
-          graph.nodes.indexOf(node),
-          totalExecutionTime,
-          node.id,
-        );
-        return createErrorResult(
-          node.name,
-          result.error || "Unknown error",
-          metadata,
-        );
-      }
-
       previousResult = result;
     } catch (error) {
       totalExecutionTime += Date.now() - startTime;
@@ -86,11 +68,8 @@ export async function executeSequential(
   );
 
   return {
-    success: true,
-    outputs: {
-      result: previousResult?.outputs || {},
-      metadata,
-    },
+    result: previousResult || {},
+    metadata,
   };
 }
 
@@ -101,7 +80,7 @@ export async function executeParallel(
   graph: GroupGraph,
   context: NodeExecutionContext,
   params: GroupParameters,
-): Promise<NodeExecutionResult> {
+): Promise<unknown> {
   const startTime = Date.now();
 
   try {
@@ -120,11 +99,7 @@ export async function executeParallel(
     // Check for failures
     const failures = results
       .map((result, index) => ({ result, node: graph.nodes[index] }))
-      .filter(
-        ({ result }) =>
-          result.status === "rejected" ||
-          (result.status === "fulfilled" && !result.value.success),
-      );
+      .filter(({ result }) => result.status === "rejected");
 
     if (failures.length > 0) {
       const firstFailure = failures[0];
@@ -132,7 +107,7 @@ export async function executeParallel(
         firstFailure.result.status === "rejected"
           ? firstFailure.result.reason.message ||
             String(firstFailure.result.reason)
-          : firstFailure.result.value.error;
+          : "Unknown error";
 
       const metadata = createExecutionMetadata(
         context,
@@ -147,10 +122,10 @@ export async function executeParallel(
     // Collect successful results
     const successfulResults = results
       .filter(
-        (result): result is PromiseFulfilledResult<NodeExecutionResult> =>
-          result.status === "fulfilled" && result.value.success,
+        (result): result is PromiseFulfilledResult<unknown> =>
+          result.status === "fulfilled",
       )
-      .map((result) => result.value.outputs);
+      .map((result) => result.value);
 
     const metadata = createExecutionMetadata(
       context,
@@ -159,11 +134,8 @@ export async function executeParallel(
     );
 
     return {
-      success: true,
-      outputs: {
-        result: successfulResults,
-        metadata,
-      },
+      result: successfulResults,
+      metadata,
     };
   } catch (error) {
     const totalExecutionTime = Date.now() - startTime;

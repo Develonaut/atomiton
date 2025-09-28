@@ -5,8 +5,9 @@
 
 // Declare window global for Node.js build environments
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
-    atomitonRPC?: any;
+    atomitonRPC?: unknown;
   }
   const window: Window | undefined;
 }
@@ -56,8 +57,8 @@ function createAutoTransport(): ConductorTransport | undefined {
     typeof window !== "undefined" ? window : {}
   ) as Window & {
     atomitonRPC?: {
-      node?: { run?: Function };
-      system?: { health?: Function };
+      node?: { run?: (...args: unknown[]) => unknown };
+      system?: { health?: (...args: unknown[]) => unknown };
     };
   };
 
