@@ -1,3 +1,16 @@
+---
+title: "@atomiton/client"
+description: "The main desktop application for Atomiton Flow automation platform."
+stage: "alpha"
+version: "0.1.1"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "app"
+  complexity: "complex"
+  primary_language: "typescript"
+---
 # Atomiton Client
 
 The main desktop application for Atomiton Flow automation platform.

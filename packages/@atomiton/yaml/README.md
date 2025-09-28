@@ -1,3 +1,16 @@
+---
+title: "@atomiton/yaml"
+description: "High-performance YAML parsing and serialization utilities for the Atomiton"
+stage: "alpha"
+version: "0.1.0"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "utility"
+  complexity: "moderate"
+  primary_language: "typescript"
+---
 # @atomiton/yaml
 
 High-performance YAML parsing and serialization utilities for the Atomiton

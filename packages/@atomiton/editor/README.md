@@ -1,3 +1,16 @@
+---
+title: "@atomiton/editor"
+description: "Flow visual editor for the Atomiton platform."
+stage: "alpha"
+version: "0.1.0"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "ui-library"
+  complexity: "complex"
+  primary_language: "typescript"
+---
 # @atomiton/editor
 
 Flow visual editor for the Atomiton platform.

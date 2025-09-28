@@ -1,3 +1,16 @@
+---
+title: "@atomiton/hooks"
+description: "Reusable React hooks for the Atomiton platform."
+stage: "alpha"
+version: "0.1.0"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "utility"
+  complexity: "moderate"
+  primary_language: "typescript"
+---
 # @atomiton/hooks
 
 Reusable React hooks for the Atomiton platform.

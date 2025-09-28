@@ -1,3 +1,16 @@
+---
+title: "@atomiton/typescript-config"
+description: "Shared TypeScript configuration for the Atomiton monorepo."
+stage: "stable"
+version: "0.1.0"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "tool"
+  complexity: "simple"
+  primary_language: "typescript"
+---
 # @atomiton/typescript-config
 
 Shared TypeScript configuration for the Atomiton monorepo.

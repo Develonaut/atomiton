@@ -1,3 +1,16 @@
+---
+title: "@atomiton/e2e"
+description: "End-to-end tests for the Atomiton application using Playwright."
+stage: "alpha"
+version: "0.1.0"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "tool"
+  complexity: "moderate"
+  primary_language: "typescript"
+---
 # E2E Tests
 
 End-to-end tests for the Atomiton application using Playwright.

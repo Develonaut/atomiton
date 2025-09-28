@@ -1,3 +1,16 @@
+---
+title: "@atomiton/vite-config"
+description: "Shared Vite configuration presets for the Atomiton monorepo. This package provides standardized build configurations that reduce duplication and ensure consistency across all packages."
+stage: "alpha"
+version: "0.1.0"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "tool"
+  complexity: "simple"
+  primary_language: "typescript"
+---
 # @atomiton/vite-config
 
 Shared Vite configuration presets for the Atomiton monorepo. This package provides standardized build configurations that reduce duplication and ensure consistency across all packages.

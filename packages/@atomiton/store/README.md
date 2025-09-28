@@ -1,3 +1,16 @@
+---
+title: "@atomiton/store"
+description: "Simplified state management for the Atomiton Flow platform."
+stage: "alpha"
+version: "0.1.1"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "utility"
+  complexity: "moderate"
+  primary_language: "typescript"
+---
 # @atomiton/store
 
 Simplified state management for the Atomiton Flow platform.

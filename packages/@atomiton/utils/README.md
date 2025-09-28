@@ -1,3 +1,16 @@
+---
+title: "@atomiton/utils"
+description: "Shared utility functions for Atomiton workflow automation."
+stage: "alpha"
+version: "0.1.1"
+last_updated: "2025-09-28"
+dependencies: []
+tags: []
+ai_context:
+  category: "utility"
+  complexity: "simple"
+  primary_language: "typescript"
+---
 # @atomiton/utils
 
 Shared utility functions for Atomiton workflow automation.
