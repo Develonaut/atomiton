@@ -1,29 +1,17 @@
 /**
  * Factory function for creating node executable logic
+ *
+ * Simplified to just return the executable directly.
+ * Nodes handle their own validation internally.
  */
 
-import type {
-  NodeExecutable,
-  NodeExecutableInput,
-  NodeExecutionContext,
-} from "#core/types/executable";
+import type { NodeExecutable } from "#core/types/executable";
 
-export function createNodeExecutable<TConfig = unknown>(
-  input: NodeExecutableInput<TConfig>,
-): NodeExecutable<TConfig> {
-  return {
-    execute: input.execute,
-
-    getValidatedParams:
-      input.getValidatedParams ||
-      ((context: NodeExecutionContext) => {
-        const params = context.parameters || {};
-        if (input.validateConfig) {
-          return input.validateConfig(params);
-        }
-        return params as TConfig;
-      }),
-  };
+export function createNodeExecutable(
+  executable: NodeExecutable,
+): NodeExecutable {
+  // Simple pass-through - nodes handle their own validation
+  return executable;
 }
 
 export default createNodeExecutable;

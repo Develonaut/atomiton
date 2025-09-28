@@ -8,38 +8,107 @@ This document provides a step-by-step strategy to implement our architectural de
 
 ## Architectural Decisions Recap
 
-1. **Nodes is the foundation** - Pure structure, no execution
-2. **Flow package will be removed** - Flow is just a user concept  
-3. **Conductor owns all execution** - Single source of truth
-4. **RPC is pure transport** - No business logic
-5. **Client uses Conductor** - RPC is an implementation detail
-6. **No abstractions** - Just check `node.nodes` array to see if it's a group
-7. **Use existing utilities** - We already have `createNodeDefinition`
+1. **Nodes has co-located implementations** - Definition + execution together
+2. **Simple execution interface** - Just params in, result out
+3. **Flow package will be removed** - Flow is just a user concept  
+4. **Conductor orchestrates** - Adds execution context and orchestration
+5. **RPC is pure transport** - No business logic
+6. **Client uses Conductor** - RPC is an implementation detail
+7. **No abstractions** - Just check `node.nodes` array to see if it's a group
 
 ---
 
-## Step 1: Clean and Establish Nodes Package as Foundation
+## Step 1: Simplify Execution Types in Nodes Package
 
-**Goal**: Ensure @atomiton/nodes is purely structural with no execution logic.
+**Goal**: Keep co-location but simplify the execution interface in @atomiton/nodes.
 
 ### Claude Code Prompt:
 
 ```
-Clean the @atomiton/nodes package to be the pure foundation with zero execution concerns.
+Simplify the execution types in @atomiton/nodes while keeping implementations co-located with definitions.
 
-1. AUDIT /packages/@atomiton/nodes/src for any execution types:
-   - Remove any ExecutionContext, ExecutionResult, ExecutionError types
-   - Remove any execution-related imports
-   - Keep ONLY structural types
+1. SIMPLIFY the NodeExecutable interface:
+   ```typescript
+   // /packages/@atomiton/nodes/src/types/executable.ts
+   
+   // Simple interface - just params in, result out
+   export interface NodeExecutable {
+     execute(params: any): Promise<any>;
+   }
+   
+   // Optional: Simple result type if needed
+   export interface NodeResult {
+     success: boolean;
+     data?: any;
+     error?: string;
+   }
+   ```
 
-2. ENSURE core types are properly defined:
+2. KEEP node implementations co-located:
+   ```typescript
+   // /packages/@atomiton/nodes/src/library/http-request/index.ts
+   import type { NodeExecutable } from '../../types/executable';
+   
+   export const httpRequestDefinition = {
+     type: 'httpRequest',
+     version: '1.0.0',
+     inputPorts: [
+       { id: 'url', type: 'string', required: true },
+       { id: 'method', type: 'string', required: false }
+     ],
+     outputPorts: [
+       { id: 'data', type: 'any' },
+       { id: 'status', type: 'number' }
+     ]
+   };
+   
+   export const httpRequestExecutable: NodeExecutable = {
+     async execute(params) {
+       const response = await fetch(params.url, {
+         method: params.method || 'GET'
+       });
+       
+       return {
+         data: await response.json(),
+         status: response.status
+       };
+     }
+   };
+   
+   // Export both together
+   export const httpRequestNode = {
+     definition: httpRequestDefinition,
+     executable: httpRequestExecutable
+   };
+   ```
+
+3. MAINTAIN the registry in nodes:
+   ```typescript
+   // /packages/@atomiton/nodes/src/registry/index.ts
+   import { httpRequestNode } from '../library/http-request';
+   import { transformNode } from '../library/transform';
+   // ... other nodes
+   
+   export const nodeRegistry = new Map();
+   
+   // Register all nodes
+   nodeRegistry.set('httpRequest', httpRequestNode);
+   nodeRegistry.set('transform', transformNode);
+   // etc...
+   
+   export function getNodeImplementation(type: string) {
+     return nodeRegistry.get(type);
+   }
+   ```
+
+4. ENSURE core structural types remain simple:
    ```typescript
    // /packages/@atomiton/nodes/src/types/index.ts
    export interface NodeDefinition {
      id: string;
      type: string;  // 'group', 'httpRequest', 'transform', etc.
      version?: string;
-     parentId?: string;  // For hierarchy
+     parentId?: string;
      name?: string;
      position?: { x: number; y: number };
      metadata?: NodeMetadata;
@@ -47,7 +116,7 @@ Clean the @atomiton/nodes package to be the pure foundation with zero execution 
      inputPorts?: NodePort[];
      outputPorts?: NodePort[];
      nodes?: NodeDefinition[];  // If present, it's a group node
-     edges?: NodeEdge[];         // Connections between children
+     edges?: NodeEdge[];
    }
    
    export interface NodePort {
@@ -66,54 +135,47 @@ Clean the @atomiton/nodes package to be the pure foundation with zero execution 
    }
    ```
 
-3. VERIFY existing utilities are present:
+5. VERIFY existing utilities:
    ```typescript
-   // Should already exist:
    export function createNodeDefinition(params: Partial<NodeDefinition>): NodeDefinition
-   
-   // Add only if missing (but probably already exists):
-   export const hasChildren = (node: NodeDefinition): boolean => {
-     return Boolean(node.nodes && node.nodes.length > 0);
-   };
    ```
-
-4. VERIFY no dependencies on other @atomiton packages:
-   - Check package.json has NO @atomiton/* dependencies
-   - This is the foundation - everything else depends on it
-
-5. DO NOT add new utilities - use what already exists
 
 After this step, run: pnpm build -F @atomiton/nodes
 ```
 
 ---
 
-## Step 2: Consolidate All Execution Types in Conductor
+## Step 2: Enhance Execution in Conductor
 
-**Goal**: Move ALL execution types to @atomiton/conductor and implement simple execution API.
+**Goal**: Conductor imports simple types from nodes and adds orchestration/context.
 
 ### Claude Code Prompt:
 
 ```
-Consolidate all execution types in @atomiton/conductor with a simple execute API.
+Set up @atomiton/conductor to use the simple execution types from nodes and add orchestration.
 
-1. CREATE all execution types in Conductor:
+1. IMPORT simple types from nodes and enhance them:
    ```typescript
    // /packages/@atomiton/conductor/src/types/execution.ts
+   import type { NodeExecutable } from '@atomiton/nodes';
+   
+   // Conductor adds richer execution context
    export interface ExecutionContext {
-     nodeId: string;  // NOT flowId - we execute nodes
+     nodeId: string;
      executionId: string;
      variables: Record<string, any>;
      input?: any;
      parentContext?: ExecutionContext;
    }
    
+   // Enhanced result with more metadata
    export interface ExecutionResult<T = any> {
      success: boolean;
      data?: T;
      error?: ExecutionError;
      duration?: number;
      executedNodes?: string[];
+     context?: ExecutionContext;
    }
    
    export interface ExecutionError {
@@ -122,35 +184,29 @@ Consolidate all execution types in @atomiton/conductor with a simple execute API
      code?: string;
      timestamp: Date;
    }
-   
-   export enum ExecutionStatus {
-     PENDING = 'pending',
-     RUNNING = 'running',
-     COMPLETED = 'completed',
-     FAILED = 'failed',
-     CANCELLED = 'cancelled'
-   }
    ```
 
 2. CREATE transport abstraction:
    ```typescript
    // /packages/@atomiton/conductor/src/types/transport.ts
+   import type { NodeDefinition } from '@atomiton/nodes';
+   
    export interface ConductorTransport {
      execute(node: NodeDefinition, context: ExecutionContext): Promise<ExecutionResult>;
    }
    ```
 
-3. IMPLEMENT simple Conductor with execute method:
+3. IMPLEMENT Conductor using nodes registry:
    ```typescript
    // /packages/@atomiton/conductor/src/conductor.ts
-   import { NodeDefinition } from '@atomiton/nodes';
+   import { NodeDefinition, getNodeImplementation } from '@atomiton/nodes';
    
    export class Conductor {
      constructor(private config: { transport?: ConductorTransport } = {}) {}
      
-     // Simple API - just execute a node
      async execute(node: NodeDefinition, context?: Partial<ExecutionContext>): Promise<ExecutionResult> {
        const ctx = this.createContext(node, context);
+       const startTime = Date.now();
        
        // Check if it has child nodes (it's a group)
        if (node.nodes && node.nodes.length > 0) {
@@ -162,26 +218,74 @@ Consolidate all execution types in @atomiton/conductor with a simple execute API
          return this.config.transport.execute(node, ctx);
        }
        
-       return this.executeLocal(node, ctx);
+       return this.executeLocal(node, ctx, startTime);
+     }
+     
+     private async executeLocal(
+       node: NodeDefinition, 
+       context: ExecutionContext,
+       startTime: number
+     ): Promise<ExecutionResult> {
+       // Get implementation from nodes registry
+       const nodeImpl = getNodeImplementation(node.type);
+       
+       if (!nodeImpl) {
+         return {
+           success: false,
+           error: {
+             nodeId: node.id,
+             message: `No implementation found for node type: ${node.type}`,
+             timestamp: new Date()
+           }
+         };
+       }
+       
+       try {
+         // Call the simple execute method from nodes
+         const result = await nodeImpl.executable.execute(node.parameters);
+         
+         // Conductor adds the execution context and metadata
+         return {
+           success: true,
+           data: result,
+           duration: Date.now() - startTime,
+           executedNodes: [node.id],
+           context
+         };
+       } catch (error) {
+         return {
+           success: false,
+           error: {
+             nodeId: node.id,
+             message: error.message,
+             timestamp: new Date()
+           },
+           duration: Date.now() - startTime
+         };
+       }
      }
      
      private async executeGroup(node: NodeDefinition, context: ExecutionContext): Promise<ExecutionResult> {
-       // Execute children in topological order
+       const startTime = Date.now();
        const sorted = this.topologicalSort(node.nodes || [], node.edges || []);
        const results = [];
+       const executedNodes = [];
        
        for (const childNode of sorted) {
          const result = await this.execute(childNode, {
            ...context,
            parentContext: context
          });
+         
          results.push(result);
+         executedNodes.push(...(result.executedNodes || []));
          
          if (!result.success) {
            return {
              success: false,
              error: result.error,
-             executedNodes: results.map(r => r.nodeId)
+             duration: Date.now() - startTime,
+             executedNodes
            };
          }
        }
@@ -189,7 +293,8 @@ Consolidate all execution types in @atomiton/conductor with a simple execute API
        return {
          success: true,
          data: results,
-         executedNodes: results.map(r => r.nodeId)
+         duration: Date.now() - startTime,
+         executedNodes
        };
      }
    }
@@ -199,9 +304,14 @@ Consolidate all execution types in @atomiton/conductor with a simple execute API
    }
    ```
 
-4. UPDATE all imports across codebase:
-   - Find: import { ExecutionContext, ExecutionResult } from '@atomiton/flow'
-   - Replace with: import { ExecutionContext, ExecutionResult } from '@atomiton/conductor'
+4. UPDATE package.json:
+   ```json
+   {
+     "dependencies": {
+       "@atomiton/nodes": "workspace:*"
+     }
+   }
+   ```
 
 After this step, run: pnpm build -F @atomiton/conductor
 ```
@@ -312,7 +422,7 @@ Remove the @atomiton/flow package entirely. We don't need its utilities.
 4. UPDATE all imports:
    - Search entire codebase for: '@atomiton/flow'
    - Replace with '@atomiton/nodes' for NodeDefinition
-   - Replace with '@atomiton/conductor' for execution types
+   - Replace with '@atomiton/conductor' for richer execution types
    - Use createNodeDefinition from @atomiton/nodes
 
 5. DELETE the package:
@@ -458,7 +568,7 @@ After this step, run: pnpm dev and test execution
 Validate the final architecture and clean up any remaining issues.
 
 1. VERIFY package dependencies:
-   - @atomiton/nodes: NO @atomiton dependencies
+   - @atomiton/nodes: NO @atomiton dependencies (foundation with co-located implementations)
    - @atomiton/conductor: ONLY @atomiton/nodes
    - @atomiton/storage: ONLY @atomiton/nodes
    - @atomiton/editor: ONLY @atomiton/nodes
@@ -470,10 +580,10 @@ Validate the final architecture and clean up any remaining issues.
 3. VERIFY Flow package is gone:
    pnpm why @atomiton/flow  # Should fail
 
-4. VERIFY we're using existing utilities:
-   - Using createNodeDefinition from @atomiton/nodes
-   - Using conductor.execute() for execution
-   - Not creating unnecessary abstractions
+4. VERIFY co-location is maintained:
+   - Each node type in @atomiton/nodes has definition + implementation together
+   - Simple NodeExecutable interface (params in, result out)
+   - Conductor adds execution context and orchestration
 
 5. TEST the application:
    - Create a node tree in editor
@@ -481,16 +591,10 @@ Validate the final architecture and clean up any remaining issues.
    - Save as .flow.yaml
    - Load and execute again
 
-6. The entire execution API is just:
-   ```typescript
-   import { execute } from '#lib/conductor';
-   import { createNodeDefinition } from '@atomiton/nodes';
-   
-   const node = createNodeDefinition({ type: 'group', nodes: [...] });
-   const result = await execute(node);
-   ```
-
-That's it - super simple!
+6. The architecture is now:
+   - @atomiton/nodes: Co-located definitions + implementations with simple interface
+   - @atomiton/conductor: Orchestration and execution context
+   - Simple API: createNodeDefinition() and execute()
 ```
 
 ---
@@ -500,41 +604,61 @@ That's it - super simple!
 After completing all steps:
 
 ✅ @atomiton/flow package doesn't exist
-✅ No duplicate type definitions  
-✅ Conductor owns all execution types
+✅ Node definitions and implementations are co-located in @atomiton/nodes
+✅ Simple NodeExecutable interface (params → result)
+✅ Conductor adds execution context and orchestration
 ✅ Using existing createNodeDefinition from nodes package
 ✅ Simple execute(node) API from conductor
 ✅ Client never imports RPC directly
 ✅ "Flow" only appears in user-facing contexts
-✅ No unnecessary abstractions or utilities
 
-## The Simplest Possible API
+## Architecture Summary
 
-### Creating Nodes
-```typescript
-import { createNodeDefinition } from '@atomiton/nodes';
+### Package Responsibilities
 
-const node = createNodeDefinition({
-  type: 'group',
-  nodes: [...]
-});
+```
+@atomiton/nodes (Foundation)
+├── NodeDefinition type
+├── Simple NodeExecutable interface
+├── Co-located node implementations
+├── Registry of all nodes
+└── createNodeDefinition utility
+
+@atomiton/conductor (Orchestration)
+├── Imports simple types from nodes
+├── Adds ExecutionContext
+├── Adds ExecutionResult with metadata
+├── Handles orchestration (groups, sequencing)
+└── Transport abstraction
+
+@atomiton/rpc (Transport)
+└── Pure message passing
+
+@atomiton/storage (Persistence)
+└── Flow files (user concept)
+
+@atomiton/editor (Visualization)
+└── Visual transformations
 ```
 
-### Executing Nodes
-```typescript
-import { execute } from '#lib/conductor';
+### The Simple API
 
+```typescript
+// Create nodes
+import { createNodeDefinition } from '@atomiton/nodes';
+const node = createNodeDefinition({ type: 'group', nodes: [...] });
+
+// Execute nodes
+import { execute } from '#lib/conductor';
 const result = await execute(node);
 ```
 
-That's the entire API - two functions!
-
 ## Common Pitfalls to Avoid
 
-❌ **DON'T** create new utilities when we have existing ones
-❌ **DON'T** create abstractions (isAtomic, isComposite, etc.)
+❌ **DON'T** split node definitions from implementations
+❌ **DON'T** create complex execution interfaces
 ❌ **DON'T** move Flow utilities - just delete them
-❌ **DON'T** complicate the execute API
+❌ **DON'T** put execution context in nodes package
 ❌ **DON'T** skip steps - the order matters!
 
 ## Quick Validation Commands

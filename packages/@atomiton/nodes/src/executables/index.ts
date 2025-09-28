@@ -6,7 +6,6 @@
 // Re-export everything from definitions (for convenience)
 export * from "#definitions";
 
-// Export executable factory and types
 export { default as createNodeExecutable } from "#core/factories/createNodeExecutable";
 export * from "#core/types/executable";
 
@@ -16,15 +15,15 @@ export {
   getNodeExecutable,
   getNodeExecutableIds,
   hasNodeExecutable,
-  nodeExecutableRegistry,
+  nodeExecutableRegistry
 } from "#executables/registry";
 
 // Export all individual node executables
 export { default as codeExecutable } from "#executables/code";
-export { default as groupExecutable } from "#executables/group";
 export { default as csvReaderExecutable } from "#executables/csv-reader";
 export { default as editFieldsExecutable } from "#executables/edit-fields";
 export { default as fileSystemExecutable } from "#executables/file-system";
+export { default as groupExecutable } from "#executables/group";
 export { default as httpRequestExecutable } from "#executables/http-request";
 export { default as imageCompositeExecutable } from "#executables/image-composite";
 export { default as loopExecutable } from "#executables/loop";
