@@ -6,7 +6,14 @@
 // Re-export everything from definitions (for convenience)
 export * from "#definitions";
 
-export { default as createNodeExecutable } from "#core/factories/createNodeExecutable";
+// Export both simple and legacy factory functions
+export {
+  createSimpleNodeExecutable,
+  createNodeExecutable as createNodeExecutable_DEPRECATED,
+  default as createNodeExecutable
+} from "#core/factories/createNodeExecutable";
+
+// Export all types (simple and legacy)
 export * from "#core/types/executable";
 
 // Export the registry and all registry functions

@@ -34,7 +34,7 @@ export const parallelExecutable: NodeExecutable<ParallelParameters> =
 
       try {
         // Get input operations
-        const operations = (context.inputs.operations as unknown[]) || [];
+        const operations = (context.inputs?.operations as unknown[]) || [];
 
         context.log?.info?.(
           `Starting parallel execution of ${operations.length} operations`,
