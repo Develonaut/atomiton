@@ -6,7 +6,7 @@ import type {
   NodeExecutable,
   NodeExecutableInput,
   NodeExecutionContext,
-  SimpleNodeExecutable
+  SimpleNodeExecutable,
 } from "#core/types/executable";
 
 /**
@@ -27,7 +27,7 @@ import type {
  * ```
  */
 export function createSimpleNodeExecutable(
-  executable: SimpleNodeExecutable
+  executable: SimpleNodeExecutable,
 ): SimpleNodeExecutable {
   return executable;
 }

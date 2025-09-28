@@ -2,9 +2,10 @@ import Export from "#components/Export";
 import Icon from "#components/Icon";
 import RunFlow, { type ExecuteHandler } from "#components/RunFlow";
 import Zoom from "#components/Zoom";
-import { ipc, type NodeExecuteResponse, type NodeProgress } from "#lib/ipc";
+import conductor from "#lib/conductor";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { Box, Button } from "@atomiton/ui";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 function Toolbar() {
   // TODO: Re-implement undo/redo functionality
@@ -14,69 +15,35 @@ function Toolbar() {
   const redo = () => {};
   const [active, setActive] = useState<number | null>(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [output, setOutput] = useState<NodeExecuteResponse | null>(null);
-  const [progress, setProgress] = useState<NodeProgress | null>(null);
+  const [output, setOutput] = useState<any>(null);
   const [showOutput, setShowOutput] = useState(false);
 
-  // Set up IPC listeners
-  useEffect(() => {
-    if (!ipc.isAvailable()) return;
-
-    const unsubProgress = ipc.onProgress((p) => {
-      setProgress(p);
-      console.log("Flow execution progress:", p);
-    });
-
-    const unsubComplete = ipc.onComplete((response) => {
-      console.log("Flow execution complete:", response);
-      setOutput(response);
-      setIsRunning(false);
-    });
-
-    const unsubError = ipc.onError((response) => {
-      console.log("Flow execution error:", response);
-      setOutput(response);
-      setIsRunning(false);
-    });
-
-    return () => {
-      unsubProgress();
-      unsubComplete();
-      unsubError();
-    };
-  }, []);
-
   const handleExecute: ExecuteHandler = useCallback(async (nodeDefinitions) => {
-    if (!ipc.isAvailable()) {
-      console.error("IPC not available - not running in Electron");
-      return;
-    }
-
     setIsRunning(true);
-    setProgress(null);
     setOutput(null);
     setShowOutput(true);
 
     try {
-      // Execute via IPC
-      const response = await ipc.executeNode({
-        id: "flow-runner",
-        type: "flow-runner",
-        config: {
-          nodes: nodeDefinitions,
-          edges: [],
-          startNodeId: (nodeDefinitions[0] as { id?: string })?.id,
-          flow: {
-            id: "current-flow",
-            name: "Current Flow",
-            nodes: nodeDefinitions,
-            edges: [],
-          },
-        },
+      // Create a group node with the node definitions as children
+      const groupNode = createNodeDefinition({
+        type: "group",
+        nodes: nodeDefinitions,
       });
 
+      console.log("Executing flow with Conductor API...");
+      const response = await conductor.execute(groupNode);
+
       console.log("Flow execution response:", response);
-      setOutput(response);
+
+      // Convert to old format for display compatibility
+      const displayOutput = {
+        id: groupNode.id,
+        success: response.success,
+        outputs: response.data,
+        error: response.error,
+      };
+
+      setOutput(displayOutput);
     } catch (error) {
       console.error("Failed to execute flow:", error);
       setOutput({
@@ -84,6 +51,7 @@ function Toolbar() {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
       });
+    } finally {
       setIsRunning(false);
     }
   }, []);
@@ -177,22 +145,6 @@ function Toolbar() {
           </div>
 
           <div className="p-4 max-h-80 overflow-y-auto">
-            {/* Progress */}
-            {progress && (
-              <div className="mb-4 p-3 bg-accent-01/5 border border-accent-01/20 rounded-lg">
-                <p className="text-sm font-medium text-primary mb-2">
-                  Progress: {progress.progress}%
-                </p>
-                <div className="w-full bg-surface-02 rounded-full h-2 mb-2">
-                  <div
-                    className="bg-accent-01 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${progress.progress}%` }}
-                  />
-                </div>
-                <p className="text-xs text-secondary">{progress.message}</p>
-              </div>
-            )}
-
             {/* Output */}
             {output && (
               <div
@@ -224,7 +176,7 @@ function Toolbar() {
             )}
 
             {/* Show message if not in Electron */}
-            {!ipc.isAvailable() && (
+            {!window.electron && (
               <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
                 <p className="text-sm text-warning">
                   Run functionality requires the desktop application

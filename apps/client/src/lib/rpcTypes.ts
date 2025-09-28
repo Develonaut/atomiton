@@ -1,21 +1,35 @@
-// Type definitions from RPC package
-// This is a workaround for TypeScript resolution issues
-import type { AppRouter as TRPCRouter } from "../../../../packages/@atomiton/rpc/src/trpc/router";
+// Type definitions - importing from proper packages
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import type {
-  Flow as FlowType,
-  StorageItem as StorageItemType,
-  ExecutionContext as ExecutionContextType,
-  ExecutionResult as ExecutionResultType,
-  Connection as ConnectionType,
-  FlowNode as FlowNodeType,
-  NodeDefinition as NodeDefinitionType,
-} from "../../../../packages/@atomiton/rpc/src/schemas";
+  ExecutionContext,
+  ExecutionResult,
+} from "@atomiton/conductor/browser";
+
+// TODO: Replace with proper imports when TRPC router is properly exported
+import type { AppRouter as TRPCRouter } from "../../../../packages/@atomiton/rpc/src/trpc/router";
 
 export type AppRouter = TRPCRouter;
-export type Flow = FlowType;
-export type StorageItem = StorageItemType;
-export type ExecutionContext = ExecutionContextType;
-export type ExecutionResult = ExecutionResultType;
-export type Connection = ConnectionType;
-export type FlowNode = FlowNodeType;
-export type NodeDefinition = NodeDefinitionType;
+
+// Flow is just what users call a NodeDefinition with child nodes
+export type Flow = NodeDefinition;
+export type FlowNode = NodeDefinition;
+export type NodeDefinition = NodeDefinition;
+
+// Execution types come from conductor
+export type ExecutionContext = ExecutionContext;
+export type ExecutionResult = ExecutionResult;
+
+// TODO: Define these types properly or import from correct location
+export type Connection = {
+  source: string;
+  target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
+};
+
+export type StorageItem = {
+  id: string;
+  name: string;
+  type: string;
+  data: unknown;
+};

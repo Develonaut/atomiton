@@ -17,7 +17,12 @@ export interface SimpleNodeExecutable {
 /**
  * @deprecated Will be moved to @atomiton/conductor. Use SimpleNodeExecutable for new implementations.
  */
-export type NodeExecutionStatus = "idle" | "running" | "success" | "error" | "cancelled";
+export type NodeExecutionStatus =
+  | "idle"
+  | "running"
+  | "success"
+  | "error"
+  | "cancelled";
 
 /**
  * @deprecated Will be moved to @atomiton/conductor. Use SimpleNodeExecutable for new implementations.
@@ -53,7 +58,10 @@ export type NodeExecutionResult = {
  * @deprecated Use SimpleNodeExecutable for new implementations. This will be removed in next major version.
  */
 export type NodeExecutableInput<T = unknown> = {
-  execute: (context: NodeExecutionContext, config: T) => Promise<NodeExecutionResult>;
+  execute: (
+    context: NodeExecutionContext,
+    config: T,
+  ) => Promise<NodeExecutionResult>;
   validateConfig?: (config: unknown) => T;
   getValidatedParams?: (context: NodeExecutionContext) => T;
 };
@@ -63,6 +71,9 @@ export type NodeExecutableInput<T = unknown> = {
  * @deprecated Use SimpleNodeExecutable for new implementations. This will be removed in next major version.
  */
 export type NodeExecutable<T = unknown> = {
-  execute: (context: NodeExecutionContext, config: T) => Promise<NodeExecutionResult>;
+  execute: (
+    context: NodeExecutionContext,
+    config: T,
+  ) => Promise<NodeExecutionResult>;
   getValidatedParams: (context: NodeExecutionContext) => T;
 };

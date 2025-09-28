@@ -2,7 +2,10 @@ import { app } from "electron";
 import fs from "fs/promises";
 import path from "path";
 import { flowToYaml, parse } from "@atomiton/yaml";
-import type { Flow } from "@atomiton/rpc/shared";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
+
+// "Flow" is just what users call a NodeDefinition with child nodes
+type Flow = NodeDefinition;
 
 // FlowNode type removed as it's not used
 

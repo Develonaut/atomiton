@@ -4,33 +4,37 @@
 
 ### Foundation Concepts
 
-1. **Everything is a Node** - The entire system is built on the `NodeDefinition` type
+1. **Everything is a Node** - The entire system is built on the `NodeDefinition`
+   type
 2. **Co-location is key** - Node definitions and implementations stay together
 3. **Simple execution interface** - Just params in, result out
-4. **Flow is a user concept** - "Flow" only exists in user-facing contexts (UI, file names)
+4. **Flow is a user concept** - "Flow" only exists in user-facing contexts (UI,
+   file names)
 5. **Conductor orchestrates** - Adds execution context and orchestration
 6. **RPC is pure transport** - Just moves messages, no business logic
 7. **Clean layering** - Each package has one clear responsibility
 
 ### Foundation Principle: Everything is a Node
 
-The entire system is built on a single foundational type: `NodeDefinition`. There is no separate "Flow" type - a flow is just a user-friendly term for a saved NodeDefinition that typically has child nodes.
+The entire system is built on a single foundational type: `NodeDefinition`.
+There is no separate "Flow" type - a flow is just a user-friendly term for a
+saved NodeDefinition that typically has child nodes.
 
 ```typescript
 // The universal type that everything is built on
 interface NodeDefinition {
   id: string;
-  type: string;  // 'group', 'httpRequest', 'transform', etc.
+  type: string; // 'group', 'httpRequest', 'transform', etc.
   version?: string;
-  parentId?: string;           // Hierarchy
+  parentId?: string; // Hierarchy
   name?: string;
   position?: { x: number; y: number };
   metadata?: NodeMetadata;
   parameters?: Record<string, any>;
-  
+
   // Group nodes have these
-  nodes?: NodeDefinition[];    // Child nodes (if present, it's a group)
-  edges?: NodeEdge[];          // Connections between children
+  nodes?: NodeDefinition[]; // Child nodes (if present, it's a group)
+  edges?: NodeEdge[]; // Connections between children
 }
 ```
 
@@ -71,26 +75,29 @@ export const httpRequestNode = {
 Our entire system boils down to two simple operations:
 
 ### 1. Creating Nodes
+
 ```typescript
-import { createNodeDefinition } from '@atomiton/nodes';
+import { createNodeDefinition } from "@atomiton/nodes";
 
 const node = createNodeDefinition({
-  type: 'group',
+  type: "group",
   nodes: [
-    { type: 'httpRequest', parameters: { url: 'api.example.com' } },
-    { type: 'transform', parameters: { script: 'return data' } }
-  ]
+    { type: "httpRequest", parameters: { url: "api.example.com" } },
+    { type: "transform", parameters: { script: "return data" } },
+  ],
 });
 ```
 
 ### 2. Executing Nodes
+
 ```typescript
-import { execute } from '#lib/conductor';
+import { execute } from "#lib/conductor";
 
 const result = await execute(node);
 ```
 
-That's it. The entire API is two functions: `createNodeDefinition()` and `execute()`.
+That's it. The entire API is two functions: `createNodeDefinition()` and
+`execute()`.
 
 ---
 
@@ -105,28 +112,28 @@ Foundation Layer
   Purpose: Node definitions + implementations (co-located)
   Owns: NodeDefinition, NodeExecutable, node registry
   Dependencies: NONE - this is the foundation
-  
+
 Orchestration Layer
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 @atomiton/conductor
   Purpose: Execution orchestration and context
   Owns: ExecutionContext, ExecutionResult, orchestration logic
   Dependencies: @atomiton/nodes only
-  
+
 Transport Layer
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 @atomiton/rpc
   Purpose: Pure message passing between processes
   Owns: RPCRequest, RPCResponse, IPC channels
   Dependencies: @atomiton/nodes, @atomiton/conductor (types only)
-  
+
 Storage Layer
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 @atomiton/storage
   Purpose: File persistence and serialization
   Owns: FlowFile format, save/load operations
   Dependencies: @atomiton/nodes only
-  
+
 Visualization Layer
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 @atomiton/editor
@@ -137,15 +144,15 @@ Visualization Layer
 
 ### Type Ownership Matrix
 
-| Type/Function | Owner | Import From | Description |
-|--------------|-------|-------------|-------------|
-| `NodeDefinition` | @atomiton/nodes | `'@atomiton/nodes'` | Structure |
-| `NodeExecutable` | @atomiton/nodes | `'@atomiton/nodes'` | Simple interface |
-| `createNodeDefinition()` | @atomiton/nodes | `'@atomiton/nodes'` | Factory |
-| `nodeRegistry` | @atomiton/nodes | `'@atomiton/nodes'` | All implementations |
-| `ExecutionContext` | @atomiton/conductor | `'@atomiton/conductor'` | Rich context |
-| `ExecutionResult` | @atomiton/conductor | `'@atomiton/conductor'` | Rich result |
-| `execute()` | @atomiton/conductor | Via client wrapper | Orchestration |
+| Type/Function            | Owner               | Import From             | Description         |
+| ------------------------ | ------------------- | ----------------------- | ------------------- |
+| `NodeDefinition`         | @atomiton/nodes     | `'@atomiton/nodes'`     | Structure           |
+| `NodeExecutable`         | @atomiton/nodes     | `'@atomiton/nodes'`     | Simple interface    |
+| `createNodeDefinition()` | @atomiton/nodes     | `'@atomiton/nodes'`     | Factory             |
+| `nodeRegistry`           | @atomiton/nodes     | `'@atomiton/nodes'`     | All implementations |
+| `ExecutionContext`       | @atomiton/conductor | `'@atomiton/conductor'` | Rich context        |
+| `ExecutionResult`        | @atomiton/conductor | `'@atomiton/conductor'` | Rich result         |
+| `execute()`              | @atomiton/conductor | Via client wrapper      | Orchestration       |
 
 ---
 
@@ -164,7 +171,7 @@ export const transformExecutable: NodeExecutable = {
   async execute(params) {
     // params in, result out - that's it
     return eval(params.script)(params.input);
-  }
+  },
 };
 ```
 
@@ -173,24 +180,27 @@ export const transformExecutable: NodeExecutable = {
 ```typescript
 // @atomiton/conductor - Adds context and orchestration
 class Conductor {
-  async execute(node: NodeDefinition, context?: Partial<ExecutionContext>): Promise<ExecutionResult> {
+  async execute(
+    node: NodeDefinition,
+    context?: Partial<ExecutionContext>,
+  ): Promise<ExecutionResult> {
     // Get simple implementation from nodes
     const nodeImpl = getNodeImplementation(node.type);
-    
+
     if (node.nodes && node.nodes.length > 0) {
       // Orchestrate group execution
       return this.executeGroup(node, context);
     }
-    
+
     // Call simple execute, add rich context
     const result = await nodeImpl.executable.execute(node.parameters);
-    
+
     return {
       success: true,
       data: result,
       executionContext: context,
       duration: elapsed,
-      executedNodes: [node.id]
+      executedNodes: [node.id],
     };
   }
 }
@@ -204,73 +214,74 @@ class Conductor {
 // @atomiton/nodes/src/library/http-request/index.ts
 // Everything about httpRequest in one place
 
-import type { NodeExecutable } from '../../types/executable';
+import type { NodeExecutable } from "../../types/executable";
 
 // 1. Definition - what it is
 export const httpRequestDefinition = {
-  type: 'httpRequest',
-  version: '1.0.0',
-  category: 'network',
+  type: "httpRequest",
+  version: "1.0.0",
+  category: "network",
   inputPorts: [
-    { id: 'url', type: 'string', required: true },
-    { id: 'method', type: 'string', default: 'GET' },
-    { id: 'headers', type: 'object' },
-    { id: 'body', type: 'any' }
+    { id: "url", type: "string", required: true },
+    { id: "method", type: "string", default: "GET" },
+    { id: "headers", type: "object" },
+    { id: "body", type: "any" },
   ],
   outputPorts: [
-    { id: 'data', type: 'any' },
-    { id: 'status', type: 'number' },
-    { id: 'headers', type: 'object' }
-  ]
+    { id: "data", type: "any" },
+    { id: "status", type: "number" },
+    { id: "headers", type: "object" },
+  ],
 };
 
 // 2. Implementation - what it does
 export const httpRequestExecutable: NodeExecutable = {
   async execute(params) {
-    const { url, method = 'GET', headers = {}, body } = params;
-    
+    const { url, method = "GET", headers = {}, body } = params;
+
     const response = await fetch(url, {
       method,
       headers,
-      body: body ? JSON.stringify(body) : undefined
+      body: body ? JSON.stringify(body) : undefined,
     });
-    
+
     return {
       data: await response.json(),
       status: response.status,
-      headers: Object.fromEntries(response.headers.entries())
+      headers: Object.fromEntries(response.headers.entries()),
     };
-  }
+  },
 };
 
 // 3. Documentation - how to use it
 export const httpRequestDocs = {
-  description: 'Makes HTTP requests to external APIs',
+  description: "Makes HTTP requests to external APIs",
   examples: [
     {
-      name: 'Simple GET',
-      parameters: { url: 'https://api.example.com/data' }
+      name: "Simple GET",
+      parameters: { url: "https://api.example.com/data" },
     },
     {
-      name: 'POST with body',
+      name: "POST with body",
       parameters: {
-        url: 'https://api.example.com/users',
-        method: 'POST',
-        body: { name: 'John' }
-      }
-    }
-  ]
+        url: "https://api.example.com/users",
+        method: "POST",
+        body: { name: "John" },
+      },
+    },
+  ],
 };
 
 // 4. Export everything together
 export const httpRequestNode = {
   definition: httpRequestDefinition,
   executable: httpRequestExecutable,
-  docs: httpRequestDocs
+  docs: httpRequestDocs,
 };
 ```
 
 This co-location means:
+
 - ✅ Easy to understand - everything is in one file
 - ✅ Easy to maintain - changes are localized
 - ✅ Easy to test - test the whole node unit
@@ -283,6 +294,7 @@ This co-location means:
 ### For Claude Code Agents
 
 #### DO ✅
+
 - Keep node definitions and implementations together
 - Use simple NodeExecutable interface (params → result)
 - Let Conductor add execution context
@@ -292,6 +304,7 @@ This co-location means:
 - Execute migration steps IN ORDER
 
 #### DON'T ❌
+
 - Split node definitions from implementations
 - Create complex execution interfaces in nodes
 - Put ExecutionContext in nodes package
@@ -304,20 +317,24 @@ This co-location means:
 
 ```typescript
 // Node structure and implementations
-import { NodeDefinition, NodeExecutable, createNodeDefinition } from '@atomiton/nodes';
-import { getNodeImplementation } from '@atomiton/nodes/registry';
+import {
+  NodeDefinition,
+  NodeExecutable,
+  createNodeDefinition,
+} from "@atomiton/nodes";
+import { getNodeImplementation } from "@atomiton/nodes/registry";
 
 // Execution orchestration (only in Conductor)
-import { ExecutionContext, ExecutionResult } from '@atomiton/conductor';
+import { ExecutionContext, ExecutionResult } from "@atomiton/conductor";
 
 // Client-side execution
-import { execute } from '#lib/conductor';
+import { execute } from "#lib/conductor";
 
 // Storage operations
-import { saveFlowFile, loadFlowFile } from '@atomiton/storage';
+import { saveFlowFile, loadFlowFile } from "@atomiton/storage";
 
 // Editor transformations
-import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
+import { nodeToReactFlow, reactFlowToNode } from "@atomiton/editor";
 ```
 
 ---
@@ -346,13 +363,16 @@ import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
 
 The architecture maintains co-location while keeping clean boundaries:
 
-1. **@atomiton/nodes** - Co-located definitions + implementations with simple interface
-2. **@atomiton/conductor** - Imports simple types, adds orchestration and context
+1. **@atomiton/nodes** - Co-located definitions + implementations with simple
+   interface
+2. **@atomiton/conductor** - Imports simple types, adds orchestration and
+   context
 3. **Simple API** - `createNodeDefinition()` and `execute()`
 4. **No abstractions** - Just check `node.nodes` for groups
 5. **No Flow package** - Flow is just what users call saved nodes
 
 This creates a system that is:
+
 - **Cohesive** - Node parts stay together
 - **Simple** - Minimal interfaces
 - **Flexible** - Conductor can enhance as needed

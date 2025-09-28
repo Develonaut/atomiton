@@ -10,7 +10,7 @@ export * from "#definitions";
 export {
   createSimpleNodeExecutable,
   createNodeExecutable as createNodeExecutable_DEPRECATED,
-  default as createNodeExecutable
+  default as createNodeExecutable,
 } from "#core/factories/createNodeExecutable";
 
 // Export all types (simple and legacy)
@@ -22,7 +22,7 @@ export {
   getNodeExecutable,
   getNodeExecutableIds,
   hasNodeExecutable,
-  nodeExecutableRegistry
+  nodeExecutableRegistry,
 } from "#executables/registry";
 
 // Export all individual node executables

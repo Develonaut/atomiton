@@ -2,14 +2,18 @@
 
 ## Purpose
 
-This `.claude/` directory contains the authoritative documentation and configuration for the Atomiton project architecture, specifically designed for Claude Code agents to execute tasks consistently and correctly.
+This `.claude/` directory contains the authoritative documentation and
+configuration for the Atomiton project architecture, specifically designed for
+Claude Code agents to execute tasks consistently and correctly.
 
 ## Documentation Structure
 
 ### 📚 Core Architecture Documents
 
 #### [ARCHITECTURE.md](./ARCHITECTURE.md)
+
 **The comprehensive architecture reference**
+
 - Core principles and domain model
 - Package ownership and boundaries
 - Type definitions and ownership matrix
@@ -17,7 +21,9 @@ This `.claude/` directory contains the authoritative documentation and configura
 - Storage format and versioning strategy
 
 #### [POST_MIGRATION_CLEANUP_STRATEGY.md](./POST_MIGRATION_CLEANUP_STRATEGY.md)
+
 **Step-by-step migration guide**
+
 - Ordered steps that MUST be executed sequentially
 - Specific code prompts for each step
 - Validation commands and success criteria
@@ -26,13 +32,17 @@ This `.claude/` directory contains the authoritative documentation and configura
 ### 🤖 Agent Configuration
 
 #### [agents/](./agents/)
+
 Individual Claude Code agent personas and their specializations:
+
 - Domain-specific expertise
 - Task assignments
 - Behavioral guidelines
 
 #### [workflow/](./workflow/)
+
 Multi-agent workflow templates and execution plans:
+
 - Task orchestration
 - Agent collaboration patterns
 - Validation checklists
@@ -95,16 +105,16 @@ Applications:
 
 ```typescript
 // Creating nodes (use existing utility)
-import { NodeDefinition, createNodeDefinition } from '@atomiton/nodes';
+import { NodeDefinition, createNodeDefinition } from "@atomiton/nodes";
 
 // Executing nodes (simple API)
-import { execute } from '#lib/conductor';
+import { execute } from "#lib/conductor";
 
 // Storage (user concept of "flow")
-import { saveFlowFile, loadFlowFile } from '@atomiton/storage';
+import { saveFlowFile, loadFlowFile } from "@atomiton/storage";
 
 // Visual transformation
-import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
+import { nodeToReactFlow, reactFlowToNode } from "@atomiton/editor";
 
 // Never import RPC directly in client!
 // ❌ import { rpc } from '@atomiton/rpc';
@@ -125,6 +135,7 @@ import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
 ### Key Rules
 
 #### ✅ DO
+
 - Use existing utilities (createNodeDefinition)
 - Use simple execute(node) API
 - Check `node.nodes` to see if it's a group
@@ -135,6 +146,7 @@ import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
 - Execute migration steps sequentially
 
 #### ❌ DON'T
+
 - Create new utilities when we have existing ones
 - Add execution types to @atomiton/nodes
 - Create a Flow type (use NodeDefinition)
@@ -163,6 +175,7 @@ pnpm dev                        # App works
 ## Document History
 
 ### Active Documents
+
 - `ARCHITECTURE.md` - Consolidated architecture guide (current)
 - `POST_MIGRATION_CLEANUP_STRATEGY.md` - Migration steps (current)
 - `CLAUDE.md` - This file
@@ -170,7 +183,9 @@ pnpm dev                        # App works
 - `workflow/*` - Workflow templates
 
 ### Deprecated/Consolidated Documents
+
 These have been merged into ARCHITECTURE.md:
+
 - ~~DOMAIN_OWNERSHIP_SUMMARY.md~~
 - ~~DOMAIN_TYPES_INTERACTIONS.md~~
 - ~~FLOW_LIFECYCLE.md~~
@@ -185,7 +200,9 @@ These have been merged into ARCHITECTURE.md:
 ## Common Questions
 
 ### Q: What's the API for creating and executing nodes?
+
 A: Just two functions:
+
 ```typescript
 import { createNodeDefinition } from '@atomiton/nodes';
 import { execute } from '#lib/conductor';
@@ -195,19 +212,28 @@ const result = await execute(node);
 ```
 
 ### Q: Where is the Flow type defined?
-A: There is no Flow type. "Flow" is just what users call a saved NodeDefinition with child nodes.
+
+A: There is no Flow type. "Flow" is just what users call a saved NodeDefinition
+with child nodes.
 
 ### Q: Do we need isAtomic/isComposite utilities?
-A: No. Just check `if (node.nodes && node.nodes.length > 0)` to see if it's a group.
+
+A: No. Just check `if (node.nodes && node.nodes.length > 0)` to see if it's a
+group.
 
 ### Q: Which package owns ExecutionContext?
+
 A: @atomiton/conductor owns ALL execution types.
 
 ### Q: Can the client import from @atomiton/rpc?
+
 A: No. Client uses Conductor which internally uses RPC as transport when needed.
 
 ### Q: Where do I import NodeDefinition from?
+
 A: Always from '@atomiton/nodes' - it's the foundation type.
 
 ### Q: What happened to @atomiton/flow package?
-A: It's being removed completely. We don't need its utilities - we already have what we need.
+
+A: It's being removed completely. We don't need its utilities - we already have
+what we need.

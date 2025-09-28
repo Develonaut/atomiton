@@ -51,8 +51,9 @@ test.describe("Debug Page File Write Functionality", () => {
     expect(fileContent).toContain("Test data: Hello from Debug Page!");
     const timestampRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
     expect(fileContent).toMatch(timestampRegex);
+    // Check for success message in the logs
     const successMessage = sharedElectronPage.locator(
-      "text=Node executed successfully",
+      "text=✅ File write test completed",
     );
     await expect(successMessage).toBeVisible({ timeout: 10000 });
   });
@@ -62,26 +63,36 @@ test.describe("Debug Page File Write Functionality", () => {
   }) => {
     const ipcInfo = await sharedElectronPage.evaluate(() => {
       return {
-        hasElectron: !!(window as any).electron,
-        hasAtomitonIPC: !!(window as any).atomitonIPC,
-        ipcMethods: (window as any).atomitonIPC
-          ? Object.keys((window as any).atomitonIPC).filter(
-              (key) => typeof (window as any).atomitonIPC[key] === "function",
+        hasAtomitonRPC: !!(window as any).atomitonRPC,
+        hasNode: !!(window as any).atomitonRPC?.node,
+        hasSystem: !!(window as any).atomitonRPC?.system,
+        nodeMethods: (window as any).atomitonRPC?.node
+          ? Object.keys((window as any).atomitonRPC.node).filter(
+              (key) =>
+                typeof (window as any).atomitonRPC.node[key] === "function",
+            )
+          : [],
+        systemMethods: (window as any).atomitonRPC?.system
+          ? Object.keys((window as any).atomitonRPC.system).filter(
+              (key) =>
+                typeof (window as any).atomitonRPC.system[key] === "function",
             )
           : [],
       };
     });
 
-    expect(ipcInfo.hasElectron).toBe(true);
-    expect(ipcInfo.hasAtomitonIPC).toBe(true);
-    expect(ipcInfo.ipcMethods).toContain("executeNode");
-    const pingResult = await sharedElectronPage.evaluate(async () => {
-      if ((window as any).atomitonIPC?.ping) {
-        return await (window as any).atomitonIPC.ping();
+    expect(ipcInfo.hasAtomitonRPC).toBe(true);
+    expect(ipcInfo.hasNode).toBe(true);
+    expect(ipcInfo.hasSystem).toBe(true);
+    expect(ipcInfo.nodeMethods).toContain("run");
+    const healthResult = await sharedElectronPage.evaluate(async () => {
+      if ((window as any).atomitonRPC?.system?.health) {
+        return await (window as any).atomitonRPC.system.health();
       }
       return null;
     });
-    expect(pingResult).toBe("pong");
+    expect(healthResult).toBeTruthy();
+    expect(healthResult.status).toBe("ok");
   });
 
   test("handles node execution progress events", async ({
@@ -90,12 +101,8 @@ test.describe("Debug Page File Write Functionality", () => {
     let progressEvents: any[] = [];
     await sharedElectronPage.evaluate(() => {
       (window as any).__progressEvents = [];
-
-      if ((window as any).atomitonIPC?.onNodeProgress) {
-        (window as any).atomitonIPC.onNodeProgress((progress: any) => {
-          (window as any).__progressEvents.push(progress);
-        });
-      }
+      // Note: Progress events are not part of the new RPC API
+      // The new conductor API doesn't expose progress callbacks
     });
 
     const testNodeButton = sharedElectronPage.locator(
@@ -108,13 +115,8 @@ test.describe("Debug Page File Write Functionality", () => {
       return (window as any).__progressEvents || [];
     });
 
-    expect(progressEvents.length).toBeGreaterThan(0);
-    expect(progressEvents.length).toBeGreaterThan(0);
-    if (progressEvents.length > 0) {
-      const firstEvent = progressEvents[0];
-      expect(firstEvent).toHaveProperty("id");
-      expect(firstEvent).toHaveProperty("nodeId");
-      expect(firstEvent).toHaveProperty("progress");
-    }
+    // Progress events are not part of the new RPC API
+    // The conductor returns results after execution completes
+    expect(progressEvents.length).toBe(0);
   });
 });

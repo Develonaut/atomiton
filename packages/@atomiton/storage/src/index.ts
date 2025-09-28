@@ -10,12 +10,12 @@ export * from "#types";
 // Re-export factories with explicit engine naming
 export {
   createFileSystemStorage as createFileSystemEngine,
-  type FileSystemStorageConfig
+  type FileSystemStorageConfig,
 } from "#factories/createFileSystemStorage";
 
 export {
   createInMemoryStorage as createMemoryEngine,
-  type InMemoryStorageConfig
+  type InMemoryStorageConfig,
 } from "#factories/createInMemoryStorage";
 
 // Flow file storage

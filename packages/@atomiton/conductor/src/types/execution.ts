@@ -5,7 +5,7 @@
  * adding richer execution context and orchestration capabilities.
  */
 
-import type { SimpleNodeExecutable } from '@atomiton/nodes/executables';
+import type { SimpleNodeExecutable } from "@atomiton/nodes/executables";
 
 /**
  * Conductor's rich execution context
@@ -17,7 +17,7 @@ export type ExecutionContext = {
   variables: Record<string, unknown>;
   input?: unknown;
   parentContext?: ExecutionContext;
-}
+};
 
 /**
  * Enhanced execution result with orchestration metadata
@@ -26,10 +26,11 @@ export type ExecutionResult<T = unknown> = {
   success: boolean;
   data?: T;
   error?: ExecutionError;
+  /** Execution duration in milliseconds */
   duration?: number;
   executedNodes?: string[];
   context?: ExecutionContext;
-}
+};
 
 /**
  * Execution error with detailed tracking
@@ -40,7 +41,7 @@ export type ExecutionError = {
   code?: string;
   timestamp: Date;
   stack?: string;
-}
+};
 
 /**
  * Execution status for tracking node state
@@ -51,6 +52,14 @@ export type ExecutionStatus =
   | "completed"
   | "failed"
   | "cancelled";
+
+/**
+ * Node executor factory function type - provides access to node executables
+ * This should be injected as a dependency to avoid dynamic imports
+ */
+export type NodeExecutorFactory = {
+  getNodeExecutable(nodeType: string): SimpleNodeExecutable | undefined;
+};
 
 /**
  * Re-export the simple interface for convenience

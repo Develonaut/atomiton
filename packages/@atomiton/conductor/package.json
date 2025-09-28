@@ -4,16 +4,17 @@
   "description": "Central execution engine for atomic and composite nodes",
   "type": "module",
   "private": true,
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "imports": {
     "#*": "./src/*"
   },
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "./browser": {
+      "import": "./dist/exports/browser/index.js",
+      "types": "./dist/exports/browser/index.d.ts"
+    },
+    "./desktop": {
+      "import": "./dist/exports/desktop/index.js",
+      "types": "./dist/exports/desktop/index.d.ts"
     },
     "./package.json": "./package.json"
   },

@@ -42,7 +42,9 @@ class IPCClient {
     const response: RPCResponse = await this.api.rpc(request);
 
     if (response.error) {
-      throw new Error(`RPC Error ${response.error.code}: ${response.error.message}`);
+      throw new Error(
+        `RPC Error ${response.error.code}: ${response.error.message}`,
+      );
     }
 
     return response.result;
@@ -53,8 +55,4 @@ class IPCClient {
 export const ipc = new IPCClient();
 
 // Re-export pure transport types
-export type {
-  RPCRequest,
-  RPCResponse,
-  RPCError,
-} from "../shared/types";
+export type { RPCRequest, RPCResponse, RPCError } from "../shared/types";

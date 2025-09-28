@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
 import { resolve } from "path";
 import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
@@ -14,10 +14,18 @@ export default defineConfig({
   build: {
     target: "es2020",
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: {
+        "exports/browser/index": resolve(
+          __dirname,
+          "src/exports/browser/index.ts",
+        ),
+        "exports/desktop/index": resolve(
+          __dirname,
+          "src/exports/desktop/index.ts",
+        ),
+      },
       name: "AtomitonConductor",
       formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: [
@@ -66,9 +74,5 @@ export default defineConfig({
     alias: {
       "#": resolve(__dirname, "./src"),
     },
-  },
-  test: {
-    environment: "node",
-    globals: true,
   },
 });

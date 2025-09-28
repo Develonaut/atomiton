@@ -1,20 +1,27 @@
 import Layout from "#components/Layout";
-import { ipc, type NodeExecuteResponse, type NodeProgress } from "#lib/ipc";
-import { rpc, isRPCAvailable } from "#lib/rpc";
+import conductor from "#lib/conductor";
+import type {
+  ExecutionResult,
+  HealthResult,
+} from "@atomiton/conductor/browser";
+import {
+  createNodeDefinition,
+  type NodeDefinition,
+} from "@atomiton/nodes/definitions";
 import { Button, Icon } from "@atomiton/ui";
+import { isElectronEnvironment } from "@atomiton/utils";
 import { useEffect, useState } from "react";
 
 type EnvironmentInfo = {
   isElectron: boolean;
-  ipcAvailable: boolean;
-  rpcAvailable: boolean;
-  userAgent: string;
-  platform: string;
-  nodeVersion?: string;
-  electronVersion?: string;
-  chromeVersion?: string;
+  conductorAvailable: boolean;
   apiMethods: string[];
   env: "development" | "production";
+  platform?: string;
+  userAgent?: string;
+  electronVersion?: string;
+  nodeVersion?: string;
+  chromeVersion?: string;
   buildInfo?: {
     mode?: string;
     timestamp?: string;
@@ -34,11 +41,14 @@ export default function DebugPage() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isRunningTests, setIsRunningTests] = useState(false);
   const [pingResult, setPingResult] = useState<string>("");
-  const [healthResult, setHealthResult] = useState<any>(null);
-  const [nodeProgress, setNodeProgress] = useState<NodeProgress | null>(null);
-  const [nodeResult, setNodeResult] = useState<NodeExecuteResponse | null>(
-    null,
-  );
+  const [healthResult, setHealthResult] = useState<HealthResult | null>(null);
+  const [nodeProgress, setNodeProgress] = useState<{
+    progress: number;
+    message: string;
+  } | null>(null);
+  const [nodeResult, setNodeResult] = useState<
+    (ExecutionResult & { filePath?: string }) | null
+  >(null);
   const [logs, setLogs] = useState<string[]>([]);
 
   const addLog = (message: string) => {
@@ -47,135 +57,94 @@ export default function DebugPage() {
   };
 
   useEffect(() => {
-    // Detect environment on mount
-    const detectEnvironment = () => {
-      const isElectron =
-        !!(window as Window & { electron?: unknown; atomitonIPC?: unknown })
-          .electron ||
-        !!(window as Window & { electron?: unknown; atomitonIPC?: unknown })
-          .atomitonIPC;
-      const ipcAvailable = ipc.isAvailable();
-      const rpcAvailable = isRPCAvailable();
-      const apiMethods: string[] = [];
+    // Detect environment on mount using simplified detection
+    const initializeEnvironment = () => {
+      const isElectron = isElectronEnvironment();
 
-      const windowWithIPC = window as Window & {
-        atomitonIPC?: Record<string, unknown>;
-      };
-      if (windowWithIPC.atomitonIPC) {
-        apiMethods.push(
-          ...Object.keys(windowWithIPC.atomitonIPC).filter(
-            (key) => typeof windowWithIPC.atomitonIPC![key] === "function",
-          ),
-        );
-      }
-
-      // Also add RPC methods if available
-      if (rpcAvailable) {
-        apiMethods.push(
-          "rpc.node.execute",
-          "rpc.flow.execute",
-          "rpc.system.health",
-        );
-      }
-
-      // Try to get version information from process if available
-      let nodeVersion, electronVersion, chromeVersion;
-      const windowWithProcess = window as Window & {
+      // Get basic info from window if available
+      const windowWithElectron = window as Window & {
+        atomitonRPC?: Record<string, unknown>;
         process?: {
-          versions?: { node?: string; electron?: string; chrome?: string };
+          versions?: {
+            node?: string;
+            electron?: string;
+            chrome?: string;
+          };
         };
       };
-      if (windowWithProcess.process?.versions) {
-        nodeVersion = windowWithProcess.process.versions.node;
-        electronVersion = windowWithProcess.process.versions.electron;
-        chromeVersion = windowWithProcess.process.versions.chrome;
+
+      const conductorAvailable = true; // Conductor is always available
+      const apiMethods: string[] = [];
+
+      // Add Conductor API methods (new structure)
+      apiMethods.push("conductor.node.run", "conductor.system.health");
+
+      // Add legacy methods for backward compatibility
+      apiMethods.push("conductor.execute", "conductor.health");
+
+      // Add atomitonRPC methods if available
+      if (windowWithElectron.atomitonRPC) {
+        apiMethods.push(
+          ...Object.keys(windowWithElectron.atomitonRPC)
+            .filter(
+              (key) =>
+                typeof windowWithElectron.atomitonRPC![key] === "function" ||
+                typeof windowWithElectron.atomitonRPC![key] === "object",
+            )
+            .map((key) => `atomitonRPC.${key}`),
+        );
       }
 
-      const info: EnvironmentInfo = {
+      const environmentInfo: EnvironmentInfo = {
         isElectron,
-        ipcAvailable,
-        rpcAvailable,
-        userAgent: navigator.userAgent,
-        platform: navigator.platform,
-        nodeVersion,
-        electronVersion,
-        chromeVersion,
+        conductorAvailable,
         apiMethods,
         env: import.meta.env.MODE as "development" | "production",
+        platform: navigator.platform,
+        userAgent: navigator.userAgent,
+        electronVersion: windowWithElectron.process?.versions?.electron,
+        nodeVersion: windowWithElectron.process?.versions?.node,
+        chromeVersion: windowWithElectron.process?.versions?.chrome,
         buildInfo: {
           mode: import.meta.env.MODE,
           timestamp: new Date().toISOString(),
         },
       };
 
-      setEnvironment(info);
+      setEnvironment(environmentInfo);
       addLog(`Environment detected: ${isElectron ? "Electron" : "Browser"}`);
-      addLog(`IPC Available: ${ipcAvailable}`);
-      addLog(`RPC Available: ${rpcAvailable}`);
+      addLog(`atomitonRPC Available: ${!!windowWithElectron.atomitonRPC}`);
+      addLog(`Conductor Available: ${conductorAvailable}`);
     };
 
-    detectEnvironment();
+    initializeEnvironment();
   }, []);
-
-  const testPing = async () => {
-    const startTime = Date.now();
-    addLog("Starting ping test...");
-
-    try {
-      const result = await ipc.ping();
-      const duration = Date.now() - startTime;
-      setPingResult(result);
-
-      const testResult: TestResult = {
-        name: "Ping Test",
-        success: true,
-        message: `Response: ${result}`,
-        timestamp: Date.now(),
-        duration,
-      };
-
-      setTestResults((prev) => [...prev, testResult]);
-      addLog(`✅ Ping successful: ${result} (${duration}ms)`);
-    } catch (error) {
-      const duration = Date.now() - startTime;
-      const testResult: TestResult = {
-        name: "Ping Test",
-        success: false,
-        message: error instanceof Error ? error.message : "Unknown error",
-        timestamp: Date.now(),
-        duration,
-      };
-
-      setTestResults((prev) => [...prev, testResult]);
-      addLog(`❌ Ping failed: ${testResult.message}`);
-    }
-  };
 
   const testHealth = async () => {
     const startTime = Date.now();
-    addLog("Starting RPC health check...");
+    addLog("Starting conductor health check...");
 
     try {
-      const result = await rpc.system.health();
+      const result = await conductor.system.health();
       const duration = Date.now() - startTime;
       setHealthResult(result);
 
       const testResult: TestResult = {
-        name: "RPC Health Check",
-        success: true,
-        message: `Status: ${result.status}`,
+        name: "Conductor Health Check",
+        success: result.status === "ok",
+        message: `Status: ${result.status}${result.message ? ` - ${result.message}` : ""}`,
         timestamp: Date.now(),
         duration,
       };
 
       setTestResults((prev) => [...prev, testResult]);
       addLog(
-        `✅ RPC health check successful: ${result.status} (${duration}ms)`,
+        `✅ Conductor health check successful: ${result.status} (${duration}ms)`,
       );
     } catch (error) {
       const duration = Date.now() - startTime;
       const testResult: TestResult = {
-        name: "RPC Health Check",
+        name: "Conductor Health Check",
         success: false,
         message: error instanceof Error ? error.message : "Unknown error",
         timestamp: Date.now(),
@@ -183,7 +152,7 @@ export default function DebugPage() {
       };
 
       setTestResults((prev) => [...prev, testResult]);
-      addLog(`❌ RPC health check failed: ${testResult.message}`);
+      addLog(`❌ Conductor health check failed: ${testResult.message}`);
     }
   };
 
@@ -193,61 +162,72 @@ export default function DebugPage() {
     setNodeProgress(null);
     setNodeResult(null);
 
-    // Set up listeners
-    const unsubProgress = ipc.onProgress((progress) => {
-      setNodeProgress(progress);
-      addLog(`Node progress: ${progress.progress}% - ${progress.message}`);
-    });
-
-    const unsubComplete = ipc.onComplete((response) => {
-      setNodeResult(response);
-      addLog(`✅ Node execution completed: ${JSON.stringify(response)}`);
-    });
-
-    const unsubError = ipc.onError((response) => {
-      setNodeResult(response);
-      addLog(`❌ Node execution error: ${response.error}`);
-    });
-
     try {
-      // Get output path from environment variable, fallback to repo root .tmp
+      // Use file-write node for a more realistic test
+      const timestamp = new Date().toISOString();
       const outputPath = import.meta.env.VITE_OUTPUT_PATH || ".tmp";
-      const filePath = `${outputPath}/debug-test-output.txt`;
+      const filePath = `${outputPath}/atomiton-debug-test-${Date.now()}.txt`;
 
-      // Create a write-file node data that writes to configured output path
-      const writeFileNodeData = {
+      // Start with a minimal node definition (like from a template/library)
+      // This will use the default parameters from the file-system node type
+      const nodeDefinition = createNodeDefinition({
         id: "write-file-test",
         type: "file-system",
-        config: {
+        name: "File Write Test",
+      });
+
+      // Simulate user filling out the form and modifying parameters
+      // For runtime execution, we replace the parameters object with actual values
+      // We use 'as unknown as NodeDefinition' because we're intentionally
+      // replacing the structured parameters with runtime values
+      const runtimeNode = {
+        ...nodeDefinition,
+        parameters: {
           operation: "write",
           path: filePath,
-          content: `Debug test executed at ${new Date().toISOString()}\nTest data: Hello from Debug Page!`,
+          content: `Debug test executed at ${timestamp}\nTest data: Hello from Debug Page!\n\nThis file was written by the Conductor via IPC.`,
           createDirectories: true,
           encoding: "utf8",
-        },
+        } as unknown as NodeDefinition["parameters"],
       };
 
-      const response = await ipc.executeNode(writeFileNodeData);
+      addLog(`Executing file-write node to: ${filePath}`);
+      const response = await conductor.node.run(runtimeNode);
 
-      console.log({ response });
+      console.log("[DEBUG] Conductor response:", response);
+      console.log(`[DEBUG] File should be written to: ${filePath}`);
 
       const duration = Date.now() - startTime;
       const testResult: TestResult = {
-        name: "Node Execution Test",
+        name: "File Write Node Test",
         success: response.success,
         message: response.success
-          ? "Node executed successfully"
-          : response.error || "Failed",
+          ? `File written to ${filePath}`
+          : (typeof response.error === "string"
+              ? response.error
+              : JSON.stringify(response.error)) || "File write failed",
         timestamp: Date.now(),
         duration,
       };
 
       setTestResults((prev) => [...prev, testResult]);
-      setNodeResult(response);
+
+      // Store the conductor result with file path info
+      const enrichedResult: ExecutionResult & { filePath?: string } = {
+        ...response,
+        filePath, // Add file path to result for display
+      };
+      setNodeResult(enrichedResult);
+
+      if (response.success) {
+        addLog(`✅ File write test completed: ${filePath}`);
+      } else {
+        addLog(`❌ File write test failed: ${JSON.stringify(response.error)}`);
+      }
     } catch (error) {
       const duration = Date.now() - startTime;
       const testResult: TestResult = {
-        name: "Node Execution Test",
+        name: "File Write Node Test",
         success: false,
         message: error instanceof Error ? error.message : "Unknown error",
         timestamp: Date.now(),
@@ -255,12 +235,7 @@ export default function DebugPage() {
       };
 
       setTestResults((prev) => [...prev, testResult]);
-      addLog(`❌ Node execution failed: ${testResult.message}`);
-    } finally {
-      // Cleanup listeners
-      unsubProgress();
-      unsubComplete();
-      unsubError();
+      addLog(`❌ File write test failed: ${testResult.message}`);
     }
   };
 
@@ -269,9 +244,11 @@ export default function DebugPage() {
     setTestResults([]);
     addLog("🚀 Starting all tests...");
 
+    // Always run health test - conductor works in both browser and Electron
     await testHealth();
     await new Promise((resolve) => setTimeout(resolve, 500));
 
+    // Always run node execution test (works in browser and Electron)
     await testNodeExecution();
 
     setIsRunningTests(false);
@@ -327,9 +304,9 @@ export default function DebugPage() {
                     Electron
                   </span>
                 )}
-                {environment.rpcAvailable && (
+                {environment.conductorAvailable && (
                   <span className="text-xs px-2 py-1 bg-success/10 text-success rounded-lg">
-                    RPC Ready
+                    Conductor Ready
                   </span>
                 )}
               </h2>
@@ -378,7 +355,7 @@ export default function DebugPage() {
 
                 {environment.apiMethods.length > 0 && (
                   <div className="col-span-2">
-                    <p className="text-secondary mb-2">Available RPC Methods</p>
+                    <p className="text-secondary mb-2">Available API Methods</p>
                     <div className="flex flex-wrap gap-2">
                       {environment.apiMethods.map((method) => (
                         <span
@@ -399,14 +376,15 @@ export default function DebugPage() {
           <div className="bg-surface-02 rounded-2xl p-6 border border-s-01">
             <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
               <Icon name="flask" size={20} className="text-secondary" />
-              RPC Tests
+              Conductor Tests
             </h2>
 
             <div className="flex flex-wrap gap-3 mb-6">
               <Button
                 onClick={runAllTests}
-                disabled={isRunningTests || !environment?.rpcAvailable}
+                disabled={isRunningTests}
                 variant="default"
+                title="Run all available tests (Conductor health and node execution)"
               >
                 <Icon name="play" size={16} className="text-white mr-2" />
                 {isRunningTests ? "Running Tests..." : "Run All Tests"}
@@ -414,19 +392,27 @@ export default function DebugPage() {
 
               <Button
                 onClick={testHealth}
-                disabled={isRunningTests || !environment?.rpcAvailable}
+                disabled={isRunningTests}
                 variant="outline"
+                title="Test conductor health check (works in browser and Electron)"
               >
                 Test Health
+                <span className="ml-2 text-xs opacity-60">
+                  (Browser & Electron)
+                </span>
               </Button>
 
               <Button
                 onClick={testNodeExecution}
                 data-testid="test-node-execution"
-                disabled={isRunningTests || !environment?.rpcAvailable}
+                disabled={isRunningTests}
                 variant="outline"
+                title="Test node execution using Conductor API"
               >
                 Test Node
+                <span className="ml-2 text-xs opacity-60">
+                  (Browser & Electron)
+                </span>
               </Button>
 
               <Button onClick={clearLogs} variant="ghost">
@@ -537,21 +523,18 @@ export default function DebugPage() {
             </div>
           </div>
 
-          {/* Warning for non-Electron environments */}
+          {/* Info for browser environments */}
           {environment && !environment.isElectron && (
-            <div className="bg-warning/10 border border-warning/20 rounded-2xl p-6">
-              <h3 className="text-warning font-semibold mb-2 flex items-center gap-2">
-                <Icon
-                  name="alert-triangle"
-                  size={20}
-                  className="text-warning"
-                />
+            <div className="bg-info/10 border border-info/20 rounded-2xl p-6">
+              <h3 className="text-info font-semibold mb-2 flex items-center gap-2">
+                <Icon name="info" size={20} className="text-info" />
                 Running in Browser Mode
               </h3>
               <p className="text-secondary text-sm">
-                RPC features are not available when running in a browser. To
-                test RPC functionality, run the application through the Electron
-                desktop wrapper.
+                Conductor is running in browser mode. Node execution will show
+                transport unavailable errors, which is expected behavior. To
+                test full execution capabilities, run the application through
+                the Electron desktop wrapper.
               </p>
               <p className="text-secondary text-sm mt-2">
                 Use{" "}

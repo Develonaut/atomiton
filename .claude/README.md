@@ -2,12 +2,15 @@
 
 ## Current Documentation
 
-This folder contains the authoritative documentation for the Atomiton architecture.
+This folder contains the authoritative documentation for the Atomiton
+architecture.
 
 ### Core Documents
 
 #### 📋 [ARCHITECTURE.md](./ARCHITECTURE.md)
+
 The comprehensive architecture guide covering:
+
 - Core architecture principles
 - Domain ownership and boundaries
 - Package responsibilities
@@ -18,7 +21,9 @@ The comprehensive architecture guide covering:
 - Versioning strategy
 
 #### 🚀 [POST_MIGRATION_CLEANUP_STRATEGY.md](./POST_MIGRATION_CLEANUP_STRATEGY.md)
+
 Step-by-step migration guide for Claude Code agents:
+
 - Ordered steps that must be executed sequentially
 - Specific code prompts for each step
 - Validation commands
@@ -27,18 +32,23 @@ Step-by-step migration guide for Claude Code agents:
 ### Deprecated Documents
 
 The following documents have been consolidated into ARCHITECTURE.md:
+
 - ~~DOMAIN_OWNERSHIP_SUMMARY.md~~ → See "Domain Ownership" in ARCHITECTURE.md
-- ~~DOMAIN_TYPES_INTERACTIONS.md~~ → See "Type Ownership Matrix" in ARCHITECTURE.md
+- ~~DOMAIN_TYPES_INTERACTIONS.md~~ → See "Type Ownership Matrix" in
+  ARCHITECTURE.md
 - ~~FLOW_LIFECYCLE.md~~ → See "Node Lifecycle" in ARCHITECTURE.md
-- ~~FLOWS_VS_NODES_ARCHITECTURE.md~~ → See "Foundation Principle" in ARCHITECTURE.md
+- ~~FLOWS_VS_NODES_ARCHITECTURE.md~~ → See "Foundation Principle" in
+  ARCHITECTURE.md
 - ~~VERSIONING_STRATEGY.md~~ → See "Versioning Strategy" in ARCHITECTURE.md
 
 ### Agent Configuration
 
 #### 📁 [agents/](./agents/)
+
 Individual agent persona definitions and instructions.
 
 #### 📁 [workflow/](./workflow/)
+
 Workflow templates and execution plans for multi-agent tasks.
 
 ---
@@ -58,22 +68,22 @@ Workflow templates and execution plans for multi-agent tasks.
 
 ```typescript
 // Structure types
-import { NodeDefinition, NodePort, NodeEdge } from '@atomiton/nodes';
-import { isComposite, isAtomic, createNode } from '@atomiton/nodes';
+import { NodeDefinition, NodePort, NodeEdge } from "@atomiton/nodes";
+import { isComposite, isAtomic, createNode } from "@atomiton/nodes";
 
 // Execution types
-import { ExecutionContext, ExecutionResult } from '@atomiton/conductor';
-import { createConductor, ConductorTransport } from '@atomiton/conductor';
+import { ExecutionContext, ExecutionResult } from "@atomiton/conductor";
+import { createConductor, ConductorTransport } from "@atomiton/conductor";
 
 // Storage operations
-import { saveFlowFile, loadFlowFile } from '@atomiton/storage';
-import type { FlowFile } from '@atomiton/storage';
+import { saveFlowFile, loadFlowFile } from "@atomiton/storage";
+import type { FlowFile } from "@atomiton/storage";
 
 // Editor transformations
-import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
+import { nodeToReactFlow, reactFlowToNode } from "@atomiton/editor";
 
 // RPC (only in transport implementations)
-import type { RPCRequest, RPCResponse } from '@atomiton/rpc';
+import type { RPCRequest, RPCResponse } from "@atomiton/rpc";
 ```
 
 ### Common Commands
@@ -98,10 +108,13 @@ pnpm tsc --noEmit              # Type check without emitting
 
 When implementing changes, refer to:
 
-1. **[POST_MIGRATION_CLEANUP_STRATEGY.md](./POST_MIGRATION_CLEANUP_STRATEGY.md)** - For step-by-step migration
-2. **[ARCHITECTURE.md](./ARCHITECTURE.md)** - For domain boundaries and type ownership
+1. **[POST_MIGRATION_CLEANUP_STRATEGY.md](./POST_MIGRATION_CLEANUP_STRATEGY.md)** -
+   For step-by-step migration
+2. **[ARCHITECTURE.md](./ARCHITECTURE.md)** - For domain boundaries and type
+   ownership
 
 Remember:
+
 - Execute steps IN ORDER
 - Validate after each step
 - Keep domains separate

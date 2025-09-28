@@ -6,8 +6,4 @@ export function setupIPC(mainWindow: BrowserWindow) {
 }
 
 // Export pure transport types
-export type {
-  RPCRequest,
-  RPCResponse,
-  RPCError,
-} from "#shared/types";
+export type { RPCRequest, RPCResponse, RPCError } from "#shared/types";

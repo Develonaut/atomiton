@@ -21,20 +21,29 @@ test.describe("Electron Debug Page (Shared)", () => {
     // Check for IPC availability through page evaluation
     const ipcInfo = await sharedElectronPage.evaluate(() => {
       return {
-        hasElectron: !!(window as any).electron,
-        hasAtomitonIPC: !!(window as any).atomitonIPC,
-        ipcMethods: (window as any).atomitonIPC
-          ? Object.keys((window as any).atomitonIPC).filter(
-              (key) => typeof (window as any).atomitonIPC[key] === "function",
+        hasAtomitonRPC: !!(window as any).atomitonRPC,
+        hasNode: !!(window as any).atomitonRPC?.node,
+        hasSystem: !!(window as any).atomitonRPC?.system,
+        nodeMethods: (window as any).atomitonRPC?.node
+          ? Object.keys((window as any).atomitonRPC.node).filter(
+              (key) =>
+                typeof (window as any).atomitonRPC.node[key] === "function",
+            )
+          : [],
+        systemMethods: (window as any).atomitonRPC?.system
+          ? Object.keys((window as any).atomitonRPC.system).filter(
+              (key) =>
+                typeof (window as any).atomitonRPC.system[key] === "function",
             )
           : [],
       };
     });
 
-    expect(ipcInfo.hasElectron).toBe(true);
-    expect(ipcInfo.hasAtomitonIPC).toBe(true);
-    expect(ipcInfo.ipcMethods).toContain("ping");
-    expect(ipcInfo.ipcMethods).toContain("executeNode");
+    expect(ipcInfo.hasAtomitonRPC).toBe(true);
+    expect(ipcInfo.hasNode).toBe(true);
+    expect(ipcInfo.hasSystem).toBe(true);
+    expect(ipcInfo.nodeMethods).toContain("run");
+    expect(ipcInfo.systemMethods).toContain("health");
     // IPC availability and methods detected correctly
   });
 
@@ -42,14 +51,15 @@ test.describe("Electron Debug Page (Shared)", () => {
     // Testing IPC functions through debug page...
 
     // Test IPC functions directly through page evaluation
-    // Testing IPC ping...
-    const pingResult = await sharedElectronPage.evaluate(async () => {
-      if ((window as any).atomitonIPC?.ping) {
-        return await (window as any).atomitonIPC.ping();
+    // Testing IPC health...
+    const healthResult = await sharedElectronPage.evaluate(async () => {
+      if ((window as any).atomitonRPC?.system?.health) {
+        return await (window as any).atomitonRPC.system.health();
       }
       return null;
     });
-    expect(pingResult).toBe("pong");
+    expect(healthResult).toBeTruthy();
+    expect(healthResult.status).toBe("ok");
     // Ping works
   });
 

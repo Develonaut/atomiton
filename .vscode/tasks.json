@@ -45,11 +45,11 @@
       "dependsOn": []
     },
     {
-      "label": "🧪 Desktop Debug Page",
-      "detail": "Start Electron with desktop debug/test page",
+      "label": "🧪 E2E Tests",
+      "detail": "Run end-to-end tests with Playwright",
       "type": "shell",
       "command": "pnpm",
-      "args": ["--filter", "@atomiton/desktop", "run", "dev:desktop"],
+      "args": ["test:e2e"],
       "group": "build",
       "problemMatcher": ["$tsc"],
       "presentation": {

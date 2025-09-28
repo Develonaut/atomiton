@@ -1,5 +1,5 @@
-import { createConductor } from "@atomiton/conductor";
-import type { NodeDefinition } from "@atomiton/rpc/shared";
+import { createConductor } from "@atomiton/conductor/desktop";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { EventEmitter } from "events";
 
 const conductor = createConductor();

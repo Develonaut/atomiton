@@ -4,7 +4,7 @@ import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
 import { Canvas, Editor } from "@atomiton/editor";
-import { createNodeDefinition } from "@atomiton/nodes";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { Box } from "@atomiton/ui";
 
 function LayoutEditor() {

@@ -1,5 +1,5 @@
 import { initializeServices } from "@/main/services";
-import { createRPCBridge } from "@/main/trpc-bridge";
+import { createConductor, registerHandlers } from "@atomiton/conductor/desktop";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import { join } from "path";
@@ -137,6 +137,13 @@ app.whenReady().then(async () => {
   initializeServices();
   console.log("Application services initialized");
 
+  // Initialize Conductor handlers BEFORE creating window
+  console.log("Initializing Conductor handlers");
+  const conductor = createConductor();
+  const handlers = conductor.createMainHandlers();
+  registerHandlers(ipcMain, handlers);
+  console.log("Conductor handlers initialized");
+
   // Set a proper CSP for development that allows DevTools but maintains security
   if (is.dev) {
     session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -182,18 +189,6 @@ app.whenReady().then(async () => {
   });
 
   createWindow();
-
-  // Set up IPC handlers after window creation
-  if (mainWindow) {
-    // Set up legacy IPC for backward compatibility
-    const { setupIPC } = await import("@atomiton/rpc/main");
-    setupIPC(mainWindow);
-    console.log("Legacy IPC handlers initialized");
-
-    // Set up native RPC bridge
-    createRPCBridge(mainWindow);
-    console.log("Native RPC bridge initialized");
-  }
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

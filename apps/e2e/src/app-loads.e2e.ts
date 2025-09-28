@@ -14,13 +14,18 @@ test.describe("App Loading", () => {
     const title = await sharedElectronPage.title();
     expect(title).toBeTruthy();
 
-    // Verify Electron IPC bridge is available
+    // Verify atomitonRPC API is available
     const hasIPC = await sharedElectronPage.evaluate(() => {
-      const hasElectron = typeof (window as any).electron !== "undefined";
-      const hasIPC =
-        hasElectron &&
-        typeof (window as any).electron.ipcRenderer !== "undefined";
-      return hasElectron && hasIPC;
+      const hasAtomitonRPC = typeof (window as any).atomitonRPC !== "undefined";
+      const hasNodeAPI =
+        hasAtomitonRPC &&
+        typeof (window as any).atomitonRPC.node !== "undefined" &&
+        typeof (window as any).atomitonRPC.node.run === "function";
+      const hasSystemAPI =
+        hasAtomitonRPC &&
+        typeof (window as any).atomitonRPC.system !== "undefined" &&
+        typeof (window as any).atomitonRPC.system.health === "function";
+      return hasAtomitonRPC && hasNodeAPI && hasSystemAPI;
     });
     expect(hasIPC).toBe(true);
   });

@@ -1,4 +1,5 @@
 export { delay } from "#delay";
+export { formatDuration } from "#formatDuration";
 export {
   generateEdgeId,
   generateExecutionId,
@@ -9,3 +10,4 @@ export {
 } from "#generateId";
 
 export * from "#changeCase";
+export * from "#environment";

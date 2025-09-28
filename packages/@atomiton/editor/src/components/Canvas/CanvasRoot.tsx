@@ -13,13 +13,12 @@ const CanvasStyled = styled("div", {
   name: "Canvas",
 })("atomiton-canvas relative w-full h-full overflow-hidden bg-background");
 
-type CanvasRootProps = Omit<ReactFlowProps, "nodes" | "edges" | "defaultNodes" | "defaultEdges">;
+type CanvasRootProps = Omit<
+  ReactFlowProps,
+  "nodes" | "edges" | "defaultNodes" | "defaultEdges"
+>;
 
-export function CanvasRoot({
-  children,
-  className,
-  ...other
-}: CanvasRootProps) {
+export function CanvasRoot({ children, className, ...other }: CanvasRootProps) {
   return (
     <CanvasStyled className={className}>
       <ReactFlow
