@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { initializeServices } from "@/main/services";
-import { initializeStorage } from "@/main/services/storage";
+import { initializeServices } from "#main/services";
+import { initializeStorage } from "#main/services/storage";
 import type { IStorageEngine } from "@atomiton/storage";
 
 // Mock the individual service modules
-vi.mock("@/main/services/storage", () => ({
+vi.mock("#main/services/storage", () => ({
   initializeStorage: vi.fn(),
 }));
 

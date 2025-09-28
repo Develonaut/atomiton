@@ -1,4 +1,4 @@
-import { initializeStorage } from "@/main/services/storage";
+import { initializeStorage } from "#main/services/storage";
 
 export function initializeServices(): {
   storage: ReturnType<typeof initializeStorage>;

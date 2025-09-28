@@ -1,4 +1,0 @@
-{
-  "extends": "@atomiton/typescript-config/app.json",
-  "include": ["src/renderer/**/*"]
-}

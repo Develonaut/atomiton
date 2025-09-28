@@ -1,4 +1,4 @@
-import { initializeServices } from "@/main/services";
+import { initializeServices } from "#main/services";
 import { createConductor, registerHandlers } from "@atomiton/conductor/desktop";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, ipcMain, session, shell } from "electron";

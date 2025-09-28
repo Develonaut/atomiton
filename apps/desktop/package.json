@@ -10,7 +10,7 @@
     "preview": "electron-vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck": "tsc --noEmit --composite false",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:integration": "vitest run src/integration",
@@ -23,6 +23,9 @@
     "@atomiton/rpc": "workspace:^",
     "@atomiton/storage": "workspace:^",
     "dotenv": "^17.2.2"
+  },
+  "imports": {
+    "#*": "./src/*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:^",

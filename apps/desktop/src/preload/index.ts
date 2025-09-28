@@ -1,4 +1,4 @@
-import "@/preload/preload.d";
+import "#preload/preload.d";
 import { contextBridge, ipcRenderer } from "electron";
 
 console.log("[PRELOAD] Starting conductor preload script");

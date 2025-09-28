@@ -1,8 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { initializeServices } from "@/main/services";
-import { initializeStorage } from "@/main/services/storage";
-import { initializeConductor } from "@/main/services/conductor";
-import type { IStorageEngine } from "@atomiton/storage";
+import { initializeServices } from "#main/services";
+import { initializeStorage } from "#main/services/storage";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Integration tests for error handling - test real failure scenarios
 // These test what happens when things actually go wrong
@@ -19,7 +17,7 @@ describe("Services Error Handling Integration", () => {
 
     // Spy on process.exit to verify app termination
     originalProcessExit = process.exit;
-    process.exit = vi.fn() as typeof process.exit;
+    process.exit = vi.fn() as unknown as typeof process.exit;
   });
 
   afterEach(() => {
@@ -37,26 +35,6 @@ describe("Services Error Handling Integration", () => {
       const result = initializeStorage();
 
       // Assert - Storage should be created (in real scenarios, errors would be caught)
-      expect(result).toBeDefined();
-    });
-  });
-
-  describe("Given conductor initialization failures", () => {
-    it("When conductor is initialized with valid storage, Then should create successfully", () => {
-      // Arrange - Test integration with real dependencies
-      const mockStorage: IStorageEngine = {
-        save: vi.fn(),
-        load: vi.fn(),
-        list: vi.fn(),
-        delete: vi.fn(),
-        exists: vi.fn(),
-        getInfo: vi.fn(),
-      };
-
-      // Act
-      const result = initializeConductor(mockStorage as IStorageEngine);
-
-      // Assert - Should create conductor successfully
       expect(result).toBeDefined();
     });
   });
@@ -104,7 +82,6 @@ describe("Services Error Handling Integration", () => {
       // Assert
       expect(services).toBeDefined();
       expect(services.storage).toBeDefined();
-      expect(services.conductor).toBeDefined();
     });
   });
 });

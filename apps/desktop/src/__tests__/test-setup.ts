@@ -44,4 +44,4 @@ Object.defineProperty(process, "type", {
 });
 
 // Mock process.exit to prevent tests from actually exiting
-global.process.exit = vi.fn() as typeof process.exit;
+global.process.exit = vi.fn() as unknown as typeof process.exit;

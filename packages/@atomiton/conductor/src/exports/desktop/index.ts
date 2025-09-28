@@ -24,7 +24,10 @@ export * from "#types";
  * Desktop conductor with IPC setup methods
  */
 export type DesktopConductor = {
-  createMainHandlers(): Record<string, (...args: unknown[]) => unknown>;
+  createMainHandlers(): Record<
+    string,
+    (...args: unknown[]) => Promise<unknown>
+  >;
 } & ReturnType<typeof createBaseConductor>;
 
 /**
@@ -55,12 +58,16 @@ export function createConductor(
     /**
      * Creates IPC handlers for the main process
      */
-    createMainHandlers() {
+    createMainHandlers(): Record<
+      string,
+      (...args: unknown[]) => Promise<unknown>
+    > {
       return {
-        [CONDUCTOR_CHANNELS.NODE_RUN]: async (
-          event: IpcMainInvokeEvent,
-          payload: NodeRunPayload,
-        ) => {
+        [CONDUCTOR_CHANNELS.NODE_RUN]: async (...args: unknown[]) => {
+          const [_event, payload] = args as [
+            IpcMainInvokeEvent,
+            NodeRunPayload,
+          ];
           const startTime = Date.now();
           const { node, context } = payload;
 
@@ -110,7 +117,7 @@ export function createConductor(
           }
         },
 
-        [CONDUCTOR_CHANNELS.SYSTEM_HEALTH]: async () => {
+        [CONDUCTOR_CHANNELS.SYSTEM_HEALTH]: async (..._args: unknown[]) => {
           logIPC("HANDLER:SYSTEM", "Health check requested");
 
           try {

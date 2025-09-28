@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { app } from "electron";
+import { initializeStorage } from "#main/services/storage";
 import {
-  createStorage,
   createFileSystemEngine,
+  createStorage,
   type IStorageEngine,
 } from "@atomiton/storage/desktop";
-import { initializeStorage } from "@/main/services/storage";
+import { app } from "electron";
 import path from "path";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the storage factory
 vi.mock("@atomiton/storage/desktop", () => ({

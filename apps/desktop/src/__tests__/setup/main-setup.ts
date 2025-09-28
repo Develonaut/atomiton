@@ -32,7 +32,7 @@ vi.mock("electron", () => ({
 
 // Mock process.exit to prevent tests from actually exiting
 const originalExit = process.exit;
-process.exit = vi.fn() as typeof process.exit;
+process.exit = vi.fn() as unknown as typeof process.exit;
 
 // Cleanup after tests
 afterEach(() => {

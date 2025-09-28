@@ -37,20 +37,24 @@ export type HealthCheckResponse = {
 /**
  * Logging helper for consistent IPC logging
  */
-export function logIPC(context: string, message: string, data?: unknown) {
+export function logIPC(
+  context: string,
+  message: string,
+  data?: Record<string, unknown>,
+) {
   const timestamp = new Date().toISOString();
-  console.log(`[${context}] ${message}:`, { ...data, timestamp });
+  console.log(`[${context}] ${message}:`, { ...(data || {}), timestamp });
 }
 
 export function logIPCError(
   context: string,
   message: string,
   error: unknown,
-  data?: unknown,
+  data?: Record<string, unknown>,
 ) {
   const timestamp = new Date().toISOString();
   console.error(`[${context}] ${message}:`, {
-    ...data,
+    ...(data || {}),
     error: error instanceof Error ? error.message : String(error),
     timestamp,
   });

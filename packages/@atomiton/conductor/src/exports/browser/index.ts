@@ -57,8 +57,8 @@ function createAutoTransport(): ConductorTransport | undefined {
     typeof window !== "undefined" ? window : {}
   ) as Window & {
     atomitonRPC?: {
-      node?: { run?: (...args: unknown[]) => unknown };
-      system?: { health?: (...args: unknown[]) => unknown };
+      node?: { run?: (payload: unknown) => Promise<ExecutionResult> };
+      system?: { health?: () => Promise<HealthResult> };
     };
   };
 
@@ -68,7 +68,7 @@ function createAutoTransport(): ConductorTransport | undefined {
       "[CONDUCTOR:BROWSER] atomitonRPC transport detected, using Electron IPC",
     );
     return {
-      async execute(node, context) {
+      async execute(node, context): Promise<ExecutionResult> {
         console.log("[CONDUCTOR:TRANSPORT] Executing node via atomitonRPC:", {
           nodeId: node.id,
           nodeType: node.type,
@@ -80,7 +80,12 @@ function createAutoTransport(): ConductorTransport | undefined {
 
         try {
           const startTime = Date.now();
-          const result = await windowWithRPC.atomitonRPC!.node!.run({
+          const rpcFunction = windowWithRPC.atomitonRPC?.node?.run;
+          if (!rpcFunction) {
+            throw new Error("atomitonRPC.node.run is not available");
+          }
+
+          const result = await rpcFunction({
             node,
             context,
           });
@@ -104,10 +109,15 @@ function createAutoTransport(): ConductorTransport | undefined {
           throw error;
         }
       },
-      async health() {
+      async health(): Promise<HealthResult> {
         console.log("[CONDUCTOR:TRANSPORT] Health check via atomitonRPC");
         try {
-          const result = await windowWithRPC.atomitonRPC!.system!.health();
+          const healthFunction = windowWithRPC.atomitonRPC?.system?.health;
+          if (!healthFunction) {
+            throw new Error("atomitonRPC.system.health is not available");
+          }
+
+          const result = await healthFunction();
           console.log("[CONDUCTOR:TRANSPORT] Health check completed:", {
             status: result.status,
             timestamp: new Date().toISOString(),

@@ -8,11 +8,6 @@ config({ path: path.resolve(__dirname, "../../.env") });
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-      },
-    },
     define: {
       "process.env.ATOMITON_LOG_PATH": JSON.stringify(
         process.env.ATOMITON_LOG_PATH,
@@ -25,11 +20,6 @@ export default defineConfig({
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "./src"),
-      },
-    },
     build: {
       rollupOptions: {
         output: {
