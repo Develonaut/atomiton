@@ -43,8 +43,5 @@ export { isYamlValue } from "#value.js";
 // Version
 export { getVersion } from "#version.js";
 
-// Flow-specific exports
-export { parseFlow, toYaml as flowToYaml, validateFlowYaml } from "#flow.js";
-
 // Type exports
 export * from "#types.js";
