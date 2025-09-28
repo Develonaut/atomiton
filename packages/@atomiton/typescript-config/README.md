@@ -11,6 +11,7 @@ ai_context:
   complexity: "simple"
   primary_language: "typescript"
 ---
+
 # @atomiton/typescript-config
 
 Shared TypeScript configuration for the Atomiton monorepo.

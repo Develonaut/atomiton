@@ -10,13 +10,10 @@ and this project adheres to
 ## [Unreleased]
 
 ### Added
+
 - Initial package.json setup with proper metadata
 - Private workspace package configuration
 - MIT license and publishing configuration
-
-
-
-
 
 - **Package Bootstrap** - Basic package structure and configuration
 - **Workspace Integration** - Proper integration with monorepo workspace setup

@@ -1,6 +1,7 @@
 ---
 title: "@atomiton/conductor"
-description: "Central execution engine for atomic and composite nodes in the Atomiton"
+description:
+  "Central execution engine for atomic and composite nodes in the Atomiton"
 stage: "alpha"
 version: "0.1.0"
 last_updated: "2025-09-28"
@@ -11,6 +12,7 @@ ai_context:
   complexity: "complex"
   primary_language: "typescript"
 ---
+
 # @atomiton/conductor
 
 Central execution engine for atomic and composite nodes in the Atomiton

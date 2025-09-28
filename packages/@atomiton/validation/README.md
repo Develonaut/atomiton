@@ -1,16 +1,17 @@
 ---
-title: "@atomiton/validation"
-description: "Centralized Zod exports and common validators for the Atomiton platform."
-stage: "alpha"
-version: "0.1.0"
-last_updated: "2025-09-28"
+title: '@atomiton/validation'
+description: 'Centralized Zod exports and common validators for the Atomiton platform.'
+stage: 'alpha'
+version: '0.1.0'
+last_updated: '2025-09-28'
 dependencies: []
 tags: []
 ai_context:
-  category: "utility"
-  complexity: "moderate"
-  primary_language: "typescript"
+  category: 'utility'
+  complexity: 'moderate'
+  primary_language: 'typescript'
 ---
+
 # @atomiton/validation
 
 Centralized Zod exports and common validators for the Atomiton platform.

@@ -161,7 +161,7 @@ export function defineIntegrationTestConfig(
     mergeConfig(
       {
         test: {
-          include: ["src/**/*.int.test.{ts,tsx,js,jsx}"],
+          include: ["src/integration/**/*.test.{ts,tsx,js,jsx}"],
           exclude: ["**/node_modules/**", "**/dist/**", "**/build/**"],
           testTimeout: 30000,
           hookTimeout: 30000,

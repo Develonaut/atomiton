@@ -11,6 +11,7 @@ ai_context:
   complexity: "simple"
   primary_language: "javascript"
 ---
+
 # @atomiton/eslint-config
 
 Shared ESLint configuration for the Atomiton monorepo.

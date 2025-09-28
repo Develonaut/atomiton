@@ -11,6 +11,7 @@ ai_context:
   complexity: "moderate"
   primary_language: "typescript"
 ---
+
 # E2E Tests
 
 End-to-end tests for the Atomiton application using Playwright.

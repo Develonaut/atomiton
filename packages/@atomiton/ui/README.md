@@ -1,6 +1,7 @@
 ---
 title: "@atomiton/ui"
-description: "A comprehensive UI component library and design system for the Atomiton"
+description:
+  "A comprehensive UI component library and design system for the Atomiton"
 stage: "alpha"
 version: "0.1.0"
 last_updated: "2025-09-28"
@@ -11,6 +12,7 @@ ai_context:
   complexity: "complex"
   primary_language: "typescript"
 ---
+
 # Atomiton UI Components
 
 A comprehensive UI component library and design system for the Atomiton

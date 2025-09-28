@@ -1,6 +1,7 @@
 ---
 title: "@atomiton/desktop"
-description: "Electron wrapper for the Atomiton Flow automation platform, providing native"
+description:
+  "Electron wrapper for the Atomiton Flow automation platform, providing native"
 stage: "alpha"
 version: "0.2.0"
 last_updated: "2025-09-28"
@@ -11,6 +12,7 @@ ai_context:
   complexity: "complex"
   primary_language: "typescript"
 ---
+
 # Atomiton Desktop
 
 Electron wrapper for the Atomiton Flow automation platform, providing native

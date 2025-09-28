@@ -11,6 +11,7 @@ ai_context:
   complexity: "simple"
   primary_language: "typescript"
 ---
+
 # @atomiton/vite-config
 
 Shared Vite configuration presets for the Atomiton monorepo. This package provides standardized build configurations that reduce duplication and ensure consistency across all packages.

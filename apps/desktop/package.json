@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit --composite false",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:integration": "vitest run src/integration",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "kill": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\"",
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },

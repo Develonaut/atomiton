@@ -64,10 +64,7 @@ export function createConductor(
     > {
       return {
         [CONDUCTOR_CHANNELS.NODE_RUN]: async (...args: unknown[]) => {
-          const [_event, payload] = args as [
-            IpcMainInvokeEvent,
-            NodeRunPayload,
-          ];
+          const [, payload] = args as [IpcMainInvokeEvent, NodeRunPayload];
           const startTime = Date.now();
           const { node, context } = payload;
 

@@ -1,6 +1,7 @@
 ---
 title: "@atomiton/nodes"
-description: "A unified node system for Atomiton with strict browser/Node.js separation."
+description:
+  "A unified node system for Atomiton with strict browser/Node.js separation."
 stage: "alpha"
 version: "0.4.0"
 last_updated: "2025-09-28"
@@ -11,6 +12,7 @@ ai_context:
   complexity: "complex"
   primary_language: "typescript"
 ---
+
 # @atomiton/nodes
 
 A unified node system for Atomiton with strict browser/Node.js separation.

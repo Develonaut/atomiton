@@ -63,6 +63,7 @@ export function reactFlowToFlow(
   reactEdges: ReactFlowEdge[],
   baseFlow?: NodeDefinition,
 ): NodeDefinition {
+  const ports = createNodePorts({});
   return createNodeDefinition({
     ...baseFlow,
     id: baseFlow?.id || `flow-${Date.now()}`,
@@ -90,8 +91,8 @@ export function reactFlowToFlow(
           defaults: n.data?.config || {},
           fields: {},
         }),
-        inputPorts: createNodePorts([]),
-        outputPorts: createNodePorts([]),
+        inputPorts: ports.input,
+        outputPorts: ports.output,
       }),
     ),
     edges: reactEdges.map((edge) => ({

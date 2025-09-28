@@ -1,6 +1,7 @@
 ---
 title: "@atomiton/router"
-description: "**Note**: This package has been significantly simplified from its previous"
+description:
+  "**Note**: This package has been significantly simplified from its previous"
 stage: "alpha"
 version: "0.1.0"
 last_updated: "2025-09-28"
@@ -11,6 +12,7 @@ ai_context:
   complexity: "moderate"
   primary_language: "typescript"
 ---
+
 # @atomiton/router
 
 A clean, simplified wrapper around TanStack Router for React applications.

@@ -1,6 +1,7 @@
 ---
 title: "@atomiton/storage"
-description: "Universal storage abstraction for Composites and application data across"
+description:
+  "Universal storage abstraction for Composites and application data across"
 stage: "alpha"
 version: "0.2.0"
 last_updated: "2025-09-28"
@@ -11,6 +12,7 @@ ai_context:
   complexity: "moderate"
   primary_language: "typescript"
 ---
+
 # @atomiton/storage
 
 Universal storage abstraction for Composites and application data across
