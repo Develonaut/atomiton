@@ -8,90 +8,81 @@ This document provides a step-by-step strategy to implement our architectural de
 
 ## Architectural Decisions Recap
 
-1. **Nodes has co-located implementations** - Definition + execution together
-2. **Simple execution interface** - Just params in, result out
-3. **Flow package will be removed** - Flow is just a user concept  
-4. **Conductor orchestrates** - Adds execution context and orchestration
-5. **RPC is pure transport** - No business logic
-6. **Client uses Conductor** - RPC is an implementation detail
-7. **No abstractions** - Just check `node.nodes` array to see if it's a group
+1. **Nodes is the foundation** - Structure AND co-located implementations
+2. **Flow package will be removed** - Flow is just a user concept  
+3. **Conductor owns orchestration** - When and how to execute
+4. **Events (formerly RPC) is pure transport** - Environment-aware message passing
+5. **Client uses Conductor** - Events/transport is an implementation detail
+6. **No abstractions** - Just check `node.nodes` array to see if it's a group
+7. **Keep co-location** - Node definitions and implementations stay together
 
 ---
 
 ## Step 1: Simplify Execution Types in Nodes Package
 
-**Goal**: Keep co-location but simplify the execution interface in @atomiton/nodes.
+**Goal**: Keep co-located node implementations but with simple execution interface.
 
 ### Claude Code Prompt:
 
 ```
 Simplify the execution types in @atomiton/nodes while keeping implementations co-located with definitions.
 
-1. SIMPLIFY the NodeExecutable interface:
+1. CREATE simple execution interface:
    ```typescript
    // /packages/@atomiton/nodes/src/types/executable.ts
-   
-   // Simple interface - just params in, result out
    export interface NodeExecutable {
+     // Simple interface - just params in, result out
      execute(params: any): Promise<any>;
    }
    
-   // Optional: Simple result type if needed
-   export interface NodeResult {
-     success: boolean;
-     data?: any;
+   // Simple result type
+   export interface NodeResult<T = any> {
+     data?: T;
      error?: string;
    }
    ```
 
-2. KEEP node implementations co-located:
+2. ENSURE node implementations follow simple pattern:
    ```typescript
-   // /packages/@atomiton/nodes/src/library/http-request/index.ts
+   // Example: /packages/@atomiton/nodes/src/library/http-request/index.ts
    import type { NodeExecutable } from '../../types/executable';
    
    export const httpRequestDefinition = {
      type: 'httpRequest',
      version: '1.0.0',
-     inputPorts: [
-       { id: 'url', type: 'string', required: true },
-       { id: 'method', type: 'string', required: false }
-     ],
-     outputPorts: [
-       { id: 'data', type: 'any' },
-       { id: 'status', type: 'number' }
-     ]
+     inputPorts: [...],
+     outputPorts: [...],
+     schema: {...}
    };
    
    export const httpRequestExecutable: NodeExecutable = {
      async execute(params) {
+       // Simple implementation - no ExecutionContext needed
        const response = await fetch(params.url, {
-         method: params.method || 'GET'
+         method: params.method || 'GET',
+         headers: params.headers || {},
+         body: params.body
        });
-       
-       return {
-         data: await response.json(),
-         status: response.status
-       };
+       return response.json();
      }
    };
    
-   // Export both together
+   // Co-located registration
    export const httpRequestNode = {
      definition: httpRequestDefinition,
      executable: httpRequestExecutable
    };
    ```
 
-3. MAINTAIN the registry in nodes:
+3. KEEP the registry in nodes package:
    ```typescript
    // /packages/@atomiton/nodes/src/registry/index.ts
    import { httpRequestNode } from '../library/http-request';
    import { transformNode } from '../library/transform';
-   // ... other nodes
    
    export const nodeRegistry = new Map();
    
-   // Register all nodes
+   // Register all node types
    nodeRegistry.set('httpRequest', httpRequestNode);
    nodeRegistry.set('transform', transformNode);
    // etc...
@@ -101,7 +92,7 @@ Simplify the execution types in @atomiton/nodes while keeping implementations co
    }
    ```
 
-4. ENSURE core structural types remain simple:
+4. VERIFY core types are properly defined:
    ```typescript
    // /packages/@atomiton/nodes/src/types/index.ts
    export interface NodeDefinition {
@@ -119,47 +110,36 @@ Simplify the execution types in @atomiton/nodes while keeping implementations co
      edges?: NodeEdge[];
    }
    
-   export interface NodePort {
-     id: string;
-     label?: string;
-     type: string;
-     required?: boolean;
-   }
-   
-   export interface NodeEdge {
-     id: string;
-     source: string;
-     target: string;
-     sourceHandle?: string;
-     targetHandle?: string;
-   }
-   ```
-
-5. VERIFY existing utilities:
-   ```typescript
+   // Keep existing utilities
    export function createNodeDefinition(params: Partial<NodeDefinition>): NodeDefinition
    ```
+
+5. The nodes package now contains:
+   - Simple type definitions
+   - Co-located node implementations (definition + executable)
+   - Registry of all node types
+   - Simple NodeExecutable interface
+   - NO complex ExecutionContext (that's Conductor's job)
 
 After this step, run: pnpm build -F @atomiton/nodes
 ```
 
 ---
 
-## Step 2: Enhance Execution in Conductor
+## Step 2: Update Conductor to Use Simple Node Executables
 
-**Goal**: Conductor imports simple types from nodes and adds orchestration/context.
+**Goal**: Make Conductor orchestrate the simple node executables with rich execution context.
 
 ### Claude Code Prompt:
 
 ```
-Set up @atomiton/conductor to use the simple execution types from nodes and add orchestration.
+Update @atomiton/conductor to wrap simple node executables with rich execution context.
 
-1. IMPORT simple types from nodes and enhance them:
+1. CREATE rich execution types in Conductor:
    ```typescript
    // /packages/@atomiton/conductor/src/types/execution.ts
-   import type { NodeExecutable } from '@atomiton/nodes';
+   import type { NodeResult } from '@atomiton/nodes';
    
-   // Conductor adds richer execution context
    export interface ExecutionContext {
      nodeId: string;
      executionId: string;
@@ -168,7 +148,6 @@ Set up @atomiton/conductor to use the simple execution types from nodes and add 
      parentContext?: ExecutionContext;
    }
    
-   // Enhanced result with more metadata
    export interface ExecutionResult<T = any> {
      success: boolean;
      data?: T;
@@ -189,14 +168,12 @@ Set up @atomiton/conductor to use the simple execution types from nodes and add 
 2. CREATE transport abstraction:
    ```typescript
    // /packages/@atomiton/conductor/src/types/transport.ts
-   import type { NodeDefinition } from '@atomiton/nodes';
-   
    export interface ConductorTransport {
      execute(node: NodeDefinition, context: ExecutionContext): Promise<ExecutionResult>;
    }
    ```
 
-3. IMPLEMENT Conductor using nodes registry:
+3. IMPLEMENT Conductor that wraps simple executables:
    ```typescript
    // /packages/@atomiton/conductor/src/conductor.ts
    import { NodeDefinition, getNodeImplementation } from '@atomiton/nodes';
@@ -218,15 +195,13 @@ Set up @atomiton/conductor to use the simple execution types from nodes and add 
          return this.config.transport.execute(node, ctx);
        }
        
-       return this.executeLocal(node, ctx, startTime);
+       return this.executeLocal(node, ctx);
      }
      
-     private async executeLocal(
-       node: NodeDefinition, 
-       context: ExecutionContext,
-       startTime: number
-     ): Promise<ExecutionResult> {
-       // Get implementation from nodes registry
+     private async executeLocal(node: NodeDefinition, context: ExecutionContext): Promise<ExecutionResult> {
+       const startTime = Date.now();
+       
+       // Get the simple executable from the registry
        const nodeImpl = getNodeImplementation(node.type);
        
        if (!nodeImpl) {
@@ -241,10 +216,10 @@ Set up @atomiton/conductor to use the simple execution types from nodes and add 
        }
        
        try {
-         // Call the simple execute method from nodes
+         // Call the simple execute function
          const result = await nodeImpl.executable.execute(node.parameters);
          
-         // Conductor adds the execution context and metadata
+         // Wrap with rich execution result
          return {
            success: true,
            data: result,
@@ -264,39 +239,6 @@ Set up @atomiton/conductor to use the simple execution types from nodes and add 
          };
        }
      }
-     
-     private async executeGroup(node: NodeDefinition, context: ExecutionContext): Promise<ExecutionResult> {
-       const startTime = Date.now();
-       const sorted = this.topologicalSort(node.nodes || [], node.edges || []);
-       const results = [];
-       const executedNodes = [];
-       
-       for (const childNode of sorted) {
-         const result = await this.execute(childNode, {
-           ...context,
-           parentContext: context
-         });
-         
-         results.push(result);
-         executedNodes.push(...(result.executedNodes || []));
-         
-         if (!result.success) {
-           return {
-             success: false,
-             error: result.error,
-             duration: Date.now() - startTime,
-             executedNodes
-           };
-         }
-       }
-       
-       return {
-         success: true,
-         data: results,
-         duration: Date.now() - startTime,
-         executedNodes
-       };
-     }
    }
    
    export function createConductor(config?: ConductorConfig): Conductor {
@@ -304,14 +246,11 @@ Set up @atomiton/conductor to use the simple execution types from nodes and add 
    }
    ```
 
-4. UPDATE package.json:
-   ```json
-   {
-     "dependencies": {
-       "@atomiton/nodes": "workspace:*"
-     }
-   }
-   ```
+4. The Conductor now:
+   - Uses simple NodeExecutable from nodes package
+   - Adds rich execution context around them
+   - Handles orchestration and error handling
+   - Provides transport abstraction
 
 After this step, run: pnpm build -F @atomiton/conductor
 ```
@@ -350,24 +289,6 @@ Remove the @atomiton/flow package entirely. We don't need its utilities.
      };
      root: NodeDefinition;  // The actual node tree
    }
-   
-   // /packages/@atomiton/storage/src/flow-storage.ts
-   export async function saveFlowFile(
-     node: NodeDefinition, 
-     metadata: FlowMetadata
-   ): Promise<void> {
-     const file: FlowFile = {
-       version: '1.0.0',
-       metadata,
-       root: node
-     };
-     await writeYaml(path, file);
-   }
-   
-   export async function loadFlowFile(path: string): Promise<NodeDefinition> {
-     const file = await readYaml<FlowFile>(path);
-     return file.root;  // Just return the node tree
-   }
    ```
 
 3. UPDATE @atomiton/editor transformations:
@@ -398,32 +319,12 @@ Remove the @atomiton/flow package entirely. We don't need its utilities.
      
      return { nodes: reactNodes, edges: reactEdges };
    }
-   
-   export function reactFlowToNode(
-     reactNodes, 
-     reactEdges, 
-     baseNode?: NodeDefinition
-   ): NodeDefinition {
-     return createNodeDefinition({
-       ...baseNode,
-       type: baseNode?.type || 'group',
-       nodes: reactNodes.map(n => ({
-         id: n.id,
-         type: n.type,
-         position: n.position,
-         parentId: baseNode?.id,
-         parameters: n.data
-       })),
-       edges: reactEdges
-     });
-   }
    ```
 
 4. UPDATE all imports:
    - Search entire codebase for: '@atomiton/flow'
    - Replace with '@atomiton/nodes' for NodeDefinition
-   - Replace with '@atomiton/conductor' for richer execution types
-   - Use createNodeDefinition from @atomiton/nodes
+   - Replace with '@atomiton/conductor' for execution types
 
 5. DELETE the package:
    - rm -rf /packages/@atomiton/flow
@@ -436,31 +337,31 @@ Verify with: pnpm why @atomiton/flow (should fail)
 
 ---
 
-## Step 4: Clean RPC to Pure Transport
+## Step 4: Clean RPC to Pure Transport (Prepare for Rename)
 
-**Goal**: Ensure RPC is only message passing with no business logic.
+**Goal**: Clean RPC to be pure transport, preparing for rename to events.
 
 ### Claude Code Prompt:
 
 ```
 Clean @atomiton/rpc to be pure transport with zero business logic.
 
-1. SIMPLIFY RPC types:
+1. SIMPLIFY transport types:
    ```typescript
    // /packages/@atomiton/rpc/src/types.ts
-   export interface RPCRequest<T = any> {
+   export interface TransportRequest<T = any> {
      id: string;
      method: string;
      params: T;
    }
    
-   export interface RPCResponse<T = any> {
+   export interface TransportResponse<T = any> {
      id: string;
      result?: T;
-     error?: RPCError;
+     error?: TransportError;
    }
    
-   export interface RPCError {
+   export interface TransportError {
      code: number;
      message: string;
      data?: any;
@@ -489,6 +390,16 @@ Clean @atomiton/rpc to be pure transport with zero business logic.
    - No checking if nodes have children
    - Just message passing
 
+4. PREPARE for environment detection (future):
+   ```typescript
+   // /packages/@atomiton/rpc/src/transport.ts
+   export function getTransport() {
+     // For now, always IPC
+     // Future: detect environment and return appropriate transport
+     return ipcTransport;
+   }
+   ```
+
 After this step, run: pnpm build -F @atomiton/rpc
 ```
 
@@ -496,12 +407,12 @@ After this step, run: pnpm build -F @atomiton/rpc
 
 ## Step 5: Implement Conductor-based Client Architecture
 
-**Goal**: Client uses Conductor API, RPC becomes an implementation detail.
+**Goal**: Client uses Conductor API, transport is an implementation detail.
 
 ### Claude Code Prompt:
 
 ```
-Make the client use Conductor's simple execute API instead of RPC directly.
+Make the client use Conductor's simple execute API with transport as a detail.
 
 1. CREATE Conductor wrapper in client:
    ```typescript
@@ -509,12 +420,13 @@ Make the client use Conductor's simple execute API instead of RPC directly.
    import { createConductor, type ConductorTransport } from '@atomiton/conductor';
    import type { NodeDefinition } from '@atomiton/nodes';
    
-   // Create RPC transport only if in Electron
-   const createRPCTransport = (): ConductorTransport | undefined => {
+   // Create transport based on environment (for now, just IPC)
+   const createTransport = (): ConductorTransport | undefined => {
      if (!window.electron) return undefined;
      
      return {
        async execute(node, context) {
+         // This will change when we rename to events
          const response = await window.electron.ipc.invoke('execute-node', {
            node,
            context
@@ -526,7 +438,7 @@ Make the client use Conductor's simple execute API instead of RPC directly.
    
    // Export conductor instance
    export const conductor = createConductor({
-     transport: createRPCTransport()
+     transport: createTransport()
    });
    
    // Simple API - just execute
@@ -551,28 +463,186 @@ Make the client use Conductor's simple execute API instead of RPC directly.
    - Add: import { execute } from '#lib/conductor'
    - Replace: await ipc.executeNode(...) with await execute(node)
 
-4. The API is now just: execute(node) - that's it!
-
 After this step, run: pnpm dev and test execution
 ```
 
 ---
 
-## Step 6: Final Validation and Cleanup
+## Step 6: Rename RPC to Events Package
 
-**Goal**: Ensure the architecture is clean and properly layered.
+**Goal**: Rename @atomiton/rpc to @atomiton/events for flexible, environment-aware transport.
 
 ### Claude Code Prompt:
 
 ```
-Validate the final architecture and clean up any remaining issues.
+Rename @atomiton/rpc to @atomiton/events and make it environment-aware transport.
+
+1. RENAME the package:
+   ```bash
+   mv packages/@atomiton/rpc packages/@atomiton/events
+   ```
+
+2. UPDATE package.json:
+   ```json
+   // /packages/@atomiton/events/package.json
+   {
+     "name": "@atomiton/events",
+     "description": "Environment-aware event transport layer"
+   }
+   ```
+
+3. CREATE environment detection:
+   ```typescript
+   // /packages/@atomiton/events/src/environment.ts
+   export enum TransportType {
+     IPC = 'ipc',
+     WEBSOCKET = 'websocket',
+     HTTP = 'http'
+   }
+   
+   export function detectEnvironment(): TransportType {
+     // For now, always IPC
+     // Future logic:
+     // - If Electron: return TransportType.IPC
+     // - If WebSocket available: return TransportType.WEBSOCKET
+     // - Fallback: return TransportType.HTTP
+     return TransportType.IPC;
+   }
+   ```
+
+4. CREATE generic event system:
+   ```typescript
+   // /packages/@atomiton/events/src/events.ts
+   export interface EventMessage<T = any> {
+     id: string;
+     type: string;  // 'execute', 'cancel', 'status', etc.
+     payload: T;
+     timestamp: Date;
+   }
+   
+   export interface EventResponse<T = any> {
+     id: string;
+     success: boolean;
+     data?: T;
+     error?: EventError;
+   }
+   
+   export interface EventError {
+     code: string;
+     message: string;
+     details?: any;
+   }
+   
+   // Generic event emitter interface
+   export interface EventTransport {
+     send<T, R>(message: EventMessage<T>): Promise<EventResponse<R>>;
+     on<T>(type: string, handler: (payload: T) => any): void;
+     off(type: string, handler: Function): void;
+   }
+   ```
+
+5. IMPLEMENT IPC transport (current):
+   ```typescript
+   // /packages/@atomiton/events/src/transports/ipc.ts
+   import { ipcMain, ipcRenderer } from 'electron';
+   import type { EventTransport, EventMessage, EventResponse } from '../events';
+   
+   export class IPCTransport implements EventTransport {
+     async send<T, R>(message: EventMessage<T>): Promise<EventResponse<R>> {
+       if (process.type === 'renderer') {
+         return ipcRenderer.invoke('event', message);
+       }
+       // Main process implementation
+     }
+     
+     on<T>(type: string, handler: (payload: T) => any): void {
+       // Register handler
+     }
+     
+     off(type: string, handler: Function): void {
+       // Unregister handler
+     }
+   }
+   ```
+
+6. CREATE transport factory:
+   ```typescript
+   // /packages/@atomiton/events/src/index.ts
+   import { detectEnvironment, TransportType } from './environment';
+   import { IPCTransport } from './transports/ipc';
+   // Future: import { WebSocketTransport } from './transports/websocket';
+   // Future: import { HTTPTransport } from './transports/http';
+   
+   export function createEventTransport(): EventTransport {
+     const environment = detectEnvironment();
+     
+     switch (environment) {
+       case TransportType.IPC:
+         return new IPCTransport();
+       // Future cases:
+       // case TransportType.WEBSOCKET:
+       //   return new WebSocketTransport();
+       // case TransportType.HTTP:
+       //   return new HTTPTransport();
+       default:
+         return new IPCTransport();
+     }
+   }
+   
+   // Export for backward compatibility during migration
+   export { createEventTransport as createTransport };
+   ```
+
+7. UPDATE all imports:
+   - Find: `from '@atomiton/rpc'`
+   - Replace: `from '@atomiton/events'`
+   - Update function names to be more generic (event-based rather than RPC-specific)
+
+8. UPDATE client conductor wrapper:
+   ```typescript
+   // /apps/client/src/lib/conductor/index.ts
+   import { createEventTransport } from '@atomiton/events';
+   
+   const transport = createEventTransport();
+   
+   const createTransport = (): ConductorTransport | undefined => {
+     if (!transport) return undefined;
+     
+     return {
+       async execute(node, context) {
+         const response = await transport.send({
+           id: generateId(),
+           type: 'execute',
+           payload: { node, context },
+           timestamp: new Date()
+         });
+         return response.data;
+       }
+     };
+   };
+   ```
+
+After this step, run: pnpm install && pnpm build
+The package is now @atomiton/events with flexible transport!
+```
+
+---
+
+## Step 7: Final Validation and Cleanup
+
+**Goal**: Ensure the architecture is clean and properly layered with the new events system.
+
+### Claude Code Prompt:
+
+```
+Validate the final architecture with the renamed events package.
 
 1. VERIFY package dependencies:
-   - @atomiton/nodes: NO @atomiton dependencies (foundation with co-located implementations)
+   - @atomiton/nodes: NO @atomiton dependencies (foundation)
    - @atomiton/conductor: ONLY @atomiton/nodes
    - @atomiton/storage: ONLY @atomiton/nodes
    - @atomiton/editor: ONLY @atomiton/nodes
-   - @atomiton/rpc: @atomiton/nodes and @atomiton/conductor (types only)
+   - @atomiton/events: @atomiton/nodes and @atomiton/conductor (types only)
 
 2. CHECK for circular dependencies:
    pnpm dlx madge --circular packages/
@@ -580,21 +650,25 @@ Validate the final architecture and clean up any remaining issues.
 3. VERIFY Flow package is gone:
    pnpm why @atomiton/flow  # Should fail
 
-4. VERIFY co-location is maintained:
-   - Each node type in @atomiton/nodes has definition + implementation together
-   - Simple NodeExecutable interface (params in, result out)
-   - Conductor adds execution context and orchestration
+4. VERIFY RPC package is renamed:
+   pnpm why @atomiton/rpc   # Should fail
+   pnpm why @atomiton/events # Should succeed
 
 5. TEST the application:
    - Create a node tree in editor
    - Execute with: await execute(node)
+   - Verify events are being transmitted correctly
    - Save as .flow.yaml
    - Load and execute again
 
 6. The architecture is now:
-   - @atomiton/nodes: Co-located definitions + implementations with simple interface
-   - @atomiton/conductor: Orchestration and execution context
-   - Simple API: createNodeDefinition() and execute()
+   - Nodes: Structure + co-located implementations
+   - Conductor: Orchestration with rich execution context
+   - Events: Environment-aware transport layer
+   - Storage: User-facing "flow" concept
+   - Editor: Visual transformation
+
+That's it - clean, simple, and future-proof!
 ```
 
 ---
@@ -604,62 +678,42 @@ Validate the final architecture and clean up any remaining issues.
 After completing all steps:
 
 ✅ @atomiton/flow package doesn't exist
-✅ Node definitions and implementations are co-located in @atomiton/nodes
-✅ Simple NodeExecutable interface (params → result)
-✅ Conductor adds execution context and orchestration
-✅ Using existing createNodeDefinition from nodes package
-✅ Simple execute(node) API from conductor
-✅ Client never imports RPC directly
+✅ @atomiton/rpc renamed to @atomiton/events
+✅ No duplicate type definitions  
+✅ Node implementations co-located with definitions
+✅ Simple NodeExecutable interface in nodes
+✅ Rich ExecutionContext in conductor
+✅ Environment-aware event transport
+✅ Client uses simple execute(node) API
 ✅ "Flow" only appears in user-facing contexts
 
-## Architecture Summary
+## The Final Architecture
 
-### Package Responsibilities
-
-```
-@atomiton/nodes (Foundation)
-├── NodeDefinition type
-├── Simple NodeExecutable interface
-├── Co-located node implementations
-├── Registry of all nodes
-└── createNodeDefinition utility
-
-@atomiton/conductor (Orchestration)
-├── Imports simple types from nodes
-├── Adds ExecutionContext
-├── Adds ExecutionResult with metadata
-├── Handles orchestration (groups, sequencing)
-└── Transport abstraction
-
-@atomiton/rpc (Transport)
-└── Pure message passing
-
-@atomiton/storage (Persistence)
-└── Flow files (user concept)
-
-@atomiton/editor (Visualization)
-└── Visual transformations
-```
-
-### The Simple API
-
+### Creating Nodes
 ```typescript
-// Create nodes
 import { createNodeDefinition } from '@atomiton/nodes';
-const node = createNodeDefinition({ type: 'group', nodes: [...] });
 
-// Execute nodes
-import { execute } from '#lib/conductor';
-const result = await execute(node);
+const node = createNodeDefinition({
+  type: 'group',
+  nodes: [...]
+});
 ```
 
-## Common Pitfalls to Avoid
+### Executing Nodes
+```typescript
+import { execute } from '#lib/conductor';
 
-❌ **DON'T** split node definitions from implementations
-❌ **DON'T** create complex execution interfaces
-❌ **DON'T** move Flow utilities - just delete them
-❌ **DON'T** put execution context in nodes package
-❌ **DON'T** skip steps - the order matters!
+const result = await execute(node);
+// Transport (IPC, WebSocket, HTTP) is handled automatically!
+```
+
+## Benefits of This Approach
+
+1. **Co-location preserved** - Node definitions and implementations stay together
+2. **Simple interfaces** - NodeExecutable is just `(params) => result`
+3. **Rich orchestration** - Conductor adds execution context
+4. **Future-proof transport** - Events package can adapt to any environment
+5. **Clean separation** - Each package has one clear responsibility
 
 ## Quick Validation Commands
 
@@ -669,6 +723,8 @@ pnpm build
 
 # Final validation
 pnpm why @atomiton/flow         # Should fail
+pnpm why @atomiton/rpc          # Should fail  
+pnpm why @atomiton/events       # Should succeed
 pnpm dlx madge --circular       # No circles
 pnpm tsc --noEmit               # No type errors
 pnpm test                       # All pass
