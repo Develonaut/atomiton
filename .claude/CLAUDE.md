@@ -1,188 +1,213 @@
-# Claude and Claude Agent Instructions - Atomiton Project
+# Claude Configuration & Documentation Guide
 
-## 🚨 MANDATORY WORKFLOW - READ FIRST 🚨
+## Purpose
 
-**See [Workflow Documentation](./workflow/README.md) for ALL requirements.**
+This `.claude/` directory contains the authoritative documentation and configuration for the Atomiton project architecture, specifically designed for Claude Code agents to execute tasks consistently and correctly.
 
-**Key Requirements:**
+## Documentation Structure
 
-1. Follow [MANDATORY_CHECKLIST.md](./workflow/MANDATORY_CHECKLIST.md) before ANY
-   work
-2. Complete ALL steps in [EXECUTION_PLAN.md](./workflow/EXECUTION_PLAN.md)
-3. ONLY create worktrees for NEW features/efforts (not when assisting)
-4. Use TodoWrite to track workflow progress
+### 📚 Core Architecture Documents
 
-**YOU CANNOT PROCEED WITHOUT FOLLOWING THE WORKFLOW.**
+#### [ARCHITECTURE.md](./ARCHITECTURE.md)
+**The comprehensive architecture reference**
+- Core principles and domain model
+- Package ownership and boundaries
+- Type definitions and ownership matrix
+- Node lifecycle and execution flow
+- Storage format and versioning strategy
 
-### When Invoking Agents
+#### [POST_MIGRATION_CLEANUP_STRATEGY.md](./POST_MIGRATION_CLEANUP_STRATEGY.md)
+**Step-by-step migration guide**
+- Ordered steps that MUST be executed sequentially
+- Specific code prompts for each step
+- Validation commands and success criteria
+- Common pitfalls to avoid
 
-See [AGENT_INVOCATION.md](./workflow/AGENT_INVOCATION.md) for how to properly
-invoke agents with workflow compliance.
+### 🤖 Agent Configuration
 
-### Workflow Enforcement
+#### [agents/](./agents/)
+Individual Claude Code agent personas and their specializations:
+- Domain-specific expertise
+- Task assignments
+- Behavioral guidelines
 
-The execution plan is NOT optional. It applies to:
-
-- Claude (you) directly
-- ALL agents invoked via Task tool
-- ANY code changes or implementations
-
-Work that doesn't follow this workflow will be rejected. No exceptions.
-
-## 🎯 Project Overview
-
-Atomiton is a Flow automation platform that enables visual workflow creation
-through a node-based editor. The project uses a monorepo structure with separate
-UI and API packages.
-
-## 📁 Documentation Structure
-
-Project documentation is split between Claude-specific config and general docs:
-
-```
-atomiton/                       # Project root
-├── .claude/                    # Claude-specific configuration
-│   ├── CLAUDE.md              # This file - main entry point
-│   ├── settings.local.json    # Permissions and settings
-│   └── agents/                # Agent personas (Claude-specific)
-├── docs/                       # General project documentation
-│   ├── guides/                # Development principles and standards
-│   ├── architecture/          # System architecture docs
-│   ├── development/           # Development tools and processes
-│   ├── project/               # Project overview and planning
-│   ├── research/              # Analysis and research
-│   ├── strategies/            # Implementation strategies
-│   ├── testing/               # Testing documentation and strategy
-│   ├── deployment/            # Deployment guides and procedures
-│   └── nodes/                 # Node development and documentation
-└── [workspace directories]
-```
-
-## 🚀 Quick Start for Agents
-
-### 🚨 MANDATORY FOR ALL AGENTS
-
-- **BEFORE ANY WORK**:
-  [Code Quality Requirements](../docs/guides/CODE_STYLE.md) - ALL agents MUST
-  run format/lint/typecheck/build before completing work
-- **Agent workflows**: [Agents Overview](./agents/README.md) - Team coordination
-  and specific requirements
-- **Guidelines**: [Guidelines Index](../docs/guides/README.md) - Environment
-  restrictions and development standards
-
-## 🔗 Essential Documentation Links
-
-### Agent Management
-
-- [Agent Team Overview](./agents/README.md)
-- [Agent Execution Plan](./workflow/EXECUTION_PLAN.md)
-- [Agent Personas](./agents/personas/AGENT_PERSONAS.md)
-
-### Development Guidelines
-
-- [Development Principles](../docs/guides/DEVELOPMENT_PRINCIPLES.md)
-- [Code Style Guidelines](../docs/guides/CODE_STYLE.md)
-- [Package Integration Guide](../docs/guides/PACKAGE_INTEGRATION.md)
-
-### Technical Architecture
-
-- [Architecture Overview](../docs/architecture/README.md)
-- [Application Document Architecture](../docs/architecture/APPLICATION_DOCUMENT_ARCHITECTURE.md)
-- [BENTO BOX Implementation](../docs/architecture/BENTO_BOX_IMPLEMENTATION.md)
-- [Conductor API](../docs/architecture/CONDUCTOR_API.md)
-- [Electron Architecture](../docs/architecture/ELECTRON_ARCHITECTURE.md)
-- [Node Configuration System](../docs/architecture/NODE_CONFIGURATION_SYSTEM.md)
-- [Security Configuration](../docs/architecture/SECURITY.md)
-- [Storage Implementation](../docs/architecture/STORAGE.md)
-- [Transport Architecture](../docs/architecture/TRANSPORT_ARCHITECTURE.md)
-
-### Domain-Specific Documentation
-
-- [Node Development Guide](../docs/nodes/README.md) - Creating and testing
-  custom nodes
-- [Testing Strategy](../docs/testing/README.md) - Comprehensive testing approach
-- [Deployment Guide](../docs/deployment/README.md) - Multi-environment
-  deployment
-
-### Migration Documentation
-
-Migration plans are documented in package-specific ROADMAP files:
-
-- UI Framework: `/packages/@atomiton/ui/ROADMAP.md`
-- Configuration: `/packages/@atomiton/vite-config/ROADMAP.md`
-- Storage: `/packages/@atomiton/storage/ROADMAP.md`
-- Project Roadmap: `/docs/project/ROADMAP.md`
-
-## ✅ Permissions
-
-This project has comprehensive permissions configured in
-`.claude/settings.local.json`:
-
-- Full read/write access to all project files
-- All common development tools and commands pre-approved
-- Web search and documentation fetch enabled
-
-## 📦 Workspace Structure
-
-Packages are organized under `packages/@atomiton/`:
-
-### Core Flow System
-
-- `packages/@atomiton/flow` - Core Flow engine and execution
-- `packages/@atomiton/nodes` - Node implementations and registry
-- `packages/@atomiton/editor` - Visual Flow editor components
-
-### State & Storage
-
-- `packages/@atomiton/store` - State management with Redux Toolkit
-- `packages/@atomiton/storage` - Universal storage abstraction
-
-### UI & Components
-
-- `packages/@atomiton/ui` - UI components and design system
-- `packages/@atomiton/hooks` - Reusable React hooks
-
-### Development Tools
-
-- `packages/@atomiton/vite-config` - Unified Vite configuration presets
-- `packages/@atomiton/eslint-config` - Shared ESLint configuration
-- `packages/@atomiton/typescript-config` - Shared TypeScript configuration
-- `packages/@atomiton/testing` - Testing utilities and helpers
-
-### Utilities
-
-- `packages/@atomiton/utils` - Utility functions and helpers
-- `packages/@atomiton/validation` - Validation schemas and utilities
-- `packages/@atomiton/yaml` - YAML parsing and serialization
-- `packages/@atomiton/router` - Application routing
-- `packages/@atomiton/ipc` - Inter-process communication for Electron
-
-### Applications
-
-- `apps/client` - Main Vite React application (includes Playwright E2E tests)
-- `apps/desktop` - Electron desktop wrapper
-
-## 🔄 Important Notes
-
-1. **Single Source of Truth**: This file is the main entry point. All workspace
-   CLAUDE.md files reference back here.
-2. **Documentation Location**: All documentation lives in `/docs/` to avoid
-   .claude nesting issues
-3. **Permission Inheritance**: Permissions granted at root level apply to all
-   subdirectories
-4. **No Permission Prompts**: With the comprehensive settings.local.json, agents
-   should never need to ask for file access
-
-## 📝 Core Development Values
-
-- Never add comments unless explicitly requested
-- Prefer editing existing files over creating new ones
-- Never create documentation files unless explicitly requested
-- Follow existing code conventions and patterns
-- Run format/lint/typecheck/build before completing work
-- Log progress to `.claude/LOG.md` (1 line per milestone)
+#### [workflow/](./workflow/)
+Multi-agent workflow templates and execution plans:
+- Task orchestration
+- Agent collaboration patterns
+- Validation checklists
 
 ---
 
-**Last Updated**: 2025-09-17 **Documentation Root**: `./docs/` (relative to
-project root)
+## Quick Architecture Reference
+
+### Core Decisions
+
+1. **Everything is a NodeDefinition** - The universal type
+2. **No @atomiton/flow package** - Flow is just a user concept
+3. **@atomiton/nodes is the foundation** - Pure structure, zero dependencies
+4. **@atomiton/conductor owns execution** - All execution types and logic
+5. **@atomiton/rpc is pure transport** - Just message passing
+6. **Client uses Conductor** - Never touches RPC directly
+7. **No unnecessary abstractions** - Just check `node.nodes` for groups
+8. **Use existing utilities** - createNodeDefinition already exists
+9. **Simple API** - Just execute(node) from conductor
+
+### The Entire API
+
+```typescript
+// Creating nodes
+import { createNodeDefinition } from '@atomiton/nodes';
+
+const node = createNodeDefinition({
+  type: 'group',
+  nodes: [...]
+});
+
+// Executing nodes
+import { execute } from '#lib/conductor';
+
+const result = await execute(node);
+```
+
+That's it - two functions!
+
+### Package Dependency Rules
+
+```
+Foundation (no dependencies):
+└── @atomiton/nodes
+
+Depends on nodes only:
+├── @atomiton/conductor
+├── @atomiton/storage
+└── @atomiton/editor
+
+Transport layer (types only):
+└── @atomiton/rpc → nodes, conductor
+
+Applications:
+├── client → conductor (never RPC directly)
+└── desktop → conductor, rpc
+```
+
+### Type Import Guide
+
+```typescript
+// Creating nodes (use existing utility)
+import { NodeDefinition, createNodeDefinition } from '@atomiton/nodes';
+
+// Executing nodes (simple API)
+import { execute } from '#lib/conductor';
+
+// Storage (user concept of "flow")
+import { saveFlowFile, loadFlowFile } from '@atomiton/storage';
+
+// Visual transformation
+import { nodeToReactFlow, reactFlowToNode } from '@atomiton/editor';
+
+// Never import RPC directly in client!
+// ❌ import { rpc } from '@atomiton/rpc';
+// ✅ import { execute } from '#lib/conductor';
+```
+
+---
+
+## For Claude Code Agents
+
+### When Implementing Changes
+
+1. **Read POST_MIGRATION_CLEANUP_STRATEGY.md first** - Follow steps IN ORDER
+2. **Reference ARCHITECTURE.md** - For domain boundaries and type ownership
+3. **Validate after each step** - Run the provided commands
+4. **Never skip steps** - Later steps depend on earlier ones
+
+### Key Rules
+
+#### ✅ DO
+- Use existing utilities (createNodeDefinition)
+- Use simple execute(node) API
+- Check `node.nodes` to see if it's a group
+- Keep @atomiton/nodes pure (no execution)
+- Put ALL execution types in @atomiton/conductor
+- Make RPC dumb transport only
+- Use "Flow" only in UI and file names
+- Execute migration steps sequentially
+
+#### ❌ DON'T
+- Create new utilities when we have existing ones
+- Add execution types to @atomiton/nodes
+- Create a Flow type (use NodeDefinition)
+- Create isAtomic/isComposite abstractions
+- Move utilities "just in case" (YAGNI)
+- Import RPC directly in client code
+- Put business logic in RPC
+- Skip validation steps
+
+### Validation Commands
+
+```bash
+# Check architecture is correct
+pnpm why @atomiton/flow         # Should fail
+pnpm dlx madge --circular       # No circles
+pnpm tsc --noEmit               # No type errors
+
+# Build and test
+pnpm build                      # Should succeed
+pnpm test                       # All pass
+pnpm dev                        # App works
+```
+
+---
+
+## Document History
+
+### Active Documents
+- `ARCHITECTURE.md` - Consolidated architecture guide (current)
+- `POST_MIGRATION_CLEANUP_STRATEGY.md` - Migration steps (current)
+- `CLAUDE.md` - This file
+- `agents/*` - Agent configurations
+- `workflow/*` - Workflow templates
+
+### Deprecated/Consolidated Documents
+These have been merged into ARCHITECTURE.md:
+- ~~DOMAIN_OWNERSHIP_SUMMARY.md~~
+- ~~DOMAIN_TYPES_INTERACTIONS.md~~
+- ~~FLOW_LIFECYCLE.md~~
+- ~~FLOWS_VS_NODES_ARCHITECTURE.md~~
+- ~~VERSIONING_STRATEGY.md~~
+- ~~ARCHITECTURE_OVERVIEW.md~~
+- ~~PACKAGE_DOMAIN_OWNERSHIP.md~~
+- ~~POST_MIGRATION_ANALYSIS.md~~
+
+---
+
+## Common Questions
+
+### Q: What's the API for creating and executing nodes?
+A: Just two functions:
+```typescript
+import { createNodeDefinition } from '@atomiton/nodes';
+import { execute } from '#lib/conductor';
+
+const node = createNodeDefinition({ type: 'group', nodes: [...] });
+const result = await execute(node);
+```
+
+### Q: Where is the Flow type defined?
+A: There is no Flow type. "Flow" is just what users call a saved NodeDefinition with child nodes.
+
+### Q: Do we need isAtomic/isComposite utilities?
+A: No. Just check `if (node.nodes && node.nodes.length > 0)` to see if it's a group.
+
+### Q: Which package owns ExecutionContext?
+A: @atomiton/conductor owns ALL execution types.
+
+### Q: Can the client import from @atomiton/rpc?
+A: No. Client uses Conductor which internally uses RPC as transport when needed.
+
+### Q: Where do I import NodeDefinition from?
+A: Always from '@atomiton/nodes' - it's the foundation type.
+
+### Q: What happened to @atomiton/flow package?
+A: It's being removed completely. We don't need its utilities - we already have what we need.
