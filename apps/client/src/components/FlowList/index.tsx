@@ -62,7 +62,9 @@ type FlowListItemProps = {
 
 function FlowListItem({ flow, isSelected, onSelect }: FlowListItemProps) {
   const nodeCount = flow.nodes?.length || 0;
-  const hasParentNodes = flow.nodes?.some((n: any) => n.parentId) || false;
+  const hasParentNodes =
+    flow.nodes?.some((n: unknown) => (n as { parentId?: string }).parentId) ||
+    false;
 
   return (
     <Button

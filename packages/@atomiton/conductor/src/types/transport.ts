@@ -5,7 +5,10 @@
  * (e.g., local, RPC, cloud, etc.)
  */
 
-import type { ExecutionContext, ExecutionResult } from "#types/execution";
+import type {
+  ConductorExecutionContext,
+  ExecutionResult,
+} from "#types/execution";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 /**
@@ -24,7 +27,7 @@ export type HealthResult = {
 export type ConductorTransport = {
   execute(
     node: NodeDefinition,
-    context: ExecutionContext,
+    context: ConductorExecutionContext,
   ): Promise<ExecutionResult>;
   health?(): Promise<HealthResult>;
 };

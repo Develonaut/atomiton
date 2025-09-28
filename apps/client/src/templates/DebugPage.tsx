@@ -40,6 +40,7 @@ export default function DebugPage() {
   const [environment, setEnvironment] = useState<EnvironmentInfo | null>(null);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [isRunningTests, setIsRunningTests] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pingResult, setPingResult] = useState<string>("");
   const [healthResult, setHealthResult] = useState<HealthResult | null>(null);
   const [nodeProgress, setNodeProgress] = useState<{

@@ -11,7 +11,7 @@ export type FlowExecutionState = {
   isExecuting: boolean;
   error: Error | null;
   result: unknown | null;
-}
+};
 
 /**
  * Hook for saving flows - placeholder until storage is properly integrated
@@ -114,7 +114,8 @@ export function useFlow() {
       });
       return result;
     } catch (error) {
-      const errorObj = error instanceof Error ? error : new Error(String(error));
+      const errorObj =
+        error instanceof Error ? error : new Error(String(error));
       setState({
         isExecuting: false,
         error: errorObj,

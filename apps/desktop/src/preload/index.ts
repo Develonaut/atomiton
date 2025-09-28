@@ -46,7 +46,8 @@ if (process.contextIsolated) {
   console.log(
     "[PRELOAD] Context isolation disabled, setting atomitonRPC on window",
   );
-  (window as Window & { atomitonRPC?: typeof atomitonRPC }).atomitonRPC = atomitonRPC;
+  (window as Window & { atomitonRPC?: typeof atomitonRPC }).atomitonRPC =
+    atomitonRPC;
 }
 
 console.log("[PRELOAD] Conductor preload script completed");

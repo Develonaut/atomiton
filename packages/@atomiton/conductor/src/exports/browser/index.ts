@@ -15,7 +15,7 @@ declare global {
 import type {
   ConductorConfig,
   ConductorTransport,
-  ExecutionContext,
+  ConductorExecutionContext,
   ExecutionResult,
   HealthResult,
 } from "#types";
@@ -31,8 +31,8 @@ export * from "#types";
  */
 function createContext(
   node: NodeDefinition,
-  context?: Partial<ExecutionContext>,
-): ExecutionContext {
+  context?: Partial<ConductorExecutionContext>,
+): ConductorExecutionContext {
   return {
     nodeId: node.id,
     executionId: context?.executionId || generateExecutionId(),
@@ -155,7 +155,7 @@ export function createConductor(config: ConductorConfig = {}) {
      */
     async run(
       node: NodeDefinition,
-      contextOverrides?: Partial<ExecutionContext>,
+      contextOverrides?: Partial<ConductorExecutionContext>,
     ): Promise<ExecutionResult> {
       const context = createContext(node, contextOverrides);
 
@@ -203,7 +203,7 @@ export function createConductor(config: ConductorConfig = {}) {
     // Backward compatibility - legacy execute method
     async execute(
       node: NodeDefinition,
-      contextOverrides?: Partial<ExecutionContext>,
+      contextOverrides?: Partial<ConductorExecutionContext>,
     ): Promise<ExecutionResult> {
       console.warn(
         "[Conductor] execute() is deprecated, use conductor.node.run() instead",

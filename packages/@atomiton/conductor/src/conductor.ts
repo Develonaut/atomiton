@@ -7,7 +7,7 @@
 
 import type {
   ConductorConfig,
-  ExecutionContext,
+  ConductorExecutionContext,
   ExecutionError,
   ExecutionResult,
   HealthResult,
@@ -21,8 +21,8 @@ import { generateExecutionId } from "@atomiton/utils";
  */
 function createContext(
   node: NodeDefinition,
-  context?: Partial<ExecutionContext>,
-): ExecutionContext {
+  context?: Partial<ConductorExecutionContext>,
+): ConductorExecutionContext {
   return {
     nodeId: node.id,
     executionId: context?.executionId || generateExecutionId(),
@@ -100,7 +100,7 @@ function topologicalSort(
  */
 async function executeLocal(
   node: NodeDefinition,
-  context: ExecutionContext,
+  context: ConductorExecutionContext,
   startTime: number,
   nodeExecutorFactory?: NodeExecutorFactory,
 ): Promise<ExecutionResult> {
@@ -184,7 +184,7 @@ async function executeLocal(
  */
 async function executeGroup(
   node: NodeDefinition,
-  context: ExecutionContext,
+  context: ConductorExecutionContext,
   config: ConductorConfig,
 ): Promise<ExecutionResult> {
   const startTime = Date.now();
@@ -219,7 +219,7 @@ async function executeGroup(
           (context.input as Record<string, unknown>) || {},
         );
 
-      const childContext: ExecutionContext = {
+      const childContext: ConductorExecutionContext = {
         nodeId: childNode.id,
         executionId: generateExecutionId(`child_${childNode.id}`),
         variables: context.variables,
@@ -275,7 +275,7 @@ async function executeGroup(
  */
 async function execute(
   node: NodeDefinition,
-  context: ExecutionContext,
+  context: ConductorExecutionContext,
   config: ConductorConfig,
 ): Promise<ExecutionResult> {
   const startTime = Date.now();
@@ -313,7 +313,7 @@ export function createConductor(config: ConductorConfig = {}) {
      */
     async run(
       node: NodeDefinition,
-      contextOverrides?: Partial<ExecutionContext>,
+      contextOverrides?: Partial<ConductorExecutionContext>,
     ): Promise<ExecutionResult> {
       const context = createContext(node, contextOverrides);
       return execute(node, context, config);
@@ -346,7 +346,7 @@ export function createConductor(config: ConductorConfig = {}) {
     // Backward compatibility - legacy execute method
     async execute(
       node: NodeDefinition,
-      contextOverrides?: Partial<ExecutionContext>,
+      contextOverrides?: Partial<ConductorExecutionContext>,
     ): Promise<ExecutionResult> {
       console.warn(
         "[Conductor] execute() is deprecated, use conductor.node.run() instead",

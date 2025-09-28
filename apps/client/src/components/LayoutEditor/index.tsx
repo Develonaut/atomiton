@@ -4,6 +4,7 @@ import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
 import { Canvas, Editor } from "@atomiton/editor";
+import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { Box } from "@atomiton/ui";
 
@@ -32,10 +33,10 @@ function LayoutEditor() {
           },
           // Convert legacy props to proper format
           nodes: Array.isArray(editorState?.defaultNodes)
-            ? (editorState.defaultNodes as any)
+            ? (editorState.defaultNodes as NodeDefinition[])
             : [],
           edges: Array.isArray(editorState?.defaultEdges)
-            ? (editorState.defaultEdges as any)
+            ? (editorState.defaultEdges as NodeEdge[])
             : [],
         })
       : undefined;

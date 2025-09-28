@@ -9,7 +9,7 @@ import type { NodeDefinition, NodeEdge } from "@atomiton/nodes/definitions";
 export type { ExecutionContext, ExecutionResult, NodeDefinition };
 
 // TODO: Replace with proper imports when TRPC router is properly exported
-  import type { AppRouter as TRPCRouter } from "../../../../packages/@atomiton/rpc/src/trpc/router";
+import type { AppRouter as TRPCRouter } from "#shared/trpc/router";
 
 export type AppRouter = TRPCRouter;
 

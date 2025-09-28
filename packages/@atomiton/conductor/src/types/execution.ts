@@ -1,22 +1,22 @@
 /**
  * Conductor Execution Types
  *
- * Builds on the simple NodeExecutable from @atomiton/nodes,
+ * Builds on the NodeExecutable from @atomiton/nodes,
  * adding richer execution context and orchestration capabilities.
  */
 
-import type { SimpleNodeExecutable } from "@atomiton/nodes/executables";
+import type { NodeExecutable } from "@atomiton/nodes/executables";
 
 /**
  * Conductor's rich execution context
  * Adds orchestration metadata beyond simple parameter passing
  */
-export type ExecutionContext = {
+export type ConductorExecutionContext = {
   nodeId: string;
   executionId: string;
   variables: Record<string, unknown>;
   input?: unknown;
-  parentContext?: ExecutionContext;
+  parentContext?: ConductorExecutionContext;
 };
 
 /**
@@ -29,7 +29,7 @@ export type ExecutionResult<T = unknown> = {
   /** Execution duration in milliseconds */
   duration?: number;
   executedNodes?: string[];
-  context?: ExecutionContext;
+  context?: ConductorExecutionContext;
 };
 
 /**
@@ -58,10 +58,5 @@ export type ExecutionStatus =
  * This should be injected as a dependency to avoid dynamic imports
  */
 export type NodeExecutorFactory = {
-  getNodeExecutable(nodeType: string): SimpleNodeExecutable | undefined;
+  getNodeExecutable(nodeType: string): NodeExecutable | undefined;
 };
-
-/**
- * Re-export the simple interface for convenience
- */
-export type { SimpleNodeExecutable };

@@ -5,27 +5,27 @@
  */
 
 import { createConductor as createBaseConductor } from "#conductor";
-import type { ConductorConfig, NodeExecutorFactory } from "#types";
-import type { IpcMainInvokeEvent } from "electron";
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import { getNodeExecutable } from "@atomiton/nodes/executables";
 import {
   CONDUCTOR_CHANNELS,
   logIPC,
   logIPCError,
   type NodeRunPayload,
 } from "#desktop/ipc";
+import type { ConductorConfig, NodeExecutorFactory } from "#types";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { getNodeExecutable } from "@atomiton/nodes/executables";
+import type { IpcMainInvokeEvent } from "electron";
 
 // Re-export types and utilities
-export * from "#types";
 export { registerHandlers } from "#desktop/ipc";
+export * from "#types";
 
 /**
  * Desktop conductor with IPC setup methods
  */
 export type DesktopConductor = {
   createMainHandlers(): Record<string, (...args: unknown[]) => unknown>;
-} & ReturnType<typeof createBaseConductor>
+} & ReturnType<typeof createBaseConductor>;
 
 /**
  * Creates a desktop conductor with Node.js execution capabilities
@@ -34,74 +34,9 @@ export type DesktopConductor = {
 export function createConductor(
   config: ConductorConfig = {},
 ): DesktopConductor {
-  // Create node executor factory that imports from @atomiton/nodes/executables
-  // and adapts legacy executables to SimpleNodeExecutable
   const nodeExecutorFactory: NodeExecutorFactory = {
     getNodeExecutable: (nodeType) => {
-      const legacyExecutable = getNodeExecutable(nodeType);
-      if (!legacyExecutable) return undefined;
-
-      // Create a SimpleNodeExecutable adapter for the legacy executable
-      return {
-        async execute(params: unknown) {
-          // Legacy executables expect context and config separately
-          // The params object has context fields (nodeId, executionId, input, etc)
-          // plus the node's parameters spread directly into it
-          const typedParams = params as Record<string, unknown>;
-          const {
-            nodeId,
-            executionId,
-            input,
-            variables,
-            parentContext,
-            ...nodeParameters
-          } = typedParams;
-
-          // Only log in development
-          if (process.env.NODE_ENV === "development") {
-            console.log("[CONDUCTOR:ADAPTER] Execute params:", {
-              nodeId,
-              executionId,
-              hasInput: !!input,
-              nodeParameters,
-              paramKeys: Object.keys(typedParams),
-            });
-          }
-
-          const context = {
-            nodeId: (nodeId as string) || "",
-            inputs: (input as Record<string, unknown>) || {},
-            parameters: nodeParameters || {},
-            metadata: { executionId: (executionId as string) || "" },
-          };
-
-          // Only log in development
-          if (process.env.NODE_ENV === "development") {
-            console.log("[CONDUCTOR:ADAPTER] Created context:", {
-              nodeId: context.nodeId,
-              hasInputs: Object.keys(context.inputs).length > 0,
-              parameters: context.parameters,
-              metadata: context.metadata,
-            });
-          }
-
-          // Get validated config
-          const config = legacyExecutable.getValidatedParams(context);
-
-          // Only log in development
-          if (process.env.NODE_ENV === "development") {
-            console.log("[CONDUCTOR:ADAPTER] Validated config:", config);
-          }
-
-          // Execute and return the result
-          const result = await legacyExecutable.execute(context, config);
-
-          if (result.success) {
-            return result.outputs || {};
-          }
-          throw new Error(result.error || "Execution failed");
-        },
-      };
+      return getNodeExecutable(nodeType);
     },
   };
 

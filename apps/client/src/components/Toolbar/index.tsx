@@ -15,7 +15,7 @@ function Toolbar() {
   const redo = () => {};
   const [active, setActive] = useState<number | null>(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [output, setOutput] = useState<any>(null);
+  const [output, setOutput] = useState<unknown>(null);
   const [showOutput, setShowOutput] = useState(false);
 
   const handleExecute: ExecuteHandler = useCallback(async (nodeDefinitions) => {
