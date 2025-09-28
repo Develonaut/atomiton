@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createConductor, isAtomic, isComposite } from "#index";
+import { createConductor } from "#index";
 import {
   createNodeDefinition,
   createNodeMetadata,
   createNodeParameters,
   createNodePorts,
 } from "@atomiton/nodes/definitions";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Conductor Integration Tests", () => {
   beforeEach(() => {
@@ -13,7 +13,7 @@ describe("Conductor Integration Tests", () => {
   });
 
   describe("Node Type Detection", () => {
-    it("should identify atomic nodes", () => {
+    it("should identify atomic nodes (nodes without children)", () => {
       const atomicNode = createNodeDefinition({
         id: "node-1",
         type: "processor",
@@ -32,11 +32,12 @@ describe("Conductor Integration Tests", () => {
         ...createNodePorts({}),
       });
 
-      expect(isAtomic(atomicNode)).toBe(true);
-      expect(isComposite(atomicNode)).toBe(false);
+      // Direct check following architecture pattern
+      expect(atomicNode.nodes).toBeUndefined();
+      expect(!atomicNode.nodes || atomicNode.nodes.length === 0).toBe(true);
     });
 
-    it("should identify composite nodes", () => {
+    it("should identify composite nodes (nodes with children)", () => {
       const childNode = createNodeDefinition({
         id: "child-1",
         type: "processor",
@@ -76,8 +77,10 @@ describe("Conductor Integration Tests", () => {
         edges: [],
       });
 
-      expect(isComposite(compositeNode)).toBe(true);
-      expect(isAtomic(compositeNode)).toBe(false);
+      // Direct check following architecture pattern
+      expect(compositeNode.nodes).toBeDefined();
+      expect(compositeNode.nodes && compositeNode.nodes.length > 0).toBe(true);
+      expect(compositeNode.nodes?.length).toBe(1);
     });
   });
 

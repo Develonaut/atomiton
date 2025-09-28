@@ -33,7 +33,8 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
-    "@atomiton/nodes": "workspace:*"
+    "@atomiton/nodes": "workspace:*",
+    "@atomiton/utils": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",

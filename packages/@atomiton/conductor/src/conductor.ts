@@ -1,31 +1,52 @@
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
+/**
+ * Functional Conductor Implementation
+ *
+ * Orchestrates node execution using the simple NodeExecutable interface
+ * from @atomiton/nodes, adding rich execution context and metadata.
+ */
+
 import type {
-  ExecutionContext,
-  ExecutionResult,
-  ExecutionError,
   ConductorConfig,
+  ExecutionContext,
+  ExecutionError,
+  ExecutionResult,
 } from "#types";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { generateExecutionId } from "@atomiton/utils";
 
-export function isAtomic(node: NodeDefinition): boolean {
-  return !node.nodes || node.nodes.length === 0;
+/**
+ * Create execution context with defaults
+ */
+function createContext(
+  node: NodeDefinition,
+  context?: Partial<ExecutionContext>
+): ExecutionContext {
+  return {
+    nodeId: node.id,
+    executionId: context?.executionId || generateExecutionId(),
+    variables: context?.variables || {},
+    input: context?.input,
+    parentContext: context?.parentContext
+  };
 }
 
-export function isComposite(node: NodeDefinition): boolean {
-  return !!node.nodes && node.nodes.length > 0;
-}
-
-function getTopologicalOrder(
+/**
+ * Topological sort for node execution order
+ */
+function topologicalSort(
   nodes: NodeDefinition[],
-  edges: NodeDefinition["edges"] = [],
-): string[] {
+  edges: NodeDefinition["edges"] = []
+): NodeDefinition[] {
   const inDegree = new Map<string, number>();
   const adjacency = new Map<string, string[]>();
 
+  // Initialize structures
   nodes.forEach((node) => {
     inDegree.set(node.id, 0);
     adjacency.set(node.id, []);
   });
 
+  // Build adjacency and in-degree
   edges.forEach((edge) => {
     const current = inDegree.get(edge.target) || 0;
     inDegree.set(edge.target, current + 1);
@@ -35,8 +56,9 @@ function getTopologicalOrder(
     adjacency.set(edge.source, neighbors);
   });
 
+  // Find nodes with no dependencies
   const queue: string[] = [];
-  const result: string[] = [];
+  const result: NodeDefinition[] = [];
 
   inDegree.forEach((degree, nodeId) => {
     if (degree === 0) {
@@ -44,11 +66,16 @@ function getTopologicalOrder(
     }
   });
 
+  // Process nodes in topological order
   while (queue.length > 0) {
-    const current = queue.shift()!;
-    result.push(current);
+    const currentId = queue.shift()!;
+    const currentNode = nodes.find((n) => n.id === currentId);
 
-    const neighbors = adjacency.get(current) || [];
+    if (currentNode) {
+      result.push(currentNode);
+    }
+
+    const neighbors = adjacency.get(currentId) || [];
     neighbors.forEach((neighbor) => {
       const degree = inDegree.get(neighbor)! - 1;
       inDegree.set(neighbor, degree);
@@ -66,69 +93,93 @@ function getTopologicalOrder(
   return result;
 }
 
-async function executeAtomic(
+/**
+ * Execute a single node locally using the nodes registry
+ */
+async function executeLocal(
   node: NodeDefinition,
   context: ExecutionContext,
+  startTime: number
 ): Promise<ExecutionResult> {
-  const startTime = Date.now();
-
   try {
+    // Dynamically import to avoid circular dependency
     const { getNodeExecutable } = await import("@atomiton/nodes/executables");
 
-    const executable = getNodeExecutable(node.type);
+    const nodeExecutable = getNodeExecutable(node.type);
 
-    if (!executable) {
-      throw new Error(`No executable found for node type: ${node.type}`);
+    if (!nodeExecutable) {
+      const error: ExecutionError = {
+        nodeId: node.id,
+        message: `No implementation found for node type: ${node.type}`,
+        timestamp: new Date(),
+        code: 'NODE_TYPE_NOT_FOUND'
+      };
+
+      return {
+        success: false,
+        error,
+        duration: Date.now() - startTime,
+        executedNodes: [node.id]
+      };
     }
 
-    // Convert ExecutionContext to NodeExecutionContext
-    const nodeContext = {
-      nodeId: context.nodeId,
-      inputs: (context.input || {}) as Record<string, unknown>,
-      parameters: node.parameters.defaults || {},
-      metadata: { executionId: context.executionId },
-      startTime: context.startTime,
-    };
+    // All current executables are legacy format with context and config
+    // The simple format will be adopted gradually during migration
+    if ('execute' in nodeExecutable && typeof nodeExecutable.execute === 'function') {
+      // Legacy executable - needs context and config
+      const nodeContext = {
+        nodeId: context.nodeId,
+        inputs: context.input as Record<string, unknown> || {},
+        parameters: node.parameters?.defaults || {},
+        metadata: { executionId: context.executionId },
+        startTime: new Date()
+      };
 
-    const result = await executable.execute(nodeContext, {
-      parameters: node.parameters,
-      inputPorts: node.inputPorts,
-      outputPorts: node.outputPorts,
-    });
+      const config = nodeExecutable.getValidatedParams
+        ? nodeExecutable.getValidatedParams(nodeContext)
+        : node.parameters;
 
-    return {
-      success: result.success,
-      data: result.outputs,
-      error: result.error
-        ? {
-            nodeId: node.id,
-            message: result.error,
-            timestamp: new Date(),
-          }
-        : undefined,
-      duration: Date.now() - startTime,
-      executedNodes: [node.id],
-    };
+      const result = await nodeExecutable.execute(nodeContext, config);
+
+      return {
+        success: result.success,
+        data: result.outputs,
+        error: result.error ? {
+          nodeId: node.id,
+          message: result.error,
+          timestamp: new Date()
+        } : undefined,
+        duration: Date.now() - startTime,
+        executedNodes: [node.id],
+        context
+      };
+    }
+
+    throw new Error(`Invalid executable for node type: ${node.type}`);
   } catch (error) {
     const executionError: ExecutionError = {
       nodeId: node.id,
       message: error instanceof Error ? error.message : String(error),
       timestamp: new Date(),
-      stack: error instanceof Error ? error.stack : undefined,
+      stack: error instanceof Error ? error.stack : undefined
     };
 
     return {
       success: false,
       error: executionError,
       duration: Date.now() - startTime,
-      executedNodes: [node.id],
+      executedNodes: [node.id]
     };
   }
 }
 
-async function executeComposite(
+/**
+ * Execute a group of nodes (composite execution)
+ */
+async function executeGroup(
   node: NodeDefinition,
   context: ExecutionContext,
+  config: ConductorConfig
 ): Promise<ExecutionResult> {
   const startTime = Date.now();
   const executedNodes: string[] = [];
@@ -140,51 +191,44 @@ async function executeComposite(
         success: true,
         data: {},
         duration: Date.now() - startTime,
-        executedNodes: [node.id],
+        executedNodes: [node.id]
       };
     }
 
-    const executionOrder = getTopologicalOrder(node.nodes, node.edges);
+    const sorted = topologicalSort(node.nodes, node.edges);
 
-    for (const nodeId of executionOrder) {
-      const childNode = node.nodes.find((n: NodeDefinition) => n.id === nodeId);
-
-      if (!childNode) {
-        throw new Error(`Node ${nodeId} not found in composite node`);
-      }
-
+    for (const childNode of sorted) {
+      // Build input from edges
       const childInput = node.edges
-        ?.filter((edge) => edge.target === nodeId)
+        ?.filter((edge) => edge.target === childNode.id)
         .reduce(
           (acc: Record<string, unknown>, edge) => {
             const sourceOutput = nodeOutputs.get(edge.source);
             if (sourceOutput !== undefined) {
-              return { ...acc, [edge.targetHandle || "default"]: sourceOutput };
+              const key = edge.targetHandle || "default";
+              return { ...acc, [key]: sourceOutput };
             }
             return acc;
           },
-          (context.input as Record<string, unknown>) || {},
+          (context.input as Record<string, unknown>) || {}
         );
 
       const childContext: ExecutionContext = {
-        ...context,
         nodeId: childNode.id,
-        executionId: `${context.executionId}-${childNode.id}`,
+        executionId: generateExecutionId(`child_${childNode.id}`),
+        variables: context.variables,
         input: childInput,
-        status: "running",
-        startTime: new Date(),
+        parentContext: context
       };
 
-      const result = isAtomic(childNode)
-        ? await executeAtomic(childNode, childContext)
-        : await executeComposite(childNode, childContext);
+      const result = await execute(childNode, childContext, config);
 
       if (!result.success) {
         return {
           success: false,
           error: result.error,
           duration: Date.now() - startTime,
-          executedNodes: [...executedNodes, ...(result.executedNodes || [])],
+          executedNodes: [...executedNodes, ...(result.executedNodes || [])]
         };
       }
 
@@ -192,55 +236,80 @@ async function executeComposite(
       executedNodes.push(...(result.executedNodes || []));
     }
 
-    const lastNodeId = executionOrder[executionOrder.length - 1];
-    const finalOutput = nodeOutputs.get(lastNodeId);
+    // Return the output of the last node
+    const lastNodeId = sorted[sorted.length - 1]?.id;
+    const finalOutput = lastNodeId ? nodeOutputs.get(lastNodeId) : undefined;
 
     return {
       success: true,
       data: finalOutput,
       duration: Date.now() - startTime,
       executedNodes: [node.id, ...executedNodes],
+      context
     };
   } catch (error) {
     const executionError: ExecutionError = {
       nodeId: node.id,
       message: error instanceof Error ? error.message : String(error),
       timestamp: new Date(),
-      stack: error instanceof Error ? error.stack : undefined,
+      stack: error instanceof Error ? error.stack : undefined
     };
 
     return {
       success: false,
       error: executionError,
       duration: Date.now() - startTime,
-      executedNodes: [node.id, ...executedNodes],
+      executedNodes: [node.id, ...executedNodes]
     };
   }
 }
 
-export function createConductor(_config?: ConductorConfig) {
+/**
+ * Main execution function
+ */
+async function execute(
+  node: NodeDefinition,
+  context: ExecutionContext,
+  config: ConductorConfig
+): Promise<ExecutionResult> {
+  const startTime = Date.now();
+
+  // Check if it has child nodes (it's a group)
+  if (node.nodes && node.nodes.length > 0) {
+    return executeGroup(node, context, config);
+  }
+
+  // Single node - use transport if configured, otherwise execute locally
+  if (config.transport) {
+    return config.transport.execute(node, context);
+  }
+
+  return executeLocal(node, context, startTime);
+}
+
+/**
+ * Create a conductor with the given configuration
+ *
+ * @param config - Conductor configuration
+ * @returns Conductor with execute function
+ *
+ * @example
+ * ```typescript
+ * const conductor = createConductor();
+ * const result = await conductor.execute(node);
+ * ```
+ */
+export function createConductor(config: ConductorConfig = {}) {
   return {
+    /**
+     * Execute a node definition
+     */
     async execute(
       node: NodeDefinition,
-      context?: Partial<ExecutionContext>,
+      contextOverrides?: Partial<ExecutionContext>
     ): Promise<ExecutionResult> {
-      const executionContext: ExecutionContext = {
-        nodeId: node.id,
-        executionId: context?.executionId || `exec-${Date.now()}`,
-        variables: context?.variables || {},
-        input: context?.input,
-        status: "running",
-        startTime: new Date(),
-        ...context,
-      };
-
-      if (isAtomic(node)) {
-        return executeAtomic(node, executionContext);
-      } else if (isComposite(node)) {
-        return executeComposite(node, executionContext);
-      }
-
-      throw new Error(`Unknown node type: ${node.type}`);
-    },
+      const context = createContext(node, contextOverrides);
+      return execute(node, context, config);
+    }
   };
 }
