@@ -1,8 +1,13 @@
-import type { Flow } from "@atomiton/flow";
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import type { NodeDefinition } from '@atomiton/nodes/definitions';
+import {
+  createNodeDefinition,
+  createNodeMetadata,
+  createNodeParameters,
+  createNodePorts
+} from '@atomiton/nodes/definitions';
 import type {
-  Node as ReactFlowNode,
   Edge as ReactFlowEdge,
+  Node as ReactFlowNode,
 } from "@xyflow/react";
 
 export type ReactFlowData = {
@@ -17,95 +22,81 @@ export type TransformedFlow = {
   edges: ReactFlowEdge[];
 };
 
-export function flowToReactFlow(flow: Flow): TransformedFlow {
-  const nodes = (flow.nodes || []).map((node) => ({
-    id: node.id,
-    type: node.type,
-    position: node.position,
-    data: {
-      label: node.name || node.type,
-      config: node.parameters.defaults || {},
-      version: node.version,
-      parentId: node.parentId,
-    },
-  }));
+export function flowToReactFlow(flow: NodeDefinition): TransformedFlow {
+  const reactNodes = [];
+  const reactEdges = [];
 
-  const edges = (flow.edges || []).map((edge) => ({
-    id: edge.id,
-    source: edge.source,
-    target: edge.target,
-    sourceHandle: edge.sourceHandle,
-    targetHandle: edge.targetHandle,
-    type: edge.type || "smoothstep",
-  }));
+  if (flow.nodes) {
+    reactNodes.push(...flow.nodes.map(n => ({
+      id: n.id,
+      type: n.type,
+      position: n.position,
+      data: {
+        label: n.name || n.type,
+        config: n.parameters?.defaults || {},
+        version: n.version,
+        parentId: flow.id
+      }
+    })));
+  }
 
-  return { nodes, edges };
+  if (flow.edges) {
+    reactEdges.push(...flow.edges.map(e => ({
+      id: e.id,
+      source: e.source,
+      target: e.target,
+      sourceHandle: e.sourceHandle,
+      targetHandle: e.targetHandle,
+      type: e.type || "smoothstep"
+    })));
+  }
+
+  return { nodes: reactNodes, edges: reactEdges };
 }
 
 export function reactFlowToFlow(
-  nodes: ReactFlowNode<ReactFlowData>[],
-  edges: ReactFlowEdge[],
-  baseFlow?: Partial<Flow>,
-): Flow {
-  const flowNodes: NodeDefinition[] = nodes.map(
-    (node) =>
-      ({
-        id: node.id,
-        type: node.type || "default",
-        version: node.data?.version || "1.0.0",
-        name: node.data?.label || node.type || "Untitled",
-        position: node.position,
-        parentId: node.data?.parentId,
-        metadata: {
-          id: node.id,
-          name: node.data?.label || node.type || "Untitled",
-          author: "editor",
-          icon: "default",
-          category: "default",
-          description: "",
-        },
-        parameters: {
-          defaults: node.data?.config || {},
-          fields: {},
-        },
-        inputPorts: [],
-        outputPorts: [],
-      }) as unknown as NodeDefinition,
-  );
-
-  const flowEdges = edges.map((edge) => ({
-    id: edge.id,
-    source: edge.source,
-    target: edge.target,
-    sourceHandle: edge.sourceHandle,
-    targetHandle: edge.targetHandle,
-    type: "smoothstep" as const,
-  }));
-
-  return {
+  reactNodes: ReactFlowNode<ReactFlowData>[],
+  reactEdges: ReactFlowEdge[],
+  baseFlow?: NodeDefinition
+): NodeDefinition {
+  return createNodeDefinition({
+    ...baseFlow,
     id: baseFlow?.id || `flow-${Date.now()}`,
-    type: "flow",
+    type: baseFlow?.type || 'group',
     version: baseFlow?.version || "1.0.0",
     name: baseFlow?.name || "Untitled Flow",
     position: baseFlow?.position || { x: 0, y: 0 },
-    metadata: {
-      id: baseFlow?.id || `flow-${Date.now()}`,
-      name: baseFlow?.name || "Untitled Flow",
-      author: "editor",
-      icon: "flow",
-      category: "flow",
-      description: "",
-      ...baseFlow?.metadata,
-    },
-    parameters: baseFlow?.parameters || {
-      defaults: {},
-      fields: {},
-    },
-    inputPorts: baseFlow?.inputPorts || [],
-    outputPorts: baseFlow?.outputPorts || [],
-    nodes: flowNodes,
-    edges: flowEdges,
-  } as unknown as Flow;
+    nodes: reactNodes.map(n => createNodeDefinition({
+      id: n.id,
+      type: n.type || "default",
+      version: n.data?.version || "1.0.0",
+      name: n.data?.label || n.type || "Untitled",
+      position: n.position,
+      parentId: baseFlow?.id,
+      metadata: createNodeMetadata({
+        id: n.id,
+        name: n.data?.label || n.type || "Untitled",
+        author: "editor",
+        icon: "settings",
+        category: "user",
+        description: "",
+      }),
+      parameters: createNodeParameters({
+        defaults: n.data?.config || {},
+        fields: {},
+      }),
+      inputPorts: createNodePorts([]),
+      outputPorts: createNodePorts([]),
+    })),
+    edges: reactEdges.map(edge => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      sourceHandle: edge.sourceHandle,
+      targetHandle: edge.targetHandle,
+      type: (edge.type as any) === "smoothstep" ? "smoothstep" : "bezier",
+    })),
+  });
 }
 
 export function findNodeById(

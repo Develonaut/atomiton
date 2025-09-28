@@ -1,12 +1,13 @@
+import { useFlowToReactFlow } from "#hooks/useFlowToReactFlow";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { styled } from "@atomiton/ui";
 import { ReactFlowProvider } from "@xyflow/react";
 import type { HTMLAttributes } from "react";
-import type { Flow } from "@atomiton/flow";
 
 type EditorProps = {
   children: React.ReactNode;
   className?: string;
-  flow?: Flow;
+  flow?: NodeDefinition;
 } & HTMLAttributes<HTMLDivElement>;
 
 const EditorRootStyled = styled("div", {
@@ -20,9 +21,13 @@ const EditorRootStyled = styled("div", {
  *
  */
 function EditorRoot({ children, className, flow, ...props }: EditorProps) {
+  const { nodes, edges } = useFlowToReactFlow(flow);
+
   return (
     <EditorRootStyled data-editor-root {...props}>
-      <ReactFlowProvider>{children}</ReactFlowProvider>
+      <ReactFlowProvider defaultNodes={nodes} defaultEdges={edges}>
+        {children}
+      </ReactFlowProvider>
     </EditorRootStyled>
   );
 }

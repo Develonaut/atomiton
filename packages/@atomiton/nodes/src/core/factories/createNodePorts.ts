@@ -54,10 +54,10 @@ export function createNodePort(
 /**
  * Create input and output ports for a node
  */
-export function createNodePorts(input: NodePortsInput): INodePorts {
+export function createNodePorts(input?: NodePortsInput): INodePorts {
   return {
-    input: (input.input || []).map((p) => createNodePort("input", p)),
-    output: (input.output || []).map((p) => createNodePort("output", p)),
+    input: (input?.input || []).map((p) => createNodePort("input", p)),
+    output: (input?.output || []).map((p) => createNodePort("output", p)),
   };
 }
 export default createNodePorts;

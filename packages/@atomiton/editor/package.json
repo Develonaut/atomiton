@@ -40,7 +40,6 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
-    "@atomiton/flow": "workspace:*",
     "@atomiton/hooks": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/store": "workspace:*",

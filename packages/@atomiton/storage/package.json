@@ -31,11 +31,15 @@
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@atomiton/nodes": "workspace:*",
+    "js-yaml": "^4.1.0"
+  },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@atomiton/vite-config": "workspace:*",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "rollup-plugin-visualizer": "catalog:",

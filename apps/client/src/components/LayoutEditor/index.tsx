@@ -4,6 +4,7 @@ import Toolbar from "#components/Toolbar";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
 import { Canvas, Editor } from "@atomiton/editor";
+import { createNodeDefinition } from "@atomiton/nodes";
 import { Box } from "@atomiton/ui";
 
 function LayoutEditor() {
@@ -11,16 +12,33 @@ function LayoutEditor() {
   const { state: locationState } = useLocation();
   const editorState = locationState as EditorRouteState | undefined;
 
-  // Pass raw nodes directly to Canvas - let it handle transformation
-  // Canvas accepts both NodeDefinition and EditorNode types internally
-  // Using 'unknown' here as Canvas internally handles the transformation
-  const defaultNodes = Array.isArray(editorState?.defaultNodes)
-    ? (editorState.defaultNodes as unknown[])
-    : [];
-
-  const defaultEdges = Array.isArray(editorState?.defaultEdges)
-    ? (editorState.defaultEdges as unknown[])
-    : [];
+  // Create a flow (NodeDefinition) from the editor state
+  // TODO: Load actual flow from storage using id
+  const flow =
+    editorState?.defaultNodes || editorState?.defaultEdges
+      ? createNodeDefinition({
+          id: id || `flow-${Date.now()}`,
+          type: "group",
+          version: "1.0.0",
+          name: "Current Flow",
+          position: { x: 0, y: 0 },
+          metadata: {
+            id: id || `flow-${Date.now()}`,
+            name: "Current Flow",
+            author: "editor",
+            icon: "layers",
+            category: "group",
+            description: "Flow being edited",
+          },
+          // Convert legacy props to proper format
+          nodes: Array.isArray(editorState?.defaultNodes)
+            ? (editorState.defaultNodes as any)
+            : [],
+          edges: Array.isArray(editorState?.defaultEdges)
+            ? (editorState.defaultEdges as any)
+            : [],
+        })
+      : undefined;
 
   // TODO: Implement complete file lifecycle:
   // - Save: Serialize editor state back to Flow (YAML) format
@@ -45,13 +63,10 @@ function LayoutEditor() {
 
   return (
     <Box className="relative min-h-screen bg-surface-02">
-      <Editor>
+      <Editor flow={flow}>
         <Box className="absolute inset-0">
           <Box className="relative w-full h-full">
-            <Canvas
-              defaultNodes={defaultNodes as never}
-              defaultEdges={defaultEdges as never}
-            >
+            <Canvas>
               <Canvas.Grid variant="dots" gap={12} size={1} />
               <Canvas.Minimap
                 placement="bottom-right"
