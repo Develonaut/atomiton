@@ -1,56 +1,15 @@
 import { IPC } from "#shared/channels";
-import type {
-  NodeExecuteRequest,
-  NodeExecuteResponse,
-  NodeProgress,
-  StorageRequest,
-  StorageResponse,
-} from "#shared/types";
+import type { RPCRequest, RPCResponse } from "#shared/types";
 import { contextBridge, ipcRenderer } from "electron";
 
-// Define the IPC API
+// Define the IPC API for pure transport
 const ipcAPI = {
   // System
   ping: (): Promise<string> => ipcRenderer.invoke(IPC.PING),
 
-  // Node execution
-  executeNode: (request: NodeExecuteRequest): Promise<NodeExecuteResponse> =>
-    ipcRenderer.invoke(IPC.EXECUTE_NODE, request),
-
-  // Storage
-  storageGet: (request: StorageRequest): Promise<StorageResponse> =>
-    ipcRenderer.invoke(IPC.STORAGE_GET, request),
-
-  storageSet: (request: StorageRequest): Promise<StorageResponse> =>
-    ipcRenderer.invoke(IPC.STORAGE_SET, request),
-
-  // Event listeners with cleanup
-  onNodeProgress: (callback: (progress: NodeProgress) => void) => {
-    const listener = (_event: any, progress: NodeProgress) =>
-      callback(progress);
-    ipcRenderer.on(IPC.NODE_PROGRESS, listener);
-    return () => {
-      ipcRenderer.removeListener(IPC.NODE_PROGRESS, listener);
-    };
-  },
-
-  onNodeComplete: (callback: (response: NodeExecuteResponse) => void) => {
-    const listener = (_event: any, response: NodeExecuteResponse) =>
-      callback(response);
-    ipcRenderer.on(IPC.NODE_COMPLETE, listener);
-    return () => {
-      ipcRenderer.removeListener(IPC.NODE_COMPLETE, listener);
-    };
-  },
-
-  onNodeError: (callback: (response: NodeExecuteResponse) => void) => {
-    const listener = (_event: any, response: NodeExecuteResponse) =>
-      callback(response);
-    ipcRenderer.on(IPC.NODE_ERROR, listener);
-    return () => {
-      ipcRenderer.removeListener(IPC.NODE_ERROR, listener);
-    };
-  },
+  // Generic RPC call
+  rpc: (request: RPCRequest): Promise<RPCResponse> =>
+    ipcRenderer.invoke("rpc", request),
 };
 
 // Expose the API

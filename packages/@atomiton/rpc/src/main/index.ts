@@ -5,11 +5,9 @@ export function setupIPC(mainWindow: BrowserWindow) {
   setupHandlers(mainWindow);
 }
 
-// Export types for main process usage
+// Export pure transport types
 export type {
-  NodeExecuteRequest,
-  NodeExecuteResponse,
-  NodeProgress,
-  StorageRequest,
-  StorageResponse,
+  RPCRequest,
+  RPCResponse,
+  RPCError,
 } from "#shared/types";

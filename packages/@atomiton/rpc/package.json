@@ -35,15 +35,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@atomiton/nodes": "workspace:^",
-    "@atomiton/validation": "workspace:^",
-    "@trpc/client": "^11.6.0",
-    "@trpc/react-query": "^11.6.0",
     "@trpc/server": "^11.6.0",
-    "electron": "^38.0.0",
-    "electron-trpc": "^0.6.1",
-    "superjson": "^2.2.2",
-    "zod": "^4.1.11"
+    "electron": "^38.0.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",

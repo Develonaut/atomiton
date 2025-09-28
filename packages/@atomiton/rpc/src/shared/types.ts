@@ -1,46 +1,21 @@
-// Node execution types
-export type SimpleNodeData = {
+// Pure RPC transport types
+export type RPCRequest<T = any> = {
   id: string;
-  type: string;
-  config: Record<string, unknown>;
-};
+  method: string;
+  params: T;
+}
 
-export type NodeExecuteRequestPayload = {
-  nodeData: SimpleNodeData;
-};
-
-export type NodeExecuteRequest = {
+export type RPCResponse<T = any> = {
   id: string;
-  version: string;
-  payload: NodeExecuteRequestPayload;
-};
+  result?: T;
+  error?: RPCError;
+}
 
-export type NodeExecuteResponse = {
-  id: string;
-  success: boolean;
-  outputs?: Record<string, unknown>;
-  error?: string;
-  duration?: number;
-};
-
-export type NodeProgress = {
-  id: string;
-  nodeId: string;
-  progress: number;
-  message?: string;
-};
-
-// Storage types
-export type StorageRequest = {
-  key: string;
-  value?: unknown;
-};
-
-export type StorageResponse = {
-  success: boolean;
-  value?: unknown;
-  error?: string;
-};
+export type RPCError = {
+  code: number;
+  message: string;
+  data?: any;
+}
 
 // Re-export from index
 export * from "#shared/channels";

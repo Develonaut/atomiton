@@ -1,13 +1,7 @@
-import type {
-  NodeExecuteRequest,
-  NodeExecuteResponse,
-  NodeProgress,
-  SimpleNodeData,
-} from "#shared/types";
+import type { RPCRequest, RPCResponse } from "#shared/types";
 
 /**
- * Client-side IPC wrapper
- * Provides a clean API for the renderer process to communicate with main
+ * Client-side IPC wrapper for pure transport
  */
 class IPCClient {
   private get api() {
@@ -34,65 +28,33 @@ class IPCClient {
   }
 
   /**
-   * Execute a node
+   * Generic RPC call - pure transport
    */
-  async executeNode(nodeData: SimpleNodeData): Promise<NodeExecuteResponse> {
+  async rpc(method: string, params: any = {}): Promise<any> {
     if (!this.api) throw new Error("IPC not available");
 
-    const request: NodeExecuteRequest = {
+    const request: RPCRequest = {
       id: crypto.randomUUID(),
-      version: "1",
-      payload: {
-        nodeData,
-      },
+      method,
+      params,
     };
 
-    return await this.api.executeNode(request);
-  }
+    const response: RPCResponse = await this.api.rpc(request);
 
-  /**
-   * Storage operations
-   */
-  async storageGet(key: string): Promise<unknown> {
-    if (!this.api) throw new Error("IPC not available");
-    const response = await this.api.storageGet({ key });
-    if (!response.success) throw new Error(response.error);
-    return response.value;
-  }
+    if (response.error) {
+      throw new Error(`RPC Error ${response.error.code}: ${response.error.message}`);
+    }
 
-  async storageSet(key: string, value: unknown): Promise<void> {
-    if (!this.api) throw new Error("IPC not available");
-    const response = await this.api.storageSet({ key, value });
-    if (!response.success) throw new Error(response.error);
-  }
-
-  /**
-   * Event subscriptions
-   */
-  onProgress(callback: (progress: NodeProgress) => void): () => void {
-    if (!this.api) return () => {};
-    return this.api.onNodeProgress(callback);
-  }
-
-  onComplete(callback: (response: NodeExecuteResponse) => void): () => void {
-    if (!this.api) return () => {};
-    return this.api.onNodeComplete(callback);
-  }
-
-  onError(callback: (response: NodeExecuteResponse) => void): () => void {
-    if (!this.api) return () => {};
-    return this.api.onNodeError(callback);
+    return response.result;
   }
 }
 
 // Export singleton instance
 export const ipc = new IPCClient();
 
-// Re-export types
+// Re-export pure transport types
 export type {
-  NodeExecuteRequest,
-  NodeExecuteResponse,
-  NodeProgress,
-  StorageRequest,
-  StorageResponse,
+  RPCRequest,
+  RPCResponse,
+  RPCError,
 } from "../shared/types";
