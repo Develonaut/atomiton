@@ -1,7 +1,7 @@
 import { app } from "electron";
 import fs from "fs/promises";
 import path from "path";
-import { flowToYaml, parse } from "@atomiton/yaml";
+import { toYaml, parse } from "@atomiton/yaml";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 // "Flow" is just what users call a NodeDefinition with child nodes
@@ -13,18 +13,9 @@ const FLOWS_DIR = path.join(app.getPath("documents"), "Atomiton", "flows");
 
 export const storageProcedures = {
   save: async ({ input }: { input: Flow }) => {
-    const flow = input;
-    const flatFlow = {
-      ...flow,
-      nodes: flow.nodes?.map((n: Record<string, unknown>) => ({
-        ...n,
-        version: (n.version as string) || "1.0.0",
-        parentId: (n.parentId as string) || undefined,
-      })),
-    };
-
-    const yaml = flowToYaml(flatFlow);
-    const filePath = path.join(FLOWS_DIR, `${flow.id}.flow.yaml`);
+    const node = input;
+    const yaml = toYaml(node);
+    const filePath = path.join(FLOWS_DIR, `${node.id}.flow.yaml`);
 
     await fs.mkdir(FLOWS_DIR, { recursive: true });
     await fs.writeFile(filePath, yaml, "utf-8");
@@ -34,10 +25,10 @@ export const storageProcedures = {
 
   load: async ({ input }: { input: string }) => {
     const filePath = path.join(FLOWS_DIR, `${input}.flow.yaml`);
-    const yaml = await fs.readFile(filePath, "utf-8");
-    const flow = parse(yaml) as Flow;
+    const yamlContent = await fs.readFile(filePath, "utf-8");
+    const node = parse(yamlContent) as Flow;
 
-    return flow;
+    return node;
   },
 
   list: async () => {
