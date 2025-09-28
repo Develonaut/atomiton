@@ -491,3 +491,107 @@ maintainable architecture that scales with the application's needs.
 3. [Process Sandboxing in Electron](https://www.electronjs.org/docs/latest/tutorial/sandbox)
 4. [VS Code Architecture](https://github.com/microsoft/vscode)
 5. Research on RPC patterns in Electron applications
+
+---
+
+## Claude Code Migration Prompt
+
+**Use this prompt with Claude Code to implement the Generic Transport Pattern
+migration:**
+
+```
+I need help implementing a Generic Transport Pattern migration for our Electron IPC architecture as documented in ./.claude/IPC_ARCHITECTURE_ANALYSIS.md.
+
+CONTEXT:
+- We're migrating from a duplicated API structure (in both preload and RPC package) to a single source of truth
+- The preload script is limited and cannot import external packages due to Electron sandboxing
+- Current structure: apps/desktop/src/preload duplicates API definitions from packages/@atomiton/rpc
+- Goal: Minimal preload bridge that only handles generic transport, with RPC package owning all API logic
+
+ARCHITECTURE DECISION (already made):
+We're implementing a Generic Transport Pattern where:
+1. Preload exposes only 3 generic methods: invoke(), on(), send()
+2. RPC package becomes the single source of truth with router/handler pattern
+3. Conductor package consumes RPC client without knowing transport details
+
+IMPLEMENTATION PHASES:
+
+PHASE 1: Create Minimal Preload Bridge
+1. Update apps/desktop/src/preload/index.ts to expose only generic bridge methods
+2. Expose via contextBridge as 'atomitonBridge' with invoke, on, and send methods
+3. Use channels: 'rpc:invoke', 'rpc:event:*', 'rpc:send'
+4. Generate TypeScript declarations for window.atomitonBridge
+
+PHASE 2: Implement RPC Router Infrastructure
+1. Create packages/@atomiton/rpc/src/shared/api.ts with AtomitonAPI interface
+2. Implement packages/@atomiton/rpc/src/main/router.ts with method routing logic
+3. Create domain handlers in packages/@atomiton/rpc/src/main/handlers/
+4. Set up IPC listener in main process that routes through RPCRouter
+
+PHASE 3: Build Type-Safe RPC Client
+1. Create packages/@atomiton/rpc/src/renderer/client.ts with Proxy-based client
+2. Ensure full TypeScript type inference from AtomitonAPI interface
+3. Export createRPCClient() function for renderer usage
+
+PHASE 4: Update Conductor Integration
+1. Modify packages/@atomiton/conductor to use RPC client
+2. Remove any direct IPC references from conductor
+3. Update conductor's browser entry point to use createRPCClient()
+
+CONSTRAINTS:
+- Preload CANNOT import from packages/@atomiton/rpc (bundling limitation)
+- Must maintain context isolation and security best practices
+- All IPC must go through the generic bridge - no direct ipcRenderer access
+- Type safety must be preserved across all boundaries
+- Backwards compatibility during migration (use feature flags if needed)
+
+VALIDATION CRITERIA:
+- [ ] Preload script is under 50 lines and has no business logic
+- [ ] Adding new API methods requires changes only in RPC package
+- [ ] Full type inference works from renderer to main process
+- [ ] All existing functionality continues to work
+- [ ] Performance is equal or better than current implementation
+
+FILE STRUCTURE TO CREATE/MODIFY:
+```
+
+apps/desktop/src/ preload/ index.ts # Minimal generic bridge types.d.ts #
+TypeScript declarations
+
+packages/@atomiton/rpc/ src/ shared/ api.ts # API contract (single source of
+truth) types.ts # Shared type definitions registry.ts # Method registry main/
+router.ts # Central routing logic server.ts # IPC server setup handlers/
+node.ts # Node execution handlers system.ts # System info handlers  
+ storage.ts # Storage handlers renderer/ client.ts # Type-safe RPC client
+proxy.ts # Proxy implementation types.ts # Renderer-specific types index.ts #
+Package exports
+
+```
+
+PLEASE START WITH:
+1. Show me the current preload/index.ts to understand what needs migration
+2. Create the minimal generic bridge implementation
+3. Implement the RPC router pattern step by step
+4. Ensure all type safety is preserved
+
+KEY REQUIREMENTS:
+- Question every assumption about the implementation
+- Validate patterns against Electron security best practices
+- Consider performance implications of Proxy usage
+- Document trade-offs in code comments
+- Write unit tests for critical paths
+```
+
+### Alternative Prompt for Specific Phase Implementation
+
+```
+Implement [PHASE X] of the Generic Transport Pattern migration as documented in ./.claude/IPC_ARCHITECTURE_ANALYSIS.md
+
+[Include relevant phase details from above]
+
+Show me:
+1. Current implementation that needs to change
+2. New implementation following the pattern
+3. Migration path to avoid breaking changes
+4. Tests to validate the implementation
+```
