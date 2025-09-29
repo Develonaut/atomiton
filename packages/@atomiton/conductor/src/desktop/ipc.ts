@@ -73,7 +73,7 @@ export function registerHandlers(
     // Remove any existing handler first to prevent duplicates
     try {
       ipcMain.removeHandler(channel);
-    } catch (error) {
+    } catch {
       // Handler might not exist, which is fine
     }
     ipcMain.handle(channel, handler as (...args: unknown[]) => unknown);
