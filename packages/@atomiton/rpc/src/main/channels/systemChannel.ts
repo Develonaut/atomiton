@@ -8,20 +8,9 @@ import * as os from "os";
 
 // Types for system channel operations
 export type HealthResult = {
-  status: "ok" | "warning" | "error";
+  status: "ok" | "error";
   timestamp: number;
   message?: string;
-  details: {
-    uptime: number;
-    memory: {
-      used: number;
-      total: number;
-      percentage: number;
-    };
-    platform: string;
-    version: string;
-    nodeVersion: string;
-  };
 };
 
 export type MetricsResult = {
@@ -61,10 +50,10 @@ export type RestartParams = {
 export const createSystemChannelServer = (ipcMain: IpcMain): ChannelServer => {
   const server = createChannelServer("system", ipcMain);
 
-  // Track app start time for uptime calculations
+  // Track app start time for metrics
   const appStartTime = Date.now();
 
-  // Helper function to get memory usage info
+  // Helper functions for metrics (not health check)
   const getMemoryInfo = () => {
     const memUsage = process.memoryUsage();
     const totalMemory = os.totalmem();
@@ -84,7 +73,6 @@ export const createSystemChannelServer = (ipcMain: IpcMain): ChannelServer => {
     };
   };
 
-  // Helper function to get CPU usage
   const getCPUUsage = (): number => {
     const cpus = os.cpus();
     let totalIdle = 0;
@@ -106,45 +94,14 @@ export const createSystemChannelServer = (ipcMain: IpcMain): ChannelServer => {
 
   // Register command handlers
   server.handle("health", async (): Promise<HealthResult> => {
-    const uptime = Date.now() - appStartTime;
-    const memory = getMemoryInfo();
+    // Simple ping-pong health check to verify IPC connection
+    console.log("[SYSTEM] Health check ping received, responding with pong");
 
-    // Determine health status based on metrics
-    let status: "ok" | "warning" | "error" = "ok";
-    let message: string | undefined;
-
-    if (memory.percentage > 90) {
-      status = "error";
-      message = "Memory usage critical";
-    } else if (memory.percentage > 75) {
-      status = "warning";
-      message = "Memory usage high";
-    }
-
-    const health: HealthResult = {
-      status,
+    return {
+      status: "ok",
       timestamp: Date.now(),
-      message,
-      details: {
-        uptime,
-        memory: {
-          used: memory.used,
-          total: memory.total,
-          percentage: memory.percentage,
-        },
-        platform: os.platform(),
-        version: os.release(),
-        nodeVersion: process.version,
-      },
+      message: "IPC connection active",
     };
-
-    console.log("[SYSTEM] Health check completed:", {
-      status: health.status,
-      memoryPercentage: memory.percentage,
-      uptime,
-    });
-
-    return health;
   });
 
   server.handle("metrics", async (): Promise<MetricsResult> => {
@@ -265,62 +222,6 @@ export const createSystemChannelServer = (ipcMain: IpcMain): ChannelServer => {
       uptime: os.uptime(),
     };
   });
-
-  // Store health function for periodic checks
-  const getHealthStatus = async (): Promise<HealthResult> => {
-    const uptime = Date.now() - appStartTime;
-    const memory = getMemoryInfo();
-
-    // Determine health status based on metrics
-    let status: "ok" | "warning" | "error" = "ok";
-    let message: string | undefined;
-
-    if (memory.percentage > 90) {
-      status = "error";
-      message = "Memory usage critical";
-    } else if (memory.percentage > 75) {
-      status = "warning";
-      message = "Memory usage high";
-    }
-
-    return {
-      status,
-      timestamp: Date.now(),
-      message,
-      details: {
-        uptime,
-        memory: {
-          used: memory.used,
-          total: memory.total,
-          percentage: memory.percentage,
-        },
-        platform: os.platform(),
-        version: os.release(),
-        nodeVersion: process.version,
-      },
-    };
-  };
-
-  // Periodic health check broadcast
-  const healthCheckInterval = setInterval(async () => {
-    try {
-      const health = await getHealthStatus();
-      if (health.status !== "ok") {
-        server.broadcast("healthAlert", health);
-      }
-    } catch (error) {
-      console.error("[SYSTEM] Health check broadcast failed:", {
-        error: error instanceof Error ? error.message : String(error),
-      });
-    }
-  }, 30000); // Every 30 seconds
-
-  // Clean up interval on dispose
-  const originalDispose = server.dispose;
-  server.dispose = () => {
-    clearInterval(healthCheckInterval);
-    originalDispose();
-  };
 
   return server;
 };

@@ -36,6 +36,11 @@ test.describe("Debug Page Node Execution", () => {
     // Ensure .tmp directory exists
     await fs.promises.mkdir(".tmp", { recursive: true });
 
+    // First click the Nodes tab to make the test button visible
+    const nodesTab = sharedElectronPage.locator('[data-testid="tab-nodes"]');
+    await expect(nodesTab).toBeVisible({ timeout: 5000 });
+    await nodesTab.click();
+
     // Click the Test Node button that uses conductor.node.run()
     const testNodeButton = sharedElectronPage.locator(
       '[data-testid="test-node-execution"]',
@@ -63,20 +68,21 @@ test.describe("Debug Page Node Execution", () => {
 
     if (hasError) {
       const errorText = await errorMessage.textContent();
-      throw new Error(`File write test failed: ${errorText}`);
+      const errorDataOutput = await errorMessage.getAttribute("data-output");
+      // Use data-output if available, otherwise fall back to text content
+      const errorDetail = errorDataOutput || errorText;
+      throw new Error(`File write test failed: ${errorDetail}`);
     }
 
     expect(hasSuccess).toBe(true);
 
-    // Extract and verify the created file
-    const messageText = await successMessage.textContent();
-    const filePathMatch = messageText?.match(
-      /✅ File write test completed: (.+)/,
-    );
-    expect(filePathMatch).toBeTruthy();
+    // Extract the file path from data-output attribute (more reliable than text parsing)
+    const dataOutput = await successMessage.getAttribute("data-output");
+    expect(dataOutput).toBeTruthy();
+    expect(dataOutput).toMatch(/\.tmp\/debug-test-\d+\.txt$/);
 
-    if (filePathMatch && filePathMatch[1]) {
-      const createdFilePath = filePathMatch[1];
+    if (dataOutput) {
+      const createdFilePath = dataOutput;
 
       // Verify file was created
       const fileExists = await fs.promises

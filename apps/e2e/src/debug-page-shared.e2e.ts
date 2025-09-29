@@ -22,7 +22,12 @@ test.describe("Debug Page Core Functionality", () => {
   test("conductor health check works through UI", async ({
     sharedElectronPage,
   }) => {
-    // Test through the debug page UI button using data-testid
+    // First click the System tab to make the health button visible
+    const systemTab = sharedElectronPage.locator('[data-testid="tab-system"]');
+    await expect(systemTab).toBeVisible({ timeout: 5000 });
+    await systemTab.click();
+
+    // Now test through the debug page UI button using data-testid
     const healthButton = sharedElectronPage.locator(
       '[data-testid="test-health"]',
     );
@@ -31,10 +36,43 @@ test.describe("Debug Page Core Functionality", () => {
     await healthButton.click();
     await sharedElectronPage.waitForTimeout(1000);
 
-    // Check if health result is displayed in UI
-    const healthStatus = await sharedElectronPage
-      .locator('[data-testid="health-status"]')
-      .isVisible({ timeout: 5000 });
-    expect(healthStatus).toBe(true);
+    // Verify ping message is sent
+    const pingElement = sharedElectronPage.locator(
+      '[data-testid="health-ping"]',
+    );
+    await expect(pingElement).toBeVisible({ timeout: 5000 });
+    const pingDataOutput = await pingElement.getAttribute("data-output");
+    expect(pingDataOutput).toBe("ping");
+
+    // Verify pong response is received
+    const pongElement = sharedElectronPage.locator(
+      '[data-testid="health-pong"]',
+    );
+    await expect(pongElement).toBeVisible({ timeout: 5000 });
+    const pongDataOutput = await pongElement.getAttribute("data-output");
+    // The health check should succeed, returning 'success' in data-output
+    expect(pongDataOutput).toBe("success");
+
+    // Verify IPC connection message
+    const messageElement = sharedElectronPage.locator(
+      '[data-testid="health-message"]',
+    );
+    const hasMessage = await messageElement
+      .isVisible({ timeout: 2000 })
+      .catch(() => false);
+    if (hasMessage) {
+      const messageOutput = await messageElement.getAttribute("data-output");
+      expect(messageOutput).toContain("IPC connection");
+    }
+
+    // Verify timestamp is present
+    const timestampElement = sharedElectronPage.locator(
+      '[data-testid="health-timestamp"]',
+    );
+    await expect(timestampElement).toBeVisible({ timeout: 5000 });
+    const timestampOutput = await timestampElement.getAttribute("data-output");
+    expect(timestampOutput).toBeTruthy();
+    // Verify it looks like a time
+    expect(timestampOutput).toMatch(/\d{1,2}:\d{2}:\d{2}/);
   });
 });
