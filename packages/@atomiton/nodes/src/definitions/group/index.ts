@@ -8,6 +8,7 @@ import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import { createNodePort } from "#core/factories/createNodePorts";
 import type { NodeDefinition } from "#core/types/definition";
+import type { NodeFieldsConfig } from "#core/types/parameters.js";
 
 /**
  * Default values for group parameters
@@ -16,6 +17,31 @@ export const groupDefaults = {
   timeout: 30000,
   retries: 1,
   parallel: false,
+};
+
+/**
+ * Field configurations for group parameters
+ */
+export const groupFields: NodeFieldsConfig = {
+  timeout: {
+    controlType: "number",
+    label: "Timeout (ms)",
+    helpText: "Maximum execution time in milliseconds",
+    min: 1000,
+    max: 300000,
+  },
+  retries: {
+    controlType: "number",
+    label: "Retries",
+    helpText: "Number of retry attempts on failure",
+    min: 0,
+    max: 10,
+  },
+  parallel: {
+    controlType: "boolean",
+    label: "Parallel Execution",
+    helpText: "Execute child nodes in parallel when possible",
+  },
 };
 
 /**
@@ -40,27 +66,8 @@ export const groupDefinition: NodeDefinition = createNodeDefinition({
     deprecated: false,
   }),
 
-  parameters: createNodeParameters(groupDefaults, {
-    timeout: {
-      controlType: "number",
-      label: "Timeout (ms)",
-      helpText: "Maximum execution time in milliseconds",
-      min: 1000,
-      max: 300000,
-    },
-    retries: {
-      controlType: "number",
-      label: "Retries",
-      helpText: "Number of retry attempts on failure",
-      min: 0,
-      max: 10,
-    },
-    parallel: {
-      controlType: "boolean",
-      label: "Parallel Execution",
-      helpText: "Execute child nodes in parallel when possible",
-    },
-  }),
+  parameters: createNodeParameters(groupDefaults),
+  fields: groupFields,
 
   inputPorts: [
     createNodePort("trigger", {

@@ -55,7 +55,8 @@ export const transformDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(transformDefaults, transformFields),
+  parameters: createNodeParameters(transformDefaults),
+  fields: transformFields,
   inputPorts: transformInputPorts,
   outputPorts: transformOutputPorts,
 });

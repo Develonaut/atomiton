@@ -34,7 +34,7 @@ export function flowToReactFlow(flow: NodeDefinition): TransformedFlow {
         position: n.position,
         data: {
           label: n.name || n.type,
-          config: n.parameters?.defaults || {},
+          config: n.parameters || {},
           version: n.version,
           parentId: flow.id,
         },
@@ -87,10 +87,7 @@ export function reactFlowToFlow(
           category: "user",
           description: "",
         }),
-        parameters: createNodeParameters({
-          defaults: n.data?.config || {},
-          fields: {},
-        }),
+        parameters: createNodeParameters(n.data?.config || {}),
         inputPorts: ports.input,
         outputPorts: ports.output,
       }),

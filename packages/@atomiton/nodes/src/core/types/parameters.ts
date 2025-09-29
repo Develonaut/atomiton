@@ -73,12 +73,7 @@ export type NodeFieldsConfig = Record<string, NodeFieldConfig>;
 
 /**
  * Node parameters structure (serializable)
- * Contains only pure data - validation logic is in the schema registry
+ * Contains runtime parameter values as flat key-value pairs
+ * Validation logic is in the schema registry
  */
-export type NodeParameters = {
-  /** Default parameter values */
-  defaults: Record<string, unknown>;
-
-  /** UI field configurations for form rendering */
-  fields: NodeFieldsConfig;
-};
+export type NodeParameters = Record<string, unknown>;

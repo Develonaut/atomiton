@@ -14,6 +14,7 @@ import type {
   NodePort,
   NodeRuntime,
 } from "#core/types/definition.js";
+import type { NodeParameters } from "#core/types/parameters.js";
 import yaml from "js-yaml";
 import type {
   YamlEdge,
@@ -67,8 +68,8 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
   // Parse metadata (without type and version)
   const metadata = parseMetadata(data);
 
-  // Parse parameters
-  const parameters = parseParameters(data.parameters);
+  // Parse parameters and fields
+  const { parameters, fields } = parseParameters(data.parameters);
 
   // Parse ports
   const inputPorts = parsePorts(data.inputPorts || []);
@@ -89,6 +90,7 @@ function parseNodeDefinition(data: YamlNodeDefinition): NodeDefinition {
     position: data.position || { x: 0, y: 0 },
     metadata,
     parameters,
+    fields,
     inputPorts,
     outputPorts,
     nodes,
@@ -131,20 +133,24 @@ function parseMetadata(data: YamlNodeDefinition) {
 
 /**
  * Parse parameters from YAML data
+ * Returns separate parameters and fields
  */
-function parseParameters(params?: Record<string, YamlParameter>) {
+function parseParameters(params?: Record<string, YamlParameter>): {
+  parameters: NodeParameters;
+  fields: NodeFieldsConfig;
+} {
   if (!params) {
-    // Return a minimal parameters object with empty defaults and fields
-    return createNodeParameters({}, {});
+    // Return minimal objects
+    return { parameters: createNodeParameters({}), fields: {} };
   }
 
-  const defaults: Record<string, unknown> = {};
+  const parameters: Record<string, unknown> = {};
   const fields: NodeFieldsConfig = {};
 
   Object.entries(params).forEach(([key, param]) => {
-    // Store default value
+    // Store default value as parameter
     if (param.default !== undefined) {
-      defaults[key] = param.default;
+      parameters[key] = param.default;
     }
 
     // Create field configuration
@@ -164,7 +170,7 @@ function parseParameters(params?: Record<string, YamlParameter>) {
     }
   });
 
-  return createNodeParameters(defaults, fields);
+  return { parameters: createNodeParameters(parameters), fields };
 }
 
 /**

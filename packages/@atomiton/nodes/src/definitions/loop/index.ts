@@ -55,7 +55,8 @@ export const loopDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(loopDefaults, loopFields),
+  parameters: createNodeParameters(loopDefaults),
+  fields: loopFields,
   inputPorts: loopInputPorts,
   outputPorts: loopOutputPorts,
 });

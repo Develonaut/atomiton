@@ -57,7 +57,8 @@ export const fileSystemDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(fileSystemDefaults, fileSystemFields),
+  parameters: createNodeParameters(fileSystemDefaults),
+  fields: fileSystemFields,
   inputPorts: fileSystemInputPorts,
   outputPorts: fileSystemOutputPorts,
 });

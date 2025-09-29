@@ -42,15 +42,8 @@ export function isNodeMetadata(obj: unknown): obj is NodeMetadata {
 }
 
 /**
- * Helper to check if an object is already NodeParameters
+ * Helper to check if an object is already NodeParameters (flat parameters)
  */
 export function isNodeParameters(obj: unknown): obj is NodeParameters {
-  return (
-    obj !== null &&
-    typeof obj === "object" &&
-    "defaults" in obj &&
-    "fields" in obj &&
-    typeof (obj as Record<string, unknown>).defaults === "object" &&
-    typeof (obj as Record<string, unknown>).fields === "object"
-  );
+  return obj !== null && typeof obj === "object" && !Array.isArray(obj);
 }

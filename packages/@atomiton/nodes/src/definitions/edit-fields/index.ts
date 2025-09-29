@@ -43,7 +43,8 @@ export const editFieldsDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(editFieldsDefaults, editFieldsFields),
+  parameters: createNodeParameters(editFieldsDefaults),
+  fields: editFieldsFields,
   inputPorts: editFieldsInputPorts,
   outputPorts: editFieldsOutputPorts,
 });

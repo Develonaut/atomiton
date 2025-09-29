@@ -2,26 +2,16 @@
  * Factory function for creating node parameters
  */
 
-import type {
-  NodeFieldsConfig,
-  NodeParameters,
-} from "#core/types/definition.js";
-import { isNodeParameters } from "#core/utils/nodeUtils.js";
+import type { NodeParameters } from "#core/types/definition.js";
 
 /**
- * Creates a serializable NodeParameters object
+ * Creates a flat NodeParameters object with base defaults
  * Note: Schema registration happens separately in the schemas module
  */
 function createNodeParameters(
-  parametersOrDefaults: NodeParameters | Record<string, unknown>,
-  fields?: NodeFieldsConfig,
+  parameters?: Record<string, unknown>,
 ): NodeParameters {
-  if (isNodeParameters(parametersOrDefaults)) {
-    return parametersOrDefaults as NodeParameters;
-  }
-
-  const defaults = parametersOrDefaults || {};
-  const fieldConfig = fields || {};
+  const parameterValues = parameters || {};
 
   // Base defaults that all nodes share
   const baseDefaults = {
@@ -30,14 +20,9 @@ function createNodeParameters(
     retries: 1,
   };
 
-  const fullDefaults = {
-    ...baseDefaults,
-    ...defaults,
-  } as Record<string, unknown>;
-
   return {
-    defaults: fullDefaults,
-    fields: fieldConfig,
+    ...baseDefaults,
+    ...parameterValues,
   };
 }
 

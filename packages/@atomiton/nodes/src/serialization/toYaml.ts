@@ -96,8 +96,11 @@ export function toYaml(definition: NodeDefinition): string {
     }
 
     // Add parameters if present
-    if (definition.parameters) {
-      yamlStructure.parameters = serializeParameters(definition.parameters);
+    if (definition.parameters || definition.fields) {
+      yamlStructure.parameters = serializeParameters(
+        definition.parameters || {},
+        definition.fields,
+      );
     }
 
     // Add any additional fields
@@ -152,8 +155,11 @@ function serializeNode(node: NodeDefinition): SerializedNode {
   }
 
   // Add parameters
-  if (node.parameters) {
-    serialized.parameters = serializeParameters(node.parameters);
+  if (node.parameters || node.fields) {
+    serialized.parameters = serializeParameters(
+      node.parameters || {},
+      node.fields,
+    );
   }
 
   // Add position
@@ -209,39 +215,47 @@ function serializeEdge(edge: NodeEdge): SerializedEdge {
 
 function serializeParameters(
   parameters: NodeDefinition["parameters"],
+  fields?: NodeDefinition["fields"],
 ): Record<string, unknown> {
   const serialized: Record<string, unknown> = {};
+  const fieldConfigs = fields || {};
 
-  // Extract from fields and defaults
-  if (parameters.fields) {
-    for (const [key, field] of Object.entries(parameters.fields)) {
-      serialized[key] = {
-        type:
-          field.controlType === "number"
-            ? "number"
-            : field.controlType === "boolean"
-              ? "boolean"
-              : "string",
-        default: parameters.defaults[key],
-        control: field.controlType,
-        required: field.required,
-        label: field.label !== key ? field.label : undefined,
-        placeholder: field.placeholder,
-        helpText: field.helpText,
-        options: field.options?.map((o) => o.value),
-        min: field.min,
-        max: field.max,
-        step: field.step,
-      };
+  // Combine parameters with their field definitions
+  const allKeys = new Set([
+    ...Object.keys(parameters || {}),
+    ...Object.keys(fieldConfigs),
+  ]);
 
-      // Remove undefined values for cleaner YAML
-      const paramObj = serialized[key] as Record<string, unknown>;
-      Object.keys(paramObj).forEach((k) => {
-        if (paramObj[k] === undefined) {
-          delete paramObj[k];
-        }
-      });
-    }
+  for (const key of allKeys) {
+    const field = fieldConfigs[key];
+    const value = parameters?.[key];
+
+    serialized[key] = {
+      type:
+        field?.controlType === "number"
+          ? "number"
+          : field?.controlType === "boolean"
+            ? "boolean"
+            : "string",
+      default: value,
+      control: field?.controlType,
+      required: field?.required,
+      label: field?.label !== key ? field?.label : undefined,
+      placeholder: field?.placeholder,
+      helpText: field?.helpText,
+      options: field?.options?.map((o) => o.value),
+      min: field?.min,
+      max: field?.max,
+      step: field?.step,
+    };
+
+    // Remove undefined values for cleaner YAML
+    const paramObj = serialized[key] as Record<string, unknown>;
+    Object.keys(paramObj).forEach((k) => {
+      if (paramObj[k] === undefined) {
+        delete paramObj[k];
+      }
+    });
   }
 
   return serialized;

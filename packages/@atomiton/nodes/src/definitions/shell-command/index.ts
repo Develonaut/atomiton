@@ -60,7 +60,8 @@ export const shellCommandDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(shellCommandDefaults, shellCommandFields),
+  parameters: createNodeParameters(shellCommandDefaults),
+  fields: shellCommandFields,
   inputPorts: shellCommandInputPorts,
   outputPorts: shellCommandOutputPorts,
 });

@@ -58,7 +58,8 @@ export const httpRequestDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(httpRequestDefaults, httpRequestFields),
+  parameters: createNodeParameters(httpRequestDefaults),
+  fields: httpRequestFields,
   inputPorts: httpRequestInputPorts,
   outputPorts: httpRequestOutputPorts,
 });

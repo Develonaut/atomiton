@@ -49,7 +49,8 @@ export const codeDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(codeDefaults, codeFields),
+  parameters: createNodeParameters(codeDefaults),
+  fields: codeFields,
   inputPorts: codeInputPorts,
   outputPorts: codeOutputPorts,
 });

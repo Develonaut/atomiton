@@ -31,8 +31,8 @@ function createEditorNodeData(nodeType: string): NodeData {
   return {
     name: definition.metadata?.name || definition.name,
     metadata: definition.metadata,
-    parameters: definition.parameters?.defaults || {},
-    fields: definition.parameters?.fields || {},
+    parameters: definition.parameters || {},
+    fields: definition.fields || {},
     inputPorts: calculatePortPositions(inputPorts),
     outputPorts: calculatePortPositions(outputPorts),
   };

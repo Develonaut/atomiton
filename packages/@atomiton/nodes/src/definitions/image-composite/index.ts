@@ -57,10 +57,8 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(
-    imageCompositeDefaults,
-    imageCompositeFields,
-  ),
+  parameters: createNodeParameters(imageCompositeDefaults),
+  fields: imageCompositeFields,
   inputPorts: imageCompositeInputPorts,
   outputPorts: imageCompositeOutputPorts,
 });

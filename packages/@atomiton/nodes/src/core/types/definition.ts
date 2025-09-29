@@ -11,7 +11,7 @@ export * from "#core/types/ports";
 
 import type { NodeEdge } from "#core/types/edges";
 import type { NodeMetadata } from "#core/types/metadata";
-import type { NodeParameters } from "#core/types/parameters";
+import type { NodeFieldsConfig, NodeParameters } from "#core/types/parameters";
 import type { NodePort } from "#core/types/ports";
 
 // ============================================================================
@@ -51,8 +51,11 @@ export type NodeDefinition = {
   /** Metadata about this node (without type and version) */
   metadata: NodeMetadata;
 
-  /** Parameters schema, defaults, and field definitions */
+  /** Runtime parameter values */
   parameters: NodeParameters;
+
+  /** UI field configurations for form rendering */
+  fields?: NodeFieldsConfig;
 
   /** Input port definitions */
   inputPorts: NodePort[];

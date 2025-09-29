@@ -9,9 +9,9 @@ const createChannelBridge = () => {
   return {
     // Generic channel call method
     call: async (channel: string, command: string, args?: unknown) => {
-      const fullMethod = `${channel}:${command}`;
-      console.log("[PRELOAD:CALL]", fullMethod, args);
-      return await ipcRenderer.invoke(fullMethod, args);
+      const fullMethod = `${channel}:call`;
+      console.log("[PRELOAD:CALL]", fullMethod, command, args);
+      return await ipcRenderer.invoke(fullMethod, command, args);
     },
 
     // Generic channel listen method

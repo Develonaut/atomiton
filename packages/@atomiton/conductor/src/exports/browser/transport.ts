@@ -35,7 +35,7 @@ export function createRPCTransport(): ConductorTransport | undefined {
           });
 
           try {
-            const result = await bridge.call("conductor", "node:run", {
+            const result = await bridge.call("node", "execute", {
               node,
               context,
             });
@@ -70,20 +70,39 @@ export function createRPCTransport(): ConductorTransport | undefined {
         async health(): Promise<HealthResult> {
           console.log("[CONDUCTOR:TRANSPORT] Health check via RPC");
           try {
-            const result = await bridge.call("conductor", "system:health");
+            const result = await bridge.call("system", "health");
+            console.log(
+              "[CONDUCTOR:TRANSPORT] Raw health result from bridge:",
+              result,
+            );
+
+            // The result should be wrapped in { result: ... } by the channel server
+            const healthResult = result.result as HealthResult;
+
             console.log("[CONDUCTOR:TRANSPORT] Health check completed:", {
-              status: result.status,
+              status: healthResult?.status,
+              hasResult: !!healthResult,
+              resultKeys: healthResult ? Object.keys(healthResult) : [],
             });
-            return (
-              (result.result as HealthResult) || {
+
+            if (!healthResult) {
+              console.warn(
+                "[CONDUCTOR:TRANSPORT] No health result in response, using fallback",
+              );
+              return {
                 status: "ok" as const,
                 timestamp: Date.now(),
-                message: "Health check successful",
-              }
-            );
+                message: "Health check successful (fallback)",
+              };
+            }
+
+            return healthResult;
           } catch (error) {
             console.error("[CONDUCTOR:TRANSPORT] Health check failed:", {
               error: error instanceof Error ? error.message : String(error),
+              errorType:
+                error instanceof Error ? error.constructor.name : typeof error,
+              stack: error instanceof Error ? error.stack : undefined,
             });
             return {
               status: "error" as const,

@@ -20,6 +20,12 @@ import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 // Re-export types and utilities
 export * from "#types";
+export type {
+  NodeProgressEvent,
+  NodeCompleteEvent,
+  NodeErrorEvent,
+  FlowSavedEvent,
+} from "#exports/browser/types.js";
 
 /**
  * Internal factory function for creating conductor instances

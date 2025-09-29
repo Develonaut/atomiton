@@ -1,8 +1,9 @@
 import {
   createChannelServer,
-  withValidation,
   type ChannelServer,
 } from "#main/channels/createChannelServer";
+import { createConductor } from "@atomiton/conductor/desktop";
+import { generateExecutionId } from "@atomiton/utils";
 import { v } from "@atomiton/validation";
 import type { IpcMain } from "electron";
 
@@ -87,20 +88,8 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
   const server = createChannelServer("node", ipcMain);
   const executions = new Map<string, AbortController>();
 
-  // Mock conductor for demonstration (replace with actual implementation)
-  const mockConductor = {
-    node: {
-      async run(node: NodeDefinition): Promise<ExecutionResult> {
-        // Simple mock execution
-        return {
-          success: true,
-          data: `Mock execution result for ${node.type} node`,
-          duration: 100,
-          executedNodes: [node.id],
-        };
-      },
-    },
-  };
+  // Create real conductor instance
+  const conductor = createConductor();
 
   // Register command handlers
   server.handle("execute", async (args: unknown): Promise<unknown> => {
@@ -111,7 +100,7 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
     }
 
     const params = validation.data;
-    const executionId = crypto.randomUUID();
+    const executionId = generateExecutionId();
     const controller = new AbortController();
 
     executions.set(executionId, controller);
@@ -131,8 +120,16 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
         timestamp: Date.now(),
       });
 
-      // Execute the node using mock conductor
-      const result = await mockConductor.node.run(params.node);
+      // Execute the node using real conductor with context
+      const context = {
+        nodeId: params.node.id,
+        executionId,
+        variables: params.context?.variables || {},
+        input: params.context?.input,
+        parentContext: params.context?.parentContext,
+      };
+
+      const result = await conductor.node.run(params.node as any, context);
 
       // Broadcast completion event
       server.broadcast("completed", {
@@ -149,11 +146,8 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
         duration: result.duration,
       });
 
-      return {
-        executionId,
-        status: "completed",
-        result,
-      };
+      // Return the result directly for the browser transport
+      return result;
     } catch (error) {
       console.error("[NODE] Execution failed:", {
         executionId,
@@ -169,10 +163,17 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
         timestamp: Date.now(),
       });
 
+      // Return an error result for the browser transport
       return {
-        executionId,
-        status: "failed",
-        error,
+        success: false,
+        error: {
+          nodeId: params.node.id,
+          message: error instanceof Error ? error.message : String(error),
+          timestamp: new Date(),
+          code: "EXECUTION_FAILED",
+        },
+        duration: 0,
+        executedNodes: [],
       };
     } finally {
       executions.delete(executionId);

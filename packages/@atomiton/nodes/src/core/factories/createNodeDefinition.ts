@@ -15,6 +15,7 @@ import { isNodeParameters } from "#core/utils/nodeUtils";
 import type {
   NodeDefinition,
   NodeEdge,
+  NodeFieldsConfig,
   NodeMetadata,
   NodeParameters,
   NodePort,
@@ -30,6 +31,7 @@ export type CreateNodeInput = {
   position?: { x: number; y: number };
   metadata?: NodeMetadata | NodeMetadataInput;
   parameters?: NodeParameters | Parameters<typeof createNodeParameters>[0];
+  fields?: NodeFieldsConfig;
   inputPorts?: NodePort[] | NodePortInput[];
   outputPorts?: NodePort[] | NodePortInput[];
   nodes?: NodeDefinition[];
@@ -58,7 +60,8 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
   const metadata = createNodeMetadata(input.metadata || {});
   const parameters = isNodeParameters(input.parameters)
     ? input.parameters
-    : createNodeParameters(input.parameters || {}, undefined);
+    : createNodeParameters(input.parameters || {});
+  const fields = input.fields || {};
 
   const ports = createNodePorts({
     input: input.inputPorts,
@@ -74,6 +77,7 @@ function createNodeDefinition(input: CreateNodeInput): NodeDefinition {
     position,
     metadata,
     parameters,
+    fields,
     inputPorts: ports.input,
     outputPorts: ports.output,
   };
