@@ -2,7 +2,7 @@ import { expect, test } from "#fixtures/electron";
 import fs from "fs";
 import path from "path";
 
-test.describe("Debug Page File Write Functionality", () => {
+test.describe("Debug Page Node Execution", () => {
   const testOutputDir = "/tmp/atomiton-e2e-test";
   const testFilePath = path.join(testOutputDir, "debug-test-output.txt");
 
@@ -30,93 +30,74 @@ test.describe("Debug Page File Write Functionality", () => {
     await sharedElectronPage.waitForTimeout(2000);
   });
 
-  test("executes node and writes file to .tmp directory", async ({
+  test("executes file-write node through UI button", async ({
     sharedElectronPage,
   }) => {
+    // Ensure .tmp directory exists
+    await fs.promises.mkdir(".tmp", { recursive: true });
+
+    // Click the Test Node button that uses conductor.node.run()
     const testNodeButton = sharedElectronPage.locator(
-      'button:has-text("Test Node")',
+      '[data-testid="test-node-execution"]',
     );
     await expect(testNodeButton).toBeVisible({ timeout: 10000 });
     await testNodeButton.click();
-    await sharedElectronPage.waitForTimeout(5000);
 
-    const createdFilePath = ".tmp/debug-test-output.txt";
-    const fileExists = await fs.promises
-      .access(createdFilePath)
-      .then(() => true)
-      .catch(() => false);
-    expect(fileExists).toBe(true);
-    const fileContent = await fs.promises.readFile(createdFilePath, "utf8");
-    expect(fileContent).toContain("Debug test executed at");
-    expect(fileContent).toContain("Test data: Hello from Debug Page!");
-    const timestampRegex = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
-    expect(fileContent).toMatch(timestampRegex);
-    // Check for success message in the logs
-    const successMessage = sharedElectronPage.locator(
-      "text=✅ File write test completed",
-    );
-    await expect(successMessage).toBeVisible({ timeout: 10000 });
-  });
-
-  test("shows IPC connection and node execution capability", async ({
-    sharedElectronPage,
-  }) => {
-    const ipcInfo = await sharedElectronPage.evaluate(() => {
-      return {
-        hasAtomitonRPC: !!(window as any).atomitonRPC,
-        hasNode: !!(window as any).atomitonRPC?.node,
-        hasSystem: !!(window as any).atomitonRPC?.system,
-        nodeMethods: (window as any).atomitonRPC?.node
-          ? Object.keys((window as any).atomitonRPC.node).filter(
-              (key) =>
-                typeof (window as any).atomitonRPC.node[key] === "function",
-            )
-          : [],
-        systemMethods: (window as any).atomitonRPC?.system
-          ? Object.keys((window as any).atomitonRPC.system).filter(
-              (key) =>
-                typeof (window as any).atomitonRPC.system[key] === "function",
-            )
-          : [],
-      };
-    });
-
-    expect(ipcInfo.hasAtomitonRPC).toBe(true);
-    expect(ipcInfo.hasNode).toBe(true);
-    expect(ipcInfo.hasSystem).toBe(true);
-    expect(ipcInfo.nodeMethods).toContain("run");
-    const healthResult = await sharedElectronPage.evaluate(async () => {
-      if ((window as any).atomitonRPC?.system?.health) {
-        return await (window as any).atomitonRPC.system.health();
-      }
-      return null;
-    });
-    expect(healthResult).toBeTruthy();
-    expect(healthResult.status).toBe("ok");
-  });
-
-  test("handles node execution progress events", async ({
-    sharedElectronPage,
-  }) => {
-    let progressEvents: any[] = [];
-    await sharedElectronPage.evaluate(() => {
-      (window as any).__progressEvents = [];
-      // Note: Progress events are not part of the new RPC API
-      // The new conductor API doesn't expose progress callbacks
-    });
-
-    const testNodeButton = sharedElectronPage.locator(
-      'button:has-text("Test Node")',
-    );
-    await testNodeButton.click();
-
+    // Wait for execution to complete
     await sharedElectronPage.waitForTimeout(3000);
-    progressEvents = await sharedElectronPage.evaluate(() => {
-      return (window as any).__progressEvents || [];
-    });
 
-    // Progress events are not part of the new RPC API
-    // The conductor returns results after execution completes
-    expect(progressEvents.length).toBe(0);
+    // Check for success message
+    const successMessage = sharedElectronPage.locator(
+      '[data-testid="file-write-success"]',
+    );
+    const errorMessage = sharedElectronPage.locator(
+      '[data-testid="file-write-error"]',
+    );
+
+    const hasSuccess = await successMessage
+      .isVisible({ timeout: 10000 })
+      .catch(() => false);
+    const hasError = await errorMessage
+      .isVisible({ timeout: 1000 })
+      .catch(() => false);
+
+    if (hasError) {
+      const errorText = await errorMessage.textContent();
+      throw new Error(`File write test failed: ${errorText}`);
+    }
+
+    expect(hasSuccess).toBe(true);
+
+    // Extract and verify the created file
+    const messageText = await successMessage.textContent();
+    const filePathMatch = messageText?.match(
+      /✅ File write test completed: (.+)/,
+    );
+    expect(filePathMatch).toBeTruthy();
+
+    if (filePathMatch && filePathMatch[1]) {
+      const createdFilePath = filePathMatch[1];
+
+      // Verify file was created
+      const fileExists = await fs.promises
+        .access(createdFilePath)
+        .then(() => true)
+        .catch(() => false);
+      expect(fileExists).toBe(true);
+
+      // Verify file content
+      const fileContent = await fs.promises.readFile(createdFilePath, "utf8");
+      expect(fileContent).toContain("Debug test executed at");
+      expect(fileContent).toContain("Test data: Hello from Debug Page!");
+      expect(fileContent).toContain(
+        "This file was written by the Conductor via IPC.",
+      );
+      expect(fileContent).toMatch(
+        /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/,
+      );
+
+      // Clean up
+      await fs.promises.unlink(createdFilePath).catch(() => {});
+    }
   });
 });

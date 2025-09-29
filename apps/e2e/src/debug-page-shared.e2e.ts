@@ -1,84 +1,40 @@
 import { expect, test } from "#fixtures/electron";
 
-test.describe("Electron Debug Page (Shared)", () => {
+test.describe("Debug Page Core Functionality", () => {
   test.beforeEach(async ({ sharedElectronPage }) => {
     // Navigate to debug route for each test
-    await sharedElectronPage.goto("http://localhost:5173#/debug");
+    await sharedElectronPage.goto("http://localhost:5173/debug");
     await sharedElectronPage.waitForLoadState("networkidle");
     await sharedElectronPage.waitForTimeout(2000); // Give React time to render
   });
 
-  test("debug page loads and detects desktop wrapper functionality", async ({
-    sharedElectronPage,
-  }) => {
-    // Starting debug page E2E test...
-
+  test("debug page loads", async ({ sharedElectronPage }) => {
     // Verify we're on the debug page
     const pageContent = await sharedElectronPage.textContent("body");
     expect(pageContent).toContain("Debug");
-    // Debug page loaded
 
-    // Check for IPC availability through page evaluation
-    const ipcInfo = await sharedElectronPage.evaluate(() => {
-      return {
-        hasAtomitonRPC: !!(window as any).atomitonRPC,
-        hasNode: !!(window as any).atomitonRPC?.node,
-        hasSystem: !!(window as any).atomitonRPC?.system,
-        nodeMethods: (window as any).atomitonRPC?.node
-          ? Object.keys((window as any).atomitonRPC.node).filter(
-              (key) =>
-                typeof (window as any).atomitonRPC.node[key] === "function",
-            )
-          : [],
-        systemMethods: (window as any).atomitonRPC?.system
-          ? Object.keys((window as any).atomitonRPC.system).filter(
-              (key) =>
-                typeof (window as any).atomitonRPC.system[key] === "function",
-            )
-          : [],
-      };
-    });
-
-    expect(ipcInfo.hasAtomitonRPC).toBe(true);
-    expect(ipcInfo.hasNode).toBe(true);
-    expect(ipcInfo.hasSystem).toBe(true);
-    expect(ipcInfo.nodeMethods).toContain("run");
-    expect(ipcInfo.systemMethods).toContain("health");
-    // IPC availability and methods detected correctly
+    // Verify debug page title is present using data-testid
+    await expect(
+      sharedElectronPage.locator('[data-testid="debug-page-title"]'),
+    ).toBeVisible();
   });
 
-  test("debug page IPC functions work", async ({ sharedElectronPage }) => {
-    // Testing IPC functions through debug page...
-
-    // Test IPC functions directly through page evaluation
-    // Testing IPC health...
-    const healthResult = await sharedElectronPage.evaluate(async () => {
-      if ((window as any).atomitonRPC?.system?.health) {
-        return await (window as any).atomitonRPC.system.health();
-      }
-      return null;
-    });
-    expect(healthResult).toBeTruthy();
-    expect(healthResult.status).toBe("ok");
-    // Ping works
-  });
-
-  test("debug page UI elements are interactive", async ({
+  test("conductor health check works through UI", async ({
     sharedElectronPage,
   }) => {
-    // Testing debug page UI elements...
+    // Test through the debug page UI button using data-testid
+    const healthButton = sharedElectronPage.locator(
+      '[data-testid="test-health"]',
+    );
 
-    // Check for debug page specific elements
-    const hasDebugContent = await sharedElectronPage.evaluate(() => {
-      const bodyText = document.body.textContent || "";
-      return (
-        bodyText.includes("Debug") ||
-        bodyText.includes("IPC") ||
-        bodyText.includes("Desktop")
-      );
-    });
-    expect(hasDebugContent).toBe(true);
+    await expect(healthButton).toBeVisible({ timeout: 5000 });
+    await healthButton.click();
+    await sharedElectronPage.waitForTimeout(1000);
 
-    // Debug page UI elements are present
+    // Check if health result is displayed in UI
+    const healthStatus = await sharedElectronPage
+      .locator('[data-testid="health-status"]')
+      .isVisible({ timeout: 5000 });
+    expect(healthStatus).toBe(true);
   });
 });

@@ -9,7 +9,6 @@ import {
   type NodeDefinition,
 } from "@atomiton/nodes/definitions";
 import { Button, Icon } from "@atomiton/ui";
-import { isElectronEnvironment } from "@atomiton/utils";
 import { useEffect, useState } from "react";
 
 type EnvironmentInfo = {
@@ -36,6 +35,15 @@ type TestResult = {
   duration?: number;
 };
 
+type Flow = {
+  id: string;
+  name: string;
+  nodeCount: number;
+  savedAt: string;
+  updatedAt: string;
+  version: string;
+};
+
 export default function DebugPage() {
   const [environment, setEnvironment] = useState<EnvironmentInfo | null>(null);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
@@ -52,15 +60,66 @@ export default function DebugPage() {
   >(null);
   const [logs, setLogs] = useState<string[]>([]);
 
+  // Additional conductor states
+  const [flows, setFlows] = useState<Flow[]>([]);
+  const [eventSubscriptions, setEventSubscriptions] = useState<(() => void)[]>(
+    [],
+  );
+
   const addLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString();
     setLogs((prev) => [...prev, `[${timestamp}] ${message}`]);
   };
 
   useEffect(() => {
-    // Detect environment on mount using simplified detection
+    // Setup event subscriptions
+    const subscriptions: (() => void)[] = [];
+
+    // Subscribe to node execution events
+    const unsubProgress = conductor.events?.onNodeProgress?.((event: any) => {
+      addLog(`📊 Node progress: ${event.progress}% - ${event.message || ""}`);
+      setNodeProgress({
+        progress: event.progress || 0,
+        message: event.message || "Processing...",
+      });
+    });
+    if (unsubProgress) subscriptions.push(unsubProgress);
+
+    const unsubComplete = conductor.events?.onNodeComplete?.((event: any) => {
+      addLog(`✅ Node completed: ${event.nodeId}`);
+      setNodeProgress(null);
+    });
+    if (unsubComplete) subscriptions.push(unsubComplete);
+
+    const unsubError = conductor.events?.onNodeError?.((event: any) => {
+      addLog(`❌ Node error: ${event.error}`);
+      setNodeProgress(null);
+    });
+    if (unsubError) subscriptions.push(unsubError);
+
+    // Subscribe to storage events
+    const unsubFlowSaved = conductor.events?.onFlowSaved?.((event: any) => {
+      addLog(`💾 Flow saved: ${event.name}`);
+      loadFlows();
+    });
+    if (unsubFlowSaved) subscriptions.push(unsubFlowSaved);
+
+    setEventSubscriptions(subscriptions);
+
+    // Load initial data
+    loadFlows();
+
+    // Cleanup subscriptions on unmount
+    return () => {
+      subscriptions.forEach((unsub) => unsub());
+    };
+  }, []);
+
+  useEffect(() => {
+    // Detect environment on mount using conductor's built-in detection
     const initializeEnvironment = () => {
-      const isElectron = isElectronEnvironment();
+      const envInfo = conductor.getEnvironment();
+      const isElectron = envInfo.isDesktop;
 
       // Get basic info from window if available
       const windowWithElectron = window as Window & {
@@ -120,6 +179,68 @@ export default function DebugPage() {
 
     initializeEnvironment();
   }, []);
+
+  // Storage operations
+  const loadFlows = async () => {
+    try {
+      const result = await conductor.storage?.listFlows?.({ limit: 10 });
+      if (result) {
+        setFlows(result.flows || []);
+        addLog(`📂 Loaded ${result.flows?.length || 0} flows`);
+      }
+    } catch (error) {
+      addLog(
+        `❌ Failed to load flows: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  };
+
+  const saveExampleFlow = async () => {
+    try {
+      const exampleFlow = {
+        name: `Debug Flow ${Date.now()}`,
+        nodes: [
+          createNodeDefinition({
+            id: "input-node",
+            type: "input",
+            name: "Input Node",
+            parameters: { value: "Hello from Debug Page" },
+          } as any),
+          createNodeDefinition({
+            id: "transform-node",
+            type: "transform",
+            name: "Transform Node",
+            parameters: { script: 'return input + " - Transformed!"' },
+          } as any),
+        ],
+        edges: [
+          { id: "edge1", source: "input-node", target: "transform-node" },
+        ],
+      };
+
+      const result = await conductor.storage?.saveFlow?.(exampleFlow);
+      if (result) {
+        addLog(`✅ Flow saved with ID: ${result.id}`);
+        await loadFlows();
+      }
+    } catch (error) {
+      addLog(
+        `❌ Failed to save flow: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  };
+
+  const deleteFlow = async (flowId: string) => {
+    try {
+      await conductor.storage?.deleteFlow?.(flowId);
+      addLog(`🗑️ Flow deleted: ${flowId}`);
+      await loadFlows();
+    } catch (error) {
+      addLog(
+        `❌ Failed to delete flow: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  };
 
   const testHealth = async () => {
     const startTime = Date.now();
@@ -240,20 +361,62 @@ export default function DebugPage() {
     }
   };
 
+  const testStorageOperations = async () => {
+    const startTime = Date.now();
+    addLog("Testing storage operations...");
+
+    try {
+      // Test save flow
+      await saveExampleFlow();
+
+      // Test list flows
+      const result = await conductor.storage?.listFlows?.({ limit: 10 });
+      const duration = Date.now() - startTime;
+
+      const testResult: TestResult = {
+        name: "Storage Operations Test",
+        success: true,
+        message: `Saved and loaded ${result?.flows?.length || 0} flows`,
+        timestamp: Date.now(),
+        duration,
+      };
+
+      setTestResults((prev) => [...prev, testResult]);
+      addLog(`✅ Storage operations test completed (${duration}ms)`);
+    } catch (error) {
+      const duration = Date.now() - startTime;
+      const testResult: TestResult = {
+        name: "Storage Operations Test",
+        success: false,
+        message: error instanceof Error ? error.message : "Unknown error",
+        timestamp: Date.now(),
+        duration,
+      };
+
+      setTestResults((prev) => [...prev, testResult]);
+      addLog(`❌ Storage operations test failed: ${testResult.message}`);
+    }
+  };
+
   const runAllTests = async () => {
     setIsRunningTests(true);
     setTestResults([]);
-    addLog("🚀 Starting all tests...");
+    addLog("🚀 Starting comprehensive conductor tests...");
 
-    // Always run health test - conductor works in both browser and Electron
+    // Test health - works in both browser and Electron
     await testHealth();
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // Always run node execution test (works in browser and Electron)
+    // Test node execution - works in both browser and Electron
     await testNodeExecution();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Test storage operations
+    await testStorageOperations();
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     setIsRunningTests(false);
-    addLog("✨ All tests completed");
+    addLog("✨ All conductor tests completed");
   };
 
   const clearLogs = () => {
@@ -273,7 +436,10 @@ export default function DebugPage() {
               <div className="size-10 rounded-xl bg-accent-02/10 flex items-center justify-center">
                 <Icon name="settings" size={20} className="text-accent-02" />
               </div>
-              <h1 className="text-2xl font-semibold text-primary">
+              <h1
+                className="text-2xl font-semibold text-primary"
+                data-testid="debug-page-title"
+              >
                 Debug Console
               </h1>
             </div>
@@ -373,52 +539,130 @@ export default function DebugPage() {
             </div>
           )}
 
-          {/* Test Controls */}
+          {/* Conductor Operations Hub */}
           <div className="bg-surface-02 rounded-2xl p-6 border border-s-01">
             <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
               <Icon name="flask" size={20} className="text-secondary" />
-              Conductor Tests
+              Conductor Operations Hub
+              <span className="text-xs px-2 py-1 bg-accent-02/10 text-accent-02 rounded-lg">
+                Central Testing Point
+              </span>
             </h2>
 
-            <div className="flex flex-wrap gap-3 mb-6">
-              <Button
-                onClick={runAllTests}
-                disabled={isRunningTests}
-                variant="default"
-                title="Run all available tests (Conductor health and node execution)"
-              >
-                <Icon name="play" size={16} className="text-white mr-2" />
-                {isRunningTests ? "Running Tests..." : "Run All Tests"}
-              </Button>
+            {/* Test Controls */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-secondary mb-3">
+                Quick Tests
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  onClick={runAllTests}
+                  disabled={isRunningTests}
+                  variant="default"
+                  title="Run all available tests"
+                  data-testid="run-all-tests"
+                >
+                  <Icon name="play" size={16} className="text-white mr-2" />
+                  {isRunningTests ? "Running Tests..." : "Run All Tests"}
+                </Button>
 
-              <Button
-                onClick={testHealth}
-                disabled={isRunningTests}
-                variant="outline"
-                title="Test conductor health check (works in browser and Electron)"
-              >
-                Test Health
-                <span className="ml-2 text-xs opacity-60">
-                  (Browser & Electron)
-                </span>
-              </Button>
+                <Button
+                  onClick={testHealth}
+                  disabled={isRunningTests}
+                  variant="outline"
+                  title="Test conductor health check"
+                  data-testid="test-health"
+                >
+                  Test Health
+                </Button>
 
-              <Button
-                onClick={testNodeExecution}
-                data-testid="test-node-execution"
-                disabled={isRunningTests}
-                variant="outline"
-                title="Test node execution using Conductor API"
-              >
-                Test Node
-                <span className="ml-2 text-xs opacity-60">
-                  (Browser & Electron)
-                </span>
-              </Button>
+                <Button
+                  onClick={testNodeExecution}
+                  data-testid="test-node-execution"
+                  disabled={isRunningTests}
+                  variant="outline"
+                  title="Test node execution using Conductor API"
+                >
+                  Test Node
+                </Button>
 
-              <Button onClick={clearLogs} variant="ghost">
-                Clear Logs
-              </Button>
+                <Button
+                  onClick={testStorageOperations}
+                  disabled={isRunningTests}
+                  variant="outline"
+                  title="Test storage operations"
+                  data-testid="test-storage"
+                >
+                  Test Storage
+                </Button>
+
+                <Button onClick={clearLogs} variant="ghost">
+                  Clear All
+                </Button>
+              </div>
+            </div>
+
+            {/* Storage Operations */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-secondary mb-3">
+                Storage Operations
+              </h3>
+              <div className="flex flex-wrap gap-3 mb-3">
+                <Button
+                  onClick={saveExampleFlow}
+                  disabled={isRunningTests}
+                  variant="outline"
+                  size="sm"
+                  data-testid="save-flow"
+                >
+                  Save Example Flow
+                </Button>
+                <Button
+                  onClick={loadFlows}
+                  disabled={isRunningTests}
+                  variant="outline"
+                  size="sm"
+                  data-testid="refresh-flows"
+                >
+                  Refresh Flows
+                </Button>
+              </div>
+
+              {flows.length > 0 && (
+                <div className="bg-surface-01 rounded-xl p-3 max-h-48 overflow-y-auto">
+                  <p className="text-xs text-secondary mb-2">
+                    Saved Flows ({flows.length})
+                  </p>
+                  {flows.map((flow) => (
+                    <div
+                      key={flow.id}
+                      className="flex items-center justify-between py-2 border-b border-s-01 last:border-0"
+                    >
+                      <div>
+                        <p className="text-sm text-primary font-medium">
+                          {flow.name}
+                        </p>
+                        <p className="text-xs text-secondary">
+                          {flow.nodeCount} nodes •{" "}
+                          {new Date(flow.savedAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => deleteFlow(flow.id)}
+                        variant="ghost"
+                        size="sm"
+                        data-testid={`delete-flow-${flow.id}`}
+                      >
+                        <Icon
+                          name="trash"
+                          size={14}
+                          className="text-secondary"
+                        />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Test Results */}
@@ -447,7 +691,15 @@ export default function DebugPage() {
                       <span className="font-medium text-primary">
                         {result.name}
                       </span>
-                      <span className="text-sm text-secondary">
+                      <span
+                        className="text-sm text-secondary"
+                        data-testid={
+                          result.name === "Conductor Health Check" &&
+                          result.message.includes("Status:")
+                            ? "health-status"
+                            : undefined
+                        }
+                      >
                         {result.message}
                       </span>
                     </div>
@@ -516,7 +768,17 @@ export default function DebugPage() {
                 <p className="text-secondary">No activity yet...</p>
               ) : (
                 logs.map((log, index) => (
-                  <div key={index} className="text-primary mb-1">
+                  <div
+                    key={index}
+                    className="text-primary mb-1"
+                    data-testid={
+                      log.includes("✅ File write test completed")
+                        ? "file-write-success"
+                        : log.includes("❌ File write test failed")
+                          ? "file-write-error"
+                          : undefined
+                    }
+                  >
                     {log}
                   </div>
                 ))
@@ -524,8 +786,8 @@ export default function DebugPage() {
             </div>
           </div>
 
-          {/* Info for browser environments */}
-          {environment && !environment.isElectron && (
+          {/* Info for browser environments without transport */}
+          {conductor.inBrowser && (
             <div className="bg-info/10 border border-info/20 rounded-2xl p-6">
               <h3 className="text-info font-semibold mb-2 flex items-center gap-2">
                 <Icon name="info" size={20} className="text-info" />
