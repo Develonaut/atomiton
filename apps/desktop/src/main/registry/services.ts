@@ -31,8 +31,15 @@ export type ServiceRegistryManager = {
 
 export const createServiceRegistryManager = (): ServiceRegistryManager => {
   let registry: ServiceRegistry | null = null;
+  let isInitialized = false;
 
   const initializeServicesImpl = async (): Promise<ServiceRegistry> => {
+    // Prevent double initialization
+    if (isInitialized && registry) {
+      console.log("Services already initialized, returning existing registry");
+      return registry;
+    }
+
     console.log("Initializing application services");
 
     const legacyServices = initializeServices();
@@ -58,6 +65,7 @@ export const createServiceRegistryManager = (): ServiceRegistryManager => {
       errorBoundary,
     };
 
+    isInitialized = true;
     return registry;
   };
 

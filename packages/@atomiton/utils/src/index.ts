@@ -10,4 +10,3 @@ export {
 } from "#generateId";
 
 export * from "#changeCase";
-export * from "#environment";

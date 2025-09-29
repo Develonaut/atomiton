@@ -62,6 +62,7 @@ export function logIPCError(
 
 /**
  * Helper to register handlers in main process
+ * Checks if handlers are already registered to prevent duplicates
  */
 export function registerHandlers(
   ipcMain: IpcMain,
@@ -69,6 +70,12 @@ export function registerHandlers(
 ): void {
   Object.entries(handlers).forEach(([channel, handler]) => {
     console.log(`[CONDUCTOR] Registering handler: ${channel}`);
+    // Remove any existing handler first to prevent duplicates
+    try {
+      ipcMain.removeHandler(channel);
+    } catch (error) {
+      // Handler might not exist, which is fine
+    }
     ipcMain.handle(channel, handler as (...args: unknown[]) => unknown);
   });
 }

@@ -1,4 +1,4 @@
-import { session } from "electron";
+import { session, app } from "electron";
 
 export type CSPManager = {
   setupContentSecurityPolicy: (isDev: boolean) => void;
@@ -6,6 +6,12 @@ export type CSPManager = {
 
 export function createCSPManager(): CSPManager {
   const setupContentSecurityPolicy = (isDev: boolean): void => {
+    // Ensure app is ready before accessing session
+    if (!app.isReady()) {
+      console.warn("[CSP] App not ready yet, skipping CSP setup");
+      return;
+    }
+
     session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
       const responseHeaders = { ...details.responseHeaders };
 

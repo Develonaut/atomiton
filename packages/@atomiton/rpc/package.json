@@ -12,6 +12,11 @@
       "import": "./dist/main/index.js",
       "require": "./dist/main/index.cjs"
     },
+    "./main/channels": {
+      "types": "./dist/main/channels/index.d.ts",
+      "import": "./dist/main/channels/index.js",
+      "require": "./dist/main/channels/index.cjs"
+    },
     "./preload": {
       "types": "./dist/preload/index.d.ts",
       "import": "./dist/preload/index.js",
@@ -36,7 +41,11 @@
   },
   "dependencies": {
     "@trpc/server": "^11.6.0",
-    "electron": "^38.0.0"
+    "electron": "^38.0.0",
+    "@atomiton/conductor": "workspace:*",
+    "@atomiton/nodes": "workspace:*",
+    "winston": "^3.17.0",
+    "p-retry": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",

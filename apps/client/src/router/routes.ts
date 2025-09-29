@@ -76,7 +76,7 @@ export const routes: RouteConfig[] = [
     path: "/assets/materials",
     component: () => import("../templates/Assets/MaterialsPage"),
   },
-  // Debug route only available in development
+  // Debug routes only available in development
   ...(import.meta.env.DEV
     ? [
         {
