@@ -1,6 +1,7 @@
 import { initializeServices } from "#main/services";
 import { createConductor, registerHandlers } from "@atomiton/conductor/desktop";
 import { createNodeService, type NodeService } from "#main/services/node";
+import { safeLog } from "#main/utils/safeLogging";
 import {
   createExecutionService,
   type ExecutionService,
@@ -27,6 +28,7 @@ export type ServiceRegistry = {
 export type ServiceRegistryManager = {
   initializeServices(): Promise<ServiceRegistry>;
   getServices(): ServiceRegistry;
+  dispose(): void;
 };
 
 export const createServiceRegistryManager = (): ServiceRegistryManager => {
@@ -36,25 +38,25 @@ export const createServiceRegistryManager = (): ServiceRegistryManager => {
   const initializeServicesImpl = async (): Promise<ServiceRegistry> => {
     // Prevent double initialization
     if (isInitialized && registry) {
-      console.log("Services already initialized, returning existing registry");
+      safeLog("Services already initialized, returning existing registry");
       return registry;
     }
 
-    console.log("Initializing application services");
+    safeLog("Initializing application services");
 
     const legacyServices = initializeServices();
-    console.log("Legacy application services initialized");
+    safeLog("Legacy application services initialized");
 
     const errorBoundary = createErrorBoundaryService();
     const nodeService = createNodeService(errorBoundary);
     const executionService = createExecutionService();
     const flowStorageService = createFlowStorageService();
 
-    console.log("Initializing Conductor handlers");
+    safeLog("Initializing Conductor handlers");
     const conductor = createConductor();
     const handlers = conductor.createMainHandlers();
     registerHandlers(ipcMain, handlers);
-    console.log("Conductor handlers initialized");
+    safeLog("Conductor handlers initialized");
 
     registry = {
       storage: legacyServices.storage,
@@ -78,8 +80,21 @@ export const createServiceRegistryManager = (): ServiceRegistryManager => {
     return registry;
   };
 
+  const dispose = (): void => {
+    if (registry) {
+      safeLog("Disposing service registry...");
+
+      // Clear the registry and reset initialization flag
+      registry = null;
+      isInitialized = false;
+
+      safeLog("Service registry disposed successfully");
+    }
+  };
+
   return {
     initializeServices: initializeServicesImpl,
     getServices,
+    dispose,
   };
 };

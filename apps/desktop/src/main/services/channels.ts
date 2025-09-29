@@ -1,3 +1,4 @@
+import { safeLog } from "#main/utils/safeLogging";
 import {
   createNodeChannelServer,
   createStorageChannelServer,
@@ -19,10 +20,12 @@ export type ChannelManager = {
 export const createChannelManager = (): ChannelManager => {
   const channels: ChannelServer[] = [];
   const windows = new Set<BrowserWindow>();
+  const windowListeners = new Map<BrowserWindow, (() => void)[]>();
+  let isDisposed = false;
 
   // Initialize all channel servers
   const initialize = () => {
-    console.log("[CHANNELS] Initializing channel servers...");
+    safeLog("[CHANNELS] Initializing channel servers...");
 
     // Create all channel servers
     const nodeChannel = createNodeChannelServer(ipcMain);
@@ -31,7 +34,7 @@ export const createChannelManager = (): ChannelManager => {
 
     channels.push(nodeChannel, storageChannel, systemChannel);
 
-    console.log(`[CHANNELS] Initialized ${channels.length} channel servers:`, [
+    safeLog(`[CHANNELS] Initialized ${channels.length} channel servers:`, [
       "node",
       "storage",
       "system",
@@ -42,14 +45,16 @@ export const createChannelManager = (): ChannelManager => {
       return ["node", "storage", "system"];
     });
 
-    console.log("[CHANNELS] Channel discovery handler registered");
+    safeLog("[CHANNELS] Channel discovery handler registered");
   };
 
   // Track window for broadcasts
   const trackWindow = (window: BrowserWindow) => {
+    if (isDisposed) return;
+
     windows.add(window);
 
-    console.log(
+    safeLog(
       `[CHANNELS] Tracking window for broadcasts. Total windows: ${windows.size}`,
     );
 
@@ -57,27 +62,47 @@ export const createChannelManager = (): ChannelManager => {
     channels.forEach((channel, index) => {
       if (channel.trackWindow) {
         channel.trackWindow(window);
-        console.log(`[CHANNELS] Channel ${index} now tracking window`);
+        safeLog(`[CHANNELS] Channel ${index} now tracking window`);
       }
     });
 
-    // Clean up when window is closed
-    window.on("closed", () => {
+    // Create event handlers that can be removed later
+    const onClosed = () => {
       windows.delete(window);
-      console.log(
-        `[CHANNELS] Window closed. Remaining windows: ${windows.size}`,
-      );
-    });
+      windowListeners.delete(window);
+      safeLog(`[CHANNELS] Window closed. Remaining windows: ${windows.size}`);
+    };
 
-    // Handle window destroyed
-    window.webContents.on("destroyed", () => {
-      console.log("[CHANNELS] Window webContents destroyed");
-    });
+    const onDestroyed = () => {
+      safeLog("[CHANNELS] Window webContents destroyed");
+    };
+
+    // Store listener references for cleanup
+    windowListeners.set(window, [onClosed, onDestroyed]);
+
+    // Add event listeners
+    window.on("closed", onClosed);
+    window.webContents.on("destroyed", onDestroyed);
   };
 
   // Dispose all channels
   const dispose = () => {
+    if (isDisposed) return;
+
     console.log("[CHANNELS] Disposing channel manager...");
+
+    // Mark as disposed first to prevent further logging
+    isDisposed = true;
+
+    // Remove all window event listeners
+    for (const [window, listeners] of windowListeners) {
+      try {
+        window.removeListener("closed", listeners[0]);
+        window.webContents.removeListener("destroyed", listeners[1]);
+      } catch {
+        // Ignore errors when removing listeners during shutdown
+      }
+    }
 
     // Dispose all channels
     channels.forEach((channel, index) => {
@@ -89,12 +114,17 @@ export const createChannelManager = (): ChannelManager => {
       }
     });
 
-    // Clear arrays
+    // Clear arrays and maps
     channels.length = 0;
     windows.clear();
+    windowListeners.clear();
 
     // Remove discovery handler
-    ipcMain.removeHandler("channels:list");
+    try {
+      ipcMain.removeHandler("channels:list");
+    } catch {
+      // Ignore errors when removing handlers during shutdown
+    }
 
     console.log("[CHANNELS] Channel manager disposed");
   };
@@ -137,9 +167,9 @@ export const setupChannels = (mainWindow: BrowserWindow): ChannelManager => {
 // Health check for channels
 export const checkChannelHealth = async (): Promise<{
   status: "healthy" | "degraded" | "error";
-  channels: Record<string, any>;
+  channels: Record<string, unknown>;
 }> => {
-  const results: Record<string, any> = {};
+  const results: Record<string, unknown> = {};
 
   try {
     // Test each channel by calling a health method if available
@@ -163,7 +193,7 @@ export const checkChannelHealth = async (): Promise<{
 
     // Determine overall health
     const hasErrors = Object.values(results).some(
-      (result: any) => result.status === "error",
+      (result: unknown) => (result as { status: string }).status === "error",
     );
     const status = hasErrors ? "error" : "healthy";
 

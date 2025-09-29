@@ -48,7 +48,8 @@ const createChannelBridge = () => {
 if (process.contextIsolated) {
   contextBridge.exposeInMainWorld("atomitonBridge", createChannelBridge());
 } else {
-  (globalThis as any).atomitonBridge = createChannelBridge();
+  (globalThis as { atomitonBridge?: unknown }).atomitonBridge =
+    createChannelBridge();
 }
 
 console.log("[PRELOAD] Minimal channel bridge completed");

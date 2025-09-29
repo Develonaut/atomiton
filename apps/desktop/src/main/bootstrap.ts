@@ -2,13 +2,14 @@ import { createAppLifecycleManager } from "#main/app/lifecycle";
 import { createConfigManager } from "#main/config";
 import { createServiceRegistryManager } from "#main/registry/services";
 import { createCSPManager } from "#main/security/csp";
-import { createDevToolsManager } from "#main/window/devtools";
-import { createWindowManager } from "#main/window/manager";
 import {
-  setupChannels,
   checkChannelHealth,
+  setupChannels,
   type ChannelManager,
 } from "#main/services/channels";
+import { createDevToolsManager } from "#main/window/devtools";
+import { createWindowManager } from "#main/window/manager";
+import { markShuttingDown, safeLog } from "#main/utils/safeLogging";
 import { optimizer } from "@electron-toolkit/utils";
 import { app, ipcMain } from "electron";
 
@@ -17,7 +18,7 @@ export type DesktopAppBootstrap = {
 };
 
 export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
-  console.log("Desktop application starting up");
+  safeLog("Desktop application starting up");
 
   const configManager = createConfigManager();
   const config = configManager.getConfig();
@@ -62,7 +63,15 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
 
     // Setup cleanup on app quit
     app.on("before-quit", () => {
-      console.log("App shutting down, disposing channels...");
+      console.log("App shutting down, disposing channels and services...");
+
+      // Mark safe logging as shutting down to prevent EIO errors
+      markShuttingDown();
+
+      // Dispose service registry first (includes conductor reset)
+      serviceRegistryManager.dispose();
+
+      // Then dispose channel manager
       if (channelManager) {
         channelManager.dispose();
         channelManager = null;
@@ -70,7 +79,7 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
     });
 
     await appLifecycleManager.onReady(async () => {
-      console.log("Electron app ready, initializing desktop application");
+      safeLog("Electron app ready, initializing desktop application");
 
       const config = configManager.getConfig();
 
@@ -84,9 +93,9 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
       const mainWindow = windowManager.createMainWindow(config.window);
 
       // Initialize channels after window creation
-      console.log("Setting up functional channels...");
+      safeLog("Setting up functional channels...");
       channelManager = setupChannels(mainWindow);
-      console.log("Functional channels initialized successfully");
+      safeLog("Functional channels initialized successfully");
 
       if (config.app.isDev) {
         await devToolsManager.setupReduxDevTools(mainWindow);
