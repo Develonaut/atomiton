@@ -29,6 +29,72 @@ function createContext(
 }
 
 /**
+ * Create error result for node execution
+ */
+function createErrorResult(
+  nodeId: string,
+  message: string,
+  code: string,
+): ExecutionResult {
+  return {
+    success: false,
+    error: {
+      nodeId,
+      message,
+      timestamp: new Date(),
+      code,
+    },
+    duration: 0,
+    executedNodes: [],
+  };
+}
+
+/**
+ * Validate node definition before execution
+ */
+function validateNodeDefinition(node: NodeDefinition): ExecutionResult | null {
+  if (!node.id || !node.type) {
+    return createErrorResult(
+      node.id || "unknown",
+      "Invalid node definition: id and type are required",
+      "INVALID_NODE",
+    );
+  }
+  return null;
+}
+
+/**
+ * Execute node with retry logic
+ */
+async function executeWithRetry(
+  transport: ConductorTransport,
+  node: NodeDefinition,
+  context: ConductorExecutionContext,
+): Promise<ExecutionResult> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      return await transport.execute(node, context);
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2) {
+        const delay = 1000 * Math.pow(2, attempt);
+        console.warn(
+          `[CONDUCTOR] Execution attempt ${attempt + 1} failed, retrying in ${delay}ms`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  return createErrorResult(
+    node.id,
+    lastError instanceof Error ? lastError.message : String(lastError),
+    "EXECUTION_FAILED",
+  );
+}
+
+/**
  * Create node API with execution, validation and cancellation
  */
 export function createNodeAPI(transport: ConductorTransport | undefined) {
@@ -42,66 +108,23 @@ export function createNodeAPI(transport: ConductorTransport | undefined) {
     ): Promise<ExecutionResult> {
       const context = createContext(node, contextOverrides);
 
-      // Business logic: validate node before execution
-      if (!node.id || !node.type) {
-        return {
-          success: false,
-          error: {
-            nodeId: node.id || "unknown",
-            message: "Invalid node definition: id and type are required",
-            timestamp: new Date(),
-            code: "INVALID_NODE",
-          },
-          duration: 0,
-          executedNodes: [],
-        };
+      // Validate node definition
+      const validationError = validateNodeDefinition(node);
+      if (validationError) {
+        return validationError;
       }
 
+      // Check transport availability
       if (!transport) {
-        return {
-          success: false,
-          error: {
-            nodeId: node.id,
-            message:
-              "No transport available for execution in browser environment",
-            timestamp: new Date(),
-            code: "NO_TRANSPORT",
-          },
-          duration: 0,
-          executedNodes: [],
-        };
+        return createErrorResult(
+          node.id,
+          "No transport available for execution in browser environment",
+          "NO_TRANSPORT",
+        );
       }
 
-      // Business logic: retry with exponential backoff
-      let lastError: unknown;
-      for (let attempt = 0; attempt < 3; attempt++) {
-        try {
-          return await transport.execute(node, context);
-        } catch (error) {
-          lastError = error;
-          if (attempt < 2) {
-            const delay = 1000 * Math.pow(2, attempt);
-            console.warn(
-              `[CONDUCTOR] Execution attempt ${attempt + 1} failed, retrying in ${delay}ms`,
-            );
-            await new Promise((resolve) => setTimeout(resolve, delay));
-          }
-        }
-      }
-
-      // All retries failed
-      return {
-        success: false,
-        error: {
-          nodeId: node.id,
-          message:
-            lastError instanceof Error ? lastError.message : String(lastError),
-          timestamp: new Date(),
-          code: "EXECUTION_FAILED",
-        },
-        duration: 0,
-        executedNodes: [],
-      };
+      // Execute with retry logic
+      return executeWithRetry(transport, node, context);
     },
 
     /**
@@ -110,7 +133,6 @@ export function createNodeAPI(transport: ConductorTransport | undefined) {
     async validate(
       node: NodeDefinition,
     ): Promise<{ valid: boolean; errors: string[] }> {
-      // Local validation first
       const errors: string[] = [];
       if (!node.id) errors.push("Node must have an id");
       if (!node.type) errors.push("Node must have a type");
@@ -119,7 +141,6 @@ export function createNodeAPI(transport: ConductorTransport | undefined) {
         return { valid: false, errors };
       }
 
-      // Remote validation via transport
       if (transport) {
         try {
           const bridge = getBridge();

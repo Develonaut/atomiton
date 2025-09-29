@@ -5,7 +5,6 @@
 import type { ExecutionResult } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
-// Bridge interface types
 export type AtomitonBridgeResponse<T = unknown> = {
   result?: T;
   status?: string;

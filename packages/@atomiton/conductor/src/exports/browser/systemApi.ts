@@ -18,7 +18,6 @@ export function createSystemAPI(transport: ConductorTransport | undefined) {
         return transport.health();
       }
 
-      // Fallback for browser without transport
       return {
         status: "ok",
         timestamp: Date.now(),
@@ -27,7 +26,6 @@ export function createSystemAPI(transport: ConductorTransport | undefined) {
     },
 
     async restart(): Promise<void> {
-      // Business logic: confirm before restart
       const confirmed =
         typeof window !== "undefined" && window?.confirm
           ? window.confirm("System will restart. Continue?")

@@ -60,9 +60,7 @@
       utils
 - [ ] **Testable functions** - business logic can be tested without React
 
-## 📋 Additional Checks
-
-### Testing (Simplified Rules Apply)
+### Testing
 
 - [ ] **Test file naming compliant** - Only `.test.ts` or `.spec.ts` (NO
       .int.test.ts, .smoke.test.ts, etc.)
@@ -90,8 +88,6 @@
 - [ ] No hardcoded secrets
 - [ ] Input validation present
 - [ ] Error messages don't leak sensitive info
-
-## 🎯 Quick Scan Areas
 
 ### Common Issues Found
 
@@ -121,6 +117,7 @@
 **Request changes if:**
 
 - Any `any` types present
+- Any of above items are unchecked
 - Build/lint/test failures
 - pnpm dev fails
 - Tests are failing or missing

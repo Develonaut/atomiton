@@ -16,7 +16,6 @@ import type {
 export function createAuthAPI(transport: ConductorTransport | undefined) {
   return {
     async login(credentials: AuthCredentials): Promise<AuthResult> {
-      // Business logic: validate credentials format
       if (!credentials.username || !credentials.password) {
         throw new Error("Invalid credentials");
       }
@@ -31,7 +30,6 @@ export function createAuthAPI(transport: ConductorTransport | undefined) {
           );
           const result = response.result || response;
 
-          // Business logic: store token in browser
           if (
             result.token &&
             typeof window !== "undefined" &&
@@ -59,7 +57,6 @@ export function createAuthAPI(transport: ConductorTransport | undefined) {
         }
       }
 
-      // Business logic: clear local state
       if (typeof window !== "undefined" && window?.localStorage) {
         window.localStorage.removeItem("auth_token");
       }

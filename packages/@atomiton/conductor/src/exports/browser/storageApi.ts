@@ -15,12 +15,10 @@ import type {
 export function createStorageAPI(transport: ConductorTransport | undefined) {
   return {
     async saveFlow(flow: FlowDefinition): Promise<FlowDefinition> {
-      // Business logic: validate flow structure
       if (!flow.nodes || flow.nodes.length === 0) {
         throw new Error("Flow must contain at least one node");
       }
 
-      // Business logic: add metadata
       const flowWithMetadata = {
         ...flow,
         savedAt: new Date().toISOString(),
@@ -56,7 +54,6 @@ export function createStorageAPI(transport: ConductorTransport | undefined) {
             throw new Error("Flow not found");
           }
 
-          // Business logic: migration if needed
           if (flow.version === "0.9.0") {
             return { ...flow, version: "1.0.0" }; // Simple migration
           }
@@ -81,7 +78,6 @@ export function createStorageAPI(transport: ConductorTransport | undefined) {
           );
           const flows = response.result || response;
 
-          // Business logic: sorting and filtering
           return {
             ...flows,
             flows: (flows.flows || []).filter((f) => !f.deleted),
