@@ -58,6 +58,18 @@ export function createFieldsFromSchema<T extends ZodObject<ZodRawShape>>(
  * Derive a complete field configuration from a Zod type
  */
 function deriveFieldConfig(key: string, zodType: ZodTypeAny): NodeFieldConfig {
+  // Defensive: Handle cases where _def might be missing or malformed
+  if (!zodType || !zodType._def) {
+    console.warn(
+      `[createFieldsFromSchema] Invalid Zod type for field "${key}", using text fallback`,
+    );
+    return {
+      controlType: "text",
+      label: formatFieldLabel(key),
+      required: true,
+    };
+  }
+
   const def = zodType._def;
 
   const config: NodeFieldConfig = {
@@ -74,7 +86,20 @@ function deriveFieldConfig(key: string, zodType: ZodTypeAny): NodeFieldConfig {
   const isOptional = def.typeName === "ZodOptional";
   config.required = !isOptional;
 
-  // Unwrap optional and default wrappers to get to the base type
+  /**
+   * Unwrap Zod type wrappers to access base type and constraints
+   *
+   * Zod uses layered wrappers for optional and default values:
+   * schema → optional → default → base type (e.g., ZodString)
+   *
+   * We need to unwrap to access the base type's checks (min/max/enum)
+   * while preserving wrapper info for required/default extraction.
+   *
+   * Example: z.string().min(1).optional().default("foo")
+   * - Outer: ZodOptional (wraps default)
+   * - Middle: ZodDefault (wraps string)
+   * - Inner: ZodString (has .checks with min constraint)
+   */
   let innerType = zodType;
   let innerDef = def;
 
@@ -122,10 +147,18 @@ function deriveFieldConfig(key: string, zodType: ZodTypeAny): NodeFieldConfig {
     const defaultValue = checkDef.defaultValue();
     if (defaultValue !== undefined && defaultValue !== null) {
       // Format default value for display
-      const displayValue =
-        typeof defaultValue === "object"
-          ? JSON.stringify(defaultValue)
-          : String(defaultValue);
+      let displayValue: string;
+      if (typeof defaultValue === "object") {
+        const json = JSON.stringify(defaultValue);
+        // Truncate long objects to prevent overwhelming UI
+        const MAX_PLACEHOLDER_LENGTH = 50;
+        displayValue =
+          json.length > MAX_PLACEHOLDER_LENGTH
+            ? `${json.slice(0, MAX_PLACEHOLDER_LENGTH - 3)}...`
+            : json;
+      } else {
+        displayValue = String(defaultValue);
+      }
       config.placeholder = `Default: ${displayValue}`;
     }
   }
