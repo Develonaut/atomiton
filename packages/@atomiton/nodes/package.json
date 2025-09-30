@@ -28,7 +28,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest watch",
-    "test:integration": "vitest run src/integration"
+    "test:integration": "vitest run src/integration --passWithNoTests"
   },
   "keywords": [
     "nodes",

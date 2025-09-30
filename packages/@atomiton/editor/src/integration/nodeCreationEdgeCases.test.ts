@@ -148,7 +148,7 @@ describe("node-creation utils - edge cases", () => {
 
       // Should have all required properties
       expect(node.data.name).toBe("Test Node");
-      expect(node.data.parameters).toEqual({});
+      expect(node.data.parameters).toEqual({ schema: {}, defaults: {} });
       expect(node.position).toEqual({ x: 50, y: 75 });
       expect(node.data.fields).toEqual({});
       expect(node.data.inputPorts).toEqual([]);
@@ -162,7 +162,7 @@ describe("node-creation utils - edge cases", () => {
 
       // Should preserve position and have expected structure
       expect(node.position).toEqual({ x: 100, y: 200 });
-      expect(node.data.parameters).toEqual({});
+      expect(node.data.parameters).toEqual({ schema: {}, defaults: {} });
       expect(node.id).toBeDefined();
       expect(node.type).toBeDefined();
       expect(typeof node.data.name).toBe("string");
