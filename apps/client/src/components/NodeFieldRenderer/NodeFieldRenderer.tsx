@@ -1,14 +1,14 @@
 import type { JSX } from "react";
-import { BooleanField } from "./fields/BooleanField";
-import { CodeField } from "./fields/CodeField";
-import { ColorField } from "./fields/ColorField";
-import { JsonField } from "./fields/JsonField";
-import { NumberField } from "./fields/NumberField";
-import { RangeField } from "./fields/RangeField";
-import { SelectField } from "./fields/SelectField";
-import { TextAreaField } from "./fields/TextAreaField";
-import { TextField } from "./fields/TextField";
-import type { NodeFieldRendererProps } from "./types";
+import { BooleanField } from "#components/NodeFieldRenderer/fields/BooleanField";
+import { CodeField } from "#components/NodeFieldRenderer/fields/CodeField";
+import { ColorField } from "#components/NodeFieldRenderer/fields/ColorField";
+import { JsonField } from "#components/NodeFieldRenderer/fields/JsonField";
+import { NumberField } from "#components/NodeFieldRenderer/fields/NumberField";
+import { RangeField } from "#components/NodeFieldRenderer/fields/RangeField";
+import { SelectField } from "#components/NodeFieldRenderer/fields/SelectField";
+import { TextAreaField } from "#components/NodeFieldRenderer/fields/TextAreaField";
+import { TextField } from "#components/NodeFieldRenderer/fields/TextField";
+import type { NodeFieldRendererProps } from "#components/NodeFieldRenderer/types";
 
 /**
  * Main field renderer component that routes to the appropriate
@@ -34,7 +34,6 @@ export function NodeFieldRenderer({
     case "password":
     case "email":
     case "url":
-    case "file":
       return <TextField {...props} />;
 
     case "textarea":
@@ -67,6 +66,10 @@ export function NodeFieldRenderer({
 
     case "code":
       return <CodeField {...props} />;
+
+    case "file":
+      // Use text field for file paths for now
+      return <TextField {...props} />;
 
     default:
       // Fallback to text field
