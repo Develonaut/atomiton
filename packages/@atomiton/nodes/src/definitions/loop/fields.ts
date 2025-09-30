@@ -4,16 +4,19 @@
  * MVP: Core loop types only
  */
 
-import type { NodeFieldsConfig } from "#core/types/definition";
+import { createFieldsFromSchema } from "#core/utils/createFieldsFromSchema";
+import { loopSchema } from "#schemas/loop";
 
 /**
  * Field configuration for loop parameters
+ *
+ * Auto-derived from loopSchema with selective overrides for:
+ * - loopType: enum with descriptive labels
+ * - array: textarea with custom placeholder and rows
+ * - condition: code editor with custom placeholder and rows
  */
-export const loopFields: NodeFieldsConfig = {
+export const loopFields = createFieldsFromSchema(loopSchema, {
   loopType: {
-    controlType: "select",
-    label: "Loop Type",
-    helpText: "Select the type of loop operation",
     options: [
       { value: "forEach", label: "For Each" },
       { value: "times", label: "Times" },
@@ -22,28 +25,12 @@ export const loopFields: NodeFieldsConfig = {
   },
   array: {
     controlType: "textarea",
-    label: "Array (for forEach)",
     placeholder: "[1, 2, 3, 4, 5]",
-    helpText: "Array to iterate over",
     rows: 3,
-  },
-  count: {
-    controlType: "number",
-    label: "Count (for times)",
-    helpText: "Number of iterations to perform",
-    min: 1,
-    max: 10000,
   },
   condition: {
     controlType: "code",
-    label: "Condition (for while)",
     placeholder: "iteration < 100",
-    helpText: "JavaScript condition expression",
     rows: 3,
   },
-  collectResults: {
-    controlType: "boolean",
-    label: "Collect Results",
-    helpText: "Collect results from each iteration into an array",
-  },
-};
+});

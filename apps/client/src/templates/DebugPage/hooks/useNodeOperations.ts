@@ -1,16 +1,14 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
 import conductor from "#lib/conductor";
 import {
   createNodeDefinition,
+  getNodeDefinition,
   type NodeDefinition,
 } from "@atomiton/nodes/definitions";
 import {
   getNodeSchemaTypes,
-  getNodeSchema,
   registerAllNodeSchemas,
 } from "@atomiton/nodes/schemas";
-import { schemaToFieldConfig } from "#utils/schemaToFieldConfig";
-import { FIELD_CONFIG_OVERRIDES } from "#utils/fieldConfigOverrides";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export function useNodeOperations(addLog: (message: string) => void) {
   const [nodeContent, setNodeContent] = useState<string>("");
@@ -231,39 +229,16 @@ export function useNodeOperations(addLog: (message: string) => void) {
     return types;
   }, []);
 
-  // Get schema for selected node type
-  const nodeSchema = useMemo(() => {
-    if (!selectedNodeType) return null;
-    return getNodeSchema(selectedNodeType);
-  }, [selectedNodeType]);
-
-  // Build fields config from schema + overrides
+  // Get fields config from node definition (pre-built from createFieldsFromSchema)
   const nodeFieldsConfig = useMemo(() => {
-    if (!nodeSchema) return {};
+    if (!selectedNodeType) return {};
 
-    // Generate base config from schema
-    const baseConfig = schemaToFieldConfig(nodeSchema.schema);
+    // Get the node definition which includes pre-built field configs
+    const nodeDefinition = getNodeDefinition(selectedNodeType);
 
-    // Apply overrides if they exist for this node type
-    const overrides = selectedNodeType
-      ? FIELD_CONFIG_OVERRIDES[selectedNodeType]
-      : {};
-
-    // Merge overrides with base config
-    return {
-      ...baseConfig,
-      ...Object.entries(overrides || {}).reduce(
-        (acc, [key, override]) => {
-          acc[key] = {
-            ...baseConfig[key],
-            ...override,
-          };
-          return acc;
-        },
-        {} as Record<string, any>,
-      ),
-    };
-  }, [nodeSchema, selectedNodeType]);
+    // Return the fields from the definition, or empty object if not found
+    return nodeDefinition?.fields || {};
+  }, [selectedNodeType]);
 
   // Update field value
   const setNodeFieldValue = useCallback((key: string, value: unknown) => {

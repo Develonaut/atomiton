@@ -8,7 +8,7 @@ import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import { createNodePort } from "#core/factories/createNodePorts";
 import type { NodeDefinition } from "#core/types/definition";
-import type { NodeFieldsConfig } from "#core/types/parameters.js";
+import { csvReaderFields } from "#definitions/csv-reader/fields";
 
 /**
  * Default values for CSV reader parameters
@@ -17,36 +17,6 @@ import type { NodeFieldsConfig } from "#core/types/parameters.js";
 export const csvReaderDefaults = {
   hasHeaders: true,
   delimiter: ",",
-};
-
-/**
- * Field configurations for CSV reader parameters
- * MVP: Core CSV parsing only
- */
-export const csvReaderFields: NodeFieldsConfig = {
-  path: {
-    controlType: "text",
-    label: "CSV File Path",
-    placeholder: "/path/to/file.csv",
-    helpText: "Path to the CSV file",
-    required: true,
-  },
-  hasHeaders: {
-    controlType: "boolean",
-    label: "Has Headers",
-    helpText: "First row contains column headers",
-  },
-  delimiter: {
-    controlType: "select",
-    label: "Delimiter",
-    helpText: "Field separator character",
-    options: [
-      { value: ",", label: "Comma" },
-      { value: ";", label: "Semicolon" },
-      { value: "\t", label: "Tab" },
-      { value: "|", label: "Pipe" },
-    ],
-  },
 };
 
 /**

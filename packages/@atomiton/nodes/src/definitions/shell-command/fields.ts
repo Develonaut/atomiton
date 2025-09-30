@@ -4,31 +4,30 @@
  * MVP: Core command execution only
  */
 
-import type { NodeFieldsConfig } from "#core/types/definition";
+import { createFieldsFromSchema } from "#core/utils/createFieldsFromSchema";
+import { shellCommandSchema } from "#schemas/shell-command";
 
 /**
  * Field configuration for shell command parameters
+ *
+ * Auto-derived from shellCommandSchema with selective overrides for:
+ * - command: textarea with custom placeholder and rows
+ * - args: textarea with custom placeholder and rows
+ * - shell: enum with descriptive labels
+ * - stdin: textarea with custom placeholder and rows
  */
-export const shellCommandFields: NodeFieldsConfig = {
+export const shellCommandFields = createFieldsFromSchema(shellCommandSchema, {
   command: {
     controlType: "textarea",
-    label: "Command",
     placeholder: "ls -la",
-    helpText: "Shell command to execute",
     rows: 3,
-    required: true,
   },
   args: {
     controlType: "textarea",
-    label: "Arguments (optional)",
     placeholder: '["--verbose", "--output", "result.txt"]',
-    helpText: "Command arguments as JSON array",
     rows: 2,
   },
   shell: {
-    controlType: "select",
-    label: "Shell",
-    helpText: "Shell interpreter to use",
     options: [
       { value: "bash", label: "Bash" },
       { value: "sh", label: "sh" },
@@ -37,14 +36,7 @@ export const shellCommandFields: NodeFieldsConfig = {
   },
   stdin: {
     controlType: "textarea",
-    label: "Stdin (optional)",
     placeholder: "Data to pipe to command",
-    helpText: "Data to send to command's stdin",
     rows: 3,
   },
-  captureOutput: {
-    controlType: "boolean",
-    label: "Capture Output",
-    helpText: "Capture stdout and stderr",
-  },
-};
+});

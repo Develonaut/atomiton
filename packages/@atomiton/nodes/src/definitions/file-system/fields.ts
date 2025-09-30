@@ -4,16 +4,18 @@
  * MVP: Core file operations only
  */
 
-import type { NodeFieldsConfig } from "#core/types/definition";
+import { createFieldsFromSchema } from "#core/utils/createFieldsFromSchema";
+import { fileSystemSchema } from "#schemas/file-system";
 
 /**
  * Field configuration for file system parameters
+ *
+ * Auto-derived from fileSystemSchema with selective overrides for:
+ * - operation: enum with descriptive labels
+ * - content: textarea with custom placeholder and rows
  */
-export const fileSystemFields: NodeFieldsConfig = {
+export const fileSystemFields = createFieldsFromSchema(fileSystemSchema, {
   operation: {
-    controlType: "select",
-    label: "Operation",
-    helpText: "File system operation",
     options: [
       { value: "read", label: "Read" },
       { value: "write", label: "Write" },
@@ -25,23 +27,9 @@ export const fileSystemFields: NodeFieldsConfig = {
       { value: "move", label: "Move" },
     ],
   },
-  path: {
-    controlType: "text",
-    label: "Path",
-    placeholder: "/path/to/file",
-    helpText: "File or directory path",
-    required: true,
-  },
   content: {
     controlType: "textarea",
-    label: "Content (for write)",
     placeholder: "Content to write",
-    helpText: "Content for write operations",
     rows: 5,
   },
-  recursive: {
-    controlType: "boolean",
-    label: "Recursive (for list)",
-    helpText: "List directories recursively",
-  },
-};
+});

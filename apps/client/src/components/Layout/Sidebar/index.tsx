@@ -54,7 +54,6 @@ function Sidebar({ visible, onClose }: Props) {
             <Dropdown title="Debug" icon="bug" href="/debug/environment">
               <DropdownItem href="/debug/nodes">Nodes</DropdownItem>
               <DropdownItem href="/debug/flows">Flows</DropdownItem>
-              <DropdownItem href="/debug/auth">Auth</DropdownItem>
             </Dropdown>
           )}
         </div>

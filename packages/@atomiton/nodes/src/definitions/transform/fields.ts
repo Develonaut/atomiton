@@ -4,16 +4,18 @@
  * MVP: Core transformation operations only
  */
 
-import type { NodeFieldsConfig } from "#core/types/definition";
+import { createFieldsFromSchema } from "#core/utils/createFieldsFromSchema";
+import { transformSchema } from "#schemas/transform";
 
 /**
  * Field configuration for transform parameters
+ *
+ * Auto-derived from transformSchema with selective overrides for:
+ * - operation: enum with descriptive labels
+ * - transformFunction: code editor with custom placeholder and rows
  */
-export const transformFields: NodeFieldsConfig = {
+export const transformFields = createFieldsFromSchema(transformSchema, {
   operation: {
-    controlType: "select",
-    label: "Operation",
-    helpText: "Type of transformation to perform",
     options: [
       { value: "map", label: "Map" },
       { value: "filter", label: "Filter" },
@@ -23,22 +25,7 @@ export const transformFields: NodeFieldsConfig = {
   },
   transformFunction: {
     controlType: "code",
-    label: "Transform Function",
     placeholder: "item => ({ ...item, processed: true })",
-    helpText: "JavaScript function for map/filter operations",
     rows: 5,
   },
-  sortKey: {
-    controlType: "text",
-    label: "Sort Key (optional)",
-    placeholder: "name",
-    helpText: "Property to sort by",
-  },
-  flattenDepth: {
-    controlType: "number",
-    label: "Flatten Depth",
-    helpText: "How many levels deep to flatten",
-    min: 1,
-    max: 10,
-  },
-};
+});

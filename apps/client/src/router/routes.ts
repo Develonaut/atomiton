@@ -96,24 +96,19 @@ export const routes: RouteConfig[] = [
               component: () => import("../templates/DebugPage/pages/NodesPage"),
             },
             {
-              name: "debugSystem",
-              path: "/system",
-              component: () =>
-                import("../templates/DebugPage/pages/SystemPage"),
-            },
-            {
               name: "debugFlows",
               path: "/flows",
               component: () => import("../templates/DebugPage/pages/FlowsPage"),
             },
             {
-              name: "debugAuth",
-              path: "/auth",
-              component: () => import("../templates/DebugPage/pages/AuthPage"),
-            },
-            {
               name: "debugEnvironment",
               path: "/environment",
+              component: () =>
+                import("../templates/DebugPage/pages/EnvironmentPage"),
+            },
+            {
+              name: "debugSystem",
+              path: "/system",
               component: () =>
                 import("../templates/DebugPage/pages/EnvironmentPage"),
             },

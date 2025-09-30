@@ -1,22 +1,24 @@
-import type { NodeFieldsConfig } from "#core/types/definition";
+import { createFieldsFromSchema } from "#core/utils/createFieldsFromSchema";
+import { codeSchema } from "#schemas/code";
 
 /**
  * Field configuration for code execution parameters
  * MVP: Core code execution only
+ *
+ * Auto-derived from codeSchema with selective overrides for:
+ * - code: textarea instead of text input
+ * - returnType: custom labels for enum options
+ * - context: textarea instead of json editor
  */
-export const codeFields: NodeFieldsConfig = {
+export const codeFields = createFieldsFromSchema(codeSchema, {
   code: {
     controlType: "textarea",
     label: "JavaScript Code",
     placeholder: "input.name || 'Default Value'",
-    helpText: "JavaScript expression to execute",
     rows: 5,
-    required: true,
   },
   returnType: {
-    controlType: "select",
     label: "Return Type",
-    helpText: "Expected type of the return value",
     options: [
       { value: "auto", label: "Auto" },
       { value: "string", label: "String" },
@@ -30,7 +32,6 @@ export const codeFields: NodeFieldsConfig = {
     controlType: "textarea",
     label: "Context (optional)",
     placeholder: '{"key": "value"}',
-    helpText: "Variables to make available in code",
     rows: 3,
   },
-};
+});
