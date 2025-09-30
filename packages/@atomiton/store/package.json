@@ -4,7 +4,10 @@
   "description": "State management for Atomiton workflow automation",
   "type": "module",
   "private": true,
-  "sideEffects": false,
+  "sideEffects": [
+    "./src/index.ts",
+    "./dist/index.js"
+  ],
   "imports": {
     "#*": "./src/*"
   },

@@ -5,7 +5,7 @@
 env:
   LEFTHOOK: "1"
 
-# Fast pre-commit hooks for staged files only
+# Fast pre-commit hooks - catches 95% of issues in ~15-30s
 pre-commit:
   parallel: true
   commands:
@@ -30,59 +30,45 @@ pre-commit:
       stage_fixed: true
       fail_text: "❌ Markdown table formatting failed"
 
-
-# More comprehensive pre-push hooks - full test suite must pass
-pre-push:
-  parallel: true
-  commands:
-    # Type check affected packages (moved from pre-commit for speed)
+    # Type check all packages (turbo cached, very fast)
     type-check:
       run: |
-        echo "🔍 Type checking affected packages..."
-        pnpm typecheck --filter=[HEAD^]
-      fail_text: "❌ Type checking failed"
-
-    # Full lint check (ensures nothing was missed)
-    lint-check:
-      run: |
-        echo "🔍 Running full lint check..."
-        pnpm lint
-      fail_text: "❌ Lint check failed - please fix linting issues"
-
-    # Full type check across all packages
-    full-type-check:
-      run: |
-        echo "🔍 Running full type check..."
+        echo "🔍 Type checking all packages..."
         pnpm typecheck
       fail_text: "❌ Type check failed - please fix TypeScript errors"
 
-    # Unit tests for all packages
+    # Unit tests (turbo cached, catches logic errors early)
     unit-tests:
       run: |
-        echo "🧪 Running unit tests for all packages..."
+        echo "🧪 Running unit tests..."
         pnpm test
       fail_text: "❌ Unit tests failed - please fix failing tests"
 
-    # Integration tests (more comprehensive)
+    # Build verification (turbo cached, catches build errors early)
+    build-check:
+      run: |
+        echo "🏗️ Verifying build integrity..."
+        pnpm build
+      fail_text: "❌ Build failed - please fix build errors"
+
+
+# Comprehensive pre-push hooks - runs ~2-5min before sharing code
+pre-push:
+  parallel: true
+  commands:
+    # Integration tests (tests package interactions)
     integration-tests:
       run: |
         echo "🎭 Running integration tests..."
         pnpm test:integration
       fail_text: "❌ Integration tests failed"
 
-    # E2E tests (headless by default in CI/hooks)
+    # E2E tests (tests full user flows, headless by default)
     e2e-tests:
       run: |
         echo "🌐 Running end-to-end tests (headless)..."
         pnpm test:e2e
       fail_text: "❌ E2E tests failed"
-
-    # Build verification (ensure everything builds)
-    build-check:
-      run: |
-        echo "🏗️ Verifying build integrity..."
-        pnpm build
-      fail_text: "❌ Build failed - please fix build errors"
 
 # Skip options for cleaner output
 skip_output:

@@ -3,7 +3,10 @@
  *
  * Clean, functional API for creating Zustand stores with Immer and persistence
  *
- * Map/Set support is automatically enabled on first store creation.
+ * IMPORTANT: This module has side effects. On first import/store creation, it calls
+ * Immer's enableMapSet() to enable Map/Set support globally. This happens exactly once
+ * via lazy initialization pattern, ensuring optimal performance without requiring manual
+ * setup in consuming code.
  */
 
 import { kebabCase } from "@atomiton/utils";
@@ -61,7 +64,20 @@ export type StoreConfig<T> = {
  * Creates a Zustand store with Immer for immutability and optional persistence
  * Automatically prefixes store names with "atomiton-" and converts to kebab-case
  *
- * On first invocation, automatically enables Map/Set support in Immer.
+ * LAZY INITIALIZATION: On first invocation across the entire application, this function
+ * automatically enables Map/Set support in Immer by calling enableMapSet(). This is a
+ * one-time global side effect that modifies Immer's internal state. Subsequent calls
+ * skip this initialization step for optimal performance.
+ *
+ * This pattern ensures:
+ * - Zero manual setup required in consuming code
+ * - Map/Set support always available when needed
+ * - No redundant enableMapSet() calls across store instances
+ * - Optimal bundle size (only imported when first store is created)
+ *
+ * @param initializer - Function that returns the initial state
+ * @param config - Optional configuration for store name and persistence
+ * @returns Store interface with getState, setState, subscribe, and React hook
  */
 export function createStore<T extends object>(
   initializer: StateCreator<T>,
