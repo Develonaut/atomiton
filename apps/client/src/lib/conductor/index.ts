@@ -1,6 +1,2 @@
-import { createConductor } from "@atomiton/conductor/browser";
-
-// Create conductor with automatic environment detection
-const conductor = createConductor();
-
+import { conductor } from "@atomiton/conductor/browser";
 export default conductor;

@@ -1,28 +1,21 @@
 import Layout from "#components/Layout";
-import conductor from "#lib/conductor";
 import { useAuthOperations } from "#templates/DebugPage/hooks/useAuthOperations";
 import { useEnvironment } from "#templates/DebugPage/hooks/useEnvironment";
 import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
 import { useNodeOperations } from "#templates/DebugPage/hooks/useNodeOperations";
 import { useSystemOperations } from "#templates/DebugPage/hooks/useSystemOperations";
-import type {
-  FlowSavedEvent,
-  NodeCompleteEvent,
-  NodeErrorEvent,
-  NodeProgressEvent,
-} from "@atomiton/conductor/browser";
+import { useDebugStore } from "#templates/DebugPage/store";
 import { Button, Icon } from "@atomiton/ui";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function DebugPage() {
-  const [logs, setLogs] = useState<string[]>([]);
-  const [selectedFlow, setSelectedFlow] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<string>("environment");
-
-  const addLog = useCallback((message: string) => {
-    const timestamp = new Date().toLocaleTimeString();
-    setLogs((prev) => [...prev, `[${timestamp}] ${message}`]);
-  }, []);
+  const logs = useDebugStore((state) => state.logs);
+  const activeSection = useDebugStore((state) => state.activeSection);
+  const selectedFlow = useDebugStore((state) => state.selectedFlow);
+  const addLog = useDebugStore((state) => state.addLog);
+  const clearLogs = useDebugStore((state) => state.clearLogs);
+  const setActiveSection = useDebugStore((state) => state.setActiveSection);
+  const setSelectedFlow = useDebugStore((state) => state.setSelectedFlow);
 
   const environment = useEnvironment(addLog);
 
@@ -60,57 +53,10 @@ export default function DebugPage() {
   const { checkHealth, restartSystem, testExecute, testHealthShortcut } =
     useSystemOperations(addLog);
 
-  // Setup event subscriptions
-  useEffect(() => {
-    const subscriptions: (() => void)[] = [];
-
-    const unsubProgress = conductor.events?.onNodeProgress?.(
-      (event: NodeProgressEvent) => {
-        addLog(`📊 Node progress: ${event.progress}% - ${event.message || ""}`);
-      },
-    );
-    if (unsubProgress) subscriptions.push(unsubProgress);
-
-    const unsubComplete = conductor.events?.onNodeComplete?.(
-      (event: NodeCompleteEvent) => {
-        addLog(`✅ Node complete: ${event.nodeId}`);
-      },
-    );
-    if (unsubComplete) subscriptions.push(unsubComplete);
-
-    const unsubError = conductor.events?.onNodeError?.(
-      (event: NodeErrorEvent) => {
-        addLog(`❌ Node error: ${event.error}`);
-      },
-    );
-    if (unsubError) subscriptions.push(unsubError);
-
-    const unsubFlowSaved = conductor.events?.onFlowSaved?.(
-      (event: FlowSavedEvent) => {
-        addLog(`💾 Flow saved: ${event.flowId}`);
-      },
-    );
-    if (unsubFlowSaved) subscriptions.push(unsubFlowSaved);
-
-    const unsubAuthExpired = conductor.events?.onAuthExpired?.(() => {
-      addLog("🔒 Auth token expired");
-    });
-    if (unsubAuthExpired) subscriptions.push(unsubAuthExpired);
-
-    return () => {
-      subscriptions.forEach((unsub) => unsub());
-    };
-  }, [addLog]);
-
   // Load initial data
   useEffect(() => {
     loadFlows();
   }, [loadFlows]);
-
-  const clearLogs = useCallback(() => {
-    setLogs([]);
-    addLog("Logs cleared");
-  }, [addLog]);
 
   const renderSectionButtons = () => (
     <div className="flex gap-2 mb-4 flex-wrap">
@@ -390,12 +336,16 @@ export default function DebugPage() {
             {logs.length === 0 ? (
               <div className="text-gray-500">No logs yet...</div>
             ) : (
-              logs.map((log, idx) => {
+              logs.map((logEntry, idx) => {
+                const log = `[${logEntry.timestamp}] ${logEntry.message}`;
+
                 // Add test IDs and data attributes for E2E test assertions
                 let testId = undefined;
                 let dataOutput = undefined;
 
-                if (log.includes("✅ File write test completed:")) {
+                if (
+                  logEntry.message.includes("✅ File write test completed:")
+                ) {
                   testId = "file-write-success";
                   // Extract the file path from the log message
                   const filePathMatch = log.match(
@@ -404,56 +354,63 @@ export default function DebugPage() {
                   if (filePathMatch) {
                     dataOutput = filePathMatch[1];
                   }
-                } else if (log.includes("❌ File write test error:")) {
+                } else if (
+                  logEntry.message.includes("❌ File write test error:")
+                ) {
                   testId = "file-write-error";
-                  // Extract the error message
-                  const errorMatch = log.match(
+                  const errorMatch = logEntry.message.match(
                     /❌ File write test error: (.+)/,
                   );
                   if (errorMatch) {
                     dataOutput = errorMatch[1];
                   }
-                } else if (log.includes("System health:")) {
+                } else if (logEntry.message.includes("System health:")) {
                   testId = "health-status";
-                  // Extract the health status
-                  const healthMatch = log.match(/System health: (.+)/);
+                  const healthMatch =
+                    logEntry.message.match(/System health: (.+)/);
                   if (healthMatch) {
                     dataOutput = healthMatch[1];
                   }
-                } else if (log.includes("🏓 Sending health check ping")) {
+                } else if (
+                  logEntry.message.includes("🏓 Sending health check ping")
+                ) {
                   testId = "health-ping";
                   dataOutput = "ping";
-                } else if (log.includes("Health check pong received")) {
+                } else if (
+                  logEntry.message.includes("Health check pong received")
+                ) {
                   testId = "health-pong";
-                  // Check for success/error emoji anywhere in the log
-                  if (log.includes("✅")) {
+                  if (logEntry.message.includes("✅")) {
                     dataOutput = "success";
-                  } else if (log.includes("❌")) {
+                  } else if (logEntry.message.includes("❌")) {
                     dataOutput = "error";
                   } else {
                     dataOutput = "pong";
                   }
-                } else if (log.includes("IPC connection")) {
+                } else if (logEntry.message.includes("IPC connection")) {
                   testId = "health-message";
-                  const messageMatch = log.match(/Status: (.+)/);
+                  const messageMatch = logEntry.message.match(/Status: (.+)/);
                   if (messageMatch) {
                     dataOutput = messageMatch[1];
                   } else {
-                    dataOutput = log;
+                    dataOutput = logEntry.message;
                   }
-                } else if (log.includes("Response time:")) {
+                } else if (logEntry.message.includes("Response time:")) {
                   testId = "health-timestamp";
-                  const timeMatch = log.match(/Response time: (.+)/);
+                  const timeMatch =
+                    logEntry.message.match(/Response time: (.+)/);
                   if (timeMatch) {
                     dataOutput = timeMatch[1];
                   }
-                } else if (log.includes("Test execution result:")) {
+                } else if (
+                  logEntry.message.includes("Test execution result:")
+                ) {
                   testId = "test-execution-result";
                   // The next log entry might contain JSON data
                 } else if (
                   testId === undefined &&
                   idx > 0 &&
-                  logs[idx - 1].includes("Test execution result:")
+                  logs[idx - 1].message.includes("Test execution result:")
                 ) {
                   // This is the JSON result after "Test execution result:"
                   testId = "test-execution-data";

@@ -1,32 +1,20 @@
-// Define the types locally to avoid circular dependency
-export type ConductorTransport = {
-  execute(node: any, context: any): Promise<any>;
-  health(): Promise<any>;
-};
-
-// We'll use 'any' types here since this is pure transport - no business logic
-
-// Channel client interface for different transports
-type ChannelClient = {
-  call: (command: string, args?: unknown) => Promise<unknown>;
-  listen: (event: string, callback: (data: unknown) => void) => () => void;
-  send?: (event: string, data?: unknown) => void;
-};
-
-type Transport = {
-  channel: (name: string) => ChannelClient;
-};
+// Import from shared types - single source of truth
+import type {
+  ExecutionTransport,
+  ChannelClient,
+  Transport,
+} from "#shared/types";
 
 // Auto-detect environment and create appropriate transport
-export const createRPCTransport = (): ConductorTransport => {
+export const createRPCTransport = (): ExecutionTransport => {
   const transport = detectTransport();
 
   return {
-    async execute(node: any, context: any): Promise<any> {
+    async execute(node: unknown, context: unknown): Promise<unknown> {
       return transport.channel("node").call("execute", { node, context });
     },
 
-    async health(): Promise<any> {
+    async health(): Promise<unknown> {
       return transport.channel("system").call("health");
     },
   };
@@ -34,8 +22,11 @@ export const createRPCTransport = (): ConductorTransport => {
 
 // Transport detection logic
 const detectTransport = (): Transport => {
-  // Check for Electron environment (atomitonBridge from preload)
-  if (typeof window !== "undefined" && (window as any).atomitonBridge) {
+  // Check for Electron environment (window.atomiton.__bridge__ from preload)
+  if (
+    typeof window !== "undefined" &&
+    (window as { atomiton?: { __bridge__: unknown } }).atomiton?.__bridge__
+  ) {
     console.log(
       "[TRANSPORT] Detected Electron environment, using IPC transport",
     );
@@ -67,7 +58,20 @@ const detectTransport = (): Transport => {
 
 // IPC Transport for Electron
 const createIPCTransport = (): Transport => {
-  const bridge = (window as any).atomitonBridge;
+  const bridge = (window as unknown as { atomiton: { __bridge__: unknown } })
+    .atomiton.__bridge__ as {
+    call: (
+      channel: string,
+      command: string,
+      args?: unknown,
+    ) => Promise<unknown>;
+    listen: (
+      channel: string,
+      event: string,
+      callback: (data: unknown) => void,
+    ) => () => void;
+    send?: (channel: string, event: string, data?: unknown) => void;
+  };
   const channels = new Map<string, ChannelClient>();
 
   return {
@@ -82,12 +86,35 @@ const createIPCTransport = (): Transport => {
 
 const createIPCChannelClient = (
   channelName: string,
-  bridge: any,
+  bridge: {
+    call: (
+      channel: string,
+      command: string,
+      args?: unknown,
+    ) => Promise<unknown>;
+    listen: (
+      channel: string,
+      event: string,
+      callback: (data: unknown) => void,
+    ) => () => void;
+    send?: (channel: string, event: string, data?: unknown) => void;
+  },
 ): ChannelClient => {
   return {
     call: async (command: string, args?: unknown) => {
       console.log(`[IPC:${channelName}] Calling ${command}`, args);
-      return bridge.call(channelName, command, args);
+      const response = await bridge.call(channelName, command, args);
+      const wrappedResponse = response as { result?: unknown; error?: unknown };
+
+      if (wrappedResponse.error) {
+        throw new Error(
+          typeof wrappedResponse.error === "string"
+            ? wrappedResponse.error
+            : JSON.stringify(wrappedResponse.error),
+        );
+      }
+
+      return wrappedResponse.result;
     },
 
     listen: (event: string, callback: (data: unknown) => void) => {
@@ -97,19 +124,21 @@ const createIPCChannelClient = (
 
     send: (event: string, data?: unknown) => {
       console.log(`[IPC:${channelName}] Sending ${event}`, data);
-      bridge.send(channelName, event, data);
+      bridge.send?.(channelName, event, data);
     },
   };
 };
 
 // WebSocket Transport for browser
 const createWebSocketTransport = (): Transport => {
-  const wsUrl = (window as any).__ATOMITON_WS_URL__ || "ws://localhost:3001";
+  const wsUrl =
+    (window as { __ATOMITON_WS_URL__?: string }).__ATOMITON_WS_URL__ ||
+    "ws://localhost:3001";
   const ws = new WebSocket(wsUrl);
   const channels = new Map<string, ChannelClient>();
   const pendingCalls = new Map<
     string,
-    { resolve: (value: any) => void; reject: (error: any) => void }
+    { resolve: (value: unknown) => void; reject: (error: unknown) => void }
   >();
 
   ws.onopen = () => {
@@ -156,7 +185,10 @@ const createWebSocketTransport = (): Transport => {
 const createWebSocketChannelClient = (
   channelName: string,
   ws: WebSocket,
-  pendingCalls: Map<string, any>,
+  pendingCalls: Map<
+    string,
+    { resolve: (value: unknown) => void; reject: (error: unknown) => void }
+  >,
 ): ChannelClient => {
   return {
     call: async (command: string, args?: unknown) => {
@@ -255,31 +287,34 @@ const createHTTPChannelClient = (
 
 // Memory Transport for testing
 const createMemoryTransport = (): Transport => {
-  const handlers = new Map<string, Map<string, (args: any) => Promise<any>>>();
+  const handlers = new Map<
+    string,
+    Map<string, (args: unknown) => Promise<unknown>>
+  >();
   const eventListeners = new Map<
     string,
     Map<string, Set<(data: unknown) => void>>
   >();
 
   // Register some default handlers for testing
-  const nodeHandlers = new Map<string, (args: any) => Promise<any>>();
-  nodeHandlers.set("execute", async (args) => {
-    // Mock execution result
+  const nodeHandlers = new Map<string, (args: unknown) => Promise<unknown>>();
+  nodeHandlers.set("execute", async (args: unknown) => {
+    const typedArgs = args as { node?: { type?: string; id?: string } };
     return {
       success: true,
-      data: `Mock result for ${args.node?.type || "unknown"} node`,
+      data: `Mock result for ${typedArgs.node?.type || "unknown"} node`,
       duration: 100,
-      executedNodes: [args.node?.id || "mock-id"],
+      executedNodes: [typedArgs.node?.id || "mock-id"],
     };
   });
-  nodeHandlers.set("validate", async (args) => {
+  nodeHandlers.set("validate", async () => {
     return {
       valid: true,
       errors: [],
     };
   });
 
-  const systemHandlers = new Map<string, (args: any) => Promise<any>>();
+  const systemHandlers = new Map<string, (args: unknown) => Promise<unknown>>();
   systemHandlers.set("health", async () => {
     return {
       status: "ok",
@@ -299,7 +334,7 @@ const createMemoryTransport = (): Transport => {
 
 const createMemoryChannelClient = (
   channelName: string,
-  handlers: Map<string, Map<string, (args: any) => Promise<any>>>,
+  handlers: Map<string, Map<string, (args: unknown) => Promise<unknown>>>,
   eventListeners: Map<string, Map<string, Set<(data: unknown) => void>>>,
 ): ChannelClient => {
   return {
@@ -353,6 +388,3 @@ export {
   createMemoryTransport,
   createWebSocketTransport,
 };
-
-// Export types
-export type { ChannelClient, Transport };
