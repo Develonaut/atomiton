@@ -4,6 +4,7 @@
   "description": "Central execution engine for atomic and composite nodes",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
   },

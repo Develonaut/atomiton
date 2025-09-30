@@ -3,11 +3,10 @@
  * Central type definitions for the node system
  */
 
-// Re-export types from separate modules
-export * from "#core/types/edges";
-export * from "#core/types/metadata";
-export * from "#core/types/parameters";
-export * from "#core/types/ports";
+export type { NodeEdge } from "#core/types/edges";
+export type { NodeMetadata } from "#core/types/metadata";
+export type { NodeFieldsConfig, NodeParameters } from "#core/types/parameters";
+export type { NodePort } from "#core/types/ports";
 
 import type { NodeEdge } from "#core/types/edges";
 import type { NodeMetadata } from "#core/types/metadata";

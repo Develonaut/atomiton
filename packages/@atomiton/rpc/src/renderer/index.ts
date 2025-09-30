@@ -1,5 +1,20 @@
-// RPC Renderer Transport Exports
-export * from "#renderer/createTransport";
+/**
+ * @atomiton/rpc - Renderer Transport
+ *
+ * Pure transport layer for renderer environments
+ * - IPC transport for Electron
+ * - WebSocket transport for browser
+ * - HTTP transport for Node.js
+ * - Memory transport for testing
+ */
 
-// Re-export main transport creation function
-export { createRPCTransport as default } from "#renderer/createTransport";
+export {
+  createRPCTransport,
+  createHTTPTransport,
+  createIPCTransport,
+  createMemoryTransport,
+  createWebSocketTransport,
+  type ConductorTransport,
+  type ChannelClient,
+  type Transport,
+} from "#renderer/createTransport";

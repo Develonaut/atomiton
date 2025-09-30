@@ -2,6 +2,8 @@
  * @atomiton/store - Simplified State Management
  *
  * Clean, functional API for creating Zustand stores with Immer and persistence
+ *
+ * Map/Set support is automatically enabled on first store creation.
  */
 
 import { kebabCase } from "@atomiton/utils";
@@ -12,8 +14,8 @@ import type { PersistOptions, PersistStorage } from "zustand/middleware";
 import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-// Enable Map/Set support in Immer on module load
-enableMapSet();
+// Track initialization to ensure enableMapSet() is only called once
+let initialized = false;
 
 /**
  * Function that creates initial state
@@ -58,11 +60,19 @@ export type StoreConfig<T> = {
 /**
  * Creates a Zustand store with Immer for immutability and optional persistence
  * Automatically prefixes store names with "atomiton-" and converts to kebab-case
+ *
+ * On first invocation, automatically enables Map/Set support in Immer.
  */
 export function createStore<T extends object>(
   initializer: StateCreator<T>,
   config: StoreConfig<T> = {},
 ): Store<T> & { useStore: UseBoundStore<StoreApi<T>> } {
+  // Lazy initialization: enable Map/Set support on first store creation
+  if (!initialized) {
+    enableMapSet();
+    initialized = true;
+  }
+
   const { name = "Store", persist: persistConfig } = config;
 
   // Auto-format name: prefix with "atomiton-" and convert to kebab-case

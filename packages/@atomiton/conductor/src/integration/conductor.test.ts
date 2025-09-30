@@ -1,10 +1,5 @@
 import { createConductor } from "#index";
-import {
-  createNodeDefinition,
-  createNodeMetadata,
-  createNodeParameters,
-  createNodePorts,
-} from "@atomiton/nodes/definitions";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Conductor Integration Tests", () => {
@@ -20,16 +15,17 @@ describe("Conductor Integration Tests", () => {
         version: "1.0.0",
         name: "Test Processor",
         position: { x: 0, y: 0 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "processor",
           name: "Processor",
           author: "Test",
           description: "Test processor",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       // Direct check following architecture pattern
@@ -45,16 +41,17 @@ describe("Conductor Integration Tests", () => {
         parentId: "flow-1",
         name: "Child Node",
         position: { x: 100, y: 100 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "child",
           name: "Child",
           author: "Test",
           description: "Test child",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const compositeNode = createNodeDefinition({
@@ -63,16 +60,17 @@ describe("Conductor Integration Tests", () => {
         version: "1.0.0",
         name: "Test Flow",
         position: { x: 0, y: 0 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "flow",
           name: "Flow",
           author: "Test",
           description: "Test flow",
           category: "group",
           icon: "git-branch",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
         nodes: [childNode],
         edges: [],
       });
@@ -108,16 +106,17 @@ describe("Conductor Integration Tests", () => {
         version: "1.0.0",
         name: "Test Processor",
         position: { x: 0, y: 0 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "processor",
           name: "Processor",
           author: "Test",
           description: "Test processor",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({ value: 42 }),
-        ...createNodePorts({}),
+        },
+        parameters: { value: 42 },
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const result = await conductor.execute(atomicNode, {
@@ -140,16 +139,17 @@ describe("Conductor Integration Tests", () => {
         version: "1.0.0",
         name: "Failing Processor",
         position: { x: 0, y: 0 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "failing",
           name: "Failing",
           author: "Test",
           description: "Test failing processor",
           category: "utility",
           icon: "zap",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const result = await conductor.execute(atomicNode);
@@ -184,16 +184,17 @@ describe("Conductor Integration Tests", () => {
         parentId: "flow-1",
         name: "First Child",
         position: { x: 100, y: 100 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "child1",
           name: "First Child",
           author: "Test",
           description: "First child node",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const child2 = createNodeDefinition({
@@ -203,16 +204,17 @@ describe("Conductor Integration Tests", () => {
         parentId: "flow-1",
         name: "Second Child",
         position: { x: 200, y: 100 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "child2",
           name: "Second Child",
           author: "Test",
           description: "Second child node",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const compositeNode = createNodeDefinition({
@@ -221,16 +223,17 @@ describe("Conductor Integration Tests", () => {
         version: "1.0.0",
         name: "Test Flow",
         position: { x: 0, y: 0 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "flow",
           name: "Flow",
           author: "Test",
           description: "Test flow",
           category: "group",
           icon: "git-branch",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
         nodes: [child1, child2],
         edges: [
           {
@@ -261,16 +264,17 @@ describe("Conductor Integration Tests", () => {
         parentId: "flow-1",
         name: "First Child",
         position: { x: 100, y: 100 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "child1",
           name: "First Child",
           author: "Test",
           description: "First child node",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const child2 = createNodeDefinition({
@@ -280,16 +284,17 @@ describe("Conductor Integration Tests", () => {
         parentId: "flow-1",
         name: "Second Child",
         position: { x: 200, y: 100 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "child2",
           name: "Second Child",
           author: "Test",
           description: "Second child node",
           category: "utility",
           icon: "code-2",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
       });
 
       const cyclicNode = createNodeDefinition({
@@ -298,16 +303,17 @@ describe("Conductor Integration Tests", () => {
         version: "1.0.0",
         name: "Cyclic Flow",
         position: { x: 0, y: 0 },
-        metadata: createNodeMetadata({
+        metadata: {
           id: "cyclic",
           name: "Cyclic Flow",
           author: "Test",
           description: "Test cyclic flow",
           category: "group",
           icon: "repeat",
-        }),
-        parameters: createNodeParameters({}),
-        ...createNodePorts({}),
+        },
+        parameters: {},
+        inputPorts: [],
+        outputPorts: [],
         nodes: [child1, child2],
         edges: [
           {

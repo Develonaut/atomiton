@@ -1,12 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  capitalize,
-  delay,
+  generateEdgeId,
   generateExecutionId,
-  generateId,
-  generateJobId,
   generateNodeId,
-  generateWorkerId,
   kebabCase,
   titleCase,
 } from "#index";
@@ -15,25 +11,17 @@ describe("Utils Package Contract", () => {
   describe("package exports", () => {
     it("should export all expected functions", () => {
       const expectedExports = [
-        "delay",
+        "generateEdgeId",
         "generateExecutionId",
-        "generateId",
-        "generateJobId",
         "generateNodeId",
-        "generateWorkerId",
-        "capitalize",
         "kebabCase",
         "titleCase",
       ];
 
       const actualExports = [
-        delay,
+        generateEdgeId,
         generateExecutionId,
-        generateId,
-        generateJobId,
         generateNodeId,
-        generateWorkerId,
-        capitalize,
         kebabCase,
         titleCase,
       ];

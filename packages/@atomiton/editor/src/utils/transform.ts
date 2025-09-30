@@ -1,10 +1,5 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import {
-  createNodeDefinition,
-  createNodeMetadata,
-  createNodeParameters,
-  createNodePorts,
-} from "@atomiton/nodes/definitions";
+import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type {
   Edge as ReactFlowEdge,
   Node as ReactFlowNode,
@@ -63,7 +58,6 @@ export function reactFlowToFlow(
   reactEdges: ReactFlowEdge[],
   baseFlow?: NodeDefinition,
 ): NodeDefinition {
-  const ports = createNodePorts({});
   return createNodeDefinition({
     ...baseFlow,
     id: baseFlow?.id || `flow-${Date.now()}`,
@@ -79,17 +73,17 @@ export function reactFlowToFlow(
         name: n.data?.label || n.type || "Untitled",
         position: n.position,
         parentId: baseFlow?.id,
-        metadata: createNodeMetadata({
+        metadata: {
           id: n.id,
           name: n.data?.label || n.type || "Untitled",
           author: "editor",
           icon: "settings",
           category: "user",
           description: "",
-        }),
-        parameters: createNodeParameters(n.data?.config || {}),
-        inputPorts: ports.input,
-        outputPorts: ports.output,
+        },
+        parameters: n.data?.config || {},
+        inputPorts: [],
+        outputPorts: [],
       }),
     ),
     edges: reactEdges.map((edge) => ({

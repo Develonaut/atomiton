@@ -3,15 +3,15 @@
  * Extracted validation logic for type safety
  */
 
+import type { NodeEdgeType } from "#core/types/edges.js";
 import type {
   NodeCategory,
-  NodeEdgeType,
-  NodeFieldControlType,
   NodeIcon,
   NodeMetadataSource,
   NodeMetadataType,
   NodeRuntime,
-} from "#core/types/definition.js";
+} from "#core/types/metadata.js";
+import type { NodeFieldControlType } from "#core/types/parameters.js";
 
 /**
  * Helper to validate and convert string to NodeMetadataType

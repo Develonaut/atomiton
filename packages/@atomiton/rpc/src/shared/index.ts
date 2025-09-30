@@ -1,8 +1,16 @@
 // Pure transport exports only
-export * from "#trpc";
+export {
+  createContext,
+  router,
+  publicProcedure,
+  middleware,
+  appRouter,
+  type Context,
+  type AppRouter,
+} from "#trpc";
 
 // Channel constants
-export * as IPC from "#shared/channels";
+export { IPC, type IPCChannel } from "#shared/channels";
 
 // Pure transport types
 export type { RPCRequest, RPCResponse, RPCError } from "#shared/types";

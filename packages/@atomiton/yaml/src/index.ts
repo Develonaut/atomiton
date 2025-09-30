@@ -1,3 +1,13 @@
+/**
+ * @atomiton/yaml
+ *
+ * YAML parsing, stringifying, and validation utilities
+ * - Parse YAML documents with comprehensive error handling
+ * - Stringify values with formatting options
+ * - Schema validation and type checking
+ * - JSON interoperability
+ */
+
 // Parser exports
 export {
   // Convenience alias
@@ -44,4 +54,16 @@ export { isYamlValue } from "#value.js";
 export { getVersion } from "#version.js";
 
 // Type exports
-export * from "#types.js";
+export type {
+  YamlParseOptions,
+  YamlStringifyOptions,
+  YamlValue,
+  YamlObject,
+  YamlArray,
+  YamlDocument,
+  ParseResult,
+  YamlError,
+  YamlWarning,
+  StreamParseOptions,
+  ValidationSchema,
+} from "#types.js";

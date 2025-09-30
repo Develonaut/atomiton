@@ -6,7 +6,18 @@
 import type { IStorageEngine } from "#types";
 import { createMemoryEngine } from "#index";
 
-export * from "#types";
+// Export essential types only
+export type {
+  IStorageEngine,
+  StorageOptions,
+  StorageItem,
+  StorageInfo,
+  StorageType,
+  Platform,
+  StorageError,
+  StorageErrorCode,
+} from "#types";
+
 export { createMemoryEngine, type InMemoryStorageConfig } from "#index";
 
 /**

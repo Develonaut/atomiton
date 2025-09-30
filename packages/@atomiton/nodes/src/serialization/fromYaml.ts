@@ -12,8 +12,8 @@ import type {
   NodeEdge,
   NodeFieldsConfig,
   NodePort,
-  NodeRuntime,
 } from "#core/types/definition.js";
+import type { NodeRuntime } from "#core/types/metadata.js";
 import type { NodeParameters } from "#core/types/parameters.js";
 import yaml from "js-yaml";
 import type {

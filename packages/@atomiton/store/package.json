@@ -4,6 +4,7 @@
   "description": "State management for Atomiton workflow automation",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
   },

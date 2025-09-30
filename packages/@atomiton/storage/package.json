@@ -4,6 +4,7 @@
   "description": "Universal storage abstraction for Composites and application data across platforms",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
   },  "exports": {

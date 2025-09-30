@@ -4,6 +4,7 @@
   "description": "YAML parsing utilities for Atomiton",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
   },  "main": "./dist/index.js",

@@ -4,6 +4,7 @@
   "description": "Shared utility functions for Atomiton",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
   },

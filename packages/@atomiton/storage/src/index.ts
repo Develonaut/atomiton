@@ -5,7 +5,17 @@
  * Direct usage of this module is discouraged in favor of environment-specific exports
  */
 
-export * from "#types";
+// Export essential types only
+export type {
+  IStorageEngine,
+  StorageOptions,
+  StorageItem,
+  StorageInfo,
+  StorageType,
+  Platform,
+  StorageError,
+  StorageErrorCode,
+} from "#types";
 
 // Re-export factories with explicit engine naming
 export {

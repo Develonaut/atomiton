@@ -19,7 +19,22 @@ import type {
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 // Re-export types and utilities
-export * from "#types";
+export type {
+  ConductorExecutionContext,
+  ExecutionResult,
+  ExecutionError,
+  ExecutionStatus,
+  NodeExecutorFactory,
+} from "#types/execution";
+
+export type {
+  ConductorTransport,
+  TransportConfig,
+  HealthResult,
+} from "#types/transport";
+
+export type { ConductorConfig } from "#types";
+
 export type {
   NodeProgressEvent,
   NodeCompleteEvent,

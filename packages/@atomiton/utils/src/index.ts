@@ -1,12 +1,15 @@
-export { delay } from "#delay";
-export { formatDuration } from "#formatDuration";
+/**
+ * @atomiton/utils
+ *
+ * Core utility functions for ID generation and string manipulation
+ * - Domain-specific ID generators (node, edge, execution)
+ * - String case transformations
+ */
+
 export {
   generateEdgeId,
   generateExecutionId,
-  generateId,
-  generateJobId,
   generateNodeId,
-  generateWorkerId,
 } from "#generateId";
 
-export * from "#changeCase";
+export { titleCase, kebabCase } from "#changeCase";

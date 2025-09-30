@@ -2,12 +2,8 @@
  * Factory function for creating node metadata
  */
 
-import type {
-  NodeCategory,
-  NodeIcon,
-  NodeMetadata,
-  NodeRuntime,
-} from "#core/types/definition";
+import type { NodeMetadata } from "#core/types/definition";
+import type { NodeCategory, NodeIcon, NodeRuntime } from "#core/types/metadata";
 import { isNodeMetadata } from "#core/utils/nodeUtils";
 import { titleCase } from "@atomiton/utils";
 

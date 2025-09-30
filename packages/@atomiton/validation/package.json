@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Centralized validation utilities and schema definitions for the Atomiton platform",
   "type": "module",
+  "sideEffects": false,
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

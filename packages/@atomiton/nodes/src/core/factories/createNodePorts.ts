@@ -2,7 +2,8 @@
  * Factory function for creating node ports
  */
 
-import type { NodePort, NodePortDataType } from "#core/types/definition.js";
+import type { NodePort } from "#core/types/definition.js";
+import type { NodePortDataType } from "#core/types/ports.js";
 import { isNodePort } from "#core/utils/nodeUtils.js";
 
 export type NodePortInput = {

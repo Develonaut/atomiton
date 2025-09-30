@@ -4,6 +4,7 @@
   "description": "Domain-agnostic router package with auto-generated navigation methods and TanStack Router integration",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "imports": {
     "#*": "./src/*"
   },  "main": "./dist/index.js",
