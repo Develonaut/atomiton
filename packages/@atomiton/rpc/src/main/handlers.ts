@@ -22,7 +22,7 @@ export function setupHandlers(mainWindow: BrowserWindow) {
       return {
         id: request.id,
         error: {
-          code: -32601,
+          code: "METHOD_NOT_FOUND",
           message: "Method not found",
           data: `Method '${request.method}' not implemented in transport layer`,
         },

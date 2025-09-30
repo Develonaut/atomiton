@@ -18,7 +18,10 @@
         "PLAYWRIGHT_BASE_URL",
         "PLAYWRIGHT_HEADED",
         "LEFTHOOK",
-        "BUILD_TARGET"
+        "BUILD_TARGET",
+        "ATOMITON_LOG_PATH",
+        "ATOMITON_DESKTOP",
+        "DEBUG"
       ]
     },
     "lint": {

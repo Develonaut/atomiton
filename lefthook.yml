@@ -30,6 +30,20 @@ pre-commit:
       stage_fixed: true
       fail_text: "❌ Markdown table formatting failed"
 
+    # Auto-regenerate preload types when RPC types change
+    preload-types:
+      glob: "packages/@atomiton/rpc/src/shared/types.ts"
+      run: |
+        echo "🔄 RPC types changed, regenerating preload types..."
+        pnpm generate:preload-types
+
+        echo "✅ Validating preload types..."
+        pnpm validate:preload-types
+
+        # Stage regenerated file if changed
+        git add apps/desktop/src/preload/preload.d.ts
+      fail_text: "❌ Preload type generation failed"
+
     # Type check all packages (turbo cached, very fast)
     type-check:
       run: |

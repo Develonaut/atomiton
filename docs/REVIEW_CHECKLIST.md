@@ -19,6 +19,9 @@
       self-documenting code instead)
 - [ ] **No commented-out code** (use git history instead)
 - [ ] **No barreling for non component files** (import directly)
+- [ ] **No wildcard imports** (e.g. `import * as something from ...`)
+- [ ] **No wildcard exports** (e.g. `export * from ...`)
+- [ ] **No relative imports outside current package** (use `#` paths)
 - [ ] **Files < ~250 lines** (break up if larger)
 - [ ] **Functions < 20-30 lines** (refactor if larger)
 - [ ] **Meaningful test written for new code** (not just coverage)
@@ -29,6 +32,7 @@
 - [ ] **No utility grab bags** - utilities are logically grouped
 - [ ] **Clear boundaries** - well-defined interfaces
 - [ ] **Composable** - small pieces that work together
+- [ ] **YAGNI** - no unused code or features or exported types or code
 
 ## ⚛️ React Components & Hooks
 

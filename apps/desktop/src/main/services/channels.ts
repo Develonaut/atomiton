@@ -1,4 +1,10 @@
 import { safeLog } from "#main/utils/safeLogging";
+import type {
+  ConductorExecutionContext,
+  ExecutionResult,
+} from "@atomiton/conductor/desktop";
+import { createConductor } from "@atomiton/conductor/desktop";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import {
   createNodeChannelServer,
   createStorageChannelServer,
@@ -27,17 +33,30 @@ export const createChannelManager = (): ChannelManager => {
   const initialize = () => {
     safeLog("[CHANNELS] Initializing channel servers...");
 
-    // Create all channel servers
-    const nodeChannel = createNodeChannelServer(ipcMain);
-    const storageChannel = createStorageChannelServer(ipcMain);
+    // Create conductor instance ONCE for all channels
+    // This is the ONLY place conductor is created for IPC
+    const conductor = createConductor();
+    safeLog("[CHANNELS] Conductor instance created for channel servers");
+
+    // Create node channel with direct method references and type parameters
+    const nodeChannel = createNodeChannelServer<
+      NodeDefinition,
+      ConductorExecutionContext,
+      ExecutionResult
+    >(ipcMain, {
+      execute: conductor.node.run,
+    });
+
     const systemChannel = createSystemChannelServer(ipcMain);
 
-    channels.push(nodeChannel, storageChannel, systemChannel);
+    const storageChannel = createStorageChannelServer(ipcMain);
+
+    channels.push(nodeChannel, systemChannel, storageChannel);
 
     safeLog(`[CHANNELS] Initialized ${channels.length} channel servers:`, [
       "node",
-      "storage",
       "system",
+      "storage",
     ]);
 
     // Register channel discovery handler

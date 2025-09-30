@@ -2,40 +2,10 @@ import {
   createChannelServer,
   type ChannelServer,
 } from "#main/channels/createChannelServer";
-import { createConductor } from "@atomiton/conductor/desktop";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
 import { v } from "@atomiton/validation";
 import type { IpcMain } from "electron";
-
-// Local type definitions to avoid circular dependency
-type NodeDefinition = {
-  id: string;
-  type: string;
-  parameters?: Record<string, any>;
-};
-
-type ConductorExecutionContext = {
-  nodeId: string;
-  executionId: string;
-  variables: Record<string, unknown>;
-  input?: unknown;
-  parentContext?: ConductorExecutionContext;
-};
-
-type ExecutionResult = {
-  success: boolean;
-  data?: unknown;
-  error?: {
-    nodeId: string;
-    message: string;
-    timestamp: Date;
-    code?: string;
-    stack?: string;
-  };
-  duration?: number;
-  executedNodes?: string[];
-  context?: ConductorExecutionContext;
-};
 
 // Validation schemas
 const nodeDefinitionSchema = v.object({
@@ -62,20 +32,20 @@ const nodeValidateParamsSchema = v.object({
 });
 
 // Types for node channel operations
-export type NodeExecuteParams = {
-  node: NodeDefinition;
-  context?: Partial<ConductorExecutionContext>;
+export type NodeExecuteParams<TNode = NodeDefinition, TContext = unknown> = {
+  node: TNode;
+  context?: TContext;
 };
 
-export type NodeExecuteResult = {
+export type NodeExecuteResult<TResult = unknown> = {
   executionId: string;
   status: "completed" | "failed" | "cancelled";
-  result?: ExecutionResult;
+  result?: TResult;
   error?: unknown;
 };
 
-export type NodeValidateParams = {
-  node: NodeDefinition;
+export type NodeValidateParams<TNode = NodeDefinition> = {
+  node: TNode;
 };
 
 export type NodeValidateResult = {
@@ -83,13 +53,21 @@ export type NodeValidateResult = {
   errors: string[];
 };
 
-// Functional factory for node channel server
-export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
+// Functional factory for node channel server with generic handlers
+export const createNodeChannelServer = <
+  TNode = NodeDefinition,
+  TContext = unknown,
+  TResult = unknown,
+>(
+  ipcMain: IpcMain,
+  handlers: {
+    execute: (node: TNode, context?: TContext) => Promise<TResult>;
+    validate?: (node: TNode) => Promise<{ valid: boolean; errors: string[] }>;
+    cancel?: (executionId: string) => Promise<void>;
+  },
+): ChannelServer => {
   const server = createChannelServer("node", ipcMain);
   const executions = new Map<string, AbortController>();
-
-  // Create real conductor instance
-  const conductor = createConductor();
 
   // Register command handlers
   server.handle("execute", async (args: unknown): Promise<unknown> => {
@@ -120,16 +98,16 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
         timestamp: Date.now(),
       });
 
-      // Execute the node using real conductor with context
-      const context = {
-        nodeId: params.node.id,
-        executionId,
-        variables: params.context?.variables || {},
-        input: params.context?.input,
-        parentContext: params.context?.parentContext,
-      };
+      // Execute the node using injected handler
+      const context = params.context
+        ? ({
+            nodeId: (params.node as any).id,
+            executionId,
+            ...params.context,
+          } as TContext)
+        : undefined;
 
-      const result = await conductor.node.run(params.node as any, context);
+      const result = await handlers.execute(params.node as TNode, context);
 
       // Broadcast completion event
       server.broadcast("completed", {
@@ -142,8 +120,8 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
       console.log("[NODE] Execution completed:", {
         executionId,
         nodeId: params.node.id,
-        success: result.success,
-        duration: result.duration,
+        success: (result as any).success,
+        duration: (result as any).duration,
       });
 
       // Return the result directly for the browser transport
@@ -183,9 +161,19 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
   server.handle("cancel", async (args: unknown): Promise<unknown> => {
     const executionId = args as string;
     const controller = executions.get(executionId);
+
     if (controller) {
       controller.abort();
       executions.delete(executionId);
+
+      // Use injected cancel handler if provided
+      if (handlers.cancel) {
+        try {
+          await handlers.cancel(executionId);
+        } catch (error) {
+          console.warn("[NODE] Cancel handler error:", error);
+        }
+      }
 
       console.log("[NODE] Execution cancelled:", { executionId });
 
@@ -212,9 +200,21 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
     }
 
     const params = validation.data;
-    const errors: string[] = [];
 
-    // Basic validation
+    // Use injected validator if provided, otherwise do basic validation
+    if (handlers.validate) {
+      const result = await handlers.validate(params.node as TNode);
+      console.log("[NODE] Validation completed (via handler):", {
+        nodeId: params.node.id,
+        nodeType: params.node.type,
+        valid: result.valid,
+        errorCount: result.errors.length,
+      });
+      return result;
+    }
+
+    // Basic fallback validation
+    const errors: string[] = [];
     if (!params.node.id) {
       errors.push("Node must have an id");
     }
@@ -222,10 +222,7 @@ export const createNodeChannelServer = (ipcMain: IpcMain): ChannelServer => {
       errors.push("Node must have a type");
     }
 
-    // Additional validation could be added here
-    // For example, checking if the node type is supported
-
-    console.log("[NODE] Validation completed:", {
+    console.log("[NODE] Validation completed (basic):", {
       nodeId: params.node.id,
       nodeType: params.node.type,
       valid: errors.length === 0,

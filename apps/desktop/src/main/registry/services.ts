@@ -1,7 +1,8 @@
 import { initializeServices } from "#main/services";
-import { createConductor, registerHandlers } from "@atomiton/conductor/desktop";
-import { createNodeService, type NodeService } from "#main/services/node";
-import { safeLog } from "#main/utils/safeLogging";
+import {
+  createErrorBoundaryService,
+  type ErrorBoundaryService,
+} from "#main/services/errorBoundary";
 import {
   createExecutionService,
   type ExecutionService,
@@ -10,15 +11,11 @@ import {
   createFlowStorageService,
   type FlowStorageService,
 } from "#main/services/flowStorage";
-import {
-  createErrorBoundaryService,
-  type ErrorBoundaryService,
-} from "#main/services/errorBoundary";
-import { ipcMain } from "electron";
+import { createNodeService, type NodeService } from "#main/services/node";
+import { safeLog } from "#main/utils/safeLogging";
 
 export type ServiceRegistry = {
   storage: ReturnType<typeof initializeServices>["storage"];
-  conductor: ReturnType<typeof createConductor>;
   nodeService: NodeService;
   executionService: ExecutionService;
   flowStorageService: FlowStorageService;
@@ -52,15 +49,12 @@ export const createServiceRegistryManager = (): ServiceRegistryManager => {
     const executionService = createExecutionService();
     const flowStorageService = createFlowStorageService();
 
-    safeLog("Initializing Conductor handlers");
-    const conductor = createConductor();
-    const handlers = conductor.createMainHandlers();
-    registerHandlers(ipcMain, handlers);
-    safeLog("Conductor handlers initialized");
+    safeLog(
+      "Application services initialized (IPC handled by channel manager)",
+    );
 
     registry = {
       storage: legacyServices.storage,
-      conductor,
       nodeService,
       executionService,
       flowStorageService,

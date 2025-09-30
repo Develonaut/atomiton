@@ -9,8 +9,4 @@ import "#index.css";
 // Import editor styles for ReactFlow nodes - after theme variables
 import "@atomiton/editor/index.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);

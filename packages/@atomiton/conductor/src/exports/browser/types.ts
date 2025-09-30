@@ -4,26 +4,20 @@
 
 import type { ExecutionResult } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import type {
+  AtomitonBridge,
+  AtomitonBridgeResponse as BaseAtomitonBridgeResponse,
+} from "@atomiton/rpc/shared";
 
-export type AtomitonBridgeResponse<T = unknown> = {
-  result?: T;
-  status?: string;
-  token?: string;
-  flows?: FlowListItem[];
-};
+// Re-export bridge types
+export type { AtomitonBridge };
 
-export type AtomitonBridge = {
-  call<T = unknown>(
-    channel: string,
-    method: string,
-    data?: unknown,
-  ): Promise<AtomitonBridgeResponse<T>>;
-  listen(
-    channel: string,
-    event: string,
-    callback: (data: unknown) => void,
-  ): () => void;
-};
+// Extend bridge response with conductor-specific fields
+export type AtomitonBridgeResponse<T = unknown> =
+  BaseAtomitonBridgeResponse<T> & {
+    token?: string;
+    flows?: FlowListItem[];
+  };
 
 // Flow types
 export type FlowDefinition = {
@@ -102,7 +96,9 @@ export type FlowSavedEvent = {
 declare global {
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Window {
-    atomitonBridge?: AtomitonBridge;
+    atomiton?: {
+      __bridge__: AtomitonBridge;
+    };
     localStorage?: {
       getItem(key: string): string | null;
       setItem(key: string, value: string): void;

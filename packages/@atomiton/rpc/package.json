@@ -43,7 +43,6 @@
   "dependencies": {
     "@trpc/server": "^11.6.0",
     "electron": "^38.0.0",
-    "@atomiton/conductor": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "winston": "^3.17.0",
     "p-retry": "^7.0.0"

@@ -4,17 +4,14 @@ import { contextBridge, ipcRenderer } from "electron";
 console.log("[PRELOAD] Starting minimal channel bridge");
 console.log("[PRELOAD] contextIsolated:", process.contextIsolated);
 
-// Minimal channel bridge - under 50 lines as specified
 const createChannelBridge = () => {
   return {
-    // Generic channel call method
     call: async (channel: string, command: string, args?: unknown) => {
       const fullMethod = `${channel}:call`;
       console.log("[PRELOAD:CALL]", fullMethod, command, args);
       return await ipcRenderer.invoke(fullMethod, command, args);
     },
 
-    // Generic channel listen method
     listen: (
       channel: string,
       event: string,
@@ -29,13 +26,11 @@ const createChannelBridge = () => {
 
       ipcRenderer.on(fullEvent, handler);
 
-      // Return unsubscribe function
       return () => {
         ipcRenderer.removeListener(fullEvent, handler);
       };
     },
 
-    // Generic channel send method (fire and forget)
     send: (channel: string, event: string, data?: unknown) => {
       const fullEvent = `${channel}:${event}`;
       console.log("[PRELOAD:SEND]", fullEvent, data);
@@ -44,12 +39,18 @@ const createChannelBridge = () => {
   };
 };
 
-// Expose minimal bridge interface
+const bridge = createChannelBridge();
+
 if (process.contextIsolated) {
-  contextBridge.exposeInMainWorld("atomitonBridge", createChannelBridge());
+  contextBridge.exposeInMainWorld("atomiton", {
+    __bridge__: bridge,
+  });
 } else {
-  (globalThis as { atomitonBridge?: unknown }).atomitonBridge =
-    createChannelBridge();
+  (globalThis as { atomiton?: { __bridge__: unknown } }).atomiton = {
+    __bridge__: bridge,
+  };
 }
 
-console.log("[PRELOAD] Minimal channel bridge completed");
+console.log(
+  "[PRELOAD] Minimal channel bridge exposed at window.atomiton.__bridge__",
+);

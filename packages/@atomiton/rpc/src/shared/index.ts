@@ -1,16 +1,10 @@
 // Pure transport exports only
-export {
-  createContext,
-  router,
-  publicProcedure,
-  middleware,
-  appRouter,
-  type Context,
-  type AppRouter,
-} from "#trpc";
+// Only export types that are actually used by consumers
 
-// Channel constants
-export { IPC, type IPCChannel } from "#shared/channels";
+export type { AtomitonBridge, AtomitonBridgeResponse, RPCError } from "./types";
 
-// Pure transport types
-export type { RPCRequest, RPCResponse, RPCError } from "#shared/types";
+// Internal types (not exported, used only within RPC package):
+// - ChannelClient: internal transport abstraction
+// - ExecutionTransport: exported via renderer/index.ts
+// - RPCRequest/RPCResponse: internal RPC protocol
+// - Transport: internal transport abstraction

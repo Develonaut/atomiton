@@ -9,7 +9,6 @@ import type {
 } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
-import { getBridge } from "#exports/browser/transport.js";
 import type { ValidationResult } from "#exports/browser/types.js";
 
 /**
@@ -141,17 +140,20 @@ export function createNodeAPI(transport: ConductorTransport | undefined) {
         return { valid: false, errors };
       }
 
-      if (transport) {
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
         try {
-          const bridge = getBridge();
-          if (bridge) {
-            const response = await bridge.call<ValidationResult>(
-              "node",
-              "validate",
-              { node },
-            );
-            return response.result || { valid: true, errors: [] };
-          }
+          const response = await window.atomiton.__bridge__.call(
+            "node",
+            "validate",
+            { node },
+          );
+          return (
+            (response.result as ValidationResult) || { valid: true, errors: [] }
+          );
         } catch (error) {
           console.warn("[CONDUCTOR] Remote validation failed:", error);
         }
@@ -164,12 +166,13 @@ export function createNodeAPI(transport: ConductorTransport | undefined) {
      * Cancel a running execution
      */
     async cancel(executionId: string): Promise<void> {
-      if (transport) {
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
         try {
-          const bridge = getBridge();
-          if (bridge) {
-            await bridge.call("node", "cancel", executionId);
-          }
+          await window.atomiton.__bridge__.call("node", "cancel", executionId);
         } catch (error) {
           console.warn("[CONDUCTOR] Cancel execution failed:", error);
         }

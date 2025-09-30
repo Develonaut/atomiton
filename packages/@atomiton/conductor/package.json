@@ -31,12 +31,19 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage"
   },
-  "keywords": ["conductor", "execution", "node", "flow", "orchestration"],
+  "keywords": [
+    "conductor",
+    "execution",
+    "node",
+    "flow",
+    "orchestration"
+  ],
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
     "@atomiton/nodes": "workspace:*",
-    "@atomiton/utils": "workspace:*"
+    "@atomiton/utils": "workspace:*",
+    "@atomiton/rpc": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",

@@ -3,7 +3,6 @@
  */
 
 import type { ConductorTransport } from "#types";
-import { getBridge } from "#exports/browser/transport.js";
 import type {
   AuthCredentials,
   AuthResult,
@@ -20,41 +19,39 @@ export function createAuthAPI(transport: ConductorTransport | undefined) {
         throw new Error("Invalid credentials");
       }
 
-      if (transport) {
-        const bridge = getBridge();
-        if (bridge) {
-          const response = await bridge.call<AuthResult>(
-            "auth",
-            "login",
-            credentials,
-          );
-          const result = response.result || response;
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
+        const response = await window.atomiton?.__bridge__.call(
+          "auth",
+          "login",
+          credentials,
+        );
+        const result =
+          (response.result as AuthResult) || (response as AuthResult);
 
-          if (
-            result.token &&
-            typeof window !== "undefined" &&
-            window?.localStorage
-          ) {
-            window.localStorage.setItem("auth_token", result.token);
-          }
-
-          return result;
+        if (result.token && window?.localStorage) {
+          window.localStorage.setItem("auth_token", result.token);
         }
+
+        return result;
       }
 
       throw new Error("No transport available for authentication");
     },
 
     async logout(): Promise<void> {
-      if (transport) {
-        const bridge = getBridge();
-        if (bridge) {
-          const token =
-            typeof window !== "undefined" && window?.localStorage
-              ? window.localStorage.getItem("auth_token")
-              : null;
-          await bridge.call("auth", "logout", { token });
-        }
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
+        const token = window?.localStorage
+          ? window.localStorage.getItem("auth_token")
+          : null;
+        await window.atomiton?.__bridge__.call("auth", "logout", { token });
       }
 
       if (typeof window !== "undefined" && window?.localStorage) {
@@ -72,15 +69,16 @@ export function createAuthAPI(transport: ConductorTransport | undefined) {
           : null;
       if (!token) return null;
 
-      if (transport) {
-        const bridge = getBridge();
-        if (bridge) {
-          const response = await bridge.call<UserInfo>(
-            "auth",
-            "getCurrentUser",
-          );
-          return response.result || null;
-        }
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
+        const response = await window.atomiton?.__bridge__.call(
+          "auth",
+          "getCurrentUser",
+        );
+        return (response.result as UserInfo) || null;
       }
 
       return null;
@@ -95,27 +93,25 @@ export function createAuthAPI(transport: ConductorTransport | undefined) {
         throw new Error("No token to refresh");
       }
 
-      if (transport) {
-        const bridge = getBridge();
-        if (bridge) {
-          const response = await bridge.call<AuthResult>(
-            "auth",
-            "refreshToken",
-            { token },
-          );
-          const result = response.result || response;
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
+        const response = await window.atomiton?.__bridge__.call(
+          "auth",
+          "refreshToken",
+          { token },
+        );
+        const result =
+          (response.result as AuthResult) || (response as AuthResult);
 
-          // Update stored token
-          if (
-            result.token &&
-            typeof window !== "undefined" &&
-            window?.localStorage
-          ) {
-            window.localStorage.setItem("auth_token", result.token);
-          }
-
-          return result;
+        // Update stored token
+        if (result.token && window?.localStorage) {
+          window.localStorage.setItem("auth_token", result.token);
         }
+
+        return result;
       }
 
       throw new Error("No transport available for authentication");

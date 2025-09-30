@@ -3,7 +3,6 @@
  */
 
 import type { ConductorTransport, HealthResult } from "#types";
-import { getBridge } from "#exports/browser/transport.js";
 
 /**
  * Create system API for health checks and system operations
@@ -32,12 +31,13 @@ export function createSystemAPI(transport: ConductorTransport | undefined) {
           : false;
       if (!confirmed) return;
 
-      if (transport) {
-        const bridge = getBridge();
-        if (bridge) {
-          await bridge.call("system", "restart");
-          return;
-        }
+      if (
+        transport &&
+        typeof window !== "undefined" &&
+        window.atomiton?.__bridge__
+      ) {
+        await window.atomiton?.__bridge__.call("system", "restart");
+        return;
       }
 
       throw new Error("Restart not available in browser environment");

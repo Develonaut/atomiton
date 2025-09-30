@@ -15,6 +15,7 @@
     "fix": "pnpm run format && pnpm run lint:fix",
     "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "generate:preload-types": "tsx scripts/generate-preload-types.ts",
     "kill:all": "tsx scripts/cross-platform-kill.ts all",
     "kill:electron": "tsx scripts/cross-platform-kill.ts electron",
     "kill:ports": "tsx scripts/cross-platform-kill.ts ports",
@@ -38,6 +39,7 @@
     "typecheck": "turbo run typecheck",
     "validate:knip": "knip --config knip.packages.json",
     "validate:packages": "tsx scripts/validate-packages.ts",
+    "validate:preload-types": "tsx scripts/validate-preload-types.ts",
     "validate": "turbo run validate"
   },
   "devDependencies": {

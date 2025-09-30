@@ -31,7 +31,8 @@ export function getEnvironmentInfo(
   transport: ConductorTransport | undefined,
 ): EnvironmentInfo {
   const hasTransport = !!transport;
-  const hasBridge = typeof window !== "undefined" && !!window?.atomitonBridge;
+  const hasBridge =
+    typeof window !== "undefined" && !!window?.atomiton?.__bridge__;
   const type = hasBridge ? ("desktop" as const) : ("browser" as const);
 
   return {
@@ -42,8 +43,8 @@ export function getEnvironmentInfo(
       nodeExecution: hasTransport,
       localStorage: typeof window !== "undefined" && !!window?.localStorage,
       sessionStorage: typeof window !== "undefined" && !!window?.sessionStorage,
-      fileSystem: hasBridge, // Only Electron has file system access
-      cloudExecution: false, // Future: will be true for cloud environments
+      fileSystem: hasBridge,
+      cloudExecution: false,
     },
     details: {
       userAgent:
