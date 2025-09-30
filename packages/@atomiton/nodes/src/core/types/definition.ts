@@ -5,7 +5,12 @@
 
 export type { NodeEdge } from "#core/types/edges";
 export type { NodeMetadata } from "#core/types/metadata";
-export type { NodeFieldsConfig, NodeParameters } from "#core/types/parameters";
+export type {
+  NodeFieldConfig,
+  NodeFieldControlType,
+  NodeFieldsConfig,
+  NodeParameters,
+} from "#core/types/parameters";
 export type { NodePort } from "#core/types/ports";
 
 import type { NodeEdge } from "#core/types/edges";

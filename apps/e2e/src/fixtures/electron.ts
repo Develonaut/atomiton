@@ -25,8 +25,14 @@ export const test = base.extend<{}, WorkerFixtures>({
         "../../../../apps/desktop/out/main/index.js",
       );
 
+      const isHeadless =
+        process.env.LEFTHOOK === "1" ||
+        process.env.CI === "1" ||
+        process.env.ELECTRON_E2E_HEADLESS === "true";
+
       const isHeaded =
-        process.env.HEADED === "true" || process.env.PWDEBUG === "1";
+        (process.env.HEADED === "true" || process.env.PWDEBUG === "1") &&
+        !isHeadless;
 
       const userDataDir = path.join(
         __dirname,

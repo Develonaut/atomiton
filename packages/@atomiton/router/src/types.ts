@@ -11,6 +11,7 @@ export type RouteConfig = {
   component: RouteComponent;
   errorComponent?: ComponentType;
   pendingComponent?: ComponentType;
+  children?: RouteConfig[];
 };
 
 export type CreateRouterOptions = {

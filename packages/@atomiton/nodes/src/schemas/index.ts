@@ -7,7 +7,14 @@
 export * from "#schemas/node";
 
 // Registry and registration
-export * from "#schemas/registry";
+export {
+  getNodeSchema,
+  getAllNodeSchemas,
+  hasNodeSchema,
+  getNodeSchemaTypes,
+  registerAllNodeSchemas,
+  type NodeSchemaEntry,
+} from "#schemas/registry";
 
 // Individual node parameter schemas
 export { default as codeSchemaShape, type CodeParameters } from "#schemas/code";

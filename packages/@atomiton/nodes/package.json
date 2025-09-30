@@ -17,6 +17,10 @@
       "import": "./dist/executables.js",
       "types": "./dist/executables.d.ts"
     },
+    "./schemas": {
+      "import": "./dist/schemas.js",
+      "types": "./dist/schemas.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

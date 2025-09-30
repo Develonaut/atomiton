@@ -12,14 +12,14 @@ pre-commit:
     # Format staged files with Prettier
     format:
       glob: "*.{ts,tsx,js,jsx,md,json,yml,yaml}"
-      run: pnpm format
+      run: pnpm prettier --write {staged_files}
       stage_fixed: true
       fail_text: "❌ Formatting failed"
 
     # Fix linting issues on staged TypeScript/JavaScript files
     lint-fix:
       glob: "*.{ts,tsx,js,jsx}"
-      run: pnpm lint:fix
+      run: pnpm eslint --fix {staged_files}
       stage_fixed: true
       fail_text: "❌ Linting fixes failed"
 
@@ -64,7 +64,6 @@ pre-commit:
         echo "🏗️ Verifying build integrity..."
         pnpm build
       fail_text: "❌ Build failed - please fix build errors"
-
 
 # Comprehensive pre-push hooks - runs ~2-5min before sharing code
 pre-push:

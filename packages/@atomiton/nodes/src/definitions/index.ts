@@ -10,6 +10,8 @@ export { default as createNodeDefinition } from "#core/factories/createNodeDefin
 export type {
   NodeDefinition,
   NodeEdge,
+  NodeFieldConfig,
+  NodeFieldControlType,
   NodeFieldsConfig,
   NodeMetadata,
   NodeParameters,

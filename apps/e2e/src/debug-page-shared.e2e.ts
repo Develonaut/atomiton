@@ -2,7 +2,7 @@ import { expect, test } from "#fixtures/electron";
 
 test.describe("Debug Page Core Functionality", () => {
   test.beforeEach(async ({ sharedElectronPage }) => {
-    // Navigate to debug route for each test
+    // Navigate to debug route for each test - will redirect to /debug/nodes
     await sharedElectronPage.goto("http://localhost:5173/debug");
     await sharedElectronPage.waitForLoadState("networkidle");
     await sharedElectronPage.waitForTimeout(2000); // Give React time to render
@@ -22,10 +22,10 @@ test.describe("Debug Page Core Functionality", () => {
   test("conductor health check works through UI", async ({
     sharedElectronPage,
   }) => {
-    // First click the System tab to make the health button visible
-    const systemTab = sharedElectronPage.locator('[data-testid="tab-system"]');
-    await expect(systemTab).toBeVisible({ timeout: 5000 });
-    await systemTab.click();
+    // Navigate to System page using the new route
+    await sharedElectronPage.goto("http://localhost:5173/debug/system");
+    await sharedElectronPage.waitForLoadState("networkidle");
+    await sharedElectronPage.waitForTimeout(1000);
 
     // Now test through the debug page UI button using data-testid
     const healthButton = sharedElectronPage.locator(

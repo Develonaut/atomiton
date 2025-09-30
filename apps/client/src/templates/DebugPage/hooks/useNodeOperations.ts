@@ -1,9 +1,16 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import conductor from "#lib/conductor";
 import {
   createNodeDefinition,
   type NodeDefinition,
 } from "@atomiton/nodes/definitions";
+import {
+  getNodeSchemaTypes,
+  getNodeSchema,
+  registerAllNodeSchemas,
+} from "@atomiton/nodes/schemas";
+import { schemaToFieldConfig } from "#utils/schemaToFieldConfig";
+import { FIELD_CONFIG_OVERRIDES } from "#utils/fieldConfigOverrides";
 
 export function useNodeOperations(addLog: (message: string) => void) {
   const [nodeContent, setNodeContent] = useState<string>("");
@@ -11,6 +18,12 @@ export function useNodeOperations(addLog: (message: string) => void) {
   const [currentExecutionId, setCurrentExecutionId] = useState<string | null>(
     null,
   );
+
+  // Dynamic node selection state
+  const [selectedNodeType, setSelectedNodeType] = useState<string | null>(null);
+  const [nodeFieldValues, setNodeFieldValues] = useState<
+    Record<string, unknown>
+  >({});
 
   const validateNode = useCallback(async () => {
     try {
@@ -208,6 +221,110 @@ export function useNodeOperations(addLog: (message: string) => void) {
     }
   }, [addLog]);
 
+  // Get available node types from schema registry
+  // Note: registerAllNodeSchemas() is called on module load for browser
+  const availableNodeTypes = useMemo(() => {
+    // Ensure schemas are registered before getting types
+    registerAllNodeSchemas();
+    const types = getNodeSchemaTypes();
+    console.log("[useNodeOperations] Available node types:", types);
+    return types;
+  }, []);
+
+  // Get schema for selected node type
+  const nodeSchema = useMemo(() => {
+    if (!selectedNodeType) return null;
+    return getNodeSchema(selectedNodeType);
+  }, [selectedNodeType]);
+
+  // Build fields config from schema + overrides
+  const nodeFieldsConfig = useMemo(() => {
+    if (!nodeSchema) return {};
+
+    // Generate base config from schema
+    const baseConfig = schemaToFieldConfig(nodeSchema.schema);
+
+    // Apply overrides if they exist for this node type
+    const overrides = selectedNodeType
+      ? FIELD_CONFIG_OVERRIDES[selectedNodeType]
+      : {};
+
+    // Merge overrides with base config
+    return {
+      ...baseConfig,
+      ...Object.entries(overrides || {}).reduce(
+        (acc, [key, override]) => {
+          acc[key] = {
+            ...baseConfig[key],
+            ...override,
+          };
+          return acc;
+        },
+        {} as Record<string, any>,
+      ),
+    };
+  }, [nodeSchema, selectedNodeType]);
+
+  // Update field value
+  const setNodeFieldValue = useCallback((key: string, value: unknown) => {
+    setNodeFieldValues((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  }, []);
+
+  // Build node from field values
+  const buildNodeFromFields = useCallback(() => {
+    if (!selectedNodeType) return null;
+
+    // Filter out undefined/null values
+    const cleanedValues = Object.entries(nodeFieldValues).reduce(
+      (acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {} as Record<string, unknown>,
+    );
+
+    return createNodeDefinition({
+      type: selectedNodeType,
+      id: `${selectedNodeType}_${Date.now()}`,
+      parameters: cleanedValues,
+    });
+  }, [selectedNodeType, nodeFieldValues]);
+
+  // Execute node built from fields
+  const executeSelectedNode = useCallback(async () => {
+    const node = buildNodeFromFields();
+    if (!node) {
+      addLog("❌ No node configured");
+      return;
+    }
+
+    try {
+      addLog(`🚀 Executing ${selectedNodeType} node...`);
+      setIsExecuting(true);
+
+      const executionId = `exec_${Date.now()}`;
+      const result = await conductor.node.run(node, { executionId });
+
+      addLog(`✅ ${selectedNodeType} execution complete`);
+      addLog(JSON.stringify(result, null, 2));
+    } catch (error) {
+      addLog(`❌ Execution error: ${error}`);
+      console.error("Execution error:", error);
+    } finally {
+      setIsExecuting(false);
+    }
+  }, [buildNodeFromFields, selectedNodeType, addLog]);
+
+  // Reset field values when node type changes
+  useEffect(() => {
+    setNodeFieldValues({});
+  }, [selectedNodeType]);
+
   return {
     nodeContent,
     setNodeContent,
@@ -220,5 +337,13 @@ export function useNodeOperations(addLog: (message: string) => void) {
     createGroupNode,
     createTestNode,
     testNode,
+    // Dynamic node selection
+    selectedNodeType,
+    setSelectedNodeType,
+    availableNodeTypes,
+    nodeFieldsConfig,
+    nodeFieldValues,
+    setNodeFieldValue,
+    executeSelectedNode,
   };
 }

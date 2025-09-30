@@ -25,7 +25,7 @@ test.describe("Debug Page Node Execution", () => {
       // Ignore if file doesn't exist
     }
 
-    await sharedElectronPage.goto("http://localhost:5173/debug");
+    await sharedElectronPage.goto("http://localhost:5173/debug/nodes");
     await sharedElectronPage.waitForLoadState("networkidle");
     await sharedElectronPage.waitForTimeout(2000);
   });
@@ -35,11 +35,6 @@ test.describe("Debug Page Node Execution", () => {
   }) => {
     // Ensure .tmp directory exists
     await fs.promises.mkdir(".tmp", { recursive: true });
-
-    // First click the Nodes tab to make the test button visible
-    const nodesTab = sharedElectronPage.locator('[data-testid="tab-nodes"]');
-    await expect(nodesTab).toBeVisible({ timeout: 5000 });
-    await nodesTab.click();
 
     // Click the Test Node button that uses conductor.node.run()
     const testNodeButton = sharedElectronPage.locator(
