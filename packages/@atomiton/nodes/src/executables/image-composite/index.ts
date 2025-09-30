@@ -73,7 +73,7 @@ export const imageCompositeExecutable =
       }
 
       // Create output path
-      const outputPath = createTempFilePath(config.outputFormat as string);
+      const outputPath = createTempFilePath(config.format as string);
 
       // Perform image composition
       await performImageComposition(
@@ -96,7 +96,7 @@ export const imageCompositeExecutable =
         imagePath: outputPath,
         width: finalWidth,
         height: finalHeight,
-        format: config.outputFormat as string,
+        format: config.format as string,
         size: metadata.size,
         success: true,
       };
@@ -105,7 +105,7 @@ export const imageCompositeExecutable =
         outputPath,
         width: finalWidth,
         height: finalHeight,
-        format: config.outputFormat,
+        format: config.format,
         size: metadata.size,
       });
 

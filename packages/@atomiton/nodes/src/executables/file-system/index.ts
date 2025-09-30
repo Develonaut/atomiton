@@ -19,6 +19,16 @@ import {
 export type { FileSystemOutput } from "#executables/file-system/operations";
 
 /**
+ * MVP defaults for file system operations
+ * These values are hardcoded for the MVP and not exposed in the schema
+ */
+const MVP_DEFAULTS = {
+  encoding: "utf8" as const,
+  createDirectories: true,
+  overwrite: true,
+} as const;
+
+/**
  * File System node executable
  */
 export const fileSystemExecutable = createExecutable<FileSystemParameters>(
@@ -45,7 +55,7 @@ export const fileSystemExecutable = createExecutable<FileSystemParameters>(
       case "read":
         result = await readFileOperation(
           filePath,
-          (config.encoding || "utf8") as string,
+          MVP_DEFAULTS.encoding,
           context,
         );
         break;
@@ -54,8 +64,8 @@ export const fileSystemExecutable = createExecutable<FileSystemParameters>(
         result = await writeFileOperation(
           filePath,
           content as string,
-          config.encoding || "utf8",
-          config.createDirectories || false,
+          MVP_DEFAULTS.encoding,
+          MVP_DEFAULTS.createDirectories,
           context,
         );
         break;
@@ -92,7 +102,7 @@ export const fileSystemExecutable = createExecutable<FileSystemParameters>(
         result = await copyOperation(
           filePath as string,
           targetPath,
-          config.overwrite || false,
+          MVP_DEFAULTS.overwrite,
           context,
         );
         break;
@@ -104,7 +114,7 @@ export const fileSystemExecutable = createExecutable<FileSystemParameters>(
         result = await moveOperation(
           filePath as string,
           targetPath,
-          config.overwrite || false,
+          MVP_DEFAULTS.overwrite,
           context,
         );
         break;

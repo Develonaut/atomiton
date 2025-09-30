@@ -12,49 +12,40 @@ import type { NodeFieldsConfig } from "#core/types/parameters.js";
 
 /**
  * Default values for CSV reader parameters
+ * MVP: Core CSV parsing only
  */
 export const csvReaderDefaults = {
   hasHeaders: true,
   delimiter: ",",
-  skipEmpty: false,
 };
 
 /**
  * Field configurations for CSV reader parameters
+ * MVP: Core CSV parsing only
  */
 export const csvReaderFields: NodeFieldsConfig = {
-  filePath: {
-    controlType: "file",
+  path: {
+    controlType: "text",
     label: "CSV File Path",
-    placeholder: "Select or enter path to CSV file",
-    helpText: "The path to the CSV file you want to read",
-  },
-  data: {
-    controlType: "textarea",
-    label: "Raw CSV Data",
-    placeholder: "Paste CSV data here...",
-    helpText: "Raw CSV data as an alternative to file path",
+    placeholder: "/path/to/file.csv",
+    helpText: "Path to the CSV file",
+    required: true,
   },
   hasHeaders: {
     controlType: "boolean",
-    label: "Has Header Row",
-    helpText: "Check if the first row contains column headers",
+    label: "Has Headers",
+    helpText: "First row contains column headers",
   },
   delimiter: {
     controlType: "select",
-    label: "Field Delimiter",
-    helpText: "Character used to separate fields in the CSV",
+    label: "Delimiter",
+    helpText: "Field separator character",
     options: [
-      { value: ",", label: "Comma (,)" },
-      { value: ";", label: "Semicolon (;)" },
+      { value: ",", label: "Comma" },
+      { value: ";", label: "Semicolon" },
       { value: "\t", label: "Tab" },
-      { value: "|", label: "Pipe (|)" },
+      { value: "|", label: "Pipe" },
     ],
-  },
-  skipEmpty: {
-    controlType: "boolean",
-    label: "Skip Empty Rows",
-    helpText: "Skip empty rows when parsing CSV data",
   },
 };
 

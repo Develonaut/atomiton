@@ -9,6 +9,7 @@ import { baseSchema } from "#schemas/node";
 
 /**
  * Image Composite specific schema (without base fields)
+ * MVP: Core image composition only
  */
 export const imageCompositeSchemaShape = {
   operation: v
@@ -16,17 +17,12 @@ export const imageCompositeSchemaShape = {
     .default("overlay")
     .describe("Type of image composition operation"),
 
-  outputFormat: v
-    .enum(["png", "jpeg", "webp", "bmp", "tiff"])
-    .default("png")
-    .describe("Output image format"),
-
-  quality: v
-    .number()
+  images: v
+    .array(v.string())
     .min(1)
-    .max(100)
-    .default(90)
-    .describe("Output quality for lossy formats (1-100)"),
+    .describe("Array of image paths or URLs to composite"),
+
+  output: v.string().describe("Output path for the composed image"),
 
   width: v
     .number()
@@ -40,57 +36,10 @@ export const imageCompositeSchemaShape = {
     .optional()
     .describe("Output image height in pixels"),
 
-  position: v
-    .enum([
-      "center",
-      "top",
-      "bottom",
-      "left",
-      "right",
-      "top-left",
-      "top-right",
-      "bottom-left",
-      "bottom-right",
-    ])
-    .default("center")
-    .describe("Position for overlay operations"),
-
-  opacity: v
-    .number()
-    .min(0)
-    .max(1)
-    .default(1)
-    .describe("Opacity for overlay/blend operations"),
-
-  blendMode: v
-    .enum([
-      "normal",
-      "multiply",
-      "screen",
-      "overlay",
-      "darken",
-      "lighten",
-      "color-dodge",
-      "color-burn",
-    ])
-    .default("normal")
-    .describe("Blend mode for composition"),
-
-  backgroundColor: v
-    .string()
-    .default("transparent")
-    .describe("Background color for composite operations"),
-
-  maintainAspectRatio: v
-    .boolean()
-    .default(true)
-    .describe("Maintain aspect ratio when resizing"),
-
-  padding: v
-    .number()
-    .min(0)
-    .default(0)
-    .describe("Padding around images in pixels"),
+  format: v
+    .enum(["png", "jpeg", "webp"])
+    .default("png")
+    .describe("Output image format"),
 };
 
 /**

@@ -1,6 +1,7 @@
 /**
  * Loop Field Configuration
  * UI field configurations for loop parameters
+ * MVP: Core loop types only
  */
 
 import type { NodeFieldsConfig } from "#core/types/definition";
@@ -12,81 +13,37 @@ export const loopFields: NodeFieldsConfig = {
   loopType: {
     controlType: "select",
     label: "Loop Type",
-    helpText: "Select the type of loop operation to perform",
+    helpText: "Select the type of loop operation",
     options: [
-      { value: "forEach", label: "For Each - Iterate over array items" },
-      { value: "forRange", label: "For Range - Iterate over numeric range" },
-      { value: "times", label: "Times - Repeat N times" },
-      { value: "while", label: "While - Loop while condition is true" },
-      { value: "doWhile", label: "Do While - Execute then check condition" },
-      { value: "until", label: "Until - Loop until condition is true" },
+      { value: "forEach", label: "For Each" },
+      { value: "times", label: "Times" },
+      { value: "while", label: "While" },
     ],
   },
-  batchSize: {
-    controlType: "number",
-    label: "Batch Size",
-    helpText: "Number of items to process in each batch",
-    min: 1,
-    max: 1000,
+  array: {
+    controlType: "textarea",
+    label: "Array (for forEach)",
+    placeholder: "[1, 2, 3, 4, 5]",
+    helpText: "Array to iterate over",
+    rows: 3,
   },
-  maxIterations: {
+  count: {
     controlType: "number",
-    label: "Max Iterations",
-    helpText: "Maximum number of iterations to prevent infinite loops",
+    label: "Count (for times)",
+    helpText: "Number of iterations to perform",
     min: 1,
     max: 10000,
-  },
-  delay: {
-    controlType: "number",
-    label: "Delay (ms)",
-    helpText: "Delay between iterations in milliseconds",
-    min: 0,
-    max: 60000,
-  },
-  continueOnError: {
-    controlType: "boolean",
-    label: "Continue On Error",
-    helpText: "Continue processing remaining items if an error occurs",
   },
   condition: {
     controlType: "code",
-    label: "Loop Condition",
+    label: "Condition (for while)",
     placeholder: "iteration < 100",
-    helpText: "JavaScript condition for while/until loops",
+    helpText: "JavaScript condition expression",
     rows: 3,
   },
-  startValue: {
-    controlType: "number",
-    label: "Start Value",
-    helpText: "Starting value for range loops",
-  },
-  endValue: {
-    controlType: "number",
-    label: "End Value",
-    helpText: "Ending value for range loops",
-  },
-  stepSize: {
-    controlType: "number",
-    label: "Step Size",
-    helpText: "Step increment for range loops",
-  },
-  times: {
-    controlType: "number",
-    label: "Times",
-    helpText: "Number of times to repeat for 'times' loop type",
-    min: 1,
-    max: 10000,
-  },
-  parallel: {
+  collectResults: {
     controlType: "boolean",
-    label: "Parallel Execution",
-    helpText: "Execute iterations in parallel",
-  },
-  concurrency: {
-    controlType: "number",
-    label: "Concurrency",
-    helpText: "Maximum concurrent operations for parallel execution",
-    min: 1,
-    max: 100,
+    label: "Collect Results",
+    helpText: "Collect results from each iteration into an array",
   },
 };

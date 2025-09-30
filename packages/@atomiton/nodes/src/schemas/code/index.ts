@@ -9,6 +9,7 @@ import { baseSchema } from "#schemas/node";
 
 /**
  * Code node specific schema (without base fields)
+ * MVP: Core code execution only
  */
 export const codeSchemaShape = {
   code: v
@@ -16,24 +17,15 @@ export const codeSchemaShape = {
     .min(1, "Code expression is required")
     .describe("JavaScript expression to execute"),
 
-  timeout: v
-    .number()
-    .min(100)
-    .max(30000)
-    .default(5000)
-    .describe("Execution timeout in milliseconds"),
-
   returnType: v
     .enum(["auto", "string", "number", "boolean", "object", "array"])
     .default("auto")
     .describe("Expected return type"),
 
-  memoryLimit: v
-    .number()
-    .min(8)
-    .max(128)
-    .default(32)
-    .describe("Memory limit for isolated execution in MB"),
+  context: v
+    .record(v.unknown())
+    .default({})
+    .describe("Variables to make available in code execution context"),
 };
 
 /**

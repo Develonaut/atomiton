@@ -9,10 +9,11 @@ import { baseSchema } from "#schemas/node";
 
 /**
  * HTTP Request specific schema (without base fields)
+ * MVP: Core HTTP request fields only
  */
 export const httpRequestSchemaShape = {
   method: v
-    .enum(["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"])
+    .enum(["GET", "POST", "PUT", "DELETE"])
     .default("GET")
     .describe("HTTP method to use"),
 
@@ -23,41 +24,15 @@ export const httpRequestSchemaShape = {
     .default({})
     .describe("Request headers as key-value pairs"),
 
-  body: v
-    .string()
-    .optional()
-    .describe("Request body content (for POST, PUT, PATCH)"),
+  body: v.string().optional().describe("Request body content (for POST, PUT)"),
 
-  followRedirects: v
-    .boolean()
-    .default(true)
-    .describe("Whether to follow HTTP redirects"),
-
-  validateSSL: v
-    .boolean()
-    .default(true)
-    .describe("Whether to validate SSL certificates"),
-
-  timeout: v
-    .number()
-    .min(1000)
-    .max(300000)
-    .default(30000)
-    .describe("Request timeout in milliseconds"),
-
-  retries: v
-    .number()
-    .min(0)
-    .max(5)
-    .default(0)
-    .describe("Number of retry attempts on failure"),
-
-  retryDelay: v
-    .number()
-    .min(100)
-    .max(10000)
-    .default(1000)
-    .describe("Delay between retry attempts in milliseconds"),
+  // POST-MVP: Advanced fields removed for MVP
+  // Hardcoded defaults applied in executor:
+  // - followRedirects: true
+  // - validateSSL: true
+  // - timeout: 30000ms
+  // - retries: 0 (no retries)
+  // - retryDelay: N/A (no retries)
 };
 
 /**

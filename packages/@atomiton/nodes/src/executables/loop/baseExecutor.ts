@@ -30,11 +30,11 @@ export async function executeBaseLoop(
   const results: unknown[] = [];
   const errors: unknown[] = [];
   let iterationCount = 0;
-  const maxIterations = config.maxIterations as number;
+  const maxIterations = 1000; // MVP: maxIterations hardcoded to 1000
 
   while (iterationCount < maxIterations) {
     try {
-      await applyDelay(config.delay as number);
+      await applyDelay(0); // MVP: delay hardcoded to 0
 
       const { shouldContinue, incrementCount = true } = await iteratorFn(
         results,
@@ -54,7 +54,7 @@ export async function executeBaseLoop(
         error,
         iterationCount,
         errors,
-        config.continueOnError as boolean,
+        false, // MVP: continueOnError hardcoded to false
       );
       if (!shouldContinue) break;
       iterationCount++;

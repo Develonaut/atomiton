@@ -1,20 +1,25 @@
 /**
  * Loop Node Executable
  * Node.js implementation with loop iteration logic
+ * MVP: Core loop types only (forEach, times, while)
  */
 
 import { createExecutable } from "#core/utils/executable";
 import type { LoopParameters } from "#schemas/loop";
 import {
-  executeDoWhile,
   executeForEach,
-  executeForRange,
   executeTimesLoop,
-  executeUntil,
   executeWhile,
 } from "#executables/loop/operations";
 
-// Types for loop operations
+const MVP_DEFAULTS = {
+  maxIterations: 1000,
+  delay: 0,
+  continueOnError: false,
+  parallel: false,
+  concurrency: 1,
+};
+
 export type LoopOutput = {
   result: {
     results: unknown[];
@@ -44,48 +49,25 @@ export const loopExecutable = createExecutable<LoopParameters>(
     let iterationCount = 0;
 
     context.log.info(`Starting ${loopType} loop`, {
-      maxIterations: config.maxIterations,
-      parallel: config.parallel,
-      concurrency: config.concurrency,
+      maxIterations: MVP_DEFAULTS.maxIterations,
     });
+
+    const configWithDefaults = {
+      ...config,
+      maxIterations: MVP_DEFAULTS.maxIterations,
+      delay: MVP_DEFAULTS.delay,
+      continueOnError: MVP_DEFAULTS.continueOnError,
+      parallel: MVP_DEFAULTS.parallel,
+      concurrency: MVP_DEFAULTS.concurrency,
+    };
 
     switch (loopType) {
       case "forEach": {
-        const items = getInput<unknown[]>("items") || [];
-        const loopResult = await executeForEach(items, config, context);
-        results = loopResult.results;
-        errors = loopResult.errors;
-        iterationCount = loopResult.iterationCount;
-        break;
-      }
-
-      case "while": {
-        const condition = (config.condition as string) || "false";
-        const loopResult = await executeWhile(condition, config, context);
-        results = loopResult.results;
-        errors = loopResult.errors;
-        iterationCount = loopResult.iterationCount;
-        break;
-      }
-
-      case "doWhile": {
-        const condition = (config.condition as string) || "false";
-        const loopResult = await executeDoWhile(condition, config, context);
-        results = loopResult.results;
-        errors = loopResult.errors;
-        iterationCount = loopResult.iterationCount;
-        break;
-      }
-
-      case "forRange": {
-        const start = (config.startValue as number) || 0;
-        const end = (config.endValue as number) || 10;
-        const step = (config.stepSize as number) || 1;
-        const loopResult = await executeForRange(
-          start,
-          end,
-          step,
-          config,
+        const array =
+          (config.array as unknown[]) || getInput<unknown[]>("array") || [];
+        const loopResult = await executeForEach(
+          array,
+          configWithDefaults,
           context,
         );
         results = loopResult.results;
@@ -94,9 +76,13 @@ export const loopExecutable = createExecutable<LoopParameters>(
         break;
       }
 
-      case "until": {
+      case "while": {
         const condition = (config.condition as string) || "false";
-        const loopResult = await executeUntil(condition, config, context);
+        const loopResult = await executeWhile(
+          condition,
+          configWithDefaults,
+          context,
+        );
         results = loopResult.results;
         errors = loopResult.errors;
         iterationCount = loopResult.iterationCount;
@@ -104,8 +90,12 @@ export const loopExecutable = createExecutable<LoopParameters>(
       }
 
       case "times": {
-        const times = (config.times as number) || 1;
-        const loopResult = await executeTimesLoop(times, config, context);
+        const count = (config.count as number) || 1;
+        const loopResult = await executeTimesLoop(
+          count,
+          configWithDefaults,
+          context,
+        );
         results = loopResult.results;
         errors = loopResult.errors;
         iterationCount = loopResult.iterationCount;
@@ -120,18 +110,20 @@ export const loopExecutable = createExecutable<LoopParameters>(
     const success = errors.length === 0;
     const completed = iterationCount > 0;
 
+    const collectResults = config.collectResults !== false;
+    const finalResults = collectResults ? results : [];
+
     const output: LoopOutput = {
       result: {
-        results,
+        results: finalResults,
         iterationCount,
         errors,
         success,
         duration,
         completed,
-        stopped:
-          !completed && iterationCount < (config.maxIterations as number),
+        stopped: !completed && iterationCount < MVP_DEFAULTS.maxIterations,
       },
-      results,
+      results: finalResults,
       iterationCount,
       errors,
       success,

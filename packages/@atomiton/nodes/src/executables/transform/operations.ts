@@ -165,15 +165,17 @@ export function executeTransformation(
       return executeMapTransform(data, transformFunction as string, context);
 
     case "filter": {
-      const filterCondition = config.filterCondition || transformFunction;
+      // MVP: filterCondition removed, use transformFunction
+      const filterCondition = transformFunction;
       return executeFilterTransform(data, filterCondition as string, context);
     }
 
     case "reduce":
+      // MVP: reduceFunction and reduceInitial removed, use transformFunction with empty initial
       return executeReduceTransform(
         data,
-        config.reduceFunction as string,
-        config.reduceInitial as string,
+        transformFunction as string,
+        "", // MVP: reduceInitial hardcoded to empty string
         context,
       );
 
@@ -181,14 +183,15 @@ export function executeTransformation(
       return executeSortTransform(
         data,
         config.sortKey,
-        config.sortDirection as "asc" | "desc",
+        "asc", // MVP: sortDirection hardcoded to asc
       );
 
     case "group": {
-      if (!config.groupBy) {
-        throw new Error("groupBy key is required for group operation");
+      // MVP: groupBy removed, use sortKey as grouping key
+      if (!config.sortKey) {
+        throw new Error("sortKey is required for group operation");
       }
-      return executeGroupTransform(data, config.groupBy);
+      return executeGroupTransform(data, config.sortKey);
     }
 
     case "flatten":

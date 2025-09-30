@@ -99,7 +99,7 @@ export async function executeTimesLoop(
   config: LoopParameters,
   context: NodeExecutionContext,
 ): Promise<LoopResult> {
-  const maxTimes = Math.min(times, config.maxIterations as number);
+  const maxTimes = Math.min(times, 1000); // MVP: maxIterations hardcoded to 1000
   const indices = Array.from({ length: maxTimes }, (_, i) => i);
 
   return executeIterationLoop(indices, config, context, (index, _) => ({

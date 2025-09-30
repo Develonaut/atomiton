@@ -18,6 +18,15 @@ import {
 export type { ShellCommandOutput };
 
 /**
+ * MVP defaults for shell command execution
+ * These values are hardcoded for the MVP and not exposed in the schema
+ */
+const MVP_DEFAULTS = {
+  stdio: "pipe" as const,
+  killSignal: "SIGTERM" as const,
+} as const;
+
+/**
  * Shell Command node executable
  */
 export const shellCommandExecutable = createExecutable<ShellCommandParameters>(
@@ -39,9 +48,8 @@ export const shellCommandExecutable = createExecutable<ShellCommandParameters>(
       args = config.args as string[];
     }
 
-    // Merge environment variables
+    // Merge environment variables - MVP: config.environment removed
     const environment = {
-      ...(config.environment as Record<string, string>),
       ...inputEnvironment,
     };
 
@@ -61,9 +69,9 @@ export const shellCommandExecutable = createExecutable<ShellCommandParameters>(
       cwd: workingDirectory as string,
       env: environment,
       shell: config.shell,
-      stdio: config.inheritStdio ? "inherit" : "pipe",
+      stdio: MVP_DEFAULTS.stdio,
       timeout: config.timeout,
-      killSignal: config.killSignal,
+      killSignal: MVP_DEFAULTS.killSignal,
     });
 
     const duration = getDuration();

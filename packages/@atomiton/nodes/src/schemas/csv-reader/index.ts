@@ -9,11 +9,10 @@ import { baseSchema } from "#schemas/node";
 
 /**
  * CSV Reader specific schema (without base fields)
+ * MVP: Core CSV parsing only
  */
 export const csvReaderSchemaShape = {
-  filePath: v.string().optional().describe("Path to the CSV file to read"),
-
-  data: v.string().optional().describe("Raw CSV data as string"),
+  path: v.string().describe("Path to the CSV file to read"),
 
   hasHeaders: v
     .boolean()
@@ -21,8 +20,6 @@ export const csvReaderSchemaShape = {
     .describe("Whether the first row contains column headers"),
 
   delimiter: v.string().default(",").describe("Field delimiter character"),
-
-  skipEmpty: v.boolean().default(false).describe("Skip empty rows in the CSV"),
 };
 
 /**

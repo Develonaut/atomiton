@@ -7,6 +7,15 @@ import {
 import type { CodeParameters } from "#schemas/code";
 
 /**
+ * MVP defaults for code execution
+ * These values are hardcoded for the MVP and not exposed in the schema
+ */
+const MVP_DEFAULTS = {
+  memoryLimit: 32, // MB
+  timeoutMs: 5000, // milliseconds
+} as const;
+
+/**
  * Code execution node executable
  */
 export const codeExecutable = createExecutable<CodeParameters>(
@@ -30,8 +39,8 @@ export const codeExecutable = createExecutable<CodeParameters>(
 
     // Execute code in isolated VM
     const result = await executeSecureCode(config.code, executionContext, {
-      memoryLimit: config.memoryLimit || 32,
-      timeoutMs: config.timeout || 5000,
+      memoryLimit: MVP_DEFAULTS.memoryLimit,
+      timeoutMs: MVP_DEFAULTS.timeoutMs,
     });
 
     // Convert result to target type if specified

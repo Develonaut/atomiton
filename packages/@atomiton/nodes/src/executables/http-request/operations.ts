@@ -37,7 +37,7 @@ export async function parseResponse(response: Response): Promise<unknown> {
 }
 
 /**
- * Execute HTTP request with retries
+ * Execute HTTP request (MVP: No retries)
  */
 export async function executeRequestWithRetries(
   url: string,
@@ -45,38 +45,13 @@ export async function executeRequestWithRetries(
   config: HttpRequestParameters,
   context: NodeExecutionContext,
 ): Promise<Response> {
-  let lastError: Error;
+  context.log?.debug?.("Making HTTP request", {
+    url,
+    method: options.method,
+  });
 
-  for (let attempt = 0; attempt <= (config.retries as number); attempt++) {
-    try {
-      context.log?.debug?.(`HTTP request attempt ${attempt + 1}`, {
-        url,
-        method: options.method,
-      });
-
-      const response = await fetch(url, options);
-      return response;
-    } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error));
-
-      if (attempt < (config.retries as number)) {
-        context.log?.warn?.(
-          `HTTP request failed, retrying (attempt ${attempt + 1}/${config.retries as number})`,
-          {
-            error: lastError.message,
-            retryDelay: config.retryDelay,
-          },
-        );
-
-        // Wait before retry
-        await new Promise((resolve) =>
-          setTimeout(resolve, config.retryDelay as number),
-        );
-      }
-    }
-  }
-
-  throw lastError!;
+  const response = await fetch(url, options);
+  return response;
 }
 
 /**

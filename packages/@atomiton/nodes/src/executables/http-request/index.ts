@@ -1,6 +1,7 @@
 /**
  * HTTP Request Node Executable
  * Node.js implementation with HTTP request logic
+ * MVP: Core HTTP functionality with hardcoded defaults
  */
 
 import { createExecutable } from "#core/utils/executable";
@@ -17,10 +18,19 @@ import {
   validateUrl,
 } from "#executables/http-request/utils";
 
+// MVP: Hardcoded defaults for advanced features
+const MVP_DEFAULTS = {
+  followRedirects: true,
+  validateSSL: true,
+  timeout: 30000, // 30 seconds
+  retries: 0, // No retries for MVP
+  retryDelay: 0, // N/A (no retries)
+};
+
 // Types for HTTP request
 export type HttpRequestInput = {
   url?: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
+  method?: "GET" | "POST" | "PUT" | "DELETE"; // MVP: Reduced method set
   headers?: Record<string, string>;
   body?: string | Record<string, unknown> | Buffer;
   params?: Record<string, string>;
@@ -95,12 +105,12 @@ export const httpRequestExecutable = createExecutable<HttpRequestParameters>(
       headers,
     );
 
-    // Prepare request options
+    // Prepare request options (MVP: Use hardcoded defaults)
     const requestOptions: RequestInit = {
       method,
       headers: finalHeaders,
-      signal: AbortSignal.timeout(config.timeout as number),
-      redirect: (config.followRedirects as boolean) ? "follow" : "manual",
+      signal: AbortSignal.timeout(MVP_DEFAULTS.timeout),
+      redirect: MVP_DEFAULTS.followRedirects ? "follow" : "manual",
     };
 
     // Add body if present

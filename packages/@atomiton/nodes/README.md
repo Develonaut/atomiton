@@ -80,8 +80,9 @@ const result = await executable.execute(context);
 | `code`            | Execute JavaScript     | Logic    |
 | `loop`            | Iterate over arrays    | Logic    |
 | `parallel`        | Parallel execution     | Logic    |
-| `image-processor` | Image manipulation     | Media    |
+| `image-composite` | Image composition      | Media    |
 | `shell-command`   | System commands        | System   |
+| `edit-fields`     | Edit field values      | Data     |
 
 ## Creating Custom Nodes
 

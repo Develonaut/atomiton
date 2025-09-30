@@ -7,6 +7,14 @@ import { createExecutable } from "#core/utils/executable";
 import type { CSVReaderParameters } from "#schemas/csv-reader";
 
 /**
+ * MVP defaults for CSV reader
+ * These values are hardcoded for the MVP and not exposed in the schema
+ */
+const MVP_DEFAULTS = {
+  skipEmpty: false,
+} as const;
+
+/**
  * Simple CSV parser utility
  */
 function parseCSV(
@@ -119,7 +127,7 @@ export const csvReaderExecutable = createExecutable<CSVReaderParameters>(
       csvContent,
       delimiter,
       hasHeaders,
-      typeof config.skipEmpty === "boolean" ? config.skipEmpty : true,
+      MVP_DEFAULTS.skipEmpty,
     );
 
     // Extract headers if available

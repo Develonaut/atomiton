@@ -171,8 +171,8 @@ export async function performImageComposition(
 ): Promise<void> {
   context.log?.info?.(`Performing ${operation} operation`, {
     operation,
-    outputFormat: config.outputFormat,
-    quality: config.quality,
+    outputFormat: config.format,
+    quality: 90, // MVP: quality hardcoded to 90
     outputPath,
   });
 

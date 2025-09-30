@@ -9,50 +9,20 @@ import { baseSchema } from "#schemas/node";
 
 /**
  * Transform specific schema (without base fields)
+ * MVP: Core transformation operations only
  */
 export const transformSchemaShape = {
   operation: v
-    .enum([
-      "map",
-      "filter",
-      "reduce",
-      "sort",
-      "group",
-      "flatten",
-      "unique",
-      "reverse",
-    ])
+    .enum(["map", "filter", "sort", "flatten"])
     .default("map")
     .describe("Type of transformation operation"),
 
   transformFunction: v
     .string()
     .default("item => item")
-    .describe("JavaScript function for transformation (map/filter operations)"),
-
-  filterCondition: v
-    .string()
-    .optional()
-    .describe("Condition for filter operation"),
+    .describe("JavaScript function for map/filter operations"),
 
   sortKey: v.string().optional().describe("Property key to sort by"),
-
-  sortDirection: v
-    .enum(["asc", "desc"])
-    .default("asc")
-    .describe("Sort direction"),
-
-  groupBy: v.string().optional().describe("Property key to group by"),
-
-  reduceFunction: v
-    .string()
-    .default("(acc, item) => acc + item")
-    .describe("JavaScript function for reduce operation"),
-
-  reduceInitial: v
-    .string()
-    .default("0")
-    .describe("Initial value for reduce operation"),
 
   flattenDepth: v
     .number()
