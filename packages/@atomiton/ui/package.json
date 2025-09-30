@@ -37,9 +37,12 @@
   },
   "dependencies": {
     "@atomiton/router": "workspace:*",
+    "@codemirror/lang-javascript": "^6.2.4",
     "@headlessui/react": "^2.2.4",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@uiw/codemirror-theme-vscode": "^4.25.2",
+    "@uiw/react-codemirror": "^4.25.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.542.0",

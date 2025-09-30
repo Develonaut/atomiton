@@ -15,6 +15,9 @@ export type { ColumnProps } from "#components/Column/Column.types";
 
 export { default as Card } from "#components/Card";
 
+export { CodeInput } from "#primitives/CodeInput";
+export type { CodeInputProps } from "#primitives/CodeInput";
+
 export { default as Field } from "#components/Field";
 
 export { default as Input } from "#components/Input";

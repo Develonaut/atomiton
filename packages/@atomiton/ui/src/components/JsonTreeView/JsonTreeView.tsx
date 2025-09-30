@@ -1,4 +1,4 @@
-import { JsonTreeView as PrimitiveJsonTreeView } from "#primitives/jsonTreeView";
+import { JsonTreeView as PrimitiveJsonTreeView } from "#primitives/JsonTreeView";
 import type { JsonTreeViewProps } from "#components/JsonTreeView/JsonTreeView.types";
 
 function JsonTreeView({
