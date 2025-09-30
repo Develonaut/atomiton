@@ -1,6 +1,6 @@
 import { Input } from "@atomiton/ui";
-import type { FieldComponentProps } from "../types";
 import type { ChangeEvent } from "react";
+import type { FieldComponentProps } from "../types";
 
 export function TextField({
   fieldKey,
@@ -9,14 +9,15 @@ export function TextField({
   onChange,
   disabled = false,
 }: FieldComponentProps) {
-  const inputType =
-    config.controlType === "password"
-      ? "password"
-      : config.controlType === "email"
-        ? "email"
-        : config.controlType === "url"
-          ? "url"
-          : "text";
+  const inputTypes = {
+    text: "text",
+    password: "password",
+    email: "email",
+    url: "url",
+    file: "file",
+  };
+
+  const inputType = inputTypes[config.controlType] || "text";
 
   return (
     <div className="space-y-1">

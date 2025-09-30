@@ -1,14 +1,14 @@
-import type { NodeFieldRendererProps } from "./types";
 import type { JSX } from "react";
-import { TextField } from "./fields/TextField";
-import { TextAreaField } from "./fields/TextAreaField";
-import { NumberField } from "./fields/NumberField";
-import { SelectField } from "./fields/SelectField";
 import { BooleanField } from "./fields/BooleanField";
-import { RangeField } from "./fields/RangeField";
+import { CodeField } from "./fields/CodeField";
 import { ColorField } from "./fields/ColorField";
 import { JsonField } from "./fields/JsonField";
-import { CodeField } from "./fields/CodeField";
+import { NumberField } from "./fields/NumberField";
+import { RangeField } from "./fields/RangeField";
+import { SelectField } from "./fields/SelectField";
+import { TextAreaField } from "./fields/TextAreaField";
+import { TextField } from "./fields/TextField";
+import type { NodeFieldRendererProps } from "./types";
 
 /**
  * Main field renderer component that routes to the appropriate
@@ -34,6 +34,7 @@ export function NodeFieldRenderer({
     case "password":
     case "email":
     case "url":
+    case "file":
       return <TextField {...props} />;
 
     case "textarea":
@@ -66,10 +67,6 @@ export function NodeFieldRenderer({
 
     case "code":
       return <CodeField {...props} />;
-
-    case "file":
-      // Use text field for file paths for now
-      return <TextField {...props} />;
 
     default:
       // Fallback to text field
