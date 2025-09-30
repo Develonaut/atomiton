@@ -1,11 +1,12 @@
-import { safeLog } from "#main/utils/safeLogging";
 import type {
   ConductorExecutionContext,
   ExecutionResult,
 } from "@atomiton/conductor/desktop";
 import { createConductor } from "@atomiton/conductor/desktop";
+import { createLogger } from "@atomiton/logger/desktop";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import {
+  createLoggerChannelServer,
   createNodeChannelServer,
   createStorageChannelServer,
   createSystemChannelServer,
@@ -13,6 +14,8 @@ import {
 } from "@atomiton/rpc/main/channels";
 import type { BrowserWindow } from "electron";
 import { ipcMain } from "electron";
+
+const logger = createLogger({ scope: "CHANNELS" });
 
 // Functional channel manager interface
 export type ChannelManager = {
@@ -31,12 +34,15 @@ export const createChannelManager = (): ChannelManager => {
 
   // Initialize all channel servers
   const initialize = () => {
-    safeLog("[CHANNELS] Initializing channel servers...");
+    logger.info("Initializing channel servers...");
 
     // Create conductor instance ONCE for all channels
     // This is the ONLY place conductor is created for IPC
     const conductor = createConductor();
-    safeLog("[CHANNELS] Conductor instance created for channel servers");
+    logger.info("Conductor instance created for channel servers");
+
+    // Create logger channel server
+    const loggerChannel = createLoggerChannelServer(ipcMain, { logger });
 
     // Create node channel with direct method references and type parameters
     const nodeChannel = createNodeChannelServer<
@@ -51,9 +57,10 @@ export const createChannelManager = (): ChannelManager => {
 
     const storageChannel = createStorageChannelServer(ipcMain);
 
-    channels.push(nodeChannel, systemChannel, storageChannel);
+    channels.push(loggerChannel, nodeChannel, systemChannel, storageChannel);
 
-    safeLog(`[CHANNELS] Initialized ${channels.length} channel servers:`, [
+    logger.info(`Initialized ${channels.length} channel servers`, [
+      "logger",
       "node",
       "system",
       "storage",
@@ -61,10 +68,10 @@ export const createChannelManager = (): ChannelManager => {
 
     // Register channel discovery handler
     ipcMain.handle("channels:list", () => {
-      return ["node", "storage", "system"];
+      return ["logger", "node", "storage", "system"];
     });
 
-    safeLog("[CHANNELS] Channel discovery handler registered");
+    logger.info("Channel discovery handler registered");
   };
 
   // Track window for broadcasts
@@ -73,15 +80,15 @@ export const createChannelManager = (): ChannelManager => {
 
     windows.add(window);
 
-    safeLog(
-      `[CHANNELS] Tracking window for broadcasts. Total windows: ${windows.size}`,
+    logger.info(
+      `Tracking window for broadcasts. Total windows: ${windows.size}`,
     );
 
     // Pass window to all channels for broadcasting
     channels.forEach((channel, index) => {
       if (channel.trackWindow) {
         channel.trackWindow(window);
-        safeLog(`[CHANNELS] Channel ${index} now tracking window`);
+        logger.info(`Channel ${index} now tracking window`);
       }
     });
 
@@ -89,11 +96,11 @@ export const createChannelManager = (): ChannelManager => {
     const onClosed = () => {
       windows.delete(window);
       windowListeners.delete(window);
-      safeLog(`[CHANNELS] Window closed. Remaining windows: ${windows.size}`);
+      logger.info(`Window closed. Remaining windows: ${windows.size}`);
     };
 
     const onDestroyed = () => {
-      safeLog("[CHANNELS] Window webContents destroyed");
+      logger.info("Window webContents destroyed");
     };
 
     // Store listener references for cleanup
@@ -152,7 +159,7 @@ export const createChannelManager = (): ChannelManager => {
   const getChannelCount = () => channels.length;
 
   // Get channel names
-  const getChannelNames = () => ["node", "storage", "system"];
+  const getChannelNames = () => ["logger", "node", "storage", "system"];
 
   // Initialize on creation
   initialize();

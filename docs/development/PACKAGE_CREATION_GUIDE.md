@@ -341,11 +341,10 @@ export default defineConfig({
 packages/@atomiton/[package-name]/
 ├── src/
 │   ├── index.ts              # Main entry point
-│   ├── api.ts                # Public API (for complex packages)
 │   ├── types.ts              # Type definitions
 │   ├── utils/                # Utility functions
 │   ├── components/           # React components (UI packages)
-│   └── __tests__/           # Test files
+│   └── integration/           # Integration Test files
 ├── dist/                     # Build output (generated)
 ├── docs/                     # Package-specific documentation
 ├── package.json
@@ -355,9 +354,6 @@ packages/@atomiton/[package-name]/
 ├── vitest.config.ts          # If separate from vite config
 ├── README.md
 ├── CHANGELOG.md
-├── CURRENT.md                # Current sprint tasks
-├── COMPLETED.md              # Completed features
-├── NEXT.md                   # Next sprint planning
 └── ROADMAP.md                # Long-term roadmap
 ```
 

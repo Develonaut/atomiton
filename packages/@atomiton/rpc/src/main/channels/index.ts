@@ -1,11 +1,14 @@
 // Functional Channel Server Exports
 export * from "#main/channels/createChannelServer";
+export * from "#main/channels/loggerChannel";
 export * from "#main/channels/nodeChannel";
 export * from "#main/channels/storageChannel";
 export * from "#main/channels/systemChannel";
 
 // Re-export types for convenience
 export type { ChannelServer } from "#main/channels/createChannelServer";
+
+export type { LoggerChannelOptions } from "#main/channels/loggerChannel";
 
 export type {
   NodeExecuteParams,

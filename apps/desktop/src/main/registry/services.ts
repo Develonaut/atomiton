@@ -12,7 +12,9 @@ import {
   type FlowStorageService,
 } from "#main/services/flowStorage";
 import { createNodeService, type NodeService } from "#main/services/node";
-import { safeLog } from "#main/utils/safeLogging";
+import { createLogger } from "@atomiton/logger/desktop";
+
+const logger = createLogger({ scope: "SERVICE_REGISTRY" });
 
 export type ServiceRegistry = {
   storage: ReturnType<typeof initializeServices>["storage"];
@@ -35,21 +37,21 @@ export const createServiceRegistryManager = (): ServiceRegistryManager => {
   const initializeServicesImpl = async (): Promise<ServiceRegistry> => {
     // Prevent double initialization
     if (isInitialized && registry) {
-      safeLog("Services already initialized, returning existing registry");
+      logger.info("Services already initialized, returning existing registry");
       return registry;
     }
 
-    safeLog("Initializing application services");
+    logger.info("Initializing application services");
 
     const legacyServices = initializeServices();
-    safeLog("Legacy application services initialized");
+    logger.info("Legacy application services initialized");
 
     const errorBoundary = createErrorBoundaryService();
     const nodeService = createNodeService(errorBoundary);
     const executionService = createExecutionService();
     const flowStorageService = createFlowStorageService();
 
-    safeLog(
+    logger.info(
       "Application services initialized (IPC handled by channel manager)",
     );
 
@@ -76,13 +78,13 @@ export const createServiceRegistryManager = (): ServiceRegistryManager => {
 
   const dispose = (): void => {
     if (registry) {
-      safeLog("Disposing service registry...");
+      logger.info("Disposing service registry...");
 
       // Clear the registry and reset initialization flag
       registry = null;
       isInitialized = false;
 
-      safeLog("Service registry disposed successfully");
+      logger.info("Service registry disposed successfully");
     }
   };
 

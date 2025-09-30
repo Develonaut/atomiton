@@ -8,6 +8,11 @@ config({ path: path.resolve(__dirname, "../../.env") });
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    build: {
+      rollupOptions: {
+        external: ["@atomiton/logger/desktop"],
+      },
+    },
     define: {
       "process.env.ATOMITON_LOG_PATH": JSON.stringify(
         process.env.ATOMITON_LOG_PATH,

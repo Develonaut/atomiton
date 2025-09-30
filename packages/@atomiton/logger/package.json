@@ -1,0 +1,64 @@
+{
+  "name": "@atomiton/logger",
+  "version": "0.1.0",
+  "description": "Centralized logging for Atomiton across browser, desktop, and Node.js environments",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./desktop": {
+      "import": "./dist/exports/desktop/index.js",
+      "types": "./dist/exports/desktop/index.d.ts"
+    },
+    "./browser": {
+      "import": "./dist/exports/browser/index.js",
+      "types": "./dist/exports/browser/index.d.ts"
+    },
+    "./shared": {
+      "import": "./dist/exports/shared/index.js",
+      "types": "./dist/exports/shared/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "vite build",
+    "clean": "rm -rf dist",
+    "dev": "vite build --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:integration": "vitest run src/integration",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": ["logger", "logging", "electron", "electron-log", "atomiton"],
+  "author": "Atomiton",
+  "license": "MIT",
+  "dependencies": {
+    "electron-log": "^5.4.3"
+  },
+  "devDependencies": {
+    "@atomiton/eslint-config": "workspace:*",
+    "@atomiton/typescript-config": "workspace:*",
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "electron": "^34.0.0",
+    "eslint": "^9",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.44.0",
+    "typescript": "^5",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^2.1.9"
+  }
+}

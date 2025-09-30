@@ -9,8 +9,18 @@
  * - Memory transport for testing
  */
 
-// Only export the auto-detecting transport creator (not individual transport creators)
-export { createRPCTransport } from "#renderer/createTransport";
+// Export the auto-detecting transport creators
+export {
+  createHTTPTransport,
+  createIPCTransport,
+  createMemoryTransport,
+  createRPCTransport,
+  createWebSocketTransport,
+} from "#renderer/createTransport";
 
 // Re-export transport types
-export type { ExecutionTransport } from "#shared/types";
+export type {
+  ChannelClient,
+  ExecutionTransport,
+  Transport,
+} from "#shared/types";

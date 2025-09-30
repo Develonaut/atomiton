@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@atomiton/conductor": "workspace:*",
+    "@atomiton/logger": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/rpc": "workspace:*",
     "@atomiton/storage": "workspace:*"

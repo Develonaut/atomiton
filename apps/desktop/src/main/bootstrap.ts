@@ -9,16 +9,18 @@ import {
 } from "#main/services/channels";
 import { createDevToolsManager } from "#main/window/devtools";
 import { createWindowManager } from "#main/window/manager";
-import { markShuttingDown, safeLog } from "#main/utils/safeLogging";
+import { createLogger } from "@atomiton/logger/desktop";
 import { optimizer } from "@electron-toolkit/utils";
 import { app, ipcMain } from "electron";
+
+const logger = createLogger({ scope: "BOOTSTRAP" });
 
 export type DesktopAppBootstrap = {
   start(): Promise<void>;
 };
 
 export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
-  safeLog("Desktop application starting up");
+  logger.info("Desktop application starting up");
 
   const configManager = createConfigManager();
   const config = configManager.getConfig();
@@ -63,10 +65,7 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
 
     // Setup cleanup on app quit
     app.on("before-quit", () => {
-      console.log("App shutting down, disposing channels and services...");
-
-      // Mark safe logging as shutting down to prevent EIO errors
-      markShuttingDown();
+      logger.info("App shutting down, disposing channels and services...");
 
       // Dispose service registry first (includes conductor reset)
       serviceRegistryManager.dispose();
@@ -79,7 +78,7 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
     });
 
     await appLifecycleManager.onReady(async () => {
-      safeLog("Electron app ready, initializing desktop application");
+      logger.info("Electron app ready, initializing desktop application");
 
       const config = configManager.getConfig();
 
@@ -93,9 +92,9 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
       const mainWindow = windowManager.createMainWindow(config.window);
 
       // Initialize channels after window creation
-      safeLog("Setting up functional channels...");
+      logger.info("Setting up functional channels...");
       channelManager = setupChannels(mainWindow);
-      safeLog("Functional channels initialized successfully");
+      logger.info("Functional channels initialized successfully");
 
       if (config.app.isDev) {
         await devToolsManager.setupReduxDevTools(mainWindow);
