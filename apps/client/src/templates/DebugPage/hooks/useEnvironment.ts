@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import conductor from "#lib/conductor";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import type { AtomitonBridge } from "@atomiton/rpc/shared";
+import { useEffect, useState } from "react";
 
 export type EnvironmentInfo = {
   isElectron: boolean;
@@ -26,7 +27,9 @@ export function useEnvironment() {
       const isElectron = envInfo.isDesktop;
 
       const windowWithElectron = window as Window & {
-        atomitonRPC?: Record<string, unknown>;
+        atomiton?: {
+          __bridge__: AtomitonBridge;
+        };
         process?: {
           versions?: {
             node?: string;
@@ -52,7 +55,7 @@ export function useEnvironment() {
 
       setEnvironment(environmentInfo);
       addLog(`Environment detected: ${isElectron ? "Electron" : "Browser"}`);
-      addLog(`atomitonRPC Available: ${!!windowWithElectron.atomitonRPC}`);
+      addLog(`Atomiton Bridge Available: ${!!windowWithElectron.atomiton?.__bridge__}`);
     };
 
     initializeEnvironment();
