@@ -1,7 +1,7 @@
 import { useEnvironment } from "#templates/DebugPage/hooks/useEnvironment";
 import { useSystemOperations } from "#templates/DebugPage/hooks/useSystemOperations";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
-import { Button } from "@atomiton/ui";
+import { Button, JsonTreeView } from "@atomiton/ui";
 
 export default function EnvironmentPage() {
   const { addLog } = useDebugLogs();
@@ -30,42 +30,11 @@ export default function EnvironmentPage() {
           <h2 className="text-xl font-semibold mb-4">
             Environment Information
           </h2>
-          <div className="space-y-2 text-sm">
-            <div>
-              <strong>Runtime:</strong>{" "}
-              {environment.isElectron ? "Electron" : "Browser"}
-            </div>
-            <div>
-              <strong>Conductor:</strong>{" "}
-              {environment.conductorAvailable
-                ? "✓ Available"
-                : "✗ Not Available"}
-            </div>
-            <div>
-              <strong>Environment:</strong> {environment.env}
-            </div>
-            <div>
-              <strong>Platform:</strong> {environment.platform}
-            </div>
-            {environment.electronVersion && (
-              <div>
-                <strong>Electron:</strong> {environment.electronVersion}
-              </div>
-            )}
-            {environment.nodeVersion && (
-              <div>
-                <strong>Node:</strong> {environment.nodeVersion}
-              </div>
-            )}
-            <div>
-              <strong>Available APIs:</strong>
-              <ul className="ml-4 mt-1">
-                {environment.apiMethods.map((method, idx) => (
-                  <li key={idx}>• {method}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <JsonTreeView
+            data={environment}
+            rootName="environment"
+            defaultExpanded={true}
+          />
         </div>
       )}
     </div>

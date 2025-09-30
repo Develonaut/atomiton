@@ -19,6 +19,9 @@ export { default as Field } from "#components/Field";
 
 export { default as Input } from "#components/Input";
 
+export { default as JsonTreeView } from "#components/JsonTreeView";
+export type { JsonTreeViewProps } from "#components/JsonTreeView";
+
 export {
   LegacySelect,
   default as Select,
