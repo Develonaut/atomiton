@@ -59,8 +59,10 @@ function Dropdown({
     return false;
   });
 
+  const isAnyActive = isActive || isActiveChild;
+
   const [height, setHeight] = useState<number | "auto">(
-    defaultOpen || isActiveChild || isActive ? "auto" : 0,
+    defaultOpen || isAnyActive ? "auto" : 0,
   );
 
   return (
@@ -68,7 +70,7 @@ function Dropdown({
       <div
         className={`group relative flex items-center w-full p-0.75 pr-3 border rounded-xl text-body-md-str text-primary transition-colors cursor-pointer hover:bg-surface-03 ${
           height === 0 ? "" : "bg-surface-03"
-        } ${isActive ? "bg-surface-03 border-s-01" : "border-transparent"}`}
+        } ${isAnyActive ? "bg-surface-03 border-s-01" : "border-transparent"}`}
         onClick={() => !href && setHeight(height === 0 ? "auto" : 0)}
       >
         {href && (
@@ -77,7 +79,11 @@ function Dropdown({
           </Link>
         )}
         <div
-          className={`flex justify-center items-center size-8 mr-3 rounded-lg transition`}
+          className={`flex justify-center items-center size-8 mr-3 rounded-lg transition ${
+            isAnyActive
+              ? "bg-[#fcfcfc] shadow-[0_0_4px_0_rgba(18,18,18,0.10)] fill-[#121212]"
+              : "fill-[#7b7b7b]"
+          }`}
         >
           <Icon name={icon} />
         </div>
