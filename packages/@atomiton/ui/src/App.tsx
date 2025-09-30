@@ -1,5 +1,5 @@
 import { ThemeProvider } from "#components/ThemeProvider";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { createRouter, RouterProvider } from "@atomiton/router";
 
 // Import template components directly
 import ButtonsPage from "#templates/ButtonsPage";
@@ -20,31 +20,33 @@ import ToolbarPage from "#templates/ToolbarPage";
 import TopbarPage from "#templates/TopbarPage";
 import TypographyPage from "#templates/TypographyPage";
 
+const router = createRouter({
+  routes: [
+    { path: "/", component: HomePage },
+    { path: "/buttons", component: ButtonsPage },
+    { path: "/cards", component: CardsPage },
+    { path: "/colors", component: ColorsPage },
+    { path: "/comment", component: CommentPage },
+    { path: "/depths", component: DepthsPage },
+    { path: "/dropdown", component: DropdownPage },
+    { path: "/iconography", component: IconographyPage },
+    { path: "/inputs", component: InputsPage },
+    { path: "/menu", component: MenuPage },
+    { path: "/modal", component: ModalPage },
+    { path: "/notifications", component: NotificationsPage },
+    { path: "/prompt-input", component: PromptInputPage },
+    { path: "/sidebar", component: SidebarPage },
+    { path: "/toolbar", component: ToolbarPage },
+    { path: "/topbar", component: TopbarPage },
+    { path: "/typography", component: TypographyPage },
+  ],
+});
+
 function App() {
   return (
-    <Router>
-      <ThemeProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/buttons" element={<ButtonsPage />} />
-          <Route path="/cards" element={<CardsPage />} />
-          <Route path="/colors" element={<ColorsPage />} />
-          <Route path="/comment" element={<CommentPage />} />
-          <Route path="/depths" element={<DepthsPage />} />
-          <Route path="/dropdown" element={<DropdownPage />} />
-          <Route path="/iconography" element={<IconographyPage />} />
-          <Route path="/inputs" element={<InputsPage />} />
-          <Route path="/menu" element={<MenuPage />} />
-          <Route path="/modal" element={<ModalPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
-          <Route path="/prompt-input" element={<PromptInputPage />} />
-          <Route path="/sidebar" element={<SidebarPage />} />
-          <Route path="/toolbar" element={<ToolbarPage />} />
-          <Route path="/topbar" element={<TopbarPage />} />
-          <Route path="/typography" element={<TypographyPage />} />
-        </Routes>
-      </ThemeProvider>
-    </Router>
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   );
 }
 
