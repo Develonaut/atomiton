@@ -1,8 +1,11 @@
 import { useCallback } from "react";
 import conductor from "#lib/conductor";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
+import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 
-export function useSystemOperations(addLog: (message: string) => void) {
+export function useSystemOperations() {
+  const { addLog } = useDebugLogs();
+
   const checkHealth = useCallback(async () => {
     try {
       addLog("🏓 Sending health check ping...");

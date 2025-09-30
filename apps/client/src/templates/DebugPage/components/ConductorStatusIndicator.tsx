@@ -1,5 +1,6 @@
 import { Icon } from "@atomiton/ui";
-import { useEffect, useState } from "react";
+import { useDidMount } from "@atomiton/hooks";
+import { useState } from "react";
 import conductor from "#lib/conductor";
 
 type ConductorStatus = "checking" | "healthy" | "unhealthy" | "unknown";
@@ -14,11 +15,11 @@ export function ConductorStatusIndicator() {
   const [conductorStatus, setConductorStatus] = useState<ConductorStatus>("checking");
 
   // Check conductor API health on mount
-  useEffect(() => {
+  useDidMount(() => {
     const checkConductorApi = async () => {
       try {
-        const result = await conductor.health();
-        if (result) {
+        const result = await conductor.system.health();
+        if (result && result.status === "ok") {
           setConductorStatus("healthy");
         } else {
           setConductorStatus("unhealthy");
@@ -29,18 +30,18 @@ export function ConductorStatusIndicator() {
     };
 
     checkConductorApi();
-  }, []);
+  });
 
   const getStatusIcon = (status: ConductorStatus) => {
     switch (status) {
       case "healthy":
         return <Icon name="check" className="w-5 h-5 text-green-500" />;
       case "unhealthy":
-        return <Icon name="close" className="w-5 h-5 text-red-500" />;
+        return <Icon name="x" className="w-5 h-5 text-red-500" />;
       case "checking":
-        return <Icon name="refresh" className="w-5 h-5 text-blue-500 animate-spin" />;
+        return <Icon name="loader-2" className="w-5 h-5 text-blue-500 animate-spin" />;
       default:
-        return <Icon name="help" className="w-5 h-5 text-gray-400" />;
+        return <Icon name="help-circle" className="w-5 h-5 text-gray-400" />;
     }
   };
 

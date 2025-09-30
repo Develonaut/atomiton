@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import conductor from "#lib/conductor";
+import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 
 export type EnvironmentInfo = {
   isElectron: boolean;
-  conductorAvailable: boolean;
-  apiMethods: string[];
   env: "development" | "production";
   platform?: string;
   userAgent?: string;
@@ -17,7 +16,8 @@ export type EnvironmentInfo = {
   };
 };
 
-export function useEnvironment(addLog: (message: string) => void) {
+export function useEnvironment() {
+  const { addLog } = useDebugLogs();
   const [environment, setEnvironment] = useState<EnvironmentInfo | null>(null);
 
   useEffect(() => {
@@ -36,30 +36,8 @@ export function useEnvironment(addLog: (message: string) => void) {
         };
       };
 
-      const conductorAvailable = true;
-      const apiMethods: string[] = [];
-
-      // Add Conductor API methods
-      apiMethods.push("conductor.node.run", "conductor.system.health");
-      apiMethods.push("conductor.execute", "conductor.health");
-
-      // Add atomitonRPC methods if available
-      if (windowWithElectron.atomitonRPC) {
-        apiMethods.push(
-          ...Object.keys(windowWithElectron.atomitonRPC)
-            .filter(
-              (key) =>
-                typeof windowWithElectron.atomitonRPC![key] === "function" ||
-                typeof windowWithElectron.atomitonRPC![key] === "object",
-            )
-            .map((key) => `atomitonRPC.${key}`),
-        );
-      }
-
       const environmentInfo: EnvironmentInfo = {
         isElectron,
-        conductorAvailable,
-        apiMethods,
         env: import.meta.env.MODE as "development" | "production",
         platform: navigator.platform,
         userAgent: navigator.userAgent,
@@ -75,7 +53,6 @@ export function useEnvironment(addLog: (message: string) => void) {
       setEnvironment(environmentInfo);
       addLog(`Environment detected: ${isElectron ? "Electron" : "Browser"}`);
       addLog(`atomitonRPC Available: ${!!windowWithElectron.atomitonRPC}`);
-      addLog(`Conductor Available: ${conductorAvailable}`);
     };
 
     initializeEnvironment();
