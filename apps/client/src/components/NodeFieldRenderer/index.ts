@@ -1,2 +1,2 @@
 export { NodeFieldRenderer } from "./NodeFieldRenderer";
-export type { NodeFieldRendererProps, FieldComponentProps } from "./types";
+export type { FieldComponentProps, NodeFieldRendererProps } from "./types";
