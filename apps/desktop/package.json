@@ -18,19 +18,18 @@
     "kill:electron": "cross-env-shell \"taskkill /f /im electron.exe 2>nul || pkill -f electron || true\""
   },
   "dependencies": {
-    "@atomiton/conductor": "workspace:^",
-    "@atomiton/nodes": "workspace:^",
-    "@atomiton/rpc": "workspace:^",
-    "@atomiton/storage": "workspace:^",
-    "dotenv": "^17.2.2"
+    "@atomiton/conductor": "workspace:*",
+    "@atomiton/nodes": "workspace:*",
+    "@atomiton/rpc": "workspace:*",
+    "@atomiton/storage": "workspace:*"
   },
   "imports": {
     "#*": "./src/*"
   },
   "devDependencies": {
-    "@atomiton/eslint-config": "workspace:^",
-    "@atomiton/typescript-config": "workspace:^",
-    "@atomiton/vite-config": "workspace:^",
+    "@atomiton/eslint-config": "workspace:*",
+    "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
     "@types/node": "catalog:",

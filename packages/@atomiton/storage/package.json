@@ -43,11 +43,9 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "rollup-plugin-visualizer": "catalog:",
     "terser": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:",
     "vitest": "catalog:"
   },
   "keywords": [

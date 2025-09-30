@@ -46,11 +46,9 @@
     "@types/node": "catalog:",
     "@types/uuid": "^10.0.0",
     "eslint": "catalog:",
-    "rollup-plugin-visualizer": "catalog:",
     "terser": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:",
     "vitest": "catalog:"
   }
 }

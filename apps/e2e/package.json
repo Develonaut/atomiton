@@ -18,11 +18,10 @@
     "install": "playwright install chromium"
   },
   "devDependencies": {
-    "@atomiton/typescript-config": "workspace:^",
+    "@atomiton/typescript-config": "workspace:*",
     "@atomiton/vite-config": "workspace:*",
     "@playwright/test": "catalog:",
     "@types/node": "catalog:",
-    "cross-env": "catalog:",
     "typescript": "catalog:"
   }
 }

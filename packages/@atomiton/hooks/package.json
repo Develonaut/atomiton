@@ -50,11 +50,9 @@
     "eslint": "catalog:",
     "jsdom": "catalog:",
     "react": "catalog:",
-    "rollup-plugin-visualizer": "catalog:",
     "terser": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:",
     "vitest": "catalog:"
   }
 }

@@ -3,22 +3,48 @@
   "workspaces": {
     "packages/@atomiton/ui": {
       "entry": [
-        "src/index.tsx",
-        "src/**/*.stories.tsx",
-        "src/templates/**/index.tsx",
-        "src/App.tsx"
+        "src/index.ts",
+        "src/**/*.stories.tsx"
       ],
       "project": ["src/**/*.{ts,tsx}"]
     },
     "packages/@atomiton/editor": {
-      "entry": ["src/index.tsx"],
-      "project": ["src/**/*.{ts,tsx}"]
-    },
-    "packages/@atomiton/nodes": {
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]
     },
+    "packages/@atomiton/nodes": {
+      "entry": ["src/definitions/index.ts", "src/executables/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
     "packages/@atomiton/store": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/conductor": {
+      "entry": ["src/exports/browser/index.ts", "src/exports/desktop/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/rpc": {
+      "entry": ["src/main/index.ts", "src/renderer/index.ts", "src/preload/index.ts", "src/shared/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/storage": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/router": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/utils": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/validation": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/@atomiton/yaml": {
       "entry": ["src/index.ts"],
       "project": ["src/**/*.{ts,tsx}"]
     },
@@ -35,13 +61,12 @@
       "project": ["src/**/*.{ts,tsx}"]
     },
     "packages/@atomiton/typescript-config": {
-      "entry": ["base.json", "node.json", "react.json"],
+      "entry": ["base.json", "library.json", "app.json"],
       "project": []
     },
     "apps/client": {
-      "entry": ["src/main.tsx", "src/routes.tsx"],
-      "project": ["src/**/*.{ts,tsx}"],
-      "ignoreBinaries": ["kill-dev-servers.sh"]
+      "entry": ["src/main.tsx"],
+      "project": ["src/**/*.{ts,tsx}"]
     },
     "apps/desktop": {
       "entry": ["src/main/index.ts", "src/preload/index.ts"],
@@ -71,7 +96,7 @@
     "type": true,
     "enum": true
   },
-  "ignoreDependencies": ["@atomiton/*", "@types/node"],
+  "ignoreDependencies": ["@atomiton/*"],
   "ignoreWorkspaces": [],
   "rules": {
     "files": "error",

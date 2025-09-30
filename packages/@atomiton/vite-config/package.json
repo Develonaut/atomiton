@@ -52,9 +52,7 @@
     "@atomiton/typescript-config": "workspace:*",
     "@tailwindcss/vite": "catalog:",
     "@types/node": "catalog:",
-    "@vitest/coverage-v8": "catalog:",
     "eslint": "catalog:",
-    "prettier": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

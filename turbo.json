@@ -59,22 +59,6 @@
         "BUILD_TARGET"
       ]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "ELECTRON_RENDERER_URL",
-        "CI",
-        "PLAYWRIGHT_BASE_URL",
-        "PLAYWRIGHT_HEADED",
-        "LEFTHOOK",
-        "BUILD_TARGET"
-      ]
-    },
     "typecheck": {
       "dependsOn": ["^typecheck"],
       "env": [
