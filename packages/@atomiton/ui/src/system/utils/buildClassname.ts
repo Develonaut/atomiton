@@ -16,10 +16,20 @@ export function buildClassName(config: BuildClassNameConfig): string {
 
   const baseClassName = name ? `atomiton-${name.toLowerCase()}` : undefined;
 
+  // Normalize whitespace in string inputs by splitting and rejoining
+  const normalizedStyleClasses = styleClasses
+    ?.split(/\s+/)
+    .filter(Boolean)
+    .join(" ");
+  const normalizedUserClassName = userClassName
+    ?.split(/\s+/)
+    .filter(Boolean)
+    .join(" ");
+
   return cn(
     baseClassName,
-    styleClasses,
-    systemClasses.join(" "),
-    userClassName,
+    normalizedStyleClasses,
+    systemClasses.filter(Boolean).join(" "),
+    normalizedUserClassName,
   );
 }
