@@ -12,7 +12,8 @@ type ConductorStatus = "checking" | "healthy" | "unhealthy" | "unknown";
  * - Non-interactive (read-only status display)
  */
 export function ConductorStatusIndicator() {
-  const [conductorStatus, setConductorStatus] = useState<ConductorStatus>("checking");
+  const [conductorStatus, setConductorStatus] =
+    useState<ConductorStatus>("checking");
 
   // Check conductor API health on mount
   useDidMount(() => {
@@ -39,7 +40,12 @@ export function ConductorStatusIndicator() {
       case "unhealthy":
         return <Icon name="x" className="w-5 h-5 text-red-500" />;
       case "checking":
-        return <Icon name="loader-2" className="w-5 h-5 text-blue-500 animate-spin" />;
+        return (
+          <Icon
+            name="loader-2"
+            className="w-5 h-5 text-blue-500 animate-spin"
+          />
+        );
       default:
         return <Icon name="help-circle" className="w-5 h-5 text-gray-400" />;
     }

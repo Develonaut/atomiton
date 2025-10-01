@@ -41,7 +41,9 @@ export function HealthStatusIndicator() {
 
     try {
       const result = await conductor.system.health();
-      setHealthStatus(result && result.status === "ok" ? "healthy" : "unhealthy");
+      setHealthStatus(
+        result && result.status === "ok" ? "healthy" : "unhealthy",
+      );
     } catch {
       setHealthStatus("unhealthy");
     }
@@ -54,7 +56,12 @@ export function HealthStatusIndicator() {
       case "unhealthy":
         return <Icon name="x" className="w-5 h-5 text-red-500" />;
       case "checking":
-        return <Icon name="loader-2" className="w-5 h-5 text-blue-500 animate-spin" />;
+        return (
+          <Icon
+            name="loader-2"
+            className="w-5 h-5 text-blue-500 animate-spin"
+          />
+        );
       default:
         return <Icon name="help-circle" className="w-5 h-5 text-gray-400" />;
     }

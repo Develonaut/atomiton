@@ -106,7 +106,7 @@ export type NodeConfig = {
   selectFields?: Record<string, string>;
   codeMirrorFields?: Record<string, string>;
   checkboxFields?: Record<string, boolean>;
-}
+};
 
 /**
  * Configures and executes a node, returning the result

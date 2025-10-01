@@ -55,7 +55,9 @@ export function useEnvironment() {
 
       setEnvironment(environmentInfo);
       addLog(`Environment detected: ${isElectron ? "Electron" : "Browser"}`);
-      addLog(`Atomiton Bridge Available: ${!!windowWithElectron.atomiton?.__bridge__}`);
+      addLog(
+        `Atomiton Bridge Available: ${!!windowWithElectron.atomiton?.__bridge__}`,
+      );
     };
 
     initializeEnvironment();

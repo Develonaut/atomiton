@@ -44,10 +44,7 @@ function serializeApiStructure(obj: unknown, depth = 0, maxDepth = 5): unknown {
 export default function EnvironmentPage() {
   const environment = useEnvironment();
 
-  const conductorApi = useMemo(
-    () => serializeApiStructure(conductor),
-    []
-  );
+  const conductorApi = useMemo(() => serializeApiStructure(conductor), []);
 
   return (
     <div className="space-y-6">

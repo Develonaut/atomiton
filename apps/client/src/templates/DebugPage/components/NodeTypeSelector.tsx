@@ -17,7 +17,7 @@ export function NodeTypeSelector({
   }));
 
   const selectedOption = selectedNodeType
-    ? options.find((opt) => opt.name === selectedNodeType) ?? options[0]
+    ? (options.find((opt) => opt.name === selectedNodeType) ?? options[0])
     : options[0];
 
   const handleChange = (option: SelectOption) => {
