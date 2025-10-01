@@ -15,20 +15,13 @@ import {
 
 /**
  * Default values for shell command parameters
+ * Security: Uses structured command format (program + args)
  */
 export const shellCommandDefaults = {
-  command: "",
-  shell: "bash" as const,
-  env: {},
+  program: "",
+  args: [],
   timeout: 30000,
   captureOutput: true,
-  encoding: "utf8" as const,
-  throwOnError: false,
-  maxBuffer: 10485760,
-  killSignal: "SIGTERM",
-  args: [],
-  environment: {},
-  inheritStdio: false,
 };
 
 /**

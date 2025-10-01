@@ -1,7 +1,9 @@
 /**
  * Shell Command Field Configuration
  * UI field configurations for shell command parameters
- * MVP: Core command execution only
+ *
+ * Security: Uses structured command format (program + args)
+ * to prevent command injection attacks
  */
 
 import { createFieldsFromSchema } from "#core/utils/createFieldsFromSchema";
@@ -11,28 +13,19 @@ import { shellCommandSchema } from "#schemas/shell-command";
  * Field configuration for shell command parameters
  *
  * Auto-derived from shellCommandSchema with selective overrides for:
- * - command: textarea with custom placeholder and rows
- * - args: textarea with custom placeholder and rows
- * - shell: enum with descriptive labels
+ * - program: text input with example placeholder
+ * - args: textarea with JSON array placeholder
  * - stdin: textarea with custom placeholder and rows
  */
 export const shellCommandFields = createFieldsFromSchema(shellCommandSchema, {
-  command: {
-    controlType: "textarea",
-    placeholder: "ls -la",
-    rows: 3,
+  program: {
+    controlType: "text",
+    placeholder: "git",
   },
   args: {
     controlType: "textarea",
-    placeholder: '["--verbose", "--output", "result.txt"]',
-    rows: 2,
-  },
-  shell: {
-    options: [
-      { value: "bash", label: "Bash" },
-      { value: "sh", label: "sh" },
-      { value: "zsh", label: "Zsh" },
-    ],
+    placeholder: '["status", "--short"]',
+    rows: 3,
   },
   stdin: {
     controlType: "textarea",

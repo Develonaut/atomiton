@@ -1,6 +1,9 @@
 /**
  * Shell Command Node Executable
- * Node.js implementation with shell command execution logic
+ * Node.js implementation with secure shell command execution
+ *
+ * Security: Uses structured command API (program + args) with shell: false
+ * to prevent command injection attacks
  */
 
 import { createExecutable } from "#core/utils/executable";
@@ -10,10 +13,7 @@ import {
   createCommandOutput,
   type ShellCommandOutput,
 } from "#executables/shell-command/output";
-import {
-  logExecutionResult,
-  parseJSON,
-} from "#executables/shell-command/utils";
+import { logExecutionResult } from "#executables/shell-command/utils";
 
 export type { ShellCommandOutput };
 
@@ -28,47 +28,38 @@ const MVP_DEFAULTS = {
 
 /**
  * Shell Command node executable
+ * Security: Uses structured command format to prevent injection
  */
 export const shellCommandExecutable = createExecutable<ShellCommandParameters>(
   "shell-command",
   async ({ getInput, config, context, getDuration }) => {
     // Get parameters using enhanced helper
-    const command = getInput<string>("command");
-    const inputArgs = getInput<string[] | string>("args");
+    const program = getInput<string>("program");
+    const args = getInput<string[]>("args") || (config.args as string[]);
     const workingDirectory = getInput<string>("workingDirectory");
     const inputEnvironment = getInput<Record<string, string>>("environment");
 
-    // Parse arguments
-    let args: string[];
-    if (inputArgs) {
-      args = Array.isArray(inputArgs)
-        ? inputArgs
-        : parseJSON(inputArgs, config.args as string[]);
-    } else {
-      args = config.args as string[];
-    }
-
-    // Merge environment variables - MVP: config.environment removed
+    // Merge environment variables
     const environment = {
       ...inputEnvironment,
     };
 
-    if (!command) {
-      throw new Error("Command is required for shell execution");
+    if (!program) {
+      throw new Error("Program is required for command execution");
     }
 
-    context.log.info(`Executing shell command: ${command}`, {
+    context.log.info(`Executing command: ${program}`, {
       args,
       workingDirectory,
-      shell: config.shell,
       timeout: config.timeout,
     });
 
-    // Execute the command
-    const result = await executeCommand(command, args, {
+    // Execute the command with structured API
+    const result = await executeCommand({
+      program,
+      args,
       cwd: workingDirectory as string,
       env: environment,
-      shell: config.shell,
       stdio: MVP_DEFAULTS.stdio,
       timeout: config.timeout,
       killSignal: MVP_DEFAULTS.killSignal,

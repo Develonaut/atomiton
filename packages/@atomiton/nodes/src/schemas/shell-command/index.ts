@@ -1,28 +1,31 @@
 /**
  * Shell Command Schema
  * Runtime validation schema for shell command node
+ *
+ * Security: Uses structured command format (program + args)
+ * instead of shell strings to prevent command injection
  */
 
-import v from "@atomiton/validation";
+import v, { jsonString } from "@atomiton/validation";
 import type { VInfer } from "@atomiton/validation";
 import { baseSchema } from "#schemas/node";
 
 /**
  * Shell Command specific schema (without base fields)
- * MVP: Core command execution only
+ * Security: Structured API prevents command injection
  */
 export const shellCommandSchemaShape = {
-  command: v
+  program: v
     .string()
-    .min(1, "Command is required")
-    .describe("Shell command to execute"),
+    .min(1, "Program is required")
+    .describe("Program to execute (e.g., git, npm, echo)"),
 
-  args: v.array(v.string()).default([]).describe("Command arguments as array"),
-
-  shell: v
-    .enum(["bash", "sh", "zsh"])
-    .default("bash")
-    .describe("Shell to use for execution"),
+  args: v
+    .union([v.array(v.string()), jsonString(v.array(v.string()))])
+    .default([])
+    .describe(
+      "Program arguments as array (e.g., ['status'], ['run', 'build'])",
+    ),
 
   stdin: v.string().optional().describe("Data to pipe to stdin"),
 

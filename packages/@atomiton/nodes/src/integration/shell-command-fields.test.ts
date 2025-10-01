@@ -14,9 +14,8 @@ describe("Shell Command Node Fields Integration", () => {
       const fieldKeys = Object.keys(shellCommandFields);
 
       // Should include all fields from shellCommandSchemaShape
-      expect(fieldKeys).toContain("command");
+      expect(fieldKeys).toContain("program");
       expect(fieldKeys).toContain("args");
-      expect(fieldKeys).toContain("shell");
       expect(fieldKeys).toContain("stdin");
       expect(fieldKeys).toContain("captureOutput");
 
@@ -28,9 +27,9 @@ describe("Shell Command Node Fields Integration", () => {
       expect(fieldKeys).toContain("description");
     });
 
-    it("should have exactly 10 fields total", () => {
-      // 5 shell-command-specific + 5 base fields
-      expect(Object.keys(shellCommandFields)).toHaveLength(10);
+    it("should have exactly 9 fields total", () => {
+      // 4 shell-command-specific + 5 base fields
+      expect(Object.keys(shellCommandFields)).toHaveLength(9);
     });
 
     it("should have field config for every schema field", () => {
@@ -54,61 +53,52 @@ describe("Shell Command Node Fields Integration", () => {
   });
 
   describe("Auto-Derived Fields", () => {
-    describe("Command Field", () => {
-      it("should have textarea control type (overridden)", () => {
-        expect(shellCommandFields.command.controlType).toBe("textarea");
+    describe("Program Field", () => {
+      it("should have text control type (overridden)", () => {
+        expect(shellCommandFields.program.controlType).toBe("text");
       });
 
       it("should be required (no default, not optional)", () => {
-        expect(shellCommandFields.command.required).toBe(true);
+        expect(shellCommandFields.program.required).toBe(true);
       });
 
       it("should have custom placeholder (overridden)", () => {
-        expect(shellCommandFields.command.placeholder).toBe("ls -la");
-      });
-
-      it("should have custom rows (overridden)", () => {
-        expect(shellCommandFields.command.rows).toBe(3);
+        expect(shellCommandFields.program.placeholder).toBe("git");
       });
 
       it("should have helpText from schema description", () => {
-        expect(shellCommandFields.command.helpText).toBe(
-          "Shell command to execute",
+        expect(shellCommandFields.program.helpText).toBe(
+          "Program to execute (e.g., git, npm, echo)",
         );
       });
 
-      it("should reject missing command", () => {
+      it("should reject missing program", () => {
         const result = shellCommandSchema.safeParse({});
 
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.errors[0].path).toContain("command");
+          expect(result.error.errors[0].path).toContain("program");
         }
       });
 
-      it("should reject empty command", () => {
+      it("should reject empty program", () => {
         const result = shellCommandSchema.safeParse({
-          command: "",
+          program: "",
         });
 
         expect(result.success).toBe(false);
         if (!result.success) {
           expect(result.error.errors[0].message).toContain(
-            "Command is required",
+            "Program is required",
           );
         }
       });
 
-      it("should accept non-empty commands", () => {
-        const validCommands = [
-          "ls -la",
-          "echo 'hello'",
-          "npm test",
-          "cat file.txt",
-        ];
+      it("should accept non-empty programs", () => {
+        const validPrograms = ["ls", "echo", "npm", "cat"];
 
-        for (const command of validCommands) {
-          const result = shellCommandSchema.safeParse({ command });
+        for (const program of validPrograms) {
+          const result = shellCommandSchema.safeParse({ program });
           expect(result.success).toBe(true);
         }
       });
@@ -125,23 +115,23 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should have custom placeholder (overridden)", () => {
         expect(shellCommandFields.args.placeholder).toBe(
-          '["--verbose", "--output", "result.txt"]',
+          '["status", "--short"]',
         );
       });
 
       it("should have custom rows (overridden)", () => {
-        expect(shellCommandFields.args.rows).toBe(2);
+        expect(shellCommandFields.args.rows).toBe(3);
       });
 
       it("should have helpText from schema description", () => {
         expect(shellCommandFields.args.helpText).toBe(
-          "Command arguments as array",
+          "Program arguments as array (e.g., ['status'], ['run', 'build'])",
         );
       });
 
       it("should use default value when not provided", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
+          program: "ls",
         });
 
         expect(result.success).toBe(true);
@@ -152,7 +142,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should accept array of strings", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
+          program: "ls",
           args: ["--verbose", "--output", "result.txt"],
         });
 
@@ -161,7 +151,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should reject non-array values", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
+          program: "ls",
           args: "not an array",
         });
 
@@ -170,7 +160,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should reject array with non-string values", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
+          program: "ls",
           args: [1, 2, 3],
         });
 
@@ -178,62 +168,37 @@ describe("Shell Command Node Fields Integration", () => {
       });
     });
 
-    describe("Shell Field", () => {
-      it("should have select control type (auto-derived from enum)", () => {
-        expect(shellCommandFields.shell.controlType).toBe("select");
+    describe("Program Field", () => {
+      it("should have text control type", () => {
+        expect(shellCommandFields.program.controlType).toBe("text");
       });
 
-      it("should have custom options with labels (overridden)", () => {
-        expect(shellCommandFields.shell.options).toEqual([
-          { value: "bash", label: "Bash" },
-          { value: "sh", label: "sh" },
-          { value: "zsh", label: "Zsh" },
-        ]);
+      it("should be required", () => {
+        expect(shellCommandFields.program.required).toBe(true);
       });
 
-      it("should be required (has default but not optional)", () => {
-        expect(shellCommandFields.shell.required).toBe(true);
-      });
-
-      it("should have placeholder showing default value", () => {
-        expect(shellCommandFields.shell.placeholder).toBe("Default: bash");
+      it("should have placeholder", () => {
+        expect(shellCommandFields.program.placeholder).toBe("git");
       });
 
       it("should have helpText from schema description", () => {
-        expect(shellCommandFields.shell.helpText).toBe(
-          "Shell to use for execution",
+        expect(shellCommandFields.program.helpText).toBe(
+          "Program to execute (e.g., git, npm, echo)",
         );
       });
 
-      it("should use default value when not provided", () => {
+      it("should reject empty program", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
-        });
-
-        expect(result.success).toBe(true);
-        if (result.success) {
-          expect(result.data.shell).toBe("bash");
-        }
-      });
-
-      it("should validate enum values", () => {
-        const validShells = ["bash", "sh", "zsh"];
-
-        for (const shell of validShells) {
-          const result = shellCommandSchema.safeParse({
-            command: "ls",
-            shell,
-          });
-          expect(result.success).toBe(true);
-        }
-      });
-
-      it("should reject invalid shell", () => {
-        const result = shellCommandSchema.safeParse({
-          command: "ls",
-          shell: "fish",
+          program: "",
         });
         expect(result.success).toBe(false);
+      });
+
+      it("should accept valid program", () => {
+        const result = shellCommandSchema.safeParse({
+          program: "ls",
+        });
+        expect(result.success).toBe(true);
       });
     });
 
@@ -262,7 +227,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should accept undefined", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
+          program: "ls",
         });
 
         expect(result.success).toBe(true);
@@ -273,7 +238,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should accept string value", () => {
         const result = shellCommandSchema.safeParse({
-          command: "grep",
+          program: "grep",
           stdin: "line1\nline2\nline3",
         });
 
@@ -282,7 +247,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should reject non-string value", () => {
         const result = shellCommandSchema.safeParse({
-          command: "grep",
+          program: "grep",
           stdin: 123,
         });
 
@@ -313,7 +278,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       it("should use default value when not provided", () => {
         const result = shellCommandSchema.safeParse({
-          command: "ls",
+          program: "ls",
         });
 
         expect(result.success).toBe(true);
@@ -348,7 +313,7 @@ describe("Shell Command Node Fields Integration", () => {
 
       // Verify schema validates this
       const resultInvalid = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         timeout: 0,
       });
       expect(resultInvalid.success).toBe(false);
@@ -387,29 +352,17 @@ describe("Shell Command Node Fields Integration", () => {
 
   describe("Type Safety", () => {
     it("all fields should have required controlType", () => {
-      for (const [_key, field] of Object.entries(shellCommandFields)) {
+      for (const field of Object.values(shellCommandFields)) {
         expect(field.controlType).toBeDefined();
         expect(typeof field.controlType).toBe("string");
       }
     });
 
     it("all fields should have required label", () => {
-      for (const [_key, field] of Object.entries(shellCommandFields)) {
+      for (const field of Object.values(shellCommandFields)) {
         expect(field.label).toBeDefined();
         expect(typeof field.label).toBe("string");
         expect(field.label.length).toBeGreaterThan(0);
-      }
-    });
-
-    it("fields with options should have valid options array", () => {
-      if (shellCommandFields.shell.options) {
-        expect(Array.isArray(shellCommandFields.shell.options)).toBe(true);
-        expect(shellCommandFields.shell.options.length).toBeGreaterThan(0);
-
-        for (const option of shellCommandFields.shell.options) {
-          expect(option.value).toBeDefined();
-          expect(option.label).toBeDefined();
-        }
       }
     });
   });
@@ -417,13 +370,13 @@ describe("Shell Command Node Fields Integration", () => {
   describe("Complete Valid Examples", () => {
     it("should validate minimal valid node", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
       });
 
       expect(result.success).toBe(true);
       if (result.success) {
+        expect(result.data.program).toBe("ls");
         expect(result.data.args).toEqual([]);
-        expect(result.data.shell).toBe("bash");
         expect(result.data.captureOutput).toBe(true);
         expect(result.data.enabled).toBe(true);
         expect(result.data.timeout).toBe(30000);
@@ -433,7 +386,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should validate command with args", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         args: ["-la", "/home"],
       });
 
@@ -442,7 +395,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should validate command with stdin", () => {
       const result = shellCommandSchema.safeParse({
-        command: "grep",
+        program: "grep",
         args: ["error"],
         stdin: "line1\nline2\nerror on line3\nline4",
       });
@@ -450,18 +403,9 @@ describe("Shell Command Node Fields Integration", () => {
       expect(result.success).toBe(true);
     });
 
-    it("should validate command with different shell", () => {
-      const result = shellCommandSchema.safeParse({
-        command: "echo $SHELL",
-        shell: "zsh",
-      });
-
-      expect(result.success).toBe(true);
-    });
-
     it("should validate command without capturing output", () => {
       const result = shellCommandSchema.safeParse({
-        command: "rm temp.txt",
+        program: "rm temp.txt",
         captureOutput: false,
       });
 
@@ -470,27 +414,18 @@ describe("Shell Command Node Fields Integration", () => {
   });
 
   describe("Invalid Examples", () => {
-    it("should reject missing command", () => {
+    it("should reject missing program", () => {
       const result = shellCommandSchema.safeParse({});
 
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.errors[0].path).toContain("command");
+        expect(result.error.errors[0].path).toContain("program");
       }
     });
 
     it("should reject empty command", () => {
       const result = shellCommandSchema.safeParse({
-        command: "",
-      });
-
-      expect(result.success).toBe(false);
-    });
-
-    it("should reject invalid shell", () => {
-      const result = shellCommandSchema.safeParse({
-        command: "ls",
-        shell: "fish",
+        program: "",
       });
 
       expect(result.success).toBe(false);
@@ -498,7 +433,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should reject non-array args", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         args: "not an array",
       });
 
@@ -507,7 +442,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should reject args with non-string values", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         args: [1, 2, 3],
       });
 
@@ -516,7 +451,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should reject non-string stdin", () => {
       const result = shellCommandSchema.safeParse({
-        command: "grep",
+        program: "grep",
         stdin: 123,
       });
 
@@ -525,7 +460,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should reject non-boolean captureOutput", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         captureOutput: "true",
       });
 
@@ -534,7 +469,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should reject invalid timeout", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         timeout: 0,
       });
 
@@ -543,7 +478,7 @@ describe("Shell Command Node Fields Integration", () => {
 
     it("should reject invalid retries", () => {
       const result = shellCommandSchema.safeParse({
-        command: "ls",
+        program: "ls",
         retries: -1,
       });
 

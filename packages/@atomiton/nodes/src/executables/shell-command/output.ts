@@ -7,23 +7,16 @@ import type { CommandResult } from "#executables/shell-command/executor";
 
 /**
  * Shell command output structure
+ * Follows the same flat pattern as http-request for consistency
  */
 export type ShellCommandOutput = {
-  result: {
-    stdout: string;
-    stderr: string;
-    exitCode: number;
-    command: string;
-    duration: number;
-    success: boolean;
-    timedOut: boolean;
-  };
   stdout: string;
   stderr: string;
   exitCode: number;
   command: string;
   duration: number;
   success: boolean;
+  timedOut: boolean;
 };
 
 /**
@@ -37,21 +30,13 @@ export function createCommandOutput(
   const success = result.exitCode === 0 && !result.timedOut;
 
   return {
-    result: {
-      stdout: captureOutput ? result.stdout : "",
-      stderr: captureOutput ? result.stderr : "",
-      exitCode: result.exitCode,
-      command: result.command,
-      duration,
-      success,
-      timedOut: result.timedOut,
-    },
     stdout: captureOutput ? result.stdout : "",
     stderr: captureOutput ? result.stderr : "",
     exitCode: result.exitCode,
     command: result.command,
     duration,
     success,
+    timedOut: result.timedOut,
   };
 }
 
@@ -63,20 +48,12 @@ export function createErrorOutput(
   duration: number,
 ): ShellCommandOutput {
   return {
-    result: {
-      stdout: "",
-      stderr: "",
-      exitCode: -1,
-      command,
-      duration,
-      success: false,
-      timedOut: false,
-    },
     stdout: "",
     stderr: "",
     exitCode: -1,
     command,
     duration,
     success: false,
+    timedOut: false,
   };
 }
