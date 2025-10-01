@@ -47,22 +47,22 @@ pre-commit:
     # Type check all packages (turbo cached, very fast)
     type-check:
       run: |
-        echo "🔍 Type checking all packages..."
-        pnpm typecheck
+        echo "🔍 Type checking affected packages..."
+        pnpm typecheck --filter="...[HEAD]"
       fail_text: "❌ Type check failed - please fix TypeScript errors"
 
     # Unit tests (turbo cached, catches logic errors early)
     unit-tests:
       run: |
-        echo "🧪 Running unit tests..."
-        pnpm test
+        echo "🧪 Running tests in affected packages..."
+        pnpm test --filter="...[HEAD]"
       fail_text: "❌ Unit tests failed - please fix failing tests"
 
     # Build verification (turbo cached, catches build errors early)
     build-check:
       run: |
-        echo "🏗️ Verifying build integrity..."
-        pnpm build
+        echo "🏗️ Verifying build integrity for affected packages..."
+        pnpm build --filter="...[HEAD]"
       fail_text: "❌ Build failed - please fix build errors"
 
 # Comprehensive pre-push hooks - runs ~2-5min before sharing code
@@ -72,15 +72,15 @@ pre-push:
     # Integration tests (tests package interactions)
     integration-tests:
       run: |
-        echo "🎭 Running integration tests..."
-        pnpm test:integration
+        echo "🎭 Running integration tests in affected packages..."
+        pnpm test:integration --filter="...[origin/main]"
       fail_text: "❌ Integration tests failed"
 
     # E2E tests (tests full user flows, headless by default)
     e2e-tests:
       run: |
-        echo "🌐 Running end-to-end tests (headless)..."
-        pnpm test:e2e
+        echo "🌐 Running end-to-end tests (headless) in affected packages..."
+        pnpm test:e2e --filter="...[origin/main]"
       fail_text: "❌ E2E tests failed"
 
 # Skip options for cleaner output
