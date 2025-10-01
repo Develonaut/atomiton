@@ -17,7 +17,6 @@ export {
 } from "#schemas/registry";
 
 // Individual node parameter schemas
-export { default as codeSchemaShape, type CodeParameters } from "#schemas/code";
 export {
   default as csvReaderSchemaShape,
   type CSVReaderParameters,

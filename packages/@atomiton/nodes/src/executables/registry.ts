@@ -6,7 +6,6 @@
 import type { NodeExecutable } from "#core/types/executable";
 
 // Import all node executables
-import codeExecutable from "#executables/code";
 import groupExecutable from "#executables/group";
 import csvReaderExecutable from "#executables/csv-reader";
 import editFieldsExecutable from "#executables/edit-fields";
@@ -24,7 +23,6 @@ import transformExecutable from "#executables/transform";
 export const nodeExecutableRegistry = new Map<string, NodeExecutable>();
 
 // Register all executables
-nodeExecutableRegistry.set("code", codeExecutable);
 nodeExecutableRegistry.set("parallel", parallelExecutable);
 nodeExecutableRegistry.set("csv-reader", csvReaderExecutable);
 nodeExecutableRegistry.set("group", groupExecutable);
@@ -66,7 +64,6 @@ export function getNodeExecutableIds(): string[] {
 
 // Export all executables for convenience
 export {
-  codeExecutable,
   csvReaderExecutable,
   editFieldsExecutable,
   fileSystemExecutable,

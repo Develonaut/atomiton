@@ -186,7 +186,7 @@ describe("HTTP Request Node Fields Integration", () => {
 
       it("should have helpText from schema description", () => {
         expect(httpRequestFields.headers.helpText).toBe(
-          "Request headers as key-value pairs",
+          "Request headers as key-value pairs (object or JSON string)",
         );
       });
 
@@ -244,7 +244,7 @@ describe("HTTP Request Node Fields Integration", () => {
 
       it("should have helpText from schema description", () => {
         expect(httpRequestFields.body.helpText).toBe(
-          "Request body content (for POST, PUT)",
+          "Request body content (string, object, or JSON string)",
         );
       });
 
@@ -342,14 +342,14 @@ describe("HTTP Request Node Fields Integration", () => {
 
   describe("Type Safety", () => {
     it("all fields should have required controlType", () => {
-      for (const [_key, field] of Object.entries(httpRequestFields)) {
+      for (const field of Object.values(httpRequestFields)) {
         expect(field.controlType).toBeDefined();
         expect(typeof field.controlType).toBe("string");
       }
     });
 
     it("all fields should have required label", () => {
-      for (const [_key, field] of Object.entries(httpRequestFields)) {
+      for (const field of Object.values(httpRequestFields)) {
         expect(field.label).toBeDefined();
         expect(typeof field.label).toBe("string");
         expect(field.label.length).toBeGreaterThan(0);

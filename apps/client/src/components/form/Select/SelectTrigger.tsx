@@ -6,10 +6,21 @@ type SelectTriggerProps = PropsWithChildren<{
   className?: string;
   isMedium?: boolean;
   isWhite?: boolean;
+  "data-testid"?: string;
 }>;
 
 const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
-  ({ children, className = "", isMedium = false, isWhite = false }, ref) => {
+  (
+    {
+      children,
+      className = "",
+      isMedium = false,
+      isWhite = false,
+      "data-testid": dataTestId,
+      ...props
+    },
+    ref,
+  ) => {
     const sizeClasses = isMedium ? "h-9 text-body-md" : "h-10 text-body-lg";
 
     const variantClasses = isWhite
@@ -20,6 +31,8 @@ const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
       <ListboxButton
         ref={ref}
         className={`group flex items-center w-full px-3 border border-s-01 rounded-[0.625rem] text-primary transition-all data-[hover]:border-s-02 data-[open]:border-s-02 data-[open]:bg-transparent outline-0 ${sizeClasses} ${variantClasses} ${className}`}
+        data-testid={dataTestId}
+        {...props}
       >
         {children}
       </ListboxButton>

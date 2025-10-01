@@ -18,7 +18,7 @@ import { describe, expect, it } from "vitest";
 describe("ReactFlow Integration Tests", () => {
   // Core test: Can we create nodes that ReactFlow can use?
   it("creates valid ReactFlow nodes", () => {
-    const node = createNode("code", { x: 100, y: 100 });
+    const node = createNode("transform", { x: 100, y: 100 });
 
     // Essential ReactFlow requirements
     expect(node.id).toBeDefined();
@@ -32,7 +32,7 @@ describe("ReactFlow Integration Tests", () => {
 
   // Core test: Can we create edges between nodes?
   it("creates valid ReactFlow edges", () => {
-    const sourceNode = createNode("code", { x: 0, y: 0 });
+    const sourceNode = createNode("http-request", { x: 0, y: 0 });
     const targetNode = createNode("transform", { x: 200, y: 0 });
     const edge = createEdgeFromLastNode(sourceNode.id, targetNode.id);
 
@@ -49,7 +49,7 @@ describe("ReactFlow Integration Tests", () => {
 
     // Create 10 nodes (realistic small workflow)
     const nodes = Array.from({ length: 10 }, (_, i) =>
-      createNode("code", { x: i * 100, y: 0 }),
+      createNode("file-system", { x: i * 100, y: 0 }),
     );
 
     const duration = performance.now() - startTime;

@@ -6,7 +6,6 @@
 import type { NodeDefinition } from "#core/types/definition";
 
 // Import all node definitions
-import codeDefinition from "#definitions/code";
 import csvReaderDefinition from "#definitions/csv-reader";
 import editFieldsDefinition from "#definitions/edit-fields";
 import fileSystemDefinition from "#definitions/file-system";
@@ -22,7 +21,6 @@ import transformDefinition from "#definitions/transform";
  * Registry of all available node definitions
  */
 export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
-  ["code", codeDefinition],
   ["parallel", parallelDefinition],
   ["csv-reader", csvReaderDefinition],
   ["group", groupDefinition],
@@ -121,7 +119,6 @@ export function searchNodeDefinitions(query: string): NodeDefinition[] {
 
 // Export all definitions for convenience
 export {
-  codeDefinition,
   csvReaderDefinition,
   editFieldsDefinition,
   fileSystemDefinition,

@@ -52,15 +52,6 @@ export const testNodes = {
   },
 
   /**
-   * Code node
-   * Tests: arbitrary code execution
-   */
-  code: {
-    type: "code",
-    code: "const result = 'Code node executed'; return { success: true, result };",
-  },
-
-  /**
    * Shell Command node
    * Tests: shell command execution
    */
@@ -127,7 +118,6 @@ export const expectedFieldCounts: Record<string, number> = {
   "file-system": 7, // operation, path, content, encoding, createDirectories, overwrite, fileFilter
   transform: 9, // operation, transformFunction, filterCondition, sortKey, sortDirection, groupBy, reduceFunction, reduceInitial, flattenDepth
   "http-request": 4, // method, url, body, headers
-  code: 1, // code
   "shell-command": 2, // command, workingDirectory
   loop: 1, // iterableExpression
   "csv-reader": 3, // filePath, delimiter, encoding
@@ -144,7 +134,6 @@ export const nodeTypesToTest = [
   "file-system",
   "transform",
   "http-request",
-  "code",
   "shell-command",
 ] as const;
 

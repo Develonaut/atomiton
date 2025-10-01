@@ -29,7 +29,6 @@ export {
 } from "#definitions/registry";
 
 // Export parameter types from schemas module
-export type { CodeParameters } from "#schemas/code";
 export type { CSVReaderParameters } from "#schemas/csv-reader";
 export type { FileSystemParameters } from "#schemas/file-system";
 export type { GroupParameters } from "#schemas/group";

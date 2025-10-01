@@ -3,7 +3,7 @@
  * Runtime validation schema for HTTP request node
  */
 
-import v from "@atomiton/validation";
+import v, { jsonString } from "@atomiton/validation";
 import type { VInfer } from "@atomiton/validation";
 import { baseSchema } from "#schemas/node";
 
@@ -20,11 +20,14 @@ export const httpRequestSchemaShape = {
   url: v.string().url("Must be a valid URL").describe("Request URL"),
 
   headers: v
-    .record(v.string())
+    .union([v.record(v.string()), jsonString(v.record(v.string()))])
     .default({})
-    .describe("Request headers as key-value pairs"),
+    .describe("Request headers as key-value pairs (object or JSON string)"),
 
-  body: v.string().optional().describe("Request body content (for POST, PUT)"),
+  body: v
+    .union([v.string(), jsonString(v.unknown())])
+    .optional()
+    .describe("Request body content (string, object, or JSON string)"),
 
   // POST-MVP: Advanced fields removed for MVP
   // Hardcoded defaults applied in executor:
