@@ -1,34 +1,46 @@
-/**
- * Edit Fields Node Executable
- * Node.js implementation for editing or creating data fields
- */
-
-import Handlebars from "handlebars";
+import { render } from "squirrelly";
 import { createExecutable } from "#core/utils/executable";
 import type { EditFieldsParameters } from "#schemas/edit-fields";
 
-/**
- * Edit Fields node executable
- */
+function extractVariables(template: string): string[] {
+  const regex = /\{\{(?!@)([^}]+)\}\}/g;
+  const variables: string[] = [];
+  let match;
+  while ((match = regex.exec(template)) !== null) {
+    const varName = match[1].trim().split(".")[0].split(" ")[0];
+    if (varName && !varName.startsWith("@") && varName !== "$now") {
+      variables.push(varName);
+    }
+  }
+  return [...new Set(variables)];
+}
+
 export const editFieldsExecutable = createExecutable<EditFieldsParameters>(
   "edit-fields",
   async ({ getInput, config, context }) => {
     const inputData = getInput<Record<string, unknown>>("data") || {};
 
-    // Start with input data or empty object
     const outputData: Record<string, unknown> = config.keepOnlySet
       ? {}
       : { ...inputData };
 
-    // Register common helpers
-    Handlebars.registerHelper("$now", () => new Date().toISOString());
-
-    // Apply the field edits with template processing
     if (config.values && typeof config.values === "object") {
       Object.entries(config.values).forEach(([key, value]) => {
         if (typeof value === "string") {
-          const template = Handlebars.compile(value);
-          outputData[key] = template(inputData);
+          const variables = extractVariables(value);
+          const safeData: Record<string, unknown> = { ...inputData };
+
+          safeData.$now = new Date().toISOString();
+
+          variables.forEach((varName) => {
+            if (!(varName in safeData)) {
+              safeData[varName] = "";
+            }
+          });
+
+          outputData[key] = render(value, safeData, {
+            useWith: true,
+          });
         } else {
           outputData[key] = value;
         }

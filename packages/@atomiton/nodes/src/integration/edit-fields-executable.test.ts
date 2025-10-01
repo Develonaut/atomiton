@@ -117,8 +117,8 @@ describe("Edit Fields Executable Integration", () => {
     });
   });
 
-  describe("Handlebars Templating", () => {
-    it("should process Handlebars templates in string values", async () => {
+  describe("Template Interpolation", () => {
+    it("should process template variables in string values", async () => {
       const result = (await editFieldsExecutable.execute({
         nodeId: "test-node",
         executionId: "test-exec",
@@ -175,12 +175,12 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      // Handlebars renders missing variables as empty strings
+      // Template engine renders missing variables as empty strings
       expect(result.data.message).toBe("Hello John ");
     });
   });
 
-  describe("Built-in Handlebars Helpers", () => {
+  describe("Built-in Template Helpers", () => {
     it("should support $now helper for timestamps", async () => {
       const result = (await editFieldsExecutable.execute({
         nodeId: "test-node",

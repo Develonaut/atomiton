@@ -56,7 +56,7 @@ test.describe("Edit Fields Node Execution", () => {
     });
   });
 
-  test("uses Handlebars templates to transform data", async ({
+  test("uses template interpolation to transform data", async ({
     sharedElectronPage,
   }) => {
     await sharedElectronPage

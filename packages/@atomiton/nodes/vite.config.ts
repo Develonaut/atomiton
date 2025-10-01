@@ -24,6 +24,7 @@ export default defineLibraryConfig({
     "sharp",
     "execa",
     "isolated-vm",
+    "squirrelly", // Template engine - uses Node.js built-ins
     // Internal packages
     "@atomiton/validation",
     "@atomiton/yaml",
