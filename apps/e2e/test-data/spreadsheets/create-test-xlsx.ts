@@ -4,7 +4,6 @@
  */
 
 import XLSX from "xlsx";
-import { writeFileSync } from "fs";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
