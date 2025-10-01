@@ -61,7 +61,7 @@ describe("Edit Fields Node Fields Integration", () => {
       });
 
       it("should have custom placeholder (overridden)", () => {
-        expect(editFieldsFields.values.placeholder).toBe("Add field");
+        expect(editFieldsFields.values.placeholder).toBe('{"field": "value"}');
       });
 
       it("should have custom rows (overridden)", () => {
@@ -70,7 +70,7 @@ describe("Edit Fields Node Fields Integration", () => {
 
       it("should have helpText from schema description", () => {
         expect(editFieldsFields.values.helpText).toBe(
-          "Object containing field names and their values to set or edit",
+          "Object containing field names and their values to set or edit (object or JSON string)",
         );
       });
 
@@ -195,14 +195,14 @@ describe("Edit Fields Node Fields Integration", () => {
 
   describe("Type Safety", () => {
     it("all fields should have required controlType", () => {
-      for (const [_key, field] of Object.entries(editFieldsFields)) {
+      for (const field of Object.values(editFieldsFields)) {
         expect(field.controlType).toBeDefined();
         expect(typeof field.controlType).toBe("string");
       }
     });
 
     it("all fields should have required label", () => {
-      for (const [_key, field] of Object.entries(editFieldsFields)) {
+      for (const field of Object.values(editFieldsFields)) {
         expect(field.label).toBeDefined();
         expect(typeof field.label).toBe("string");
         expect(field.label.length).toBeGreaterThan(0);

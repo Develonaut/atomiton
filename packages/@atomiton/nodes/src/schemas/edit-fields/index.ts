@@ -3,7 +3,7 @@
  * Runtime validation schema for edit fields node
  */
 
-import v from "@atomiton/validation";
+import v, { jsonString } from "@atomiton/validation";
 import type { VInfer } from "@atomiton/validation";
 import { baseSchema } from "#schemas/node";
 
@@ -12,9 +12,11 @@ import { baseSchema } from "#schemas/node";
  */
 export const editFieldsSchemaShape = {
   values: v
-    .record(v.unknown())
+    .union([v.record(v.unknown()), jsonString(v.record(v.unknown()))])
     .default({})
-    .describe("Object containing field names and their values to set or edit"),
+    .describe(
+      "Object containing field names and their values to set or edit (object or JSON string)",
+    ),
 
   keepOnlySet: v
     .boolean()
