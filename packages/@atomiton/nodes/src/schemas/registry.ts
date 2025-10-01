@@ -8,7 +8,6 @@ import { baseSchema } from "#schemas/node";
 
 // Import all node schema shapes
 import httpRequestSchemaShape from "#schemas/http-request";
-import csvReaderSchemaShape from "#schemas/csv-reader";
 import editFieldsSchemaShape from "#schemas/edit-fields";
 import fileSystemSchemaShape from "#schemas/file-system";
 import groupSchemaShape from "#schemas/group";
@@ -136,7 +135,6 @@ export function clearSchemaRegistry(): void {
 export function registerAllNodeSchemas(): void {
   // Register each node type's schema
   registerNodeSchema("http-request", httpRequestSchemaShape);
-  registerNodeSchema("csv-reader", csvReaderSchemaShape);
   registerNodeSchema("edit-fields", editFieldsSchemaShape);
   registerNodeSchema("file-system", fileSystemSchemaShape);
   registerNodeSchema("group", groupSchemaShape);

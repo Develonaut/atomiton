@@ -10,7 +10,6 @@ export { createNodeDefinition } from "#definitions";
 // Re-export parameter types
 export type {
   GroupParameters,
-  CSVReaderParameters,
   FileSystemParameters,
   HttpRequestParameters,
   ImageCompositeParameters,

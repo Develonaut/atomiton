@@ -14,11 +14,6 @@ test.describe("Debug Page Core Functionality", () => {
   });
 
   test("debug page loads", async ({ sharedElectronPage }) => {
-    // Verify we're on the debug page
-    const pageContent = await sharedElectronPage.textContent("body");
-    expect(pageContent).toContain("Debug");
-
-    // Verify debug page title is present using data-testid
     await expect(
       sharedElectronPage.locator('[data-testid="debug-page-title"]'),
     ).toBeVisible();

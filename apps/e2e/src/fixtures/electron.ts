@@ -55,7 +55,7 @@ export const test = base.extend<{}, WorkerFixtures>({
       });
 
       const page = await electronApp.firstWindow();
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("domcontentloaded");
 
       await use(electronApp);
 
@@ -66,14 +66,14 @@ export const test = base.extend<{}, WorkerFixtures>({
 
   sharedElectronPage: async ({ sharedElectronApp }, use, testInfo) => {
     const page = await sharedElectronApp.firstWindow();
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     if (testInfo.title.includes("debug") || testInfo.file.includes("debug")) {
       await page.goto("http://localhost:5173/debug");
     } else {
       await page.goto("http://localhost:5173");
     }
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("domcontentloaded");
 
     await use(page);
   },

@@ -30,7 +30,7 @@ async function globalSetup() {
   });
 
   electronPage = await electronApp.firstWindow();
-  await electronPage.waitForLoadState("networkidle");
+  await electronPage.waitForLoadState("domcontentloaded");
 
   // Store the electron app and page globally
   (global as any).__ELECTRON_APP__ = electronApp;

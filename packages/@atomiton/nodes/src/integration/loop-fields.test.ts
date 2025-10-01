@@ -351,14 +351,14 @@ describe("Loop Node Fields Integration", () => {
 
   describe("Type Safety", () => {
     it("all fields should have required controlType", () => {
-      for (const [_key, field] of Object.entries(loopFields)) {
+      for (const field of Object.values(loopFields)) {
         expect(field.controlType).toBeDefined();
         expect(typeof field.controlType).toBe("string");
       }
     });
 
     it("all fields should have required label", () => {
-      for (const [_key, field] of Object.entries(loopFields)) {
+      for (const field of Object.values(loopFields)) {
         expect(field.label).toBeDefined();
         expect(typeof field.label).toBe("string");
         expect(field.label.length).toBeGreaterThan(0);

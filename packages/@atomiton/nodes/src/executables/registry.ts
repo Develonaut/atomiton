@@ -7,7 +7,6 @@ import type { NodeExecutable } from "#core/types/executable";
 
 // Import all node executables
 import groupExecutable from "#executables/group";
-import csvReaderExecutable from "#executables/csv-reader";
 import editFieldsExecutable from "#executables/edit-fields";
 import fileSystemExecutable from "#executables/file-system";
 import httpRequestExecutable from "#executables/http-request";
@@ -25,7 +24,6 @@ export const nodeExecutableRegistry = new Map<string, NodeExecutable>();
 
 // Register all executables
 nodeExecutableRegistry.set("parallel", parallelExecutable);
-nodeExecutableRegistry.set("csv-reader", csvReaderExecutable);
 nodeExecutableRegistry.set("group", groupExecutable);
 nodeExecutableRegistry.set("edit-fields", editFieldsExecutable);
 nodeExecutableRegistry.set("image-composite", imageCompositeExecutable);
@@ -66,7 +64,6 @@ export function getNodeExecutableIds(): string[] {
 
 // Export all executables for convenience
 export {
-  csvReaderExecutable,
   editFieldsExecutable,
   fileSystemExecutable,
   groupExecutable,

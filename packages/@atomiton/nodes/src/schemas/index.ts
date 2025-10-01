@@ -18,10 +18,6 @@ export {
 
 // Individual node parameter schemas
 export {
-  default as csvReaderSchemaShape,
-  type CSVReaderParameters,
-} from "#schemas/csv-reader";
-export {
   default as fileSystemSchemaShape,
   type FileSystemParameters,
 } from "#schemas/file-system";

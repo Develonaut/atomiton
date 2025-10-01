@@ -2,18 +2,13 @@ import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 /**
- * Common test utilities for the Atomiton web app
- */
-
-/**
  * Wait for page to be fully loaded including network activity
- * Especially useful for pages with 3D content or animations
  */
 export async function waitForPageLoad(
   page: Page,
   options?: { timeout?: number },
 ) {
-  await page.waitForLoadState("networkidle", {
+  await page.waitForLoadState("domcontentloaded", {
     timeout: options?.timeout || 10000,
   });
 
@@ -22,7 +17,7 @@ export async function waitForPageLoad(
 }
 
 /**
- * Wait for 3D content to load (useful for animation and design pages)
+ * Wait for 3D content to load
  */
 export async function waitFor3DContent(page: Page) {
   // Wait for canvas elements to be present (common in 3D applications)
@@ -31,31 +26,10 @@ export async function waitFor3DContent(page: Page) {
   });
 
   // Wait for network idle to ensure all assets are loaded
-  await page.waitForLoadState("networkidle", { timeout: 15000 });
+  await page.waitForLoadState("domcontentloaded", { timeout: 15000 });
 
   // Give additional time for 3D rendering to complete
   await page.waitForTimeout(2000);
-}
-
-/**
- * Verify basic page content is present (MINIMAL smoke test approach)
- */
-export async function verifyBasicContent(page: Page) {
-  // Check that page has some text content (not blank)
-  const bodyText = await page.locator("body").textContent();
-  expect(bodyText).toBeTruthy();
-  expect(bodyText!.trim().length).toBeGreaterThan(0);
-
-  // Check for no critical errors
-  await checkNoErrors(page);
-}
-
-/**
- * Wait for navigation and ensure page is stable
- */
-export async function navigateAndWait(page: Page, url: string) {
-  await page.goto(url);
-  await waitForPageLoad(page);
 }
 
 /**
@@ -93,41 +67,4 @@ export async function checkNoErrors(page: Page) {
   );
 
   expect(criticalErrors).toHaveLength(0);
-}
-
-/**
- * Viewport sizes for responsive testing
- */
-export const VIEWPORTS = {
-  mobile: { width: 375, height: 812 },
-  tablet: { width: 768, height: 1024 },
-  desktop: { width: 1440, height: 900 },
-  widescreen: { width: 1920, height: 1080 },
-} as const;
-
-/**
- * Common selectors used throughout the app
- */
-export const SELECTORS = {
-  navigation: '[data-testid="navigation"], nav',
-  header: '[data-testid="header"], header',
-  footer: '[data-testid="footer"], footer',
-  loading: '[data-testid="loading"], .loading',
-  error: '[data-testid="error"], .error',
-} as const;
-
-/**
- * Take a visual snapshot of the current page
- * Useful for visual regression testing
- */
-export async function takePageSnapshot(page: Page, fileName: string) {
-  // Wait for page to be stable before taking screenshot
-  await waitForPageLoad(page);
-
-  // Take the screenshot with consistent settings
-  await expect(page).toHaveScreenshot(fileName, {
-    fullPage: true,
-    animations: "disabled",
-    clip: undefined, // Full page
-  });
 }

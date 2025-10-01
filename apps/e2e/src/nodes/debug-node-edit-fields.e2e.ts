@@ -25,7 +25,6 @@ test.describe("Edit Fields Node Execution", () => {
   test("creates new fields with static values", async ({
     sharedElectronPage,
   }) => {
-    // Select edit-fields node
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -33,19 +32,16 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure values field with JSON (CodeMirror editor)
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
     await valuesEditor.click();
     await valuesEditor.fill('{"name": "John Doe", "age": 30, "active": true}');
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -63,7 +59,6 @@ test.describe("Edit Fields Node Execution", () => {
   test("uses Handlebars templates to transform data", async ({
     sharedElectronPage,
   }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -71,9 +66,6 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure values with Handlebars templates
-    // Note: In real usage, templates would reference input data
-    // For this test, we'll create output fields with the $now helper
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
@@ -82,12 +74,10 @@ test.describe("Edit Fields Node Execution", () => {
       '{"message": "Hello World", "timestamp": "{{$now}}"}',
     );
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -105,7 +95,6 @@ test.describe("Edit Fields Node Execution", () => {
   test("merges fields with keepOnlySet=false (default)", async ({
     sharedElectronPage,
   }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -113,22 +102,16 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure values - new fields to add
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
     await valuesEditor.click();
     await valuesEditor.fill('{"newField": "new value", "anotherField": 42}');
 
-    // Keep keepOnlySet unchecked (default false)
-    // This means existing fields should be preserved
-
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -143,7 +126,6 @@ test.describe("Edit Fields Node Execution", () => {
   test("keeps only specified fields with keepOnlySet=true", async ({
     sharedElectronPage,
   }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -151,7 +133,6 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure values
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
@@ -160,17 +141,14 @@ test.describe("Edit Fields Node Execution", () => {
       '{"outputField1": "value1", "outputField2": "value2"}',
     );
 
-    // Enable keepOnlySet
     await sharedElectronPage
       .locator('[data-testid="field-keepOnlySet"]')
       .check();
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -187,7 +165,6 @@ test.describe("Edit Fields Node Execution", () => {
   });
 
   test("handles mixed data types in values", async ({ sharedElectronPage }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -195,7 +172,6 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure values with mixed types
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
@@ -208,12 +184,10 @@ test.describe("Edit Fields Node Execution", () => {
   "objectField": {"nested": "value"}
 }`);
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -231,7 +205,6 @@ test.describe("Edit Fields Node Execution", () => {
   test("creates user profile with $now timestamp", async ({
     sharedElectronPage,
   }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -239,7 +212,6 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure values for a user profile
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
@@ -252,12 +224,10 @@ test.describe("Edit Fields Node Execution", () => {
   "createdAt": "{{$now}}"
 }`);
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -275,7 +245,6 @@ test.describe("Edit Fields Node Execution", () => {
   });
 
   test("handles empty values object", async ({ sharedElectronPage }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -283,19 +252,16 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure with empty values
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
     await valuesEditor.click();
     await valuesEditor.fill("{}");
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result - should succeed with empty output
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -307,7 +273,6 @@ test.describe("Edit Fields Node Execution", () => {
   });
 
   test("handles null and undefined values", async ({ sharedElectronPage }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -315,7 +280,6 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure with null values (undefined not valid in JSON)
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
@@ -327,12 +291,10 @@ test.describe("Edit Fields Node Execution", () => {
   "field4": false
 }`);
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );
@@ -347,7 +309,6 @@ test.describe("Edit Fields Node Execution", () => {
   });
 
   test("creates complex nested structures", async ({ sharedElectronPage }) => {
-    // Re-select node type
     await sharedElectronPage
       .locator('[data-testid="node-type-selector"]')
       .click();
@@ -355,7 +316,6 @@ test.describe("Edit Fields Node Execution", () => {
       .getByRole("option", { name: "edit-fields" })
       .click();
 
-    // Configure with nested structure
     const valuesEditor = sharedElectronPage
       .locator('[data-testid="field-values"]')
       .locator(".cm-content");
@@ -377,12 +337,10 @@ test.describe("Edit Fields Node Execution", () => {
   }
 }`);
 
-    // Execute
     await sharedElectronPage
       .locator('[data-testid="execute-node-button"]')
       .click();
 
-    // Verify result
     const result = sharedElectronPage.locator(
       '[data-testid="execution-result-json"]',
     );

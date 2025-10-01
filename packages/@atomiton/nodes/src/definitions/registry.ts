@@ -6,7 +6,6 @@
 import type { NodeDefinition } from "#core/types/definition";
 
 // Import all node definitions
-import csvReaderDefinition from "#definitions/csv-reader";
 import editFieldsDefinition from "#definitions/edit-fields";
 import fileSystemDefinition from "#definitions/file-system";
 import groupDefinition from "#definitions/group";
@@ -23,7 +22,6 @@ import transformDefinition from "#definitions/transform";
  */
 export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
   ["parallel", parallelDefinition],
-  ["csv-reader", csvReaderDefinition],
   ["group", groupDefinition],
   ["image-composite", imageCompositeDefinition],
   ["http-request", httpRequestDefinition],
@@ -121,7 +119,6 @@ export function searchNodeDefinitions(query: string): NodeDefinition[] {
 
 // Export all definitions for convenience
 export {
-  csvReaderDefinition,
   editFieldsDefinition,
   fileSystemDefinition,
   groupDefinition,
