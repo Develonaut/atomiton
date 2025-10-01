@@ -21,11 +21,6 @@ import { describe, expect, it } from "vitest";
 
 describe("Editor Package Smoke Tests", () => {
   describe("Public API Exports", () => {
-    it.skip("should export all required components (skipped due to UI package import issues in test env)", () => {
-      // Components depend on @atomiton/ui which has path alias issues in test environment
-      // These are exported correctly in the actual build
-    });
-
     it("should export all required hooks", () => {
       // Core editor hooks
       expect(useEditorNodes).toBeDefined();

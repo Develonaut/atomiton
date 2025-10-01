@@ -15,6 +15,7 @@ import imageCompositeDefinition from "#definitions/image-composite";
 import loopDefinition from "#definitions/loop";
 import parallelDefinition from "#definitions/parallel";
 import shellCommandDefinition from "#definitions/shell-command";
+import spreadsheetDefinition from "#definitions/spreadsheet";
 import transformDefinition from "#definitions/transform";
 
 /**
@@ -30,6 +31,7 @@ export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
   ["edit-fields", editFieldsDefinition],
   ["transform", transformDefinition],
   ["shell-command", shellCommandDefinition],
+  ["spreadsheet", spreadsheetDefinition],
   ["loop", loopDefinition],
 ]);
 
@@ -128,5 +130,6 @@ export {
   loopDefinition,
   parallelDefinition,
   shellCommandDefinition,
+  spreadsheetDefinition,
   transformDefinition,
 };

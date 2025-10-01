@@ -47,6 +47,10 @@ export {
   type ShellCommandParameters,
 } from "#schemas/shell-command";
 export {
+  default as spreadsheetSchemaShape,
+  type SpreadsheetParameters,
+} from "#schemas/spreadsheet";
+export {
   default as transformSchemaShape,
   type TransformParameters,
 } from "#schemas/transform";

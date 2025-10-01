@@ -8,6 +8,19 @@ import { app } from "electron";
 import path from "path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+// Mock Electron app
+vi.mock("electron", () => ({
+  app: {
+    getPath: vi.fn(() => "/mock/userData"),
+    quit: vi.fn(),
+  },
+}));
+
+// Mock process.exit
+vi.spyOn(process, "exit").mockImplementation(() => {
+  return undefined as never;
+});
+
 // Mock the storage factory
 vi.mock("@atomiton/storage/desktop", () => ({
   createFileSystemEngine: vi.fn(),

@@ -1,7 +1,10 @@
+/**
+ * @vitest-environment jsdom
+ */
 import { createRouter } from "#createRouter";
 import "@testing-library/jest-dom/vitest";
-import { act, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 
 // Test components - minimal real components that would actually catch bugs
 function HomePage() {
@@ -28,6 +31,9 @@ const testRoutes = [
 ];
 
 describe("Router Integration", () => {
+  afterEach(() => {
+    cleanup();
+  });
   it("renders RouterProvider and provides navigation context", async () => {
     const { RouterProvider } = createRouter({ routes: testRoutes });
 

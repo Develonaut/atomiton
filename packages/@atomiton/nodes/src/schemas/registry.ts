@@ -16,6 +16,7 @@ import imageCompositeSchemaShape from "#schemas/image-composite";
 import loopSchemaShape from "#schemas/loop";
 import parallelSchemaShape from "#schemas/parallel";
 import shellCommandSchemaShape from "#schemas/shell-command";
+import spreadsheetSchemaShape from "#schemas/spreadsheet";
 import transformSchemaShape from "#schemas/transform";
 
 /**
@@ -143,6 +144,7 @@ export function registerAllNodeSchemas(): void {
   registerNodeSchema("loop", loopSchemaShape);
   registerNodeSchema("parallel", parallelSchemaShape);
   registerNodeSchema("shell-command", shellCommandSchemaShape);
+  registerNodeSchema("spreadsheet", spreadsheetSchemaShape);
   registerNodeSchema("transform", transformSchemaShape);
 }
 

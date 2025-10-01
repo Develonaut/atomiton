@@ -7,6 +7,8 @@
 
 import { expect, test } from "#fixtures/electron";
 
+const TEST_BASE_URL = "http://localhost:8888";
+
 test.describe("HTTP Request Node Execution", () => {
   test.beforeAll(async ({ sharedElectronPage }) => {
     // Navigate once to debug nodes page
@@ -36,7 +38,7 @@ test.describe("HTTP Request Node Execution", () => {
 
     // Fill in the URL field for a simple GET request
     const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill("https://httpbin.org/get");
+    await urlField.fill(`${TEST_BASE_URL}/get`);
 
     // GET is the default method, so we don't need to select it
 
@@ -67,7 +69,7 @@ test.describe("HTTP Request Node Execution", () => {
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data).toHaveProperty("data");
-    expect(result.data.data).toHaveProperty("url", "https://httpbin.org/get");
+    expect(result.data.data).toHaveProperty("url", `${TEST_BASE_URL}/get`);
   });
 
   test("makes a POST request with JSON body from string", async ({
@@ -83,7 +85,7 @@ test.describe("HTTP Request Node Execution", () => {
 
     // Fill in URL
     const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill("https://httpbin.org/post");
+    await urlField.fill(`${TEST_BASE_URL}/post`);
 
     // Select POST method (custom Select component)
     const methodField = sharedElectronPage.locator(
@@ -133,7 +135,7 @@ test.describe("HTTP Request Node Execution", () => {
 
     // Fill in URL
     const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill("https://httpbin.org/headers");
+    await urlField.fill(`${TEST_BASE_URL}/headers`);
 
     // Fill headers with JSON string (will be validated by jsonString schema)
     const headersField = sharedElectronPage.locator(
@@ -164,12 +166,13 @@ test.describe("HTTP Request Node Execution", () => {
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data.data).toHaveProperty("headers");
+    // HTTP headers are case-insensitive and Node.js lowercases them
     expect(result.data.data.headers).toHaveProperty(
-      "X-Custom-Header",
+      "x-custom-header",
       "test-value",
     );
     expect(result.data.data.headers).toHaveProperty(
-      "X-Another-Header",
+      "x-another-header",
       "another-value",
     );
   });
@@ -185,7 +188,7 @@ test.describe("HTTP Request Node Execution", () => {
 
     // Fill in URL
     const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill("https://httpbin.org/put");
+    await urlField.fill(`${TEST_BASE_URL}/put`);
 
     // Select PUT method (custom Select component)
     const methodField = sharedElectronPage.locator(
@@ -236,7 +239,7 @@ test.describe("HTTP Request Node Execution", () => {
 
     // Fill in URL
     const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill("https://httpbin.org/delete");
+    await urlField.fill(`${TEST_BASE_URL}/delete`);
 
     // Select DELETE method (custom Select component)
     const methodField = sharedElectronPage.locator(
@@ -265,10 +268,7 @@ test.describe("HTTP Request Node Execution", () => {
     expect(result).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
-    expect(result.data.data).toHaveProperty(
-      "url",
-      "https://httpbin.org/delete",
-    );
+    expect(result.data.data).toHaveProperty("url", `${TEST_BASE_URL}/delete`);
   });
 
   test("includes response headers in output", async ({
@@ -284,7 +284,7 @@ test.describe("HTTP Request Node Execution", () => {
 
     // Fill in URL
     const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill("https://httpbin.org/get");
+    await urlField.fill(`${TEST_BASE_URL}/get`);
 
     // Execute the node
     const executeButton = sharedElectronPage.locator(

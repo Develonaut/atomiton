@@ -2,6 +2,14 @@ import { describe, expect, it, vi } from "vitest";
 import { initializeServices } from "#main/services";
 import { initializeStorage } from "#main/services/storage";
 
+// Mock Electron app
+vi.mock("electron", () => ({
+  app: {
+    getPath: vi.fn(() => "/mock/user/data"),
+    quit: vi.fn(),
+  },
+}));
+
 // Mock Electron and dependencies for smoke test
 vi.mock("@atomiton/storage/desktop", () => ({
   createFileSystemEngine: vi.fn(() => ({ save: vi.fn(), load: vi.fn() })),

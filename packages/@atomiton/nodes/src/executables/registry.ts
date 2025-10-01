@@ -15,6 +15,7 @@ import imageCompositeExecutable from "#executables/image-composite";
 import loopExecutable from "#executables/loop";
 import parallelExecutable from "#executables/parallel";
 import shellCommandExecutable from "#executables/shell-command";
+import spreadsheetExecutable from "#executables/spreadsheet";
 import transformExecutable from "#executables/transform";
 
 /**
@@ -32,6 +33,7 @@ nodeExecutableRegistry.set("http-request", httpRequestExecutable);
 nodeExecutableRegistry.set("file-system", fileSystemExecutable);
 nodeExecutableRegistry.set("transform", transformExecutable);
 nodeExecutableRegistry.set("shell-command", shellCommandExecutable);
+nodeExecutableRegistry.set("spreadsheet", spreadsheetExecutable);
 nodeExecutableRegistry.set("loop", loopExecutable);
 
 /**
@@ -73,5 +75,6 @@ export {
   loopExecutable,
   parallelExecutable,
   shellCommandExecutable,
+  spreadsheetExecutable,
   transformExecutable,
 };

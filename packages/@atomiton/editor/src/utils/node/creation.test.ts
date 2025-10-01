@@ -3,7 +3,7 @@ import { createEditorNode } from "#utils/node/creation";
 
 describe("createEditorNode performance", () => {
   it("should pre-calculate port positions during creation", () => {
-    const node = createEditorNode("code", { x: 0, y: 0 });
+    const node = createEditorNode("http-request", { x: 0, y: 0 });
 
     // Verify ports have pre-calculated positions
     if (node.data.inputPorts.length > 0) {
@@ -38,7 +38,7 @@ describe("createEditorNode performance", () => {
   });
 
   it("should handle nodes without ports", () => {
-    const node = createEditorNode("code", { x: 0, y: 0 });
+    const node = createEditorNode("shell-command", { x: 0, y: 0 });
 
     expect(node.data.inputPorts).toBeDefined();
     expect(node.data.outputPorts).toBeDefined();

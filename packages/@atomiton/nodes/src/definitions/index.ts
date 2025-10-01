@@ -37,6 +37,7 @@ export type { ImageCompositeParameters } from "#schemas/image-composite";
 export type { LoopParameters } from "#schemas/loop";
 export type { ParallelParameters } from "#schemas/parallel";
 export type { ShellCommandParameters } from "#schemas/shell-command";
+export type { SpreadsheetParameters } from "#schemas/spreadsheet";
 export type { TransformParameters } from "#schemas/transform";
 
 // Export template functions (used by client app)

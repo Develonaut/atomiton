@@ -18,13 +18,21 @@ export default defineConfig({
     : [["list"]],
 
   // Official Playwright webServer configuration
-  // Only start the client dev server (not desktop) - tests will launch Electron
-  webServer: {
-    command: "cd ../.. && pnpm dev:client",
-    port: 5173,
-    reuseExistingServer: true,
-    timeout: 120000,
-  },
+  // Start both client dev server and test HTTP server
+  webServer: [
+    {
+      command: "cd ../.. && pnpm dev:client",
+      port: 5173,
+      reuseExistingServer: true,
+      timeout: 120000,
+    },
+    {
+      command: "tsx src/test-http-server.ts",
+      port: 8888,
+      reuseExistingServer: true,
+      timeout: 10000,
+    },
+  ],
 
   use: {
     trace: "on-first-retry",

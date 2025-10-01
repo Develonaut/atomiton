@@ -2,6 +2,22 @@ import { initializeServices } from "#main/services";
 import { initializeStorage } from "#main/services/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+// Mock Electron app
+vi.mock("electron", () => ({
+  app: {
+    getPath: vi.fn(() => "/mock/user/data"),
+    quit: vi.fn(),
+  },
+}));
+
+// Mock storage
+vi.mock("@atomiton/storage/desktop", () => ({
+  createFileSystemEngine: vi.fn(() => ({ save: vi.fn(), load: vi.fn() })),
+  createStorage: vi.fn(
+    (config) => config?.engine || { save: vi.fn(), load: vi.fn() },
+  ),
+}));
+
 // Integration tests for error handling - test real failure scenarios
 // These test what happens when things actually go wrong
 

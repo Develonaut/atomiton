@@ -105,7 +105,7 @@ describe("buildClassName", () => {
 
       const result = buildClassName(config);
 
-      expect(result).toBe("m-4  p-2 ");
+      expect(result).toBe("m-4 p-2");
     });
 
     it("should handle undefined name", () => {
@@ -424,7 +424,7 @@ describe("buildClassName", () => {
       const result = buildClassName(config);
 
       // The cn utility should handle whitespace normalization
-      expect(result).toBe("  spaced   classes    m-4 p-2   user   classes   ");
+      expect(result).toBe("spaced classes m-4 p-2 user classes");
     });
 
     it("should handle special characters in class names", () => {

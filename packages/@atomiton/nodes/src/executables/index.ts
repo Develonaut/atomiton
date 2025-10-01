@@ -17,6 +17,7 @@ export type {
   LoopParameters,
   ParallelParameters,
   ShellCommandParameters,
+  SpreadsheetParameters,
   TransformParameters,
 } from "#definitions";
 

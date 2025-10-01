@@ -29,7 +29,7 @@ test.describe("Debug Page Core Functionality", () => {
   }) => {
     // Navigate to System page using the new route
     await sharedElectronPage.goto("http://localhost:5173/debug/system", {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
     });
 
     // The HealthStatusIndicator component automatically checks health on mount
@@ -55,7 +55,7 @@ test.describe("Debug Page Core Functionality", () => {
   }) => {
     // Navigate to System page
     await sharedElectronPage.goto("http://localhost:5173/debug/system", {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
     });
 
     // Wait for initial auto-check to complete
