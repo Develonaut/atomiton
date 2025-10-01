@@ -5,6 +5,11 @@
  */
 
 import { expect, test } from "#fixtures/electron";
+import {
+  configureAndExecuteNode,
+  expectSuccessResult,
+  TEST_TIMEOUTS,
+} from "#utils/test-helpers";
 import fs from "fs";
 import path from "node:path";
 
@@ -15,170 +20,103 @@ test.describe("File System Node Execution", () => {
   const testFile = path.join(testOutputDir, "pipeline-test.txt");
   const content = "Pipeline test content";
 
-  test.beforeAll(async ({ sharedElectronPage }) => {
+  test.beforeAll(async () => {
     // Clean up and create test directory
     await fs.promises.rm(testOutputDir, { recursive: true, force: true });
     await fs.promises.mkdir(testOutputDir, { recursive: true });
+  });
 
-    // Navigate once to debug nodes page
-    await sharedElectronPage.goto("http://localhost:5173/debug/nodes", {
+  test.beforeEach(async ({ electronPage }) => {
+    // Navigate directly to debug/nodes to reset state (more reliable than reload)
+    await electronPage.goto("http://localhost:5173/debug/nodes", {
       waitUntil: "domcontentloaded",
     });
-
     // Wait for node selector to be ready
-    await sharedElectronPage
+    await electronPage
       .locator('[data-testid="node-type-selector"]')
-      .waitFor();
+      .waitFor({ state: "visible", timeout: 10000 });
   });
 
   test.afterAll(async () => {
     await fs.promises.rm(testOutputDir, { recursive: true, force: true });
   });
 
-  test("writes a file", async ({ sharedElectronPage }) => {
-    // Select file-system node for first test
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "file-system" })
-      .click();
-
-    await sharedElectronPage.locator('[data-testid="field-operation"]').click();
-    await sharedElectronPage.getByRole("option", { name: "write" }).click();
-    await sharedElectronPage
-      .locator('[data-testid="field-path"]')
-      .fill(testFile);
-    await sharedElectronPage
-      .locator('[data-testid="field-content"]')
-      .fill(content);
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("writes a file", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "file-system",
+        selectFields: { operation: "write" },
+        fields: { path: testFile, content: content },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 1000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.size).toBeGreaterThan(0);
+    expectSuccessResult(result);
+    expect(result.data.size).toBeGreaterThan(0);
   });
 
-  test("lists files in directory", async ({ sharedElectronPage }) => {
-    // Re-select node type after execution
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "file-system" })
-      .click();
-
-    await sharedElectronPage.locator('[data-testid="field-operation"]').click();
-    await sharedElectronPage.getByRole("option", { name: "list" }).click();
-    await sharedElectronPage
-      .locator('[data-testid="field-path"]')
-      .fill(testOutputDir);
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("lists files in directory", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "file-system",
+        selectFields: { operation: "list" },
+        fields: { path: testOutputDir },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 1000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.files.length).toBeGreaterThan(0);
+    expectSuccessResult(result);
+    expect(result.data.files.length).toBeGreaterThan(0);
     expect(
-      data.data.files.some((f: string) => f.includes("pipeline-test.txt")),
+      result.data.files.some((f: string) => f.includes("pipeline-test.txt")),
     ).toBe(true);
   });
 
-  test("reads the file", async ({ sharedElectronPage }) => {
-    // Re-select node type after execution
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "file-system" })
-      .click();
-
-    await sharedElectronPage.locator('[data-testid="field-operation"]').click();
-    await sharedElectronPage.getByRole("option", { name: "read" }).click();
-    await sharedElectronPage
-      .locator('[data-testid="field-path"]')
-      .fill(testFile);
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("reads the file", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "file-system",
+        selectFields: { operation: "read" },
+        fields: { path: testFile },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 1000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.content).toBe(content);
+    expectSuccessResult(result);
+    expect(result.data.content).toBe(content);
   });
 
-  test("checks if file exists", async ({ sharedElectronPage }) => {
-    // Re-select node type after execution
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "file-system" })
-      .click();
-
-    await sharedElectronPage.locator('[data-testid="field-operation"]').click();
-    await sharedElectronPage.getByRole("option", { name: "exists" }).click();
-    await sharedElectronPage
-      .locator('[data-testid="field-path"]')
-      .fill(testFile);
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("checks if file exists", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "file-system",
+        selectFields: { operation: "exists" },
+        fields: { path: testFile },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 1000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.exists).toBe(true);
+    expectSuccessResult(result);
+    expect(result.data.exists).toBe(true);
   });
 
-  test("deletes the file", async ({ sharedElectronPage }) => {
-    // Re-select node type after execution
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "file-system" })
-      .click();
-
-    await sharedElectronPage.locator('[data-testid="field-operation"]').click();
-    await sharedElectronPage.getByRole("option", { name: "delete" }).click();
-    await sharedElectronPage
-      .locator('[data-testid="field-path"]')
-      .fill(testFile);
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("deletes the file", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "file-system",
+        selectFields: { operation: "delete" },
+        fields: { path: testFile },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 1000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.deleted).toBe(true);
+    expectSuccessResult(result);
+    expect(result.data.deleted).toBe(true);
 
     // Verify file no longer exists
     await expect(fs.promises.access(testFile)).rejects.toThrow();

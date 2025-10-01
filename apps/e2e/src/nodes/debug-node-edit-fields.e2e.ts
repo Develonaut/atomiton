@@ -6,50 +6,38 @@
  */
 
 import { expect, test } from "#fixtures/electron";
-
-test.describe.configure({ mode: "serial" });
+import {
+  configureAndExecuteNode,
+  expectSuccessResult,
+  TEST_TIMEOUTS,
+} from "#utils/test-helpers";
 
 test.describe("Edit Fields Node Execution", () => {
-  test.beforeAll(async ({ sharedElectronPage }) => {
-    // Navigate once to debug nodes page
-    await sharedElectronPage.goto("http://localhost:5173/debug/nodes", {
+  test.beforeEach(async ({ electronPage }) => {
+    // Navigate directly to debug/nodes to reset state (more reliable than reload)
+    await electronPage.goto("http://localhost:5173/debug/nodes", {
       waitUntil: "domcontentloaded",
     });
-
     // Wait for node selector to be ready
-    await sharedElectronPage
+    await electronPage
       .locator('[data-testid="node-type-selector"]')
-      .waitFor();
+      .waitFor({ state: "visible", timeout: 10000 });
   });
 
-  test("creates new fields with static values", async ({
-    sharedElectronPage,
-  }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill('{"name": "John Doe", "age": 30, "active": true}');
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("creates new fields with static values", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: '{"name": "John Doe", "age": 30, "active": true}',
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data).toEqual({
+    expectSuccessResult(result);
+    expect(result.data.data).toEqual({
       name: "John Doe",
       age: 30,
       active: true,
@@ -57,270 +45,169 @@ test.describe("Edit Fields Node Execution", () => {
   });
 
   test("uses template interpolation to transform data", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill(
-      '{"message": "Hello World", "timestamp": "{{$now}}"}',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: '{"message": "Hello World", "timestamp": "{{$now}}"}',
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
 
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(result).toBeVisible({ timeout: 2000 });
-
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data.message).toBe("Hello World");
+    expectSuccessResult(result);
+    expect(result.data.data.message).toBe("Hello World");
     // Verify timestamp is ISO format
-    expect(data.data.data.timestamp).toMatch(
+    expect(result.data.data.timestamp).toMatch(
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
     );
   });
 
   test("merges fields with keepOnlySet=false (default)", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill('{"newField": "new value", "anotherField": 42}');
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: '{"newField": "new value", "anotherField": 42}',
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data.newField).toBe("new value");
-    expect(data.data.data.anotherField).toBe(42);
+    expectSuccessResult(result);
+    expect(result.data.data.newField).toBe("new value");
+    expect(result.data.data.anotherField).toBe(42);
   });
 
   test("keeps only specified fields with keepOnlySet=true", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill(
-      '{"outputField1": "value1", "outputField2": "value2"}',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: '{"outputField1": "value1", "outputField2": "value2"}',
+        },
+        checkboxFields: { keepOnlySet: true },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
 
-    await sharedElectronPage
-      .locator('[data-testid="field-keepOnlySet"]')
-      .check();
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(result).toBeVisible({ timeout: 2000 });
-
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data).toEqual({
+    expectSuccessResult(result);
+    expect(result.data.data).toEqual({
       outputField1: "value1",
       outputField2: "value2",
     });
     // No other fields should be present
-    expect(Object.keys(data.data.data)).toHaveLength(2);
+    expect(Object.keys(result.data.data)).toHaveLength(2);
   });
 
-  test("handles mixed data types in values", async ({ sharedElectronPage }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill(`{
+  test("handles mixed data types in values", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: `{
   "stringField": "text value",
   "numberField": 123,
   "booleanField": true,
   "arrayField": [1, 2, 3],
   "objectField": {"nested": "value"}
-}`);
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+}`,
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data.stringField).toBe("text value");
-    expect(data.data.data.numberField).toBe(123);
-    expect(data.data.data.booleanField).toBe(true);
-    expect(data.data.data.arrayField).toEqual([1, 2, 3]);
-    expect(data.data.data.objectField).toEqual({ nested: "value" });
+    expectSuccessResult(result);
+    expect(result.data.data.stringField).toBe("text value");
+    expect(result.data.data.numberField).toBe(123);
+    expect(result.data.data.booleanField).toBe(true);
+    expect(result.data.data.arrayField).toEqual([1, 2, 3]);
+    expect(result.data.data.objectField).toEqual({ nested: "value" });
   });
 
-  test("creates user profile with $now timestamp", async ({
-    sharedElectronPage,
-  }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill(`{
+  test("creates user profile with $now timestamp", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: `{
   "username": "alice_wonder",
   "email": "alice@wonder.land",
   "role": "developer",
   "active": true,
   "createdAt": "{{$now}}"
-}`);
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+}`,
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data.username).toBe("alice_wonder");
-    expect(data.data.data.email).toBe("alice@wonder.land");
-    expect(data.data.data.role).toBe("developer");
-    expect(data.data.data.active).toBe(true);
-    expect(data.data.data.createdAt).toMatch(
+    expectSuccessResult(result);
+    expect(result.data.data.username).toBe("alice_wonder");
+    expect(result.data.data.email).toBe("alice@wonder.land");
+    expect(result.data.data.role).toBe("developer");
+    expect(result.data.data.active).toBe(true);
+    expect(result.data.data.createdAt).toMatch(
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
     );
   });
 
-  test("handles empty values object", async ({ sharedElectronPage }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill("{}");
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+  test("handles empty values object", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: { values: "{}" },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data).toEqual({});
+    expectSuccessResult(result);
+    expect(result.data.data).toEqual({});
   });
 
-  test("handles null and undefined values", async ({ sharedElectronPage }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill(`{
+  test("handles null and undefined values", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: `{
   "field1": "value",
   "field2": null,
   "field3": 0,
   "field4": false
-}`);
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+}`,
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data.field1).toBe("value");
-    expect(data.data.data.field2).toBe(null);
-    expect(data.data.data.field3).toBe(0);
-    expect(data.data.data.field4).toBe(false);
+    expectSuccessResult(result);
+    expect(result.data.data.field1).toBe("value");
+    expect(result.data.data.field2).toBe(null);
+    expect(result.data.data.field3).toBe(0);
+    expect(result.data.data.field4).toBe(false);
   });
 
-  test("creates complex nested structures", async ({ sharedElectronPage }) => {
-    await sharedElectronPage
-      .locator('[data-testid="node-type-selector"]')
-      .click();
-    await sharedElectronPage
-      .getByRole("option", { name: "edit-fields" })
-      .click();
-
-    const valuesEditor = sharedElectronPage
-      .locator('[data-testid="field-values"]')
-      .locator(".cm-content");
-    await valuesEditor.click();
-    await valuesEditor.fill(`{
+  test("creates complex nested structures", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "edit-fields",
+        codeMirrorFields: {
+          values: `{
   "user": {
     "profile": {
       "name": "Alice",
@@ -335,24 +222,18 @@ test.describe("Edit Fields Node Execution", () => {
     "version": "1.0",
     "tags": ["important", "verified"]
   }
-}`);
-
-    await sharedElectronPage
-      .locator('[data-testid="execute-node-button"]')
-      .click();
-
-    const result = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
+}`,
+        },
+      },
+      { timeout: TEST_TIMEOUTS.FAST_OPERATION },
     );
-    await expect(result).toBeVisible({ timeout: 2000 });
 
-    const data = JSON.parse((await result.getAttribute("data-output"))!);
-    expect(data.success).toBe(true);
-    expect(data.data.data.user.profile.name).toBe("Alice");
-    expect(data.data.data.user.profile.age).toBe(30);
-    expect(data.data.data.user.settings.theme).toBe("dark");
-    expect(data.data.data.user.settings.notifications).toBe(true);
-    expect(data.data.data.metadata.version).toBe("1.0");
-    expect(data.data.data.metadata.tags).toEqual(["important", "verified"]);
+    expectSuccessResult(result);
+    expect(result.data.data.user.profile.name).toBe("Alice");
+    expect(result.data.data.user.profile.age).toBe(30);
+    expect(result.data.data.user.settings.theme).toBe("dark");
+    expect(result.data.data.user.settings.notifications).toBe(true);
+    expect(result.data.data.metadata.version).toBe("1.0");
+    expect(result.data.data.metadata.tags).toEqual(["important", "verified"]);
   });
 });

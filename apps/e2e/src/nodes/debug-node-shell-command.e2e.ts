@@ -9,109 +9,52 @@
  */
 
 import { expect, test } from "#fixtures/electron";
+import {
+  configureAndExecuteNode,
+  expectSuccessResult,
+  TEST_TIMEOUTS,
+} from "#utils/test-helpers";
 
 test.describe("Shell Command Node Execution", () => {
-  test.beforeAll(async ({ sharedElectronPage }) => {
-    // Navigate once to debug nodes page
-    await sharedElectronPage.goto("http://localhost:5173/debug/nodes", {
+  test.beforeEach(async ({ electronPage }) => {
+    // Navigate directly to debug/nodes to reset state (more reliable than reload)
+    await electronPage.goto("http://localhost:5173/debug/nodes", {
       waitUntil: "domcontentloaded",
     });
-
     // Wait for node selector to be ready
-    await sharedElectronPage
+    await electronPage
       .locator('[data-testid="node-type-selector"]')
-      .waitFor();
+      .waitFor({ state: "visible", timeout: 10000 });
   });
 
-  test("executes a simple echo command", async ({ sharedElectronPage }) => {
-    // Select shell-command node type
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("executes a simple echo command", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "echo", args: '["Hello", "World"]' },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
 
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
-
-    // Fill in the program field
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("echo");
-
-    // Fill in args as JSON array
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["Hello", "World"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    expect(resultJson).toBeTruthy();
-
-    const result = JSON.parse(resultJson!);
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("stdout");
     expect(result.data.stdout.trim()).toBe("Hello World");
     expect(result.data).toHaveProperty("exitCode", 0);
   });
 
-  test("executes ls command with flags", async ({ sharedElectronPage }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("executes ls command with flags", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "ls", args: '["-la"]' },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("ls");
-
-    // Fill in args with flags
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["-la"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("stdout");
     expect(result.data.stdout).toContain("total"); // ls -la output contains "total"
@@ -119,47 +62,18 @@ test.describe("Shell Command Node Execution", () => {
   });
 
   test("prevents command injection via semicolon in args", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "echo", args: '["hello; echo injected"]' },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("echo");
-
-    // Attempt injection with semicolon (should be treated as literal text)
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["hello; echo injected"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     // The semicolon should be printed as literal text, not executed
     expect(result.data.stdout.trim()).toBe("hello; echo injected");
@@ -167,280 +81,105 @@ test.describe("Shell Command Node Execution", () => {
   });
 
   test("prevents command injection via pipe in args", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "echo", args: '["test | cat"]' },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("echo");
-
-    // Attempt injection with pipe (should be treated as literal text)
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["test | cat"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     // The pipe should be printed as literal text, not executed
     expect(result.data.stdout.trim()).toBe("test | cat");
     expect(result.data).toHaveProperty("exitCode", 0);
   });
 
-  test("prevents command substitution in args", async ({
-    sharedElectronPage,
-  }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("prevents command substitution in args", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "echo", args: '["$(whoami)"]' },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("echo");
-
-    // Attempt command substitution (should be treated as literal text)
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["$(whoami)"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     // Command substitution should NOT happen - printed as literal
     expect(result.data.stdout.trim()).toBe("$(whoami)");
     expect(result.data).toHaveProperty("exitCode", 0);
   });
 
-  test("executes git status command", async ({ sharedElectronPage }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("executes git status command", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "git", args: '["status", "--short"]' },
+      },
+      { timeout: 10000 }, // Git can be slow, especially during pre-commit hooks
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("git");
-
-    // Fill in args
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["status", "--short"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("stdout");
     // Git status should succeed (might be empty in clean repo)
     expect(result.data).toHaveProperty("exitCode", 0);
   });
 
-  test("handles command with multiple arguments", async ({
-    sharedElectronPage,
-  }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("handles command with multiple arguments", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: {
+          program: "printf",
+          args: '["arg1: %s, arg2: %s\\n", "first", "second"]',
+        },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("printf");
-
-    // Multiple arguments to test argument array handling
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["arg1: %s, arg2: %s\\n", "first", "second"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data.stdout.trim()).toBe("arg1: first, arg2: second");
     expect(result.data).toHaveProperty("exitCode", 0);
   });
 
-  test("captures stderr output", async ({ sharedElectronPage }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("captures stderr output", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "ls", args: '["/path/that/does/not/exist"]' },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program that writes to stderr (ls with invalid path)
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("ls");
-
-    // Use a path that doesn't exist to trigger stderr
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill('["/path/that/does/not/exist"]');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", false); // Command failed
     expect(result.data).toHaveProperty("stderr");
     expect(result.data.stderr).toContain("No such file or directory");
     expect(result.data.exitCode).not.toBe(0); // Non-zero exit code
   });
 
-  test("handles empty args array", async ({ sharedElectronPage }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("handles empty args array", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "pwd", args: "[]" },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
 
-    // Fill in program
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("pwd");
-
-    // Empty args array
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill("[]");
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("stdout");
     expect(result.data.stdout).toContain("/"); // pwd returns a path
@@ -448,52 +187,23 @@ test.describe("Shell Command Node Execution", () => {
   });
 
   test("sanitizes dangerous environment variables (LD_PRELOAD)", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "shell-command",
+        fields: { program: "env", args: "[]" },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "shell-command" })
-      .click();
-
-    // Fill in program - use env to check environment variables
-    const programField = sharedElectronPage.locator(
-      '[data-testid="field-program"]',
-    );
-    await programField.fill("env");
-
-    // Empty args (will list all env vars)
-    const argsField = sharedElectronPage.locator('[data-testid="field-args"]');
-    await argsField.fill("[]");
 
     // Note: We can't easily set env vars through the UI in this test
     // This test documents that the sanitization function exists
     // The actual sanitization is tested at the unit level in executor.ts
     // This e2e test verifies the node executes successfully
 
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("shell-command execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("exitCode", 0);
 

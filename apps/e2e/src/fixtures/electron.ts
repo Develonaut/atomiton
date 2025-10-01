@@ -12,13 +12,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 type WorkerFixtures = {
-  sharedElectronApp: ElectronApplication;
-  sharedElectronPage: Page;
+  electronApp: ElectronApplication;
+  electronPage: Page;
 };
 
 // Worker-scoped fixture that launches Electron once per worker
 export const test = base.extend<{}, WorkerFixtures>({
-  sharedElectronApp: [
+  electronApp: [
     async ({}, use) => {
       const electronMain = path.join(
         __dirname,
@@ -40,7 +40,7 @@ export const test = base.extend<{}, WorkerFixtures>({
         `electron-${process.pid}-${Date.now()}`,
       );
 
-      const electronApp = await electron.launch({
+      const app = await electron.launch({
         args: [
           electronMain,
           `--user-data-dir=${userDataDir}`,
@@ -54,29 +54,30 @@ export const test = base.extend<{}, WorkerFixtures>({
         timeout: 30000,
       });
 
-      const page = await electronApp.firstWindow();
+      const page = await app.firstWindow();
       await page.waitForLoadState("domcontentloaded");
 
-      await use(electronApp);
+      await use(app);
 
-      await electronApp.close();
+      await app.close();
     },
     { scope: "worker" },
   ],
 
-  sharedElectronPage: async ({ sharedElectronApp }, use, testInfo) => {
-    const page = await sharedElectronApp.firstWindow();
-    await page.waitForLoadState("domcontentloaded");
+  electronPage: [
+    async ({ electronApp }, use) => {
+      const page = await electronApp.firstWindow();
+      await page.waitForLoadState("domcontentloaded");
 
-    if (testInfo.title.includes("debug") || testInfo.file.includes("debug")) {
-      await page.goto("http://localhost:5173/debug");
-    } else {
-      await page.goto("http://localhost:5173");
-    }
-    await page.waitForLoadState("domcontentloaded");
+      // Navigate to the debug/nodes page by default for all tests
+      // This is the most common starting point for node tests
+      await page.goto("http://localhost:5173/debug/nodes");
+      await page.waitForLoadState("domcontentloaded");
 
-    await use(page);
-  },
+      await use(page);
+    },
+    { scope: "worker" },
+  ],
 });
 
 export { expect } from "@playwright/test";

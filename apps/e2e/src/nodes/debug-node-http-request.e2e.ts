@@ -6,66 +6,37 @@
  */
 
 import { expect, test } from "#fixtures/electron";
+import {
+  configureAndExecuteNode,
+  expectSuccessResult,
+  TEST_TIMEOUTS,
+} from "#utils/test-helpers";
 
 const TEST_BASE_URL = "http://localhost:8888";
 
 test.describe("HTTP Request Node Execution", () => {
-  test.beforeAll(async ({ sharedElectronPage }) => {
-    // Navigate once to debug nodes page
-    await sharedElectronPage.goto("http://localhost:5173/debug/nodes", {
+  test.beforeEach(async ({ electronPage }) => {
+    // Navigate directly to debug/nodes to reset state (more reliable than reload)
+    await electronPage.goto("http://localhost:5173/debug/nodes", {
       waitUntil: "domcontentloaded",
     });
-
     // Wait for node selector to be ready
-    await sharedElectronPage
+    await electronPage
       .locator('[data-testid="node-type-selector"]')
-      .waitFor();
+      .waitFor({ state: "visible", timeout: 10000 });
   });
 
-  test("makes a GET request to a public API", async ({
-    sharedElectronPage,
-  }) => {
-    // Select http-request node type using custom Select component
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("makes a GET request to a public API", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "http-request",
+        fields: { url: `${TEST_BASE_URL}/get` },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click(); // Open the dropdown
 
-    // Click the http-request option in the dropdown menu (use role="option" to be specific)
-    await sharedElectronPage
-      .getByRole("option", { name: "http-request" })
-      .click();
-
-    // Fill in the URL field for a simple GET request
-    const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill(`${TEST_BASE_URL}/get`);
-
-    // GET is the default method, so we don't need to select it
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Wait for execution
-
-    // Verify execution completed
-    await expect(
-      sharedElectronPage.locator('[data-testid="debug-logs"]'),
-    ).toContainText("http-request execution complete");
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    expect(resultJson).toBeTruthy();
-
-    const result = JSON.parse(resultJson!);
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data).toHaveProperty("data");
@@ -73,49 +44,22 @@ test.describe("HTTP Request Node Execution", () => {
   });
 
   test("makes a POST request with JSON body from string", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "http-request",
+        fields: {
+          url: `${TEST_BASE_URL}/post`,
+          body: '{"test": "data", "number": 42}',
+        },
+        selectFields: { method: "POST" },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "http-request" })
-      .click();
 
-    // Fill in URL
-    const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill(`${TEST_BASE_URL}/post`);
-
-    // Select POST method (custom Select component)
-    const methodField = sharedElectronPage.locator(
-      '[data-testid="field-method"]',
-    );
-    await methodField.click();
-    await sharedElectronPage.getByRole("option", { name: "POST" }).click();
-
-    // Fill body with JSON string (will be validated by jsonString schema)
-    const bodyField = sharedElectronPage.locator('[data-testid="field-body"]');
-    await bodyField.fill('{"test": "data", "number": 42}');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Wait for execution
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data.data).toHaveProperty("json");
@@ -123,46 +67,22 @@ test.describe("HTTP Request Node Execution", () => {
   });
 
   test("makes a request with custom headers from JSON string", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
-    );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "http-request" })
-      .click();
-
-    // Fill in URL
-    const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill(`${TEST_BASE_URL}/headers`);
-
-    // Fill headers with JSON string (will be validated by jsonString schema)
-    const headersField = sharedElectronPage.locator(
-      '[data-testid="field-headers"]',
-    );
-    await headersField.fill(
-      '{"X-Custom-Header": "test-value", "X-Another-Header": "another-value"}',
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "http-request",
+        fields: {
+          url: `${TEST_BASE_URL}/headers`,
+          headers:
+            '{"X-Custom-Header": "test-value", "X-Another-Header": "another-value"}',
+        },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
 
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Wait for execution
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data.data).toHaveProperty("headers");
@@ -177,48 +97,21 @@ test.describe("HTTP Request Node Execution", () => {
     );
   });
 
-  test("handles PUT request with JSON body", async ({ sharedElectronPage }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("handles PUT request with JSON body", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "http-request",
+        fields: {
+          url: `${TEST_BASE_URL}/put`,
+          body: '{"updated": true, "timestamp": 1234567890}',
+        },
+        selectFields: { method: "PUT" },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "http-request" })
-      .click();
 
-    // Fill in URL
-    const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill(`${TEST_BASE_URL}/put`);
-
-    // Select PUT method (custom Select component)
-    const methodField = sharedElectronPage.locator(
-      '[data-testid="field-method"]',
-    );
-    await methodField.click();
-    await sharedElectronPage.getByRole("option", { name: "PUT" }).click();
-
-    // Fill body with JSON string
-    const bodyField = sharedElectronPage.locator('[data-testid="field-body"]');
-    await bodyField.fill('{"updated": true, "timestamp": 1234567890}');
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Wait for execution
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data.data).toHaveProperty("json");
@@ -228,82 +121,34 @@ test.describe("HTTP Request Node Execution", () => {
     });
   });
 
-  test("handles DELETE request", async ({ sharedElectronPage }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("handles DELETE request", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "http-request",
+        fields: { url: `${TEST_BASE_URL}/delete` },
+        selectFields: { method: "DELETE" },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "http-request" })
-      .click();
 
-    // Fill in URL
-    const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill(`${TEST_BASE_URL}/delete`);
-
-    // Select DELETE method (custom Select component)
-    const methodField = sharedElectronPage.locator(
-      '[data-testid="field-method"]',
-    );
-    await methodField.click();
-    await sharedElectronPage.getByRole("option", { name: "DELETE" }).click();
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Wait for execution
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("success", true);
     expect(result.data).toHaveProperty("status", 200);
     expect(result.data.data).toHaveProperty("url", `${TEST_BASE_URL}/delete`);
   });
 
-  test("includes response headers in output", async ({
-    sharedElectronPage,
-  }) => {
-    const selector = sharedElectronPage.locator(
-      '[data-testid="node-type-selector"]',
+  test("includes response headers in output", async ({ electronPage }) => {
+    const result = await configureAndExecuteNode(
+      electronPage,
+      {
+        type: "http-request",
+        fields: { url: `${TEST_BASE_URL}/get` },
+      },
+      { timeout: TEST_TIMEOUTS.NETWORK_OPERATION },
     );
-    await selector.click();
-    await sharedElectronPage
-      .getByRole("option", { name: "http-request" })
-      .click();
 
-    // Fill in URL
-    const urlField = sharedElectronPage.locator('[data-testid="field-url"]');
-    await urlField.fill(`${TEST_BASE_URL}/get`);
-
-    // Execute the node
-    const executeButton = sharedElectronPage.locator(
-      '[data-testid="execute-node-button"]',
-    );
-    await executeButton.click();
-
-    // Wait for execution
-
-    // Verify the JSON result
-    const resultElement = sharedElectronPage.locator(
-      '[data-testid="execution-result-json"]',
-    );
-    await expect(resultElement).toBeVisible({ timeout: 3000 });
-
-    const resultJson = await resultElement.getAttribute("data-output");
-    const result = JSON.parse(resultJson!);
-
-    expect(result).toHaveProperty("success", true);
+    expectSuccessResult(result);
     expect(result.data).toHaveProperty("headers");
     expect(result.data.headers).toHaveProperty("content-type");
     expect(result.data.headers["content-type"]).toContain("application/json");

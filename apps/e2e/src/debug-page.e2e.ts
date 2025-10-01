@@ -1,74 +1,78 @@
 import { expect, test } from "#fixtures/electron";
 
 test.describe("Debug Page Core Functionality", () => {
-  test.beforeAll(async ({ sharedElectronPage }) => {
-    // Navigate once to debug route - will redirect to /debug/nodes
-    await sharedElectronPage.goto("http://localhost:5173/debug", {
+  test("debug page loads", async ({ electronPage }) => {
+    // Navigate to debug route - will redirect to /debug/nodes
+    await electronPage.goto("http://localhost:5173/debug", {
       waitUntil: "load",
       timeout: 10000,
     });
     // Wait for debug page title to be visible
-    await sharedElectronPage
+    await electronPage
       .locator('[data-testid="debug-page-title"]')
       .waitFor({ state: "visible", timeout: 10000 });
-  });
 
-  test("debug page loads", async ({ sharedElectronPage }) => {
     await expect(
-      sharedElectronPage.locator('[data-testid="debug-page-title"]'),
+      electronPage.locator('[data-testid="debug-page-title"]'),
     ).toBeVisible();
   });
 
   test("conductor health check auto-runs on page load", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
     // Navigate to System page using the new route
-    await sharedElectronPage.goto("http://localhost:5173/debug/system", {
+    await electronPage.goto("http://localhost:5173/debug/system", {
       waitUntil: "domcontentloaded",
     });
 
     // The HealthStatusIndicator component automatically checks health on mount
     // Verify health check button is visible with health status
-    const healthButton = sharedElectronPage.locator(
-      '[data-testid="test-health"]',
-    );
+    const healthButton = electronPage.locator('[data-testid="test-health"]');
     await expect(healthButton).toBeVisible({ timeout: 5000 });
 
-    // Wait for auto health check to complete (should be "healthy" or "unhealthy")
-    await sharedElectronPage.waitForTimeout(2000);
-
-    // Verify health status is set (not "checking" or "unknown")
-    const healthDataOutput = await healthButton.getAttribute("data-output");
-    expect(healthDataOutput).toMatch(/^(healthy|unhealthy)$/);
+    // Wait for auto health check to complete by checking the data-output attribute
+    await expect(healthButton).toHaveAttribute(
+      "data-output",
+      /^(healthy|unhealthy)$/,
+      { timeout: 5000 },
+    );
 
     // For MVP health check should succeed
+    const healthDataOutput = await healthButton.getAttribute("data-output");
     expect(healthDataOutput).toBe("healthy");
   });
 
   test("conductor health check works via button click", async ({
-    sharedElectronPage,
+    electronPage,
   }) => {
     // Navigate to System page
-    await sharedElectronPage.goto("http://localhost:5173/debug/system", {
+    await electronPage.goto("http://localhost:5173/debug/system", {
       waitUntil: "domcontentloaded",
     });
 
     // Wait for initial auto-check to complete
-    const healthButton = sharedElectronPage.locator(
-      '[data-testid="test-health"]',
-    );
+    const healthButton = electronPage.locator('[data-testid="test-health"]');
     await expect(healthButton).toBeVisible({ timeout: 5000 });
-    await sharedElectronPage.waitForTimeout(2000);
+    await expect(healthButton).toHaveAttribute(
+      "data-output",
+      /^(healthy|unhealthy)$/,
+      { timeout: 5000 },
+    );
 
     // Click button to manually trigger health check
     await healthButton.click();
 
-    // Should briefly show "checking" status
-    const checkingStatus = await healthButton.getAttribute("data-output");
-    expect(checkingStatus).toMatch(/^(checking|healthy)$/);
+    // Wait for health check to complete (status should be either "checking" or "healthy" initially)
+    await expect(healthButton).toHaveAttribute(
+      "data-output",
+      /^(checking|healthy)$/,
+      { timeout: 1000 },
+    );
 
-    // Wait for health check to complete
-    await sharedElectronPage.waitForTimeout(2000);
+    // Wait for final status
+    await expect(healthButton).toHaveAttribute("data-output", "healthy", {
+      timeout: 5000,
+    });
 
     // Verify final health status
     const finalStatus = await healthButton.getAttribute("data-output");
