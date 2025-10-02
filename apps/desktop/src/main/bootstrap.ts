@@ -41,16 +41,12 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
   };
 
   const setupIPCHandlers = (): void => {
-    ipcMain.on("ping", () => {
-      // Ping handler for testing IPC communication
-    });
-
-    // Add channel health check handler
+    // Channel health check handler
     ipcMain.handle("channels:health", async () => {
       return await checkChannelHealth();
     });
 
-    // Add debugging handler for channel status
+    // Debugging handler for channel status
     ipcMain.handle("channels:status", () => {
       return {
         initialized: channelManager !== null,

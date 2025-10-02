@@ -45,8 +45,8 @@ export function useSystemOperations() {
 
   const testExecute = useCallback(async () => {
     try {
-      addLog("Testing conductor.execute...");
-      const result = await conductor.execute(
+      addLog("Testing conductor.node.run...");
+      const result = await conductor.node.run(
         createNodeDefinition({
           type: "transform",
           id: "test_execute",
@@ -64,12 +64,12 @@ export function useSystemOperations() {
 
   const testHealthShortcut = useCallback(async () => {
     try {
-      addLog("Testing conductor.health shortcut...");
-      const result = await conductor.health();
-      addLog(`Health shortcut result: ${JSON.stringify(result)}`);
+      addLog("Testing conductor.system.health...");
+      const result = await conductor.system.health();
+      addLog(`Health result: ${JSON.stringify(result)}`);
     } catch (error) {
-      addLog(`Health shortcut error: ${error}`);
-      console.error("Health shortcut error:", error);
+      addLog(`Health error: ${error}`);
+      console.error("Health error:", error);
     }
   }, [addLog]);
 

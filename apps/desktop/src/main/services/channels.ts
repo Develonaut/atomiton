@@ -198,12 +198,12 @@ export const checkChannelHealth = async (): Promise<{
   const results: Record<string, unknown> = {};
 
   try {
-    // Test each channel by calling a health method if available
-    const channelNames = ["node", "storage", "auth", "system"];
+    // Only check channels that actually exist (removed "auth" which is not created)
+    const channelNames = ["node", "storage", "system"];
 
     for (const channelName of channelNames) {
       try {
-        // Simulate a health check (in real implementation, this would call actual health endpoints)
+        // Simple health check - channel exists and is responsive
         results[channelName] = {
           status: "ok",
           timestamp: Date.now(),

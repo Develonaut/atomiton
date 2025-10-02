@@ -38,7 +38,7 @@ export const createExecutionService = (): ExecutionService => {
 
       emitProgress(executionId, 0, "Starting execution");
 
-      const result = await conductor.execute(executable, context);
+      const result = await conductor.node.run(executable, context);
 
       emitProgress(executionId, 100, "Complete");
 

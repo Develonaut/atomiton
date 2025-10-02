@@ -10,13 +10,7 @@ import { createNodeAPI } from "#exports/browser/nodeApi.js";
 import { createStorageAPI } from "#exports/browser/storageApi.js";
 import { createSystemAPI } from "#exports/browser/systemApi.js";
 import { createRPCTransport } from "#exports/browser/transport.js";
-import type {
-  ConductorConfig,
-  ConductorExecutionContext,
-  ExecutionResult,
-  HealthResult,
-} from "#types";
-import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import type { ConductorConfig } from "#types";
 
 // Re-export types and utilities
 export type {
@@ -82,25 +76,6 @@ export function createConductorInstance(config: ConductorConfig = {}) {
      */
     getEnvironment() {
       return envInfo;
-    },
-
-    // Backward compatibility - legacy execute method
-    async execute(
-      node: NodeDefinition,
-      contextOverrides?: Partial<ConductorExecutionContext>,
-    ): Promise<ExecutionResult> {
-      console.warn(
-        "[Conductor] execute() is deprecated, use conductor.node.run() instead",
-      );
-      return nodeAPI.run(node, contextOverrides);
-    },
-
-    // Backward compatibility - legacy health method
-    async health(): Promise<HealthResult> {
-      console.warn(
-        "[Conductor] health() is deprecated, use conductor.system.health() instead",
-      );
-      return systemAPI.health();
     },
   };
 }

@@ -37,7 +37,7 @@ function Toolbar() {
 
     try {
       console.log("Executing flow with Conductor API...");
-      const response = await conductor.execute(groupNode);
+      const response = await conductor.node.run(groupNode);
 
       console.log("Flow execution response:", response);
 
