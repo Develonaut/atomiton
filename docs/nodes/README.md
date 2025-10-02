@@ -13,9 +13,9 @@ blocks that execute specific tasks within a Flow workflow, following the unified
 
 **Node Types:**
 
-- **Atomic Nodes**: Leaf nodes that perform specific tasks (CSV reader, HTTP
-  request, database operations)
-- **Composite Nodes**: Container nodes that orchestrate multiple child nodes
+- **Task Nodes**: Nodes that perform specific operations (HTTP request, file
+  system, transform, etc.)
+- **Group Nodes**: Container nodes that orchestrate multiple child nodes
   (sub-workflows, reusable components)
 
 **Node Interface:**
@@ -31,7 +31,7 @@ interface INode {
   outputPorts: NodePortDefinition[];
   execute(context: NodeExecutionContext): Promise<NodeExecutionResult>;
   validate(): { valid: boolean; errors: string[] };
-  isComposite: boolean;
+  isGroup: boolean;
   dispose(): void;
 }
 ```
@@ -43,7 +43,7 @@ workflows (entire data processing pipelines) implement the same `INode`
 interface. This creates a powerful composition pattern where nodes can be
 combined infinitely without complexity.
 
-## Creating Custom Atomic Nodes
+## Creating Custom Task Nodes
 
 ### Basic Node Implementation
 
@@ -51,16 +51,16 @@ combined infinitely without complexity.
 
 ```typescript
 import {
-  IAtomicNode,
+  INode,
   NodeExecutionContext,
   NodeExecutionResult,
 } from "@atomiton/nodes";
 
-export class CsvReaderNode implements IAtomicNode {
+export class CsvReaderNode implements INode {
   readonly id: string;
   readonly name: string = "CSV Reader";
   readonly type: string = "csv-reader";
-  readonly isComposite: boolean = false;
+  readonly isGroup: boolean = false;
 
   metadata = {
     description: "Reads data from CSV files",
@@ -188,8 +188,8 @@ export class CsvReaderNode implements IAtomicNode {
 **Node with Multiple Input/Output Ports:**
 
 ```typescript
-export class DataTransformerNode implements IAtomicNode {
-  readonly isComposite = false;
+export class DataTransformerNode implements INode {
+  readonly isGroup = false;
 
   inputPorts = [
     {
@@ -391,7 +391,7 @@ interface PortConstraints {
 **Nodes with Variable Ports:**
 
 ```typescript
-export class DatabaseQueryNode implements IAtomicNode {
+export class DatabaseQueryNode implements INode {
   private _inputPorts: NodePortDefinition[] = [
     {
       id: "connection",
@@ -486,7 +486,7 @@ interface CsvReaderParameters {
   encoding?: string;
 }
 
-export class TypedCsvReaderNode implements IAtomicNode {
+export class TypedCsvReaderNode implements INode {
   async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
     // Type-safe parameter access
     const params = context.parameters as CsvReaderParameters;
@@ -509,7 +509,7 @@ import Ajv from "ajv";
 
 const ajv = new Ajv();
 
-export class ValidatedNode implements IAtomicNode {
+export class ValidatedNode implements INode {
   private parameterSchema = {
     type: "object",
     properties: {
@@ -829,7 +829,7 @@ my-custom-nodes/
 **Memory Management:**
 
 ```typescript
-export class StreamProcessingNode implements IAtomicNode {
+export class StreamProcessingNode implements INode {
   private streams: Set<Stream> = new Set();
 
   async execute(context: NodeExecutionContext): Promise<NodeExecutionResult> {
@@ -931,7 +931,7 @@ function createNodeError(
  * @throws CSV_READ_ERROR - When file cannot be read or parsed
  * @throws INVALID_DELIMITER - When delimiter is not supported
  */
-export class CsvReaderNode implements IAtomicNode {
+export class CsvReaderNode implements INode {
   // Implementation
 }
 ````

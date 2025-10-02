@@ -125,8 +125,8 @@ Timeline: "When it's ready" (aka no idea).
 
 ## Why "Atomiton"?
 
-Atomic + Automaton = Atomiton. Small, indivisible units of automation that
-combine into complex workflows. Also, it sounds cool.
+Automaton + Simplicity = Atomiton. A modern automation platform that makes
+workflow creation simple and powerful. Also, it sounds cool.
 
 ## License
 
