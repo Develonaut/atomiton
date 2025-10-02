@@ -1,6 +1,7 @@
 id: "550e8400-e29b-41d4-a716-446655440003"
 name: "Image Processing Workflow"
-description: "Batch process images with parallel operations for optimal performance"
+description:
+  "Batch process images with parallel operations for optimal performance"
 category: "media"
 type: "group"
 version: "1.0.0"
@@ -249,15 +250,15 @@ nodes:
           y: 150
 
   - id: "image-resize"
-    type: "image-composite"
+    type: "image"
     name: "Resize Image"
     category: "media"
     version: "1.0.0"
 
     metadata:
-      id: "image-composite"
-      name: "Image Composite"
-      type: "image-composite"
+      id: "image"
+      name: "Image"
+      type: "image"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Image processing and manipulation"
@@ -335,15 +336,15 @@ nodes:
           y: 100
 
   - id: "image-watermark"
-    type: "image-composite"
+    type: "image"
     name: "Add Watermark"
     category: "media"
     version: "1.0.0"
 
     metadata:
-      id: "image-composite"
-      name: "Image Composite"
-      type: "image-composite"
+      id: "image"
+      name: "Image"
+      type: "image"
       version: "1.0.0"
       author: "Atomiton Core Team"
       description: "Image processing and manipulation"

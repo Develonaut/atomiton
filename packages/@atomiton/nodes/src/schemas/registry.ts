@@ -11,7 +11,7 @@ import httpRequestSchemaShape from "#schemas/http-request";
 import editFieldsSchemaShape from "#schemas/edit-fields";
 import fileSystemSchemaShape from "#schemas/file-system";
 import groupSchemaShape from "#schemas/group";
-import imageCompositeSchemaShape from "#schemas/image-composite";
+import imageSchemaShape from "#schemas/image";
 import loopSchemaShape from "#schemas/loop";
 import parallelSchemaShape from "#schemas/parallel";
 import shellCommandSchemaShape from "#schemas/shell-command";
@@ -138,7 +138,7 @@ export function registerAllNodeSchemas(): void {
   registerNodeSchema("edit-fields", editFieldsSchemaShape);
   registerNodeSchema("file-system", fileSystemSchemaShape);
   registerNodeSchema("group", groupSchemaShape);
-  registerNodeSchema("image-composite", imageCompositeSchemaShape);
+  registerNodeSchema("image", imageSchemaShape);
   registerNodeSchema("loop", loopSchemaShape);
   registerNodeSchema("parallel", parallelSchemaShape);
   registerNodeSchema("shell-command", shellCommandSchemaShape);

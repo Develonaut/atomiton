@@ -10,7 +10,7 @@ import editFieldsDefinition from "#definitions/edit-fields";
 import fileSystemDefinition from "#definitions/file-system";
 import groupDefinition from "#definitions/group";
 import httpRequestDefinition from "#definitions/http-request";
-import imageCompositeDefinition from "#definitions/image-composite";
+import imageDefinition from "#definitions/image";
 import loopDefinition from "#definitions/loop";
 import parallelDefinition from "#definitions/parallel";
 import shellCommandDefinition from "#definitions/shell-command";
@@ -23,7 +23,7 @@ import transformDefinition from "#definitions/transform";
 export const nodeDefinitionRegistry: Map<string, NodeDefinition> = new Map([
   ["parallel", parallelDefinition],
   ["group", groupDefinition],
-  ["image-composite", imageCompositeDefinition],
+  ["image", imageDefinition],
   ["http-request", httpRequestDefinition],
   ["file-system", fileSystemDefinition],
   ["edit-fields", editFieldsDefinition],
@@ -123,7 +123,7 @@ export {
   fileSystemDefinition,
   groupDefinition,
   httpRequestDefinition,
-  imageCompositeDefinition,
+  imageDefinition,
   loopDefinition,
   parallelDefinition,
   shellCommandDefinition,

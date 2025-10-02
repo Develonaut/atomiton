@@ -71,18 +71,18 @@ const result = await executable.execute(context);
 
 ## Available Nodes
 
-| Node              | Description            | Category |
-| ----------------- | ---------------------- | -------- |
-| `http-request`    | Make HTTP/API requests | IO       |
-| `csv-reader`      | Parse CSV files        | IO       |
-| `file-system`     | File operations        | IO       |
-| `transform`       | Data transformation    | Data     |
-| `code`            | Execute JavaScript     | Logic    |
-| `loop`            | Iterate over arrays    | Logic    |
-| `parallel`        | Parallel execution     | Logic    |
-| `image-composite` | Image composition      | Media    |
-| `shell-command`   | System commands        | System   |
-| `edit-fields`     | Edit field values      | Data     |
+| Node            | Description            | Category |
+| --------------- | ---------------------- | -------- |
+| `http-request`  | Make HTTP/API requests | IO       |
+| `csv-reader`    | Parse CSV files        | IO       |
+| `file-system`   | File operations        | IO       |
+| `transform`     | Data transformation    | Data     |
+| `code`          | Execute JavaScript     | Logic    |
+| `loop`          | Iterate over arrays    | Logic    |
+| `parallel`      | Parallel execution     | Logic    |
+| `image`         | Image processing       | Media    |
+| `shell-command` | System commands        | System   |
+| `edit-fields`   | Edit field values      | Data     |
 
 ## Creating Custom Nodes
 

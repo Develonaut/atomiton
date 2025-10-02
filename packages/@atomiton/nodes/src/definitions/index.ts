@@ -32,7 +32,7 @@ export {
 export type { FileSystemParameters } from "#schemas/file-system";
 export type { GroupParameters } from "#schemas/group";
 export type { HttpRequestParameters } from "#schemas/http-request";
-export type { ImageCompositeParameters } from "#schemas/image-composite";
+export type { ImageParameters } from "#schemas/image";
 export type { LoopParameters } from "#schemas/loop";
 export type { ParallelParameters } from "#schemas/parallel";
 export type { ShellCommandParameters } from "#schemas/shell-command";

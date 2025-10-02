@@ -75,7 +75,7 @@ export const NODE_ICON_MAP: Record<string, string> = {
   // External Integration
   "http-request": "globe",
   "shell-command": "terminal",
-  "image-composite": "image",
+  image: "image",
 
   // Data Processing
   transform: "code",

@@ -30,9 +30,9 @@ export {
   type HttpRequestParameters,
 } from "#schemas/http-request";
 export {
-  default as imageCompositeSchemaShape,
-  type ImageCompositeParameters,
-} from "#schemas/image-composite";
+  default as imageSchemaShape,
+  type ImageParameters,
+} from "#schemas/image";
 export { default as loopSchemaShape, type LoopParameters } from "#schemas/loop";
 export {
   default as parallelSchemaShape,

@@ -1,5 +1,5 @@
 /**
- * Image Composite Utilities
+ * Image Utilities
  * Helper functions for image processing
  */
 
@@ -12,7 +12,7 @@ import * as path from "path";
 export function createTempFilePath(extension: string): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 8);
-  const fileName = `image-composite-${timestamp}-${random}.${extension}`;
+  const fileName = `image-${timestamp}-${random}.${extension}`;
   return path.join(os.tmpdir(), fileName);
 }
 

@@ -7,6 +7,7 @@ import { editFieldsSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/
 import { fileSystemSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/file-system";
 import { groupSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/group";
 import { httpRequestSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/http-request";
+import { imageSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/image";
 import { loopSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/loop";
 import { parallelSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/parallel";
 import { shellCommandSmokeTests } from "#templates/DebugPage/fixtures/smoke-tests/shell-command";
@@ -31,6 +32,7 @@ export const nodeSmokeTests: NodeSmokeTests = {
   "edit-fields": editFieldsSmokeTests,
   "file-system": fileSystemSmokeTests,
   "http-request": httpRequestSmokeTests,
+  image: imageSmokeTests,
   "shell-command": shellCommandSmokeTests,
   spreadsheet: spreadsheetSmokeTests,
   transform: transformSmokeTests,

@@ -24,5 +24,8 @@
     "@types/node": "catalog:",
     "dotenv": "^17.2.3",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "sharp": "^0.34.4"
   }
 }

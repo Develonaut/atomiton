@@ -1,15 +1,15 @@
 /**
- * Image Composite Port Definitions
- * Input and output ports for image composite node
+ * Image Port Definitions
+ * Input and output ports for image node
  */
 
 import { createNodePort } from "#core/factories/createNodePorts";
 import type { NodePort } from "#core/types/definition";
 
 /**
- * Input ports for image composite node
+ * Input ports for image node
  */
-export const imageCompositeInputPorts: NodePort[] = [
+export const imageInputPorts: NodePort[] = [
   createNodePort("input", {
     id: "baseImage",
     name: "Base Image",
@@ -21,9 +21,9 @@ export const imageCompositeInputPorts: NodePort[] = [
 ];
 
 /**
- * Output ports for image composite node
+ * Output ports for image node
  */
-export const imageCompositeOutputPorts: NodePort[] = [
+export const imageOutputPorts: NodePort[] = [
   createNodePort("output", {
     id: "result",
     name: "Result",

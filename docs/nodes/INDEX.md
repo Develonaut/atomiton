@@ -71,7 +71,7 @@ Execute shell commands and scripts securely.
 
 ### Media
 
-#### [Image Composite Node](./image-composite.md)
+#### [Image Node](./image.md)
 
 Combine, overlay, and manipulate images.
 

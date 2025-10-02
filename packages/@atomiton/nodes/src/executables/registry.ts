@@ -10,7 +10,7 @@ import groupExecutable from "#executables/group";
 import editFieldsExecutable from "#executables/edit-fields";
 import fileSystemExecutable from "#executables/file-system";
 import httpRequestExecutable from "#executables/http-request";
-import imageCompositeExecutable from "#executables/image-composite";
+import imageExecutable from "#executables/image";
 import loopExecutable from "#executables/loop";
 import parallelExecutable from "#executables/parallel";
 import shellCommandExecutable from "#executables/shell-command";
@@ -26,7 +26,7 @@ export const nodeExecutableRegistry = new Map<string, NodeExecutable>();
 nodeExecutableRegistry.set("parallel", parallelExecutable);
 nodeExecutableRegistry.set("group", groupExecutable);
 nodeExecutableRegistry.set("edit-fields", editFieldsExecutable);
-nodeExecutableRegistry.set("image-composite", imageCompositeExecutable);
+nodeExecutableRegistry.set("image", imageExecutable);
 nodeExecutableRegistry.set("http-request", httpRequestExecutable);
 nodeExecutableRegistry.set("file-system", fileSystemExecutable);
 nodeExecutableRegistry.set("transform", transformExecutable);
@@ -68,7 +68,7 @@ export {
   fileSystemExecutable,
   groupExecutable,
   httpRequestExecutable,
-  imageCompositeExecutable,
+  imageExecutable,
   loopExecutable,
   parallelExecutable,
   shellCommandExecutable,

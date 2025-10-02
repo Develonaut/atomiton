@@ -1,19 +1,19 @@
 /**
- * Integration tests for image-composite node field generation
+ * Integration tests for image node field generation
  * Tests the complete pipeline: schema → createFieldsFromSchema → field config
  * Validates that field constraints match actual schema validation behavior
  */
 
 import { describe, expect, it } from "vitest";
-import { imageCompositeFields } from "#definitions/image-composite/fields";
-import { imageCompositeSchema } from "#schemas/image-composite";
+import { imageFields } from "#definitions/image/fields";
+import { imageSchema } from "#schemas/image";
 
-describe("Image Composite Node Fields Integration", () => {
+describe("Image Node Fields Integration", () => {
   describe("Field Generation Pipeline", () => {
     it("should generate all expected fields from schema", () => {
-      const fieldKeys = Object.keys(imageCompositeFields);
+      const fieldKeys = Object.keys(imageFields);
 
-      // Should include all fields from imageCompositeSchemaShape
+      // Should include all fields from imageSchemaShape
       expect(fieldKeys).toContain("operation");
       expect(fieldKeys).toContain("images");
       expect(fieldKeys).toContain("output");
@@ -29,24 +29,24 @@ describe("Image Composite Node Fields Integration", () => {
       expect(fieldKeys).toContain("description");
     });
 
-    it("should have exactly 11 fields total", () => {
-      // 6 image-composite-specific + 5 base fields
-      expect(Object.keys(imageCompositeFields)).toHaveLength(11);
+    it("should have exactly 19 fields total", () => {
+      // 14 image-composite-specific + 5 base fields
+      expect(Object.keys(imageFields)).toHaveLength(19);
     });
 
     it("should have field config for every schema field", () => {
-      const schemaKeys = Object.keys(imageCompositeSchema.shape);
+      const schemaKeys = Object.keys(imageSchema.shape);
 
       for (const key of schemaKeys) {
-        expect(imageCompositeFields[key]).toBeDefined();
-        expect(imageCompositeFields[key].controlType).toBeDefined();
-        expect(imageCompositeFields[key].label).toBeDefined();
+        expect(imageFields[key]).toBeDefined();
+        expect(imageFields[key].controlType).toBeDefined();
+        expect(imageFields[key].label).toBeDefined();
       }
     });
 
     it("should not have extra fields not in schema", () => {
-      const schemaKeys = Object.keys(imageCompositeSchema.shape);
-      const fieldKeys = Object.keys(imageCompositeFields);
+      const schemaKeys = Object.keys(imageSchema.shape);
+      const fieldKeys = Object.keys(imageFields);
 
       for (const key of fieldKeys) {
         expect(schemaKeys).toContain(key);
@@ -57,11 +57,11 @@ describe("Image Composite Node Fields Integration", () => {
   describe("Auto-Derived Fields", () => {
     describe("Operation Field", () => {
       it("should have select control type (auto-derived from enum)", () => {
-        expect(imageCompositeFields.operation.controlType).toBe("select");
+        expect(imageFields.operation.controlType).toBe("select");
       });
 
       it("should have custom options with labels (overridden)", () => {
-        expect(imageCompositeFields.operation.options).toEqual([
+        expect(imageFields.operation.options).toEqual([
           { value: "overlay", label: "Overlay" },
           { value: "merge", label: "Merge" },
           { value: "composite", label: "Composite" },
@@ -70,23 +70,21 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should be required (has default but not optional)", () => {
-        expect(imageCompositeFields.operation.required).toBe(true);
+        expect(imageFields.operation.required).toBe(true);
       });
 
       it("should have placeholder showing default value", () => {
-        expect(imageCompositeFields.operation.placeholder).toBe(
-          "Default: overlay",
-        );
+        expect(imageFields.operation.placeholder).toBe("Default: overlay");
       });
 
       it("should have helpText from schema description", () => {
-        expect(imageCompositeFields.operation.helpText).toBe(
+        expect(imageFields.operation.helpText).toBe(
           "Type of image composition operation",
         );
       });
 
       it("should use default value when not provided", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
         });
@@ -101,7 +99,7 @@ describe("Image Composite Node Fields Integration", () => {
         const validOps = ["overlay", "merge", "composite", "blend"];
 
         for (const op of validOps) {
-          const result = imageCompositeSchema.safeParse({
+          const result = imageSchema.safeParse({
             operation: op,
             images: ["/path/to/image.png"],
             output: "/path/to/output.png",
@@ -111,7 +109,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject invalid operation", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           operation: "combine",
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
@@ -122,31 +120,31 @@ describe("Image Composite Node Fields Integration", () => {
 
     describe("Images Field", () => {
       it("should have textarea control type (overridden)", () => {
-        expect(imageCompositeFields.images.controlType).toBe("textarea");
+        expect(imageFields.images.controlType).toBe("textarea");
       });
 
       it("should be required (no default, not optional)", () => {
-        expect(imageCompositeFields.images.required).toBe(true);
+        expect(imageFields.images.required).toBe(true);
       });
 
       it("should have custom placeholder (overridden)", () => {
-        expect(imageCompositeFields.images.placeholder).toBe(
+        expect(imageFields.images.placeholder).toBe(
           '["/path/to/image1.png", "/path/to/image2.png"]',
         );
       });
 
       it("should have custom rows (overridden)", () => {
-        expect(imageCompositeFields.images.rows).toBe(3);
+        expect(imageFields.images.rows).toBe(3);
       });
 
       it("should have helpText from schema description", () => {
-        expect(imageCompositeFields.images.helpText).toBe(
+        expect(imageFields.images.helpText).toBe(
           "Array of image paths or URLs to composite",
         );
       });
 
       it("should reject missing images", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           output: "/path/to/output.png",
         });
 
@@ -157,7 +155,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject empty array", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: [],
           output: "/path/to/output.png",
         });
@@ -166,7 +164,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should accept array with one or more images", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image1.png", "/path/to/image2.png"],
           output: "/path/to/output.png",
         });
@@ -175,7 +173,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject non-string array values", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: [1, 2, 3],
           output: "/path/to/output.png",
         });
@@ -186,21 +184,21 @@ describe("Image Composite Node Fields Integration", () => {
 
     describe("Output Field", () => {
       it("should have text control type (auto-derived from string)", () => {
-        expect(imageCompositeFields.output.controlType).toBe("text");
+        expect(imageFields.output.controlType).toBe("text");
       });
 
       it("should be required (no default, not optional)", () => {
-        expect(imageCompositeFields.output.required).toBe(true);
+        expect(imageFields.output.required).toBe(true);
       });
 
       it("should have helpText from schema description", () => {
-        expect(imageCompositeFields.output.helpText).toBe(
+        expect(imageFields.output.helpText).toBe(
           "Output path for the composed image",
         );
       });
 
       it("should reject missing output", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
         });
 
@@ -211,7 +209,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should accept valid output paths", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
         });
@@ -222,21 +220,19 @@ describe("Image Composite Node Fields Integration", () => {
 
     describe("Width Field", () => {
       it("should have number control type (auto-derived)", () => {
-        expect(imageCompositeFields.width.controlType).toBe("number");
+        expect(imageFields.width.controlType).toBe("number");
       });
 
       it("should be optional (no default, marked optional)", () => {
-        expect(imageCompositeFields.width.required).toBe(false);
+        expect(imageFields.width.required).toBe(false);
       });
 
       it("should have helpText from schema description", () => {
-        expect(imageCompositeFields.width.helpText).toBe(
-          "Output image width in pixels",
-        );
+        expect(imageFields.width.helpText).toBe("Output image width in pixels");
       });
 
       it("should accept undefined", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
         });
@@ -248,7 +244,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should accept positive numbers", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           width: 1920,
@@ -258,7 +254,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject zero", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           width: 0,
@@ -268,7 +264,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject negative numbers", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           width: -100,
@@ -280,21 +276,21 @@ describe("Image Composite Node Fields Integration", () => {
 
     describe("Height Field", () => {
       it("should have number control type (auto-derived)", () => {
-        expect(imageCompositeFields.height.controlType).toBe("number");
+        expect(imageFields.height.controlType).toBe("number");
       });
 
       it("should be optional (no default, marked optional)", () => {
-        expect(imageCompositeFields.height.required).toBe(false);
+        expect(imageFields.height.required).toBe(false);
       });
 
       it("should have helpText from schema description", () => {
-        expect(imageCompositeFields.height.helpText).toBe(
+        expect(imageFields.height.helpText).toBe(
           "Output image height in pixels",
         );
       });
 
       it("should accept undefined", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
         });
@@ -306,7 +302,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should accept positive numbers", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           height: 1080,
@@ -316,7 +312,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject zero", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           height: 0,
@@ -326,7 +322,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject negative numbers", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           height: -100,
@@ -338,11 +334,11 @@ describe("Image Composite Node Fields Integration", () => {
 
     describe("Format Field", () => {
       it("should have select control type (auto-derived from enum)", () => {
-        expect(imageCompositeFields.format.controlType).toBe("select");
+        expect(imageFields.format.controlType).toBe("select");
       });
 
       it("should have custom options with labels (overridden)", () => {
-        expect(imageCompositeFields.format.options).toEqual([
+        expect(imageFields.format.options).toEqual([
           { value: "png", label: "PNG" },
           { value: "jpeg", label: "JPEG" },
           { value: "webp", label: "WebP" },
@@ -350,21 +346,19 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should be required (has default but not optional)", () => {
-        expect(imageCompositeFields.format.required).toBe(true);
+        expect(imageFields.format.required).toBe(true);
       });
 
       it("should have placeholder showing default value", () => {
-        expect(imageCompositeFields.format.placeholder).toBe("Default: png");
+        expect(imageFields.format.placeholder).toBe("Default: png");
       });
 
       it("should have helpText from schema description", () => {
-        expect(imageCompositeFields.format.helpText).toBe(
-          "Output image format",
-        );
+        expect(imageFields.format.helpText).toBe("Output image format");
       });
 
       it("should use default value when not provided", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
         });
@@ -379,7 +373,7 @@ describe("Image Composite Node Fields Integration", () => {
         const validFormats = ["png", "jpeg", "webp"];
 
         for (const format of validFormats) {
-          const result = imageCompositeSchema.safeParse({
+          const result = imageSchema.safeParse({
             images: ["/path/to/image.png"],
             output: "/path/to/output.png",
             format,
@@ -389,7 +383,7 @@ describe("Image Composite Node Fields Integration", () => {
       });
 
       it("should reject invalid format", () => {
-        const result = imageCompositeSchema.safeParse({
+        const result = imageSchema.safeParse({
           images: ["/path/to/image.png"],
           output: "/path/to/output.png",
           format: "gif",
@@ -401,7 +395,7 @@ describe("Image Composite Node Fields Integration", () => {
 
   describe("Base Schema Fields", () => {
     it("enabled field should be auto-derived correctly", () => {
-      expect(imageCompositeFields.enabled).toMatchObject({
+      expect(imageFields.enabled).toMatchObject({
         controlType: "boolean",
         label: "Enabled",
         helpText: "Whether this node is enabled for execution",
@@ -411,7 +405,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("timeout field should be auto-derived with constraints", () => {
-      expect(imageCompositeFields.timeout).toMatchObject({
+      expect(imageFields.timeout).toMatchObject({
         controlType: "number",
         label: "Timeout",
         helpText: "Maximum execution time in milliseconds",
@@ -419,10 +413,10 @@ describe("Image Composite Node Fields Integration", () => {
         required: true,
       });
 
-      expect(imageCompositeFields.timeout.min).toBe(1);
+      expect(imageFields.timeout.min).toBe(1);
 
       // Verify schema validates this
-      const resultInvalid = imageCompositeSchema.safeParse({
+      const resultInvalid = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         timeout: 0,
@@ -431,7 +425,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("retries field should be auto-derived with constraints", () => {
-      expect(imageCompositeFields.retries).toMatchObject({
+      expect(imageFields.retries).toMatchObject({
         controlType: "number",
         label: "Retries",
         helpText: "Number of retry attempts on failure",
@@ -439,11 +433,11 @@ describe("Image Composite Node Fields Integration", () => {
         required: true,
       });
 
-      expect(imageCompositeFields.retries.min).toBe(0);
+      expect(imageFields.retries.min).toBe(0);
     });
 
     it("label field should be auto-derived as optional", () => {
-      expect(imageCompositeFields.label).toMatchObject({
+      expect(imageFields.label).toMatchObject({
         controlType: "text",
         label: "Label",
         helpText: "Custom label for this node instance",
@@ -452,7 +446,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("description field should be auto-derived as optional", () => {
-      expect(imageCompositeFields.description).toMatchObject({
+      expect(imageFields.description).toMatchObject({
         controlType: "text",
         label: "Description",
         helpText: "Custom description for this node instance",
@@ -463,14 +457,14 @@ describe("Image Composite Node Fields Integration", () => {
 
   describe("Type Safety", () => {
     it("all fields should have required controlType", () => {
-      for (const field of Object.values(imageCompositeFields)) {
+      for (const field of Object.values(imageFields)) {
         expect(field.controlType).toBeDefined();
         expect(typeof field.controlType).toBe("string");
       }
     });
 
     it("all fields should have required label", () => {
-      for (const field of Object.values(imageCompositeFields)) {
+      for (const field of Object.values(imageFields)) {
         expect(field.label).toBeDefined();
         expect(typeof field.label).toBe("string");
         expect(field.label.length).toBeGreaterThan(0);
@@ -478,10 +472,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("fields with options should have valid options array", () => {
-      const fieldsWithOptions = [
-        imageCompositeFields.operation,
-        imageCompositeFields.format,
-      ];
+      const fieldsWithOptions = [imageFields.operation, imageFields.format];
 
       for (const field of fieldsWithOptions) {
         if (field.options) {
@@ -499,7 +490,7 @@ describe("Image Composite Node Fields Integration", () => {
 
   describe("Complete Valid Examples", () => {
     it("should validate minimal valid node", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
       });
@@ -515,7 +506,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should validate overlay operation", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         operation: "overlay",
         images: ["/path/to/base.png", "/path/to/overlay.png"],
         output: "/path/to/result.png",
@@ -525,7 +516,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should validate merge operation", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         operation: "merge",
         images: [
           "/path/to/image1.png",
@@ -540,7 +531,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should validate with dimensions", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         operation: "composite",
         images: ["/path/to/image1.png", "/path/to/image2.png"],
         output: "/path/to/composite.png",
@@ -553,7 +544,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should validate blend operation", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         operation: "blend",
         images: ["/path/to/image1.png", "/path/to/image2.png"],
         output: "/path/to/blended.png",
@@ -565,7 +556,7 @@ describe("Image Composite Node Fields Integration", () => {
 
   describe("Invalid Examples", () => {
     it("should reject missing images", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         output: "/path/to/output.png",
       });
 
@@ -576,7 +567,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject empty images array", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: [],
         output: "/path/to/output.png",
       });
@@ -585,7 +576,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject missing output", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
       });
 
@@ -596,7 +587,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject invalid operation", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         operation: "combine",
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
@@ -606,7 +597,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject invalid format", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         format: "gif",
@@ -616,7 +607,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject zero width", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         width: 0,
@@ -626,7 +617,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject negative width", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         width: -100,
@@ -636,7 +627,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject zero height", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         height: 0,
@@ -646,7 +637,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject negative height", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         height: -100,
@@ -656,7 +647,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject invalid timeout", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         timeout: 0,
@@ -666,7 +657,7 @@ describe("Image Composite Node Fields Integration", () => {
     });
 
     it("should reject invalid retries", () => {
-      const result = imageCompositeSchema.safeParse({
+      const result = imageSchema.safeParse({
         images: ["/path/to/image.png"],
         output: "/path/to/output.png",
         retries: -1,

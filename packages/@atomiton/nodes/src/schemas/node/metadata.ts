@@ -8,7 +8,7 @@ const nodeMetadataSchema = v.object({
     "csv-reader",
     "file-system",
     "http-request",
-    "image-composite",
+    "image",
     "loop",
     "parallel",
     "shell-command",

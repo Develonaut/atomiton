@@ -1,22 +1,19 @@
 /**
- * Image Composite Node Definition
- * Browser-safe configuration for image composition node
+ * Image Node Definition
+ * Browser-safe configuration for image processing node
  */
 
 import { createNodeDefinition } from "#core/factories/createNodeDefinition";
 import createNodeMetadata from "#core/factories/createNodeMetadata";
 import createNodeParameters from "#core/factories/createNodeParameters";
 import type { NodeDefinition } from "#core/types/definition";
-import { imageCompositeFields } from "#definitions/image-composite/fields";
-import {
-  imageCompositeInputPorts,
-  imageCompositeOutputPorts,
-} from "#definitions/image-composite/ports";
+import { imageFields } from "#definitions/image/fields";
+import { imageInputPorts, imageOutputPorts } from "#definitions/image/ports";
 
 /**
- * Default values for image composite parameters
+ * Default values for image parameters
  */
-export const imageCompositeDefaults = {
+export const imageDefaults = {
   operation: "overlay" as const,
   outputFormat: "png" as const,
   quality: 90,
@@ -29,14 +26,14 @@ export const imageCompositeDefaults = {
 };
 
 /**
- * Image Composite node definition (browser-safe)
+ * Image node definition (browser-safe)
  */
-export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
-  type: "image-composite",
+export const imageDefinition: NodeDefinition = createNodeDefinition({
+  type: "image",
   version: "1.0.0",
   metadata: createNodeMetadata({
-    id: "image-composite",
-    name: "Image Composite",
+    id: "image",
+    name: "Image",
     author: "Atomiton Core Team",
     description: "Combine, overlay, and manipulate images",
     category: "media",
@@ -57,10 +54,10 @@ export const imageCompositeDefinition: NodeDefinition = createNodeDefinition({
     experimental: false,
     deprecated: false,
   }),
-  parameters: createNodeParameters(imageCompositeDefaults),
-  fields: imageCompositeFields,
-  inputPorts: imageCompositeInputPorts,
-  outputPorts: imageCompositeOutputPorts,
+  parameters: createNodeParameters(imageDefaults),
+  fields: imageFields,
+  inputPorts: imageInputPorts,
+  outputPorts: imageOutputPorts,
 });
 
-export default imageCompositeDefinition;
+export default imageDefinition;

@@ -25,7 +25,7 @@ export function validateType(
     "csv-reader",
     "file-system",
     "http-request",
-    "image-composite",
+    "image",
     "loop",
     "parallel",
     "shell-command",

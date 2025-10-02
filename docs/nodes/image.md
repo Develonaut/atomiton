@@ -1,14 +1,13 @@
-# Image Composite Node
+# Image Node
 
 ## Overview
 
-The Image Composite Node combines, overlays, and manipulates images. It supports
-various operations for image composition, resizing, positioning, and format
-conversion.
+The Image Node combines, overlays, and manipulates images. It supports various
+operations for image composition, resizing, positioning, and format conversion.
 
 ## Purpose
 
-Image Composite nodes are essential for:
+Image nodes are essential for:
 
 - Combining multiple images
 - Adding overlays and watermarks
@@ -139,7 +138,7 @@ Convert image format:
 
 ```javascript
 {
-  type: "image-composite",
+  type: "image",
   parameters: {
     operation: "overlay",
     position: "bottom-right",
@@ -158,7 +157,7 @@ Convert image format:
 
 ```javascript
 {
-  type: "image-composite",
+  type: "image",
   parameters: {
     operation: "resize",
     width: 200,
@@ -182,7 +181,7 @@ Convert image format:
   },
   nodes: [
     {
-      type: "image-composite",
+      type: "image",
       parameters: {
         operation: "resize",
         width: 1920,
@@ -259,7 +258,7 @@ bmp, tiff
 
 ```javascript
 {
-  type: "image-composite",
+  type: "image",
   parameters: {
     operation: "resize",
     width: 1200,
@@ -276,7 +275,7 @@ bmp, tiff
 
 ```javascript
 {
-  type: "image-composite",
+  type: "image",
   parameters: {
     operation: "overlay",
     position: "bottom-right",
@@ -304,7 +303,7 @@ bmp, tiff
   },
   nodes: [
     {
-      type: "image-composite",
+      type: "image",
       parameters: {
         operation: "resize",
         width: 300,
