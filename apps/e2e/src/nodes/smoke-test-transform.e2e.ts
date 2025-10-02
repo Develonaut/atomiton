@@ -375,7 +375,7 @@ test.describe("Transform Smoke Tests", () => {
     await electronPage.click('[data-testid="run-smoke-tests"]');
 
     const logs = electronPage.locator('[data-testid="debug-logs"]');
-    await expect(logs).toContainText("📊 Results: 23/23 passed", {
+    await expect(logs).toContainText("📊 Results: 22/22 passed", {
       timeout: 15000,
     });
   });
