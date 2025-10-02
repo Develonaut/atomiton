@@ -31,10 +31,10 @@ test.describe("Transform Smoke Tests", () => {
     expect(dataOutput).toBeTruthy();
 
     const result = JSON.parse(dataOutput!);
-    expect(result.data.transformedData).toEqual([2, 4, 6, 8, 10]);
-    expect(result.data.operation).toBe("map");
-    expect(result.data.inputCount).toBe(5);
-    expect(result.data.outputCount).toBe(5);
+    expect(result.data).toEqual([2, 4, 6, 8, 10]);
+    expect(result.operation).toBe("map");
+    expect(result.inputCount).toBe(5);
+    expect(result.outputCount).toBe(5);
   });
 
   test("validates map - extract properties", async ({ electronPage }) => {
@@ -48,11 +48,11 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([
+    expect(result.data).toEqual([
       { id: 1, name: "Alice" },
       { id: 2, name: "Bob" },
     ]);
-    expect(result.data.operation).toBe("map");
+    expect(result.operation).toBe("map");
   });
 
   test("validates filter - even numbers", async ({ electronPage }) => {
@@ -66,10 +66,10 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([2, 4, 6, 8, 10]);
-    expect(result.data.operation).toBe("filter");
-    expect(result.data.inputCount).toBe(10);
-    expect(result.data.outputCount).toBe(5);
+    expect(result.data).toEqual([2, 4, 6, 8, 10]);
+    expect(result.operation).toBe("filter");
+    expect(result.inputCount).toBe(10);
+    expect(result.outputCount).toBe(5);
   });
 
   test("validates filter - adults only", async ({ electronPage }) => {
@@ -83,9 +83,9 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toHaveLength(2);
-    expect(result.data.transformedData[0].name).toBe("Alice");
-    expect(result.data.transformedData[1].name).toBe("Charlie");
+    expect(result.data).toHaveLength(2);
+    expect(result.data[0].name).toBe("Alice");
+    expect(result.data[1].name).toBe("Charlie");
   });
 
   test("validates reduce - sum numbers", async ({ electronPage }) => {
@@ -99,8 +99,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toBe(15);
-    expect(result.data.operation).toBe("reduce");
+    expect(result.data).toBe(15);
+    expect(result.operation).toBe("reduce");
   });
 
   test("validates reduce - concatenate strings", async ({ electronPage }) => {
@@ -114,8 +114,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toBe("Hello World!");
-    expect(result.data.operation).toBe("reduce");
+    expect(result.data).toBe("Hello World!");
+    expect(result.operation).toBe("reduce");
   });
 
   test("validates sort - ascending", async ({ electronPage }) => {
@@ -129,8 +129,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([1, 2, 3, 5, 8, 9]);
-    expect(result.data.operation).toBe("sort");
+    expect(result.data).toEqual([1, 2, 3, 5, 8, 9]);
+    expect(result.operation).toBe("sort");
   });
 
   test("validates sort - descending", async ({ electronPage }) => {
@@ -144,8 +144,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([9, 8, 5, 3, 2, 1]);
-    expect(result.data.operation).toBe("sort");
+    expect(result.data).toEqual([9, 8, 5, 3, 2, 1]);
+    expect(result.operation).toBe("sort");
   });
 
   test("validates sort - by property", async ({ electronPage }) => {
@@ -159,9 +159,9 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData[0].name).toBe("Alice");
-    expect(result.data.transformedData[1].name).toBe("Bob");
-    expect(result.data.transformedData[2].name).toBe("Charlie");
+    expect(result.data[0].name).toBe("Alice");
+    expect(result.data[1].name).toBe("Bob");
+    expect(result.data[2].name).toBe("Charlie");
   });
 
   test("validates group - by category", async ({ electronPage }) => {
@@ -175,10 +175,10 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toHaveProperty("fruit");
-    expect(result.data.transformedData).toHaveProperty("vegetable");
-    expect(result.data.transformedData.fruit).toHaveLength(2);
-    expect(result.data.transformedData.vegetable).toHaveLength(2);
+    expect(result.data).toHaveProperty("fruit");
+    expect(result.data).toHaveProperty("vegetable");
+    expect(result.data.fruit).toHaveLength(2);
+    expect(result.data.vegetable).toHaveLength(2);
   });
 
   test("validates flatten - depth 1", async ({ electronPage }) => {
@@ -192,8 +192,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(result.data.operation).toBe("flatten");
+    expect(result.data).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(result.operation).toBe("flatten");
   });
 
   test("validates flatten - depth 2", async ({ electronPage }) => {
@@ -207,7 +207,7 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(result.data).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   test("validates unique - remove duplicates", async ({ electronPage }) => {
@@ -221,10 +221,10 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([1, 2, 3, 4, 5]);
-    expect(result.data.operation).toBe("unique");
-    expect(result.data.inputCount).toBe(9);
-    expect(result.data.outputCount).toBe(5);
+    expect(result.data).toEqual([1, 2, 3, 4, 5]);
+    expect(result.operation).toBe("unique");
+    expect(result.inputCount).toBe(9);
+    expect(result.outputCount).toBe(5);
   });
 
   test("validates unique - strings", async ({ electronPage }) => {
@@ -238,7 +238,7 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual(["apple", "banana", "cherry"]);
+    expect(result.data).toEqual(["apple", "banana", "cherry"]);
   });
 
   test("validates reverse - numbers", async ({ electronPage }) => {
@@ -252,8 +252,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([5, 4, 3, 2, 1]);
-    expect(result.data.operation).toBe("reverse");
+    expect(result.data).toEqual([5, 4, 3, 2, 1]);
+    expect(result.operation).toBe("reverse");
   });
 
   test("validates reverse - strings", async ({ electronPage }) => {
@@ -267,12 +267,7 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([
-      "fourth",
-      "third",
-      "second",
-      "first",
-    ]);
+    expect(result.data).toEqual(["fourth", "third", "second", "first"]);
   });
 
   test("validates limit - first 3", async ({ electronPage }) => {
@@ -286,10 +281,10 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([1, 2, 3]);
-    expect(result.data.operation).toBe("limit");
-    expect(result.data.inputCount).toBe(10);
-    expect(result.data.outputCount).toBe(3);
+    expect(result.data).toEqual([1, 2, 3]);
+    expect(result.operation).toBe("limit");
+    expect(result.inputCount).toBe(10);
+    expect(result.outputCount).toBe(3);
   });
 
   test("validates limit - first 5", async ({ electronPage }) => {
@@ -303,8 +298,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual(["a", "b", "c", "d", "e"]);
-    expect(result.data.outputCount).toBe(5);
+    expect(result.data).toEqual(["a", "b", "c", "d", "e"]);
+    expect(result.outputCount).toBe(5);
   });
 
   test("validates skip - first 3", async ({ electronPage }) => {
@@ -318,10 +313,10 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([4, 5, 6, 7, 8, 9, 10]);
-    expect(result.data.operation).toBe("skip");
-    expect(result.data.inputCount).toBe(10);
-    expect(result.data.outputCount).toBe(7);
+    expect(result.data).toEqual([4, 5, 6, 7, 8, 9, 10]);
+    expect(result.operation).toBe("skip");
+    expect(result.inputCount).toBe(10);
+    expect(result.outputCount).toBe(7);
   });
 
   test("validates skip - first 5", async ({ electronPage }) => {
@@ -335,8 +330,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual(["f", "g", "h"]);
-    expect(result.data.outputCount).toBe(3);
+    expect(result.data).toEqual(["f", "g", "h"]);
+    expect(result.outputCount).toBe(3);
   });
 
   test("validates slice - middle section", async ({ electronPage }) => {
@@ -350,10 +345,10 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([3, 4, 5]);
-    expect(result.data.operation).toBe("slice");
-    expect(result.data.inputCount).toBe(10);
-    expect(result.data.outputCount).toBe(3);
+    expect(result.data).toEqual([3, 4, 5]);
+    expect(result.operation).toBe("slice");
+    expect(result.inputCount).toBe(10);
+    expect(result.outputCount).toBe(3);
   });
 
   test("validates slice - from index to end", async ({ electronPage }) => {
@@ -367,8 +362,8 @@ test.describe("Transform Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.transformedData).toEqual([6, 7, 8, 9, 10]);
-    expect(result.data.outputCount).toBe(5);
+    expect(result.data).toEqual([6, 7, 8, 9, 10]);
+    expect(result.outputCount).toBe(5);
   });
 
   test("all smoke tests pass", async ({ electronPage }) => {
