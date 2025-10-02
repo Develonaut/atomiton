@@ -17,7 +17,15 @@ describe("Transform Node Fields Integration", () => {
       expect(fieldKeys).toContain("operation");
       expect(fieldKeys).toContain("transformFunction");
       expect(fieldKeys).toContain("sortKey");
+      expect(fieldKeys).toContain("sortDirection");
+      expect(fieldKeys).toContain("reduceInitial");
+      expect(fieldKeys).toContain("groupKey");
       expect(fieldKeys).toContain("flattenDepth");
+      expect(fieldKeys).toContain("limitCount");
+      expect(fieldKeys).toContain("skipCount");
+      expect(fieldKeys).toContain("sliceStart");
+      expect(fieldKeys).toContain("sliceEnd");
+      expect(fieldKeys).toContain("data");
 
       // Should also include base schema fields
       expect(fieldKeys).toContain("enabled");
@@ -27,9 +35,9 @@ describe("Transform Node Fields Integration", () => {
       expect(fieldKeys).toContain("description");
     });
 
-    it("should have exactly 9 fields total", () => {
-      // 4 transform-specific + 5 base fields
-      expect(Object.keys(transformFields)).toHaveLength(9);
+    it("should have exactly 17 fields total", () => {
+      // 12 transform-specific + 5 base fields
+      expect(Object.keys(transformFields)).toHaveLength(17);
     });
 
     it("should have field config for every schema field", () => {
@@ -62,8 +70,15 @@ describe("Transform Node Fields Integration", () => {
         expect(transformFields.operation.options).toEqual([
           { value: "map", label: "Map" },
           { value: "filter", label: "Filter" },
+          { value: "reduce", label: "Reduce" },
           { value: "sort", label: "Sort" },
+          { value: "group", label: "Group" },
           { value: "flatten", label: "Flatten" },
+          { value: "unique", label: "Unique" },
+          { value: "reverse", label: "Reverse" },
+          { value: "limit", label: "Limit" },
+          { value: "skip", label: "Skip" },
+          { value: "slice", label: "Slice" },
         ]);
       });
 
@@ -91,7 +106,19 @@ describe("Transform Node Fields Integration", () => {
       });
 
       it("should validate enum values", () => {
-        const validOps = ["map", "filter", "sort", "flatten"];
+        const validOps = [
+          "map",
+          "filter",
+          "reduce",
+          "sort",
+          "group",
+          "flatten",
+          "unique",
+          "reverse",
+          "limit",
+          "skip",
+          "slice",
+        ];
 
         for (const op of validOps) {
           const result = transformSchema.safeParse({ operation: op });
@@ -126,7 +153,7 @@ describe("Transform Node Fields Integration", () => {
 
       it("should have helpText from schema description", () => {
         expect(transformFields.transformFunction.helpText).toBe(
-          "JavaScript function for map/filter operations",
+          "JavaScript function for map/filter/reduce operations",
         );
       });
 
@@ -377,10 +404,85 @@ describe("Transform Node Fields Integration", () => {
     });
   });
 
+  describe("New Operations", () => {
+    it("should validate reduce operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "reduce",
+        transformFunction: "({ acc, item }) => acc + item.value",
+        reduceInitial: "0",
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate group operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "group",
+        groupKey: "category",
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate unique operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "unique",
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate reverse operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "reverse",
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate limit operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "limit",
+        limitCount: 5,
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate skip operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "skip",
+        skipCount: 3,
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate slice operation", () => {
+      const result = transformSchema.safeParse({
+        operation: "slice",
+        sliceStart: 2,
+        sliceEnd: 5,
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it("should validate sort with direction", () => {
+      const result = transformSchema.safeParse({
+        operation: "sort",
+        sortKey: "name",
+        sortDirection: "desc",
+      });
+
+      expect(result.success).toBe(true);
+    });
+  });
+
   describe("Invalid Examples", () => {
     it("should reject invalid operation", () => {
       const result = transformSchema.safeParse({
-        operation: "reduce",
+        operation: "invalid",
       });
 
       expect(result.success).toBe(false);
@@ -421,6 +523,38 @@ describe("Transform Node Fields Integration", () => {
     it("should reject non-string transformFunction", () => {
       const result = transformSchema.safeParse({
         transformFunction: 123,
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it("should reject invalid sortDirection", () => {
+      const result = transformSchema.safeParse({
+        sortDirection: "invalid",
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it("should reject limitCount below min", () => {
+      const result = transformSchema.safeParse({
+        limitCount: 0,
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it("should reject negative skipCount", () => {
+      const result = transformSchema.safeParse({
+        skipCount: -1,
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it("should reject negative sliceStart", () => {
+      const result = transformSchema.safeParse({
+        sliceStart: -1,
       });
 
       expect(result.success).toBe(false);

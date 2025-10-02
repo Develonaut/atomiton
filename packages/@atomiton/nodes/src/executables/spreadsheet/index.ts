@@ -6,8 +6,11 @@
 
 import { createExecutable } from "#core/utils/executable";
 import type { SpreadsheetParameters } from "#schemas/spreadsheet";
-import { readSpreadsheetFromData, readSpreadsheetFromFile } from "./fileReader";
-import { parseSheetFromWorkbook } from "./sheetParser";
+import {
+  readSpreadsheetFromData,
+  readSpreadsheetFromFile,
+} from "#executables/spreadsheet/fileReader";
+import { parseSheetFromWorkbook } from "#executables/spreadsheet/sheetParser";
 
 /**
  * Spreadsheet Reader node executable

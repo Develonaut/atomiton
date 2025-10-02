@@ -20,8 +20,8 @@ export type { TransformOutput };
 export const transformExecutable = createExecutable<TransformParameters>(
   "transform",
   async ({ getInput, config, context }) => {
-    // Get input data using the smart helper
-    const inputData = getInput<unknown[]>("data") || [];
+    // Get input data from port or config (config.data used for testing/standalone)
+    const inputData = getInput<unknown[]>("data") || config.data || [];
     const functionOverride = getInput<string>("function");
 
     if (!Array.isArray(inputData)) {

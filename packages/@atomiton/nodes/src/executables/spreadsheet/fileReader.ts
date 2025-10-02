@@ -4,8 +4,12 @@
 
 import type { NodeExecutionContext } from "#core/utils/executable";
 import type { SpreadsheetParameters } from "#schemas/spreadsheet";
+import {
+  detectDelimiter,
+  detectFormat,
+  parseCSVManually,
+} from "#executables/spreadsheet/csvParser";
 import * as XLSX from "xlsx";
-import { detectDelimiter, detectFormat, parseCSVManually } from "./csvParser";
 
 /**
  * Read spreadsheet from file path

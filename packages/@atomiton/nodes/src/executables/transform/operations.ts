@@ -149,6 +149,40 @@ export function executeReverseTransform(data: unknown[]): unknown[] {
 }
 
 /**
+ * Execute limit transformation
+ * Returns first N items from the array
+ */
+export function executeLimitTransform(
+  data: unknown[],
+  limitCount: number = 10,
+): unknown[] {
+  return data.slice(0, limitCount);
+}
+
+/**
+ * Execute skip transformation
+ * Skips first N items from the array
+ */
+export function executeSkipTransform(
+  data: unknown[],
+  skipCount: number = 0,
+): unknown[] {
+  return data.slice(skipCount);
+}
+
+/**
+ * Execute slice transformation
+ * Returns items between start and end indices
+ */
+export function executeSliceTransform(
+  data: unknown[],
+  sliceStart: number = 0,
+  sliceEnd?: number,
+): unknown[] {
+  return data.slice(sliceStart, sliceEnd);
+}
+
+/**
  * Main transformation dispatcher
  */
 export function executeTransformation(
@@ -171,11 +205,10 @@ export function executeTransformation(
     }
 
     case "reduce":
-      // MVP: reduceFunction and reduceInitial removed, use transformFunction with empty initial
       return executeReduceTransform(
         data,
         transformFunction as string,
-        "", // MVP: reduceInitial hardcoded to empty string
+        config.reduceInitial ?? "",
         context,
       );
 
@@ -183,15 +216,15 @@ export function executeTransformation(
       return executeSortTransform(
         data,
         config.sortKey,
-        "asc", // MVP: sortDirection hardcoded to asc
+        config.sortDirection || "asc",
       );
 
     case "group": {
-      // MVP: groupBy removed, use sortKey as grouping key
-      if (!config.sortKey) {
-        throw new Error("sortKey is required for group operation");
+      const groupByKey = config.groupKey || config.sortKey;
+      if (!groupByKey) {
+        throw new Error("groupKey or sortKey is required for group operation");
       }
-      return executeGroupTransform(data, config.sortKey);
+      return executeGroupTransform(data, groupByKey);
     }
 
     case "flatten":
@@ -205,6 +238,15 @@ export function executeTransformation(
 
     case "reverse":
       return executeReverseTransform(data);
+
+    case "limit":
+      return executeLimitTransform(data, config.limitCount);
+
+    case "skip":
+      return executeSkipTransform(data, config.skipCount);
+
+    case "slice":
+      return executeSliceTransform(data, config.sliceStart, config.sliceEnd);
 
     default:
       return data;
