@@ -41,7 +41,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@trpc/server": "^11.6.0",
     "electron": "^38.0.0",
     "@atomiton/nodes": "workspace:*"
   },
