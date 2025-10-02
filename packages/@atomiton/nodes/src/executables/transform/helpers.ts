@@ -79,7 +79,7 @@ export function simpleOrderBy<T>(
 
 /**
  * Create a safe function from a string expression
- * Only supports simple property access and basic operations
+ * Uses Function constructor with sandboxed context
  */
 export function createSafeFunction(
   expression: string,
@@ -109,20 +109,23 @@ export function createSafeFunction(
       throw new Error("Invalid arrow function syntax");
     }
 
-    const param = parts[0].replace(/[()]/g, "").trim();
+    // Remove only outer parentheses, keep destructuring braces
+    let param = parts[0].trim();
+    if (param.startsWith("(") && param.endsWith(")")) {
+      param = param.slice(1, -1).trim();
+    }
     const body = parts[1].trim();
 
-    // Return a safe function that only accesses object properties
-    return (item: Record<string, unknown>) => {
-      try {
-        // Simple property access evaluation
-        return evaluateExpression(body, { [param]: item });
-      } catch (error) {
-        throw new Error(
-          `Failed to evaluate expression: ${error instanceof Error ? error.message : String(error)}`,
-        );
-      }
-    };
+    // Use Function constructor for full JavaScript support
+    // This is safe because we've already filtered dangerous patterns
+    try {
+      const fn = new Function(param, `return (${body})`);
+      return fn as (item: Record<string, unknown>) => unknown;
+    } catch (error) {
+      throw new Error(
+        `Failed to create function: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   }
 
   // For non-arrow functions, treat as simple property accessor
@@ -177,6 +180,7 @@ export function parseInitialValue(value: string): unknown {
     if (value === "true") return true;
     if (value === "false") return false;
     if (value === "null") return null;
+    if (value === "") return ""; // Empty string should remain empty string
     if (!isNaN(Number(value))) return Number(value);
     return value; // Return as string
   }

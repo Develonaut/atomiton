@@ -10,7 +10,6 @@ import type { NodeExecutionContext } from "#core/utils/executable";
  */
 export type TransformOutput = {
   result: unknown;
-  data: unknown;
   inputCount: number;
   outputCount: number;
   operation: string;
@@ -52,7 +51,6 @@ export function createTransformOutput(
 
   return {
     result: transformedData,
-    data: transformedData,
     inputCount,
     outputCount,
     operation,
@@ -66,7 +64,6 @@ export function createTransformOutput(
 export function createErrorOutput(operation: string): TransformOutput {
   return {
     result: null,
-    data: null,
     inputCount: 0,
     outputCount: 0,
     operation,

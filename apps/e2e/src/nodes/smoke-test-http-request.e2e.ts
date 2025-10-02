@@ -35,8 +35,8 @@ test.describe("HTTP Request Smoke Tests", () => {
     const result = JSON.parse(dataOutput!);
     expect(result.data.success).toBe(true);
     expect(result.data.status).toBe(200);
-    expect(result.data.data).toBeDefined();
-    expect(result.data.data.url).toContain("httpbin.org/get");
+    expect(result.data.result).toBeDefined();
+    expect(result.data.result.url).toContain("localhost:8888/get");
   });
 
   test("validates GET with query params", async ({ electronPage }) => {
@@ -52,9 +52,9 @@ test.describe("HTTP Request Smoke Tests", () => {
 
     expect(result.data.success).toBe(true);
     expect(result.data.status).toBe(200);
-    expect(result.data.data.args).toBeDefined();
-    expect(result.data.data.args.param1).toBe("value1");
-    expect(result.data.data.args.param2).toBe("value2");
+    expect(result.data.result.args).toBeDefined();
+    expect(result.data.result.args.param1).toBe("value1");
+    expect(result.data.result.args.param2).toBe("value2");
   });
 
   test("validates POST with JSON body", async ({ electronPage }) => {
@@ -70,7 +70,7 @@ test.describe("HTTP Request Smoke Tests", () => {
 
     expect(result.data.success).toBe(true);
     expect(result.data.status).toBe(200);
-    expect(result.data.data.json).toEqual({ test: "data", number: 42 });
+    expect(result.data.result.json).toEqual({ test: "data", number: 42 });
   });
 
   test("validates POST with custom headers", async ({ electronPage }) => {
@@ -86,9 +86,9 @@ test.describe("HTTP Request Smoke Tests", () => {
 
     expect(result.data.success).toBe(true);
     expect(result.data.status).toBe(200);
-    expect(result.data.data.headers).toBeDefined();
+    expect(result.data.result.headers).toBeDefined();
     // Headers are case-insensitive and lowercased by the server
-    expect(result.data.data.headers["X-Custom-Header"]).toBe("test-value");
+    expect(result.data.result.headers["x-custom-header"]).toBe("test-value");
   });
 
   test("validates PUT request", async ({ electronPage }) => {
@@ -104,9 +104,9 @@ test.describe("HTTP Request Smoke Tests", () => {
 
     expect(result.data.success).toBe(true);
     expect(result.data.status).toBe(200);
-    expect(result.data.data.json).toBeDefined();
-    expect(result.data.data.json.updated).toBe(true);
-    expect(typeof result.data.data.json.timestamp).toBe("number");
+    expect(result.data.result.json).toBeDefined();
+    expect(result.data.result.json.updated).toBe(true);
+    expect(typeof result.data.result.json.timestamp).toBe("number");
   });
 
   test("validates DELETE request", async ({ electronPage }) => {
@@ -122,7 +122,7 @@ test.describe("HTTP Request Smoke Tests", () => {
 
     expect(result.data.success).toBe(true);
     expect(result.data.status).toBe(200);
-    expect(result.data.data.url).toContain("httpbin.org/delete");
+    expect(result.data.result.url).toContain("localhost:8888/delete");
   });
 
   test("all smoke tests pass", async ({ electronPage }) => {

@@ -33,7 +33,7 @@ test.describe("Edit Fields Smoke Tests", () => {
     expect(dataOutput).toBeTruthy();
 
     const result = JSON.parse(dataOutput!);
-    expect(result.data.data).toEqual({
+    expect(result.data.result).toEqual({
       name: "John Doe",
       age: 30,
       active: true,
@@ -53,9 +53,9 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data.message).toBe("Hello World");
+    expect(result.data.result.message).toBe("Hello World");
     // Verify timestamp is ISO format
-    expect(result.data.data.timestamp).toMatch(
+    expect(result.data.result.timestamp).toMatch(
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
     );
   });
@@ -71,11 +71,11 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data.string).toBe("text");
-    expect(result.data.data.number).toBe(42);
-    expect(result.data.data.boolean).toBe(true);
-    expect(result.data.data.array).toEqual([1, 2, 3]);
-    expect(result.data.data.object).toEqual({ nested: "value" });
+    expect(result.data.result.string).toBe("text");
+    expect(result.data.result.number).toBe(42);
+    expect(result.data.result.boolean).toBe(true);
+    expect(result.data.result.array).toEqual([1, 2, 3]);
+    expect(result.data.result.object).toEqual({ nested: "value" });
   });
 
   test("validates keepOnlySet functionality", async ({ electronPage }) => {
@@ -89,12 +89,12 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data).toEqual({
+    expect(result.data.result).toEqual({
       field1: "value1",
       field2: "value2",
     });
     // Ensure only these two fields exist
-    expect(Object.keys(result.data.data)).toHaveLength(2);
+    expect(Object.keys(result.data.result)).toHaveLength(2);
   });
 
   test("validates user profile with timestamp", async ({ electronPage }) => {
@@ -108,10 +108,10 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data.username).toBe("alice_wonder");
-    expect(result.data.data.email).toBe("alice@example.com");
-    expect(result.data.data.role).toBe("developer");
-    expect(result.data.data.createdAt).toMatch(
+    expect(result.data.result.username).toBe("alice_wonder");
+    expect(result.data.result.email).toBe("alice@example.com");
+    expect(result.data.result.role).toBe("developer");
+    expect(result.data.result.createdAt).toMatch(
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
     );
   });
@@ -127,12 +127,12 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data.user.profile.name).toBe("Alice");
-    expect(result.data.data.user.profile.age).toBe(30);
-    expect(result.data.data.user.settings.theme).toBe("dark");
-    expect(result.data.data.user.settings.notifications).toBe(true);
-    expect(result.data.data.metadata.version).toBe("1.0");
-    expect(result.data.data.metadata.tags).toEqual(["important", "verified"]);
+    expect(result.data.result.user.profile.name).toBe("Alice");
+    expect(result.data.result.user.profile.age).toBe(30);
+    expect(result.data.result.user.settings.theme).toBe("dark");
+    expect(result.data.result.user.settings.notifications).toBe(true);
+    expect(result.data.result.metadata.version).toBe("1.0");
+    expect(result.data.result.metadata.tags).toEqual(["important", "verified"]);
   });
 
   test("validates empty values", async ({ electronPage }) => {
@@ -146,7 +146,7 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data).toEqual({});
+    expect(result.data.result).toEqual({});
   });
 
   test("validates null and falsy values", async ({ electronPage }) => {
@@ -160,10 +160,10 @@ test.describe("Edit Fields Smoke Tests", () => {
     const dataOutput = await testLog.getAttribute("data-output");
     const result = JSON.parse(dataOutput!);
 
-    expect(result.data.data.field1).toBe("value");
-    expect(result.data.data.field2).toBe(null);
-    expect(result.data.data.field3).toBe(0);
-    expect(result.data.data.field4).toBe(false);
+    expect(result.data.result.field1).toBe("value");
+    expect(result.data.result.field2).toBe(null);
+    expect(result.data.result.field3).toBe(0);
+    expect(result.data.result.field4).toBe(false);
   });
 
   test("all smoke tests pass", async ({ electronPage }) => {

@@ -6,7 +6,7 @@
 import { describe, expect, it } from "vitest";
 import { editFieldsExecutable } from "#executables/edit-fields";
 
-type EditFieldsResult = { data: Record<string, unknown> };
+type EditFieldsResult = { result: Record<string, unknown> };
 
 describe("Edit Fields Executable Integration", () => {
   describe("Basic Field Creation", () => {
@@ -21,9 +21,9 @@ describe("Edit Fields Executable Integration", () => {
           active: true,
         },
         keepOnlySet: false,
-      })) as { data: Record<string, unknown> };
-      expect(result).toHaveProperty("data");
-      expect(result.data).toEqual({
+      })) as { result: Record<string, unknown> };
+      expect(result).toHaveProperty("result");
+      expect(result.result).toEqual({
         name: "John Doe",
         age: 30,
         active: true,
@@ -43,7 +43,7 @@ describe("Edit Fields Executable Integration", () => {
         },
         keepOnlySet: false,
       })) as EditFieldsResult;
-      expect(result.data).toEqual({
+      expect(result.result).toEqual({
         existing: "value",
         count: 10,
         name: "Alice",
@@ -65,7 +65,7 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data).toEqual({
+      expect(result.result).toEqual({
         name: "New Name",
         status: "active",
       });
@@ -87,13 +87,13 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: true,
       })) as EditFieldsResult;
 
-      expect(result.data).toEqual({
+      expect(result.result).toEqual({
         name: "Alice",
         status: "active",
       });
-      expect(result.data).not.toHaveProperty("existing");
-      expect(result.data).not.toHaveProperty("another");
-      expect(result.data).not.toHaveProperty("count");
+      expect(result.result).not.toHaveProperty("existing");
+      expect(result.result).not.toHaveProperty("another");
+      expect(result.result).not.toHaveProperty("count");
     });
 
     it("should keep all fields when keepOnlySet is false", async () => {
@@ -109,7 +109,7 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data).toEqual({
+      expect(result.result).toEqual({
         existing: "value",
         count: 10,
         name: "Alice",
@@ -132,8 +132,8 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data.fullName).toBe("John Doe");
-      expect(result.data.greeting).toBe("Hello, John!");
+      expect(result.result.fullName).toBe("John Doe");
+      expect(result.result.greeting).toBe("Hello, John!");
     });
 
     it("should access nested properties in templates", async () => {
@@ -158,8 +158,8 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data.userInfo).toBe("Alice (alice@example.com)");
-      expect(result.data.version).toBe("Version 1.0");
+      expect(result.result.userInfo).toBe("Alice (alice@example.com)");
+      expect(result.result.version).toBe("Version 1.0");
     });
 
     it("should handle missing template variables gracefully", async () => {
@@ -176,7 +176,7 @@ describe("Edit Fields Executable Integration", () => {
       })) as EditFieldsResult;
 
       // Template engine renders missing variables as empty strings
-      expect(result.data.message).toBe("Hello John ");
+      expect(result.result.message).toBe("Hello John ");
     });
   });
 
@@ -193,12 +193,12 @@ describe("Edit Fields Executable Integration", () => {
       })) as EditFieldsResult;
 
       // Verify it's an ISO timestamp
-      expect(result.data.timestamp).toMatch(
+      expect(result.result.timestamp).toMatch(
         /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
       );
 
       // Verify it's recent (within last 5 seconds)
-      const timestamp = new Date(result.data.timestamp as string);
+      const timestamp = new Date(result.result.timestamp as string);
       const now = new Date();
       const diffMs = now.getTime() - timestamp.getTime();
       expect(diffMs).toBeLessThan(5000);
@@ -217,7 +217,7 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data.message).toMatch(/^User Alice logged in at \d{4}-/);
+      expect(result.result.message).toMatch(/^User Alice logged in at \d{4}-/);
     });
   });
 
@@ -239,11 +239,11 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data.age).toBe(30);
-      expect(result.data.active).toBe(true);
-      expect(result.data.score).toBe(95.5);
-      expect(result.data.items).toEqual([1, 2, 3]);
-      expect(result.data.metadata).toEqual({ key: "value" });
+      expect(result.result.age).toBe(30);
+      expect(result.result.active).toBe(true);
+      expect(result.result.score).toBe(95.5);
+      expect(result.result.items).toEqual([1, 2, 3]);
+      expect(result.result.metadata).toEqual({ key: "value" });
     });
 
     it("should mix string templates with non-string values", async () => {
@@ -262,10 +262,10 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data.message).toBe("Hello Alice");
-      expect(result.data.age).toBe(25);
-      expect(result.data.active).toBe(true);
-      expect(result.data.multiplier).toBe(2.5);
+      expect(result.result.message).toBe("Hello Alice");
+      expect(result.result.age).toBe(25);
+      expect(result.result.active).toBe(true);
+      expect(result.result.multiplier).toBe(2.5);
     });
   });
 
@@ -281,7 +281,7 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data).toEqual({ existing: "data" });
+      expect(result.result).toEqual({ existing: "data" });
     });
 
     it("should handle null values in config", async () => {
@@ -297,7 +297,7 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data.nullValue).toBe(null);
+      expect(result.result.nullValue).toBe(null);
     });
 
     it("should handle empty input data", async () => {
@@ -312,7 +312,7 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: false,
       })) as EditFieldsResult;
 
-      expect(result.data).toEqual({
+      expect(result.result).toEqual({
         name: "Alice",
         status: "active",
       });
@@ -332,8 +332,8 @@ describe("Edit Fields Executable Integration", () => {
       })) as EditFieldsResult;
 
       // Handlebars escapes HTML by default with {{}}
-      expect(result.data.output).toMatch(/Message: Hello &amp; goodbye/);
-      expect(result.data.output).toMatch(/Tag: &lt;script&gt;/);
+      expect(result.result.output).toMatch(/Message: Hello &amp; goodbye/);
+      expect(result.result.output).toMatch(/Tag: &lt;script&gt;/);
     });
   });
 
@@ -360,16 +360,16 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: true,
       })) as EditFieldsResult;
 
-      expect(result.data).toHaveProperty("fullName", "John Doe");
-      expect(result.data).toHaveProperty("displayName", "John (developer)");
-      expect(result.data).toHaveProperty(
+      expect(result.result).toHaveProperty("fullName", "John Doe");
+      expect(result.result).toHaveProperty("displayName", "John (developer)");
+      expect(result.result).toHaveProperty(
         "contactInfo",
         "Email: john.doe@example.com",
       );
-      expect(result.data).toHaveProperty("active", true);
-      expect(result.data.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
-      expect(result.data).not.toHaveProperty("firstName");
-      expect(result.data).not.toHaveProperty("lastName");
+      expect(result.result).toHaveProperty("active", true);
+      expect(result.result.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+      expect(result.result).not.toHaveProperty("firstName");
+      expect(result.result).not.toHaveProperty("lastName");
     });
 
     it("should transform API response into structured data", async () => {
@@ -399,11 +399,11 @@ describe("Edit Fields Executable Integration", () => {
         keepOnlySet: true,
       })) as EditFieldsResult;
 
-      expect(result.data.id).toBe("123");
-      expect(result.data.username).toBe("alice_wonder");
-      expect(result.data.email).toBe("alice@wonder.land");
-      expect(result.data.source).toBe("Data from API v2.0");
-      expect(result.data.processedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+      expect(result.result.id).toBe("123");
+      expect(result.result.username).toBe("alice_wonder");
+      expect(result.result.email).toBe("alice@wonder.land");
+      expect(result.result.source).toBe("Data from API v2.0");
+      expect(result.result.processedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     });
   });
 });

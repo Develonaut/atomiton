@@ -19,6 +19,9 @@ export default defineAppConfig({
       "import.meta.env.VITE_REPO_ROOT": JSON.stringify(
         path.resolve(__dirname, "../.."),
       ),
+      "import.meta.env.TEST_HTTP_SERVER_URL": JSON.stringify(
+        process.env.TEST_HTTP_SERVER_URL || "http://localhost:8888",
+      ),
     },
     resolve: {
       conditions:

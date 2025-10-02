@@ -54,7 +54,7 @@ export const editFieldsExecutable = createExecutable<EditFieldsParameters>(
     });
 
     return {
-      data: outputData,
+      result: outputData,
     };
   },
 );

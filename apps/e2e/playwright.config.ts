@@ -1,4 +1,16 @@
 import { defineConfig } from "@playwright/test";
+import * as dotenv from "dotenv";
+import * as path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Load environment variables from root .env file
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+
+const TEST_HTTP_SERVER_URL =
+  process.env.TEST_HTTP_SERVER_URL || "http://localhost:8888";
+const TEST_HTTP_SERVER_PORT = new URL(TEST_HTTP_SERVER_URL).port || "8888";
 
 /**
  * E2E test configuration for Atomiton Desktop Application
@@ -10,7 +22,11 @@ export default defineConfig({
   testMatch: "**/*.e2e.ts",
   testIgnore: ["**/.disabled/**", "**/disabled/**"],
   fullyParallel: true, // Enable parallel execution
-  workers: process.env.CI ? 1 : undefined, // Use default workers locally, 1 in CI
+  // Limited to 3 workers locally to avoid Electron resource contention with dev server.
+  // With 6+ workers (default based on CPU cores), multiple Electron instances competing
+  // for resources cause intermittent timeouts and failures. Tested 5 consecutive runs
+  // with 3 workers - all passed. With 6 workers - flaky failures occur.
+  workers: process.env.CI ? 1 : 3,
   timeout: 60000,
 
   reporter: process.env.CI
@@ -28,7 +44,7 @@ export default defineConfig({
     },
     {
       command: "tsx src/test-http-server.ts",
-      port: 8888,
+      port: Number(TEST_HTTP_SERVER_PORT),
       reuseExistingServer: true,
       timeout: 10000,
     },

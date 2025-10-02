@@ -6,6 +6,10 @@
 import { test, expect } from "#fixtures/electron";
 import { existsSync, readFileSync } from "fs";
 
+// Run file-system tests serially to avoid race conditions when multiple workers
+// create/delete the same files in .tmp directory simultaneously
+test.describe.configure({ mode: "serial" });
+
 test.describe("File System Smoke Tests", () => {
   test.beforeEach(async ({ electronPage }) => {
     await electronPage.goto("http://localhost:5173/debug/nodes", {

@@ -44,7 +44,6 @@ export type HttpRequestInput = {
 
 export type HttpRequestOutput = {
   result: unknown;
-  data: unknown;
   status: number;
   statusText: string;
   headers: Record<string, string>;
@@ -143,7 +142,6 @@ export const httpRequestExecutable = createExecutable<HttpRequestParameters>(
 
     const output: HttpRequestOutput = {
       result: data,
-      data,
       status: response.status,
       statusText: response.statusText,
       headers: responseHeaders,

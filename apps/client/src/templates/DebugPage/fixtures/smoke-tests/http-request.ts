@@ -8,7 +8,8 @@ export type SmokeTest = {
   config: Record<string, unknown>;
 };
 
-const TEST_BASE_URL = "https://httpbin.org";
+const TEST_BASE_URL =
+  import.meta.env.TEST_HTTP_SERVER_URL || "http://localhost:8888";
 
 export const httpRequestSmokeTests: SmokeTest[] = [
   {
