@@ -1,4 +1,10 @@
 import conductor from "#lib/conductor";
+import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import {
+  createSampleGroupNode,
+  createSampleTransformNode,
+  createTestWriteNode,
+} from "#templates/DebugPage/utils/sampleNodes";
 import {
   createNodeDefinition,
   getNodeDefinition,
@@ -10,7 +16,8 @@ import {
 } from "@atomiton/nodes/schemas";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export function useNodeOperations(addLog: (message: string) => void) {
+export function useNodeOperations() {
+  const { addLog } = useDebugLogs();
   const [nodeContent, setNodeContent] = useState<string>("");
   const [isExecuting, setIsExecuting] = useState(false);
   const [currentExecutionId, setCurrentExecutionId] = useState<string | null>(
@@ -100,123 +107,21 @@ export function useNodeOperations(addLog: (message: string) => void) {
   }, [currentExecutionId, addLog]);
 
   const createSampleNode = useCallback(() => {
-    const sampleNode = createNodeDefinition({
-      type: "transform",
-      id: "sample_transform",
-      parameters: {
-        code: "return { result: 'Hello from transform node!' };",
-      },
-    });
+    const sampleNode = createSampleTransformNode();
     setNodeContent(JSON.stringify(sampleNode, null, 2));
     addLog("Sample node created");
   }, [addLog]);
 
   const createGroupNode = useCallback(() => {
-    const groupNode = createNodeDefinition({
-      type: "group",
-      id: "sample_group",
-      nodes: [
-        createNodeDefinition({
-          type: "transform",
-          id: "step1",
-          parameters: {
-            code: "return { step: 1, message: 'First step' };",
-          },
-        }),
-        createNodeDefinition({
-          type: "transform",
-          id: "step2",
-          parameters: {
-            code: "return { step: 2, message: 'Second step' };",
-          },
-        }),
-      ],
-    });
+    const groupNode = createSampleGroupNode();
     setNodeContent(JSON.stringify(groupNode, null, 2));
     addLog("Group node created");
   }, [addLog]);
 
   const createTestNode = useCallback(() => {
-    const isoTimestamp = new Date().toISOString();
-    const testNode = createNodeDefinition({
-      type: "file-system",
-      id: "test_write_file",
-      parameters: {
-        operation: "write",
-        path: ".tmp/test_output.txt",
-        content: `Debug test executed at ${isoTimestamp}\n\nTest data: Hello from Debug Page!\n\nThis file was written by the Conductor via IPC.\nTimestamp: ${isoTimestamp}`,
-        encoding: "utf8",
-        createDirectories: true,
-        overwrite: true,
-      },
-    });
+    const testNode = createTestWriteNode();
     setNodeContent(JSON.stringify(testNode, null, 2));
     addLog("Test node (write-file) created");
-  }, [addLog]);
-
-  const testNode = useCallback(async () => {
-    try {
-      addLog("🧪 Starting test node execution...");
-      setIsExecuting(true);
-
-      // Generate unique filename with timestamp
-      const timestamp = Date.now();
-      const filePath = `.tmp/debug-test-${timestamp}.txt`;
-
-      // Create content that matches E2E test expectations
-      const isoTimestamp = new Date().toISOString();
-      const content = `Debug test executed at ${isoTimestamp}\n\nTest data: Hello from Debug Page!\n\nThis file was written by the Conductor via IPC.\nTimestamp: ${isoTimestamp}`;
-
-      // Create and execute the write-file test node
-      const testNode = createNodeDefinition({
-        type: "file-system",
-        id: "test_write_file_" + timestamp,
-        parameters: {
-          operation: "write",
-          path: filePath,
-          content: content,
-          encoding: "utf8",
-          createDirectories: true,
-          overwrite: true,
-        },
-      });
-
-      addLog("📝 Executing write-file node...");
-      const result = await conductor.node.run(testNode, {
-        executionId: `test_${timestamp}`,
-      });
-
-      // Log detailed result for debugging
-      addLog("Test execution result:");
-      addLog(JSON.stringify(result, null, 2));
-
-      // Check if the execution was successful
-      if (result && typeof result === "object") {
-        if ("success" in result && result.success === false) {
-          // Execution failed
-          const errorMessage = result.error?.message || "Unknown error";
-          const errorCode = result.error?.code || "UNKNOWN";
-          addLog(`❌ File write test error: ${errorMessage} (${errorCode})`);
-        } else if ("error" in result && result.error) {
-          // Alternative error format
-          addLog(`❌ File write test error: ${result.error}`);
-        } else if ("filePath" in result) {
-          // Success with file path in result
-          addLog(`✅ File write test completed: ${result.filePath}`);
-        } else {
-          // Assume success if no error indicators
-          addLog(`✅ File write test completed: ${filePath}`);
-        }
-      } else {
-        // No result object
-        addLog(`❌ File write test error: No result returned`);
-      }
-    } catch (error) {
-      addLog(`❌ File write test error: ${error}`);
-      console.error("Test node error:", error);
-    } finally {
-      setIsExecuting(false);
-    }
   }, [addLog]);
 
   // Get available node types from schema registry
@@ -224,9 +129,7 @@ export function useNodeOperations(addLog: (message: string) => void) {
   const availableNodeTypes = useMemo(() => {
     // Ensure schemas are registered before getting types
     registerAllNodeSchemas();
-    const types = getNodeSchemaTypes();
-    console.log("[useNodeOperations] Available node types:", types);
-    return types;
+    return getNodeSchemaTypes();
   }, []);
 
   // Get fields config from node definition (pre-built from createFieldsFromSchema)
@@ -295,6 +198,13 @@ export function useNodeOperations(addLog: (message: string) => void) {
     }
   }, [buildNodeFromFields, selectedNodeType, addLog]);
 
+  // Initialize with first available node type
+  useEffect(() => {
+    if (!selectedNodeType && availableNodeTypes.length > 0) {
+      setSelectedNodeType(availableNodeTypes[0]);
+    }
+  }, [availableNodeTypes, selectedNodeType]);
+
   // Reset field values when node type changes
   useEffect(() => {
     setNodeFieldValues({});
@@ -311,7 +221,6 @@ export function useNodeOperations(addLog: (message: string) => void) {
     createSampleNode,
     createGroupNode,
     createTestNode,
-    testNode,
     // Dynamic node selection
     selectedNodeType,
     setSelectedNodeType,

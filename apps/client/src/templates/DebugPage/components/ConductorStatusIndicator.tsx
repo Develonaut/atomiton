@@ -25,7 +25,7 @@ export function ConductorStatusIndicator() {
         } else {
           setConductorStatus("unhealthy");
         }
-      } catch (error) {
+      } catch {
         setConductorStatus("unhealthy");
       }
     };

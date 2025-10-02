@@ -53,8 +53,11 @@ function Dropdown({
 
   // Check if any child DropdownItem is active
   const isActiveChild = Children.toArray(children).some((child) => {
-    if (isValidElement(child) && child.props.href) {
-      return pathname === child.props.href;
+    if (isValidElement(child)) {
+      const props = child.props as { href?: string };
+      if (props.href) {
+        return pathname === props.href;
+      }
     }
     return false;
   });

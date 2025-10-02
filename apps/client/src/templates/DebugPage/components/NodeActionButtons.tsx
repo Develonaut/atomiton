@@ -2,28 +2,35 @@ import { Button } from "@atomiton/ui";
 
 type NodeActionButtonsProps = {
   isExecuting: boolean;
+  selectedNodeType: string | null;
   onRunNode: () => void;
-  onTestNode: () => void;
+  onRunSmokeTests: () => void;
 };
 
 export function NodeActionButtons({
   isExecuting,
+  selectedNodeType,
   onRunNode,
-  onTestNode,
+  onRunSmokeTests,
 }: NodeActionButtonsProps) {
   return (
     <>
-      <Button onClick={onRunNode} disabled={isExecuting} variant="default">
-        {isExecuting ? "Running..." : "▶ Run Node"}
+      <Button
+        onClick={onRunNode}
+        disabled={isExecuting}
+        size="icon"
+        title="Run Node"
+      >
+        ▶
       </Button>
       <Button
-        onClick={onTestNode}
-        disabled={isExecuting}
-        variant="default"
-        className="font-semibold"
-        data-testid="test-node-execution"
+        onClick={onRunSmokeTests}
+        disabled={isExecuting || !selectedNodeType}
+        size="icon"
+        title="Run Smoke Tests"
+        data-testid="run-smoke-tests"
       >
-        {isExecuting ? "Testing..." : "🧪 Test Node"}
+        🧪
       </Button>
     </>
   );

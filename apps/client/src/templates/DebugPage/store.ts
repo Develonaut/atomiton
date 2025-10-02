@@ -10,6 +10,7 @@ import { createStore } from "@atomiton/store";
 export type DebugLog = {
   timestamp: string;
   message: string;
+  metadata?: Record<string, unknown>;
 };
 
 type DebugState = {
@@ -19,7 +20,7 @@ type DebugState = {
 };
 
 type DebugActions = {
-  addLog: (message: string) => void;
+  addLog: (message: string, metadata?: Record<string, unknown>) => void;
   clearLogs: () => void;
   setActiveSection: (section: string) => void;
   setSelectedFlow: (flowId: string | null) => void;
@@ -31,11 +32,11 @@ const debugStore = createStore<DebugState & DebugActions>(
     activeSection: "environment",
     selectedFlow: null,
 
-    addLog: (message: string) => {
+    addLog: (message: string, metadata?: Record<string, unknown>) => {
       const timestamp = new Date().toLocaleTimeString();
       debugStore.setState((state) => ({
         ...state,
-        logs: [...state.logs, { timestamp, message }],
+        logs: [...state.logs, { timestamp, message, metadata }],
       }));
     },
 
@@ -85,11 +86,8 @@ const setupConductorSubscriptions = () => {
     }),
   ].filter(Boolean);
 
-  console.log("[DEBUG_STORE] Conductor event subscriptions initialized");
-
   return () => {
     subscriptions.forEach((unsub) => unsub?.());
-    console.log("[DEBUG_STORE] Conductor event subscriptions cleaned up");
   };
 };
 

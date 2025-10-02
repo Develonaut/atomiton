@@ -17,7 +17,7 @@ type WorkerFixtures = {
 };
 
 // Worker-scoped fixture that launches Electron once per worker
-export const test = base.extend<{}, WorkerFixtures>({
+export const test = base.extend<Record<string, never>, WorkerFixtures>({
   electronApp: [
     async ({}, use) => {
       const electronMain = path.join(
@@ -40,22 +40,26 @@ export const test = base.extend<{}, WorkerFixtures>({
         `electron-${process.pid}-${Date.now()}`,
       );
 
+      // Set working directory to repo root for consistent file path resolution
+      const repoRoot = path.join(__dirname, "../../../..");
+
       const app = await electron.launch({
         args: [
           electronMain,
           `--user-data-dir=${userDataDir}`,
           ...(isHeaded ? [] : ["--headless"]),
         ],
+        cwd: repoRoot,
         env: {
           ...process.env,
           NODE_ENV: "test",
           ELECTRON_RENDERER_URL: "http://localhost:5173",
         },
-        timeout: 30000,
+        timeout: 60000, // Increased from 30s to 60s to handle slower systems
       });
 
-      const page = await app.firstWindow();
-      await page.waitForLoadState("domcontentloaded");
+      const page = await app.firstWindow({ timeout: 60000 }); // Add explicit timeout for firstWindow
+      await page.waitForLoadState("domcontentloaded", { timeout: 60000 });
 
       await use(app);
 

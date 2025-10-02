@@ -1,6 +1,6 @@
 import { Input } from "@atomiton/ui";
 import type { ChangeEvent } from "react";
-import type { FieldComponentProps } from "../types";
+import type { FieldComponentProps } from "#components/NodeFieldRenderer/types";
 
 export function TextField({
   fieldKey,
@@ -9,12 +9,13 @@ export function TextField({
   onChange,
   disabled = false,
 }: FieldComponentProps) {
-  const inputTypes = {
+  const inputTypes: Record<string, string> = {
     text: "text",
     password: "password",
     email: "email",
     url: "url",
     file: "file",
+    number: "number",
   };
 
   const inputType = inputTypes[config.controlType] || "text";

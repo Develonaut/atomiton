@@ -1,13 +1,13 @@
+import type {
+  ExecutionContext,
+  ExecutionResult,
+  IExecutionService,
+  ProgressEvent,
+  ServiceResult,
+} from "#main/services/types";
 import { createConductor } from "@atomiton/conductor/desktop";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { EventEmitter } from "events";
-import type {
-  IExecutionService,
-  ServiceResult,
-  ExecutionResult,
-  ProgressEvent,
-  ExecutionContext,
-} from "#main/services/types";
 
 export type ExecutionService = IExecutionService;
 

@@ -1,5 +1,5 @@
 import { Input } from "@atomiton/ui";
-import type { FieldComponentProps } from "../types";
+import type { FieldComponentProps } from "#components/NodeFieldRenderer/types";
 import type { ChangeEvent } from "react";
 
 export function NumberField({

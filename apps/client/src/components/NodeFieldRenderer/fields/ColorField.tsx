@@ -1,4 +1,4 @@
-import type { FieldComponentProps } from "../types";
+import type { FieldComponentProps } from "#components/NodeFieldRenderer/types";
 
 export function ColorField({
   fieldKey,

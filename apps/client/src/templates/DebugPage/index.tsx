@@ -1,1 +1,1 @@
-export { default } from "./DebugLayout";
+export { default } from "#templates/DebugPage/DebugLayout";

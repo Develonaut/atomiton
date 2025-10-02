@@ -27,7 +27,7 @@ export function HealthStatusIndicator() {
         } else {
           setHealthStatus("unhealthy");
         }
-      } catch (error) {
+      } catch {
         setHealthStatus("unhealthy");
       }
     };

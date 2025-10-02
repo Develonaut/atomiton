@@ -27,13 +27,24 @@ export type SpreadsheetFormat = (typeof spreadsheetFormats)[number];
  * Supports multiple spreadsheet formats with automatic format detection
  */
 export const spreadsheetSchemaShape = {
-  path: v.string().describe("Path to the spreadsheet file to read"),
+  // Input methods (provide either path OR data, not both)
+  path: v
+    .string()
+    .optional()
+    .describe("File path to read (desktop environments only)"),
+
+  data: v
+    .string()
+    .optional()
+    .describe(
+      "Raw spreadsheet content as string (works in all environments - CSV, TSV, or other text formats)",
+    ),
 
   format: v
     .enum(spreadsheetFormats)
     .optional()
     .describe(
-      "Spreadsheet format (auto-detected from file extension if not provided)",
+      "Spreadsheet format (auto-detected from file extension if using path)",
     ),
 
   sheetName: v

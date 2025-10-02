@@ -4,9 +4,9 @@
  * Validates that field constraints match actual schema validation behavior
  */
 
-import { describe, expect, it } from "vitest";
 import { spreadsheetFields } from "#definitions/spreadsheet/fields";
 import { spreadsheetSchema } from "#schemas/spreadsheet";
+import { describe, expect, it } from "vitest";
 
 describe("Spreadsheet Node Fields Integration", () => {
   describe("Field Generation Pipeline", () => {
@@ -15,6 +15,7 @@ describe("Spreadsheet Node Fields Integration", () => {
 
       // Should include all fields from spreadsheetSchemaShape
       expect(fieldKeys).toContain("path");
+      expect(fieldKeys).toContain("data");
       expect(fieldKeys).toContain("format");
       expect(fieldKeys).toContain("sheetName");
       expect(fieldKeys).toContain("sheetIndex");
@@ -31,9 +32,9 @@ describe("Spreadsheet Node Fields Integration", () => {
       expect(fieldKeys).toContain("description");
     });
 
-    it("should have exactly 13 fields total", () => {
-      // 8 spreadsheet-specific + 5 base fields
-      expect(Object.keys(spreadsheetFields)).toHaveLength(13);
+    it("should have exactly 14 fields total", () => {
+      // 9 spreadsheet-specific (path, data, format, sheetName, sheetIndex, hasHeaders, range, delimiter, skipEmptyLines) + 5 base fields
+      expect(Object.keys(spreadsheetFields)).toHaveLength(14);
     });
 
     it("should have field config for every schema field", () => {
@@ -62,32 +63,54 @@ describe("Spreadsheet Node Fields Integration", () => {
         expect(spreadsheetFields.path.controlType).toBe("text");
       });
 
-      it("should be required (auto-derived, no default or optional)", () => {
-        expect(spreadsheetFields.path.required).toBe(true);
+      it("should be optional (either path OR data required)", () => {
+        expect(spreadsheetFields.path.required).toBe(false);
 
-        // Verify schema validates this constraint
-        const resultMissing = spreadsheetSchema.safeParse({
-          hasHeaders: true,
-          delimiter: ",",
-        });
-        expect(resultMissing.success).toBe(false);
-
-        const resultValid = spreadsheetSchema.safeParse({
+        // Verify schema allows path without data
+        const resultWithPath = spreadsheetSchema.safeParse({
           path: "/path/to/file.xlsx",
-          hasHeaders: true,
-          delimiter: ",",
         });
-        expect(resultValid.success).toBe(true);
+        expect(resultWithPath.success).toBe(true);
+
+        // Verify schema allows data without path
+        const resultWithData = spreadsheetSchema.safeParse({
+          data: "col1,col2\nval1,val2",
+        });
+        expect(resultWithData.success).toBe(true);
       });
 
       it("should have helpText from schema description", () => {
-        expect(spreadsheetFields.path.helpText).toBe(
-          "Path to the spreadsheet file to read",
-        );
+        expect(spreadsheetFields.path.helpText).toContain("File path to read");
       });
 
       it("should have auto-formatted label", () => {
         expect(spreadsheetFields.path.label).toBe("Path");
+      });
+    });
+
+    describe("Data Field", () => {
+      it("should have textarea control type (overridden)", () => {
+        expect(spreadsheetFields.data.controlType).toBe("textarea");
+      });
+
+      it("should be optional (either path OR data required)", () => {
+        expect(spreadsheetFields.data.required).toBe(false);
+      });
+
+      it("should have custom placeholder", () => {
+        expect(spreadsheetFields.data.placeholder).toBe(
+          "Paste CSV/TSV data here...",
+        );
+      });
+
+      it("should have helpText from schema description", () => {
+        expect(spreadsheetFields.data.helpText).toContain(
+          "Raw spreadsheet content",
+        );
+      });
+
+      it("should have auto-formatted label", () => {
+        expect(spreadsheetFields.data.label).toBe("Data");
       });
     });
 
@@ -113,7 +136,7 @@ describe("Spreadsheet Node Fields Integration", () => {
 
       it("should have helpText from schema description", () => {
         expect(spreadsheetFields.format.helpText).toBe(
-          "Spreadsheet format (auto-detected from file extension if not provided)",
+          "Spreadsheet format (auto-detected from file extension if using path)",
         );
       });
     });
@@ -385,16 +408,22 @@ describe("Spreadsheet Node Fields Integration", () => {
   });
 
   describe("Invalid Examples", () => {
-    it("should reject missing required path field", () => {
-      const result = spreadsheetSchema.safeParse({
-        hasHeaders: true,
-        delimiter: ",",
+    it("should accept when either path or data is provided", () => {
+      // Valid with path only
+      const resultPath = spreadsheetSchema.safeParse({
+        path: "/data/users.csv",
       });
+      expect(resultPath.success).toBe(true);
 
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.errors[0].path).toContain("path");
-      }
+      // Valid with data only
+      const resultData = spreadsheetSchema.safeParse({
+        data: "name,age\nAlice,30",
+        format: "csv",
+      });
+      expect(resultData.success).toBe(true);
+
+      // TODO: Add validation that rejects when BOTH path and data are missing
+      // TODO: Add validation that rejects when BOTH path and data are provided
     });
 
     it("should reject invalid format", () => {

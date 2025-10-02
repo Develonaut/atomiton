@@ -1,5 +1,5 @@
 import { ThemeProvider } from "#components/ThemeProvider";
-import { createRouter, RouterProvider } from "@atomiton/router";
+import { createRouter } from "@atomiton/router";
 
 // Import template components directly
 import ButtonsPage from "#templates/ButtonsPage";
@@ -22,30 +22,35 @@ import TypographyPage from "#templates/TypographyPage";
 
 const router = createRouter({
   routes: [
-    { path: "/", component: HomePage },
-    { path: "/buttons", component: ButtonsPage },
-    { path: "/cards", component: CardsPage },
-    { path: "/colors", component: ColorsPage },
-    { path: "/comment", component: CommentPage },
-    { path: "/depths", component: DepthsPage },
-    { path: "/dropdown", component: DropdownPage },
-    { path: "/iconography", component: IconographyPage },
-    { path: "/inputs", component: InputsPage },
-    { path: "/menu", component: MenuPage },
-    { path: "/modal", component: ModalPage },
-    { path: "/notifications", component: NotificationsPage },
-    { path: "/prompt-input", component: PromptInputPage },
-    { path: "/sidebar", component: SidebarPage },
-    { path: "/toolbar", component: ToolbarPage },
-    { path: "/topbar", component: TopbarPage },
-    { path: "/typography", component: TypographyPage },
+    { name: "home", path: "/", component: HomePage },
+    { name: "buttons", path: "/buttons", component: ButtonsPage },
+    { name: "cards", path: "/cards", component: CardsPage },
+    { name: "colors", path: "/colors", component: ColorsPage },
+    { name: "comment", path: "/comment", component: CommentPage },
+    { name: "depths", path: "/depths", component: DepthsPage },
+    { name: "dropdown", path: "/dropdown", component: DropdownPage },
+    { name: "iconography", path: "/iconography", component: IconographyPage },
+    { name: "inputs", path: "/inputs", component: InputsPage },
+    { name: "menu", path: "/menu", component: MenuPage },
+    { name: "modal", path: "/modal", component: ModalPage },
+    {
+      name: "notifications",
+      path: "/notifications",
+      component: NotificationsPage,
+    },
+    { name: "promptInput", path: "/prompt-input", component: PromptInputPage },
+    { name: "sidebar", path: "/sidebar", component: SidebarPage },
+    { name: "toolbar", path: "/toolbar", component: ToolbarPage },
+    { name: "topbar", path: "/topbar", component: TopbarPage },
+    { name: "typography", path: "/typography", component: TypographyPage },
   ],
 });
 
 function App() {
+  const { RouterProvider: Provider } = router;
   return (
     <ThemeProvider>
-      <RouterProvider router={router} />
+      <Provider />
     </ThemeProvider>
   );
 }
