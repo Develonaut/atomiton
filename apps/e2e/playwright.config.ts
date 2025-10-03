@@ -21,13 +21,10 @@ export default defineConfig({
   testDir: "./src",
   testMatch: "**/*.e2e.ts",
   testIgnore: ["**/.disabled/**", "**/disabled/**"],
-  fullyParallel: true, // Enable parallel execution
-  // Limited to 3 workers locally to avoid Electron resource contention with dev server.
-  // With 6+ workers (default based on CPU cores), multiple Electron instances competing
-  // for resources cause intermittent timeouts and failures. Tested 5 consecutive runs
-  // with 3 workers - all passed. With 6 workers - flaky failures occur.
-  workers: process.env.CI ? 1 : 3,
+  fullyParallel: true,
+  workers: process.env.CI ? 1 : undefined,
   timeout: 60000,
+  retries: 1, // Retry failed tests once to handle flakiness
 
   reporter: process.env.CI
     ? [["github"], ["html", { open: "never" }]]

@@ -58,16 +58,18 @@ pre-commit:
         pnpm test
       fail_text: "❌ Unit tests failed - please fix failing tests"
 
+    # Build affected packages to catch build errors early
+    build-check:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: |
+        echo "🏗️ Building affected packages..."
+        pnpm build
+      fail_text: "❌ Build failed - please fix build errors"
+
 # Comprehensive pre-push hooks - runs ~2-5min before sharing code
 pre-push:
   parallel: true
   commands:
-    build-check:
-      run: |
-        echo "🏗️ Verifying build integrity for affected packages..."
-        pnpm build
-      fail_text: "❌ Build failed - please fix build errors"
-
     # Integration tests (tests package interactions)
     integration-tests:
       run: |
