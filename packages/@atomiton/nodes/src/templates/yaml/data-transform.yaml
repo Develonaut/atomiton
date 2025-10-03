@@ -35,193 +35,35 @@ nodes:
   - id: "csv-source"
     type: "csv-reader"
     name: "Read CSV Data"
-    category: "io"
     version: "1.0.0"
-
-    metadata:
-      id: "csv-reader"
-      name: "CSV Reader"
-      type: "csv-reader"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Read and parse CSV files"
-      category: "io"
-      icon: "table-2"
-      source: "system"
-      experimental: false
-      deprecated: false
-
-    inputPorts:
-      - id: "trigger"
-        name: "Trigger"
-        type: "trigger"
-        dataType: "any"
-        required: false
-
-    outputPorts:
-      - id: "data"
-        name: "Data"
-        type: "output"
-        dataType: "array"
-      - id: "error"
-        name: "Error"
-        type: "error"
-        dataType: "object"
-
     parameters:
-      filePath:
-        type: "string"
-        required: true
-        control: "file-picker"
-        fileTypes: [".csv"]
-      hasHeaders:
-        type: "boolean"
-        default: true
-        control: "checkbox"
-      delimiter:
-        type: "string"
-        default: ","
-        control: "select"
-        options: [",", ";", "\t", "|"]
-      encoding:
-        type: "string"
-        default: "utf-8"
-        control: "select"
-        options: ["utf-8", "ascii", "utf-16", "iso-8859-1"]
-
-    data:
       filePath: "/data/sample.csv"
       hasHeaders: true
       delimiter: ","
       encoding: "utf-8"
-      customLabel: "Read CSV Data"
-      lastModified: "2025-01-15T10:00:00Z"
-
     position:
       x: 50
       y: 100
 
-    settings:
-      ui:
-        position:
-          x: 50
-          y: 100
-
   - id: "filter-transform"
     type: "transform"
     name: "Filter Active Records"
-    category: "data"
     version: "1.0.0"
-
-    metadata:
-      id: "transform"
-      name: "Transform"
-      type: "transform"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Transform data using JavaScript expressions"
-      category: "data"
-      icon: "wand-2"
-      source: "system"
-      experimental: false
-      deprecated: false
-
-    inputPorts:
-      - id: "input"
-        name: "Input"
-        type: "input"
-        dataType: "any"
-        required: true
-
-    outputPorts:
-      - id: "output"
-        name: "Output"
-        type: "output"
-        dataType: "any"
-
     parameters:
       expression:
-        type: "string"
-        default: "return data;"
-        control: "code"
-        language: "javascript"
-      inputType:
-        type: "string"
-        default: "any"
-        control: "select"
-        options: ["any", "string", "number", "boolean", "object", "array"]
-      outputType:
-        type: "string"
-        default: "any"
-        control: "select"
-        options: ["any", "string", "number", "boolean", "object", "array"]
-
-    data:
-      expression: "// Filter only active records\nreturn data.filter(row => row.active === 'true');"
+        "// Filter only active records\nreturn data.filter(row => row.active ===
+        'true');"
       inputType: "array"
       outputType: "array"
-      customLabel: "Filter Active Records"
-      lastModified: "2025-01-15T10:00:00Z"
-
     position:
       x: 300
       y: 100
 
-    settings:
-      ui:
-        position:
-          x: 300
-          y: 100
-
   - id: "aggregate-code"
     type: "code"
     name: "Calculate Totals"
-    category: "logic"
     version: "1.0.0"
-
-    metadata:
-      id: "code"
-      name: "Code"
-      type: "code"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Execute custom JavaScript/TypeScript code"
-      category: "logic"
-      icon: "code-2"
-      source: "system"
-      experimental: false
-      deprecated: false
-
-    inputPorts:
-      - id: "input"
-        name: "Input"
-        type: "input"
-        dataType: "any"
-        required: false
-
-    outputPorts:
-      - id: "output"
-        name: "Output"
-        type: "output"
-        dataType: "any"
-
     parameters:
-      code:
-        type: "string"
-        default: "// Write your JavaScript code here\nreturn data;"
-        control: "code"
-      inputParams:
-        type: "string"
-        default: "data"
-      returnType:
-        type: "string"
-        default: "any"
-        options: ["any", "string", "number", "boolean", "object", "array"]
-      async:
-        type: "boolean"
-        default: false
-
-    data:
       code: |
         // Aggregate totals
         const total = data.reduce((sum, row) => {
@@ -236,110 +78,40 @@ nodes:
       inputParams: "data"
       returnType: "object"
       async: false
-      customLabel: "Calculate Totals"
-      lastModified: "2025-01-15T10:00:00Z"
-
     position:
       x: 550
       y: 100
 
-    settings:
-      ui:
-        position:
-          x: 550
-          y: 100
-
   - id: "output-file"
     type: "file-system"
     name: "Write Results"
-    category: "io"
     version: "1.0.0"
-
-    metadata:
-      id: "file-system"
-      name: "File System"
-      type: "file-system"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "File system operations (read, write, list)"
-      category: "io"
-      icon: "file"
-      source: "system"
-      experimental: false
-      deprecated: false
-
-    inputPorts:
-      - id: "input"
-        name: "Input"
-        type: "input"
-        dataType: "any"
-        required: true
-
-    outputPorts:
-      - id: "output"
-        name: "Output"
-        type: "output"
-        dataType: "any"
-      - id: "error"
-        name: "Error"
-        type: "error"
-        dataType: "object"
-
     parameters:
-      operation:
-        type: "string"
-        default: "read"
-        control: "select"
-        options: ["read", "write", "list", "delete", "exists"]
-      filePath:
-        type: "string"
-        required: true
-        control: "file-picker"
-      encoding:
-        type: "string"
-        default: "utf-8"
-        control: "select"
-        options: ["utf-8", "ascii", "binary", "base64"]
-      createDirectory:
-        type: "boolean"
-        default: false
-        control: "checkbox"
-      overwrite:
-        type: "boolean"
-        default: true
-        control: "checkbox"
-
-    data:
       operation: "write"
       filePath: "/output/results.json"
       encoding: "utf-8"
       createDirectory: true
       overwrite: true
-      customLabel: "Write Results"
-      lastModified: "2025-01-15T10:00:00Z"
-
     position:
       x: 800
       y: 100
-
-    settings:
-      ui:
-        position:
-          x: 800
-          y: 100
 
 edges:
   - id: "csv-to-filter"
     source: "csv-source"
     target: "filter-transform"
-
+    sourceHandle: "output"
+    targetHandle: "input"
   - id: "filter-to-aggregate"
     source: "filter-transform"
     target: "aggregate-code"
-
+    sourceHandle: "output"
+    targetHandle: "input"
   - id: "aggregate-to-output"
     source: "aggregate-code"
     target: "output-file"
+    sourceHandle: "output"
+    targetHandle: "input"
 
 variables:
   inputPath:

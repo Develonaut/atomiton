@@ -87,4 +87,3 @@ pre-push:
 # Skip options for cleaner output
 skip_output:
   - meta
-  - summary
