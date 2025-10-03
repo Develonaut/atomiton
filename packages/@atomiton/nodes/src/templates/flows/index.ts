@@ -1,0 +1,86 @@
+/**
+ * Flow Template Loading System
+ *
+ * Provides access to bundled flow templates (read-only examples).
+ * These are separate from user storage - templates are immutable starter examples.
+ */
+
+import type { NodeDefinition } from "#core/types/definition";
+import { loadTemplate } from "#templates/loader";
+
+// Import YAML templates as raw strings (handled by build system)
+// @ts-expect-error - Build system handles raw imports
+import helloWorldYaml from "#templates/yaml/hello-world.yaml?raw";
+// @ts-expect-error - Build system handles raw imports
+import dataTransformYaml from "#templates/yaml/data-transform.yaml?raw";
+// @ts-expect-error - Build system handles raw imports
+import imageProcessorYaml from "#templates/yaml/image-processor.yaml?raw";
+
+export type FlowTemplate = {
+  id: string;
+  name: string;
+  description?: string;
+  filename: string;
+  definition: NodeDefinition;
+};
+
+/**
+ * Metadata for built-in flow templates
+ */
+const FLOW_TEMPLATES = [
+  {
+    filename: "hello-world.yaml",
+    id: "hello-world-flow",
+    name: "Hello World Flow",
+    yamlContent: helloWorldYaml,
+  },
+  {
+    filename: "data-transform.yaml",
+    id: "data-transform-flow",
+    name: "Data Transform Pipeline",
+    yamlContent: dataTransformYaml,
+  },
+  {
+    filename: "image-processor.yaml",
+    id: "image-processor-flow",
+    name: "Image Processing Workflow",
+    yamlContent: imageProcessorYaml,
+  },
+];
+
+/**
+ * Load all flow templates
+ * Returns metadata for UI display
+ */
+export async function loadFlowTemplates(): Promise<FlowTemplate[]> {
+  const templates = await Promise.all(
+    FLOW_TEMPLATES.map(async (template) => {
+      const definition = await loadTemplate(template.yamlContent);
+
+      return {
+        id: template.id,
+        name: template.name,
+        description: definition.metadata?.description as string | undefined,
+        filename: template.filename,
+        definition,
+      };
+    }),
+  );
+
+  return templates;
+}
+
+/**
+ * Get a specific flow template by ID
+ */
+export async function getFlowTemplate(
+  id: string,
+): Promise<NodeDefinition | null> {
+  const template = FLOW_TEMPLATES.find((t) => t.id === id);
+  if (!template) {
+    return null;
+  }
+
+  const definition = await loadTemplate(template.yamlContent);
+  return definition;
+}

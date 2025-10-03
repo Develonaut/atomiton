@@ -1,5 +1,6 @@
 // Functional Channel Server Exports
 export * from "#main/channels/createChannelServer";
+export * from "#main/channels/flowChannel";
 export * from "#main/channels/loggerChannel";
 export * from "#main/channels/nodeChannel";
 export * from "#main/channels/storageChannel";

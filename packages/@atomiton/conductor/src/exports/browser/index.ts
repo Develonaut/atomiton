@@ -6,6 +6,7 @@
 import { createAuthAPI } from "#exports/browser/authApi.js";
 import { getEnvironmentInfo } from "#exports/browser/environment.js";
 import { createEventsAPI } from "#exports/browser/eventsApi.js";
+import { createFlowAPI } from "#exports/browser/flow.js";
 import { createNodeAPI } from "#exports/browser/nodeApi.js";
 import { createStorageAPI } from "#exports/browser/storageApi.js";
 import { createSystemAPI } from "#exports/browser/systemApi.js";
@@ -53,6 +54,7 @@ export function createConductorInstance(config: ConductorConfig = {}) {
   // Create all API modules
   const nodeAPI = createNodeAPI(transport);
   const storageAPI = createStorageAPI(transport);
+  const flowAPI = createFlowAPI(transport);
   const authAPI = createAuthAPI(transport);
   const systemAPI = createSystemAPI(transport);
   const eventsAPI = createEventsAPI(transport);
@@ -63,6 +65,7 @@ export function createConductorInstance(config: ConductorConfig = {}) {
   return {
     node: nodeAPI,
     storage: storageAPI,
+    flow: flowAPI,
     auth: authAPI,
     system: systemAPI,
     events: eventsAPI,

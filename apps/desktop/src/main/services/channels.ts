@@ -6,6 +6,7 @@ import { createConductor } from "@atomiton/conductor/desktop";
 import { createLogger } from "@atomiton/logger/desktop";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import {
+  createFlowChannelServer,
   createLoggerChannelServer,
   createNodeChannelServer,
   createStorageChannelServer,
@@ -57,18 +58,27 @@ export const createChannelManager = (): ChannelManager => {
 
     const storageChannel = createStorageChannelServer(ipcMain);
 
-    channels.push(loggerChannel, nodeChannel, systemChannel, storageChannel);
+    const flowChannel = createFlowChannelServer(ipcMain);
+
+    channels.push(
+      loggerChannel,
+      nodeChannel,
+      systemChannel,
+      storageChannel,
+      flowChannel,
+    );
 
     logger.info(`Initialized ${channels.length} channel servers`, [
       "logger",
       "node",
       "system",
       "storage",
+      "flow",
     ]);
 
     // Register channel discovery handler
     ipcMain.handle("channels:list", () => {
-      return ["logger", "node", "storage", "system"];
+      return ["logger", "node", "storage", "system", "flow"];
     });
 
     logger.info("Channel discovery handler registered");
@@ -159,7 +169,7 @@ export const createChannelManager = (): ChannelManager => {
   const getChannelCount = () => channels.length;
 
   // Get channel names
-  const getChannelNames = () => ["logger", "node", "storage", "system"];
+  const getChannelNames = () => ["logger", "node", "storage", "system", "flow"];
 
   // Initialize on creation
   initialize();
@@ -199,7 +209,7 @@ export const checkChannelHealth = async (): Promise<{
 
   try {
     // Only check channels that actually exist (removed "auth" which is not created)
-    const channelNames = ["node", "storage", "system"];
+    const channelNames = ["node", "storage", "system", "flow"];
 
     for (const channelName of channelNames) {
       try {

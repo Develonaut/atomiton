@@ -6,6 +6,7 @@ export default defineLibraryConfig({
     definitions: "./src/definitions/index.ts",
     executables: "./src/executables/index.ts",
     schemas: "./src/schemas/index.ts",
+    "templates/flows": "./src/templates/flows/index.ts",
   },
   external: [
     // Node.js built-ins
