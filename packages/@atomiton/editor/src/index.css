@@ -5,6 +5,9 @@
  * It imports and re-exports all the CSS that consumers might need.
  */
 
+/* Import theme variables from UI package */
+@import "@atomiton/ui/theme/variables.css";
+
 /* React Flow styles - Required for proper node editor styling */
 @import "@xyflow/react/dist/style.css";
 

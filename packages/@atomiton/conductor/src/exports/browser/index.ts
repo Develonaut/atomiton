@@ -37,6 +37,8 @@ export type {
   NodeProgressEvent,
 } from "#exports/browser/types.js";
 
+export type { NodeExecutionState } from "#execution/executionGraphStore";
+
 /**
  * Internal factory function for creating conductor instances
  */

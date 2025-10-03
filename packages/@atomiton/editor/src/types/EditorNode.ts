@@ -3,6 +3,7 @@ import type {
   NodeMetadata,
   NodePort,
 } from "@atomiton/nodes/definitions";
+import type { NodeExecutionState } from "@atomiton/conductor/browser";
 import type { Node as ReactFlowNode } from "@xyflow/react";
 
 /**
@@ -25,13 +26,39 @@ export type NodeData = {
   fields: NodeFieldsConfig; // UI field configurations
   inputPorts: EditorNodePort[];
   outputPorts: EditorNodePort[];
+  // Execution state fields (optional - only used during execution visualization)
+  // Import NodeExecutionState from @atomiton/conductor/browser
+  executionState?: NodeExecutionState;
+  isCriticalPath?: boolean;
+  weight?: number;
 };
 
 /**
  * EditorNode is a React Flow node with our specific data structure
  * Decoupled from AtomitonNode to avoid confusion and duplication
+ *
+ * For execution state visualization, add data attributes to the node:
+ * - data-execution-state: NodeExecutionState value
+ * - data-critical-path: "true" | "false"
+ *
+ * Example:
+ * ```ts
+ * const node: EditorNode = {
+ *   id: '1',
+ *   type: 'default',
+ *   position: { x: 0, y: 0 },
+ *   data: { executionState: 'executing', ...},
+ *   'data-execution-state': 'executing',  // Add this for CSS styling
+ *   'data-critical-path': 'true',         // Add this for critical path styling
+ * };
+ * ```
  */
-export type EditorNode = ReactFlowNode<NodeData>;
+export type EditorNode = ReactFlowNode<NodeData> & {
+  /** Data attribute for execution state styling (applied to .react-flow__node wrapper) */
+  "data-execution-state"?: NodeExecutionState;
+  /** Data attribute for critical path styling (applied to .react-flow__node wrapper) */
+  "data-critical-path"?: "true" | "false";
+};
 
 /**
  * Position type for node placement

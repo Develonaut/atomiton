@@ -10,7 +10,8 @@ import { memo } from "react";
 
 /**
  * Custom Node component - focuses purely on content and functionality
- * Visual styling (borders, hover, selection) is handled at the canvas level
+ * Visual styling (borders, hover, selection) is handled at the canvas level via CSS
+ * Supports optional execution state visualization via data attributes
  */
 function Node(props: ReactFlowNodeProps) {
   const nodes = useNodes();

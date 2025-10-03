@@ -19,6 +19,14 @@
   --atomiton-handle-bg-selected: var(--atomiton-node-border-selected);
   --atomiton-transition-duration: 0.2s;
   --atomiton-transition-easing: ease;
+
+  /* Execution state colors - using theme colors from @atomiton/ui */
+  --atomiton-node-state-pending: var(--color-tertiary);
+  --atomiton-node-state-executing: var(--color-blue);
+  --atomiton-node-state-completed: var(--color-green);
+  --atomiton-node-state-error: var(--color-red);
+  --atomiton-node-state-skipped: var(--color-yellow);
+  --atomiton-node-critical-path-shadow: 0 0 10px rgba(var(--color-red-rgb), 0.5);
 }
 
 .react-flow__node,
@@ -153,4 +161,63 @@
 .react-flow__node-group.selectable:focus .react-flow__handle,
 .react-flow__node-group.selectable:focus-visible .react-flow__handle {
   background-color: var(--atomiton-handle-bg-selected);
+}
+
+/* Execution state styling */
+.react-flow__node[data-execution-state="pending"],
+.react-flow__node-input[data-execution-state="pending"],
+.react-flow__node-default[data-execution-state="pending"],
+.react-flow__node-output[data-execution-state="pending"],
+.react-flow__node-group[data-execution-state="pending"] {
+  border-color: var(--atomiton-node-state-pending);
+}
+
+.react-flow__node[data-execution-state="executing"],
+.react-flow__node-input[data-execution-state="executing"],
+.react-flow__node-default[data-execution-state="executing"],
+.react-flow__node-output[data-execution-state="executing"],
+.react-flow__node-group[data-execution-state="executing"] {
+  border-color: var(--atomiton-node-state-executing);
+}
+
+.react-flow__node[data-execution-state="completed"],
+.react-flow__node-input[data-execution-state="completed"],
+.react-flow__node-default[data-execution-state="completed"],
+.react-flow__node-output[data-execution-state="completed"],
+.react-flow__node-group[data-execution-state="completed"] {
+  border-color: var(--atomiton-node-state-completed);
+}
+
+.react-flow__node[data-execution-state="error"],
+.react-flow__node-input[data-execution-state="error"],
+.react-flow__node-default[data-execution-state="error"],
+.react-flow__node-output[data-execution-state="error"],
+.react-flow__node-group[data-execution-state="error"] {
+  border-color: var(--atomiton-node-state-error);
+}
+
+.react-flow__node[data-execution-state="skipped"],
+.react-flow__node-input[data-execution-state="skipped"],
+.react-flow__node-default[data-execution-state="skipped"],
+.react-flow__node-output[data-execution-state="skipped"],
+.react-flow__node-group[data-execution-state="skipped"] {
+  border-color: var(--atomiton-node-state-skipped);
+}
+
+/* Critical path styling */
+.react-flow__node[data-critical-path="true"] .atomiton-node,
+.react-flow__node-input[data-critical-path="true"] .atomiton-node,
+.react-flow__node-default[data-critical-path="true"] .atomiton-node,
+.react-flow__node-output[data-critical-path="true"] .atomiton-node,
+.react-flow__node-group[data-critical-path="true"] .atomiton-node {
+  box-shadow: var(--atomiton-node-critical-path-shadow);
+}
+
+/* Smooth transitions for execution state changes */
+.react-flow__node[data-execution-state],
+.react-flow__node-input[data-execution-state],
+.react-flow__node-default[data-execution-state],
+.react-flow__node-output[data-execution-state],
+.react-flow__node-group[data-execution-state] {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }

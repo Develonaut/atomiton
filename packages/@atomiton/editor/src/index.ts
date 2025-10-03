@@ -13,6 +13,7 @@ export { default as Editor } from "#components/Editor";
 export { useAddNode } from "#hooks/useAddNode";
 export { useEditorNode } from "#hooks/useEditorNode";
 export { useEditorNodes } from "#hooks/useEditorNodes";
+export { useEditorEdges, type EditorEdge } from "#hooks/useEditorEdges";
 export { useEditorViewport } from "#hooks/useEditorViewport";
 
 export {

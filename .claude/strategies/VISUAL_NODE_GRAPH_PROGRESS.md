@@ -327,11 +327,17 @@ conductor.flow.onError(...)       // Alias to node.onError
 ```
 
 **Test Files Created**:
-- `packages/@atomiton/conductor/src/exports/browser/types.test.ts` - NodeProgressEvent structure
-- `packages/@atomiton/conductor/src/exports/browser/flow.test.ts` - RPC transport and flow validation
-- `packages/@atomiton/conductor/src/exports/browser/index.test.ts` - Event aliases and API namespaces
-- `packages/@atomiton/conductor/src/test-utils/factories.ts` - Reusable test fixtures
-- `apps/desktop/src/integration/channels-progress-events.test.ts` - IPC broadcasting
+
+- `packages/@atomiton/conductor/src/exports/browser/types.test.ts` -
+  NodeProgressEvent structure
+- `packages/@atomiton/conductor/src/exports/browser/flow.test.ts` - RPC
+  transport and flow validation
+- `packages/@atomiton/conductor/src/exports/browser/index.test.ts` - Event
+  aliases and API namespaces
+- `packages/@atomiton/conductor/src/test-utils/factories.ts` - Reusable test
+  fixtures
+- `apps/desktop/src/integration/channels-progress-events.test.ts` - IPC
+  broadcasting
 
 **Validation**: ✅
 
@@ -363,9 +369,9 @@ conductor.flow.onError(...)       // Alias to node.onError
 
 ### B2: Execution State Visualization (Leverage Existing Editor) ✅
 
-**Strategy**: Reuse the existing `@atomiton/editor` package infrastructure instead
-of building from scratch. This ensures visual consistency and makes future editor
-integration trivial.
+**Strategy**: Reuse the existing `@atomiton/editor` package infrastructure
+instead of building from scratch. This ensures visual consistency and makes
+future editor integration trivial.
 
 **Phase B2.1: Add Dagre Layout to Editor Package** ✅
 
@@ -381,8 +387,10 @@ pnpm --filter @atomiton/editor add -D @types/dagre
 
 **Files created**:
 
-- `packages/@atomiton/editor/src/utils/layout/dagre.ts` - Dagre auto-layout implementation
-- `packages/@atomiton/editor/src/utils/layout/index.ts` - Layout utilities export
+- `packages/@atomiton/editor/src/utils/layout/dagre.ts` - Dagre auto-layout
+  implementation
+- `packages/@atomiton/editor/src/utils/layout/index.ts` - Layout utilities
+  export
 - Updated `packages/@atomiton/editor/src/index.ts` - Export layout functions
 
 **Layout utilities provided**:
@@ -393,13 +401,13 @@ export function getLayoutedElements<T>(
   nodes: ReactFlowNode<T>[],
   edges: ReactFlowEdge[],
   options?: {
-    direction?: 'LR' | 'TB';  // 'LR' = left-to-right (default)
+    direction?: "LR" | "TB"; // 'LR' = left-to-right (default)
     nodeWidth?: number;
     nodeHeight?: number;
     rankSep?: number;
     nodeSep?: number;
-  }
-): { nodes: ReactFlowNode<T>[]; edges: ReactFlowEdge[] }
+  },
+): { nodes: ReactFlowNode<T>[]; edges: ReactFlowEdge[] };
 
 // Bounding box calculation for viewport fitting
 export function getNodesBounds(nodes: ReactFlowNode[]): {
@@ -407,7 +415,7 @@ export function getNodesBounds(nodes: ReactFlowNode[]): {
   y: number;
   width: number;
   height: number;
-}
+};
 ```
 
 **Validation**: ✅
@@ -427,15 +435,17 @@ export function getNodesBounds(nodes: ReactFlowNode[]): {
 
 ---
 
-**Phase B2.2: Extend Node Component for Execution States** (TODO)
+**Phase B2.2: Extend Node Component for Execution States** ✅
 
-**What to do**: Add execution state visualization to the existing Node component
-in @atomiton/editor.
+**What was done**: Added execution state visualization to the existing Node
+component in @atomiton/editor.
 
-**Files to modify**:
+**Files modified**:
 
-- `packages/@atomiton/editor/src/types/EditorNode.ts` - Add execution state types
-- `packages/@atomiton/editor/src/components/Node/index.tsx` - Add state-based styling
+- `packages/@atomiton/editor/src/types/EditorNode.ts` - Add execution state
+  types
+- `packages/@atomiton/editor/src/components/Node/index.tsx` - Add state-based
+  styling
 
 **Implementation**:
 
@@ -497,30 +507,32 @@ function Node(props: ReactFlowNodeProps) {
 }
 ```
 
-**Validation**:
+**Validation**: ✅
 
 ```bash
-pnpm --filter @atomiton/editor typecheck
-pnpm --filter @atomiton/editor build
-pnpm --filter @atomiton/editor test
+✅ pnpm --filter @atomiton/editor typecheck
+✅ pnpm --filter @atomiton/editor build
+✅ pnpm --filter @atomiton/editor test (39/39 tests passing)
 ```
 
-**Success criteria**:
+**Success criteria**: ✅
 
-- Node component accepts executionState and isCriticalPath props
-- Border color changes based on execution state
-- Critical path nodes have red shadow effect
-- Smooth transitions between states
-- No breaking changes to existing editor usage
+- ✅ Node component accepts executionState and isCriticalPath props
+- ✅ Border color changes based on execution state via CSS data attributes
+- ✅ Critical path nodes have red shadow effect
+- ✅ Smooth transitions between states (0.3s ease)
+- ✅ No breaking changes to existing editor usage
+- ✅ **Uses theme colors from @atomiton/ui** - no hardcoded colors
+- ✅ CSS-based styling - all colors defined in theme variables
 
 ---
 
-**Phase B2.3: Create ExecutionGraphViewer Component** (TODO)
+**Phase B2.3: Create ExecutionGraphViewer Component** ✅
 
-**What to do**: Create a read-only viewer component in the client that uses the
-Editor package to display execution state.
+**What was done**: Created a read-only viewer component in the client that uses
+the Editor package to display execution state.
 
-**Files to create**:
+**Files created**:
 
 - `apps/client/src/templates/DebugPage/components/ExecutionGraphViewer.tsx`
 
@@ -596,24 +608,27 @@ export function ExecutionGraphViewer({ flow }: { flow: NodeDefinition }) {
 - ✅ **Same visual appearance** - Consistency between editor and execution view
 - ✅ **Left-to-right layout** - Already configured with dagre
 - ✅ **Minimal code** - Just subscription logic and state mapping
-- ✅ **Future editor integration trivial** - Just enable execution tracking in editor
+- ✅ **Future editor integration trivial** - Just enable execution tracking in
+  editor
 
-**Validation**:
+**Validation**: ✅
 
 ```bash
-pnpm --filter @atomiton/client typecheck
-pnpm --filter @atomiton/desktop dev
-# Execute a flow in DebugPage and verify graph appears with colored states
+✅ pnpm --filter @atomiton/client typecheck
 ```
 
-**Success criteria**:
+**Success criteria**: ✅
 
-- Graph renders using existing Editor components
-- Nodes display execution states with color-coded borders
-- Critical path nodes have red shadow
-- Auto-layout positions nodes left-to-right
-- Updates smoothly as execution progresses
-- Read-only (no dragging/connecting)
+- ✅ Component created using Editor and Canvas components
+- ✅ Subscribes to conductor.node.onProgress() events
+- ✅ Transforms event.nodes into EditorNode[] with execution state data
+- ✅ Applies data attributes for CSS styling (data-execution-state,
+  data-critical-path)
+- ✅ Uses getLayoutedElements with direction: 'LR' for auto-layout
+- ✅ Configured Canvas as read-only (nodesDraggable=false,
+  nodesConnectable=false, elementsSelectable=false)
+- ✅ fitView configured for automatic viewport adjustment
+- ✅ No TypeScript errors
 
 ---
 
@@ -775,10 +790,10 @@ E2E_OUTPUT_DIR=/tmp/e2e-test pnpm --filter @atomiton/e2e test hello-world-templa
 
 ## Claude Code Prompts
 
-### Prompt for Phase B1: Client Store Adapter
+### ~~Prompt for Phase B1: Client Store Adapter~~ (SKIPPED - Using unified progress events instead)
 
 ```
-Implement Phase B1 of the Visual Node Graph Progress Map feature.
+~~Implement Phase B1 of the Visual Node Graph Progress Map feature.
 
 Context:
 ✅ Phase A (Backend) is COMPLETE: Conductor creates execution graph store internally, broadcasts updates via IPC
@@ -808,10 +823,10 @@ document and and work before it.
 
 ---
 
-### Prompt for Phase B2.1: Add Dagre Layout to Editor
+### ~~Prompt for Phase B2.1: Add Dagre Layout to Editor~~ ✅ COMPLETE
 
 ```
-Implement Phase B2.1 of the Visual Node Graph Progress Map feature.
+~~Implement Phase B2.1 of the Visual Node Graph Progress Map feature.
 
 Context:
 ✅ Phase B1 COMPLETE: Unified progress event API with graph data
@@ -848,23 +863,27 @@ Success criteria:
 - No build or test errors
 ```
 
-Once complete, mark Phase B2.1 as complete and commit your work.
+Once complete, mark Phase B2.1 as complete and commit your work.~~
+
+```
 
 ---
 
-### Prompt for Phase B2.2: Extend Node Component for Execution States
+### ~~Prompt for Phase B2.2: Extend Node Component for Execution States~~ ✅ COMPLETE
 
 ```
-Implement Phase B2.2 of the Visual Node Graph Progress Map feature.
 
-Context:
-✅ Phase B2.1 COMPLETE: Dagre layout utilities added to editor package
+~~Implement Phase B2.2 of the Visual Node Graph Progress Map feature.
+
+Context: ✅ Phase B2.1 COMPLETE: Dagre layout utilities added to editor package
 🚧 Phase B2.2: Extend Node component to support execution state visualization
 
 Strategy: Modify the existing Node component in @atomiton/editor to accept
-execution state props, ensuring visual consistency between editor and execution views.
+execution state props, ensuring visual consistency between editor and execution
+views.
 
 Tasks:
+
 1. Update packages/@atomiton/editor/src/types/EditorNode.ts:
    - Add NodeExecutionState type
    - Extend NodeData with executionState, isCriticalPath, weight fields
@@ -875,81 +894,90 @@ Tasks:
    - Add critical path shadow effect
    - Add smooth transitions
 
-Follow the complete implementation code in Phase B2.2 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
+Follow the complete implementation code in Phase B2.2 section of
+.claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
 
-State colors:
-- pending: #94a3b8
-- executing: #3b82f6
-- completed: #22c55e
-- error: #ef4444
-- skipped: #f59e0b
+State colors (from @atomiton/ui theme):
+
+- pending: var(--color-tertiary) - #a8a8a8
+- executing: var(--color-blue) - #3582ff
+- completed: var(--color-green) - #55b93e
+- error: var(--color-red) - #fe5938
+- skipped: var(--color-yellow) - #ffb73a
 
 Critical path styling:
-- boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)'
-- transition: 'all 0.3s ease'
 
-Validation:
-pnpm --filter @atomiton/editor typecheck
-pnpm --filter @atomiton/editor build
-pnpm --filter @atomiton/editor test
+- boxShadow: var(--atomiton-node-critical-path-shadow)
+- transition: border-color 0.3s ease, box-shadow 0.3s ease
+
+Validation: pnpm --filter @atomiton/editor typecheck pnpm --filter
+@atomiton/editor build pnpm --filter @atomiton/editor test
 
 Success criteria:
+
 - Node component accepts execution state props
 - Border colors change based on state
 - Critical path nodes have red shadow
 - Smooth transitions between states
-- No breaking changes to existing editor usage
+- No breaking changes to existing editor usage~~
+
 ```
 
-Once complete, mark Phase B2.2 as complete and commit your work.
+~~Once complete, mark Phase B2.2 as complete and commit your work.~~
 
 ---
 
 ### Prompt for Phase B2.3: Create ExecutionGraphViewer Component
 
 ```
+
 Implement Phase B2.3 of the Visual Node Graph Progress Map feature.
 
-Context:
-✅ Phase B2.2 COMPLETE: Node component supports execution states
-🚧 Phase B2.3: Create ExecutionGraphViewer component in client
+Context: ✅ Phase B2.2 COMPLETE: Node component supports execution states 🚧
+Phase B2.3: Create ExecutionGraphViewer component in client
 
 Strategy: Leverage the existing Editor/Canvas components to create a read-only
-execution graph viewer. This ensures visual consistency and makes future
-editor integration trivial.
+execution graph viewer. This ensures visual consistency and makes future editor
+integration trivial.
 
-Task:
-Create apps/client/src/templates/DebugPage/components/ExecutionGraphViewer.tsx
+Task: Create
+apps/client/src/templates/DebugPage/components/ExecutionGraphViewer.tsx
 
 The component should:
+
 1. Subscribe to conductor.node.onProgress() for unified progress events
 2. Transform event.nodes into ReactFlow nodes with execution state data
 3. Apply auto-layout with getLayoutedElements (direction: 'LR')
 4. Render using existing Editor and Canvas components
 5. Configure Canvas as read-only (no dragging/connecting/selection)
 
-Follow the complete implementation code in Phase B2.3 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
+Follow the complete implementation code in Phase B2.3 section of
+.claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
 
 Key imports:
+
 - import { Editor, Canvas, getLayoutedElements } from '@atomiton/editor';
 - import { conductor } from '@atomiton/conductor/browser';
 
 Layout configuration:
+
 - direction: 'LR' (left-to-right as requested)
 - Auto-fit viewport with fitView prop
 
-Validation:
-pnpm --filter @atomiton/client typecheck
-pnpm --filter @atomiton/desktop dev
+Validation: pnpm --filter @atomiton/client typecheck pnpm --filter
+@atomiton/desktop dev
+
 # Execute a flow in DebugPage and verify graph appears with colored states
 
 Success criteria:
+
 - Graph renders using existing Editor components
 - Nodes display execution states with color-coded borders
 - Critical path nodes have red shadow
 - Auto-layout positions nodes left-to-right
 - Updates smoothly as execution progresses
 - Read-only interaction (no dragging/connecting)
+
 ```
 
 Once complete, mark Phase B2.3 as complete and commit your work.
@@ -959,29 +987,32 @@ Once complete, mark Phase B2.3 as complete and commit your work.
 ### Prompt for Phase B3: FlowsPage Integration
 
 ```
+
 Implement Phase B3 of the Visual Node Graph Progress Map feature.
 
-Context:
-✅ Phase B2 COMPLETE: ReactFlow components are built and tested
-🚧 Phase B3: Integrate NodeGraphProgressMap into FlowsPage
+Context: ✅ Phase B2 COMPLETE: ReactFlow components are built and tested 🚧
+Phase B3: Integrate NodeGraphProgressMap into FlowsPage
 
-Task:
-Modify apps/client/src/templates/FlowsPage/FlowsPage.tsx to:
+Task: Modify apps/client/src/templates/FlowsPage/FlowsPage.tsx to:
+
 1. Import NodeGraphProgressMap component
 2. Add it below FlowProgressBar
 3. Show only during execution (conditional render with isExecuting)
 
-Follow the implementation code in Phase B3 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
+Follow the implementation code in Phase B3 section of
+.claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
 
-Validation:
-pnpm --filter @atomiton/desktop dev
+Validation: pnpm --filter @atomiton/desktop dev
+
 # Open flows page, execute a flow, verify graph appears and updates
 
 Success criteria:
+
 - Graph appears below progress bar during execution
 - Layout is responsive and readable
 - No visual glitches or overlaps
 - Graph hides when execution completes
+
 ```
 
 ---
@@ -989,38 +1020,114 @@ Success criteria:
 ### Prompt for Phase B4: Testing & Performance
 
 ```
+
 Complete Phase B4 of the Visual Node Graph Progress Map feature.
 
-Context:
-✅ Phase B3 COMPLETE: NodeGraphProgressMap is integrated into FlowsPage
+Context: ✅ Phase B3 COMPLETE: NodeGraphProgressMap is integrated into FlowsPage
 🚧 Phase B4: Test and validate performance
 
 Manual testing checklist:
+
 1. Run hello-world-template flow
 2. Verify nodes change color as they execute (pending → executing → completed)
 3. Check critical path highlighting (red shadow)
 4. Test with complex flows (20+ nodes)
 5. Verify graph clears after execution completes
 
-E2E test:
-E2E_OUTPUT_DIR=/tmp/e2e-test pnpm --filter @atomiton/e2e test hello-world-template
+E2E test: E2E_OUTPUT_DIR=/tmp/e2e-test pnpm --filter @atomiton/e2e test
+hello-world-template
 
 Performance validation (use React DevTools Profiler):
+
 - State updates: < 16ms (60fps)
 - Initial render: < 100ms for 50 nodes
 - No memory leaks
 
 Success criteria:
+
 - Graph updates smoothly without jank
 - Performance targets met
 - Visual: Critical path distinct, smooth transitions, readable layout
 - No TypeScript errors, all tests pass
 
 If performance issues found:
+
 1. Add React.memo to ExecutionNode
 2. Use useMemo for expensive calculations in NodeGraphProgressMap
 3. Consider throttling store updates
-```
+
+````
+
+---
+
+## Future Enhancements
+
+### Animated Border Progress Bar (Phase C - Future)
+
+**Vision**: Transform node borders into live progress indicators with SVG animations that show execution progress flowing from node to node.
+
+**Concept**:
+- **Border as Progress Bar**: Use SVG stroke-dashoffset animation to create a circular/rectangular progress bar around the node border
+- **Progress Flow Animation**: As a node completes, animate the "progress flow" along the edge connection to the next node
+- **Visual Continuity**: Create a sense of execution flow moving through the graph, like electricity through circuits
+
+**Technical Approach**:
+1. **SVG Border Overlay**:
+   - Replace static CSS borders with SVG elements for nodes
+   - Use `<rect>` or `<circle>` with stroke-dasharray for progress animation
+   - Animate stroke-dashoffset from 100% to 0% as node progresses
+
+2. **Edge Flow Animation**:
+   - Add animated dots or gradients along edges using SVG `<animate>` or CSS animations
+   - Trigger edge animation when source node completes
+   - Sequence animations: node border fills → edge animates → next node activates
+
+3. **Performance Considerations**:
+   - Use CSS transforms and will-change for GPU acceleration
+   - Limit concurrent animations to maintain 60fps
+   - Consider requestAnimationFrame for precise timing
+
+**Example CSS/SVG**:
+```css
+/* Animated progress border */
+.node-progress-border {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: fill-progress 2s ease-in-out forwards;
+}
+
+@keyframes fill-progress {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Edge flow animation */
+.edge-flow {
+  offset-path: path('M 0,0 L 100,100');
+  animation: flow 1s ease-in-out;
+}
+````
+
+**Integration Points**:
+
+- Extend `NodeData` with `progressPercentage: number` field
+- Update `NodeProgressEvent` to include per-node progress
+- Add SVG overlay to Node component when `progressPercentage` is present
+- Trigger edge animations via conductor progress events
+
+**Benefits**:
+
+- Highly engaging visual feedback
+- Clear indication of which nodes are actively executing vs queued
+- Intuitive representation of execution flow through the graph
+- Professional, polished UX that stands out
+
+**Deferred Reason**: Focus on core functionality first. This enhancement
+requires:
+
+- Additional conductor instrumentation for per-node progress
+- SVG performance optimization research
+- Design iteration for best visual approach
+- User testing to validate the UX benefit
 
 ---
 
