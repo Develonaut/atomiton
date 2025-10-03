@@ -31,7 +31,7 @@ export function useFlowOperations(addLog: (message: string) => void) {
 
   // Subscribe to node completion events
   useEffect(() => {
-    const unsubscribe = conductor.events.onNodeComplete((event) => {
+    const unsubscribe = conductor.node.onComplete((event) => {
       // Only process events for the current execution
       if (event.executionId !== currentExecutionIdRef.current) {
         return;

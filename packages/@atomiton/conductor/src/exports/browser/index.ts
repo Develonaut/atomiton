@@ -63,12 +63,25 @@ export function createConductorInstance(config: ConductorConfig = {}) {
   const envInfo = getEnvironmentInfo(transport);
 
   return {
-    node: nodeAPI,
-    storage: storageAPI,
+    node: {
+      ...nodeAPI,
+      // Node-specific events
+      onProgress: eventsAPI.onNodeProgress,
+      onComplete: eventsAPI.onNodeComplete,
+      onError: eventsAPI.onNodeError,
+    },
+    storage: {
+      ...storageAPI,
+      // Storage-specific events
+      onFlowSaved: eventsAPI.onFlowSaved,
+    },
     flow: flowAPI,
-    auth: authAPI,
+    auth: {
+      ...authAPI,
+      // Auth-specific events
+      onAuthExpired: eventsAPI.onAuthExpired,
+    },
     system: systemAPI,
-    events: eventsAPI,
 
     // Convenience boolean flags for environment checks
     inDesktop: envInfo.type === "desktop",

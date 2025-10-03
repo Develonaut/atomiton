@@ -65,23 +65,23 @@ const setupConductorSubscriptions = () => {
   const addLog = debugStore.getState().addLog;
 
   const subscriptions = [
-    conductor.events?.onNodeProgress?.((event: NodeProgressEvent) => {
+    conductor.node?.onProgress?.((event: NodeProgressEvent) => {
       addLog(`📊 Node progress: ${event.progress}% - ${event.message || ""}`);
     }),
 
-    conductor.events?.onNodeComplete?.((event: NodeCompleteEvent) => {
+    conductor.node?.onComplete?.((event: NodeCompleteEvent) => {
       addLog(`✅ Node complete: ${event.nodeId}`);
     }),
 
-    conductor.events?.onNodeError?.((event: NodeErrorEvent) => {
+    conductor.node?.onError?.((event: NodeErrorEvent) => {
       addLog(`❌ Node error: ${event.error}`);
     }),
 
-    conductor.events?.onFlowSaved?.((event: FlowSavedEvent) => {
+    conductor.storage?.onFlowSaved?.((event: FlowSavedEvent) => {
       addLog(`💾 Flow saved: ${event.flowId}`);
     }),
 
-    conductor.events?.onAuthExpired?.(() => {
+    conductor.auth?.onAuthExpired?.(() => {
       addLog("🔒 Auth token expired");
     }),
   ].filter(Boolean);
