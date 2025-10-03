@@ -21,6 +21,10 @@
       "import": "./dist/schemas.js",
       "types": "./dist/schemas.d.ts"
     },
+    "./graph": {
+      "import": "./dist/graph.js",
+      "types": "./dist/graph.d.ts"
+    },
     "./templates/flows": {
       "import": "./dist/templates/flows.js",
       "types": "./dist/templates/flows.d.ts"

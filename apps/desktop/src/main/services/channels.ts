@@ -1,6 +1,7 @@
 import type {
   ConductorExecutionContext,
   ExecutionResult,
+  ExecutionGraphState,
 } from "@atomiton/conductor/desktop";
 import { createConductor } from "@atomiton/conductor/desktop";
 import { createLogger } from "@atomiton/logger/desktop";
@@ -53,6 +54,27 @@ export const createChannelManager = (): ChannelManager => {
     >(ipcMain, {
       execute: conductor.node.run,
     });
+
+    // Wire conductor's execution graph store to IPC broadcasts
+    conductor.store.subscribe((state: ExecutionGraphState) => {
+      // Convert Map to array for IPC serialization
+      const nodesArray = Array.from(state.nodes.values());
+
+      // Broadcast to all connected windows
+      nodeChannel.broadcast("executionGraphStateUpdate", {
+        nodes: nodesArray,
+        edges: state.edges,
+        executionOrder: state.executionOrder,
+        criticalPath: state.criticalPath,
+        totalWeight: state.totalWeight,
+        maxParallelism: state.maxParallelism,
+        isExecuting: state.isExecuting,
+        startTime: state.startTime,
+        endTime: state.endTime,
+      });
+    });
+
+    logger.info("Execution graph store wired to IPC broadcasts");
 
     const systemChannel = createSystemChannelServer(ipcMain);
 

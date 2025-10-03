@@ -23,6 +23,13 @@ export type {
 
 export type { ConductorConfig } from "#types";
 
+export type {
+  ExecutionGraphStore,
+  ExecutionGraphState,
+  ExecutionGraphNode,
+  NodeExecutionState,
+} from "#execution/executionGraphStore";
+
 /**
  * Desktop conductor - just the base conductor
  * IPC setup is handled by RPC channel servers, not conductor
