@@ -1,103 +1,133 @@
-import { useState, useCallback } from "react";
 import conductor from "#lib/conductor";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-type FlowDefinition = {
-  id?: string;
-  nodes: NodeDefinition[];
-  version?: string;
-  savedAt?: string;
-  deleted?: boolean;
+type FlowTemplate = {
+  id: string;
+  name: string;
+  description?: string;
+  nodeCount: number;
 };
 
-export function useFlowOperations(
-  addLog: (message: string) => void,
-  selectedFlow: string | null,
-  setSelectedFlow: (id: string | null) => void,
-) {
-  const [availableFlows, setAvailableFlows] = useState<FlowDefinition[]>([]);
-  const [flowContent, setFlowContent] = useState<string>("");
+type ExecutionProgress = {
+  currentNode: number;
+  totalNodes: number;
+  currentNodeName?: string;
+};
 
-  const loadFlows = useCallback(async () => {
+export function useFlowOperations(addLog: (message: string) => void) {
+  const [availableFlows, setAvailableFlows] = useState<FlowTemplate[]>([]);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [progress, setProgress] = useState<ExecutionProgress>({
+    currentNode: 0,
+    totalNodes: 0,
+  });
+
+  // Track current execution ID to filter events
+  const currentExecutionIdRef = useRef<string | null>(null);
+
+  // Track completed nodes for progress
+  const completedNodesRef = useRef<Set<string>>(new Set());
+
+  // Subscribe to node completion events
+  useEffect(() => {
+    const unsubscribe = conductor.events.onNodeComplete((event) => {
+      // Only process events for the current execution
+      if (event.executionId !== currentExecutionIdRef.current) {
+        return;
+      }
+
+      // Track this node as completed
+      completedNodesRef.current.add(event.nodeId);
+      const completedCount = completedNodesRef.current.size;
+
+      // Update progress
+      setProgress((prev) => ({
+        ...prev,
+        currentNode: completedCount,
+      }));
+
+      // Log completion
+      addLog(`  ✅ Node completed: ${event.nodeId}`);
+    });
+
+    return unsubscribe;
+  }, [addLog]);
+
+  // Load flow templates from backend
+  const loadFlowTemplates = useCallback(async () => {
     try {
-      addLog("Loading flows...");
-      const response = await conductor.storage.listFlows();
-      const flows = response.flows || [];
-      setAvailableFlows(
-        flows.map((flow) => ({
-          id: flow.id,
-          nodes: [],
-          version: "1.0.0",
-        })),
-      );
-      addLog(`Found ${flows.length} flows`);
+      addLog("📦 Loading flow templates...");
+      const response = await conductor.flow.listTemplates();
+      setAvailableFlows(response.templates);
+      addLog(`✅ Loaded ${response.templates.length} flow templates`);
     } catch (error) {
-      addLog(`Error loading flows: ${error}`);
-      console.error("Error loading flows:", error);
+      addLog(`❌ Error loading flow templates: ${error}`);
+      console.error("Error loading flow templates:", error);
     }
   }, [addLog]);
 
-  const saveFlow = useCallback(async () => {
-    try {
-      const flowData: FlowDefinition = {
-        id: selectedFlow || `flow_${Date.now()}`,
-        nodes: [],
-        version: "1.0.0",
-        savedAt: new Date().toISOString(),
-      };
+  // Run selected flow
+  const runFlow = useCallback(
+    async (selectedFlowId: string | null) => {
+      if (!selectedFlowId) {
+        addLog("❌ No flow selected");
+        return;
+      }
 
-      addLog(`Saving flow: ${flowData.id}`);
-      await conductor.storage.saveFlow(flowData);
-      addLog("Flow saved successfully");
-      await loadFlows();
-    } catch (error) {
-      addLog(`Error saving flow: ${error}`);
-      console.error("Error saving flow:", error);
-    }
-  }, [selectedFlow, addLog, loadFlows]);
+      try {
+        setIsExecuting(true);
+        addLog(`🚀 Executing flow: ${selectedFlowId}`);
 
-  const deleteFlow = useCallback(async () => {
-    if (!selectedFlow) {
-      addLog("No flow selected for deletion");
-      return;
-    }
+        // Get flow template
+        const response = await conductor.flow.getTemplate(selectedFlowId);
+        const flowDefinition = response.definition as NodeDefinition;
 
-    try {
-      addLog(`Deleting flow: ${selectedFlow}`);
-      await conductor.storage.deleteFlow(selectedFlow);
-      addLog("Flow deleted successfully");
-      setSelectedFlow(null);
-      setFlowContent("");
-      await loadFlows();
-    } catch (error) {
-      addLog(`Error deleting flow: ${error}`);
-      console.error("Error deleting flow:", error);
-    }
-  }, [selectedFlow, addLog, setSelectedFlow, loadFlows]);
+        // Initialize progress
+        const totalNodes = flowDefinition.nodes?.length || 0;
+        completedNodesRef.current.clear();
+        setProgress({
+          currentNode: 0,
+          totalNodes,
+          currentNodeName: undefined,
+        });
+        addLog(`📊 Flow has ${totalNodes} nodes to execute`);
 
-  const loadSelectedFlow = useCallback(async () => {
-    if (!selectedFlow) {
-      addLog("No flow selected");
-      return;
-    }
+        // Generate execution ID and set it for event filtering
+        const executionId = `flow_exec_${Date.now()}`;
+        currentExecutionIdRef.current = executionId;
 
-    try {
-      addLog(`Loading flow: ${selectedFlow}`);
-      const flow = await conductor.storage.loadFlow(selectedFlow);
-      setFlowContent(JSON.stringify(flow, null, 2));
-      addLog(`Flow loaded: ${flow.id}`);
-    } catch (error) {
-      addLog(`Error loading flow: ${error}`);
-      console.error("Error loading flow:", error);
-    }
-  }, [selectedFlow, addLog]);
+        const result = await conductor.node.run(flowDefinition, {
+          executionId,
+        });
+
+        // Check result and update final state
+        if (result.success) {
+          setProgress({
+            currentNode: totalNodes,
+            totalNodes,
+            currentNodeName: undefined,
+          });
+          addLog("🎉 Flow execution completed!");
+        } else {
+          addLog(`❌ Flow execution error: ${result.error?.message}`);
+        }
+      } catch (error) {
+        addLog(`❌ Flow execution error: ${error}`);
+        console.error("Flow execution error:", error);
+      } finally {
+        setIsExecuting(false);
+        currentExecutionIdRef.current = null;
+      }
+    },
+    [addLog],
+  );
 
   return {
     availableFlows,
-    flowContent,
-    loadFlows,
-    saveFlow,
-    deleteFlow,
-    loadSelectedFlow,
+    isExecuting,
+    progress,
+    loadFlowTemplates,
+    runFlow,
   };
 }

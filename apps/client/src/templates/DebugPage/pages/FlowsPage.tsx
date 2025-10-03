@@ -3,35 +3,25 @@ import { FlowActionButtons } from "#templates/DebugPage/components/FlowActionBut
 import { FlowProgressBar } from "#templates/DebugPage/components/FlowProgressBar";
 import { LogsSection } from "#templates/DebugPage/components/LogsSection";
 import { useDebugStore } from "#templates/DebugPage/store";
-import { useState, useEffect } from "react";
+import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
+import { useEffect } from "react";
 
 export default function FlowsPage() {
   const selectedFlowId = useDebugStore((state) => state.selectedFlow);
   const setSelectedFlowId = useDebugStore((state) => state.setSelectedFlow);
+  const { addLog } = useDebugLogs();
 
-  const [availableFlows] = useState<
-    Array<{
-      id: string;
-      name: string;
-      description?: string;
-      nodeCount?: number;
-    }>
-  >([]);
-  const [isExecuting] = useState(false);
-  const [progress] = useState({
-    currentNode: 0,
-    totalNodes: 0,
-    currentNodeName: undefined as string | undefined,
-  });
+  const { availableFlows, isExecuting, progress, loadFlowTemplates, runFlow } =
+    useFlowOperations(addLog);
 
-  // TODO: Load flow templates from conductor.flowTemplates.listTemplates()
+  // Load flow templates on mount
   useEffect(() => {
-    // loadFlowTemplates();
-  }, []);
+    loadFlowTemplates();
+  }, [loadFlowTemplates]);
 
-  const executeFlow = () => {
-    // TODO: Implement flow execution
-    console.log("Execute flow:", selectedFlowId);
+  const handleRunFlow = () => {
+    runFlow(selectedFlowId);
   };
 
   return (
@@ -43,7 +33,7 @@ export default function FlowsPage() {
           <FlowActionButtons
             selectedFlowId={selectedFlowId}
             isExecuting={isExecuting}
-            onRun={executeFlow}
+            onRun={handleRunFlow}
           />
         </div>
 
