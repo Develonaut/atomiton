@@ -2,9 +2,11 @@
 
 ## Executive Summary
 
-This strategy outlines the implementation of a real-time execution graph tracking system. The work is **segmented into two major phases**:
+This strategy outlines the implementation of a real-time execution graph
+tracking system. The work is **segmented into two major phases**:
 
-1. **Phase A: Backend/System** - Get the tracking system working (store, IPC, events)
+1. **Phase A: Backend/System** - Get the tracking system working (store, IPC,
+   events)
 2. **Phase B: Frontend/UI** - Build the visual representation in debug page
 
 This ensures small, testable units of work with clear boundaries.
@@ -12,21 +14,27 @@ This ensures small, testable units of work with clear boundaries.
 ### Context: Current Focus vs. Future Vision
 
 **Current Focus (This Implementation)**:
+
 - Build the **core execution graph tracking system** (Phase A - COMPLETE)
 - Create a **simple debug page visualization** (Phase B - TODO)
 - Validate that the tracking system works correctly
 - Ensure the foundation is solid for future work
 
 **Future Vision (Not in Scope)**:
-- **Editor Integration**: The real power of this system will be in the visual node editor
-- **Live Node Animations**: Nodes in the editor will show execution state with animations
+
+- **Editor Integration**: The real power of this system will be in the visual
+  node editor
+- **Live Node Animations**: Nodes in the editor will show execution state with
+  animations
   - Border fills, pulsing effects, progress bars around edges
   - Color-coded states (pending, executing, completed, error)
   - Critical path highlighting in the editor canvas
 - **Interactive Progress**: Users will see their flow come alive as it executes
-- This implementation **postures us** for that future editor experience by building the foundation now
+- This implementation **postures us** for that future editor experience by
+  building the foundation now
 
 **Why Start with Debug Page?**:
+
 - Simpler UI requirements (basic graph rendering)
 - Easier to validate the tracking system works correctly
 - Faster iteration on the core mechanics
@@ -41,7 +49,9 @@ This ensures small, testable units of work with clear boundaries.
 ### A1: Graph Analysis Foundation ✅
 
 **What was done**:
-- Moved `graphAnalyzer.ts` from `@atomiton/conductor` to `@atomiton/nodes/src/graph/`
+
+- Moved `graphAnalyzer.ts` from `@atomiton/conductor` to
+  `@atomiton/nodes/src/graph/`
 - Added `@atomiton/nodes/graph` export
 - Graph analysis functions available:
   - `analyzeExecutionGraph(flow)` - Complete graph analysis
@@ -50,6 +60,7 @@ This ensures small, testable units of work with clear boundaries.
   - `findParallelBranches()` - Parallelism detection
 
 **Files modified**:
+
 - `packages/@atomiton/nodes/src/graph/graphAnalyzer.ts`
 - `packages/@atomiton/nodes/src/graph/index.ts`
 - `packages/@atomiton/nodes/package.json`
@@ -58,12 +69,16 @@ This ensures small, testable units of work with clear boundaries.
 ### A2: Execution Graph Store ✅
 
 **What was done**:
-- Created `executionGraphStore.ts` in `@atomiton/conductor` using `@atomiton/store`
+
+- Created `executionGraphStore.ts` in `@atomiton/conductor` using
+  `@atomiton/store`
 - **Conductor creates and owns store internally** - not passed via config
-- Store tracks node execution states: pending, executing, completed, error, skipped
+- Store tracks node execution states: pending, executing, completed, error,
+  skipped
 - Framework-agnostic subscription API (getState, setState, subscribe)
 
 **Store API**:
+
 ```typescript
 // Conductor creates store internally
 const conductor = createConductor({ eventEmitter });
@@ -80,6 +95,7 @@ getNodesByState(conductor.store, "completed");
 ```
 
 **Files created/modified**:
+
 - `packages/@atomiton/conductor/src/execution/executionGraphStore.ts` (new)
 - `packages/@atomiton/conductor/src/conductor.ts` (store creation internal)
 - `packages/@atomiton/conductor/src/types.ts` (removed store from config)
@@ -88,12 +104,14 @@ getNodesByState(conductor.store, "completed");
 ### A3: Conductor Integration ✅
 
 **What was done**:
+
 - Integrated store into conductor execution flow
 - Conductor automatically initializes store when executing a group node
 - Updates store state on nodeStart, nodeComplete, nodeError
 - Store is passed internally through execution functions
 
 **Integration points in conductor.ts**:
+
 ```typescript
 // executeGroup initializes store
 if (executionGraphStore) {
@@ -117,12 +135,14 @@ if (executionGraphStore) {
 ### A4: IPC Broadcast ✅
 
 **What was done**:
+
 - Wired conductor's execution graph store through existing `nodeChannel`
 - Desktop subscribes to `conductor.store.subscribe()` and broadcasts via IPC
 - Uses same channel as nodeStart, nodeComplete, nodeError events
 - Serializes Map to array for IPC transmission
 
 **Integration in apps/desktop/src/main/services/channels.ts**:
+
 ```typescript
 // Create conductor - it owns the store internally
 const conductor = createConductor({ eventEmitter });
@@ -131,7 +151,7 @@ const conductor = createConductor({ eventEmitter });
 conductor.store.subscribe((state: ExecutionGraphState) => {
   // Convert Map to array for IPC serialization
   const nodesArray = Array.from(state.nodes.entries()).map(
-    ([id, node]: [string, any]) => ({ id, ...node })
+    ([id, node]: [string, any]) => ({ id, ...node }),
   );
 
   nodeChannel.broadcast("executionGraphStateUpdate", {
@@ -155,131 +175,82 @@ conductor.store.subscribe((state: ExecutionGraphState) => {
 ✅ pnpm --filter @atomiton/desktop typecheck
 ```
 
-**Current Status**: All backend infrastructure is complete and tested. The execution graph tracking system is ready to use.
+**Current Status**: All backend infrastructure is complete and tested. The
+execution graph tracking system is ready to use.
 
 ---
 
 ## ✅ Phase A5: Domain-Based API Organization (COMPLETE)
 
-**Goal**: Restructure the Conductor API from flat to domain-based organization for better clarity and maintainability.
+**Goal**: Restructure the Conductor API from flat to domain-based organization
+for better clarity and maintainability.
 
-**Problem**: Currently, the Conductor API has a flat structure where store and events are at the top level:
+**What was done**: Reorganized both desktop and browser conductor APIs to follow
+domain-based structure.
+
+### Desktop Conductor
+
+- ✅ Moved `conductor.store` → `conductor.node.store`
+- ✅ Updated IPC layer to use `conductor.node.store.subscribe()`
+- ✅ Backward compatibility getter with deprecation warning
+
+### Browser Conductor
+
+- ✅ Moved `conductor.events.onNodeProgress` → `conductor.node.onProgress`
+- ✅ Moved `conductor.events.onNodeComplete` → `conductor.node.onComplete`
+- ✅ Moved `conductor.events.onNodeError` → `conductor.node.onError`
+- ✅ Moved `conductor.events.onFlowSaved` → `conductor.storage.onFlowSaved`
+- ✅ Moved `conductor.events.onAuthExpired` → `conductor.auth.onAuthExpired`
+- ✅ Updated all client call sites (no backward compatibility)
+
+**Final API Structure**:
+
 ```typescript
-conductor.store.subscribe(...)           // Flat - unclear which domain
-conductor.events.onNodeStart(...)        // Flat - unclear which domain
+// Desktop Conductor
+conductor.node.run(nodeDefinition)
+conductor.node.store.subscribe(...)
+
+// Browser Conductor
+conductor.node.run(nodeDefinition)
+conductor.node.onProgress(...)
+conductor.node.onComplete(...)
+conductor.node.onError(...)
+conductor.storage.onFlowSaved(...)
+conductor.auth.onAuthExpired(...)
 ```
 
-**Solution**: Organize API by domain to make routing and ownership clear:
-```typescript
-conductor.node.store.subscribe(...)      // Domain-specific
-conductor.node.onNodeStart(...)          // Domain-specific
-conductor.flow.store.subscribe(...)      // Future: flow-specific tracking
-```
+**Files modified**:
 
-### A5.1: Restructure Conductor API
-
-**File**: `packages/@atomiton/conductor/src/conductor.ts`
-
-**Current Structure**:
-```typescript
-return {
-  node: nodeAPI,
-  system: systemAPI,
-  events: eventsAPI,              // ❌ Flat - should be under node
-  store: executionGraphStore,     // ❌ Flat - should be under node
-};
-```
-
-**Target Structure**:
-```typescript
-return {
-  node: {
-    run: nodeAPI.run,
-    store: executionGraphStore,         // ✅ Domain-specific
-    onNodeStart: eventsAPI.onNodeStart, // ✅ Domain-specific
-    onNodeComplete: eventsAPI.onNodeComplete,
-    onNodeError: eventsAPI.onNodeError,
-    onNodeSkipped: eventsAPI.onNodeSkipped,
-  },
-  system: systemAPI,
-  // Future: flow domain can be added here
-  // flow: {
-  //   store: flowStore,
-  //   onFlowStart: ...,
-  // }
-};
-```
-
-**Implementation**:
-1. Move `executionGraphStore` under `node` object
-2. Move event handlers from `events` object directly under `node` object
-3. Remove top-level `events` property
-4. Maintain backward compatibility or provide migration path
-
-### A5.2: Update Desktop IPC Layer
-
-**File**: `apps/desktop/src/main/services/channels.ts`
-
-**Current Usage**:
-```typescript
-conductor.store.subscribe((state: ExecutionGraphState) => {
-  // Broadcast to renderer...
-});
-```
-
-**Update to**:
-```typescript
-conductor.node.store.subscribe((state: ExecutionGraphState) => {
-  // Broadcast to renderer...
-});
-```
-
-### A5.3: Update Client Code
-
-**File**: `apps/client/src/templates/DebugPage/hooks/useFlowOperations.ts`
-
-**Current Usage**:
-```typescript
-const unsubscribe = conductor.events.onNodeStart((event) => {
-  // Handle event...
-});
-```
-
-**Update to**:
-```typescript
-const unsubscribe = conductor.node.onNodeStart((event) => {
-  // Handle event...
-});
-```
-
-### A5.4: Update All Other Consumers
-
-Search for and update all files that use:
-- `conductor.store` → `conductor.node.store`
-- `conductor.events.*` → `conductor.node.*`
-
-```bash
-# Find all usages
-grep -r "conductor\.store" packages/ apps/
-grep -r "conductor\.events" packages/ apps/
-```
+- `packages/@atomiton/conductor/src/conductor.ts` - Added `store` to `nodeAPI`
+  object
+- `packages/@atomiton/conductor/src/exports/browser/index.ts` - Moved events to
+  domain-specific APIs
+- `apps/desktop/src/main/services/channels.ts` - Updated to use
+  `conductor.node.store`
+- `apps/client/src/templates/DebugPage/hooks/useFlowOperations.ts` - Updated
+  event subscriptions
+- `apps/client/src/templates/DebugPage/store.ts` - Updated all 5 event
+  subscriptions
 
 ### Phase A5 Validation ✅
 
 ```bash
 ✅ pnpm --filter @atomiton/conductor typecheck
-✅ pnpm --filter @atomiton/desktop typecheck
-✅ pnpm --filter @atomiton/conductor test (15 tests passing)
 ✅ pnpm --filter @atomiton/conductor build
+✅ pnpm --filter @atomiton/conductor test (15 tests passing)
+✅ pnpm --filter @atomiton/desktop typecheck
+✅ pnpm --filter @atomiton/client typecheck
 ```
 
 **Success Criteria**:
-- ✅ All type checks pass
+
+- ✅ All type checks pass across conductor, desktop, and client
 - ✅ All tests pass (15/15)
 - ✅ Build succeeds
-- ✅ Backward compatibility maintained with deprecation warning
+- ✅ All client call sites updated to use domain-based API
 - ✅ IPC broadcasting works with conductor.node.store
-- ✅ API is now domain-based: conductor.node.store
+- ✅ API is now domain-based: conductor.node.store, conductor.node.onComplete,
+  etc.
 
 ---
 
@@ -289,17 +260,19 @@ grep -r "conductor\.events" packages/ apps/
 
 ### B1: Client Store Adapter
 
-**What to do**:
-Create a client-side Zustand store that subscribes to IPC events and exposes graph state to React components.
+**What to do**: Create a client-side Zustand store that subscribes to IPC events
+and exposes graph state to React components.
 
 **Files to create**:
+
 - `apps/client/src/stores/executionGraphStore.ts`
 
 **Implementation**:
+
 ```typescript
-import { createStore } from '@atomiton/store';
-import type { ExecutionGraphState } from '@atomiton/conductor/desktop';
-import { conductor } from '#lib/conductor';
+import { createStore } from "@atomiton/store";
+import type { ExecutionGraphState } from "@atomiton/conductor/desktop";
+import { conductor } from "#lib/conductor";
 
 export const useExecutionGraphStore = createStore<ExecutionGraphState>(
   () => ({
@@ -312,13 +285,13 @@ export const useExecutionGraphStore = createStore<ExecutionGraphState>(
     isExecuting: false,
     startTime: null,
   }),
-  { name: 'ClientExecutionGraph' }
+  { name: "ClientExecutionGraph" },
 );
 
 // Subscribe to IPC updates through existing node channel
-conductor.on('executionGraphStateUpdate', (state) => {
+conductor.on("executionGraphStateUpdate", (state) => {
   // Convert nodes array back to Map
-  const nodesMap = new Map(state.nodes.map(n => [n.id, n]));
+  const nodesMap = new Map(state.nodes.map((n) => [n.id, n]));
   useExecutionGraphStore.setState({
     ...state,
     nodes: nodesMap,
@@ -327,12 +300,14 @@ conductor.on('executionGraphStateUpdate', (state) => {
 ```
 
 **Validation**:
+
 ```bash
 pnpm --filter @atomiton/client typecheck
 pnpm --filter @atomiton/client build
 ```
 
 **Success criteria**:
+
 - Client receives and stores execution graph state updates
 - React components can access store via `useExecutionGraphStore.useStore()`
 - No TypeScript errors
@@ -341,10 +316,11 @@ pnpm --filter @atomiton/client build
 
 ### B2: ReactFlow Graph Components
 
-**What to do**:
-Build the ReactFlow visualization components with auto-layout and color-coded node states.
+**What to do**: Build the ReactFlow visualization components with auto-layout
+and color-coded node states.
 
 **Dependencies to add**:
+
 ```bash
 pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
 ```
@@ -352,6 +328,7 @@ pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
 **Files to create**:
 
 1. **NodeGraphProgressMap.tsx** - Main graph container
+
    ```typescript
    import { ReactFlow, useNodesState, useEdgesState } from '@xyflow/react';
    import { useExecutionGraphStore } from '#stores/executionGraphStore';
@@ -423,6 +400,7 @@ pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
    ```
 
 2. **ExecutionNode.tsx** - Custom node with color-coded states
+
    ```typescript
    import { memo } from 'react';
    import { Handle, Position } from '@xyflow/react';
@@ -467,25 +445,26 @@ pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
    ```
 
 3. **layoutUtils.ts** - Dagre auto-layout
-   ```typescript
-   import dagre from '@dagrejs/dagre';
 
-   export const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+   ```typescript
+   import dagre from "@dagrejs/dagre";
+
+   export const getLayoutedElements = (nodes, edges, direction = "TB") => {
      const dagreGraph = new dagre.graphlib.Graph();
      dagreGraph.setDefaultEdgeLabel(() => ({}));
      dagreGraph.setGraph({ rankdir: direction, ranksep: 50, nodesep: 30 });
 
-     nodes.forEach(node => {
+     nodes.forEach((node) => {
        dagreGraph.setNode(node.id, { width: 150, height: 80 });
      });
 
-     edges.forEach(edge => {
+     edges.forEach((edge) => {
        dagreGraph.setEdge(edge.source, edge.target);
      });
 
      dagre.layout(dagreGraph);
 
-     const layoutedNodes = nodes.map(node => {
+     const layoutedNodes = nodes.map((node) => {
        const nodeWithPosition = dagreGraph.node(node.id);
        return {
          ...node,
@@ -501,6 +480,7 @@ pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
    ```
 
 **Validation**:
+
 ```bash
 pnpm --filter @atomiton/client typecheck
 # Manually test in dev mode
@@ -508,6 +488,7 @@ pnpm --filter @atomiton/desktop dev
 ```
 
 **Success criteria**:
+
 - Graph renders without errors
 - Nodes are properly positioned with dagre
 - Critical path is visually distinct
@@ -517,13 +498,15 @@ pnpm --filter @atomiton/desktop dev
 
 ### B3: Integration into FlowsPage
 
-**What to do**:
-Add the NodeGraphProgressMap component below the progress bar, visible only during execution.
+**What to do**: Add the NodeGraphProgressMap component below the progress bar,
+visible only during execution.
 
 **Files to modify**:
+
 - `apps/client/src/templates/FlowsPage/FlowsPage.tsx`
 
 **Implementation**:
+
 ```typescript
 import { NodeGraphProgressMap } from '../DebugPage/components/NodeGraphProgressMap';
 
@@ -553,6 +536,7 @@ export function FlowsPage() {
 ```
 
 **Validation**:
+
 ```bash
 # Run flows and verify graph appears
 pnpm --filter @atomiton/desktop dev
@@ -560,6 +544,7 @@ pnpm --filter @atomiton/desktop dev
 ```
 
 **Success criteria**:
+
 - Graph appears below progress bar during execution
 - Layout is responsive and readable
 - No visual glitches or overlaps
@@ -569,10 +554,10 @@ pnpm --filter @atomiton/desktop dev
 
 ### B4: Testing & Performance
 
-**What to do**:
-Validate implementation and ensure performance targets are met.
+**What to do**: Validate implementation and ensure performance targets are met.
 
 **Manual testing steps**:
+
 1. Run hello-world-template flow
 2. Verify nodes change color as they execute (pending → executing → completed)
 3. Check critical path highlighting (red shadow)
@@ -580,11 +565,13 @@ Validate implementation and ensure performance targets are met.
 5. Verify graph clears after execution completes
 
 **E2E test** (optional):
+
 ```bash
 E2E_OUTPUT_DIR=/tmp/e2e-test pnpm --filter @atomiton/e2e test hello-world-template
 ```
 
 **Performance validation**:
+
 ```bash
 # Use React DevTools Profiler
 # Check for:
@@ -594,6 +581,7 @@ E2E_OUTPUT_DIR=/tmp/e2e-test pnpm --filter @atomiton/e2e test hello-world-templa
 ```
 
 **Success criteria**:
+
 - Graph updates smoothly without jank
 - Performance: < 16ms state updates, < 100ms initial render
 - Visual: Critical path distinct, smooth transitions, readable layout
@@ -814,15 +802,18 @@ If performance issues found:
 ## Summary
 
 **Phase A (Backend) - ✅ COMPLETE**:
+
 - Graph analysis in @atomiton/nodes/graph
 - Execution graph store created internally by conductor
 - Store updates broadcast through IPC
 - Desktop channels wired to conductor.store
 
 **Phase B (Frontend) - 🚧 TODO**:
+
 - B1: Client store adapter (subscribe to IPC)
 - B2: ReactFlow components (visualization)
 - B3: FlowsPage integration (add graph below progress bar)
 - B4: Testing & performance validation
 
-Each phase has a clear prompt for execution. Complete one phase before moving to the next.
+Each phase has a clear prompt for execution. Complete one phase before moving to
+the next.
