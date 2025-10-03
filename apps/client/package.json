@@ -18,7 +18,7 @@
     "prepare-commit": "./scripts/prepare-commit.sh",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:integration": "vitest run src/integration",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "kill:servers": "npm run kill:ports",
     "kill": "kill-port --port 5173 || true",
     "kill:ports": "kill-port --port 5173,5174,5175 || true"

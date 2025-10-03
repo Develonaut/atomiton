@@ -30,7 +30,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:integration": "vitest run src/integration"
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "keywords": [
     "store",

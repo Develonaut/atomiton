@@ -7,7 +7,8 @@
   "sideEffects": false,
   "imports": {
     "#*": "./src/*"
-  },  "main": "./dist/index.js",
+  },
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -26,7 +27,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:integration": "vitest run src/integration"
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "keywords": [
     "router",

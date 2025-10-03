@@ -40,7 +40,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest watch",
-    "test:integration": "vitest run src/integration --passWithNoTests"
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "keywords": [
     "nodes",
