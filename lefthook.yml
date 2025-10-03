@@ -54,8 +54,8 @@ pre-commit:
     # Unit tests (turbo cached, catches logic errors early)
     unit-tests:
       run: |
-        echo "🧪 Running tests in affected packages..."
-        pnpm test
+        echo "🧪 Running unit tests in affected packages..."
+        turbo run test --filter='[HEAD^1]'
       fail_text: "❌ Unit tests failed - please fix failing tests"
 
     # Build affected packages to catch build errors early
@@ -73,14 +73,14 @@ pre-push:
     # Integration tests (tests package interactions)
     integration-tests:
       run: |
-        echo "🎭 Running integration tests in affected packages..."
+        echo "🧪 Running integration tests in affected packages..."
         pnpm test:integration
       fail_text: "❌ Integration tests failed"
 
     # E2E tests (tests full user flows, headless by default)
     e2e-tests:
       run: |
-        echo "🌐 Running end-to-end tests (headless) in affected packages..."
+        echo "🎭 Running end-to-end tests (headless) in affected packages..."
         pnpm test:e2e
       fail_text: "❌ E2E tests failed"
 
