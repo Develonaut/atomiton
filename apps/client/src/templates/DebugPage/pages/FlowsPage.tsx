@@ -25,7 +25,10 @@ export default function FlowsPage() {
   };
 
   return (
-    <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div
+      className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6"
+      data-testid="flows-page"
+    >
       {/* LEFT COLUMN: Flow Selection & Control */}
       <div className="bg-white rounded-lg shadow flex flex-col h-full overflow-hidden">
         <div className="p-6 border-b border-gray-200 shrink-0">

@@ -56,7 +56,7 @@ export function LogsSection() {
               <div
                 key={idx}
                 className="mb-1"
-                data-testid={testId}
+                data-testid={testId || "log-entry"}
                 data-output={dataOutput}
               >
                 {log}

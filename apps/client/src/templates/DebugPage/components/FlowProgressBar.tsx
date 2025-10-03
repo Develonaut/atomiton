@@ -3,7 +3,7 @@ type FlowProgressBarProps = {
   totalNodes: number;
   currentNodeName?: string;
   isExecuting: boolean;
-}
+};
 
 export function FlowProgressBar({
   currentNode,
@@ -22,7 +22,7 @@ export function FlowProgressBar({
     <div className="space-y-2">
       <div className="flex justify-between text-sm text-gray-600">
         <span>Execution Progress</span>
-        <span>
+        <span data-testid="progress-text">
           {currentNode} / {totalNodes} nodes ({percentage}%)
         </span>
       </div>

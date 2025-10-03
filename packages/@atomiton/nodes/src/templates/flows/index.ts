@@ -30,19 +30,19 @@ export type FlowTemplate = {
 const FLOW_TEMPLATES = [
   {
     filename: "hello-world.flow.yaml",
-    id: "hello-world-flow",
+    id: "550e8400-e29b-41d4-a716-446655440001",
     name: "Hello World Flow",
     yamlContent: helloWorldYaml,
   },
   {
     filename: "data-transform.flow.yaml",
-    id: "data-transform-flow",
+    id: "550e8400-e29b-41d4-a716-446655440002",
     name: "Data Transform Pipeline",
     yamlContent: dataTransformYaml,
   },
   {
     filename: "image-processor.flow.yaml",
-    id: "image-processor-flow",
+    id: "550e8400-e29b-41d4-a716-446655440003",
     name: "Image Processing Workflow",
     yamlContent: imageProcessorYaml,
   },

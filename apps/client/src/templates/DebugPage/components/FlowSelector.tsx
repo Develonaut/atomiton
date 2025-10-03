@@ -3,14 +3,14 @@ type FlowTemplate = {
   name: string;
   description?: string;
   nodeCount?: number;
-}
+};
 
 type FlowSelectorProps = {
   flows: FlowTemplate[];
   selectedFlowId: string | null;
   onSelectFlow: (id: string) => void;
   disabled?: boolean;
-}
+};
 
 export function FlowSelector({
   flows,
@@ -27,6 +27,7 @@ export function FlowSelector({
         {flows.map((flow) => (
           <label
             key={flow.id}
+            data-testid="flow-item"
             className={`
               flex items-start p-3 rounded-lg border cursor-pointer
               transition-colors
