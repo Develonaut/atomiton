@@ -1,75 +1,79 @@
-import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
-import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { FlowSelector } from "#templates/DebugPage/components/FlowSelector";
+import { FlowActionButtons } from "#templates/DebugPage/components/FlowActionButtons";
+import { FlowProgressBar } from "#templates/DebugPage/components/FlowProgressBar";
+import { LogsSection } from "#templates/DebugPage/components/LogsSection";
 import { useDebugStore } from "#templates/DebugPage/store";
-import { Button, Icon } from "@atomiton/ui";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function FlowsPage() {
-  const { addLog } = useDebugLogs();
-  const selectedFlow = useDebugStore((state) => state.selectedFlow);
-  const setSelectedFlow = useDebugStore((state) => state.setSelectedFlow);
+  const selectedFlowId = useDebugStore((state) => state.selectedFlow);
+  const setSelectedFlowId = useDebugStore((state) => state.setSelectedFlow);
 
-  const {
-    availableFlows,
-    flowContent,
-    loadFlows,
-    saveFlow,
-    deleteFlow,
-    loadSelectedFlow,
-  } = useFlowOperations(addLog, selectedFlow, setSelectedFlow);
+  const [availableFlows] = useState<
+    Array<{
+      id: string;
+      name: string;
+      description?: string;
+      nodeCount?: number;
+    }>
+  >([]);
+  const [isExecuting] = useState(false);
+  const [progress] = useState({
+    currentNode: 0,
+    totalNodes: 0,
+    currentNodeName: undefined as string | undefined,
+  });
 
-  // Load initial data
+  // TODO: Load flow templates from conductor.flowTemplates.listTemplates()
   useEffect(() => {
-    loadFlows();
-  }, [loadFlows]);
+    // loadFlowTemplates();
+  }, []);
+
+  const executeFlow = () => {
+    // TODO: Implement flow execution
+    console.log("Execute flow:", selectedFlowId);
+  };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow mb-6">
-      <div className="space-y-4">
-        <div className="flex gap-2">
-          <Button onClick={loadFlows}>
-            <Icon name="refresh" className="w-4 h-4 mr-2" />
-            Refresh Flows
-          </Button>
-          <Button onClick={saveFlow}>
-            <Icon name="save" className="w-4 h-4 mr-2" />
-            Save Flow
-          </Button>
-          <Button onClick={deleteFlow} variant="destructive">
-            <Icon name="trash" className="w-4 h-4 mr-2" />
-            Delete Selected
-          </Button>
+    <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* LEFT COLUMN: Flow Selection & Control */}
+      <div className="bg-white rounded-lg shadow flex flex-col h-full overflow-hidden">
+        <div className="p-6 border-b border-gray-200 shrink-0">
+          <h3 className="text-lg font-semibold mb-4">Flow Builder</h3>
+          <FlowActionButtons
+            selectedFlowId={selectedFlowId}
+            isExecuting={isExecuting}
+            onRun={executeFlow}
+          />
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium">Available Flows:</label>
-          <select
-            className="w-full px-3 py-2 border rounded"
-            value={selectedFlow || ""}
-            onChange={(e) => setSelectedFlow(e.target.value || null)}
-          >
-            <option value="">Select a flow...</option>
-            {availableFlows.map((flow) => (
-              <option key={flow.id} value={flow.id}>
-                {flow.id}
-              </option>
-            ))}
-          </select>
+        {/* Scrollable Flow List */}
+        <div className="flex-1 overflow-y-auto p-6">
+          <FlowSelector
+            flows={availableFlows}
+            selectedFlowId={selectedFlowId}
+            onSelectFlow={setSelectedFlowId}
+            disabled={isExecuting}
+          />
+        </div>
+      </div>
+
+      {/* RIGHT COLUMN: Execution Monitor */}
+      <div className="flex flex-col gap-6 h-full">
+        {/* Progress Bar */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <FlowProgressBar
+            currentNode={progress.currentNode}
+            totalNodes={progress.totalNodes}
+            currentNodeName={progress.currentNodeName}
+            isExecuting={isExecuting}
+          />
         </div>
 
-        {selectedFlow && (
-          <div className="space-y-2">
-            <Button onClick={loadSelectedFlow}>
-              <Icon name="download" className="w-4 h-4 mr-2" />
-              Load Flow Content
-            </Button>
-            {flowContent && (
-              <pre className="bg-gray-100 p-3 rounded text-xs overflow-auto max-h-48">
-                {flowContent}
-              </pre>
-            )}
-          </div>
-        )}
+        {/* Activity Logs */}
+        <div className="flex-1 overflow-hidden">
+          <LogsSection />
+        </div>
       </div>
     </div>
   );
