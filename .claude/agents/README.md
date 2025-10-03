@@ -1,3 +1,8 @@
+---
+name: Agents Directory
+description: "Overview and documentation for all agent team members and their coordination protocols"
+---
+
 # Agents Directory
 
 ## 🚨 CRITICAL: See [Workflow Documentation](../workflow/README.md) 🚨

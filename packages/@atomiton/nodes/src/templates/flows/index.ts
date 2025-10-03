@@ -10,11 +10,11 @@ import { loadTemplate } from "#templates/loader";
 
 // Import YAML templates as raw strings (handled by build system)
 // @ts-expect-error - Build system handles raw imports
-import helloWorldYaml from "#templates/yaml/hello-world.yaml?raw";
+import helloWorldYaml from "#templates/flows/hello-world.flow.yaml?raw";
 // @ts-expect-error - Build system handles raw imports
-import dataTransformYaml from "#templates/yaml/data-transform.yaml?raw";
+import dataTransformYaml from "#templates/flows/data-transform.flow.yaml?raw";
 // @ts-expect-error - Build system handles raw imports
-import imageProcessorYaml from "#templates/yaml/image-processor.yaml?raw";
+import imageProcessorYaml from "#templates/flows/image-processor.flow.yaml?raw";
 
 export type FlowTemplate = {
   id: string;
@@ -29,19 +29,19 @@ export type FlowTemplate = {
  */
 const FLOW_TEMPLATES = [
   {
-    filename: "hello-world.yaml",
+    filename: "hello-world.flow.yaml",
     id: "hello-world-flow",
     name: "Hello World Flow",
     yamlContent: helloWorldYaml,
   },
   {
-    filename: "data-transform.yaml",
+    filename: "data-transform.flow.yaml",
     id: "data-transform-flow",
     name: "Data Transform Pipeline",
     yamlContent: dataTransformYaml,
   },
   {
-    filename: "image-processor.yaml",
+    filename: "image-processor.flow.yaml",
     id: "image-processor-flow",
     name: "Image Processing Workflow",
     yamlContent: imageProcessorYaml,

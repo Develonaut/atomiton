@@ -17,13 +17,16 @@ and activity logging.
    - ✅ `conductor.node.run()` for execution
    - ✅ `fromYaml()` parser for YAML → NodeDefinition
    - ✅ LogsSection component for activity logs
-   - ✅ Storage APIs (saveFlow, loadFlow, listFlows)
+   - ✅ `@atomiton/storage` package with engine auto-detection
+   - ✅ Storage RPC channel (needs refactoring to use storage package)
    - ✅ useDebugLogs hook for log management
 
-2. **YAML Flow Templates**
-   - `packages/@atomiton/nodes/src/templates/yaml/hello-world.yaml`
-   - `packages/@atomiton/nodes/src/templates/yaml/data-transform.yaml`
-   - `packages/@atomiton/nodes/src/templates/yaml/image-processor.yaml`
+2. **YAML Flow Templates (Read-Only)**
+   - `packages/@atomiton/nodes/src/templates/flows/hello-world.flow.yaml`
+   - `packages/@atomiton/nodes/src/templates/flows/data-transform.flow.yaml`
+   - `packages/@atomiton/nodes/src/templates/flows/image-processor.flow.yaml`
+   - These are bundled examples, not user storage
+   - Using `.flow.yaml` double extension for semantic clarity and tooling support
 
 3. **FlowsPage Scaffold**
    - Basic page exists at
@@ -45,9 +48,15 @@ and activity logging.
    - ❌ No execution capability
    - ❌ No activity logs integration
 
-3. **Flow Loading**
-   - ❌ No way to load flows from templates directory
-   - ❌ No YAML parsing integration
+3. **Storage Integration**
+   - ⚠️ `storageChannel` uses in-memory Map (doesn't persist!)
+   - ❌ Need to wire to `@atomiton/storage` package
+   - ❌ No distinction between templates (read-only) and user storage (persistent)
+   - ❌ No credential storage (blocks API-based nodes)
+
+4. **Flow Template Loading**
+   - ❌ No RPC channel to serve templates to browser
+   - ❌ No way to load templates from bundled directory
 
 ---
 
@@ -77,10 +86,146 @@ const result = await conductor.node.run(flowNodeDefinition);
 ### Package Boundaries
 
 ```
-@atomiton/nodes/templates/flows     → YAML flow definitions
+@atomiton/nodes/templates/flows     → YAML flow definitions (read-only templates)
 @atomiton/nodes/serialization       → fromYaml() parser
 @atomiton/conductor                 → execute() function
+@atomiton/storage                   → User data persistence (flows, assets, configs)
+@atomiton/rpc/storageChannel        → Routes to storage engine (auto-detection)
+@atomiton/rpc/flowTemplatesChannel  → Serves read-only templates
+@atomiton/rpc/credentialChannel     → Secure credential management (future)
 client/templates/DebugPage/pages    → FlowsPage UI
+```
+
+---
+
+## Storage vs Templates: Critical Distinction
+
+**This is one of the most important architectural decisions in Atomiton.**
+
+### Two Completely Separate Systems
+
+Atomiton has two distinct content systems that serve different purposes:
+
+| Aspect | Flow Templates | User Storage |
+|--------|----------------|--------------|
+| **Purpose** | Read-only examples, tutorials | User-created content, assets, configs |
+| **Location** | `@atomiton/nodes/templates/flows/` | `~/.atomiton/` (desktop) |
+| **Ownership** | `@atomiton/nodes` package | `@atomiton/storage` package |
+| **Lifecycle** | Bundled with app, versioned in git | Created at runtime, persists across sessions |
+| **API** | `conductor.flowTemplates.*` | `conductor.storage.*` |
+| **RPC Channel** | `flowTemplatesChannel` | `storageChannel` |
+| **Mutability** | Immutable at runtime | Full CRUD operations |
+| **Persistence** | N/A (always available) | Persists to disk/cloud |
+| **Future** | Could load from marketplace API | IndexedDB (browser), cloud sync, team sharing |
+
+### Why This Separation Matters
+
+1. **Templates are immutable** - Users can't accidentally corrupt starter examples
+2. **Clear learning path** - Start with template, customize, save to storage
+3. **Storage is extensible** - Can add assets, configs, credentials independently
+4. **Future-proof** - Templates could come from API without affecting storage
+5. **Security** - Storage layer handles encryption, backups, sync separately
+
+### User Workflow Example
+
+```typescript
+// 1. User browses templates (read-only)
+const templates = await conductor.flowTemplates.listTemplates();
+// Returns: ['hello-world', 'data-transform', 'image-processor']
+
+// 2. User loads a template to start
+const template = await conductor.flowTemplates.getTemplate('hello-world');
+// Template is NodeDefinition, never modified on disk
+
+// 3. User customizes in editor
+const myFlow = {
+  ...template,
+  name: 'My Custom Workflow',
+  nodes: [...template.nodes, myCustomNode]
+};
+
+// 4. User saves to their storage (persistent)
+await conductor.storage.saveFlow(myFlow);
+// Saved to: ~/.atomiton/flows/{flowId}.yaml
+
+// 5. Later, user loads their saved flow
+const savedFlows = await conductor.storage.listFlows();
+const myWorkflow = await conductor.storage.loadFlow(myFlow.id);
+
+// 6. Original template remains unchanged
+const originalTemplate = await conductor.flowTemplates.getTemplate('hello-world');
+// Still the same as step 2!
+```
+
+### Storage Architecture
+
+#### Data Flow: Browser → RPC → Storage → Disk
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                     Browser (Renderer Process)                  │
+│                                                                 │
+│  conductor.storage.save('flows/my-flow', flowData)            │
+└───────────────────────────┬────────────────────────────────────┘
+                            │ IPC (via @atomiton/rpc)
+┌───────────────────────────▼────────────────────────────────────┐
+│              Desktop (Main Process) - storageChannel            │
+│                                                                 │
+│  createStorage() ← Auto-detection based on platform           │
+└───────────────────────────┬────────────────────────────────────┘
+                            │
+            ┌───────────────┴──────────────┐
+            ↓                              ↓
+┌─────────────────────┐         ┌──────────────────────┐
+│ FileSystemEngine    │         │  MemoryEngine        │
+│ (Desktop)           │         │  (Browser - temp)    │
+│                     │         │                      │
+│ ~/.atomiton/        │         │  RAM only            │
+│ ├── flows/          │         │  (warning shown)     │
+│ ├── assets/         │         │                      │
+│ ├── configs/        │         │  Future: IndexedDB   │
+│ └── credentials/    │         │                      │
+└─────────────────────┘         └──────────────────────┘
+```
+
+#### Storage Namespaces
+
+User data is organized by type in separate namespaces:
+
+**Active Implementation (Phase 2.5)**:
+- `flows/{flowId}.yaml` - User-saved flows
+
+**Future Implementation** (stubbed with comments):
+- `assets/images/{id}` - User images and files
+- `assets/data/{id}` - Data files (CSV, JSON)
+- `configs/nodes/{nodeType}.yaml` - Per-node configuration
+- `configs/app.yaml` - Application preferences
+- `cache/{key}` - Temporary cached data
+
+**Security Critical** (requires research - Phase 2.5.X):
+- `credentials/{id}.encrypted` - API keys, tokens, secrets
+  - ⚠️ Must use OS keychain (Electron safeStorage)
+  - ⚠️ Never store credentials in flow files!
+  - ⚠️ Research required before implementation
+
+#### Directory Structure (Desktop)
+
+```
+~/.atomiton/                          # User data directory
+├── flows/                            # ✅ Phase 2.5
+│   ├── flow-abc123.yaml             # User-saved flow
+│   └── flow-def456.yaml
+├── assets/                           # 🔲 Future
+│   ├── images/
+│   └── data/
+├── configs/                          # 🔲 Future
+│   ├── nodes/
+│   └── app.yaml
+├── credentials/                      # 🔒 Security critical (future)
+│   └── index.json                   # Metadata only (references keychain)
+├── cache/                            # 🔲 Future
+├── logs/                             # 🔲 Future
+└── backups/                          # 🔲 Future
 ```
 
 ---
@@ -402,17 +547,17 @@ export interface FlowTemplate {
 
 const FLOW_TEMPLATES = [
   {
-    filename: "hello-world.yaml",
+    filename: "hello-world.flow.yaml",
     id: "hello-world-flow",
     name: "Hello World Flow",
   },
   {
-    filename: "data-transform.yaml",
+    filename: "data-transform.flow.yaml",
     id: "data-transform-flow",
     name: "Data Transform Pipeline",
   },
   {
-    filename: "image-processor.yaml",
+    filename: "image-processor.flow.yaml",
     id: "image-processor-flow",
     name: "Image Processing Workflow",
   },
@@ -477,6 +622,620 @@ export const createFlowTemplatesChannelServer = (ipcMain: IpcMain) => {
   return server;
 };
 ```
+
+### Phase 2.5: User Storage Integration 💾
+
+**Objective:** Wire `storageChannel` to use `@atomiton/storage` package for persistent flow save/load
+
+**CRITICAL DISTINCTION**: This phase implements USER STORAGE (persistent user data), NOT flow templates (read-only examples)
+
+#### Step 2.5.0: Simplify Storage Layer - String-Based Only
+
+**ARCHITECTURAL DECISION**: Keep storage layer dumb - it only handles string read/write.
+
+**Current Issue**: Storage layer tries to do JSON serialization, creating tight coupling.
+
+**Better Approach**: Storage layer just writes/reads strings. Caller (storageChannel) handles serialization.
+
+**Fix Required:**
+
+```typescript
+// packages/@atomiton/storage/src/factories/utils/fileOperations.ts
+
+// Remove JSON.stringify/parse - just work with strings!
+
+export async function writeDataToFile(
+  filepath: string,
+  content: string, // Changed: accept pre-serialized string
+  key: string,
+): Promise<void> {
+  try {
+    await fs.writeFile(filepath, content, 'utf-8');
+  } catch (error) {
+    throw new StorageError(
+      `Failed to save data: ${key}`,
+      'WRITE_ERROR',
+      error instanceof Error ? error : new Error(String(error)),
+      { key, operation: 'save' }
+    );
+  }
+}
+
+export async function readDataFromFile(
+  filepath: string,
+  key: string,
+): Promise<string> { // Changed: return raw string
+  try {
+    return await fs.readFile(filepath, 'utf-8');
+  } catch (error) {
+    throw new StorageError(
+      `Failed to load data: ${key}`,
+      'READ_ERROR',
+      error instanceof Error ? error : new Error(String(error)),
+      { key, operation: 'load' }
+    );
+  }
+}
+```
+
+Update `createFileSystemStorage.ts`:
+
+```typescript
+async save(
+  key: string,
+  data: string, // Changed: expect pre-serialized string
+  options?: StorageOptions,
+): Promise<void> {
+  const format = options?.format || 'yaml';
+  const filepath = getFilePath(baseDir, key, format);
+
+  await ensureDirectory(filepath, key);
+  await writeDataToFile(filepath, data, key);
+}
+
+async load(key: string): Promise<string> { // Changed: return raw string
+  const yamlPath = getFilePath(baseDir, key, 'yaml');
+  const jsonPath = getFilePath(baseDir, key, 'json');
+
+  const filepath = await findExistingFile(key, yamlPath, jsonPath);
+  return readDataFromFile(filepath, key);
+}
+```
+
+Update type definition:
+
+```typescript
+// packages/@atomiton/storage/src/types.ts
+
+export interface IStorageEngine {
+  save(key: string, data: string, options?: StorageOptions): Promise<void>;
+  load(key: string): Promise<string>;
+  list(prefix?: string): Promise<StorageItem[]>;
+  delete(key: string): Promise<void>;
+  exists(key: string): Promise<boolean>;
+  getInfo(): StorageInfo;
+}
+```
+
+**Then handle serialization in storageChannel** (where domain knowledge lives):
+
+```typescript
+// packages/@atomiton/rpc/src/main/channels/storageChannel.ts
+
+import { toYaml } from '@atomiton/nodes/serialization/toYaml';
+import { fromYaml } from '@atomiton/nodes/serialization/fromYaml';
+
+server.handle('saveFlow', async (params: SaveFlowParams) => {
+  const flowNode: NodeDefinition = { /* ... */ };
+
+  // Serialize to YAML here (domain logic, not storage logic)
+  const yamlContent = toYaml(flowNode);
+
+  // Storage just writes the string
+  await storage.save(`flows/${flowId}`, yamlContent, { format: 'yaml' });
+});
+
+server.handle('loadFlow', async (params: LoadFlowParams) => {
+  // Storage just reads the string
+  const yamlContent = await storage.load(`flows/${flowId}`);
+
+  // Deserialize from YAML here (domain logic)
+  const node = fromYaml(yamlContent);
+
+  return { /* map to result */ };
+});
+```
+
+**Note on `list()` metadata extraction:**
+
+The `walkDirectory()` function in `fileOperations.ts` currently parses JSON to extract metadata for the `StorageItem` results. This is acceptable because:
+1. It's read-only (doesn't affect save/load contract)
+2. It's optional (metadata extraction can fail gracefully)
+3. It provides better UX (shows flow names in list results)
+
+However, we should update it to handle YAML files:
+
+```typescript
+// In walkDirectory(), update metadata extraction:
+try {
+  const content = await fs.readFile(fullPath, 'utf-8');
+
+  // Try to parse as YAML first (our preferred format), fall back to JSON
+  let data: unknown;
+  if (fullPath.endsWith('.yaml')) {
+    data = fromYaml(content);
+  } else {
+    data = JSON.parse(content);
+  }
+
+  if (isCompositeData(data)) {
+    name = data.name || key;
+    metadata = { ...data.metadata };
+  }
+} catch {
+  // Skip metadata extraction if file can't be parsed
+}
+```
+
+**Benefits:**
+- ✅ Storage layer is dumb infrastructure (just file I/O)
+- ✅ Domain logic (YAML/JSON serialization) stays in domain layer (conductor/rpc)
+- ✅ Storage can be used for any string content (logs, configs, etc.)
+- ✅ No tight coupling to NodeDefinition types (except optional metadata extraction)
+- ✅ Easier to test and maintain
+
+**Validation:**
+```bash
+# Same validation - files should be YAML on disk
+cat ~/.atomiton/flows/*.yaml
+
+# Should see actual YAML format
+```
+
+#### Step 2.5.1: Refactor storageChannel Implementation
+
+Replace the in-memory Map with proper `@atomiton/storage` package integration:
+
+```typescript
+// packages/@atomiton/rpc/src/main/channels/storageChannel.ts
+
+import { createChannelServer, type ChannelServer } from '#main/channels/createChannelServer';
+import { createStorage } from '@atomiton/storage/exports/desktop';
+import type { IStorageEngine } from '@atomiton/storage';
+import type { NodeDefinition } from '@atomiton/nodes/definitions';
+import type { IpcMain } from 'electron';
+
+// Type definitions remain the same
+export type SaveFlowParams = {
+  flow: {
+    id?: string;
+    name: string;
+    nodes: NodeDefinition[];
+    edges?: Array<{
+      id: string;
+      source: string;
+      target: string;
+      sourceHandle?: string;
+      targetHandle?: string;
+    }>;
+    metadata?: Record<string, unknown>;
+  };
+};
+
+export type SaveFlowResult = {
+  id: string;
+  savedAt: string;
+  version: string;
+};
+
+export type LoadFlowParams = {
+  id: string;
+};
+
+export type LoadFlowResult = {
+  id: string;
+  name: string;
+  nodes: NodeDefinition[];
+  edges?: Array<{
+    id: string;
+    source: string;
+    target: string;
+    sourceHandle?: string;
+    targetHandle?: string;
+  }>;
+  metadata?: Record<string, unknown>;
+  savedAt: string;
+  version: string;
+};
+
+export type ListFlowsParams = {
+  limit?: number;
+  offset?: number;
+  sortBy?: 'name' | 'savedAt' | 'updatedAt';
+  sortOrder?: 'asc' | 'desc';
+};
+
+export type ListFlowsResult = {
+  flows: Array<{
+    id: string;
+    name: string;
+    nodeCount: number;
+    savedAt: string;
+    updatedAt: string;
+    version: string;
+  }>;
+  total: number;
+};
+
+export type DeleteFlowParams = {
+  id: string;
+};
+
+export const createStorageChannelServer = (ipcMain: IpcMain): ChannelServer => {
+  const server = createChannelServer('storage', ipcMain);
+
+  // ========================================
+  // AUTO-DETECT STORAGE ENGINE
+  // ========================================
+  // Uses @atomiton/storage package with auto-detection
+  // Desktop: FileSystemEngine → ~/.atomiton/
+  // Browser: MemoryEngine (temporary, with warning)
+  const storage: IStorageEngine = createStorage();
+
+  // Log storage info for debugging
+  const info = storage.getInfo();
+  console.log('Storage engine initialized:', {
+    type: info.type,
+    platform: info.platform,
+    connected: info.connected
+  });
+
+  // ========================================
+  // FLOW STORAGE (Active Implementation)
+  // ========================================
+
+  server.handle('saveFlow', async (params: unknown): Promise<SaveFlowResult> => {
+    const typedParams = params as SaveFlowParams;
+    const flowId = typedParams.flow.id || crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    // Convert to NodeDefinition
+    const flowNode: NodeDefinition = {
+      id: flowId,
+      type: 'group',
+      name: typedParams.flow.name,
+      version: '1.0.0',
+      nodes: typedParams.flow.nodes,
+      edges: typedParams.flow.edges,
+      metadata: {
+        ...typedParams.flow.metadata,
+        nodeCount: typedParams.flow.nodes.length,
+        edgeCount: typedParams.flow.edges?.length || 0,
+        createdAt: now,
+        updatedAt: now
+      }
+    };
+
+    // Save using storage engine with proper namespace
+    const key = `flows/${flowId}`;
+    await storage.save(key, flowNode, {
+      format: 'yaml',
+      metadata: {
+        name: flowNode.name,
+        nodeCount: flowNode.nodes?.length || 0,
+        createdBy: 'user'
+      }
+    });
+
+    console.log('User flow saved:', { key, name: flowNode.name });
+
+    // Broadcast flow saved event
+    server.broadcast('flowSaved', {
+      id: flowId,
+      name: typedParams.flow.name,
+      savedAt: now
+    });
+
+    return {
+      id: flowId,
+      savedAt: now,
+      version: '1.0.0'
+    };
+  });
+
+  server.handle('loadFlow', async (params: unknown): Promise<LoadFlowResult> => {
+    const typedParams = params as LoadFlowParams;
+    const key = `flows/${typedParams.id}`;
+
+    // Check if flow exists
+    const exists = await storage.exists(key);
+    if (!exists) {
+      throw new Error(`Flow ${typedParams.id} not found in user storage`);
+    }
+
+    // Load from storage engine
+    const node = await storage.load(key) as NodeDefinition;
+
+    console.log('User flow loaded:', { key, name: node.name });
+
+    return {
+      id: node.id,
+      name: node.name || 'Unnamed Flow',
+      nodes: node.nodes || [],
+      edges: node.edges || [],
+      metadata: node.metadata,
+      savedAt: (node.metadata?.updatedAt as string) || new Date().toISOString(),
+      version: node.version || '1.0.0'
+    };
+  });
+
+  server.handle('listFlows', async (params: unknown): Promise<ListFlowsResult> => {
+    const typedParams = (params || {}) as ListFlowsParams;
+    const {
+      limit = 50,
+      offset = 0,
+      sortBy = 'savedAt',
+      sortOrder = 'desc'
+    } = typedParams;
+
+    // List all flows from storage
+    const items = await storage.list('flows/');
+
+    // Map to flow metadata
+    const flows = items.map(item => ({
+      id: item.key.replace('flows/', '').replace('.yaml', ''),
+      name: item.name,
+      nodeCount: (item.metadata?.nodeCount as number) || 0,
+      savedAt: item.created,
+      updatedAt: item.updated,
+      version: '1.0.0'
+    }));
+
+    // Sort flows
+    flows.sort((a, b) => {
+      let aValue: string | number;
+      let bValue: string | number;
+
+      switch (sortBy) {
+        case 'name':
+          aValue = a.name;
+          bValue = b.name;
+          break;
+        case 'savedAt':
+          aValue = a.savedAt;
+          bValue = b.savedAt;
+          break;
+        case 'updatedAt':
+          aValue = a.updatedAt;
+          bValue = b.updatedAt;
+          break;
+        default:
+          aValue = a.savedAt;
+          bValue = b.savedAt;
+      }
+
+      if (sortOrder === 'asc') {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+      }
+    });
+
+    // Apply pagination
+    const paginatedFlows = flows.slice(offset, offset + limit);
+
+    console.log('User flows listed:', {
+      total: flows.length,
+      returned: paginatedFlows.length,
+      limit,
+      offset
+    });
+
+    return {
+      flows: paginatedFlows,
+      total: flows.length
+    };
+  });
+
+  server.handle('deleteFlow', async (params: unknown): Promise<void> => {
+    const typedParams = params as DeleteFlowParams;
+    const key = `flows/${typedParams.id}`;
+
+    // Check if flow exists
+    const exists = await storage.exists(key);
+    if (!exists) {
+      throw new Error(`Flow ${typedParams.id} not found in user storage`);
+    }
+
+    // Delete from storage
+    await storage.delete(key);
+
+    console.log('User flow deleted:', { key });
+
+    // Broadcast flow deleted event
+    server.broadcast('flowDeleted', {
+      id: typedParams.id,
+      deletedAt: new Date().toISOString()
+    });
+  });
+
+  server.handle('health', async (): Promise<{ status: string; storageType: string }> => {
+    const info = storage.getInfo();
+    return {
+      status: info.connected ? 'ok' : 'disconnected',
+      storageType: info.type
+    };
+  });
+
+  // ========================================
+  // ASSET STORAGE (Future - Stub)
+  // ========================================
+
+  // TODO: Implement asset storage for user files, images, data
+  // Use cases:
+  //   - Image files referenced by image-processor nodes
+  //   - CSV/JSON data files for data-transform nodes
+  //   - Binary assets (fonts, PDFs, etc.)
+  //
+  // API Design:
+  // server.handle('saveAsset', async (params: {
+  //   id: string;
+  //   type: 'image' | 'data' | 'binary';
+  //   data: Buffer | string;
+  //   metadata?: Record<string, unknown>;
+  // }) => {
+  //   const key = `assets/${params.type}/${params.id}`;
+  //   await storage.save(key, params.data, { metadata: params.metadata });
+  // });
+  //
+  // server.handle('loadAsset', async (params: { id: string; type: string }) => {
+  //   const key = `assets/${params.type}/${params.id}`;
+  //   return await storage.load(key);
+  // });
+  //
+  // server.handle('listAssets', async (params: { type?: string }) => {
+  //   const prefix = params.type ? `assets/${params.type}/` : 'assets/';
+  //   return await storage.list(prefix);
+  // });
+
+  // ========================================
+  // CONFIG STORAGE (Future - Stub)
+  // ========================================
+
+  // TODO: Implement config storage for app and node settings
+  // Use cases:
+  //   - Per-node type configuration (defaults, presets)
+  //   - Application preferences (theme, layout, etc.)
+  //   - User-specific settings
+  //
+  // API Design:
+  // server.handle('saveConfig', async (params: {
+  //   scope: 'app' | 'node';
+  //   key: string;
+  //   data: Record<string, unknown>;
+  // }) => {
+  //   const configKey = params.scope === 'app'
+  //     ? `configs/app/${params.key}`
+  //     : `configs/nodes/${params.key}`;
+  //   await storage.save(configKey, params.data, { format: 'yaml' });
+  // });
+  //
+  // server.handle('loadConfig', async (params: { scope: string; key: string }) => {
+  //   const configKey = `configs/${params.scope}/${params.key}`;
+  //   return await storage.load(configKey);
+  // });
+
+  // ========================================
+  // CREDENTIAL STORAGE (Future - SECURITY CRITICAL)
+  // ========================================
+
+  // ⚠️ SECURITY RESEARCH REQUIRED BEFORE IMPLEMENTATION ⚠️
+  //
+  // Assignment: Guilliman agent
+  // Blocking: API-based nodes (http-request, database nodes, cloud service nodes)
+  //
+  // Requirements:
+  // 1. Platform keychain integration via Electron safeStorage API
+  //    - macOS: Keychain Services
+  //    - Windows: Credential Manager (DPAPI)
+  //    - Linux: libsecret/gnome-keyring (with fallback warning)
+  //
+  // 2. Two-tier storage pattern:
+  //    Tier 1: OS Keychain (encrypted credential values)
+  //    Tier 2: Filesystem (metadata only - no secrets!)
+  //
+  // 3. Never store credentials in flow files!
+  //    Flows reference credentials by ID:
+  //    ```yaml
+  //    - type: "http-request"
+  //      parameters:
+  //        url: "https://api.example.com"
+  //        credentialId: "cred_123"  # ✅ Reference only
+  //        # apiKey: "sk-abc..."     # ❌ NEVER THIS!
+  //    ```
+  //
+  // 4. Secret detection before flow save:
+  //    - Scan for common secret patterns (AWS, GitHub, Stripe, etc.)
+  //    - Block save if secrets detected
+  //    - Provide migration suggestion
+  //
+  // 5. Access control:
+  //    - Only certain node types can access credentials
+  //    - Usage tracking and audit logging
+  //    - User permission prompts
+  //
+  // Research Resources:
+  //   - Electron safeStorage: https://www.electronjs.org/docs/latest/api/safe-storage
+  //   - VS Code credential storage (migrated from keytar to safeStorage in v1.80)
+  //   - 1Password local vault architecture
+  //   - OWASP credential storage guidelines
+  //
+  // Future API Design (DO NOT IMPLEMENT YET):
+  // server.handle('saveCredential', async (params: {
+  //   type: 'api-key' | 'oauth' | 'basic-auth';
+  //   name: string;
+  //   data: CredentialData;
+  // }) => {
+  //   // Research required for secure implementation
+  //   throw new Error('Credential storage not yet implemented - research phase');
+  // });
+
+  return server;
+};
+```
+
+#### Step 2.5.2: Validation Commands
+
+Test that user flows persist to disk:
+
+```bash
+# 1. Start the application
+pnpm dev
+
+# 2. In browser console, save a test flow
+await conductor.storage.saveFlow({
+  name: 'My Test Flow',
+  nodes: [
+    {
+      type: 'httpRequest',
+      parameters: { url: 'https://example.com' }
+    }
+  ]
+});
+
+# 3. Verify file was created on disk with .flow.yaml extension
+ls ~/.atomiton/flows/
+cat ~/.atomiton/flows/*.flow.yaml
+
+# 4. Close and restart the application
+# Press Ctrl+C, then run pnpm dev again
+
+# 5. In browser console, list flows
+const flows = await conductor.storage.listFlows();
+console.log(flows);
+// Should show 'My Test Flow' - it persisted!
+
+# 6. Load the saved flow
+const flow = await conductor.storage.loadFlow(flows.flows[0].id);
+console.log(flow);
+
+# 7. Verify templates are separate system
+const templates = await conductor.flowTemplates.listTemplates();
+console.log(templates);
+// Should show 'Hello World', 'Data Transform', etc. (different from user flows)
+```
+
+#### Step 2.5.3: Success Criteria
+
+- [ ] `storageChannel.ts` refactored to use `@atomiton/storage`
+- [ ] Storage auto-detection working (FileSystemEngine for desktop)
+- [ ] User flows persist to `~/.atomiton/flows/*.flow.yaml` (double extension)
+- [ ] `conductor.storage.saveFlow()` writes to disk with .flow.yaml extension
+- [ ] `conductor.storage.loadFlow()` reads from disk
+- [ ] `conductor.storage.listFlows()` shows user flows only
+- [ ] Flows survive app restart (persistence verified)
+- [ ] Asset/Config/Credential handlers stubbed with TODO comments
+- [ ] Clear distinction between templates (read-only) and storage (user data)
 
 ### Phase 3: Build FlowsPage UI 🎨
 
@@ -1017,12 +1776,13 @@ Reference: .claude/strategies/FLOW_EXECUTION_STRATEGY.md section "Step 1.4"
 Rename the templates directory and flow files:
 
 1. Rename packages/@atomiton/nodes/src/templates/yaml → flows
-2. Rename hello-world.yaml → hello-world-flow.yaml
-3. Rename data-transform.yaml → data-transform-flow.yaml
-4. Rename image-processor.yaml → image-processor-flow.yaml
+2. Rename hello-world.yaml → hello-world.flow.yaml
+3. Rename data-transform.yaml → data-transform.flow.yaml
+4. Rename image-processor.yaml → image-processor.flow.yaml
 5. Update any imports that reference the old path
 
 Reference: .claude/strategies/FLOW_EXECUTION_STRATEGY.md section "Step 1.1"
+Note: Using .flow.yaml double extension for semantic clarity and consistency
 ```
 
 ### Prompt 5: Create Flow Loading System
@@ -1087,36 +1847,84 @@ Reference: .claude/strategies/FLOW_EXECUTION_STRATEGY.md section "Testing & Vali
 
 ## Success Criteria
 
-### Phase 1: YAML Templates ✅
+### Phase 1: YAML Templates (Read-Only) ✅
 
 - [ ] All 3 YAML files parse correctly with fromYaml()
 - [ ] Directory renamed to `flows/`
-- [ ] Files renamed to `*-flow.yaml` pattern
-- [x] hello-world.yaml fixed: `type: "group"` at root, no `data:` fields
-- [ ] data-transform.yaml fixed
-- [ ] image-processor.yaml fixed
+- [ ] Files renamed to `*.flow.yaml` pattern (double extension for semantic clarity)
+- [x] hello-world.flow.yaml fixed: `type: "group"` at root, no `data:` fields
+- [ ] data-transform.flow.yaml fixed
+- [ ] image-processor.flow.yaml fixed
 
-### Phase 2: Flow Loading ✅
+### Phase 2: Flow Template Loading (Read-Only) ✅
 
-- [ ] Flow templates can be listed via RPC
-- [ ] Flow templates can be loaded by ID
+- [ ] flowTemplatesChannel created for template access
+- [ ] Flow templates can be listed via `conductor.flowTemplates.listTemplates()`
+- [ ] Flow templates can be loaded by ID via `conductor.flowTemplates.getTemplate()`
 - [ ] fromYaml() correctly parses all templates
-- [ ] Browser can access flow templates
+- [ ] Browser can access flow templates through conductor API
+- [ ] Templates are clearly separate from user storage
+
+### Phase 2.5: User Storage Integration (Persistent) ✅
+
+- [ ] **Simplify Storage Layer (Step 2.5.0)**:
+  - [ ] `IStorageEngine.save()` accepts string (not unknown)
+  - [ ] `IStorageEngine.load()` returns string (not unknown)
+  - [ ] `fileOperations.ts::writeDataToFile()` just writes string (no JSON.stringify)
+  - [ ] `fileOperations.ts::readDataFromFile()` just reads string (no JSON.parse)
+  - [ ] Storage layer has zero knowledge of NodeDefinition or domain types
+  - [ ] Storage layer is pure infrastructure (file I/O only)
+- [ ] **Storage Channel with Serialization (Step 2.5.1)**:
+  - [ ] `storageChannel.ts` imports `toYaml()` and `fromYaml()`
+  - [ ] `saveFlow` handler converts NodeDefinition → YAML string before save
+  - [ ] `loadFlow` handler converts YAML string → NodeDefinition after load
+  - [ ] Files saved as actual YAML on disk (not JSON with .flow.yaml extension)
+  - [ ] Files can be read back correctly from YAML
+  - [ ] Storage auto-detection working (FileSystemEngine for desktop)
+  - [ ] User flows persist to `~/.atomiton/flows/*.flow.yaml` (double extension)
+  - [ ] `conductor.storage.saveFlow()` writes YAML to disk with .flow.yaml extension
+  - [ ] `conductor.storage.loadFlow()` reads YAML from disk
+  - [ ] `conductor.storage.listFlows()` shows user flows only (not templates)
+  - [ ] Flows survive app restart (persistence verified)
+- [ ] **Future Storage (Stubbed)**:
+  - [ ] Asset storage stub with TODO comments
+  - [ ] Config storage stub with TODO comments
+  - [ ] Credential storage stub with security notes
+- [ ] **Documentation**:
+  - [ ] Clear distinction documented between templates vs storage
+  - [ ] Storage architecture diagram included in strategy
+
+### Phase 2.5.X: Credential Storage (Future - BLOCKED on research) 🔒
+
+- [ ] Guilliman research task: Secure credential storage best practices
+- [ ] CredentialManager implemented with Electron safeStorage
+- [ ] Secret detection implemented (blocks saves with embedded secrets)
+- [ ] credentialChannel RPC created
+- [ ] Credential resolution in conductor (credentialId → actual credentials)
+- [ ] Credential management UI
+- [ ] Platform keychain integration tested (macOS, Windows, Linux)
+- [ ] Usage tracking and audit logging
+- [ ] Access control (node type whitelist)
 
 ### Phase 3: UI Components ✅
 
 - [ ] Two-column layout matches NodesPage
-- [ ] Flow selector shows all 3 flows
-- [ ] Action buttons render (Run enabled, others disabled)
+- [ ] Flow selector shows templates and user flows separately
+- [ ] Action buttons render:
+  - [ ] Run button (enabled for templates and saved flows)
+  - [ ] Save button (enabled when flow modified)
+  - [ ] Load button (shows user flows, not templates)
+  - [ ] Download button (export as YAML)
 - [ ] Progress bar component created
 - [ ] LogsSection integrated
 
 ### Phase 4: Execution ✅
 
-- [ ] Selected flow can be executed
+- [ ] Selected flow (template or user flow) can be executed
 - [ ] Progress bar updates as nodes complete
 - [ ] Activity logs show execution details
-- [ ] All 3 flows execute successfully
+- [ ] All 3 template flows execute successfully
+- [ ] User saved flows execute successfully
 - [ ] Error states handled gracefully
 
 ---
@@ -1147,17 +1955,142 @@ Reference: .claude/strategies/FLOW_EXECUTION_STRATEGY.md section "Testing & Vali
 
 ---
 
+## Storage Namespace Reference
+
+Quick reference for all storage namespaces and their usage:
+
+| Namespace | Purpose | Format | Security | Status | Phase |
+|-----------|---------|--------|----------|--------|-------|
+| `flows/{id}.flow.yaml` | User-saved flows | YAML | Plaintext | ✅ Active | 2.5 |
+| `assets/images/{id}` | User images/files | Binary | Plaintext | 🔲 Stub | Future |
+| `assets/data/{id}` | Data files (CSV, JSON) | Various | Plaintext | 🔲 Stub | Future |
+| `configs/nodes/{nodeType}.yaml` | Per-node configuration | YAML | Plaintext | 🔲 Stub | Future |
+| `configs/app.yaml` | Application preferences | YAML | Plaintext | 🔲 Stub | Future |
+| `credentials/{id}.encrypted` | API keys, tokens, secrets | Encrypted | 🔒 Keychain | ⚠️ Research | 2.5.X |
+| `cache/{key}` | Temporary cached data | JSON | Plaintext | 🔲 Future | Future |
+| `logs/{timestamp}.log` | Application logs | Text | Plaintext | 🔲 Future | Future |
+| `backups/{date}/` | Automatic backups | Archive | Plaintext | 🔲 Future | Future |
+
+### Security Tiers
+
+- 🟢 **Plaintext**: Safe to store as regular files (no sensitive data)
+- 🔒 **Encrypted**: Must use OS keychain or encryption (credentials only)
+
+### Status Legend
+
+- ✅ **Active**: Currently implemented in Phase 2.5
+- 🔲 **Stub**: Stubbed with TODO comments, ready for future implementation
+- ⚠️ **Research**: Requires security research before implementation
+
+### Usage Examples
+
+```typescript
+// ACTIVE: Flow storage (Phase 2.5)
+await conductor.storage.saveFlow(myFlow);
+await conductor.storage.loadFlow(flowId);
+await conductor.storage.listFlows();
+
+// FUTURE: Asset storage (stubbed)
+// await conductor.storage.saveAsset({ type: 'image', id, data });
+// await conductor.storage.loadAsset({ type: 'image', id });
+
+// FUTURE: Config storage (stubbed)
+// await conductor.storage.saveConfig({ scope: 'app', key: 'theme', data });
+// await conductor.storage.loadConfig({ scope: 'app', key: 'theme' });
+
+// FUTURE: Credential storage (research required)
+// await conductor.credentials.create({ type: 'api-key', name, data });
+// await conductor.credentials.get(credentialId);
+```
+
+### Never Store Secrets in Flows!
+
+```yaml
+# ✅ CORRECT: Reference credential by ID
+nodes:
+  - type: "http-request"
+    parameters:
+      url: "https://api.example.com"
+      credentialId: "cred_123"  # References encrypted credential
+
+# ❌ WRONG: Never embed actual secrets!
+nodes:
+  - type: "http-request"
+    parameters:
+      url: "https://api.example.com"
+      apiKey: "sk-live-abc123..."  # NEVER DO THIS!
+```
+
+---
+
+## File Extension Convention
+
+### `.flow.yaml` Double Extension
+
+Based on industry best practices research, Atomiton uses the `.flow.yaml` double extension for all flow files (both templates and user flows).
+
+**Rationale:**
+1. **Semantic clarity**: Immediately indicates file purpose (flow-specific YAML)
+2. **Industry alignment**: Follows established patterns like `.spec.ts`, `.d.ts`, `.min.js`
+3. **Tooling support**: Easy to configure file associations, glob patterns, schema validation
+4. **Future-proof**: Allows other YAML files (config.yaml) without confusion
+5. **Self-documenting**: File extension matches user concept ("flow") while indicating technical format (YAML)
+
+**Examples:**
+- Flow templates: `hello-world.flow.yaml`, `data-transform.flow.yaml`
+- User flows: `{flowId}.flow.yaml` in `~/.atomiton/flows/`
+- Other YAML: `config.yaml`, `atomiton.config.yaml` (no confusion)
+
+**VSCode Configuration** (optional):
+```json
+{
+  "files.associations": {
+    "*.flow.yaml": "yaml"
+  },
+  "yaml.schemas": {
+    "path/to/flow-schema.json": "*.flow.yaml"
+  }
+}
+```
+
 ## Glossary
 
-**Flow**: A NodeDefinition with child nodes that executes as a sequence/group
+### Core Concepts
 
-**Flow Template**: A predefined YAML file containing a flow definition
+**Flow**: A NodeDefinition with child nodes that executes as a sequence/group. In Atomiton, "flow" is a user-friendly term, not a distinct type.
 
-**NodeDefinition**: The universal type representing any node or flow
+**NodeDefinition**: The universal type representing any node or flow. Everything in Atomiton is a NodeDefinition.
 
-**Progress Tracking**: Real-time updates showing which node is currently
-executing
+**Flow Template**: A predefined, read-only `.flow.yaml` file bundled with the app that provides example flows for users to learn from. Located in `@atomiton/nodes/templates/flows/`.
+
+**User Flow**: A flow created and saved by the user to persistent storage as `.flow.yaml`. Stored in `~/.atomiton/flows/` on desktop.
+
+### Storage Terms
+
+**Storage Engine**: Backend implementation that handles data persistence. Examples: FileSystemEngine (desktop), MemoryEngine (browser temp), IndexedDB (browser future).
+
+**Storage Namespace**: Organizational structure for different types of user data (flows, assets, configs, credentials).
+
+**User Storage**: Persistent storage for user-created content, managed by `@atomiton/storage` package. Separate from read-only templates.
+
+**Credential Storage**: Secure storage for API keys, tokens, and secrets using OS keychain. Never stored in flow files - referenced by `credentialId`.
+
+### APIs and Functions
 
 **fromYaml()**: Parser that converts YAML to NodeDefinition
 
 **conductor.node.run()**: Executes any NodeDefinition (single node or flow)
+
+**conductor.flowTemplates.***: API for accessing read-only bundled templates
+
+**conductor.storage.***: API for user's persistent storage (flows, assets, configs)
+
+**conductor.credentials.***: API for secure credential management (future)
+
+### Technical Terms
+
+**Progress Tracking**: Real-time updates showing which node is currently executing
+
+**Secret Detection**: Scanning flow files for embedded credentials before save to prevent accidental leaks
+
+**Two-Tier Storage**: Pattern for credentials where metadata is in filesystem and actual secrets are in OS keychain

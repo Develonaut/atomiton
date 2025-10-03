@@ -3,11 +3,11 @@ import { loadTemplate } from "#templates/loader";
 
 // Import YAML content as strings (will be handled by build system)
 // @ts-expect-error - Vite will handle these raw imports
-import helloWorldYaml from "#templates/yaml/hello-world.yaml?raw";
+import helloWorldYaml from "#templates/flows/hello-world.flow.yaml?raw";
 // @ts-expect-error - Vite will handle these raw imports
-import dataTransformYaml from "#templates/yaml/data-transform.yaml?raw";
+import dataTransformYaml from "#templates/flows/data-transform.flow.yaml?raw";
 // @ts-expect-error - Vite will handle these raw imports
-import imageProcessorYaml from "#templates/yaml/image-processor.yaml?raw";
+import imageProcessorYaml from "#templates/flows/image-processor.flow.yaml?raw";
 
 /**
  * Template registry - simple array of templates
