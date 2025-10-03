@@ -56,7 +56,7 @@ export const createChannelManager = (): ChannelManager => {
     });
 
     // Wire conductor's execution graph store to IPC broadcasts
-    conductor.store.subscribe((state: ExecutionGraphState) => {
+    conductor.node.store.subscribe((state: ExecutionGraphState) => {
       // Convert Map to array for IPC serialization
       const nodesArray = Array.from(state.nodes.values());
 

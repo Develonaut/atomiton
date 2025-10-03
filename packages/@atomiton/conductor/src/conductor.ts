@@ -115,6 +115,11 @@ export function createConductor(config: ConductorConfig = {}) {
 
       return execute(node, context, config, executionGraphStore);
     },
+
+    /**
+     * Execution graph store for tracking node execution state
+     */
+    store: executionGraphStore,
   };
 
   const systemAPI = {
@@ -139,7 +144,14 @@ export function createConductor(config: ConductorConfig = {}) {
   return {
     node: nodeAPI,
     system: systemAPI,
-    store: executionGraphStore,
+
+    // Backward compatibility - legacy top-level store accessor
+    get store() {
+      console.warn(
+        "Deprecated: conductor.store is deprecated. Use conductor.node.store instead.",
+      );
+      return executionGraphStore;
+    },
 
     // Backward compatibility - legacy execute method
     async execute(
