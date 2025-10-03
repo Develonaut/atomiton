@@ -55,7 +55,7 @@ pre-commit:
     unit-tests:
       run: |
         echo "🧪 Running unit tests in affected packages..."
-        turbo run test --filter='[HEAD^1]'
+        pnpm turbo run test --filter='[HEAD^1]'
       fail_text: "❌ Unit tests failed - please fix failing tests"
 
     # Build affected packages to catch build errors early
