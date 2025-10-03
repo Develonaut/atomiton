@@ -361,185 +361,259 @@ conductor.flow.onError(...)       // Alias to node.onError
 
 ---
 
-### B2: ReactFlow Graph Components
+### B2: Execution State Visualization (Leverage Existing Editor) ✅
 
-**What to do**: Build the ReactFlow visualization components with auto-layout
-and color-coded node states.
+**Strategy**: Reuse the existing `@atomiton/editor` package infrastructure instead
+of building from scratch. This ensures visual consistency and makes future editor
+integration trivial.
 
-**Dependencies to add**:
+**Phase B2.1: Add Dagre Layout to Editor Package** ✅
+
+**What was done**: Added auto-layout utilities to `@atomiton/editor` for use
+across the application.
+
+**Dependencies added**:
 
 ```bash
-pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
+pnpm --filter @atomiton/editor add @dagrejs/dagre
+pnpm --filter @atomiton/editor add -D @types/dagre
 ```
+
+**Files created**:
+
+- `packages/@atomiton/editor/src/utils/layout/dagre.ts` - Dagre auto-layout implementation
+- `packages/@atomiton/editor/src/utils/layout/index.ts` - Layout utilities export
+- Updated `packages/@atomiton/editor/src/index.ts` - Export layout functions
+
+**Layout utilities provided**:
+
+```typescript
+// Main layout function with left-to-right default
+export function getLayoutedElements<T>(
+  nodes: ReactFlowNode<T>[],
+  edges: ReactFlowEdge[],
+  options?: {
+    direction?: 'LR' | 'TB';  // 'LR' = left-to-right (default)
+    nodeWidth?: number;
+    nodeHeight?: number;
+    rankSep?: number;
+    nodeSep?: number;
+  }
+): { nodes: ReactFlowNode<T>[]; edges: ReactFlowEdge[] }
+
+// Bounding box calculation for viewport fitting
+export function getNodesBounds(nodes: ReactFlowNode[]): {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+```
+
+**Validation**: ✅
+
+```bash
+✅ pnpm --filter @atomiton/editor typecheck
+✅ pnpm --filter @atomiton/editor build
+```
+
+**Success criteria**: ✅
+
+- ✅ Dagre layout utilities available in @atomiton/editor
+- ✅ Left-to-right (LR) layout by default
+- ✅ Configurable node dimensions and spacing
+- ✅ TypeScript types properly exported
+- ✅ No build errors
+
+---
+
+**Phase B2.2: Extend Node Component for Execution States** (TODO)
+
+**What to do**: Add execution state visualization to the existing Node component
+in @atomiton/editor.
+
+**Files to modify**:
+
+- `packages/@atomiton/editor/src/types/EditorNode.ts` - Add execution state types
+- `packages/@atomiton/editor/src/components/Node/index.tsx` - Add state-based styling
+
+**Implementation**:
+
+```typescript
+// types/EditorNode.ts
+export type NodeExecutionState =
+  | 'pending'
+  | 'executing'
+  | 'completed'
+  | 'error'
+  | 'skipped';
+
+export type NodeData = {
+  // Existing fields...
+  metadata?: NodeMetadata;
+  inputPorts?: EditorNodePort[];
+  outputPorts?: EditorNodePort[];
+
+  // NEW: Execution state fields
+  executionState?: NodeExecutionState;
+  isCriticalPath?: boolean;
+  weight?: number;
+}
+
+// components/Node/index.tsx - Add state colors
+const STATE_COLORS = {
+  pending: '#94a3b8',
+  executing: '#3b82f6',
+  completed: '#22c55e',
+  error: '#ef4444',
+  skipped: '#f59e0b',
+} as const;
+
+function Node(props: ReactFlowNodeProps) {
+  const data = props.data as NodeData | undefined;
+  const executionState = data?.executionState;
+  const isCriticalPath = data?.isCriticalPath;
+
+  const borderColor = executionState
+    ? STATE_COLORS[executionState]
+    : undefined;
+
+  const boxShadow = isCriticalPath
+    ? '0 0 10px rgba(239, 68, 68, 0.5)'
+    : undefined;
+
+  return (
+    <div
+      className="atomiton-node"
+      style={{
+        borderColor,
+        boxShadow,
+        transition: 'all 0.3s ease'
+      }}
+    >
+      {/* Existing node content */}
+    </div>
+  );
+}
+```
+
+**Validation**:
+
+```bash
+pnpm --filter @atomiton/editor typecheck
+pnpm --filter @atomiton/editor build
+pnpm --filter @atomiton/editor test
+```
+
+**Success criteria**:
+
+- Node component accepts executionState and isCriticalPath props
+- Border color changes based on execution state
+- Critical path nodes have red shadow effect
+- Smooth transitions between states
+- No breaking changes to existing editor usage
+
+---
+
+**Phase B2.3: Create ExecutionGraphViewer Component** (TODO)
+
+**What to do**: Create a read-only viewer component in the client that uses the
+Editor package to display execution state.
 
 **Files to create**:
 
-1. **NodeGraphProgressMap.tsx** - Main graph container
+- `apps/client/src/templates/DebugPage/components/ExecutionGraphViewer.tsx`
 
-   ```typescript
-   import { ReactFlow, useNodesState, useEdgesState } from '@xyflow/react';
-   import { useExecutionGraphStore } from '#stores/executionGraphStore';
-   import { getLayoutedElements } from './layoutUtils';
-   import { ExecutionNode } from './ExecutionNode';
-   import '@xyflow/react/dist/style.css';
+**Implementation**:
 
-   export function NodeGraphProgressMap() {
-     const graphState = useExecutionGraphStore.useStore(state => state);
-     const [nodes, setNodes, onNodesChange] = useNodesState([]);
-     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+```typescript
+import { Editor, Canvas, getLayoutedElements } from '@atomiton/editor';
+import { conductor } from '@atomiton/conductor/browser';
+import { useState, useEffect } from 'react';
+import type { NodeDefinition } from '@atomiton/nodes/definitions';
+import type { Node as ReactFlowNode } from '@xyflow/react';
 
-     useEffect(() => {
-       if (!graphState.isExecuting || graphState.nodes.size === 0) {
-         setNodes([]);
-         setEdges([]);
-         return;
-       }
+export function ExecutionGraphViewer({ flow }: { flow: NodeDefinition }) {
+  const [nodes, setNodes] = useState<ReactFlowNode[]>([]);
+  const [edges, setEdges] = useState([]);
 
-       const reactFlowNodes = Array.from(graphState.nodes.values()).map(node => ({
-         id: node.id,
-         type: 'executionNode',
-         position: { x: 0, y: 0 },
-         data: {
-           label: node.name,
-           state: node.state,
-           type: node.type,
-           weight: node.weight,
-           isCriticalPath: graphState.criticalPath.includes(node.id),
-         },
-       }));
+  useEffect(() => {
+    // Subscribe to unified progress events
+    const unsubscribe = conductor.node.onProgress((event) => {
+      // Transform event.nodes into ReactFlow nodes with execution states
+      const executionNodes = event.nodes.map(node => ({
+        id: node.id,
+        type: node.type || 'default',
+        position: node.position || { x: 0, y: 0 },
+        data: {
+          label: node.name,
+          metadata: node.metadata,
+          // Execution state fields
+          executionState: node.state,
+          isCriticalPath: event.graph.criticalPath.includes(node.id),
+          weight: node.weight,
+        },
+      }));
 
-       const reactFlowEdges = graphState.edges.map((edge, i) => ({
-         id: `edge-${i}`,
-         source: edge.from,
-         target: edge.to,
-         type: 'smoothstep',
-         animated: graphState.criticalPath.includes(edge.from),
-       }));
+      // Apply auto-layout (left-to-right as requested)
+      const { nodes: layoutedNodes } = getLayoutedElements(
+        executionNodes,
+        event.graph.edges || [],
+        { direction: 'LR' }  // Left-to-right layout
+      );
 
-       const { nodes: layouted, edges: layoutedEdges } = getLayoutedElements(
-         reactFlowNodes,
-         reactFlowEdges,
-         'TB'
-       );
+      setNodes(layoutedNodes);
+      setEdges(event.graph.edges || []);
+    });
 
-       setNodes(layouted);
-       setEdges(layoutedEdges);
-     }, [graphState, setNodes, setEdges]);
+    return unsubscribe;
+  }, []);
 
-     if (!graphState.isExecuting || graphState.nodes.size === 0) {
-       return null;
-     }
+  if (nodes.length === 0) {
+    return null;
+  }
 
-     return (
-       <div style={{ width: '100%', height: '400px', border: '1px solid #e2e8f0', borderRadius: '8px' }}>
-         <ReactFlow
-           nodes={nodes}
-           edges={edges}
-           onNodesChange={onNodesChange}
-           onEdgesChange={onEdgesChange}
-           nodeTypes={{ executionNode: ExecutionNode }}
-           fitView
-           proOptions={{ hideAttribution: true }}
-         />
-       </div>
-     );
-   }
-   ```
+  return (
+    <div className="execution-graph-viewer" style={{ height: '400px', width: '100%' }}>
+      <Editor flow={flow}>
+        <Canvas
+          nodes={nodes}
+          edges={edges}
+          nodesDraggable={false}        // Read-only
+          nodesConnectable={false}      // No connecting
+          elementsSelectable={false}    // No selection
+          fitView
+        />
+      </Editor>
+    </div>
+  );
+}
+```
 
-2. **ExecutionNode.tsx** - Custom node with color-coded states
+**Key benefits**:
 
-   ```typescript
-   import { memo } from 'react';
-   import { Handle, Position } from '@xyflow/react';
-
-   const STATE_COLORS = {
-     pending: '#94a3b8',
-     executing: '#3b82f6',
-     completed: '#22c55e',
-     error: '#ef4444',
-     skipped: '#f59e0b',
-   };
-
-   export const ExecutionNode = memo(({ data }) => {
-     const color = STATE_COLORS[data.state];
-
-     return (
-       <div style={{
-         padding: '10px 15px',
-         borderRadius: '6px',
-         backgroundColor: 'white',
-         border: `2px solid ${color}`,
-         boxShadow: data.isCriticalPath ? '0 0 10px rgba(239, 68, 68, 0.5)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
-         transition: 'all 0.3s ease',
-         minWidth: '120px',
-       }}>
-         <Handle type="target" position={Position.Top} />
-         <div style={{ fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
-           {data.label}
-         </div>
-         <div style={{ fontSize: '10px', color: '#64748b' }}>
-           {data.type} • w:{data.weight}
-         </div>
-         {data.isCriticalPath && (
-           <div style={{ fontSize: '9px', color: '#ef4444', fontWeight: 600, marginTop: '2px' }}>
-             CRITICAL PATH
-           </div>
-         )}
-         <Handle type="source" position={Position.Bottom} />
-       </div>
-     );
-   });
-   ```
-
-3. **layoutUtils.ts** - Dagre auto-layout
-
-   ```typescript
-   import dagre from "@dagrejs/dagre";
-
-   export const getLayoutedElements = (nodes, edges, direction = "TB") => {
-     const dagreGraph = new dagre.graphlib.Graph();
-     dagreGraph.setDefaultEdgeLabel(() => ({}));
-     dagreGraph.setGraph({ rankdir: direction, ranksep: 50, nodesep: 30 });
-
-     nodes.forEach((node) => {
-       dagreGraph.setNode(node.id, { width: 150, height: 80 });
-     });
-
-     edges.forEach((edge) => {
-       dagreGraph.setEdge(edge.source, edge.target);
-     });
-
-     dagre.layout(dagreGraph);
-
-     const layoutedNodes = nodes.map((node) => {
-       const nodeWithPosition = dagreGraph.node(node.id);
-       return {
-         ...node,
-         position: {
-           x: nodeWithPosition.x - 75,
-           y: nodeWithPosition.y - 40,
-         },
-       };
-     });
-
-     return { nodes: layoutedNodes, edges };
-   };
-   ```
+- ✅ **Reuses existing Editor/Canvas components** - No duplicate ReactFlow setup
+- ✅ **Same visual appearance** - Consistency between editor and execution view
+- ✅ **Left-to-right layout** - Already configured with dagre
+- ✅ **Minimal code** - Just subscription logic and state mapping
+- ✅ **Future editor integration trivial** - Just enable execution tracking in editor
 
 **Validation**:
 
 ```bash
 pnpm --filter @atomiton/client typecheck
-# Manually test in dev mode
 pnpm --filter @atomiton/desktop dev
+# Execute a flow in DebugPage and verify graph appears with colored states
 ```
 
 **Success criteria**:
 
-- Graph renders without errors
-- Nodes are properly positioned with dagre
-- Critical path is visually distinct
-- Color-coded states work correctly
+- Graph renders using existing Editor components
+- Nodes display execution states with color-coded borders
+- Critical path nodes have red shadow
+- Auto-layout positions nodes left-to-right
+- Updates smoothly as execution progresses
+- Read-only (no dragging/connecting)
 
 ---
 
@@ -734,24 +808,74 @@ document and and work before it.
 
 ---
 
-### Prompt for Phase B2: ReactFlow Components
+### Prompt for Phase B2.1: Add Dagre Layout to Editor
 
 ```
-Implement Phase B2 of the Visual Node Graph Progress Map feature.
+Implement Phase B2.1 of the Visual Node Graph Progress Map feature.
 
 Context:
-✅ Phase B1 COMPLETE: Client store adapter is working
-🚧 Phase B2: Build ReactFlow visualization components
+✅ Phase B1 COMPLETE: Unified progress event API with graph data
+🚧 Phase B2.1: Add dagre auto-layout utilities to @atomiton/editor package
+
+Strategy: Add layout utilities to the editor package so they can be reused
+across the application and make future editor enhancements easier.
 
 Tasks:
-1. Install dependency: pnpm --filter @atomiton/client add @dagrejs/dagre @types/dagre
+1. Install dependencies:
+   pnpm --filter @atomiton/editor add @dagrejs/dagre
+   pnpm --filter @atomiton/editor add -D @types/dagre
 
-2. Create three files in apps/client/src/templates/DebugPage/components/:
-   - NodeGraphProgressMap.tsx (main graph container)
-   - ExecutionNode.tsx (custom node with color-coded states)
-   - layoutUtils.ts (dagre auto-layout)
+2. Create packages/@atomiton/editor/src/utils/layout/dagre.ts with:
+   - getLayoutedElements() function (left-to-right default)
+   - getNodesBounds() function for viewport fitting
+   - Configurable options (direction, node dimensions, spacing)
 
-Follow the complete implementation code in Phase B2 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
+3. Create packages/@atomiton/editor/src/utils/layout/index.ts to export utilities
+
+4. Update packages/@atomiton/editor/src/index.ts to export layout functions
+
+Follow the complete implementation code in Phase B2.1 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
+
+Validation:
+pnpm --filter @atomiton/editor typecheck
+pnpm --filter @atomiton/editor build
+pnpm --filter @atomiton/editor test
+
+Success criteria:
+- Dagre layout utilities available from @atomiton/editor
+- Left-to-right (LR) layout by default (as requested by user)
+- TypeScript types properly exported
+- No build or test errors
+```
+
+Once complete, mark Phase B2.1 as complete and commit your work.
+
+---
+
+### Prompt for Phase B2.2: Extend Node Component for Execution States
+
+```
+Implement Phase B2.2 of the Visual Node Graph Progress Map feature.
+
+Context:
+✅ Phase B2.1 COMPLETE: Dagre layout utilities added to editor package
+🚧 Phase B2.2: Extend Node component to support execution state visualization
+
+Strategy: Modify the existing Node component in @atomiton/editor to accept
+execution state props, ensuring visual consistency between editor and execution views.
+
+Tasks:
+1. Update packages/@atomiton/editor/src/types/EditorNode.ts:
+   - Add NodeExecutionState type
+   - Extend NodeData with executionState, isCriticalPath, weight fields
+
+2. Update packages/@atomiton/editor/src/components/Node/index.tsx:
+   - Add STATE_COLORS mapping
+   - Apply border color based on executionState
+   - Add critical path shadow effect
+   - Add smooth transitions
+
+Follow the complete implementation code in Phase B2.2 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
 
 State colors:
 - pending: #94a3b8
@@ -762,22 +886,73 @@ State colors:
 
 Critical path styling:
 - boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)'
+- transition: 'all 0.3s ease'
 
-Layout settings:
-- direction: 'TB' (top-to-bottom)
-- ranksep: 50
-- nodesep: 30
+Validation:
+pnpm --filter @atomiton/editor typecheck
+pnpm --filter @atomiton/editor build
+pnpm --filter @atomiton/editor test
+
+Success criteria:
+- Node component accepts execution state props
+- Border colors change based on state
+- Critical path nodes have red shadow
+- Smooth transitions between states
+- No breaking changes to existing editor usage
+```
+
+Once complete, mark Phase B2.2 as complete and commit your work.
+
+---
+
+### Prompt for Phase B2.3: Create ExecutionGraphViewer Component
+
+```
+Implement Phase B2.3 of the Visual Node Graph Progress Map feature.
+
+Context:
+✅ Phase B2.2 COMPLETE: Node component supports execution states
+🚧 Phase B2.3: Create ExecutionGraphViewer component in client
+
+Strategy: Leverage the existing Editor/Canvas components to create a read-only
+execution graph viewer. This ensures visual consistency and makes future
+editor integration trivial.
+
+Task:
+Create apps/client/src/templates/DebugPage/components/ExecutionGraphViewer.tsx
+
+The component should:
+1. Subscribe to conductor.node.onProgress() for unified progress events
+2. Transform event.nodes into ReactFlow nodes with execution state data
+3. Apply auto-layout with getLayoutedElements (direction: 'LR')
+4. Render using existing Editor and Canvas components
+5. Configure Canvas as read-only (no dragging/connecting/selection)
+
+Follow the complete implementation code in Phase B2.3 section of .claude/strategies/VISUAL_NODE_GRAPH_PROGRESS.md.
+
+Key imports:
+- import { Editor, Canvas, getLayoutedElements } from '@atomiton/editor';
+- import { conductor } from '@atomiton/conductor/browser';
+
+Layout configuration:
+- direction: 'LR' (left-to-right as requested)
+- Auto-fit viewport with fitView prop
 
 Validation:
 pnpm --filter @atomiton/client typecheck
 pnpm --filter @atomiton/desktop dev
+# Execute a flow in DebugPage and verify graph appears with colored states
 
 Success criteria:
-- Graph renders without errors
-- Nodes are properly positioned with dagre
-- Critical path is visually distinct
-- Color-coded states work correctly
+- Graph renders using existing Editor components
+- Nodes display execution states with color-coded borders
+- Critical path nodes have red shadow
+- Auto-layout positions nodes left-to-right
+- Updates smoothly as execution progresses
+- Read-only interaction (no dragging/connecting)
 ```
+
+Once complete, mark Phase B2.3 as complete and commit your work.
 
 ---
 
