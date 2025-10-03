@@ -1,80 +1,73 @@
-flow:
-  metadata:
-    name: "Hello World Example"
+id: "hello-world-flow"
+name: "Hello World Flow"
+description: "Simple flow that creates data and writes it to a file"
+type: "group"
+version: "1.0.0"
+
+metadata:
+  author: "Atomiton Team"
+  category: "example"
+  tags: ["example", "beginner", "hello-world"]
+  icon: "smile"
+
+nodes:
+  - id: "create-message"
+    type: "edit-fields"
+    name: "Create Message"
     version: "1.0.0"
-    description: "Simple flow that creates data and writes it to a file"
-    author: "Atomiton"
-    tags: ["example", "beginner", "hello-world"]
+    parameters:
+      values:
+        message: "Hello World from Atomiton!"
+        description:
+          "This is a simple example showing how Flow nodes work together."
+        timestamp: "{{$now}}"
+        author: "Atomiton Flow System"
+      keepOnlySet: true
+    position:
+      x: 100
+      y: 200
 
-    nodes:
-    # Edit Fields node - creates the hello world data
-    create_message:
-      type: "edit-fields"
-      parameters:
-        values:
-          message: "Hello World from Atomiton!"
-          description: "This is a simple example showing how Flow nodes work together."
-          timestamp: "{{$now}}"
-          author: "Atomiton Flow System"
-        keepOnlySet: true
-      position:
-        x: 100
-        y: 200
+  - id: "format-content"
+    type: "transform"
+    name: "Format Content"
+    version: "1.0.0"
+    parameters:
+      operation: "map"
+      transformFunction: |
+        item => {
+          return `${item.message}
 
-    # Transform node - formats the message for output
-    format_content:
-      type: "transform"
-      parameters:
-        operation: "map"
-        transformFunction: |
-          item => {
-            return `${item.message}
+        ${item.description}
 
-            ${item.description}
+        Created by: ${item.author}
+        Generated at: ${item.timestamp}`;
+        }
+    position:
+      x: 300
+      y: 200
 
-            Created by: ${item.author}
-            Generated at: ${item.timestamp}`;
-          }
-      position:
-        x: 300
-        y: 200
+  - id: "write-to-file"
+    type: "file-system"
+    name: "Write To File"
+    version: "1.0.0"
+    parameters:
+      operation: "write"
+      path: "/Users/Ryan/Desktop/hello-world.txt"
+      encoding: "utf8"
+      createDirectories: true
+      overwrite: true
+    position:
+      x: 500
+      y: 200
 
-    # File system node - writes the formatted content to a file
-    write_to_file:
-      type: "file-system"
-      parameters:
-        operation: "write"
-        path: "/Users/Ryan/Desktop/hello-world.txt"
-        encoding: "utf8"
-        createDirectories: true
-        overwrite: true
-      position:
-        x: 500
-        y: 200
-
-  edges:
-    # Connect edit fields node to transform node
-    - id: "data_to_transform"
-      source:
-        nodeId: "create_message"
-        portId: "data"
-      target:
-        nodeId: "format_content"
-        portId: "data"
-
-    # Connect transform node to file system node
-    - id: "content_to_file"
-      source:
-        nodeId: "format_content"
-        portId: "result"
-      target:
-        nodeId: "write_to_file"
-        portId: "content"
-
-  settings:
-    execution:
-      mode: "sequential"
-      errorHandling: "stop"
-    ui:
-      theme: "light"
-      gridSize: 20
+edges:
+  - id: "edge-1"
+    source: "create-message"
+    target: "format-content"
+    sourceHandle: "output"
+    targetHandle: "input"
+  - id: "edge-2"
+    source: "format-content"
+    target: "write-to-file"
+    sourceHandle: "output"
+    targetHandle: "input"
