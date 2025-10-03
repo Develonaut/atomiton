@@ -10,15 +10,38 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock dependencies
 vi.mock("@atomiton/conductor/desktop", () => ({
-  createConductor: vi.fn(() => ({
-    node: {
-      run: vi.fn(),
-      store: {
-        subscribe: vi.fn(),
-        getState: vi.fn(),
+  createConductor: vi.fn(() => {
+    const mockStoreApi = {
+      getState: vi.fn(),
+      setState: vi.fn(),
+      subscribe: vi.fn(),
+      getInitialState: vi.fn(),
+    };
+
+    const mockStore = {
+      subscribe: vi.fn(),
+      getState: vi.fn(),
+      setState: vi.fn(),
+      useStore: Object.assign(vi.fn(), mockStoreApi),
+      initializeGraph: vi.fn(),
+      setNodeState: vi.fn(),
+      completeExecution: vi.fn(),
+      reset: vi.fn(),
+    };
+
+    return {
+      node: {
+        run: vi.fn(),
+        store: mockStore,
       },
-    },
-  })),
+      system: {
+        health: vi.fn(),
+      },
+      store: mockStore,
+      execute: vi.fn(),
+      health: vi.fn(),
+    };
+  }),
 }));
 
 vi.mock("@atomiton/logger/desktop", () => ({
@@ -32,26 +55,69 @@ vi.mock("@atomiton/logger/desktop", () => ({
 vi.mock("@atomiton/rpc/main/channels", () => ({
   createNodeChannelServer: vi.fn(() => ({
     broadcast: vi.fn(),
+    handle: vi.fn(),
+    dispose: vi.fn(),
   })),
-  createFlowChannelServer: vi.fn(() => ({})),
-  createLoggerChannelServer: vi.fn(() => ({})),
-  createStorageChannelServer: vi.fn(() => ({})),
-  createSystemChannelServer: vi.fn(() => ({})),
+  createFlowChannelServer: vi.fn(() => ({
+    handle: vi.fn(),
+    broadcast: vi.fn(),
+    dispose: vi.fn(),
+  })),
+  createLoggerChannelServer: vi.fn(() => ({
+    handle: vi.fn(),
+    broadcast: vi.fn(),
+    dispose: vi.fn(),
+  })),
+  createStorageChannelServer: vi.fn(() => ({
+    handle: vi.fn(),
+    broadcast: vi.fn(),
+    dispose: vi.fn(),
+  })),
+  createSystemChannelServer: vi.fn(() => ({
+    handle: vi.fn(),
+    broadcast: vi.fn(),
+    dispose: vi.fn(),
+  })),
 }));
 
 // Type helpers for mocks
-const createMockConductor = () => ({
-  node: {
-    run: vi.fn(),
-    store: {
-      subscribe: vi.fn(),
-      getState: vi.fn(),
+const createMockConductor = () => {
+  const mockStoreApi = {
+    getState: vi.fn(),
+    setState: vi.fn(),
+    subscribe: vi.fn(),
+    getInitialState: vi.fn(),
+  };
+
+  const mockStore = {
+    subscribe: vi.fn(),
+    getState: vi.fn(),
+    setState: vi.fn(),
+    useStore: Object.assign(vi.fn(), mockStoreApi),
+    initializeGraph: vi.fn(),
+    setNodeState: vi.fn(),
+    completeExecution: vi.fn(),
+    reset: vi.fn(),
+  };
+
+  return {
+    node: {
+      run: vi.fn(),
+      store: mockStore,
     },
-  },
-});
+    system: {
+      health: vi.fn(),
+    },
+    store: mockStore,
+    execute: vi.fn(),
+    health: vi.fn(),
+  };
+};
 
 const createMockNodeChannel = () => ({
   broadcast: vi.fn(),
+  handle: vi.fn(),
+  dispose: vi.fn(),
 });
 
 describe("Channels - Unified Progress Event Broadcasting", () => {
