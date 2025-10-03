@@ -317,13 +317,33 @@ conductor.flow.onError(...)       // Alias to node.onError
 - `event.graph` = rich graph data (order, dependencies, critical path)
 - Visual graph UI uses `event.nodes` + `event.graph`
 
+**Test Coverage**: ✅
+
+```bash
+✅ 47 unit tests passing in @atomiton/conductor
+✅ 7 integration tests for IPC broadcasting
+✅ Test factories for reusable mock data
+✅ Co-located test files following best practices
+```
+
+**Test Files Created**:
+- `packages/@atomiton/conductor/src/exports/browser/types.test.ts` - NodeProgressEvent structure
+- `packages/@atomiton/conductor/src/exports/browser/flow.test.ts` - RPC transport and flow validation
+- `packages/@atomiton/conductor/src/exports/browser/index.test.ts` - Event aliases and API namespaces
+- `packages/@atomiton/conductor/src/test-utils/factories.ts` - Reusable test fixtures
+- `apps/desktop/src/integration/channels-progress-events.test.ts` - IPC broadcasting
+
 **Validation**: ✅
 
 ```bash
 ✅ pnpm --filter @atomiton/rpc build
 ✅ pnpm --filter @atomiton/conductor build
+✅ pnpm --filter @atomiton/conductor test (47/47 tests passing)
+✅ pnpm --filter @atomiton/desktop test (6/6 tests passing)
 ✅ pnpm --filter @atomiton/desktop typecheck
 ✅ pnpm --filter @atomiton/client typecheck
+✅ pnpm typecheck (all packages clean)
+✅ pnpm lint:fix (conductor and desktop clean)
 ```
 
 **Success criteria**: ✅
@@ -336,6 +356,8 @@ conductor.flow.onError(...)       // Alias to node.onError
 - ✅ Backend merges graph updates into progress events
 - ✅ All TypeScript errors resolved
 - ✅ **Architecture Fix**: Proper layered abstraction with flow aliases
+- ✅ **Comprehensive test coverage** with unit and integration tests
+- ✅ **Test factories** for reusable mock data generation
 
 ---
 
