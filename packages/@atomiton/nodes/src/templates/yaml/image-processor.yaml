@@ -43,19 +43,6 @@ nodes:
     category: "io"
     version: "1.0.0"
 
-    metadata:
-      id: "file-system"
-      name: "File System"
-      type: "file-system"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "File system operations (read, write, list)"
-      category: "io"
-      icon: "file"
-      source: "system"
-      experimental: false
-      deprecated: false
-
     inputPorts:
       - id: "trigger"
         name: "Trigger"
@@ -74,65 +61,21 @@ nodes:
         dataType: "object"
 
     parameters:
-      operation:
-        type: "string"
-        default: "read"
-        control: "select"
-        options: ["read", "write", "list", "delete", "exists"]
-      filePath:
-        type: "string"
-        required: true
-        control: "file-picker"
-      pattern:
-        type: "string"
-        default: "*"
-        control: "text"
-      recursive:
-        type: "boolean"
-        default: false
-        control: "checkbox"
-      includeStats:
-        type: "boolean"
-        default: false
-        control: "checkbox"
-
-    data:
       operation: "list"
       filePath: "/images/input"
       pattern: "*.{jpg,png,gif}"
       recursive: false
       includeStats: true
-      customLabel: "List Images"
-      lastModified: "2025-01-15T10:00:00Z"
 
     position:
       x: 50
       y: 150
-
-    settings:
-      ui:
-        position:
-          x: 50
-          y: 150
 
   - id: "image-loop"
     type: "loop"
     name: "Process Each Image"
     category: "logic"
     version: "1.0.0"
-
-    metadata:
-      id: "loop"
-      name: "Loop"
-      type: "loop"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Iterate over arrays or collections"
-      category: "logic"
-      icon: "git-branch"
-      source: "system"
-      experimental: false
-      deprecated: false
 
     inputPorts:
       - id: "input"
@@ -156,54 +99,19 @@ nodes:
         dataType: "array"
 
     parameters:
-      iterateOver:
-        type: "string"
-        default: "items"
-        control: "text"
-      maxIterations:
-        type: "number"
-        default: 1000
-        control: "number"
-      breakOnError:
-        type: "boolean"
-        default: false
-        control: "checkbox"
-
-    data:
       iterateOver: "files"
       maxIterations: 1000
       breakOnError: false
-      customLabel: "Process Each Image"
-      lastModified: "2025-01-15T10:00:00Z"
 
     position:
       x: 250
       y: 150
-
-    settings:
-      ui:
-        position:
-          x: 250
-          y: 150
 
   - id: "parallel-processor"
     type: "parallel"
     name: "Parallel Processing"
     category: "logic"
     version: "1.0.0"
-
-    metadata:
-      id: "parallel"
-      name: "Parallel"
-      type: "parallel"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Execute multiple operations in parallel"
-      category: "logic"
-      icon: "zap"
-      source: "system"
-      experimental: false
-      deprecated: false
 
     inputPorts:
       - id: "input"
@@ -219,35 +127,13 @@ nodes:
         dataType: "array"
 
     parameters:
-      concurrency:
-        type: "number"
-        default: 4
-        control: "number"
-      preserveOrder:
-        type: "boolean"
-        default: true
-        control: "checkbox"
-      timeout:
-        type: "number"
-        default: 30000
-        control: "number"
-
-    data:
       concurrency: 4
       preserveOrder: true
       timeout: 30000
-      customLabel: "Parallel Processing"
-      lastModified: "2025-01-15T10:00:00Z"
 
     position:
       x: 450
       y: 150
-
-    settings:
-      ui:
-        position:
-          x: 450
-          y: 150
 
   - id: "image-resize"
     type: "image"
@@ -255,19 +141,6 @@ nodes:
     category: "media"
     version: "1.0.0"
 
-    metadata:
-      id: "image"
-      name: "Image"
-      type: "image"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Image processing and manipulation"
-      category: "media"
-      icon: "image"
-      source: "system"
-      experimental: false
-      deprecated: false
-
     inputPorts:
       - id: "input"
         name: "Input"
@@ -286,54 +159,16 @@ nodes:
         dataType: "object"
 
     parameters:
-      operation:
-        type: "string"
-        default: "resize"
-        control: "select"
-        options: ["resize", "crop", "rotate", "flip", "watermark", "filter"]
-      width:
-        type: "number"
-        default: 800
-        control: "number"
-      height:
-        type: "number"
-        default: 600
-        control: "number"
-      maintainAspectRatio:
-        type: "boolean"
-        default: true
-        control: "checkbox"
-      quality:
-        type: "number"
-        default: 85
-        control: "range"
-        min: 1
-        max: 100
-      format:
-        type: "string"
-        default: "jpeg"
-        control: "select"
-        options: ["jpeg", "png", "webp", "avif"]
-
-    data:
       operation: "resize"
       width: 800
       height: 600
       maintainAspectRatio: true
       quality: 85
       format: "jpeg"
-      customLabel: "Resize Image"
-      lastModified: "2025-01-15T10:00:00Z"
 
     position:
       x: 650
       y: 100
-
-    settings:
-      ui:
-        position:
-          x: 650
-          y: 100
 
   - id: "image-watermark"
     type: "image"
@@ -341,19 +176,6 @@ nodes:
     category: "media"
     version: "1.0.0"
 
-    metadata:
-      id: "image"
-      name: "Image"
-      type: "image"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "Image processing and manipulation"
-      category: "media"
-      icon: "image"
-      source: "system"
-      experimental: false
-      deprecated: false
-
     inputPorts:
       - id: "input"
         name: "Input"
@@ -372,78 +194,22 @@ nodes:
         dataType: "object"
 
     parameters:
-      operation:
-        type: "string"
-        default: "resize"
-        control: "select"
-        options: ["resize", "crop", "rotate", "flip", "watermark", "filter"]
-      watermarkPath:
-        type: "string"
-        control: "file-picker"
-        fileTypes: [".png", ".jpg", ".svg"]
-      position:
-        type: "string"
-        default: "bottom-right"
-        control: "select"
-        options:
-          ["top-left", "top-right", "bottom-left", "bottom-right", "center"]
-      opacity:
-        type: "number"
-        default: 0.7
-        control: "range"
-        min: 0
-        max: 1
-        step: 0.1
-      scale:
-        type: "number"
-        default: 0.25
-        control: "range"
-        min: 0.1
-        max: 1
-        step: 0.05
-      margin:
-        type: "number"
-        default: 10
-        control: "number"
-
-    data:
       operation: "watermark"
       watermarkPath: "/assets/watermark.png"
       position: "bottom-right"
       opacity: 0.7
       scale: 0.25
       margin: 10
-      customLabel: "Add Watermark"
-      lastModified: "2025-01-15T10:00:00Z"
 
     position:
       x: 650
       y: 200
-
-    settings:
-      ui:
-        position:
-          x: 650
-          y: 200
 
   - id: "save-processed"
     type: "file-system"
     name: "Save Processed Image"
     category: "io"
     version: "1.0.0"
-
-    metadata:
-      id: "file-system"
-      name: "File System"
-      type: "file-system"
-      version: "1.0.0"
-      author: "Atomiton Core Team"
-      description: "File system operations (read, write, list)"
-      category: "io"
-      icon: "file"
-      source: "system"
-      experimental: false
-      deprecated: false
 
     inputPorts:
       - id: "input"
@@ -463,62 +229,45 @@ nodes:
         dataType: "object"
 
     parameters:
-      operation:
-        type: "string"
-        default: "read"
-        control: "select"
-        options: ["read", "write", "list", "delete", "exists"]
-      filePath:
-        type: "string"
-        required: true
-        control: "file-picker"
-      createDirectory:
-        type: "boolean"
-        default: false
-        control: "checkbox"
-      overwrite:
-        type: "boolean"
-        default: true
-        control: "checkbox"
-
-    data:
       operation: "write"
       filePath: "/images/output"
       createDirectory: true
       overwrite: true
-      customLabel: "Save Processed Image"
-      lastModified: "2025-01-15T10:00:00Z"
 
     position:
       x: 900
       y: 150
 
-    settings:
-      ui:
-        position:
-          x: 900
-          y: 150
-
 edges:
   - id: "source-to-loop"
     source: "image-source"
     target: "image-loop"
+    sourceHandle: "output"
+    targetHandle: "input"
 
   - id: "loop-to-parallel"
     source: "image-loop"
     target: "parallel-processor"
+    sourceHandle: "item"
+    targetHandle: "input"
 
   - id: "parallel-to-resize"
     source: "parallel-processor"
     target: "image-resize"
+    sourceHandle: "output"
+    targetHandle: "input"
 
   - id: "resize-to-watermark"
     source: "image-resize"
     target: "image-watermark"
+    sourceHandle: "output"
+    targetHandle: "input"
 
   - id: "watermark-to-save"
     source: "image-watermark"
     target: "save-processed"
+    sourceHandle: "output"
+    targetHandle: "input"
 
 variables:
   inputFolder:
