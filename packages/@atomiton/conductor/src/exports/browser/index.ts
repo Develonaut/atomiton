@@ -16,25 +16,25 @@ import type { ConductorConfig } from "#types";
 // Re-export types and utilities
 export type {
   ConductorExecutionContext,
-  ExecutionResult,
   ExecutionError,
+  ExecutionResult,
   ExecutionStatus,
   NodeExecutorFactory,
 } from "#types/execution";
 
 export type {
   ConductorTransport,
-  TransportConfig,
   HealthResult,
+  TransportConfig,
 } from "#types/transport";
 
 export type { ConductorConfig } from "#types";
 
 export type {
-  NodeProgressEvent,
+  FlowSavedEvent,
   NodeCompleteEvent,
   NodeErrorEvent,
-  FlowSavedEvent,
+  NodeProgressEvent,
 } from "#exports/browser/types.js";
 
 /**
@@ -75,7 +75,13 @@ export function createConductorInstance(config: ConductorConfig = {}) {
       // Storage-specific events
       onFlowSaved: eventsAPI.onFlowSaved,
     },
-    flow: flowAPI,
+    flow: {
+      ...flowAPI,
+      // Flow event aliases (point to node events for DX)
+      onProgress: eventsAPI.onNodeProgress,
+      onComplete: eventsAPI.onNodeComplete,
+      onError: eventsAPI.onNodeError,
+    },
     auth: {
       ...authAPI,
       // Auth-specific events

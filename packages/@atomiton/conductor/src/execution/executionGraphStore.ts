@@ -185,7 +185,8 @@ export function getExecutionProgress(
   if (state.nodes.size === 0) return 0;
 
   const completed = Array.from(state.nodes.values()).filter(
-    (n: ExecutionGraphNode) => n.state === "completed" || n.state === "skipped",
+    (n): n is ExecutionGraphNode =>
+      n.state === "completed" || n.state === "skipped",
   ).length;
 
   return Math.round((completed / state.nodes.size) * 100);
@@ -197,7 +198,7 @@ export function getNodesByState(
 ): ExecutionGraphNode[] {
   const state = store.getState();
   return Array.from(state.nodes.values()).filter(
-    (n: ExecutionGraphNode) => n.state === nodeState,
+    (n): n is ExecutionGraphNode => n.state === nodeState,
   );
 }
 
@@ -206,13 +207,11 @@ export function getCompletedWeight(
 ): number {
   const state = store.getState();
   const completed = Array.from(state.nodes.values()).filter(
-    (n: ExecutionGraphNode) => n.state === "completed" || n.state === "skipped",
+    (n): n is ExecutionGraphNode =>
+      n.state === "completed" || n.state === "skipped",
   );
 
-  return completed.reduce(
-    (sum: number, node: ExecutionGraphNode) => sum + node.weight,
-    0,
-  );
+  return completed.reduce((sum, node) => sum + node.weight, 0);
 }
 
 export function getEstimatedTimeRemaining(

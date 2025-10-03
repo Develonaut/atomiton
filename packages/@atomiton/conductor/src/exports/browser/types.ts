@@ -8,6 +8,7 @@ import type {
   AtomitonBridge,
   AtomitonBridgeResponse as BaseAtomitonBridgeResponse,
 } from "@atomiton/rpc/shared";
+import type { NodeExecutionState } from "#execution/executionGraphStore";
 
 // Re-export bridge types
 export type { AtomitonBridge };
@@ -66,12 +67,35 @@ export type ValidationResult = {
   errors: string[];
 };
 
-// Progress event types
+// Progress event types - unified for atomic and group nodes
 export type NodeProgressEvent = {
   nodeId: string;
   executionId: string;
   progress: number;
-  message?: string;
+  message: string;
+
+  // Graph information (always present, trivial for atomic nodes)
+  nodes: Array<{
+    id: string;
+    name: string;
+    type: string;
+    weight: number;
+    dependencies: string[];
+    dependents: string[];
+    level: number;
+    state: NodeExecutionState;
+    startTime?: number;
+    endTime?: number;
+    error?: string;
+  }>;
+
+  graph: {
+    executionOrder: string[][];
+    criticalPath: string[];
+    totalWeight: number;
+    maxParallelism: number;
+    edges: Array<{ from: string; to: string }>;
+  };
 };
 
 export type NodeCompleteEvent = {

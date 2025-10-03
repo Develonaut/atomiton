@@ -15,6 +15,7 @@ export {
   createIPCTransport,
   createMemoryTransport,
   createRPCTransport,
+  createTransport,
   createWebSocketTransport,
 } from "#renderer/createTransport";
 

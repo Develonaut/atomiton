@@ -254,63 +254,88 @@ conductor.auth.onAuthExpired(...)
 
 ---
 
-## 🚧 Phase B: Frontend/UI (TODO)
+## 🚧 Phase B: Frontend/UI (IN PROGRESS)
 
 **Goal**: Build the visual representation of the execution graph.
 
-### B1: Client Store Adapter
+### B1: Unified Progress Event API ✅
 
-**What to do**: Create a client-side Zustand store that subscribes to IPC events
-and exposes graph state to React components.
+**What was done**: Refactored to use unified `conductor.node.onProgress()` event
+that includes graph data, eliminating need for separate execution graph store.
 
-**Files to create**:
+**Files created**:
 
-- `apps/client/src/stores/executionGraphStore.ts`
+- None (removed separate store approach)
 
-**Implementation**:
+**Files modified**:
+
+- `packages/@atomiton/conductor/src/exports/browser/types.ts` - Extended
+  `NodeProgressEvent` to include `nodes` and `graph` fields, removed
+  `ExecutionGraphStateUpdateEvent`
+- `packages/@atomiton/conductor/src/exports/browser/eventsApi.ts` - Refactored
+  to use RPC transport, removed separate graph event
+- `packages/@atomiton/conductor/src/exports/browser/index.ts` - Added flow event
+  aliases for better DX
+- `packages/@atomiton/conductor/src/exports/browser/flow.ts` - Fixed to use RPC
+  transport, added `flow.run()` alias with validation
+- `packages/@atomiton/rpc/src/renderer/createTransport.ts` - Added
+  `createTransport()` export for full Transport with channel access
+- `packages/@atomiton/rpc/src/renderer/index.ts` - Exported `createTransport()`
+- `apps/desktop/src/main/services/channels.ts` - Merged execution graph updates
+  into unified progress events
+
+**Unified API Design**:
 
 ```typescript
-import { createStore } from "@atomiton/store";
-import type { ExecutionGraphState } from "@atomiton/conductor/desktop";
-import { conductor } from "#lib/conductor";
+// Single event for all progress tracking (atomic and group nodes)
+conductor.node.onProgress((event: NodeProgressEvent) => {
+  // Always available (simple use case)
+  event.progress   // 0-100 overall progress
+  event.message    // "Executing: node1, node2"
 
-export const useExecutionGraphStore = createStore<ExecutionGraphState>(
-  () => ({
-    nodes: new Map(),
-    edges: [],
-    executionOrder: [],
-    criticalPath: [],
-    totalWeight: 0,
-    maxParallelism: 1,
-    isExecuting: false,
-    startTime: null,
-  }),
-  { name: "ClientExecutionGraph" },
-);
-
-// Subscribe to IPC updates through existing node channel
-conductor.on("executionGraphStateUpdate", (state) => {
-  // Convert nodes array back to Map
-  const nodesMap = new Map(state.nodes.map((n) => [n.id, n]));
-  useExecutionGraphStore.setState({
-    ...state,
-    nodes: nodesMap,
-  });
+  // Always present (advanced use case - progressive disclosure)
+  event.nodes      // Array of all nodes with states
+  event.graph      // Execution order, critical path, etc.
 });
+
+// Flow namespace aliases (better DX)
+conductor.flow.run(flow)          // Validates group node, delegates to node.run()
+conductor.flow.onProgress(...)    // Alias to node.onProgress
+conductor.flow.onComplete(...)    // Alias to node.onComplete
+conductor.flow.onError(...)       // Alias to node.onError
 ```
 
-**Validation**:
+**For atomic nodes:**
+
+- `event.nodes` = array of 1 node
+- `event.graph` = trivial graph (single node)
+- Simple progress bar just uses `event.progress`
+
+**For group nodes (flows):**
+
+- `event.nodes` = array of all child nodes
+- `event.graph` = rich graph data (order, dependencies, critical path)
+- Visual graph UI uses `event.nodes` + `event.graph`
+
+**Validation**: ✅
 
 ```bash
-pnpm --filter @atomiton/client typecheck
-pnpm --filter @atomiton/client build
+✅ pnpm --filter @atomiton/rpc build
+✅ pnpm --filter @atomiton/conductor build
+✅ pnpm --filter @atomiton/desktop typecheck
+✅ pnpm --filter @atomiton/client typecheck
 ```
 
-**Success criteria**:
+**Success criteria**: ✅
 
-- Client receives and stores execution graph state updates
-- React components can access store via `useExecutionGraphStore.useStore()`
-- No TypeScript errors
+- ✅ Unified `conductor.node.onProgress()` event with graph data
+- ✅ `conductor.flow.run()` alias exists with validation
+- ✅ Flow API uses RPC transport (no direct bridge access)
+- ✅ Flow event aliases for better DX
+- ✅ No separate execution graph store needed
+- ✅ Backend merges graph updates into progress events
+- ✅ All TypeScript errors resolved
+- ✅ **Architecture Fix**: Proper layered abstraction with flow aliases
 
 ---
 
@@ -681,6 +706,9 @@ Success criteria:
 - React components can access store via useExecutionGraphStore.useStore()
 - No TypeScript errors
 ```
+
+Once your work is complete, please mark this phase as complete in the strategy
+document and and work before it.
 
 ---
 

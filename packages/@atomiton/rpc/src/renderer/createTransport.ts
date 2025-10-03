@@ -20,6 +20,14 @@ export const createRPCTransport = (): ExecutionTransport => {
   };
 };
 
+/**
+ * Create full transport with channel access for event subscriptions
+ * Use this when you need access to listen() for real-time events
+ */
+export const createTransport = (): Transport => {
+  return detectTransport();
+};
+
 // Transport detection logic
 const detectTransport = (): Transport => {
   // Check for Electron environment (window.atomiton.__bridge__ from preload)
@@ -277,7 +285,7 @@ const createHTTPChannelClient = (
       return response.json();
     },
 
-    listen: (event: string, callback: (data: unknown) => void) => {
+    listen: (_event: string, _callback: (data: unknown) => void) => {
       console.warn("[HTTP] Real-time events not supported over HTTP transport");
       // Return no-op unsubscribe function
       return () => {};

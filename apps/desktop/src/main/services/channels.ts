@@ -1,7 +1,7 @@
 import type {
   ConductorExecutionContext,
-  ExecutionResult,
   ExecutionGraphState,
+  ExecutionResult,
 } from "@atomiton/conductor/desktop";
 import { createConductor } from "@atomiton/conductor/desktop";
 import { createLogger } from "@atomiton/logger/desktop";
@@ -55,22 +55,45 @@ export const createChannelManager = (): ChannelManager => {
       execute: conductor.node.run,
     });
 
-    // Wire conductor's execution graph store to IPC broadcasts
+    // Wire conductor's execution graph store to unified progress events
     conductor.node.store.subscribe((state: ExecutionGraphState) => {
       // Convert Map to array for IPC serialization
       const nodesArray = Array.from(state.nodes.values());
 
-      // Broadcast to all connected windows
-      nodeChannel.broadcast("executionGraphStateUpdate", {
+      // Calculate overall progress
+      const completedNodes = nodesArray.filter(
+        (n) => n.state === "completed",
+      ).length;
+      const totalNodes = state.nodes.size;
+      const progress =
+        totalNodes > 0 ? Math.round((completedNodes / totalNodes) * 100) : 0;
+
+      // Generate status message
+      const executing = nodesArray.filter((n) => n.state === "executing");
+      const message =
+        executing.length > 0
+          ? `Executing: ${executing.map((n) => n.name).join(", ")}`
+          : completedNodes === totalNodes
+            ? "All nodes completed"
+            : "Waiting to start...";
+
+      // Get root node ID (first node in the graph)
+      const nodeId = nodesArray[0]?.id || "unknown";
+
+      // Broadcast unified progress event with graph data
+      nodeChannel.broadcast("progress", {
+        nodeId,
+        executionId: "current-execution", // TODO: Track execution ID properly
+        progress,
+        message,
         nodes: nodesArray,
-        edges: state.edges,
-        executionOrder: state.executionOrder,
-        criticalPath: state.criticalPath,
-        totalWeight: state.totalWeight,
-        maxParallelism: state.maxParallelism,
-        isExecuting: state.isExecuting,
-        startTime: state.startTime,
-        endTime: state.endTime,
+        graph: {
+          executionOrder: state.executionOrder,
+          criticalPath: state.criticalPath,
+          totalWeight: state.totalWeight,
+          maxParallelism: state.maxParallelism,
+          edges: state.edges,
+        },
       });
     });
 

@@ -5,7 +5,10 @@
  * These are separate from user storage.
  */
 
-import type { ConductorTransport } from "#types";
+import { createTransport } from "@atomiton/rpc/renderer";
+import type { Transport } from "@atomiton/rpc/renderer";
+import type { ConductorTransport, ExecutionResult } from "#types";
+import type { ConductorExecutionContext } from "#types/execution";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
 export type FlowTemplateInfo = {
@@ -27,45 +30,38 @@ export type GetTemplateResponse = {
  * Create flow template API
  */
 export function createFlowAPI(transport: ConductorTransport | undefined) {
+  // Create RPC transport for flow operations
+  let rpcTransport: Transport | undefined;
+
+  try {
+    rpcTransport = createTransport();
+  } catch (error) {
+    console.warn("[FLOW] RPC transport unavailable:", error);
+  }
+
   return {
     /**
      * List all available flow templates
      */
     async listTemplates(): Promise<ListTemplatesResponse> {
-      if (
-        transport &&
-        typeof window !== "undefined" &&
-        window.atomiton?.__bridge__
-      ) {
-        const response = await window.atomiton?.__bridge__.call(
-          "flow",
-          "listTemplates",
-          {},
-        );
-        return response.result as ListTemplatesResponse;
+      if (!rpcTransport) {
+        throw new Error("No transport available for flow operations");
       }
-
-      throw new Error("No transport available for flow operations");
+      return rpcTransport
+        .channel("flow")
+        .call("listTemplates", {}) as Promise<ListTemplatesResponse>;
     },
 
     /**
      * Get a specific flow template by ID
      */
     async getTemplate(id: string): Promise<GetTemplateResponse> {
-      if (
-        transport &&
-        typeof window !== "undefined" &&
-        window.atomiton?.__bridge__
-      ) {
-        const response = await window.atomiton?.__bridge__.call(
-          "flow",
-          "getTemplate",
-          { id },
-        );
-        return response.result as GetTemplateResponse;
+      if (!rpcTransport) {
+        throw new Error("No transport available for flow operations");
       }
-
-      throw new Error("No transport available for flow operations");
+      return rpcTransport
+        .channel("flow")
+        .call("getTemplate", { id }) as Promise<GetTemplateResponse>;
     },
 
     /**
@@ -74,6 +70,49 @@ export function createFlowAPI(transport: ConductorTransport | undefined) {
     async loadFlow(id: string): Promise<NodeDefinition> {
       const response = await this.getTemplate(id);
       return response.definition;
+    },
+
+    /**
+     * Execute a flow (group node)
+     * Alias to conductor.node.run() with flow-specific validation
+     */
+    async run(
+      flow: NodeDefinition,
+      contextOverrides?: Partial<ConductorExecutionContext>,
+    ): Promise<ExecutionResult> {
+      // Validate it's a group node (flow)
+      if (!flow.nodes || flow.nodes.length === 0) {
+        throw new Error(
+          "Flow must be a group node with child nodes. Use conductor.node.run() for atomic nodes.",
+        );
+      }
+
+      // Delegate to transport for execution
+      if (!transport) {
+        return {
+          success: false,
+          error: {
+            nodeId: flow.id,
+            message:
+              "No transport available for execution in browser environment",
+            timestamp: new Date(),
+            code: "NO_TRANSPORT",
+          },
+          duration: 0,
+          executedNodes: [],
+        };
+      }
+
+      // Execute via transport (same as node.run does)
+      return transport.execute(flow, {
+        nodeId: flow.id,
+        executionId:
+          contextOverrides?.executionId ||
+          `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        variables: contextOverrides?.variables || {},
+        input: contextOverrides?.input,
+        parentContext: contextOverrides?.parentContext,
+      });
     },
   };
 }
