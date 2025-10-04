@@ -1,14 +1,10 @@
-/**
- * Type definitions for browser conductor
- */
-
+import type { NodeExecutionState } from "#execution/executionGraphStore";
 import type { ExecutionResult } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import type {
   AtomitonBridge,
   AtomitonBridgeResponse as BaseAtomitonBridgeResponse,
 } from "@atomiton/rpc/shared";
-import type { NodeExecutionState } from "#execution/executionGraphStore";
 
 // Re-export bridge types
 export type { AtomitonBridge };
@@ -84,6 +80,7 @@ export type NodeProgressEvent = {
     dependents: string[];
     level: number;
     state: NodeExecutionState;
+    progress: number;
     startTime?: number;
     endTime?: number;
     error?: string;

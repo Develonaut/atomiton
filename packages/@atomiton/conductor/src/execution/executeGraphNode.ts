@@ -2,6 +2,7 @@
  * Execute a single graph node (leaf node execution)
  */
 
+import { DEFAULT_SLOWMO_MS } from "#execution/constants";
 import type { ExecutionGraphStore } from "#execution/executionGraphStore";
 import type {
   ConductorConfig,
@@ -82,19 +83,34 @@ export async function executeGraphNode(
       ...node.parameters,
     };
 
-    // Set initial progress with configurable slow-mo delay
+    // Run progress animation sequentially before node execution
+    // Use actual delays to ensure all steps complete visually before execution starts
     if (executionGraphStore) {
-      const slowMo = context.slowMo ?? 50; // Default to 50ms per step (100ms total)
-      console.log(
-        `[executeGraphNode] Node ${node.id}: slowMo=${slowMo}ms, will delay ${slowMo * 2}ms total`,
-      );
+      const slowMo = context.slowMo ?? DEFAULT_SLOWMO_MS;
 
-      executionGraphStore.setNodeProgress(node.id, 0, "Starting...");
-      await delay(slowMo);
+      // Show smooth progress animation with more frequent updates
+      const progressSteps = [0, 20, 40, 60, 80, 90];
+      const messages = [
+        "Starting...",
+        "Initializing...",
+        "Processing...",
+        "Computing...",
+        "Finalizing...",
+        "Almost done...",
+      ];
 
-      // Show intermediate progress
-      executionGraphStore.setNodeProgress(node.id, 30, "Processing...");
-      await delay(slowMo);
+      // Run all progress steps BEFORE starting execution
+      for (let i = 0; i < progressSteps.length; i++) {
+        executionGraphStore.setNodeProgress(
+          node.id,
+          progressSteps[i],
+          messages[i],
+        );
+        if (i < progressSteps.length - 1) {
+          // Don't delay after the last step
+          await delay(slowMo);
+        }
+      }
     }
 
     const result = await nodeExecutable.execute(params);

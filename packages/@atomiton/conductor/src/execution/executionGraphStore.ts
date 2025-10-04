@@ -261,10 +261,10 @@ export function createExecutionGraphStore() {
     const state = store.getState();
     const duration = state.startTime ? Date.now() - state.startTime : 0;
     const completedNodes = Array.from(state.nodes.values()).filter(
-      (n) => n.state === "completed",
+      (n): n is ExecutionGraphNode => n.state === "completed",
     ).length;
     const errorNodes = Array.from(state.nodes.values()).filter(
-      (n) => n.state === "error",
+      (n): n is ExecutionGraphNode => n.state === "error",
     ).length;
 
     logger.info("Execution graph completed", {

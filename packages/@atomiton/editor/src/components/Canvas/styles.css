@@ -1,3 +1,10 @@
+/* Register custom property for smooth animation */
+@property --progress-deg {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
 :root {
   --atomiton-node-width: 80px;
   --atomiton-node-height: 80px;
@@ -34,6 +41,7 @@
 .react-flow__node-default,
 .react-flow__node-output,
 .react-flow__node-group {
+  box-sizing: border-box;
   width: var(--atomiton-node-width);
   height: var(--atomiton-node-height);
   display: flex;
@@ -49,30 +57,19 @@
     var(--atomiton-transition-easing);
 }
 
-.react-flow__node,
-.react-flow__node-input,
-.react-flow__node-default,
-.react-flow__node-output,
-.react-flow__node-group,
 .react-flow__node .atomiton-node,
 .react-flow__node-input .atomiton-node,
 .react-flow__node-default .atomiton-node,
 .react-flow__node-output .atomiton-node,
 .react-flow__node-group .atomiton-node {
-  border-radius: var(--atomiton-node-border-radius);
-}
-
-.react-flow__node .atomiton-node,
-.react-flow__node-input .atomiton-node,
-.react-flow__node-default .atomiton-node,
-.react-flow__node-output .atomiton-node,
-.react-flow__node-group .atomiton-node {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: var(--atomiton-node-border-radius);
   transition: box-shadow var(--atomiton-transition-duration)
     var(--atomiton-transition-easing);
 }
@@ -170,13 +167,31 @@
   background-color: var(--atomiton-handle-bg-selected);
 }
 
-/* Execution state styling */
+/* Pending state - use pseudo-element for consistency with other states */
 .react-flow__node[data-execution-state="pending"],
 .react-flow__node-input[data-execution-state="pending"],
 .react-flow__node-default[data-execution-state="pending"],
 .react-flow__node-output[data-execution-state="pending"],
 .react-flow__node-group[data-execution-state="pending"] {
-  border-color: var(--atomiton-node-state-pending);
+  border-color: transparent;
+}
+
+.react-flow__node[data-execution-state="pending"] .atomiton-node::before,
+.react-flow__node-input[data-execution-state="pending"] .atomiton-node::before,
+.react-flow__node-default[data-execution-state="pending"] .atomiton-node::before,
+.react-flow__node-output[data-execution-state="pending"] .atomiton-node::before,
+.react-flow__node-group[data-execution-state="pending"] .atomiton-node::before {
+  content: "";
+  position: absolute;
+  inset: -2px; /* -2px for 1px border effect (1px transparent + 1px visual) */
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--atomiton-node-state-pending);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .react-flow__node[data-execution-state="pending"] .react-flow__handle,
@@ -187,12 +202,39 @@
   background-color: var(--atomiton-node-state-pending);
 }
 
+/* Executing state - keep border at 1px, hide it, and use pseudo-element for 3px visual */
 .react-flow__node[data-execution-state="executing"],
 .react-flow__node-input[data-execution-state="executing"],
 .react-flow__node-default[data-execution-state="executing"],
 .react-flow__node-output[data-execution-state="executing"],
 .react-flow__node-group[data-execution-state="executing"] {
-  border-color: var(--atomiton-node-state-executing);
+  border-color: transparent;
+}
+
+/* Create the progress border using a pseudo-element on the inner node */
+.react-flow__node[data-execution-state="executing"] .atomiton-node::before,
+.react-flow__node-input[data-execution-state="executing"] .atomiton-node::before,
+.react-flow__node-default[data-execution-state="executing"] .atomiton-node::before,
+.react-flow__node-output[data-execution-state="executing"] .atomiton-node::before,
+.react-flow__node-group[data-execution-state="executing"] .atomiton-node::before {
+  --progress-deg: calc(var(--progress, 0) * 3.6deg);
+
+  content: "";
+  position: absolute;
+  inset: -4px; /* -4px to account for 1px border + 3px visual border */
+  border-radius: inherit;
+  padding: 3px;
+  background: conic-gradient(
+    from -90deg,
+    var(--atomiton-node-state-completed) var(--progress-deg),
+    var(--atomiton-node-border-default) var(--progress-deg) 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: --progress-deg 0.3s ease-out;
 }
 
 .react-flow__node[data-execution-state="executing"] .react-flow__handle,
@@ -200,15 +242,34 @@
 .react-flow__node-default[data-execution-state="executing"] .react-flow__handle,
 .react-flow__node-output[data-execution-state="executing"] .react-flow__handle,
 .react-flow__node-group[data-execution-state="executing"] .react-flow__handle {
-  background-color: var(--atomiton-node-state-executing);
+  background-color: var(--atomiton-node-state-completed);
 }
 
+/* Completed state - keep border at 1px and use pseudo-element for full 3px green border */
 .react-flow__node[data-execution-state="completed"],
 .react-flow__node-input[data-execution-state="completed"],
 .react-flow__node-default[data-execution-state="completed"],
 .react-flow__node-output[data-execution-state="completed"],
 .react-flow__node-group[data-execution-state="completed"] {
-  border-color: var(--atomiton-node-state-completed);
+  border-color: transparent;
+}
+
+.react-flow__node[data-execution-state="completed"] .atomiton-node::before,
+.react-flow__node-input[data-execution-state="completed"] .atomiton-node::before,
+.react-flow__node-default[data-execution-state="completed"] .atomiton-node::before,
+.react-flow__node-output[data-execution-state="completed"] .atomiton-node::before,
+.react-flow__node-group[data-execution-state="completed"] .atomiton-node::before {
+  content: "";
+  position: absolute;
+  inset: -4px; /* -4px to account for 1px border + 3px visual border */
+  border-radius: inherit;
+  padding: 3px;
+  background: var(--atomiton-node-state-completed);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .react-flow__node[data-execution-state="completed"] .react-flow__handle,
@@ -219,12 +280,39 @@
   background-color: var(--atomiton-node-state-completed);
 }
 
+/* Error state - keep border at 1px and use pseudo-element for 3px red border */
 .react-flow__node[data-execution-state="error"],
 .react-flow__node-input[data-execution-state="error"],
 .react-flow__node-default[data-execution-state="error"],
 .react-flow__node-output[data-execution-state="error"],
 .react-flow__node-group[data-execution-state="error"] {
-  border-color: var(--atomiton-node-state-error);
+  border-color: transparent;
+}
+
+/* Create the error progress border using a pseudo-element on the inner node */
+.react-flow__node[data-execution-state="error"] .atomiton-node::before,
+.react-flow__node-input[data-execution-state="error"] .atomiton-node::before,
+.react-flow__node-default[data-execution-state="error"] .atomiton-node::before,
+.react-flow__node-output[data-execution-state="error"] .atomiton-node::before,
+.react-flow__node-group[data-execution-state="error"] .atomiton-node::before {
+  --progress-deg: calc(var(--progress, 0) * 3.6deg);
+
+  content: "";
+  position: absolute;
+  inset: -4px; /* -4px to account for 1px border + 3px visual border */
+  border-radius: inherit;
+  padding: 3px;
+  background: conic-gradient(
+    from -90deg,
+    var(--atomiton-node-state-error) var(--progress-deg),
+    var(--atomiton-node-border-default) var(--progress-deg) 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: --progress-deg 0.3s ease-out;
 }
 
 .react-flow__node[data-execution-state="error"] .react-flow__handle,

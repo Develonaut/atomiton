@@ -166,8 +166,8 @@ describe("SlowMo Execution Tests", () => {
       const progressUpdates: number[] = [];
 
       // Subscribe to progress changes
-      const unsubscribe = conductor.node.store.subscribe((state) => {
-        const nodeState = Array.from(state.nodes.values())[0];
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
+        const nodeState = Array.from(state.nodes.values())[0] as any;
         if (nodeState?.progress !== undefined) {
           progressUpdates.push(nodeState.progress);
         }
@@ -177,9 +177,9 @@ describe("SlowMo Execution Tests", () => {
 
       unsubscribe();
 
-      // Should have seen: 0 (start), 30 (intermediate), 100 (complete)
+      // Should have seen: 0, 20, 40, 60, 80, 90, 100 (sequential progress steps)
       expect(progressUpdates).toContain(0);
-      expect(progressUpdates).toContain(30);
+      expect(progressUpdates).toContain(20);
       expect(progressUpdates).toContain(100);
     });
 
@@ -198,7 +198,7 @@ describe("SlowMo Execution Tests", () => {
 
       const progressSnapshots: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         // Track overall execution progress
         progressSnapshots.push(state.cachedProgress);
       });
@@ -305,8 +305,8 @@ describe("SlowMo Execution Tests", () => {
       });
 
       let finalProgress = 0;
-      const unsubscribe = conductor.node.store.subscribe((state) => {
-        const nodeState = Array.from(state.nodes.values())[0];
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
+        const nodeState = Array.from(state.nodes.values())[0] as any;
         if (nodeState?.progress !== undefined) {
           finalProgress = nodeState.progress;
         }

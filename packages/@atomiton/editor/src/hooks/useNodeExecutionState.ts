@@ -20,15 +20,49 @@ export function useNodeExecutionState(nodeId: string) {
       if (!nodeState) return;
 
       // Find the ReactFlow wrapper (.react-flow__node) by traversing up from our ref
-      const reactFlowNode = nodeRef.current.closest(".react-flow__node");
+      const reactFlowNode = nodeRef.current.closest(
+        ".react-flow__node",
+      ) as HTMLElement | null;
       if (!reactFlowNode) return;
 
-      // Update DOM attributes on the ReactFlow wrapper (no React re-render)
+      // Find the inner .atomiton-node element for progress variable
+      const atomitonNode = nodeRef.current.closest(
+        ".atomiton-node",
+      ) as HTMLElement | null;
+
+      // Update execution state and critical path on ReactFlow wrapper (no React re-render)
       reactFlowNode.setAttribute("data-execution-state", nodeState.state);
       reactFlowNode.setAttribute(
         "data-critical-path",
         event.graph.criticalPath.includes(nodeId) ? "true" : "false",
       );
+
+      // Add accessibility attributes for screen readers
+      const progressPercent = Math.round(nodeState.progress);
+      reactFlowNode.setAttribute(
+        "aria-label",
+        `Node ${nodeState.state}: ${progressPercent}% complete`,
+      );
+
+      if (nodeState.state === "executing") {
+        reactFlowNode.setAttribute("role", "progressbar");
+        reactFlowNode.setAttribute("aria-valuenow", String(progressPercent));
+        reactFlowNode.setAttribute("aria-valuemin", "0");
+        reactFlowNode.setAttribute("aria-valuemax", "100");
+      } else {
+        reactFlowNode.removeAttribute("role");
+        reactFlowNode.removeAttribute("aria-valuenow");
+        reactFlowNode.removeAttribute("aria-valuemin");
+        reactFlowNode.removeAttribute("aria-valuemax");
+      }
+
+      // Update progress variable on the inner node (where pseudo-element lives)
+      if (atomitonNode) {
+        atomitonNode.style.setProperty(
+          "--progress",
+          String(nodeState.progress),
+        );
+      }
     });
 
     return unsubscribe;

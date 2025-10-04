@@ -57,7 +57,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressSnapshots.push(state.cachedProgress);
       });
 
@@ -117,7 +117,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressSnapshots.push(state.cachedProgress);
       });
 
@@ -173,7 +173,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressSnapshots.push(state.cachedProgress);
       });
 
@@ -217,7 +217,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressValues = new Set<number>();
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressValues.add(state.cachedProgress);
       });
 
@@ -433,7 +433,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressSnapshots.push(state.cachedProgress);
       });
 
@@ -475,7 +475,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressSnapshots.push(state.cachedProgress);
       });
 
@@ -507,7 +507,7 @@ describe("Async Progress Tracking", () => {
       const node = createNodeDefinition({ id: "test", type: "test" });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         const nodeState = state.nodes.get("test");
         if (nodeState) {
           progressSnapshots.push(nodeState.progress);
@@ -558,7 +558,7 @@ describe("Async Progress Tracking", () => {
       });
 
       const completionOrder: string[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         for (const [id, node] of state.nodes.entries()) {
           if (node.state === "completed" && !completionOrder.includes(id)) {
             completionOrder.push(id);
@@ -610,7 +610,7 @@ describe("Async Progress Tracking", () => {
       let updateCount = 0;
       const progressValues: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         updateCount++;
         progressValues.push(state.cachedProgress);
       });
@@ -662,7 +662,7 @@ describe("Async Progress Tracking", () => {
 
       const progressSnapshots: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         progressSnapshots.push(state.cachedProgress);
       });
 
@@ -711,7 +711,7 @@ describe("Async Progress Tracking", () => {
         timestamp: number;
       }> = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state) => {
+      const unsubscribe = conductor.node.store.subscribe((state: any) => {
         for (const [id, node] of state.nodes.entries()) {
           const lastEvent = events[events.length - 1];
           if (

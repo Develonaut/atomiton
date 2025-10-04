@@ -39,6 +39,8 @@ export type {
 
 export type { NodeExecutionState } from "#execution/executionGraphStore";
 
+export { DEFAULT_SLOWMO_MS } from "#execution/constants";
+
 /**
  * Internal factory function for creating conductor instances
  */

@@ -177,6 +177,53 @@ This isn't just better testing - it's definitive proof that the RPC layer works
 correctly, eliminating an entire class of bugs that currently require manual UI
 testing to discover.
 
+## Architectural Decision: Test Placement
+
+**The Confusion is Valid:** These ARE integration tests for RPC transport, not
+traditional e2e UI tests. The `apps/e2e/` folder name might suggest Playwright
+UI testing, but there's a critical architectural reason these tests must live
+there.
+
+**Why apps/e2e/ is Architecturally Correct:**
+
+1. **Electron IPC Requires a Real App:** These tests need actual Electron IPC
+   channels, which only exist when running the full desktop application. The
+   `@atomiton/conductor` and `@atomiton/rpc` packages can't spawn Electron
+   apps - only `apps/e2e` with Playwright's Electron support can do this.
+
+2. **Industry Standard Pattern:** VS Code follows the same pattern - their
+   integration tests that need real IPC live in their e2e test folder, not in
+   individual extension packages. Microsoft faced the same architectural
+   constraint we do.
+
+3. **Transport Layer Reality:** The bugs we're catching (like `slowMo` being
+   dropped) happen at the Electron context bridge boundary. This boundary
+   doesn't exist in Node.js unit tests - it only exists in a running Electron
+   application with separate main/renderer processes.
+
+4. **Why NOT in packages/@atomiton/conductor/integration/:**
+   - Can't launch Electron apps from package tests
+   - No access to real IPC channels
+   - Would require complex mocking that defeats the purpose
+   - Package tests run in Node.js, not Electron's dual-process architecture
+
+**File Organization Within apps/e2e/:**
+
+```
+apps/e2e/
+├── src/
+│   ├── integration/         # RPC transport integration tests
+│   │   ├── rpc-*.e2e.ts    # Testing IPC/transport layer
+│   │   └── ...
+│   └── ui/                  # Traditional UI tests
+│       ├── flow-editor.e2e.ts  # Testing user interactions
+│       └── ...
+```
+
+The folder structure makes the distinction clear: `integration/` for RPC
+transport tests, `ui/` for traditional Playwright UI tests. Both need Electron,
+but test different layers.
+
 ### Phase 1: Test Infrastructure Foundation
 
 **Goal:** Establish the testing harness and patterns for RPC integration tests

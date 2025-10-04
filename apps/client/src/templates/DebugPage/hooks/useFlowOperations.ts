@@ -1,4 +1,4 @@
-import conductor from "#lib/conductor";
+import conductor, { DEFAULT_SLOWMO_MS } from "#lib/conductor";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -16,7 +16,7 @@ export function useFlowOperations() {
     totalNodes: 0,
     graphProgress: 0,
   });
-  const [slowMo, setSlowMo] = useState(50);
+  const [slowMo, setSlowMo] = useState(DEFAULT_SLOWMO_MS);
 
   // Track current execution ID to filter events
   const currentExecutionIdRef = useRef<string | null>(null);
@@ -26,6 +26,32 @@ export function useFlowOperations() {
 
   // Track execution trace
   const executionTraceRef = useRef<ExecutionTraceEvent[]>([]);
+
+  // Cancel execution on page unload/refresh
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (currentExecutionIdRef.current) {
+        console.log(
+          "[CLEANUP] Page unloading - canceling execution:",
+          currentExecutionIdRef.current,
+        );
+        conductor.node.cancel(currentExecutionIdRef.current);
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      // Also cancel on component unmount
+      if (currentExecutionIdRef.current) {
+        console.log(
+          "[CLEANUP] Component unmounting - canceling execution:",
+          currentExecutionIdRef.current,
+        );
+        conductor.node.cancel(currentExecutionIdRef.current);
+      }
+    };
+  }, []);
 
   // Subscribe to node events and capture trace
   useEffect(() => {
