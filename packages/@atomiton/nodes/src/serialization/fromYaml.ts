@@ -19,12 +19,10 @@ import yaml from "js-yaml";
 import type {
   YamlEdge,
   YamlNodeDefinition,
-  YamlParameter,
   YamlPort,
 } from "#serialization/types";
 import {
   validateCategory,
-  validateControlType,
   validateEdgeType,
   validateIcon,
   validateRuntime,
@@ -135,42 +133,20 @@ function parseMetadata(data: YamlNodeDefinition) {
  * Parse parameters from YAML data
  * Returns separate parameters and fields
  */
-function parseParameters(params?: Record<string, YamlParameter>): {
+function parseParameters(params?: Record<string, unknown>): {
   parameters: NodeParameters;
   fields: NodeFieldsConfig;
 } {
   if (!params) {
-    // Return minimal objects
     return { parameters: createNodeParameters({}), fields: {} };
   }
 
-  const parameters: Record<string, unknown> = {};
-  const fields: NodeFieldsConfig = {};
-
-  Object.entries(params).forEach(([key, param]) => {
-    // Store default value as parameter
-    if (param.default !== undefined) {
-      parameters[key] = param.default;
-    }
-
-    // Create field configuration
-    if (param.control) {
-      fields[key] = {
-        controlType: validateControlType(param.control) || "text",
-        label: param.label || key,
-        placeholder: param.placeholder,
-        helpText: param.helpText,
-        required: param.required,
-        min: param.min,
-        max: param.max,
-        step: param.step,
-        options:
-          (param.options as Array<{ value: string; label: string }>) || [],
-      };
-    }
-  });
-
-  return { parameters: createNodeParameters(parameters), fields };
+  // Template YAML uses direct parameter values (not schema objects)
+  // Just pass them through directly
+  return {
+    parameters: createNodeParameters(params),
+    fields: {},
+  };
 }
 
 /**

@@ -34,10 +34,18 @@ const debugStore = createStore<DebugState & DebugActions>(
 
     addLog: (message: string, metadata?: Record<string, unknown>) => {
       const timestamp = new Date().toLocaleTimeString();
-      debugStore.setState((state) => ({
-        ...state,
-        logs: [...state.logs, { timestamp, message, metadata }],
-      }));
+      debugStore.setState((state) => {
+        // Skip if this is the exact same message as the last one
+        const lastLog = state.logs[state.logs.length - 1];
+        if (lastLog && lastLog.message === message) {
+          return state;
+        }
+
+        return {
+          ...state,
+          logs: [...state.logs, { timestamp, message, metadata }],
+        };
+      });
     },
 
     clearLogs: () => {
@@ -66,7 +74,21 @@ const setupConductorSubscriptions = () => {
 
   const subscriptions = [
     conductor.node?.onProgress?.((event: NodeProgressEvent) => {
-      addLog(`📊 Node progress: ${event.progress}% - ${event.message || ""}`);
+      // Find the current executing node
+      const executingNode = event.nodes.find((n) => n.state === "executing");
+
+      // Skip generic "Waiting to start..." messages - they're noise
+      if (event.message === "Waiting to start...") return;
+
+      // Only log if we have a meaningful message or an executing node
+      if (!event.message && !executingNode) return;
+
+      const nodeIndex = executingNode
+        ? event.nodes.findIndex((n) => n.id === executingNode.id) + 1
+        : 0;
+      const nodeInfo =
+        nodeIndex > 0 ? `[Node ${nodeIndex}/${event.nodes.length}] ` : "";
+      addLog(`📊 ${nodeInfo}${event.progress}% - ${event.message || ""}`);
     }),
 
     conductor.node?.onComplete?.((event: NodeCompleteEvent) => {

@@ -2,13 +2,13 @@
  * Execute a single node locally
  */
 
+import type { ExecutionGraphStore } from "#execution/executionGraphStore";
 import type {
   ConductorConfig,
   ConductorExecutionContext,
   ExecutionResult,
 } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import type { ExecutionGraphStore } from "#execution/executionGraphStore";
 
 /**
  * Execute a single node locally using the provided executor factory
@@ -49,7 +49,6 @@ export async function executeLocal(
       };
     }
 
-    // Get the SimpleNodeExecutable for this node type
     const nodeExecutable = config.nodeExecutorFactory.getNodeExecutable(
       node.type,
     );
@@ -76,7 +75,6 @@ export async function executeLocal(
       };
     }
 
-    // SimpleNodeExecutable is just a function that takes params and returns a result
     const params = {
       ...context,
       ...node.parameters,

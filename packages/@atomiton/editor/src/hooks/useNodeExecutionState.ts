@@ -19,9 +19,13 @@ export function useNodeExecutionState(nodeId: string) {
       const nodeState = event.nodes.find((n) => n.id === nodeId);
       if (!nodeState) return;
 
-      // Update DOM attributes directly (no React re-render)
-      nodeRef.current.setAttribute("data-execution-state", nodeState.state);
-      nodeRef.current.setAttribute(
+      // Find the ReactFlow wrapper (.react-flow__node) by traversing up from our ref
+      const reactFlowNode = nodeRef.current.closest(".react-flow__node");
+      if (!reactFlowNode) return;
+
+      // Update DOM attributes on the ReactFlow wrapper (no React re-render)
+      reactFlowNode.setAttribute("data-execution-state", nodeState.state);
+      reactFlowNode.setAttribute(
         "data-critical-path",
         event.graph.criticalPath.includes(nodeId) ? "true" : "false",
       );

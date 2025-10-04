@@ -34,13 +34,25 @@ const MVP_DEFAULTS = {
 export const fileSystemExecutable = createExecutable<FileSystemParameters>(
   "file-system",
   async ({ getInput, config, context }) => {
-    // Get parameters using enhanced helper
+    // Debug: Log what we received
+    context.log.info("File-system executable called", {
+      configKeys: Object.keys(config),
+      configPath: config.path,
+      configOperation: config.operation,
+      configContent: config.content,
+    });
+
+    // Get parameters - path comes from config, content from config or input
     const operation = config.operation;
-    const filePath = getInput<string>("path");
-    const content = getInput<string>("content");
-    const targetPath = getInput<string>("targetPath");
+    const filePath = config.path;
+    const content = config.content || getInput<string>("input"); // Content can be in config or from input
+    const targetPath = getInput<string>("targetPath"); // For copy/move operations
 
     if (!filePath) {
+      context.log.error("File path is missing!", {
+        config,
+        configKeys: Object.keys(config),
+      });
       throw new Error("File path is required");
     }
 

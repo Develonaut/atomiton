@@ -14,14 +14,10 @@ export function FlowProgressBar({
   const percentage =
     totalNodes > 0 ? Math.round((currentNode / totalNodes) * 100) : 0;
 
-  if (!isExecuting && currentNode === 0) {
-    return null;
-  }
-
   return (
     <div className="space-y-2">
       <div className="flex justify-between text-sm text-gray-600">
-        <span>Execution Progress</span>
+        <span>{isExecuting ? "Execution Progress" : "Last Execution"}</span>
         <span data-testid="progress-text">
           {currentNode} / {totalNodes} nodes ({percentage}%)
         </span>
@@ -36,7 +32,8 @@ export function FlowProgressBar({
       </div>
       {currentNodeName && (
         <div className="text-sm text-gray-600">
-          Current: <span className="font-medium">{currentNodeName}</span>
+          {isExecuting ? "Current" : "Last"}:{" "}
+          <span className="font-medium">{currentNodeName}</span>
         </div>
       )}
     </div>

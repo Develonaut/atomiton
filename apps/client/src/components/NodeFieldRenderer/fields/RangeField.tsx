@@ -10,7 +10,7 @@ export function RangeField({
   const min = config.min ?? 0;
   const max = config.max ?? 100;
   const step = config.step ?? 1;
-  const currentValue = value ?? min;
+  const currentValue = (value as number | undefined) ?? min;
 
   return (
     <div className="space-y-1">

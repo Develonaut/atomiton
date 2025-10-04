@@ -110,6 +110,15 @@ export const createNodeChannelServer = <
           } as TContext)
         : undefined;
 
+      console.log("[NODE] About to execute node with params:", {
+        nodeId: params.node.id,
+        nodeType: params.node.type,
+        nodeParameters: (params.node as Record<string, unknown>).parameters,
+        nodeParametersKeys: Object.keys(
+          (params.node as Record<string, unknown>).parameters || {},
+        ),
+      });
+
       const result = await handlers.execute(params.node as TNode, context);
 
       // Broadcast completion event

@@ -41,10 +41,12 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--atomiton-node-border-radius);
-  border: var(--atomiton-node-border-width) solid var(--atomiton-node-border-default);
+  border: var(--atomiton-node-border-width) solid
+    var(--atomiton-node-border-default);
   background-color: var(--atomiton-node-background);
   cursor: pointer;
-  transition: border-color var(--atomiton-transition-duration) var(--atomiton-transition-easing);
+  transition: border-color var(--atomiton-transition-duration)
+    var(--atomiton-transition-easing);
 }
 
 .react-flow__node,
@@ -71,7 +73,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transition: box-shadow var(--atomiton-transition-duration) var(--atomiton-transition-easing);
+  transition: box-shadow var(--atomiton-transition-duration)
+    var(--atomiton-transition-easing);
 }
 
 .react-flow__node.selectable:hover,
@@ -88,7 +91,8 @@
 .react-flow__node-default.selectable:hover .atomiton-node,
 .react-flow__node-output.selectable:hover .atomiton-node,
 .react-flow__node-group.selectable:hover .atomiton-node {
-  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size) var(--atomiton-node-inner-ring-color) inset;
+  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size)
+    var(--atomiton-node-inner-ring-color) inset;
 }
 
 .react-flow__node.selectable.selected,
@@ -125,16 +129,19 @@
 .react-flow__node-group.selectable.selected .atomiton-node,
 .react-flow__node-group.selectable:focus .atomiton-node,
 .react-flow__node-group.selectable:focus-visible .atomiton-node {
-  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size) var(--atomiton-node-inner-ring-color) inset;
+  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size)
+    var(--atomiton-node-inner-ring-color) inset;
 }
 
 .react-flow__handle {
   width: var(--atomiton-handle-size);
   height: var(--atomiton-handle-size);
-  border: var(--atomiton-handle-border-width) solid var(--atomiton-handle-border-color);
+  border: var(--atomiton-handle-border-width) solid
+    var(--atomiton-handle-border-color);
   background-color: var(--atomiton-handle-bg-default);
   border-radius: 50%;
-  transition: background-color var(--atomiton-transition-duration) var(--atomiton-transition-easing);
+  transition: background-color var(--atomiton-transition-duration)
+    var(--atomiton-transition-easing);
 }
 
 .react-flow__node.selectable:hover .react-flow__handle,
@@ -172,12 +179,28 @@
   border-color: var(--atomiton-node-state-pending);
 }
 
+.react-flow__node[data-execution-state="pending"] .react-flow__handle,
+.react-flow__node-input[data-execution-state="pending"] .react-flow__handle,
+.react-flow__node-default[data-execution-state="pending"] .react-flow__handle,
+.react-flow__node-output[data-execution-state="pending"] .react-flow__handle,
+.react-flow__node-group[data-execution-state="pending"] .react-flow__handle {
+  background-color: var(--atomiton-node-state-pending);
+}
+
 .react-flow__node[data-execution-state="executing"],
 .react-flow__node-input[data-execution-state="executing"],
 .react-flow__node-default[data-execution-state="executing"],
 .react-flow__node-output[data-execution-state="executing"],
 .react-flow__node-group[data-execution-state="executing"] {
   border-color: var(--atomiton-node-state-executing);
+}
+
+.react-flow__node[data-execution-state="executing"] .react-flow__handle,
+.react-flow__node-input[data-execution-state="executing"] .react-flow__handle,
+.react-flow__node-default[data-execution-state="executing"] .react-flow__handle,
+.react-flow__node-output[data-execution-state="executing"] .react-flow__handle,
+.react-flow__node-group[data-execution-state="executing"] .react-flow__handle {
+  background-color: var(--atomiton-node-state-executing);
 }
 
 .react-flow__node[data-execution-state="completed"],
@@ -188,12 +211,28 @@
   border-color: var(--atomiton-node-state-completed);
 }
 
+.react-flow__node[data-execution-state="completed"] .react-flow__handle,
+.react-flow__node-input[data-execution-state="completed"] .react-flow__handle,
+.react-flow__node-default[data-execution-state="completed"] .react-flow__handle,
+.react-flow__node-output[data-execution-state="completed"] .react-flow__handle,
+.react-flow__node-group[data-execution-state="completed"] .react-flow__handle {
+  background-color: var(--atomiton-node-state-completed);
+}
+
 .react-flow__node[data-execution-state="error"],
 .react-flow__node-input[data-execution-state="error"],
 .react-flow__node-default[data-execution-state="error"],
 .react-flow__node-output[data-execution-state="error"],
 .react-flow__node-group[data-execution-state="error"] {
   border-color: var(--atomiton-node-state-error);
+}
+
+.react-flow__node[data-execution-state="error"] .react-flow__handle,
+.react-flow__node-input[data-execution-state="error"] .react-flow__handle,
+.react-flow__node-default[data-execution-state="error"] .react-flow__handle,
+.react-flow__node-output[data-execution-state="error"] .react-flow__handle,
+.react-flow__node-group[data-execution-state="error"] .react-flow__handle {
+  background-color: var(--atomiton-node-state-error);
 }
 
 .react-flow__node[data-execution-state="skipped"],
@@ -204,13 +243,12 @@
   border-color: var(--atomiton-node-state-skipped);
 }
 
-/* Critical path styling */
-.react-flow__node[data-critical-path="true"] .atomiton-node,
-.react-flow__node-input[data-critical-path="true"] .atomiton-node,
-.react-flow__node-default[data-critical-path="true"] .atomiton-node,
-.react-flow__node-output[data-critical-path="true"] .atomiton-node,
-.react-flow__node-group[data-critical-path="true"] .atomiton-node {
-  box-shadow: var(--atomiton-node-critical-path-shadow);
+.react-flow__node[data-execution-state="skipped"] .react-flow__handle,
+.react-flow__node-input[data-execution-state="skipped"] .react-flow__handle,
+.react-flow__node-default[data-execution-state="skipped"] .react-flow__handle,
+.react-flow__node-output[data-execution-state="skipped"] .react-flow__handle,
+.react-flow__node-group[data-execution-state="skipped"] .react-flow__handle {
+  background-color: var(--atomiton-node-state-skipped);
 }
 
 /* Smooth transitions for execution state changes */
@@ -219,5 +257,5 @@
 .react-flow__node-default[data-execution-state],
 .react-flow__node-output[data-execution-state],
 .react-flow__node-group[data-execution-state] {
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease;
 }

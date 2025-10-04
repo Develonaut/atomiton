@@ -96,6 +96,7 @@ const createMockConductor = () => {
     useStore: Object.assign(vi.fn(), mockStoreApi),
     initializeGraph: vi.fn(),
     setNodeState: vi.fn(),
+    setNodeProgress: vi.fn(),
     completeExecution: vi.fn(),
     reset: vi.fn(),
   };
@@ -362,6 +363,7 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
               dependents: [],
               level: 0,
               state: "pending",
+              progress: 0,
             },
           ],
         ]),
@@ -373,6 +375,7 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
         isExecuting: true,
         startTime: Date.now(),
         endTime: null,
+        cachedProgress: 0,
       };
 
       subscribeCallback(mockState);

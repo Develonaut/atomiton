@@ -11,7 +11,7 @@ export type NodeFieldRendererProps = {
 export type FieldComponentProps = {
   fieldKey: string;
   config: NodeFieldConfig;
-  value: any;
-  onChange: (value: any) => void;
+  value: unknown;
+  onChange: (value: unknown) => void;
   disabled?: boolean;
 };

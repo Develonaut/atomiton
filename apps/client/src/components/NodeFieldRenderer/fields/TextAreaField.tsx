@@ -17,7 +17,7 @@ export function TextAreaField({
       </label>
       <textarea
         id={fieldKey}
-        value={value || ""}
+        value={(value as string | undefined) || ""}
         onChange={(e) => onChange(e.target.value)}
         placeholder={config.placeholder}
         disabled={disabled}

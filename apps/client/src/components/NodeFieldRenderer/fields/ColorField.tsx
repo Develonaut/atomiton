@@ -7,7 +7,7 @@ export function ColorField({
   onChange,
   disabled = false,
 }: FieldComponentProps) {
-  const currentValue = value || "#000000";
+  const currentValue = (value as string) || "#000000";
 
   return (
     <div className="space-y-1">

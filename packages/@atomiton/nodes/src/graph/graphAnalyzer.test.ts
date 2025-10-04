@@ -137,9 +137,15 @@ describe("Graph Analyzer", () => {
   });
 
   describe("analyzeExecutionGraph", () => {
-    it("should return null for non-group nodes", () => {
+    it("should handle single nodes as 1-node graphs", () => {
       const node = createNodeDefinition({ id: "node-1", type: "test" });
-      expect(analyzeExecutionGraph(node)).toBeNull();
+      const result = analyzeExecutionGraph(node);
+
+      expect(result).not.toBeNull();
+      expect(result?.nodes.size).toBe(1);
+      expect(result?.executionOrder).toEqual([["node-1"]]);
+      expect(result?.maxParallelism).toBe(1);
+      expect(result?.criticalPath).toEqual(["node-1"]);
     });
 
     it("should analyze group node graph", () => {

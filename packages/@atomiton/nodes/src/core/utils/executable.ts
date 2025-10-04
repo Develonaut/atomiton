@@ -63,8 +63,13 @@ export function extractParams<
 
   const configResult = schema.safeParse(nodeParameters);
   if (!configResult.success) {
+    console.error(`[${nodeType}] Validation failed:`, {
+      nodeParameters,
+      errors: configResult.error?.errors,
+      formattedError: JSON.stringify(configResult.error?.errors, null, 2),
+    });
     throw new Error(
-      `Invalid ${nodeType} parameters: ${configResult.error?.message || "Unknown validation error"}`,
+      `Invalid ${nodeType} parameters: ${JSON.stringify(configResult.error?.errors)}`,
     );
   }
   const config = configResult.data as T;

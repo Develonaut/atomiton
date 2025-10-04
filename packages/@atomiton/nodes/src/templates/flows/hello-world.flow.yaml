@@ -106,7 +106,8 @@ nodes:
         dataType: "any"
     parameters:
       operation: "write"
-      path: "/Users/Ryan/Desktop/hello-world.txt"
+      path: ".tmp/hello-world-output.txt"
+      content: "{{$input}}"
       encoding: "utf8"
       createDirectories: true
       overwrite: true

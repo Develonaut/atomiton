@@ -5,24 +5,11 @@
  * Uses @atomiton/store (Zustand + Immer) for state management.
  */
 
+import { createLogger } from "@atomiton/logger/browser";
 import type { ExecutionGraph, GraphNode } from "@atomiton/nodes/graph";
 import { createStore } from "@atomiton/store";
 
-// Simple logger interface for environment-agnostic logging
-const logger = {
-  info: (message: string, data?: Record<string, unknown>) => {
-    console.log(`[EXECUTION_GRAPH] ${message}`, data || "");
-  },
-  debug: (message: string, data?: Record<string, unknown>) => {
-    console.log(`[EXECUTION_GRAPH] ${message}`, data || "");
-  },
-  warn: (message: string, data?: Record<string, unknown>) => {
-    console.warn(`[EXECUTION_GRAPH] ${message}`, data || "");
-  },
-  error: (message: string, data?: Record<string, unknown>) => {
-    console.error(`[EXECUTION_GRAPH] ${message}`, data || "");
-  },
-};
+const logger = createLogger({ scope: "EXECUTION_GRAPH" });
 
 /**
  * Store type

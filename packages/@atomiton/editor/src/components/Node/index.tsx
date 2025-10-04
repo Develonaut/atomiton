@@ -1,4 +1,5 @@
 import type { EditorNodePort, NodeData } from "#types/EditorNode";
+import { useNodeExecutionState } from "#hooks/useNodeExecutionState";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,
@@ -22,8 +23,12 @@ function Node(props: ReactFlowNodeProps) {
   const outputPorts = data?.outputPorts || [];
   const icon = metadata?.icon || "frown";
 
+  // Subscribe to execution progress and update DOM attributes
+  const nodeRef = useNodeExecutionState(props.id);
+
   return (
     <div
+      ref={nodeRef}
       className="atomiton-node"
       data-testid={`node-${props.type}-${props.id}`}
       data-node-type={props.type}
