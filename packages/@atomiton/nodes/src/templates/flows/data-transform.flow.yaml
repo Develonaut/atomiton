@@ -33,9 +33,27 @@ metadata:
 
 nodes:
   - id: "csv-source"
-    type: "csv-reader"
+    type: "spreadsheet"
     name: "Read CSV Data"
     version: "1.0.0"
+    metadata:
+      id: "spreadsheet"
+      name: "Spreadsheet"
+      author: "Atomiton Core Team"
+      description: "Read and write spreadsheet files (CSV, Excel)"
+      category: "data"
+      icon: "table-2"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: false
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       filePath: "/data/sample.csv"
       hasHeaders: true
@@ -49,6 +67,24 @@ nodes:
     type: "transform"
     name: "Filter Active Records"
     version: "1.0.0"
+    metadata:
+      id: "transform"
+      name: "Transform"
+      author: "Atomiton Core Team"
+      description: "Transform data using JavaScript expressions"
+      category: "data"
+      icon: "wand-2"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: true
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       expression:
         "// Filter only active records\nreturn data.filter(row => row.active ===
@@ -60,9 +96,27 @@ nodes:
       y: 100
 
   - id: "aggregate-code"
-    type: "code"
+    type: "transform"
     name: "Calculate Totals"
     version: "1.0.0"
+    metadata:
+      id: "transform"
+      name: "Transform"
+      author: "Atomiton Core Team"
+      description: "Transform data using JavaScript expressions"
+      category: "data"
+      icon: "wand-2"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: true
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       code: |
         // Aggregate totals
@@ -86,6 +140,24 @@ nodes:
     type: "file-system"
     name: "Write Results"
     version: "1.0.0"
+    metadata:
+      id: "file-system"
+      name: "File System"
+      author: "Atomiton Core Team"
+      description: "Read and write files to the file system"
+      category: "io"
+      icon: "folder"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: true
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       operation: "write"
       filePath: "/output/results.json"

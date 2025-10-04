@@ -1,5 +1,10 @@
-import { Editor } from "@atomiton/editor";
-import { ExecutionGraphCanvas } from "#templates/DebugPage/components/ExecutionGraphViewer/ExecutionGraphCanvas";
+import { Editor, Canvas } from "@atomiton/editor";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
+
+export type ExecutionGraphViewerProps = {
+  /** The flow definition to visualize */
+  flow: NodeDefinition;
+};
 
 /**
  * ExecutionGraphViewer - Real-time execution graph visualization
@@ -15,18 +20,34 @@ import { ExecutionGraphCanvas } from "#templates/DebugPage/components/ExecutionG
  *
  * @example
  * ```tsx
- * <ExecutionGraphViewer />
+ * <ExecutionGraphViewer flow={flowDefinition} />
  * ```
  */
-export function ExecutionGraphViewer() {
+export function ExecutionGraphViewer({ flow }: ExecutionGraphViewerProps) {
   return (
     <div
       className="execution-graph-viewer"
       data-testid="execution-graph-viewer"
-      style={{ height: "400px", width: "100%" }}
+      style={{ height: "100px", width: "100%" }}
     >
-      <Editor data-testid="execution-graph-editor">
-        <ExecutionGraphCanvas />
+      <Editor
+        key={flow.id}
+        flow={flow}
+        className="h-full w-full"
+        data-testid="execution-graph-editor"
+      >
+        <Canvas
+          nodesDraggable={false}
+          nodesConnectable={false}
+          elementsSelectable={false}
+          panOnDrag={false}
+          zoomOnScroll={false}
+          zoomOnPinch={false}
+          zoomOnDoubleClick={false}
+          fitView
+        >
+          <Canvas.Grid variant="dots" gap={12} size={1} />
+        </Canvas>
       </Editor>
     </div>
   );

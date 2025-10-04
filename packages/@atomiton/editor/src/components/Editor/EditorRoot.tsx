@@ -6,7 +6,6 @@ import type { HTMLAttributes } from "react";
 
 type EditorProps = {
   children: React.ReactNode;
-  className?: string;
   flow?: NodeDefinition;
 } & HTMLAttributes<HTMLDivElement>;
 
@@ -20,7 +19,7 @@ const EditorRootStyled = styled("div", {
  * Use with Panel, Toolbar, Canvas, and other standalone components.
  *
  */
-function EditorRoot({ children, className, flow, ...props }: EditorProps) {
+function EditorRoot({ children, flow, ...props }: EditorProps) {
   const { nodes, edges } = useFlowToReactFlow(flow);
 
   return (

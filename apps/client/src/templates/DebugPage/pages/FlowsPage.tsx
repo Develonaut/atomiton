@@ -2,26 +2,30 @@ import { FlowSelector } from "#templates/DebugPage/components/FlowSelector";
 import { FlowActionButtons } from "#templates/DebugPage/components/FlowActionButtons";
 import { FlowProgressBar } from "#templates/DebugPage/components/FlowProgressBar";
 import { LogsSection } from "#templates/DebugPage/components/LogsSection";
-import { useDebugStore } from "#templates/DebugPage/store";
-import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { ExecutionGraphViewer } from "#templates/DebugPage/components/ExecutionGraphViewer";
+import { useTemplates } from "#store/useTemplates";
 import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
-import { useEffect } from "react";
+import { useState } from "react";
 
 export default function FlowsPage() {
-  const selectedFlowId = useDebugStore((state) => state.selectedFlow);
-  const setSelectedFlowId = useDebugStore((state) => state.setSelectedFlow);
-  const { addLog } = useDebugLogs();
+  const { templates } = useTemplates();
+  const [selectedFlowId, setSelectedFlowId] = useState<string | null>(null);
 
-  const { availableFlows, isExecuting, progress, loadFlowTemplates, runFlow } =
-    useFlowOperations(addLog);
+  const { isExecuting, progress, runFlow } = useFlowOperations();
 
-  // Load flow templates on mount
-  useEffect(() => {
-    loadFlowTemplates();
-  }, [loadFlowTemplates]);
+  // Convert templates to flow list format
+  const availableFlows = templates.map((template) => ({
+    id: template.id,
+    name: template.name || template.id,
+    description: template.metadata.description,
+    nodeCount: template.nodes?.length || 0,
+  }));
+
+  // Get the selected flow template
+  const selectedFlow = templates.find((t) => t.id === selectedFlowId);
 
   const handleRunFlow = () => {
-    runFlow(selectedFlowId);
+    runFlow(selectedFlow ?? null);
   };
 
   return (
@@ -62,6 +66,13 @@ export default function FlowsPage() {
             isExecuting={isExecuting}
           />
         </div>
+
+        {/* Execution Graph Viewer */}
+        {selectedFlow && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <ExecutionGraphViewer flow={selectedFlow} />
+          </div>
+        )}
 
         {/* Activity Logs */}
         <div className="flex-1 overflow-hidden">

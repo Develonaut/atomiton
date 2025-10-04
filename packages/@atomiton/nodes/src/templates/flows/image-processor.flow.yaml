@@ -43,6 +43,14 @@ nodes:
     category: "io"
     version: "1.0.0"
 
+    metadata:
+      id: "file-system"
+      name: "File System Operations"
+      author: "Atomiton Core Team"
+      description: "Read, write, and list files and directories"
+      category: "io"
+      icon: "folder"
+
     inputPorts:
       - id: "trigger"
         name: "Trigger"
@@ -76,6 +84,15 @@ nodes:
     name: "Process Each Image"
     category: "logic"
     version: "1.0.0"
+
+    metadata:
+      id: "loop"
+      name: "Loop Iterator"
+      author: "Atomiton Core Team"
+      description:
+        "Iterate over arrays or collections with configurable loop control"
+      category: "logic"
+      icon: "repeat"
 
     inputPorts:
       - id: "input"
@@ -113,6 +130,15 @@ nodes:
     category: "logic"
     version: "1.0.0"
 
+    metadata:
+      id: "parallel"
+      name: "Parallel Execution"
+      author: "Atomiton Core Team"
+      description:
+        "Execute multiple operations concurrently with configurable parallelism"
+      category: "logic"
+      icon: "git-branch"
+
     inputPorts:
       - id: "input"
         name: "Input"
@@ -140,6 +166,14 @@ nodes:
     name: "Resize Image"
     category: "media"
     version: "1.0.0"
+
+    metadata:
+      id: "image"
+      name: "Image Processing"
+      author: "Atomiton Core Team"
+      description: "Manipulate and transform images with various operations"
+      category: "media"
+      icon: "image"
 
     inputPorts:
       - id: "input"
@@ -176,6 +210,14 @@ nodes:
     category: "media"
     version: "1.0.0"
 
+    metadata:
+      id: "image"
+      name: "Image Processing"
+      author: "Atomiton Core Team"
+      description: "Manipulate and transform images with various operations"
+      category: "media"
+      icon: "image"
+
     inputPorts:
       - id: "input"
         name: "Input"
@@ -210,6 +252,14 @@ nodes:
     name: "Save Processed Image"
     category: "io"
     version: "1.0.0"
+
+    metadata:
+      id: "file-system"
+      name: "File System Operations"
+      author: "Atomiton Core Team"
+      description: "Read, write, and list files and directories"
+      category: "io"
+      icon: "folder"
 
     inputPorts:
       - id: "input"

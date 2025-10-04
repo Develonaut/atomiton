@@ -15,6 +15,24 @@ nodes:
     type: "edit-fields"
     name: "Create Message"
     version: "1.0.0"
+    metadata:
+      id: "edit-fields"
+      name: "Edit Fields"
+      author: "Atomiton Core Team"
+      description: "Edit existing fields or create new data fields"
+      category: "data"
+      icon: "wand-2"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: false
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       values:
         message: "Hello World from Atomiton!"
@@ -31,6 +49,24 @@ nodes:
     type: "transform"
     name: "Format Content"
     version: "1.0.0"
+    metadata:
+      id: "transform"
+      name: "Transform"
+      author: "Atomiton Core Team"
+      description: "Transform data using JavaScript expressions"
+      category: "data"
+      icon: "wand-2"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: true
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       operation: "map"
       transformFunction: |
@@ -50,6 +86,24 @@ nodes:
     type: "file-system"
     name: "Write To File"
     version: "1.0.0"
+    metadata:
+      id: "file-system"
+      name: "File System"
+      author: "Atomiton Core Team"
+      description: "Read and write files to the file system"
+      category: "io"
+      icon: "folder"
+    inputPorts:
+      - id: "input"
+        name: "Input"
+        type: "input"
+        dataType: "any"
+        required: true
+    outputPorts:
+      - id: "output"
+        name: "Output"
+        type: "output"
+        dataType: "any"
     parameters:
       operation: "write"
       path: "/Users/Ryan/Desktop/hello-world.txt"

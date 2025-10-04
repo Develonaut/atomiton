@@ -1,5 +1,8 @@
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import { createNodeDefinition } from "@atomiton/nodes/definitions";
+import {
+  createNodeDefinition,
+  getNodeDefinition,
+} from "@atomiton/nodes/definitions";
 import type {
   Edge as ReactFlowEdge,
   Node as ReactFlowNode,
@@ -23,17 +26,26 @@ export function flowToReactFlow(flow: NodeDefinition): TransformedFlow {
 
   if (flow.nodes) {
     reactNodes.push(
-      ...flow.nodes.map((n) => ({
-        id: n.id,
-        type: n.type,
-        position: n.position,
-        data: {
-          label: n.name || n.type,
-          config: n.parameters || {},
-          version: n.version,
-          parentId: flow.id,
-        },
-      })),
+      ...flow.nodes.map((n) => {
+        // Get the node definition from the registry to access metadata
+        const nodeDefinition = getNodeDefinition(n.type);
+
+        return {
+          id: n.id,
+          type: n.type,
+          position: n.position,
+          data: {
+            label: n.name || n.type,
+            config: n.parameters || {},
+            version: n.version,
+            parentId: flow.id,
+            metadata: n.metadata || nodeDefinition?.metadata,
+            fields: n.fields,
+            inputPorts: n.inputPorts || [],
+            outputPorts: n.outputPorts || [],
+          },
+        };
+      }),
     );
   }
 

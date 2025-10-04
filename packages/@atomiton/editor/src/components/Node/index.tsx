@@ -20,7 +20,7 @@ function Node(props: ReactFlowNodeProps) {
   const metadata = data?.metadata;
   const inputPorts = data?.inputPorts || [];
   const outputPorts = data?.outputPorts || [];
-  const icon = metadata?.icon || "zap";
+  const icon = metadata?.icon || "frown";
 
   return (
     <div

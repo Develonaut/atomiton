@@ -1,13 +1,7 @@
 import conductor from "#lib/conductor";
+import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-type FlowTemplate = {
-  id: string;
-  name: string;
-  description?: string;
-  nodeCount: number;
-};
 
 type ExecutionProgress = {
   currentNode: number;
@@ -15,8 +9,8 @@ type ExecutionProgress = {
   currentNodeName?: string;
 };
 
-export function useFlowOperations(addLog: (message: string) => void) {
-  const [availableFlows, setAvailableFlows] = useState<FlowTemplate[]>([]);
+export function useFlowOperations() {
+  const { addLog } = useDebugLogs();
   const [isExecuting, setIsExecuting] = useState(false);
   const [progress, setProgress] = useState<ExecutionProgress>({
     currentNode: 0,
@@ -54,37 +48,20 @@ export function useFlowOperations(addLog: (message: string) => void) {
     return unsubscribe;
   }, [addLog]);
 
-  // Load flow templates from backend
-  const loadFlowTemplates = useCallback(async () => {
-    try {
-      addLog("📦 Loading flow templates...");
-      const response = await conductor.flow.listTemplates();
-      setAvailableFlows(response.templates);
-      addLog(`✅ Loaded ${response.templates.length} flow templates`);
-    } catch (error) {
-      addLog(`❌ Error loading flow templates: ${error}`);
-      console.error("Error loading flow templates:", error);
-    }
-  }, [addLog]);
-
-  // Run selected flow
+  // Run a flow
   const runFlow = useCallback(
-    async (selectedFlowId: string | null) => {
-      if (!selectedFlowId) {
+    async (flow: NodeDefinition | null) => {
+      if (!flow) {
         addLog("❌ No flow selected");
         return;
       }
 
       try {
         setIsExecuting(true);
-        addLog(`🚀 Executing flow: ${selectedFlowId}`);
-
-        // Get flow template
-        const response = await conductor.flow.getTemplate(selectedFlowId);
-        const flowDefinition = response.definition as NodeDefinition;
+        addLog(`🚀 Executing flow: ${flow.name}`);
 
         // Initialize progress
-        const totalNodes = flowDefinition.nodes?.length || 0;
+        const totalNodes = flow.nodes?.length || 0;
         completedNodesRef.current.clear();
         setProgress({
           currentNode: 0,
@@ -97,7 +74,7 @@ export function useFlowOperations(addLog: (message: string) => void) {
         const executionId = `flow_exec_${Date.now()}`;
         currentExecutionIdRef.current = executionId;
 
-        const result = await conductor.node.run(flowDefinition, {
+        const result = await conductor.node.run(flow, {
           executionId,
         });
 
@@ -124,10 +101,8 @@ export function useFlowOperations(addLog: (message: string) => void) {
   );
 
   return {
-    availableFlows,
     isExecuting,
     progress,
-    loadFlowTemplates,
     runFlow,
   };
 }

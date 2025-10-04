@@ -29,7 +29,7 @@ export const editFieldsDefaults = {
  * Edit Fields node definition (browser-safe)
  */
 export const editFieldsDefinition: NodeDefinition = createNodeDefinition({
-  type: "transform",
+  type: "edit-fields",
   version: "1.0.0",
   metadata: createNodeMetadata({
     id: "edit-fields",

@@ -26,6 +26,7 @@ export function CanvasRoot({ children, className, ...other }: CanvasRootProps) {
         deleteKeyCode={DELETE_KEY_CODES}
         minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}
+        proOptions={{ hideAttribution: true }}
         {...other}
       >
         {children}
