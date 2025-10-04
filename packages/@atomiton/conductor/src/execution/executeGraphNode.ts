@@ -1,5 +1,5 @@
 /**
- * Execute a single node locally
+ * Execute a single graph node (leaf node execution)
  */
 
 import type { ExecutionGraphStore } from "#execution/executionGraphStore";
@@ -9,11 +9,13 @@ import type {
   ExecutionResult,
 } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { delay } from "@atomiton/utils";
 
 /**
- * Execute a single node locally using the provided executor factory
+ * Execute a single graph node using the provided executor factory
+ * This is called by executeGraph for each leaf node in the graph
  */
-export async function executeLocal(
+export async function executeGraphNode(
   node: NodeDefinition,
   context: ConductorExecutionContext,
   startTime: number,
@@ -80,10 +82,26 @@ export async function executeLocal(
       ...node.parameters,
     };
 
+    // Set initial progress with configurable slow-mo delay
+    if (executionGraphStore) {
+      const slowMo = context.slowMo ?? 50; // Default to 50ms per step (100ms total)
+      console.log(
+        `[executeGraphNode] Node ${node.id}: slowMo=${slowMo}ms, will delay ${slowMo * 2}ms total`,
+      );
+
+      executionGraphStore.setNodeProgress(node.id, 0, "Starting...");
+      await delay(slowMo);
+
+      // Show intermediate progress
+      executionGraphStore.setNodeProgress(node.id, 30, "Processing...");
+      await delay(slowMo);
+    }
+
     const result = await nodeExecutable.execute(params);
 
     // Update store: node completed successfully
     if (executionGraphStore) {
+      executionGraphStore.setNodeProgress(node.id, 100, "Complete");
       executionGraphStore.setNodeState(node.id, "completed");
     }
 

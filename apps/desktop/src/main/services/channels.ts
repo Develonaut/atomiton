@@ -60,20 +60,15 @@ export const createChannelManager = (): ChannelManager => {
       // Convert Map to array for IPC serialization
       const nodesArray = Array.from(state.nodes.values());
 
-      // Calculate overall progress
-      const completedNodes = nodesArray.filter(
-        (n) => n.state === "completed",
-      ).length;
-      const totalNodes = state.nodes.size;
-      const progress =
-        totalNodes > 0 ? Math.round((completedNodes / totalNodes) * 100) : 0;
+      // Use cached weighted progress from execution graph
+      const progress = state.cachedProgress;
 
       // Generate status message
       const executing = nodesArray.filter((n) => n.state === "executing");
       const message =
         executing.length > 0
           ? `Executing: ${executing.map((n) => n.name).join(", ")}`
-          : completedNodes === totalNodes
+          : progress === 100
             ? "All nodes completed"
             : "Waiting to start...";
 

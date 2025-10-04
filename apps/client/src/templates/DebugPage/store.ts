@@ -33,7 +33,8 @@ const debugStore = createStore<DebugState & DebugActions>(
     selectedFlow: null,
 
     addLog: (message: string, metadata?: Record<string, unknown>) => {
-      const timestamp = new Date().toLocaleTimeString();
+      const now = new Date();
+      const timestamp = `${now.toLocaleTimeString()}.${now.getMilliseconds().toString().padStart(3, "0")}`;
       debugStore.setState((state) => {
         // Skip if this is the exact same message as the last one
         const lastLog = state.logs[state.logs.length - 1];
@@ -88,7 +89,20 @@ const setupConductorSubscriptions = () => {
         : 0;
       const nodeInfo =
         nodeIndex > 0 ? `[Node ${nodeIndex}/${event.nodes.length}] ` : "";
-      addLog(`📊 ${nodeInfo}${event.progress}% - ${event.message || ""}`);
+
+      // Format individual node progress for display
+      // Note: Individual node progress is not available in the event,
+      // only overall graph progress. Using state instead.
+      const nodeProgress = executingNode
+        ? `Node: ${executingNode.state}`
+        : "Node: --";
+
+      // Format overall graph progress
+      const graphProgress = `Graph: ${event.progress}%`;
+
+      addLog(
+        `📊 ${nodeInfo}${graphProgress} | ${nodeProgress} | ${event.message || ""}`,
+      );
     }),
 
     conductor.node?.onComplete?.((event: NodeCompleteEvent) => {

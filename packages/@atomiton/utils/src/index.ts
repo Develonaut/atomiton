@@ -13,3 +13,5 @@ export {
 } from "#generateId";
 
 export { titleCase, kebabCase } from "#changeCase";
+
+export { delay } from "#delay";

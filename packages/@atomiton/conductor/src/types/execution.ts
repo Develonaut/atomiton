@@ -17,6 +17,17 @@ export type ConductorExecutionContext = {
   variables: Record<string, unknown>;
   input?: unknown;
   parentContext?: ConductorExecutionContext;
+  /**
+   * Slow-motion delay in milliseconds for progress visualization (for development/debugging)
+   * Total delay per node = slowMo * 2 (two progress steps)
+   * - 0 = instant (no delays)
+   * - 50 = normal (100ms per node)
+   * - 250 = slow (500ms per node)
+   * - 1000 = slower (2s per node)
+   * - 2500 = very slow (5s per node)
+   * - 7500 = super slow (15s per node)
+   */
+  slowMo?: number;
 };
 
 /**

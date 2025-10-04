@@ -56,8 +56,8 @@ export function createWindowManager(): WindowManager {
 
   const createMainWindow = (config: WindowConfig): BrowserWindow => {
     mainWindow = new BrowserWindow({
-      width: config.width ?? 1200,
-      height: config.height ?? 800,
+      width: config.width ?? 1920,
+      height: config.height ?? 1080,
       show: config.show ?? false,
       autoHideMenuBar: config.autoHideMenuBar ?? true,
       webPreferences: {

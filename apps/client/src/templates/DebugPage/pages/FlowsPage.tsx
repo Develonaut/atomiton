@@ -5,13 +5,22 @@ import { LogsSection } from "#templates/DebugPage/components/LogsSection";
 import { ExecutionGraphViewer } from "#templates/DebugPage/components/ExecutionGraphViewer";
 import { useTemplates } from "#store/useTemplates";
 import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
-import { useState } from "react";
+import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { useState, useEffect } from "react";
 
 export default function FlowsPage() {
   const { templates } = useTemplates();
   const [selectedFlowId, setSelectedFlowId] = useState<string | null>(null);
 
-  const { isExecuting, progress, runFlow } = useFlowOperations();
+  const { isExecuting, progress, runFlow, reset, resetKey, slowMo, setSlowMo } =
+    useFlowOperations();
+
+  const { clearLogs } = useDebugLogs();
+
+  // Clear logs when flow selection changes
+  useEffect(() => {
+    clearLogs();
+  }, [selectedFlowId, clearLogs]);
 
   // Convert templates to flow list format
   const availableFlows = templates.map((template) => ({
@@ -37,10 +46,38 @@ export default function FlowsPage() {
       <div className="bg-white rounded-lg shadow flex flex-col h-full overflow-hidden">
         <div className="p-6 border-b border-gray-200 shrink-0">
           <h3 className="text-lg font-semibold mb-4">Flow Builder</h3>
+
+          {/* Slow-Mo Control */}
+          <div className="mb-4">
+            <label
+              htmlFor="slow-mo"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Slow-Mo
+            </label>
+            <select
+              id="slow-mo"
+              value={slowMo}
+              onChange={(e) => setSlowMo(Number(e.target.value))}
+              disabled={isExecuting}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+            >
+              <option value={0}>Instant (no delays)</option>
+              <option value={50}>Quick (100ms per node)</option>
+              <option value={125}>Normal (250ms per node)</option>
+              <option value={250}>Medium (500ms per node)</option>
+              <option value={500}>Slow (1s per node)</option>
+              <option value={1000}>Slower (2s per node)</option>
+              <option value={2500}>Very Slow (5s per node)</option>
+              <option value={7500}>Super Slow (15s per node)</option>
+            </select>
+          </div>
+
           <FlowActionButtons
             selectedFlowId={selectedFlowId}
             isExecuting={isExecuting}
             onRun={handleRunFlow}
+            onReset={reset}
           />
         </div>
 
@@ -64,13 +101,17 @@ export default function FlowsPage() {
             totalNodes={progress.totalNodes}
             currentNodeName={progress.currentNodeName}
             isExecuting={isExecuting}
+            graphProgress={progress.graphProgress}
           />
         </div>
 
         {/* Execution Graph Viewer */}
         {selectedFlow && (
           <div className="bg-white rounded-lg shadow p-6">
-            <ExecutionGraphViewer flow={selectedFlow} />
+            <ExecutionGraphViewer
+              key={`${selectedFlow.id}-${resetKey}`}
+              flow={selectedFlow}
+            />
           </div>
         )}
 

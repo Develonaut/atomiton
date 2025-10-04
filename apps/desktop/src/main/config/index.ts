@@ -43,8 +43,8 @@ const loadConfig = (): DesktopConfig => {
       isDev,
     },
     window: {
-      width: 1200,
-      height: 800,
+      width: 1920,
+      height: 1080,
       preloadPath: join(__dirname, "../preload/index.js"),
       appUrl: resolveAppUrl(isDev),
       isHeadless,

@@ -32,6 +32,7 @@ function createContext(
     variables: context?.variables || {},
     input: context?.input,
     parentContext: context?.parentContext,
+    slowMo: context?.slowMo,
   };
 }
 

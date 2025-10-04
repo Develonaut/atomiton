@@ -15,7 +15,7 @@ import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
 import type { ExecutionGraphStore } from "#execution/executionGraphStore";
 import { topologicalSort } from "@atomiton/nodes/graph";
-import { executeLocal } from "#execution/executeLocal";
+import { executeGraphNode } from "#execution/executeGraphNode";
 
 /**
  * Execute a graph of nodes (handles both single nodes and groups)
@@ -39,6 +39,9 @@ export async function executeGraph(
   try {
     // Handle single nodes (no children)
     if (!node.nodes || node.nodes.length === 0) {
+      // TODO: Review transport usage - desktop conductor shouldn't use transport for local execution
+      // Transport should only be used by browser conductor to delegate to desktop
+      // This may be causing slowMo delays to be bypassed
       // Use transport if configured, otherwise execute locally
       if (config.transport) {
         const result = await config.transport.execute(node, context);
@@ -48,7 +51,7 @@ export async function executeGraph(
         return result;
       }
 
-      const result = await executeLocal(
+      const result = await executeGraphNode(
         node,
         context,
         startTime,
@@ -90,6 +93,7 @@ export async function executeGraph(
         variables: context.variables,
         input: childInput,
         parentContext: context,
+        slowMo: context.slowMo,
       };
 
       const result = await execute(

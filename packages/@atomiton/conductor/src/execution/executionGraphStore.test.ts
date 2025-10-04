@@ -9,7 +9,6 @@ import {
   getNodesByState,
   getCompletedWeight,
   getEstimatedTimeRemaining,
-  type ExecutionGraphState,
   type ExecutionGraphNode,
 } from "#execution/executionGraphStore";
 
@@ -296,20 +295,17 @@ describe("ExecutionGraphStore", () => {
       const graph = analyzeExecutionGraph(group);
       store.initializeGraph(graph!);
 
-      let latestState: ExecutionGraphState | null = null;
+      let lastNode: ExecutionGraphNode | undefined;
       const unsubscribe = store.subscribe((state) => {
-        latestState = state;
+        lastNode = Array.from(state.nodes.values())[0] as ExecutionGraphNode;
       });
 
       store.setNodeProgress("child-1", 75, "Almost done...");
 
       unsubscribe();
 
-      const node = Array.from(
-        latestState!.nodes.values(),
-      )[0] as ExecutionGraphNode;
-      expect(node.progress).toBe(75);
-      expect(node.message).toBe("Almost done...");
+      expect(lastNode?.progress).toBe(75);
+      expect(lastNode?.message).toBe("Almost done...");
     });
   });
 

@@ -26,6 +26,7 @@ const nodeExecuteParamsSchema = v.object({
       variables: v.record(v.string(), v.unknown()).optional(),
       input: v.unknown().optional(),
       parentContext: v.any().optional(),
+      slowMo: v.number().optional(),
     })
     .optional(),
 });

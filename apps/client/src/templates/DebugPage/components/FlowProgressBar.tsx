@@ -3,6 +3,7 @@ type FlowProgressBarProps = {
   totalNodes: number;
   currentNodeName?: string;
   isExecuting: boolean;
+  graphProgress?: number; // Weighted graph progress (0-100)
 };
 
 export function FlowProgressBar({
@@ -10,9 +11,12 @@ export function FlowProgressBar({
   totalNodes,
   currentNodeName,
   isExecuting,
+  graphProgress,
 }: FlowProgressBarProps) {
+  // Use weighted graph progress if available, otherwise fallback to simple node count
   const percentage =
-    totalNodes > 0 ? Math.round((currentNode / totalNodes) * 100) : 0;
+    graphProgress ??
+    (totalNodes > 0 ? Math.round((currentNode / totalNodes) * 100) : 0);
 
   return (
     <div className="space-y-2">

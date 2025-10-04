@@ -4,15 +4,17 @@ type FlowActionButtonsProps = {
   selectedFlowId: string | null;
   isExecuting: boolean;
   onRun: () => void;
+  onReset?: () => void;
   onLoad?: () => void;
   onSave?: () => void;
   onDownload?: () => void;
-}
+};
 
 export function FlowActionButtons({
   selectedFlowId,
   isExecuting,
   onRun,
+  onReset,
   onLoad,
   onSave,
   onDownload,
@@ -39,6 +41,15 @@ export function FlowActionButtons({
       >
         <Icon name={isExecuting ? "loader" : "play"} className="w-4 h-4 mr-2" />
         {isExecuting ? "Running..." : "Run"}
+      </Button>
+      <Button
+        onClick={onReset}
+        disabled={isExecuting}
+        variant="outline"
+        size="sm"
+      >
+        <Icon name="refresh-cw" className="w-4 h-4 mr-2" />
+        Reset
       </Button>
     </div>
   );
