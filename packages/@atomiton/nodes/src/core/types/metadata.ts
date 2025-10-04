@@ -54,6 +54,7 @@ export type NodeIcon =
   | "search"
   | "transform"
   | "repeat"
+  | "pencil"
 
   // Media
   | "image"

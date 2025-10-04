@@ -8,11 +8,14 @@ import { v } from "@atomiton/validation";
 import type { IpcMain } from "electron";
 
 // Validation schemas
-const nodeDefinitionSchema = v.object({
-  id: v.string(),
-  type: v.string(),
-  parameters: v.record(v.string(), v.any()).optional(),
-});
+// For IPC transport, we use a permissive schema that validates required fields
+// but allows all NodeDefinition fields to pass through during serialization
+const nodeDefinitionSchema = v
+  .object({
+    id: v.string(),
+    type: v.string(),
+  })
+  .passthrough(); // Allow all other NodeDefinition fields (nodes, edges, parameters, etc.)
 
 const nodeExecuteParamsSchema = v.object({
   node: nodeDefinitionSchema,
@@ -101,7 +104,7 @@ export const createNodeChannelServer = <
       // Execute the node using injected handler
       const context = params.context
         ? ({
-            nodeId: (params.node as any).id,
+            nodeId: params.node.id,
             executionId,
             ...params.context,
           } as TContext)
@@ -120,8 +123,8 @@ export const createNodeChannelServer = <
       console.log("[NODE] Execution completed:", {
         executionId,
         nodeId: params.node.id,
-        success: (result as any).success,
-        duration: (result as any).duration,
+        success: (result as Record<string, unknown>).success,
+        duration: (result as Record<string, unknown>).duration,
       });
 
       // Return the result directly for the browser transport

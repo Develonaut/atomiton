@@ -333,6 +333,9 @@ importers:
 
   packages/@atomiton/conductor:
     dependencies:
+      '@atomiton/logger':
+        specifier: workspace:^
+        version: link:../logger
       '@atomiton/nodes':
         specifier: workspace:*
         version: link:../nodes

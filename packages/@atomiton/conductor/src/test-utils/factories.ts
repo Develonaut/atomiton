@@ -68,6 +68,7 @@ export const createMockGraphState = (
   isExecuting: options.isExecuting ?? false,
   startTime: options.startTime ?? Date.now(),
   endTime: options.endTime ?? null,
+  cachedProgress: 0,
 });
 
 /**

@@ -5,8 +5,24 @@
  * Uses @atomiton/store (Zustand + Immer) for state management.
  */
 
-import { createStore } from "@atomiton/store";
 import type { ExecutionGraph, GraphNode } from "@atomiton/nodes/graph";
+import { createStore } from "@atomiton/store";
+
+// Simple logger interface for environment-agnostic logging
+const logger = {
+  info: (message: string, data?: Record<string, unknown>) => {
+    console.log(`[EXECUTION_GRAPH] ${message}`, data || "");
+  },
+  debug: (message: string, data?: Record<string, unknown>) => {
+    console.log(`[EXECUTION_GRAPH] ${message}`, data || "");
+  },
+  warn: (message: string, data?: Record<string, unknown>) => {
+    console.warn(`[EXECUTION_GRAPH] ${message}`, data || "");
+  },
+  error: (message: string, data?: Record<string, unknown>) => {
+    console.error(`[EXECUTION_GRAPH] ${message}`, data || "");
+  },
+};
 
 /**
  * Store type
@@ -28,9 +44,12 @@ export type NodeExecutionState =
  */
 export type ExecutionGraphNode = GraphNode & {
   state: NodeExecutionState;
+  progress: number; // 0-100
+  message?: string;
   startTime?: number;
   endTime?: number;
   error?: string;
+  nodes?: ExecutionGraphNode[]; // Recursive - child nodes with their own progress
 };
 
 /**
@@ -46,6 +65,7 @@ export type ExecutionGraphState = {
   isExecuting: boolean;
   startTime: number | null;
   endTime: number | null;
+  cachedProgress: number; // Cached weighted progress (0-100) - updated on state changes
 };
 
 /**
@@ -63,18 +83,41 @@ export function createExecutionGraphStore() {
       isExecuting: false,
       startTime: null,
       endTime: null,
+      cachedProgress: 0,
     }),
     { name: "ExecutionGraph" },
   );
 
   /**
+   * Internal: Calculate weighted progress from current state
+   * This is O(n) but only called on state mutations, not reads
+   */
+  function calculateProgress(state: ExecutionGraphState): number {
+    if (state.nodes.size === 0 || state.totalWeight === 0) return 0;
+
+    let completedWeight = 0;
+
+    for (const node of state.nodes.values()) {
+      if (node.state === "completed" || node.state === "skipped") {
+        completedWeight += node.weight;
+      } else if (node.state === "executing") {
+        completedWeight += node.weight * (node.progress / 100);
+      }
+    }
+
+    return Math.round((completedWeight / state.totalWeight) * 100);
+  }
+
+  /**
    * Initialize graph from analyzed execution graph
    */
   function initializeGraph(graph: ExecutionGraph) {
-    console.log(`[GRAPH] Initializing graph with ${graph.nodes.size} nodes`, {
+    logger.info("Initializing execution graph", {
+      nodeCount: graph.nodes.size,
       totalWeight: graph.totalWeight,
-      criticalPath: graph.criticalPath,
+      criticalPathLength: graph.criticalPath.length,
       maxParallelism: graph.maxParallelism,
+      executionLayers: graph.executionOrder.length,
     });
 
     store.setState((draft: ExecutionGraphState) => {
@@ -84,6 +127,7 @@ export function createExecutionGraphStore() {
         executionNodes.set(id, {
           ...node,
           state: "pending",
+          progress: 0,
         });
       });
 
@@ -104,6 +148,7 @@ export function createExecutionGraphStore() {
       draft.isExecuting = true;
       draft.startTime = Date.now();
       draft.endTime = null;
+      draft.cachedProgress = 0; // All nodes start as pending
     });
   }
 
@@ -115,6 +160,23 @@ export function createExecutionGraphStore() {
     state: NodeExecutionState,
     error?: string,
   ) {
+    const node = store.getState().nodes.get(nodeId);
+    if (!node) {
+      logger.warn("Attempted to update state for non-existent node", {
+        nodeId,
+        state,
+      });
+      return;
+    }
+
+    logger.debug(`Node state transition: ${node.state} → ${state}`, {
+      nodeId,
+      nodeName: node.name,
+      previousState: node.state,
+      newState: state,
+      error,
+    });
+
     store.setState((draft: ExecutionGraphState) => {
       const node = draft.nodes.get(nodeId);
       if (!node) return;
@@ -123,17 +185,85 @@ export function createExecutionGraphStore() {
 
       if (state === "executing") {
         node.startTime = Date.now();
+        node.progress = 0;
+        logger.info("Node execution started", {
+          nodeId,
+          nodeName: node.name,
+          nodeType: node.type,
+        });
       } else if (
         state === "completed" ||
         state === "error" ||
         state === "skipped"
       ) {
         node.endTime = Date.now();
+        node.progress = 100;
+        const duration = node.endTime - (node.startTime || node.endTime);
+
+        if (state === "completed") {
+          logger.info("Node execution completed", {
+            nodeId,
+            nodeName: node.name,
+            duration,
+          });
+        } else if (state === "error") {
+          logger.error("Node execution failed", {
+            nodeId,
+            nodeName: node.name,
+            duration,
+            error,
+          });
+        } else {
+          logger.debug("Node execution skipped", {
+            nodeId,
+            nodeName: node.name,
+          });
+        }
       }
 
       if (state === "error" && error) {
         node.error = error;
       }
+
+      // Update cached progress
+      draft.cachedProgress = calculateProgress(draft);
+    });
+  }
+
+  /**
+   * Update node progress (0-100) and optional message
+   */
+  function setNodeProgress(nodeId: string, progress: number, message?: string) {
+    const node = store.getState().nodes.get(nodeId);
+    if (!node) {
+      logger.warn("Attempted to update progress for non-existent node", {
+        nodeId,
+        progress,
+      });
+      return;
+    }
+
+    const clampedProgress = Math.min(100, Math.max(0, progress));
+
+    logger.debug("Node progress updated", {
+      nodeId,
+      nodeName: node.name,
+      previousProgress: node.progress,
+      newProgress: clampedProgress,
+      message,
+    });
+
+    store.setState((draft: ExecutionGraphState) => {
+      const node = draft.nodes.get(nodeId);
+      if (!node) return;
+
+      node.progress = clampedProgress;
+      if (message !== undefined) {
+        node.message = message;
+      }
+
+      // Update cached progress
+      draft.cachedProgress = calculateProgress(draft);
     });
   }
 
@@ -141,6 +271,23 @@ export function createExecutionGraphStore() {
    * Mark execution as complete
    */
   function completeExecution() {
+    const state = store.getState();
+    const duration = state.startTime ? Date.now() - state.startTime : 0;
+    const completedNodes = Array.from(state.nodes.values()).filter(
+      (n) => n.state === "completed",
+    ).length;
+    const errorNodes = Array.from(state.nodes.values()).filter(
+      (n) => n.state === "error",
+    ).length;
+
+    logger.info("Execution graph completed", {
+      totalNodes: state.nodes.size,
+      completedNodes,
+      errorNodes,
+      duration,
+      totalWeight: state.totalWeight,
+    });
+
     store.setState((draft: ExecutionGraphState) => {
       draft.isExecuting = false;
       draft.endTime = Date.now();
@@ -161,6 +308,7 @@ export function createExecutionGraphStore() {
       isExecuting: false,
       startTime: null,
       endTime: null,
+      cachedProgress: 0,
     }));
   }
 
@@ -168,6 +316,7 @@ export function createExecutionGraphStore() {
     ...store,
     initializeGraph,
     setNodeState,
+    setNodeProgress,
     completeExecution,
     reset,
   };
@@ -184,7 +333,27 @@ export function getNodeState(
   return store.getState().nodes.get(nodeId);
 }
 
+/**
+ * Get overall execution progress (weighted by node progress)
+ *
+ * PERFORMANCE: This is O(1) - reads from cached value.
+ * The cache is updated on state mutations (O(n) but infrequent).
+ *
+ * Use with Zustand selector for optimal React performance:
+ * @example
+ * const progress = store.useStore((state) => state.cachedProgress);
+ */
 export function getExecutionProgress(
+  store: ReturnType<typeof createExecutionGraphStore>,
+): number {
+  return store.getState().cachedProgress;
+}
+
+/**
+ * Calculate simple completion-based progress (old behavior)
+ * Only counts fully completed nodes, ignoring individual progress
+ */
+export function getCompletionProgress(
   store: ReturnType<typeof createExecutionGraphStore>,
 ): number {
   const state = store.getState();

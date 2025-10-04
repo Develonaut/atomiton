@@ -37,7 +37,7 @@ export const editFieldsDefinition: NodeDefinition = createNodeDefinition({
     author: "Atomiton Core Team",
     description: "Edit existing fields or create new data fields",
     category: "data",
-    icon: "wand-2",
+    icon: "pencil",
     keywords: ["edit", "fields", "data", "create", "modify", "values", "set"],
     tags: ["data", "fields", "edit", "simple", "beginner", "core"],
     experimental: false,

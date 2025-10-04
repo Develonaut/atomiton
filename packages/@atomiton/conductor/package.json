@@ -45,18 +45,19 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
+    "@atomiton/logger": "workspace:^",
     "@atomiton/nodes": "workspace:*",
-    "@atomiton/utils": "workspace:*",
-    "@atomiton/rpc": "workspace:*"
+    "@atomiton/rpc": "workspace:*",
+    "@atomiton/utils": "workspace:*"
   },
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@types/node": "^20.0.0",
     "eslint": "^9",
+    "terser": "^5.44.0",
     "typescript": "^5",
     "vite": "^6.0.0",
-    "vitest": "^2.0.0",
-    "terser": "^5.44.0"
+    "vitest": "^2.0.0"
   }
 }
