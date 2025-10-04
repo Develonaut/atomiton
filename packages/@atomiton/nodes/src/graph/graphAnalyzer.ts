@@ -1,6 +1,6 @@
 import type { NodeDefinition } from "#core/types/definition";
-import { topologicalSort, findParallelBranches } from "#graph/topologicalSort";
 import { findCriticalPath } from "#graph/criticalPath";
+import { findParallelBranches, topologicalSort } from "#graph/topologicalSort";
 import { DEFAULT_NODE_WEIGHTS } from "#graph/weights";
 
 export type GraphNode = {
@@ -24,21 +24,39 @@ export type ExecutionGraph = {
 
 // Re-export for convenience
 export {
-  topologicalSort,
-  findParallelBranches,
-  findCriticalPath,
   DEFAULT_NODE_WEIGHTS,
+  findCriticalPath,
+  findParallelBranches,
+  topologicalSort,
 };
 
 /**
  * Analyze the execution graph to extract metadata for progress tracking
  */
-export function analyzeExecutionGraph(
-  flow: NodeDefinition,
-): ExecutionGraph | null {
-  // Only analyze group nodes
+export function analyzeExecutionGraph(flow: NodeDefinition): ExecutionGraph {
+  // Handle single nodes by creating a 1-node graph
   if (!flow.nodes || flow.nodes.length === 0) {
-    return null;
+    const weight =
+      DEFAULT_NODE_WEIGHTS[flow.type] || DEFAULT_NODE_WEIGHTS.default;
+    const graphNodes = new Map<string, GraphNode>();
+    graphNodes.set(flow.id, {
+      id: flow.id,
+      name: flow.name || flow.type,
+      type: flow.type,
+      weight,
+      dependencies: [],
+      dependents: [],
+      level: 0,
+    });
+
+    return {
+      nodes: graphNodes,
+      totalWeight: weight,
+      criticalPath: [flow.id],
+      criticalPathWeight: weight,
+      maxParallelism: 1,
+      executionOrder: [[flow.id]],
+    };
   }
 
   const nodes = flow.nodes;

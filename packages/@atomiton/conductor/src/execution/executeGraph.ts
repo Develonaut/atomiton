@@ -1,5 +1,8 @@
 /**
- * Execute a group of nodes (composite execution)
+ * Execute a graph of nodes (handles both single nodes and groups)
+ *
+ * This is the unified execution path for all nodes. Single nodes are treated
+ * as 1-node graphs, ensuring consistent progress tracking and execution flow.
  */
 
 import type {
@@ -11,11 +14,13 @@ import type {
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
 import type { ExecutionGraphStore } from "#execution/executionGraphStore";
+import { topologicalSort } from "@atomiton/nodes/graph";
+import { executeLocal } from "#execution/executeLocal";
 
 /**
- * Execute a group of nodes (composite execution)
+ * Execute a graph of nodes (handles both single nodes and groups)
  */
-export async function executeGroup(
+export async function executeGraph(
   node: NodeDefinition,
   context: ConductorExecutionContext,
   config: ConductorConfig,
@@ -32,17 +37,31 @@ export async function executeGroup(
   const nodeOutputs = new Map<string, unknown>();
 
   try {
+    // Handle single nodes (no children)
     if (!node.nodes || node.nodes.length === 0) {
-      return {
-        success: true,
-        data: {},
-        duration: Date.now() - startTime,
-        executedNodes: [node.id],
-      };
+      // Use transport if configured, otherwise execute locally
+      if (config.transport) {
+        const result = await config.transport.execute(node, context);
+        if (executionGraphStore) {
+          executionGraphStore.completeExecution();
+        }
+        return result;
+      }
+
+      const result = await executeLocal(
+        node,
+        context,
+        startTime,
+        config,
+        executionGraphStore,
+      );
+      if (executionGraphStore) {
+        executionGraphStore.completeExecution();
+      }
+      return result;
     }
 
     // Use topological sort from graph analyzer and flatten levels to sequential execution
-    const { topologicalSort } = await import("@atomiton/nodes/graph");
     const sortedLevels = topologicalSort(node.nodes, node.edges || []);
     const sortedIds = sortedLevels.flat();
     const sorted = sortedIds

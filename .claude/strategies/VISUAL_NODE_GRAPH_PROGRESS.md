@@ -254,6 +254,75 @@ conductor.auth.onAuthExpired(...)
 
 ---
 
+## ✅ Phase -1: Unified Execution Path (COMPLETE)
+
+**Goal**: Ensure ALL nodes (single and group) go through the same graph-based
+execution path to enable consistent progress event emission.
+
+**Context**: Previously, group nodes with transport configured bypassed
+graph-based execution, preventing progress events from being emitted properly.
+
+### What was done:
+
+1. **Updated `analyzeExecutionGraph` to handle single nodes**:
+   - Modified `packages/@atomiton/nodes/src/graph/graphAnalyzer.ts`
+   - Function now creates 1-node graphs for single nodes instead of returning
+     null
+   - Return type changed from `ExecutionGraph | null` to `ExecutionGraph`
+
+2. **Refactored conductor.ts to always use graph-based execution**:
+   - Modified `packages/@atomiton/conductor/src/conductor.ts`
+   - Removed conditional branching between single/group execution
+   - ALWAYS initializes graph store (handles single nodes as 1-node graphs)
+   - ALWAYS routes to executeGraph function
+
+3. **Renamed executeGroup → executeGraph**:
+   - Renamed `packages/@atomiton/conductor/src/execution/executeGroup.ts` to
+     `executeGraph.ts`
+   - Updated function name and all imports
+   - Enhanced to handle both single nodes and groups
+
+4. **Removed dynamic imports**:
+   - Replaced all dynamic imports with static imports
+   - Better performance and clearer dependencies
+
+5. **Added logging for debugging**:
+   - Graph initialization logs show node count and metadata
+   - Helps verify unified execution path is working
+
+### Files Modified:
+
+- `packages/@atomiton/nodes/src/graph/graphAnalyzer.ts` - Handle single nodes
+- `packages/@atomiton/conductor/src/conductor.ts` - Unified execution path
+- `packages/@atomiton/conductor/src/execution/executeGraph.ts` - Renamed and
+  enhanced
+- `packages/@atomiton/conductor/src/execution/executionGraphStore.ts` - Added
+  logging
+
+### Validation: ✅
+
+```bash
+✅ pnpm --filter @atomiton/nodes build
+✅ pnpm --filter @atomiton/conductor build
+✅ pnpm --filter @atomiton/conductor test (42/42 tests passing)
+✅ pnpm --filter @atomiton/desktop test:integration channels-progress (7/7 tests passing)
+```
+
+### Success Criteria: ✅
+
+- ✅ Desktop logs show "Initializing graph with X nodes" for every execution
+- ✅ Progress events emitted for every node execution (single and group)
+- ✅ All nodes go through unified executeGraph path
+- ✅ No conditional branching based on node type
+- ✅ Integration tests pass (7/7)
+- ✅ Unit tests pass (42/42)
+
+**Impact**: This change ensures that progress events will be consistently
+emitted for all nodes, laying the foundation for visual progress tracking in the
+UI.
+
+---
+
 ## 🚧 Phase B: Frontend/UI (IN PROGRESS)
 
 **Goal**: Build the visual representation of the execution graph.

@@ -1,10 +1,14 @@
 /**
  * Functional Conductor Implementation
  *
- * Orchestrates node execution using the simple NodeExecutable interface
- * from @atomiton/nodes, adding rich execution context and metadata.
+ * Orchestrates node execution using a unified graph-based execution path.
+ * All nodes (single and groups) are analyzed as execution graphs and routed
+ * through executeGraph for consistent progress tracking and execution flow.
  */
 
+import { executeGraph } from "#execution/executeGraph";
+import type { ExecutionGraphStore } from "#execution/executionGraphStore";
+import { createExecutionGraphStore } from "#execution/executionGraphStore";
 import type {
   ConductorConfig,
   ConductorExecutionContext,
@@ -12,11 +16,8 @@ import type {
   HealthResult,
 } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
+import { analyzeExecutionGraph } from "@atomiton/nodes/graph";
 import { generateExecutionId } from "@atomiton/utils";
-import { createExecutionGraphStore } from "#execution/executionGraphStore";
-import type { ExecutionGraphStore } from "#execution/executionGraphStore";
-import { executeLocal } from "#execution/executeLocal";
-import { executeGroup } from "#execution/executeGroup";
 
 /**
  * Create execution context with defaults
@@ -43,19 +44,8 @@ async function execute(
   config: ConductorConfig,
   executionGraphStore?: ExecutionGraphStore,
 ): Promise<ExecutionResult> {
-  const startTime = Date.now();
-
-  // Check if it has child nodes (it's a group)
-  if (node.nodes && node.nodes.length > 0) {
-    return executeGroup(node, context, config, executionGraphStore, execute);
-  }
-
-  // Single node - use transport if configured, otherwise execute locally
-  if (config.transport) {
-    return config.transport.execute(node, context);
-  }
-
-  return executeLocal(node, context, startTime, config, executionGraphStore);
+  // ALWAYS use graph-based execution path
+  return executeGraph(node, context, config, executionGraphStore, execute);
 }
 
 /**
@@ -86,31 +76,24 @@ export function createConductor(config: ConductorConfig = {}) {
       const context = createContext(node, contextOverrides);
       const startTime = Date.now();
 
-      // Initialize store if executing a group node
-      if (node.nodes && node.nodes.length > 0) {
-        try {
-          const { analyzeExecutionGraph } = await import(
-            "@atomiton/nodes/graph"
-          );
-          const graph = analyzeExecutionGraph(node);
-          if (graph) {
-            executionGraphStore.initializeGraph(graph);
-          }
-        } catch (error) {
-          // Graph analysis failed (e.g., cycle detected)
-          return {
-            success: false,
-            error: {
-              nodeId: node.id,
-              message: error instanceof Error ? error.message : String(error),
-              timestamp: new Date(),
-              stack: error instanceof Error ? error.stack : undefined,
-            },
-            duration: Date.now() - startTime,
-            executedNodes: [node.id],
-            context,
-          };
-        }
+      // ALWAYS initialize graph store (handles single nodes as 1-node graphs)
+      try {
+        const graph = analyzeExecutionGraph(node);
+        executionGraphStore.initializeGraph(graph);
+      } catch (error) {
+        // Graph analysis failed (e.g., cycle detected)
+        return {
+          success: false,
+          error: {
+            nodeId: node.id,
+            message: error instanceof Error ? error.message : String(error),
+            timestamp: new Date(),
+            stack: error instanceof Error ? error.stack : undefined,
+          },
+          duration: Date.now() - startTime,
+          executedNodes: [node.id],
+          context,
+        };
       }
 
       return execute(node, context, config, executionGraphStore);

@@ -71,6 +71,12 @@ export function createExecutionGraphStore() {
    * Initialize graph from analyzed execution graph
    */
   function initializeGraph(graph: ExecutionGraph) {
+    console.log(`[GRAPH] Initializing graph with ${graph.nodes.size} nodes`, {
+      totalWeight: graph.totalWeight,
+      criticalPath: graph.criticalPath,
+      maxParallelism: graph.maxParallelism,
+    });
+
     store.setState((draft: ExecutionGraphState) => {
       // Convert graph nodes to execution graph nodes
       const executionNodes = new Map<string, ExecutionGraphNode>();
