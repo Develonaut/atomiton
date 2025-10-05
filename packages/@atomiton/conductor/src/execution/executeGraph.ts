@@ -8,14 +8,16 @@
 import type {
   ConductorConfig,
   ConductorExecutionContext,
-  ExecutionError,
   ExecutionResult,
 } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import { generateExecutionId } from "@atomiton/utils";
 import type { ExecutionGraphStore } from "#execution/executionGraphStore";
 import { topologicalSort } from "@atomiton/nodes/graph";
 import { executeGraphNode } from "#execution/executeGraphNode";
+import { buildChildNodeInput } from "#execution/inputBuilder";
+import { buildChildExecutionContext } from "#execution/contextBuilder";
+import { createExecutionResult } from "#execution/resultBuilder";
+import { completeExecution } from "#execution/storeHelpers";
 
 /**
  * Execute a graph of nodes (handles both single nodes and groups)
@@ -42,25 +44,17 @@ export async function executeGraph(
       // TODO: Review transport usage - desktop conductor shouldn't use transport for local execution
       // Transport should only be used by browser conductor to delegate to desktop
       // This may be causing slowMo delays to be bypassed
-      // Use transport if configured, otherwise execute locally
-      if (config.transport) {
-        const result = await config.transport.execute(node, context);
-        if (executionGraphStore) {
-          executionGraphStore.completeExecution();
-        }
-        return result;
-      }
+      const result = config.transport
+        ? await config.transport.execute(node, context)
+        : await executeGraphNode(
+            node,
+            context,
+            startTime,
+            config,
+            executionGraphStore,
+          );
 
-      const result = await executeGraphNode(
-        node,
-        context,
-        startTime,
-        config,
-        executionGraphStore,
-      );
-      if (executionGraphStore) {
-        executionGraphStore.completeExecution();
-      }
+      completeExecution(executionGraphStore);
       return result;
     }
 
@@ -72,33 +66,22 @@ export async function executeGraph(
       .filter(Boolean);
 
     for (const childNode of sorted) {
-      // Build input from edges - start with empty object to avoid parent input leaking
-      const edgeInput = node.edges
-        ?.filter((edge) => edge.target === childNode.id)
-        .reduce((acc: Record<string, unknown>, edge) => {
-          const sourceOutput = nodeOutputs.get(edge.source);
-          if (sourceOutput !== undefined) {
-            const key = edge.targetHandle || "default";
-            return { ...acc, [key]: sourceOutput };
-          }
-          return acc;
-        }, {});
+      // Build child input from edges
+      const childInput = buildChildNodeInput(
+        childNode,
+        node.edges,
+        nodeOutputs,
+        context.input,
+      );
 
-      // Determine child input: use edge data if available, otherwise parent context
-      const hasEdgeData = edgeInput && Object.keys(edgeInput).length > 0;
-      const childInput = hasEdgeData
-        ? edgeInput // Edge data completely replaces parent input
-        : context.input || {}; // No edges: use parent input
+      // Build child context
+      const childContext = buildChildExecutionContext(
+        childNode,
+        context,
+        childInput,
+      );
 
-      const childContext: ConductorExecutionContext = {
-        nodeId: childNode.id,
-        executionId: generateExecutionId(`child_${childNode.id}`),
-        variables: context.variables,
-        input: childInput,
-        parentContext: context,
-        slowMo: context.slowMo,
-      };
-
+      // Execute child
       const result = await execute(
         childNode,
         childContext,
@@ -107,15 +90,13 @@ export async function executeGraph(
       );
 
       if (!result.success) {
-        if (executionGraphStore) {
-          executionGraphStore.completeExecution();
-        }
-        return {
+        completeExecution(executionGraphStore);
+        return createExecutionResult({
           success: false,
-          error: result.error,
+          error: result.error!,
           duration: Date.now() - startTime,
           executedNodes: [...executedNodes, ...(result.executedNodes || [])],
-        };
+        });
       }
 
       nodeOutputs.set(childNode.id, result.data);
@@ -126,34 +107,28 @@ export async function executeGraph(
     const lastNodeId = sorted[sorted.length - 1]?.id;
     const finalOutput = lastNodeId ? nodeOutputs.get(lastNodeId) : undefined;
 
-    if (executionGraphStore) {
-      executionGraphStore.completeExecution();
-    }
+    completeExecution(executionGraphStore);
 
-    return {
+    return createExecutionResult({
       success: true,
       data: finalOutput,
       duration: Date.now() - startTime,
       executedNodes: [node.id, ...executedNodes],
       context,
-    };
+    });
   } catch (error) {
-    const executionError: ExecutionError = {
-      nodeId: node.id,
-      message: error instanceof Error ? error.message : String(error),
-      timestamp: new Date(),
-      stack: error instanceof Error ? error.stack : undefined,
-    };
+    completeExecution(executionGraphStore);
 
-    if (executionGraphStore) {
-      executionGraphStore.completeExecution();
-    }
-
-    return {
+    return createExecutionResult({
       success: false,
-      error: executionError,
+      error: {
+        nodeId: node.id,
+        message: error instanceof Error ? error.message : String(error),
+        timestamp: new Date(),
+        stack: error instanceof Error ? error.stack : undefined,
+      },
       duration: Date.now() - startTime,
       executedNodes: [node.id, ...executedNodes],
-    };
+    });
   }
 }

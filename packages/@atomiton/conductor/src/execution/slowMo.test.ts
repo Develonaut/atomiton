@@ -271,8 +271,162 @@ describe("SlowMo Execution Tests", () => {
     });
   });
 
+  describe("slowMo with long-running nodes", () => {
+    it("critical: should run animation in parallel with execution and wait for both", async () => {
+      // This tests the scenario where a node (e.g., HTTP request) takes much longer
+      // than the slowMo animation. Animation and execution run IN PARALLEL.
+      // Progress should stay at 90% while execution continues, then jump to 100%.
+
+      const longRunningExecutable: NodeExecutable = {
+        execute: vi.fn().mockImplementation(async () => {
+          // Simulate a long-running operation (e.g., HTTP request) - 500ms
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          return { success: true, data: "completed" };
+        }),
+      };
+
+      const conductor = createConductor({
+        nodeExecutorFactory: {
+          getNodeExecutable: vi.fn().mockReturnValue(longRunningExecutable),
+        },
+      });
+
+      const node = createNodeDefinition({
+        id: "long-node",
+        type: "http-request",
+      });
+
+      const progressSnapshots: Array<{ progress: number; timestamp: number }> =
+        [];
+      const startTime = Date.now();
+
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = Array.from(
+            state.nodes.values(),
+          )[0] as ExecutionGraphNode;
+          if (nodeState?.progress !== undefined) {
+            progressSnapshots.push({
+              progress: nodeState.progress,
+              timestamp: Date.now() - startTime,
+            });
+          }
+        },
+      );
+
+      // Use small slowMo (20ms per step = ~100ms animation total)
+      // But node execution takes 500ms
+      // Total time should be ~500ms (max of animation and execution)
+      const result = await conductor.node.run(node, { slowMo: 20 });
+
+      unsubscribe();
+
+      // Verify result
+      expect(result.success).toBe(true);
+      expect(result.duration).toBeGreaterThanOrEqual(500); // Execution time dominates
+
+      // Verify the sequence:
+      // 1. Progress goes 0 → 20 → 40 → 60 → 80 → 90 (animation runs in parallel)
+      expect(progressSnapshots.some((s) => s.progress === 0)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 20)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 40)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 60)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 80)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 90)).toBe(true);
+
+      // 2. Find when progress hit 90% and when it hit 100%
+      const reached90 = progressSnapshots.find((s) => s.progress === 90);
+      const reached100 = progressSnapshots.find((s) => s.progress === 100);
+
+      expect(reached90).toBeDefined();
+      expect(reached100).toBeDefined();
+
+      // 3. Animation finishes at ~100ms (90%), execution at ~500ms (100%)
+      // Gap between 90% and 100% should be ~400ms
+      const gapBetween90And100 = reached100!.timestamp - reached90!.timestamp;
+
+      // Should be at least 350ms (allowing tolerance for test timing)
+      expect(gapBetween90And100).toBeGreaterThanOrEqual(350);
+
+      // 4. Progress at 90% should happen early (~100ms)
+      expect(reached90!.timestamp).toBeLessThan(150);
+
+      // 5. Progress at 100% should happen late (~500ms)
+      expect(reached100!.timestamp).toBeGreaterThanOrEqual(450);
+
+      // 6. Final progress should be 100%
+      expect(progressSnapshots[progressSnapshots.length - 1].progress).toBe(
+        100,
+      );
+    });
+
+    it("critical: should complete animation even when execution finishes first", async () => {
+      // Opposite scenario: node executes instantly but slowMo animation is slow
+      // Execution finishes first, but we wait for animation to complete before marking 100%
+      const fastExecutable: NodeExecutable = {
+        execute: vi.fn().mockResolvedValue("fast"), // Just return data, not result object
+      };
+
+      const conductor = createConductor({
+        nodeExecutorFactory: {
+          getNodeExecutable: vi.fn().mockReturnValue(fastExecutable),
+        },
+      });
+
+      const node = createNodeDefinition({
+        id: "fast-node",
+        type: "instant",
+      });
+
+      const progressSnapshots: Array<{ progress: number; timestamp: number }> =
+        [];
+      const startTime = Date.now();
+
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = Array.from(
+            state.nodes.values(),
+          )[0] as ExecutionGraphNode;
+          if (nodeState?.progress !== undefined) {
+            progressSnapshots.push({
+              progress: nodeState.progress,
+              timestamp: Date.now() - startTime,
+            });
+          }
+        },
+      );
+
+      // 50ms per step = ~250ms animation, but execution is instant
+      const result = await conductor.node.run(node, { slowMo: 50 });
+      const duration = Date.now() - startTime;
+
+      unsubscribe();
+
+      // Should show all progress steps even though execution is instant
+      expect(progressSnapshots.some((s) => s.progress === 0)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 20)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 40)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 60)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 80)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 90)).toBe(true);
+      expect(progressSnapshots.some((s) => s.progress === 100)).toBe(true);
+
+      // Total duration should be dominated by slowMo animation, not execution
+      expect(duration).toBeGreaterThanOrEqual(200); // At least ~4 steps of 50ms
+
+      // 100% should happen at the END of animation (~250ms), not instantly
+      const reached100 = progressSnapshots.find((s) => s.progress === 100);
+      expect(reached100).toBeDefined();
+      expect(reached100!.timestamp).toBeGreaterThanOrEqual(200);
+
+      // Result should be successful
+      expect(result.success).toBe(true);
+      expect(result.data).toBe("fast");
+    });
+  });
+
   describe("slowMo with execution errors", () => {
-    it("should respect slowMo even when execution fails", async () => {
+    it("should error immediately without waiting for slowMo animation", async () => {
       const failingExecutable: NodeExecutable = {
         execute: vi.fn().mockRejectedValue(new Error("Execution failed")),
       };
@@ -294,11 +448,11 @@ describe("SlowMo Execution Tests", () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
-      // Should still have taken time for the slowMo delays before failing
-      expect(duration).toBeGreaterThanOrEqual(80); // At least some delay occurred
+      // Should error immediately, not wait for slowMo delays
+      expect(duration).toBeLessThan(100); // Fast error response
     });
 
-    it("should update progress to 100 when node errors", async () => {
+    it("should freeze progress at current state when node errors", async () => {
       const failingExecutable: NodeExecutable = {
         execute: vi.fn().mockRejectedValue(new Error("Test error")),
       };
@@ -330,8 +484,8 @@ describe("SlowMo Execution Tests", () => {
 
       unsubscribe();
 
-      // Even though it failed, progress should be marked as 100 (complete/error)
-      expect(finalProgress).toBe(100);
+      // Progress should be frozen at its current state (likely 0 since error was immediate)
+      expect(finalProgress).toBeLessThanOrEqual(20); // Frozen at early state
     });
   });
 });

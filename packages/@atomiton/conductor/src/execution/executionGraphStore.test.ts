@@ -234,11 +234,11 @@ describe("ExecutionGraphStore", () => {
       expect(node?.progress).toBe(100);
     });
 
-    it("should set progress to 100 when node errors", () => {
+    it("should freeze progress at current state when node errors", () => {
       store.setNodeProgress("child-1", 50);
       store.setNodeState("child-1", "error", "Test error");
       const node = getNodeState(store, "child-1");
-      expect(node?.progress).toBe(100);
+      expect(node?.progress).toBe(50); // Progress should be frozen at current state
     });
 
     it("should update progress without updating message", () => {

@@ -184,7 +184,11 @@ export function createExecutionGraphStore() {
         state === "skipped"
       ) {
         node.endTime = Date.now();
-        node.progress = 100;
+        // Only set progress to 100 for completed and skipped states
+        // For error state, freeze progress at current value
+        if (state === "completed" || state === "skipped") {
+          node.progress = 100;
+        }
         const duration = node.endTime - (node.startTime || node.endTime);
 
         if (state === "completed") {

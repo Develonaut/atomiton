@@ -319,12 +319,13 @@ describe("Async Progress Tracking", () => {
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
 
-      // Node should be marked as error with 100% progress
+      // Node should be marked as error with progress frozen at 90%
+      // (animation completes quickly with slowMo=0, stops at 90 until execution finishes)
       const nodeState = conductor.node.store
         .getState()
         .nodes.get("almost-done");
       expect(nodeState?.state).toBe("error");
-      expect(nodeState?.progress).toBe(100);
+      expect(nodeState?.progress).toBe(90);
     });
 
     it("should handle all nodes failing", async () => {
@@ -928,7 +929,7 @@ describe("Async Progress Tracking", () => {
         .getState()
         .nodes.get("immediate-fail");
       expect(nodeState?.state).toBe("error");
-      expect(nodeState?.progress).toBe(100); // Error state sets progress to 100
+      expect(nodeState?.progress).toBe(0); // Progress frozen at 0 for immediate failure
     });
 
     it("should handle empty group (no nodes)", async () => {

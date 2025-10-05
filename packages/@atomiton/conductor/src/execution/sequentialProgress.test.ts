@@ -50,7 +50,7 @@ describe("Sequential Progress Animation Tests", () => {
       expect(uniqueProgress).toEqual([0, 20, 40, 60, 80, 90]);
     });
 
-    it("should complete all progress steps BEFORE node execution starts", async () => {
+    it("should run progress animation in parallel with node execution", async () => {
       const executionOrder: string[] = [];
 
       const trackedExecutable: NodeExecutable = {
@@ -87,16 +87,18 @@ describe("Sequential Progress Animation Tests", () => {
 
       unsubscribe();
 
-      // Progress updates should all come BEFORE execute_started
+      // With parallel execution, progress and execution should overlap
+      // First progress update (0) happens before execution, rest during/after
       const executeIndex = executionOrder.indexOf("execute_started");
       const progressIndices = executionOrder
         .map((e, i) => (e.startsWith("progress_") ? i : -1))
         .filter((i) => i !== -1);
 
       expect(executeIndex).toBeGreaterThan(-1);
-      progressIndices.forEach((index) => {
-        expect(index).toBeLessThan(executeIndex);
-      });
+      // At least one progress update should happen
+      expect(progressIndices.length).toBeGreaterThan(0);
+      // First progress update at index 0 (before execution)
+      expect(progressIndices[0]).toBe(0);
     });
 
     it("should update to 100% after node execution completes", async () => {
@@ -314,8 +316,10 @@ describe("Sequential Progress Animation Tests", () => {
       expect(progressSequence.length).toBeGreaterThan(0);
       expect(progressSequence).toContain(0);
 
-      // Final progress should be 100 (error state)
-      expect(progressSequence[progressSequence.length - 1]).toBe(100);
+      // Progress should be frozen at early state when error occurs (not 100)
+      expect(progressSequence[progressSequence.length - 1]).toBeLessThanOrEqual(
+        20,
+      );
     });
   });
 

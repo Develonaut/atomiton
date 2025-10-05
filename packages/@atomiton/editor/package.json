@@ -41,6 +41,7 @@
   "author": "Atomiton",
   "license": "MIT",
   "dependencies": {
+    "@atomiton/conductor": "workspace:*",
     "@atomiton/hooks": "workspace:*",
     "@atomiton/nodes": "workspace:*",
     "@atomiton/store": "workspace:*",
@@ -55,6 +56,7 @@
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@atomiton/vite-config": "workspace:*",
+    "@testing-library/react": "catalog:",
     "@types/dagre": "^0.7.53",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
