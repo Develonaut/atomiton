@@ -6,7 +6,7 @@ import { ExecutionGraphViewer } from "#templates/DebugPage/components/ExecutionG
 import { useTemplates } from "#store/useTemplates";
 import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function FlowsPage() {
   const { templates } = useTemplates();

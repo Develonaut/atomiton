@@ -627,13 +627,32 @@ test.afterEach(async ({ electronPage }) => {
 - [x] Parallelize E2E tests in CI
 - [x] **Expected Outcome:** 50-70% faster test execution
 
-### Week 2: Structural Improvements
+### Week 2: Framework Optimization (REVISED) ⚠️ PARTIALLY COMPLETE
 
-- [ ] Implement test sharding
-- [ ] Create test utilities package
-- [ ] Split large integration test files
-- [ ] Optimize E2E startup process
-- [ ] **Expected Outcome:** 5-minute total CI time
+**Guilliman Review Findings:** Phase 2 was reimplementing features that
+frameworks already provide.
+
+**Corrected Approach - Using Existing Tools:**
+
+- [x] ~~Test sharding~~ Use Turborepo's native concurrency (15 parallel tasks)
+- [x] ~~@atomiton/testing package~~ Keep test utilities co-located (conductor,
+      ui packages)
+- [ ] Split large integration test files (identified 33 files >200 lines - IN
+      PROGRESS)
+- [x] E2E timeout optimization (reduced from 60s to 10s, worker-scoped fixtures)
+- [x] Created root vitest.config.ts for IDE support
+
+**Infrastructure Dependencies (Documented & Configured):**
+
+- @atomiton/vite-config build added to test task dependencies in turbo.json
+- Cached by Turborepo after first build - minimal overhead on subsequent runs
+- Similar to eslint-config/typescript-config - infrastructure that tests consume
+
+**Key Learning:** "The framework already solved this" - leverage Vitest +
+Turborepo, not custom solutions
+
+- [ ] **Expected Outcome:** 5-minute total CI time (needs file splitting
+      completion)
 
 ### Week 3-4: Advanced Optimizations
 

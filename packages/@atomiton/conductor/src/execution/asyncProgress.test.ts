@@ -22,7 +22,7 @@ import { delay } from "@atomiton/utils";
 import { describe, expect, it, vi } from "vitest";
 
 describe("Async Progress Tracking", () => {
-  describe("Variable Timing Scenarios", () => {
+  describe.concurrent("Variable Timing Scenarios", () => {
     it("should handle nodes with random delays (10ms-100ms) completing at different rates", async () => {
       // Create executables with random delays
       const createDelayedExecutable = (
@@ -145,7 +145,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Concurrent Execution", () => {
+  describe.concurrent("Concurrent Execution", () => {
     it("should handle multiple nodes running in parallel with progress updates", async () => {
       const mockConfig = {
         nodeExecutorFactory: {
@@ -246,7 +246,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Intermittent Failures", () => {
+  describe.concurrent("Intermittent Failures", () => {
     it("should handle node failing at 25% progress", async () => {
       const failingExecutable: NodeExecutable = {
         execute: async () => {
@@ -417,7 +417,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Progress Calculation Accuracy", () => {
+  describe.concurrent("Progress Calculation Accuracy", () => {
     it("should ensure weighted progress is always monotonically increasing", async () => {
       const mockConfig = {
         nodeExecutorFactory: {
@@ -542,7 +542,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Out-of-Order Completion", () => {
+  describe.concurrent("Out-of-Order Completion", () => {
     it("should handle nodes completing in different order than started", async () => {
       // Create nodes with inverse timing - later nodes complete faster
       let nodeIndex = 0;
@@ -599,7 +599,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Race Conditions", () => {
+  describe.concurrent("Race Conditions", () => {
     it("should handle rapid concurrent state updates without corruption", async () => {
       const mockConfig = {
         nodeExecutorFactory: {
@@ -702,7 +702,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Event Ordering", () => {
+  describe.concurrent("Event Ordering", () => {
     it("should emit events in correct order even with async operations", async () => {
       const mockConfig = {
         nodeExecutorFactory: {
@@ -770,7 +770,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Performance Validation", () => {
+  describe.concurrent("Performance Validation", () => {
     it("should handle 100+ nodes efficiently", async () => {
       const mockConfig = {
         nodeExecutorFactory: {
@@ -903,7 +903,7 @@ describe("Async Progress Tracking", () => {
     });
   });
 
-  describe("Edge Cases", () => {
+  describe.concurrent("Edge Cases", () => {
     it("should handle node failing immediately (0% progress)", async () => {
       const immediateFailure: NodeExecutable = {
         execute: async () => {

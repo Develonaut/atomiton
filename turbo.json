@@ -76,7 +76,7 @@
       ]
     },
     "test": {
-      "dependsOn": [],
+      "dependsOn": ["@atomiton/vite-config#build"],
       "inputs": [
         "src/**",
         "test/**",
