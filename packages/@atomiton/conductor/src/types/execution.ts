@@ -15,7 +15,13 @@ export type ConductorExecutionContext = {
   nodeId: string;
   executionId: string;
   variables: Record<string, unknown>;
-  input?: unknown;
+  /**
+   * Input data passed to nodes via edges
+   * - Keys are handle names (defaults to "default")
+   * - Values are outputs from source nodes
+   * @example { default: 5, customHandle: { value: 42 } }
+   */
+  input?: Record<string, unknown>;
   parentContext?: ConductorExecutionContext;
   /**
    * Slow-motion delay in milliseconds for progress visualization (for development/debugging)

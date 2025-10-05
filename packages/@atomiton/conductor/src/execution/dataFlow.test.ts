@@ -3,7 +3,6 @@
  * Tests to verify that data correctly flows from one node to the next in sequential execution
  */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
@@ -28,8 +27,7 @@ describe("Data Flow Between Nodes", () => {
       execute: vi
         .fn()
         .mockImplementation(async (params: ConductorExecutionContext) => {
-          const input =
-            (params.input as any)?.default ?? (params as any).default ?? 5;
+          const input = (params.input?.default as number) ?? 5;
           const output = input * 2;
           executionLog.push({ node: "double", input: params, output });
           return output;
@@ -41,8 +39,7 @@ describe("Data Flow Between Nodes", () => {
       execute: vi
         .fn()
         .mockImplementation(async (params: ConductorExecutionContext) => {
-          const input =
-            (params.input as any)?.default ?? (params as any).default ?? 0;
+          const input = (params.input?.default as number) ?? 0;
           const output = input + 10;
           executionLog.push({ node: "addTen", input: params, output });
           return output;
@@ -54,8 +51,7 @@ describe("Data Flow Between Nodes", () => {
       execute: vi
         .fn()
         .mockImplementation(async (params: ConductorExecutionContext) => {
-          const input =
-            (params.input as any)?.default ?? (params as any).default ?? 0;
+          const input = (params.input?.default as number) ?? 0;
           const output = input * input;
           executionLog.push({ node: "square", input: params, output });
           return output;
@@ -150,12 +146,18 @@ describe("Data Flow Between Nodes", () => {
 
     // Node 2 should receive output from Node 1
     expect(executionLog[1].node).toBe("addTen");
-    expect((executionLog[1].input.input as any)?.default).toBe(10); // Critical: should be 10, not undefined!
+    expect(
+      (executionLog[1].input.input as Record<string, unknown> | undefined)
+        ?.default,
+    ).toBe(10); // Critical: should be 10, not undefined!
     expect(executionLog[1].output).toBe(20);
 
     // Node 3 should receive output from Node 2
     expect(executionLog[2].node).toBe("square");
-    expect((executionLog[2].input.input as any)?.default).toBe(20); // Critical: should be 20, not undefined!
+    expect(
+      (executionLog[2].input.input as Record<string, unknown> | undefined)
+        ?.default,
+    ).toBe(20); // Critical: should be 20, not undefined!
     expect(executionLog[2].output).toBe(400);
   });
 
@@ -170,8 +172,7 @@ describe("Data Flow Between Nodes", () => {
       execute: vi
         .fn()
         .mockImplementation(async (params: ConductorExecutionContext) => {
-          const input =
-            (params.input as any)?.default ?? (params as any).default ?? 5;
+          const input = (params.input?.default as number) ?? 5;
           const output = input * 2;
           executionLog.push({ node: "double", input: params, output });
           return output;
@@ -231,7 +232,9 @@ describe("Data Flow Between Nodes", () => {
       execute: vi
         .fn()
         .mockImplementation(async (params: ConductorExecutionContext) => {
-          const input = (params.input as any)?.customHandle;
+          const input = params.input?.customHandle as
+            | { value: number }
+            | undefined;
           const output = input?.value ?? 0;
           executionLog.push({ node: "target", input: params, output });
           return output;
@@ -269,9 +272,10 @@ describe("Data Flow Between Nodes", () => {
     expect(result.success).toBe(true);
 
     // Verify target received data on custom handle
-    expect((executionLog[1].input.input as any)?.customHandle).toEqual({
-      value: 42,
-    });
+    expect(
+      (executionLog[1].input.input as Record<string, unknown> | undefined)
+        ?.customHandle,
+    ).toEqual({ value: 42 });
     expect(executionLog[1].output).toBe(42);
   });
 

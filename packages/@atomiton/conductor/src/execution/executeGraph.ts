@@ -88,7 +88,7 @@ export async function executeGraph(
       const hasEdgeData = edgeInput && Object.keys(edgeInput).length > 0;
       const childInput = hasEdgeData
         ? edgeInput // Edge data completely replaces parent input
-        : (context.input as Record<string, unknown>) || {}; // No edges: use parent input
+        : context.input || {}; // No edges: use parent input
 
       const childContext: ConductorExecutionContext = {
         nodeId: childNode.id,
