@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 
 describe("createFieldsFromSchema", () => {
   describe("Basic Type Inference", () => {
-    it("should infer text control from string", () => {
+    it("critical: should infer text control from string", () => {
       const schema = v.object({
         name: v.string(),
       });
@@ -22,7 +22,7 @@ describe("createFieldsFromSchema", () => {
       });
     });
 
-    it("should infer number control from number", () => {
+    it("critical: should infer number control from number", () => {
       const schema = v.object({
         count: v.number(),
       });
@@ -50,7 +50,7 @@ describe("createFieldsFromSchema", () => {
       });
     });
 
-    it("should infer select control from enum", () => {
+    it("critical: should infer select control from enum", () => {
       const schema = v.object({
         status: v.enum(["active", "inactive", "pending"]),
       });
@@ -176,7 +176,7 @@ describe("createFieldsFromSchema", () => {
   });
 
   describe("Optional Fields", () => {
-    it("should mark optional fields as not required", () => {
+    it("critical: should mark optional fields as not required", () => {
       const schema = v.object({
         description: v.string().optional(),
       });
@@ -415,7 +415,7 @@ describe("createFieldsFromSchema", () => {
       ]);
     });
 
-    it("should merge derived config with overrides", () => {
+    it("critical: should merge derived config with overrides", () => {
       const schema = v.object({
         timeout: v.number().min(1000).max(5000).describe("Timeout in ms"),
       });
@@ -469,7 +469,7 @@ describe("createFieldsFromSchema", () => {
   });
 
   describe("Complex Real-World Example", () => {
-    it("should handle HTTP request schema correctly", () => {
+    it("critical: should handle HTTP request schema correctly", () => {
       const schema = v.object({
         method: v
           .enum(["GET", "POST", "PUT", "DELETE"])

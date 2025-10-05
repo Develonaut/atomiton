@@ -103,7 +103,7 @@ describe("SlowMo Execution Tests", () => {
   });
 
   describe("execution timing", () => {
-    it("should take longer with higher slowMo values", async () => {
+    it("slow: should take longer with higher slowMo values", async () => {
       const conductor = createConductor(createMockConfig());
 
       const node = createNodeDefinition({
@@ -129,7 +129,7 @@ describe("SlowMo Execution Tests", () => {
       expect(slowDuration).toBeGreaterThan(fastDuration * 3);
     });
 
-    it("should respect slowMo timing for multiple nodes", async () => {
+    it("slow: should respect slowMo timing for multiple nodes", async () => {
       const conductor = createConductor(createMockConfig());
 
       const child1 = createNodeDefinition({ id: "child-1", type: "test" });
@@ -226,7 +226,7 @@ describe("SlowMo Execution Tests", () => {
   });
 
   describe("slowMo edge cases", () => {
-    it("should handle very large slowMo values", async () => {
+    it("slow: should handle very large slowMo values", async () => {
       const conductor = createConductor(createMockConfig());
 
       const node = createNodeDefinition({

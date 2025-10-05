@@ -105,7 +105,7 @@ describe.concurrent("Browser Conductor Index", () => {
   });
 
   describe.concurrent("API Namespace Structure", () => {
-    it.concurrent("should expose node namespace", () => {
+    it.concurrent("critical: should expose node namespace", () => {
       const conductor = createConductor(mockConfig);
 
       expect(conductor.node).toBeDefined();
@@ -115,7 +115,7 @@ describe.concurrent("Browser Conductor Index", () => {
       expect(conductor.node.onError).toBeDefined();
     });
 
-    it.concurrent("should expose flow namespace", () => {
+    it.concurrent("critical: should expose flow namespace", () => {
       const conductor = createConductor(mockConfig);
 
       expect(conductor.flow).toBeDefined();

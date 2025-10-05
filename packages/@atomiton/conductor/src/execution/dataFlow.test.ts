@@ -14,7 +14,7 @@ describe("Data Flow Between Nodes", () => {
     vi.clearAllMocks();
   });
 
-  it("should pass data from one node to the next in a sequential chain", async () => {
+  it("critical: should pass data from one node to the next in a sequential chain", async () => {
     // Track what each node receives and outputs
     const executionLog: Array<{
       node: string;
@@ -161,7 +161,7 @@ describe("Data Flow Between Nodes", () => {
     expect(executionLog[2].output).toBe(400);
   });
 
-  it("should handle missing edges gracefully (nodes receive initial input)", async () => {
+  it("critical: should handle missing edges gracefully (nodes receive initial input)", async () => {
     const executionLog: Array<{
       node: string;
       input: Record<string, unknown>;
@@ -211,7 +211,7 @@ describe("Data Flow Between Nodes", () => {
     expect(executionLog[1].output).toBe(10); // 5 * 2 (same input)
   });
 
-  it("should pass data through multiple output/input handles", async () => {
+  it("critical: should pass data through multiple output/input handles", async () => {
     const executionLog: Array<{
       node: string;
       input: Record<string, unknown>;
@@ -279,7 +279,7 @@ describe("Data Flow Between Nodes", () => {
     expect(executionLog[1].output).toBe(42);
   });
 
-  it("should preserve context variables across node executions", async () => {
+  it("critical: should preserve context variables across node executions", async () => {
     let receivedVariables: Record<string, unknown> | undefined;
 
     const executable: NodeExecutable = {

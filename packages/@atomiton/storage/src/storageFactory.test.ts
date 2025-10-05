@@ -56,7 +56,7 @@ describe("Storage Factory", () => {
       storage = createInMemoryStorage();
     });
 
-    it("saves and loads data", async () => {
+    it("critical: saves and loads data", async () => {
       const testData = { id: "test", name: "Test Data" };
       await storage.save("test-key", testData);
 
@@ -133,7 +133,7 @@ describe("Storage Factory", () => {
       }
     });
 
-    it("saves and loads data", async () => {
+    it("critical: saves and loads data", async () => {
       const testData = { id: "test", name: "Test Data" };
       await storage.save("test-key", testData);
 
@@ -141,7 +141,7 @@ describe("Storage Factory", () => {
       expect(loaded).toEqual(testData);
     });
 
-    it("creates directories as needed", async () => {
+    it("critical: creates directories as needed", async () => {
       const testData = { id: "test", name: "Test Data" };
       await storage.save("nested/path/test-key", testData);
 

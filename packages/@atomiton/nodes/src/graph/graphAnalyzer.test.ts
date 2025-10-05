@@ -9,7 +9,7 @@ import {
 
 describe("Graph Analyzer", () => {
   describe("topologicalSort", () => {
-    it("should sort nodes in dependency order", () => {
+    it("critical: should sort nodes in dependency order", () => {
       const node1 = createNodeDefinition({ id: "node-1", type: "test" });
       const node2 = createNodeDefinition({ id: "node-2", type: "test" });
       const node3 = createNodeDefinition({ id: "node-3", type: "test" });
@@ -36,7 +36,7 @@ describe("Graph Analyzer", () => {
       expect(result).toEqual([["node-1"], ["node-2"], ["node-3"]]);
     });
 
-    it("should detect parallel execution opportunities", () => {
+    it("critical: should detect parallel execution opportunities", () => {
       const node1 = createNodeDefinition({ id: "node-1", type: "test" });
       const node2 = createNodeDefinition({ id: "node-2", type: "test" });
       const node3 = createNodeDefinition({ id: "node-3", type: "test" });
@@ -63,7 +63,7 @@ describe("Graph Analyzer", () => {
       expect(result).toEqual([["node-1"], ["node-2", "node-3"]]);
     });
 
-    it("should throw error on cycle detection", () => {
+    it("critical: should throw error on cycle detection", () => {
       const node1 = createNodeDefinition({ id: "node-1", type: "test" });
       const node2 = createNodeDefinition({ id: "node-2", type: "test" });
 
@@ -137,7 +137,7 @@ describe("Graph Analyzer", () => {
   });
 
   describe("analyzeExecutionGraph", () => {
-    it("should handle single nodes as 1-node graphs", () => {
+    it("critical: should handle single nodes as 1-node graphs", () => {
       const node = createNodeDefinition({ id: "node-1", type: "test" });
       const result = analyzeExecutionGraph(node);
 
@@ -148,7 +148,7 @@ describe("Graph Analyzer", () => {
       expect(result?.criticalPath).toEqual(["node-1"]);
     });
 
-    it("should analyze group node graph", () => {
+    it("critical: should analyze group node graph", () => {
       const child1 = createNodeDefinition({
         id: "child-1",
         type: "httpRequest",

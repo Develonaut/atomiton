@@ -21,7 +21,7 @@ describe("ExecutionGraphStore", () => {
   });
 
   describe("initializeGraph", () => {
-    it("should initialize graph from analysis", () => {
+    it("critical: should initialize graph from analysis", () => {
       const child1 = createNodeDefinition({ id: "child-1", type: "test" });
       const child2 = createNodeDefinition({ id: "child-2", type: "test" });
 
@@ -62,14 +62,14 @@ describe("ExecutionGraphStore", () => {
       store.initializeGraph(graph!);
     });
 
-    it("should update node state to executing", () => {
+    it("critical: should update node state to executing", () => {
       store.setNodeState("child-1", "executing");
       const node = getNodeState(store, "child-1");
       expect(node?.state).toBe("executing");
       expect(node?.startTime).toBeDefined();
     });
 
-    it("should update node state to completed", () => {
+    it("critical: should update node state to completed", () => {
       store.setNodeState("child-1", "executing");
       store.setNodeState("child-1", "completed");
       const node = getNodeState(store, "child-1");
@@ -77,7 +77,7 @@ describe("ExecutionGraphStore", () => {
       expect(node?.endTime).toBeDefined();
     });
 
-    it("should update node state to error with message", () => {
+    it("critical: should update node state to error with message", () => {
       store.setNodeState("child-1", "error", "Test error");
       const node = getNodeState(store, "child-1");
       expect(node?.state).toBe("error");
@@ -86,7 +86,7 @@ describe("ExecutionGraphStore", () => {
   });
 
   describe("completeExecution", () => {
-    it("should mark execution as complete", () => {
+    it("critical: should mark execution as complete", () => {
       const child1 = createNodeDefinition({ id: "child-1", type: "test" });
       const group = createNodeDefinition({
         id: "group-1",
@@ -121,7 +121,7 @@ describe("ExecutionGraphStore", () => {
       store.initializeGraph(graph!);
     });
 
-    it("should calculate execution progress", () => {
+    it("critical: should calculate execution progress", () => {
       expect(getExecutionProgress(store)).toBe(0);
 
       store.setNodeState("child-1", "completed");
@@ -258,7 +258,7 @@ describe("ExecutionGraphStore", () => {
   });
 
   describe("event subscription", () => {
-    it("should notify subscribers when graph state changes", () => {
+    it("critical: should notify subscribers when graph state changes", () => {
       const child1 = createNodeDefinition({ id: "child-1", type: "test" });
       const group = createNodeDefinition({
         id: "group-1",
@@ -327,7 +327,7 @@ describe("ExecutionGraphStore", () => {
       store.initializeGraph(graph!);
     });
 
-    it("should track progress for multiple nodes independently", () => {
+    it("critical: should track progress for multiple nodes independently", () => {
       store.setNodeProgress("child-1", 100, "Done");
       store.setNodeProgress("child-2", 50, "In progress");
       store.setNodeProgress("child-3", 0, "Not started");
@@ -344,7 +344,7 @@ describe("ExecutionGraphStore", () => {
       expect(node3?.message).toBe("Not started");
     });
 
-    it("should calculate weighted progress including individual node progress", () => {
+    it("critical: should calculate weighted progress including individual node progress", () => {
       // All nodes pending with 0% progress
       expect(getExecutionProgress(store)).toBe(0);
 

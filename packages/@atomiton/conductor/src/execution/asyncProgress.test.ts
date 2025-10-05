@@ -83,7 +83,7 @@ describe("Async Progress Tracking", () => {
       expect(progressSnapshots[progressSnapshots.length - 1]).toBe(100);
     });
 
-    it("should handle very fast nodes (< 5ms) vs very slow nodes (> 200ms)", async () => {
+    it("slow: should handle very fast nodes (< 5ms) vs very slow nodes (> 200ms)", async () => {
       const fastExecutable: NodeExecutable = {
         execute: async () => {
           await delay(2);
@@ -771,7 +771,7 @@ describe("Async Progress Tracking", () => {
   });
 
   describe.concurrent("Performance Validation", () => {
-    it("should handle 100+ nodes efficiently", async () => {
+    it("slow: should handle 100+ nodes efficiently", async () => {
       const mockConfig = {
         nodeExecutorFactory: {
           getNodeExecutable: vi.fn().mockReturnValue({
