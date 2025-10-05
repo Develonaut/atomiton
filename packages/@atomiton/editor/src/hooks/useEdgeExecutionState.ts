@@ -59,32 +59,40 @@ export function useEdgeExecutionState(
 
       if (!sourceNode || !targetNode) return;
 
-      // Determine edge state based on connected node states
+      // Check for error states first
+      const hasError =
+        sourceNode.state === "error" || targetNode.state === "error";
+
+      // Edge progress: only fills AFTER source node completes (and no errors)
+      // Sequential flow: Node1 (0-100%) → Edge (0-100%) → Node2 (0-100%)
+      let edgeProgress = 0;
+
+      if (!hasError && sourceNode.progress >= 100) {
+        // Source complete and no errors - edge fills to 100%
+        edgeProgress = 100;
+      }
+      // On error, edgeProgress stays at 0 (doesn't fill)
+
+      // Determine edge state based on whether it has reached the target node
       let edgeState = "inactive";
 
-      if (sourceNode.state === "error" || targetNode.state === "error") {
+      if (hasError) {
         edgeState = "error";
-      } else if (
-        sourceNode.state === "completed" &&
-        targetNode.state === "completed"
-      ) {
+      } else if (edgeProgress === 100 && targetNode.progress > 0) {
+        // Edge is complete AND target has started - turn green
         edgeState = "completed";
-      } else if (
-        sourceNode.state === "executing" ||
-        targetNode.state === "executing"
-      ) {
+      } else if (edgeProgress > 0) {
+        // Edge is filling but hasn't reached target - stay blue
         edgeState = "executing";
+      } else if (
+        sourceNode.state === "pending" ||
+        targetNode.state === "pending"
+      ) {
+        edgeState = "pending";
       }
 
       // Update execution state on ReactFlow edge wrapper (no React re-render)
       reactFlowEdge.setAttribute("data-edge-state", edgeState);
-
-      // Set edge progress based on node progress
-      // Edge progress is calculated from the connected nodes' progress
-      const edgeProgress = Math.min(
-        sourceNode.progress || 0,
-        targetNode.progress || 0,
-      );
 
       // Update stroke-dashoffset for linear progress bar effect
       if (pathElement && pathLength > 0) {
