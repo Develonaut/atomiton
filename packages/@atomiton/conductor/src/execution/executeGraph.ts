@@ -72,20 +72,23 @@ export async function executeGraph(
       .filter(Boolean);
 
     for (const childNode of sorted) {
-      // Build input from edges
-      const childInput = node.edges
+      // Build input from edges - start with empty object to avoid parent input leaking
+      const edgeInput = node.edges
         ?.filter((edge) => edge.target === childNode.id)
-        .reduce(
-          (acc: Record<string, unknown>, edge) => {
-            const sourceOutput = nodeOutputs.get(edge.source);
-            if (sourceOutput !== undefined) {
-              const key = edge.targetHandle || "default";
-              return { ...acc, [key]: sourceOutput };
-            }
-            return acc;
-          },
-          (context.input as Record<string, unknown>) || {},
-        );
+        .reduce((acc: Record<string, unknown>, edge) => {
+          const sourceOutput = nodeOutputs.get(edge.source);
+          if (sourceOutput !== undefined) {
+            const key = edge.targetHandle || "default";
+            return { ...acc, [key]: sourceOutput };
+          }
+          return acc;
+        }, {});
+
+      // Determine child input: use edge data if available, otherwise parent context
+      const hasEdgeData = edgeInput && Object.keys(edgeInput).length > 0;
+      const childInput = hasEdgeData
+        ? edgeInput // Edge data completely replaces parent input
+        : (context.input as Record<string, unknown>) || {}; // No edges: use parent input
 
       const childContext: ConductorExecutionContext = {
         nodeId: childNode.id,

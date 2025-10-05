@@ -10,6 +10,7 @@ import {
   getCompletedWeight,
   getEstimatedTimeRemaining,
   type ExecutionGraphNode,
+  type ExecutionGraphState,
 } from "#execution/executionGraphStore";
 
 describe("ExecutionGraphStore", () => {
@@ -267,7 +268,7 @@ describe("ExecutionGraphStore", () => {
       const graph = analyzeExecutionGraph(group);
 
       const events: Array<{ nodeCount: number; isExecuting: boolean }> = [];
-      const unsubscribe = store.subscribe((state) => {
+      const unsubscribe = store.subscribe((state: ExecutionGraphState) => {
         events.push({
           nodeCount: state.nodes.size,
           isExecuting: state.isExecuting,
@@ -296,7 +297,7 @@ describe("ExecutionGraphStore", () => {
       store.initializeGraph(graph!);
 
       let lastNode: ExecutionGraphNode | undefined;
-      const unsubscribe = store.subscribe((state) => {
+      const unsubscribe = store.subscribe((state: ExecutionGraphState) => {
         lastNode = Array.from(state.nodes.values())[0] as ExecutionGraphNode;
       });
 

@@ -260,12 +260,9 @@ export function createExecutionGraphStore() {
   function completeExecution() {
     const state = store.getState();
     const duration = state.startTime ? Date.now() - state.startTime : 0;
-    const completedNodes = Array.from(state.nodes.values()).filter(
-      (n): n is ExecutionGraphNode => n.state === "completed",
-    ).length;
-    const errorNodes = Array.from(state.nodes.values()).filter(
-      (n): n is ExecutionGraphNode => n.state === "error",
-    ).length;
+    const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
+    const completedNodes = nodes.filter((n) => n.state === "completed").length;
+    const errorNodes = nodes.filter((n) => n.state === "error").length;
 
     logger.info("Execution graph completed", {
       totalNodes: state.nodes.size,
@@ -346,9 +343,9 @@ export function getCompletionProgress(
   const state = store.getState();
   if (state.nodes.size === 0) return 0;
 
-  const completed = Array.from(state.nodes.values()).filter(
-    (n): n is ExecutionGraphNode =>
-      n.state === "completed" || n.state === "skipped",
+  const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
+  const completed = nodes.filter(
+    (n) => n.state === "completed" || n.state === "skipped",
   ).length;
 
   return Math.round((completed / state.nodes.size) * 100);
@@ -359,18 +356,17 @@ export function getNodesByState(
   nodeState: NodeExecutionState,
 ): ExecutionGraphNode[] {
   const state = store.getState();
-  return Array.from(state.nodes.values()).filter(
-    (n): n is ExecutionGraphNode => n.state === nodeState,
-  );
+  const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
+  return nodes.filter((n) => n.state === nodeState);
 }
 
 export function getCompletedWeight(
   store: ReturnType<typeof createExecutionGraphStore>,
 ): number {
   const state = store.getState();
-  const completed = Array.from(state.nodes.values()).filter(
-    (n): n is ExecutionGraphNode =>
-      n.state === "completed" || n.state === "skipped",
+  const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
+  const completed = nodes.filter(
+    (n) => n.state === "completed" || n.state === "skipped",
   );
 
   return completed.reduce((sum, node) => sum + node.weight, 0);

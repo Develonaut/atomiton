@@ -12,30 +12,24 @@ export function useNodeExecutionState(nodeId: string) {
   const nodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const unsubscribe = conductor.node.onProgress((event) => {
-      if (!nodeRef.current) return;
+    // Cache DOM references once to avoid expensive .closest() calls on every event
+    const reactFlowNode = nodeRef.current?.closest(
+      ".react-flow__node",
+    ) as HTMLElement | null;
+    const atomitonNode = nodeRef.current?.closest(
+      ".atomiton-node",
+    ) as HTMLElement | null;
 
-      // Find this node's state in the event
+    if (!reactFlowNode) return;
+
+    const unsubscribe = conductor.node.onProgress((event) => {
+      // Use find() for small arrays - faster than Map creation for typical node counts (3-50)
+      // Map would only be better if we needed multiple lookups per event
       const nodeState = event.nodes.find((n) => n.id === nodeId);
       if (!nodeState) return;
 
-      // Find the ReactFlow wrapper (.react-flow__node) by traversing up from our ref
-      const reactFlowNode = nodeRef.current.closest(
-        ".react-flow__node",
-      ) as HTMLElement | null;
-      if (!reactFlowNode) return;
-
-      // Find the inner .atomiton-node element for progress variable
-      const atomitonNode = nodeRef.current.closest(
-        ".atomiton-node",
-      ) as HTMLElement | null;
-
-      // Update execution state and critical path on ReactFlow wrapper (no React re-render)
+      // Update execution state on ReactFlow wrapper (no React re-render)
       reactFlowNode.setAttribute("data-execution-state", nodeState.state);
-      reactFlowNode.setAttribute(
-        "data-critical-path",
-        event.graph.criticalPath.includes(nodeId) ? "true" : "false",
-      );
 
       // Add accessibility attributes for screen readers
       const progressPercent = Math.round(nodeState.progress);

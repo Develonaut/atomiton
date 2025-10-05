@@ -33,7 +33,6 @@
   --atomiton-node-state-completed: var(--color-green);
   --atomiton-node-state-error: var(--color-red);
   --atomiton-node-state-skipped: var(--color-yellow);
-  --atomiton-node-critical-path-shadow: 0 0 10px rgba(var(--color-red-rgb), 0.5);
 }
 
 .react-flow__node,

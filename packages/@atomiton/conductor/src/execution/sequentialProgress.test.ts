@@ -3,6 +3,7 @@ import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
 import { DEFAULT_SLOWMO_MS } from "#execution/constants";
+import type { ExecutionGraphState } from "#execution/executionGraphStore";
 
 describe("Sequential Progress Animation Tests", () => {
   const mockExecutable: NodeExecutable = {
@@ -30,12 +31,14 @@ describe("Sequential Progress Animation Tests", () => {
 
       const progressSequence: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.progress !== undefined && nodeState.progress !== 100) {
-          progressSequence.push(nodeState.progress);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.progress !== undefined && nodeState.progress !== 100) {
+            progressSequence.push(nodeState.progress);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 10 });
 
@@ -70,13 +73,15 @@ describe("Sequential Progress Animation Tests", () => {
 
       const progressUpdates: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.progress !== undefined && nodeState.progress !== 100) {
-          progressUpdates.push(nodeState.progress);
-          executionOrder.push(`progress_${nodeState.progress}`);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.progress !== undefined && nodeState.progress !== 100) {
+            progressUpdates.push(nodeState.progress);
+            executionOrder.push(`progress_${nodeState.progress}`);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 10 });
 
@@ -104,12 +109,14 @@ describe("Sequential Progress Animation Tests", () => {
 
       const progressValues: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.progress !== undefined) {
-          progressValues.push(nodeState.progress);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.progress !== undefined) {
+            progressValues.push(nodeState.progress);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 10 });
 
@@ -187,12 +194,14 @@ describe("Sequential Progress Animation Tests", () => {
 
       const messages: string[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.message) {
-          messages.push(nodeState.message);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.message) {
+            messages.push(nodeState.message);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 10 });
 
@@ -234,17 +243,19 @@ describe("Sequential Progress Animation Tests", () => {
       const child1Progress: number[] = [];
       const child2Progress: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const node1 = state.nodes.get("child-1");
-        const node2 = state.nodes.get("child-2");
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const node1 = state.nodes.get("child-1");
+          const node2 = state.nodes.get("child-2");
 
-        if (node1?.progress !== undefined && node1.progress !== 100) {
-          child1Progress.push(node1.progress);
-        }
-        if (node2?.progress !== undefined && node2.progress !== 100) {
-          child2Progress.push(node2.progress);
-        }
-      });
+          if (node1?.progress !== undefined && node1.progress !== 100) {
+            child1Progress.push(node1.progress);
+          }
+          if (node2?.progress !== undefined && node2.progress !== 100) {
+            child2Progress.push(node2.progress);
+          }
+        },
+      );
 
       await conductor.node.run(group, { slowMo: 10 });
 
@@ -284,12 +295,14 @@ describe("Sequential Progress Animation Tests", () => {
 
       const progressSequence: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.progress !== undefined) {
-          progressSequence.push(nodeState.progress);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.progress !== undefined) {
+            progressSequence.push(nodeState.progress);
+          }
+        },
+      );
 
       const result = await conductor.node.run(node, { slowMo: 10 });
 
@@ -317,12 +330,14 @@ describe("Sequential Progress Animation Tests", () => {
 
       const stateUpdates: string[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.state) {
-          stateUpdates.push(nodeState.state);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.state) {
+            stateUpdates.push(nodeState.state);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 10 });
 
@@ -344,12 +359,14 @@ describe("Sequential Progress Animation Tests", () => {
 
       const statesDuringProgress: Set<string> = new Set();
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test-node");
-        if (nodeState?.progress !== undefined && nodeState.progress < 100) {
-          statesDuringProgress.add(nodeState.state);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test-node");
+          if (nodeState?.progress !== undefined && nodeState.progress < 100) {
+            statesDuringProgress.add(nodeState.state);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 10 });
 

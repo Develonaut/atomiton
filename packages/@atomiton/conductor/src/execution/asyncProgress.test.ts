@@ -11,7 +11,10 @@
  * - Concurrent progress updates
  */
 
-import { getExecutionProgress } from "#execution/executionGraphStore";
+import {
+  getExecutionProgress,
+  type ExecutionGraphState,
+} from "#execution/executionGraphStore";
 import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
@@ -57,9 +60,11 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       const result = await conductor.node.run(group, { slowMo: 0 });
 
@@ -117,9 +122,11 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       const result = await conductor.node.run(group, { slowMo: 0 });
 
@@ -173,9 +180,11 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       const result = await conductor.node.run(group, { slowMo: 5 });
 
@@ -217,9 +226,11 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressValues = new Set<number>();
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressValues.add(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressValues.add(state.cachedProgress);
+        },
+      );
 
       const result = await conductor.node.run(group, { slowMo: 1 });
 
@@ -433,9 +444,11 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       await conductor.node.run(group, { slowMo: 2 });
 
@@ -475,9 +488,11 @@ describe("Async Progress Tracking", () => {
       });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       await conductor.node.run(group, { slowMo: 5 });
 
@@ -507,12 +522,14 @@ describe("Async Progress Tracking", () => {
       const node = createNodeDefinition({ id: "test", type: "test" });
 
       const progressSnapshots: number[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = state.nodes.get("test");
-        if (nodeState) {
-          progressSnapshots.push(nodeState.progress);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = state.nodes.get("test");
+          if (nodeState) {
+            progressSnapshots.push(nodeState.progress);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 5 });
 
@@ -558,13 +575,15 @@ describe("Async Progress Tracking", () => {
       });
 
       const completionOrder: string[] = [];
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        for (const [id, node] of state.nodes.entries()) {
-          if (node.state === "completed" && !completionOrder.includes(id)) {
-            completionOrder.push(id);
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          for (const [id, node] of state.nodes.entries()) {
+            if (node.state === "completed" && !completionOrder.includes(id)) {
+              completionOrder.push(id);
+            }
           }
-        }
-      });
+        },
+      );
 
       const result = await conductor.node.run(group, { slowMo: 0 });
 
@@ -610,10 +629,12 @@ describe("Async Progress Tracking", () => {
       let updateCount = 0;
       const progressValues: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        updateCount++;
-        progressValues.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          updateCount++;
+          progressValues.push(state.cachedProgress);
+        },
+      );
 
       const result = await conductor.node.run(group, { slowMo: 0 });
 
@@ -662,9 +683,11 @@ describe("Async Progress Tracking", () => {
 
       const progressSnapshots: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       await conductor.node.run(group, { slowMo: 0 });
 
@@ -711,22 +734,24 @@ describe("Async Progress Tracking", () => {
         timestamp: number;
       }> = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        for (const [id, node] of state.nodes.entries()) {
-          const lastEvent = events[events.length - 1];
-          if (
-            !lastEvent ||
-            lastEvent.nodeId !== id ||
-            lastEvent.state !== node.state
-          ) {
-            events.push({
-              nodeId: id,
-              state: node.state,
-              timestamp: Date.now(),
-            });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          for (const [id, node] of state.nodes.entries()) {
+            const lastEvent = events[events.length - 1];
+            if (
+              !lastEvent ||
+              lastEvent.nodeId !== id ||
+              lastEvent.state !== node.state
+            ) {
+              events.push({
+                nodeId: id,
+                state: node.state,
+                timestamp: Date.now(),
+              });
+            }
           }
-        }
-      });
+        },
+      );
 
       await conductor.node.run(group, { slowMo: 0 });
 

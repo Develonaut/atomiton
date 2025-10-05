@@ -2,6 +2,10 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
+import type {
+  ExecutionGraphState,
+  ExecutionGraphNode,
+} from "#execution/executionGraphStore";
 
 describe("SlowMo Execution Tests", () => {
   const mockExecutable: NodeExecutable = {
@@ -166,12 +170,16 @@ describe("SlowMo Execution Tests", () => {
       const progressUpdates: number[] = [];
 
       // Subscribe to progress changes
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = Array.from(state.nodes.values())[0] as any;
-        if (nodeState?.progress !== undefined) {
-          progressUpdates.push(nodeState.progress);
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = Array.from(
+            state.nodes.values(),
+          )[0] as ExecutionGraphNode;
+          if (nodeState?.progress !== undefined) {
+            progressUpdates.push(nodeState.progress);
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 50 });
 
@@ -198,10 +206,12 @@ describe("SlowMo Execution Tests", () => {
 
       const progressSnapshots: number[] = [];
 
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        // Track overall execution progress
-        progressSnapshots.push(state.cachedProgress);
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          // Track overall execution progress
+          progressSnapshots.push(state.cachedProgress);
+        },
+      );
 
       await conductor.node.run(group, { slowMo: 20 });
 
@@ -305,12 +315,16 @@ describe("SlowMo Execution Tests", () => {
       });
 
       let finalProgress = 0;
-      const unsubscribe = conductor.node.store.subscribe((state: any) => {
-        const nodeState = Array.from(state.nodes.values())[0] as any;
-        if (nodeState?.progress !== undefined) {
-          finalProgress = nodeState.progress;
-        }
-      });
+      const unsubscribe = conductor.node.store.subscribe(
+        (state: ExecutionGraphState) => {
+          const nodeState = Array.from(
+            state.nodes.values(),
+          )[0] as ExecutionGraphNode;
+          if (nodeState?.progress !== undefined) {
+            finalProgress = nodeState.progress;
+          }
+        },
+      );
 
       await conductor.node.run(node, { slowMo: 20 });
 
