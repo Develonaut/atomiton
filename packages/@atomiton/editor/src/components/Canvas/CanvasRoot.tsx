@@ -1,5 +1,6 @@
 import {
   DELETE_KEY_CODES,
+  EDGE_TYPES,
   MAX_ZOOM,
   MIN_ZOOM,
   NODE_TYPES,
@@ -23,6 +24,7 @@ export function CanvasRoot({ children, className, ...other }: CanvasRootProps) {
     <CanvasStyled className={className}>
       <ReactFlow
         nodeTypes={NODE_TYPES}
+        edgeTypes={EDGE_TYPES}
         deleteKeyCode={DELETE_KEY_CODES}
         minZoom={MIN_ZOOM}
         maxZoom={MAX_ZOOM}

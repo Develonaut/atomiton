@@ -47,6 +47,7 @@ export function FlowSelector({
               onChange={() => onSelectFlow(flow.id)}
               disabled={disabled}
               className="mt-1 mr-3"
+              data-testid={`flow-radio-${flow.id}`}
             />
             <div className="flex-1">
               <div className="font-medium text-gray-900">{flow.name}</div>

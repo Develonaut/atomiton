@@ -38,6 +38,7 @@ export function FlowActionButtons({
         disabled={!selectedFlowId || isExecuting}
         variant="default"
         size="sm"
+        data-testid="run-flow-button"
       >
         <Icon name={isExecuting ? "loader" : "play"} className="w-4 h-4 mr-2" />
         {isExecuting ? "Running..." : "Run"}

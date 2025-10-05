@@ -1,11 +1,18 @@
+import { ProgressEdge } from "#components/Edge/ProgressEdge";
 import Node from "#components/Node";
 import { getAllNodeDefinitions } from "@atomiton/nodes/definitions";
-import type { NodeTypes } from "@xyflow/react";
+import type { EdgeTypes, NodeTypes } from "@xyflow/react";
 
 export const NODE_TYPES: NodeTypes = getAllNodeDefinitions().reduce(
   (acc, nodeDefinition) => ({ ...acc, [nodeDefinition.type]: Node }),
   {},
 );
+
+export const EDGE_TYPES: EdgeTypes = {
+  default: ProgressEdge,
+  smoothstep: ProgressEdge,
+  bezier: ProgressEdge,
+};
 
 export const DELETE_KEY_CODES = ["Delete", "Backspace"];
 

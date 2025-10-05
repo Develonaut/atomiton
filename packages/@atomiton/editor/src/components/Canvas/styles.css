@@ -166,15 +166,7 @@
   background-color: var(--atomiton-handle-bg-selected);
 }
 
-/* Pending state - use pseudo-element for consistency with other states */
-.react-flow__node[data-execution-state="pending"],
-.react-flow__node-input[data-execution-state="pending"],
-.react-flow__node-default[data-execution-state="pending"],
-.react-flow__node-output[data-execution-state="pending"],
-.react-flow__node-group[data-execution-state="pending"] {
-  border-color: transparent;
-}
-
+/* Pending state - overlay colored border on top of default gray border */
 .react-flow__node[data-execution-state="pending"] .atomiton-node::before,
 .react-flow__node-input[data-execution-state="pending"] .atomiton-node::before,
 .react-flow__node-default[data-execution-state="pending"] .atomiton-node::before,
@@ -182,9 +174,9 @@
 .react-flow__node-group[data-execution-state="pending"] .atomiton-node::before {
   content: "";
   position: absolute;
-  inset: -2px; /* -2px for 1px border effect (1px transparent + 1px visual) */
+  inset: -1px; /* -1px to overlay the existing 1px border */
   border-radius: inherit;
-  padding: 1px;
+  padding: 2px; /* 2px for thicker visual overlay */
   background: var(--atomiton-node-state-pending);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -201,16 +193,7 @@
   background-color: var(--atomiton-node-state-pending);
 }
 
-/* Executing state - keep border at 1px, hide it, and use pseudo-element for 3px visual */
-.react-flow__node[data-execution-state="executing"],
-.react-flow__node-input[data-execution-state="executing"],
-.react-flow__node-default[data-execution-state="executing"],
-.react-flow__node-output[data-execution-state="executing"],
-.react-flow__node-group[data-execution-state="executing"] {
-  border-color: transparent;
-}
-
-/* Create the progress border using a pseudo-element on the inner node */
+/* Executing state - overlay progress border on top of default gray border */
 .react-flow__node[data-execution-state="executing"] .atomiton-node::before,
 .react-flow__node-input[data-execution-state="executing"] .atomiton-node::before,
 .react-flow__node-default[data-execution-state="executing"] .atomiton-node::before,
@@ -220,13 +203,13 @@
 
   content: "";
   position: absolute;
-  inset: -4px; /* -4px to account for 1px border + 3px visual border */
+  inset: -1px; /* -1px to overlay the existing 1px border */
   border-radius: inherit;
-  padding: 3px;
+  padding: 2px; /* 2px for thicker visual overlay */
   background: conic-gradient(
     from -90deg,
     var(--atomiton-node-state-completed) var(--progress-deg),
-    var(--atomiton-node-border-default) var(--progress-deg) 360deg
+    transparent var(--progress-deg) 360deg
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -244,15 +227,7 @@
   background-color: var(--atomiton-node-state-completed);
 }
 
-/* Completed state - keep border at 1px and use pseudo-element for full 3px green border */
-.react-flow__node[data-execution-state="completed"],
-.react-flow__node-input[data-execution-state="completed"],
-.react-flow__node-default[data-execution-state="completed"],
-.react-flow__node-output[data-execution-state="completed"],
-.react-flow__node-group[data-execution-state="completed"] {
-  border-color: transparent;
-}
-
+/* Completed state - overlay solid green border on top of default gray border */
 .react-flow__node[data-execution-state="completed"] .atomiton-node::before,
 .react-flow__node-input[data-execution-state="completed"] .atomiton-node::before,
 .react-flow__node-default[data-execution-state="completed"] .atomiton-node::before,
@@ -260,9 +235,9 @@
 .react-flow__node-group[data-execution-state="completed"] .atomiton-node::before {
   content: "";
   position: absolute;
-  inset: -4px; /* -4px to account for 1px border + 3px visual border */
+  inset: -1px; /* -1px to overlay the existing 1px border */
   border-radius: inherit;
-  padding: 3px;
+  padding: 2px; /* 2px for thicker visual overlay */
   background: var(--atomiton-node-state-completed);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -279,16 +254,7 @@
   background-color: var(--atomiton-node-state-completed);
 }
 
-/* Error state - keep border at 1px and use pseudo-element for 3px red border */
-.react-flow__node[data-execution-state="error"],
-.react-flow__node-input[data-execution-state="error"],
-.react-flow__node-default[data-execution-state="error"],
-.react-flow__node-output[data-execution-state="error"],
-.react-flow__node-group[data-execution-state="error"] {
-  border-color: transparent;
-}
-
-/* Create the error progress border using a pseudo-element on the inner node */
+/* Error state - overlay error progress border on top of default gray border */
 .react-flow__node[data-execution-state="error"] .atomiton-node::before,
 .react-flow__node-input[data-execution-state="error"] .atomiton-node::before,
 .react-flow__node-default[data-execution-state="error"] .atomiton-node::before,
@@ -298,13 +264,13 @@
 
   content: "";
   position: absolute;
-  inset: -4px; /* -4px to account for 1px border + 3px visual border */
+  inset: -1px; /* -1px to overlay the existing 1px border */
   border-radius: inherit;
-  padding: 3px;
+  padding: 2px; /* 2px for thicker visual overlay */
   background: conic-gradient(
     from -90deg,
     var(--atomiton-node-state-error) var(--progress-deg),
-    var(--atomiton-node-border-default) var(--progress-deg) 360deg
+    transparent var(--progress-deg) 360deg
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -345,4 +311,49 @@
 .react-flow__node-output[data-execution-state],
 .react-flow__node-group[data-execution-state] {
   transition: border-color 0.3s ease;
+}
+
+/* ============================================================================
+ * Edge Progress Animations
+ * ============================================================================
+ * Dual-path approach for linear determinate progress bars:
+ * 1. Background path (gray) - always visible
+ * 2. Foreground path (green/red) - uses dasharray to progressively reveal
+ */
+
+/* Background path - always visible in gray */
+.react-flow__edge-path-bg {
+  stroke: var(--atomiton-node-border-default);
+  stroke-width: 2;
+}
+
+/* Foreground path states */
+.react-flow__edge[data-edge-state="inactive"] .react-flow__edge-path {
+  stroke: none; /* Hide when inactive, show only gray background */
+}
+
+.react-flow__edge[data-edge-state="executing"] .react-flow__edge-path {
+  stroke: var(--atomiton-node-state-completed);
+  stroke-width: 2;
+  /* dasharray and dashoffset set dynamically in JS for progress effect */
+  transition: stroke 0.3s ease, stroke-dashoffset 0.3s ease;
+  will-change: stroke-dashoffset; /* GPU acceleration hint */
+}
+
+.react-flow__edge[data-edge-state="completed"] .react-flow__edge-path {
+  stroke: var(--atomiton-node-state-completed);
+  stroke-width: 2;
+  /* Reset dasharray to show full path when completed */
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+  transition: stroke 0.3s ease;
+}
+
+.react-flow__edge[data-edge-state="error"] .react-flow__edge-path {
+  stroke: var(--atomiton-node-state-error);
+  stroke-width: 2;
+  /* Show full path in error state */
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+  transition: stroke 0.3s ease;
 }
