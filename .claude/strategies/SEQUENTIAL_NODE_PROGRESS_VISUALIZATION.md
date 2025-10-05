@@ -2627,6 +2627,383 @@ enhancement fallback for Firefox users.
 - [x] Screen reader accessible (ARIA attributes)
 - [x] Comprehensive test coverage (unit tests)
 - [x] Build and type-check pass
+
+---
+
+## Phase 3: Next Steps & Recommended Implementation Order
+
+### Overview
+
+With Phase 2 complete, the foundation for visual execution feedback is solid. The next phases focus on:
+1. **Testing** - E2E integration tests for safety net
+2. **Visual Enhancement** - Edge progress animations
+3. **Performance** - Concurrent progress updates
+
+### Phase 3A: E2E Integration Testing ⭐ **RECOMMENDED START**
+
+**Priority**: 🔴 **HIGHEST** - Establish safety net before further changes
+
+**Objective**: Comprehensive end-to-end test coverage for RPC integration and progress visualization
+
+#### Test Suites to Create
+
+1. **Sequential Node Execution Tests**
+   - File: `apps/e2e/src/integration/sequential-execution.e2e.ts`
+   - Coverage:
+     - Progress events fire in correct order [0, 20, 40, 60, 80, 90, 100]
+     - DOM attributes update correctly (`data-execution-state`, `--progress`)
+     - SlowMo parameter affects timing as expected
+     - ARIA attributes present and correct for accessibility
+     - CSS animations render correctly
+
+2. **Multi-Node Flow Tests**
+   - File: `apps/e2e/src/integration/multi-node-flow.e2e.ts`
+   - Coverage:
+     - Execute 3-node sequential flow end-to-end
+     - Verify each node completes before next starts
+     - Test graph-level progress calculation
+     - Verify critical path highlighting
+     - Test flow state persistence across executions
+
+3. **Error State Tests**
+   - File: `apps/e2e/src/integration/error-handling.e2e.ts`
+   - Coverage:
+     - Node execution failure visual indication
+     - Error state propagation to UI
+     - Partial graph completion (some nodes succeed, one fails)
+     - Error recovery and reset functionality
+     - Error messages display correctly
+
+4. **Visual Regression Tests**
+   - File: `apps/e2e/src/integration/visual-regression.e2e.ts`
+   - Coverage:
+     - Progress border renders correctly
+     - State transitions don't cause layout shifts
+     - Color scheme matches design system
+     - Responsive behavior across viewport sizes
+
+#### Test Infrastructure
+
+**New Files to Create**:
+- `apps/e2e/src/fixtures/rpc-integration.ts` - RPC mocking utilities
+- `apps/e2e/src/utils/rpc-test-helpers.ts` - Helper functions for RPC testing
+- `apps/e2e/src/utils/progress-assertions.ts` - Progress-specific assertions
+
+**Example Test Pattern**:
+```typescript
+// apps/e2e/src/integration/sequential-execution.e2e.ts
+test('should emit all 6 progress steps in correct order', async ({ page }) => {
+  // Navigate to debug page
+  await page.goto('/debug/flows');
+
+  // Select a flow
+  await page.click('[data-testid="flow-hello-world"]');
+
+  // Track progress events
+  const progressEvents: number[] = [];
+  await page.exposeFunction('trackProgress', (progress: number) => {
+    progressEvents.push(progress);
+  });
+
+  // Intercept conductor events
+  await page.evaluate(() => {
+    window.conductor.node.onProgress((event) => {
+      window.trackProgress(event.nodes[0].progress);
+    });
+  });
+
+  // Execute flow
+  await page.click('[data-testid="run-flow-button"]');
+
+  // Wait for completion
+  await page.waitForSelector('[data-execution-state="completed"]');
+
+  // Verify progress sequence
+  const uniqueProgress = Array.from(new Set(progressEvents));
+  expect(uniqueProgress).toEqual([0, 20, 40, 60, 80, 90, 100]);
+});
+```
+
+#### Success Criteria
+
+- ✅ 15+ E2E tests passing
+- ✅ Visual regression tests baseline established
+- ✅ CI/CD pipeline includes E2E tests
+- ✅ Test coverage report shows >80% coverage for progress visualization
+- ✅ All tests run in under 5 minutes
+
+**Estimated Time**: 4-6 hours
+
+---
+
+### Phase 3B: Edge Progress Animations
+
+**Priority**: 🟡 **MEDIUM** - High visual impact, builds on Phase 2
+
+**Objective**: Extend progress visualization to graph edges showing data flow propagation
+
+#### Implementation Plan
+
+1. **Edge State Tracking** (`executionGraphStore.ts`)
+   - Add edge state to `ExecutionGraphNode`: `propagatingTo: Set<string>`
+   - Track when data flows from completed node to dependent nodes
+   - Emit edge progress events alongside node progress
+   - Example:
+     ```typescript
+     export interface ExecutionGraphNode {
+       id: string;
+       state: NodeExecutionState;
+       progress: number;
+       message?: string;
+       error?: string;
+       propagatingTo?: Set<string>; // NEW: IDs of nodes receiving data
+     }
+     ```
+
+2. **CSS Edge Animation** (`styles.css`)
+   - Add animated `stroke-dashoffset` for edge progress
+   - Use CSS custom properties: `--edge-progress` (0-100)
+   - Gradient animation showing "data flowing" effect
+   - Color coding:
+     - Gray (inactive): `stroke: var(--edge-default)`
+     - Blue (propagating): `stroke: var(--edge-active)`
+     - Green (complete): `stroke: var(--edge-complete)`
+   - Example:
+     ```css
+     .react-flow__edge[data-edge-state="propagating"] .react-flow__edge-path {
+       stroke: var(--edge-active);
+       stroke-dasharray: 5 5;
+       stroke-dashoffset: calc(100 - var(--edge-progress));
+       animation: dash 1s linear infinite;
+     }
+
+     @keyframes dash {
+       to {
+         stroke-dashoffset: 0;
+       }
+     }
+     ```
+
+3. **Edge Update Hook** (`useEdgeExecutionState.ts` - NEW)
+   - Similar to `useNodeExecutionState` but for ReactFlow edges
+   - Subscribe to conductor edge progress events
+   - Update `data-edge-state` and `--edge-progress` attributes
+   - Example:
+     ```typescript
+     export function useEdgeExecutionState(edgeId: string) {
+       const edgeRef = useRef<SVGPathElement>(null);
+
+       useEffect(() => {
+         const unsubscribe = conductor.node.onProgress((event) => {
+           // Find edges where source node is propagating
+           const sourceNode = event.nodes.find(n => n.propagatingTo?.has(edgeId));
+           if (!sourceNode || !edgeRef.current) return;
+
+           // Update edge state and progress
+           const edge = edgeRef.current.closest('.react-flow__edge');
+           edge?.setAttribute('data-edge-state', 'propagating');
+           edge?.style.setProperty('--edge-progress', String(sourceNode.progress));
+         });
+
+         return unsubscribe;
+       }, [edgeId]);
+
+       return edgeRef;
+     }
+     ```
+
+4. **Visual Coordination**
+   - Edge animation starts AFTER source node reaches 100%
+   - Edge animation completes BEFORE target node starts
+   - Smooth transition from node → edge → node
+   - Timing: Use same `slowMo` parameter for consistency
+
+#### Files to Modify
+
+- `packages/@atomiton/conductor/src/execution/executionGraphStore.ts` - Add edge state
+- `packages/@atomiton/conductor/src/execution/executeGraph.ts` - Emit edge events
+- `packages/@atomiton/editor/src/hooks/useEdgeExecutionState.ts` - NEW hook
+- `packages/@atomiton/editor/src/components/Canvas/styles.css` - Edge animations
+
+#### Success Criteria
+
+- ✅ Edges animate from source to target after node completion
+- ✅ Edge animation completes before next node starts
+- ✅ All existing tests still pass
+- ✅ New edge animation test suite (8+ tests)
+- ✅ No performance degradation (still 60fps)
+- ✅ Visual coordination looks smooth and natural
+
+**Estimated Time**: 2-3 hours
+
+---
+
+### Phase 3C: Concurrent Progress Updates
+
+**Priority**: 🟢 **LOW** - Performance optimization, requires refactor
+
+**Objective**: Optimize for parallel node execution with batched DOM updates
+
+#### Problem Statement
+
+Current implementation assumes sequential execution (one node at a time). Future parallel execution will require:
+- Multiple nodes in "executing" state simultaneously
+- Batched DOM updates to prevent layout thrashing
+- Progress deduplication to avoid redundant updates
+
+#### Implementation Plan
+
+1. **Batched Progress Updates**
+   - Collect multiple node progress updates in a queue
+   - Apply all DOM changes in single `requestAnimationFrame` callback
+   - Reduce layout thrashing from multiple synchronous updates
+   - Example:
+     ```typescript
+     class ProgressUpdateBatcher {
+       private updates = new Map<string, NodeProgressUpdate>();
+       private rafId: number | null = null;
+
+       schedule(nodeId: string, update: NodeProgressUpdate) {
+         this.updates.set(nodeId, update);
+
+         if (!this.rafId) {
+           this.rafId = requestAnimationFrame(() => {
+             this.flush();
+           });
+         }
+       }
+
+       private flush() {
+         for (const [nodeId, update] of this.updates) {
+           // Apply DOM updates
+           applyProgressUpdate(nodeId, update);
+         }
+         this.updates.clear();
+         this.rafId = null;
+       }
+     }
+     ```
+
+2. **Concurrent Node Support**
+   - Update `executionGraphStore` to handle simultaneous node execution
+   - Allow multiple nodes in "executing" state
+   - Coordinate progress animations for visual clarity
+   - Prevent visual overlap/confusion
+
+3. **Progress Deduplication**
+   - Prevent redundant DOM updates for same progress value
+   - Cache last-known progress per node
+   - Only update if progress value changes by ≥1%
+   - Example:
+     ```typescript
+     private lastProgress = new Map<string, number>();
+
+     shouldUpdate(nodeId: string, newProgress: number): boolean {
+       const last = this.lastProgress.get(nodeId) ?? -1;
+       const changed = Math.abs(newProgress - last) >= 1;
+
+       if (changed) {
+         this.lastProgress.set(nodeId, newProgress);
+       }
+
+       return changed;
+     }
+     ```
+
+#### Files to Modify
+
+- `packages/@atomiton/conductor/src/execution/executeGraph.ts` - Support parallel execution
+- `packages/@atomiton/conductor/src/execution/executionGraphStore.ts` - Concurrent state management
+- `packages/@atomiton/editor/src/hooks/useNodeExecutionState.ts` - Batched updates
+
+#### Success Criteria
+
+- ✅ Support 5+ nodes executing concurrently
+- ✅ DOM updates batched via `requestAnimationFrame`
+- ✅ No performance regression (maintain 60fps)
+- ✅ Progress deduplication reduces update frequency by 50%+
+- ✅ All existing tests still pass
+- ✅ New concurrent execution test suite (10+ tests)
+
+**Estimated Time**: 3-4 hours
+
+---
+
+### Recommended Implementation Order
+
+```
+Phase 3A (E2E Testing)
+    ↓
+    ✓ Safety net established
+    ✓ Regression protection
+    ↓
+Phase 3B (Edge Animations)
+    ↓
+    ✓ Visual feature complete
+    ✓ Tests validate behavior
+    ↓
+Phase 3C (Concurrent Progress)
+    ↓
+    ✓ Performance optimized
+    ✓ Ready for parallel execution
+```
+
+**Rationale**:
+
+1. **Start with Testing (3A)** - Catch regressions before making further changes
+2. **Then Visual Features (3B)** - Build on solid test foundation
+3. **Finally Performance (3C)** - Optimize once features are stable
+
+### Quality Gates
+
+All phases require:
+- ✅ Guilliman technical review (8.0+ score)
+- ✅ Karen quality review (PASS status)
+- ✅ All tests passing (unit + E2E)
+- ✅ No type errors
+- ✅ Build succeeds
+- ✅ User explicit approval before merge
+
+### Total Estimated Timeline
+
+- **Phase 3A**: 4-6 hours
+- **Phase 3B**: 2-3 hours
+- **Phase 3C**: 3-4 hours
+- **Total**: 9-13 hours
+
+---
+
+## Lessons Learned & Best Practices
+
+### What Worked Well
+
+1. **Strategy-First Approach**: Comprehensive planning document prevented scope creep
+2. **CSS Pseudo-elements**: Avoided React re-renders, achieved 60fps performance
+3. **Sequential Progress**: Guaranteed visual completion before execution
+4. **Quality Reviews**: Caught critical issues (misleading comments, missing accessibility)
+5. **Type Safety**: No `any` types in production code (test files excepted)
+
+### What Could Be Improved
+
+1. **Edge Animations Should Have Been Included**: Phase 2 feels incomplete without edge progress
+2. **E2E Tests Should Have Been Written First**: Would have caught integration issues earlier
+3. **Concurrent Progress Planning**: Didn't fully consider future parallel execution needs
+
+### Recommendations for Future Phases
+
+1. **Write E2E Tests First**: TDD approach for integration features
+2. **Consider Performance Early**: Don't wait until optimization phase
+3. **Visual Features in Pairs**: Nodes + Edges together next time
+4. **Document Deviations Immediately**: Don't wait until implementation summary
+
+---
+
+## Appendix: Related Documents
+
+- `.claude/TODO_INTEGRATION_TESTING.md` - Comprehensive E2E testing strategy
+- `.claude/ARCHITECTURE.md` - Package ownership and domain boundaries
+- `packages/@atomiton/conductor/README.md` - Conductor API documentation
+- `packages/@atomiton/editor/README.md` - Editor component documentation
 - [x] Documentation updated
 
 ### Lessons Learned
