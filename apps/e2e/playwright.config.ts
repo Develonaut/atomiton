@@ -22,7 +22,7 @@ export default defineConfig({
   testMatch: "**/*.e2e.ts",
   testIgnore: ["**/.disabled/**", "**/disabled/**"],
   fullyParallel: true,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 3 : undefined,
   timeout: 60000,
   retries: 1, // Retry failed tests once to handle flakiness
 

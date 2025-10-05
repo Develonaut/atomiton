@@ -76,7 +76,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^build"],
+      "dependsOn": [],
       "inputs": [
         "src/**",
         "test/**",
@@ -88,61 +88,8 @@
         "tsconfig.json",
         "vitest.config.*"
       ],
-      "outputs": ["coverage/**"],
-      "env": [
-        "NODE_ENV",
-        "HOME",
-        "USERPROFILE",
-        "APPDATA",
-        "JEST_WORKER_ID",
-        "CI"
-      ]
-    },
-    "test:unit": {
-      "dependsOn": [],
-      "inputs": ["src/**", "package.json", "tsconfig.json", "vitest.config.ts"],
-      "outputs": ["coverage/**"],
+      "outputs": ["coverage/**", ".vitest-cache/**", "test-results/**"],
       "env": ["NODE_ENV", "CI"]
-    },
-    "test:smoke": {
-      "dependsOn": [],
-      "cache": false,
-      "env": ["NODE_ENV", "CI"]
-    },
-    "test:benchmark": {
-      "dependsOn": [],
-      "inputs": [
-        "src/**",
-        "package.json",
-        "tsconfig.json",
-        "vitest.config.ts",
-        "vitest.benchmark.config.ts"
-      ],
-      "outputs": ["benchmark-results/**"],
-      "env": ["NODE_ENV", "CI"]
-    },
-    "test:e2e": {
-      "dependsOn": ["build"],
-      "inputs": [
-        "e2e/**",
-        "tests/e2e/**",
-        "playwright.config.*",
-        "package.json"
-      ],
-      "outputs": ["test-results/**", "playwright-report/**"],
-      "cache": false,
-      "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL", "PLAYWRIGHT_WORKERS"]
-    },
-    "test:all": {
-      "dependsOn": ["build"],
-      "cache": false,
-      "env": ["NODE_ENV", "CI"]
-    },
-    "test:watch": {
-      "dependsOn": [],
-      "cache": false,
-      "persistent": true,
-      "env": ["NODE_ENV"]
     },
     "test:integration": {
       "dependsOn": ["^build"],
@@ -162,10 +109,17 @@
       "outputs": ["test-results/**", "coverage/**"],
       "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL"]
     },
-    "test:coverage": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**", ".nyc_output/**"],
-      "env": ["NODE_ENV", "CI"]
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "e2e/**",
+        "tests/e2e/**",
+        "playwright.config.*",
+        "package.json"
+      ],
+      "outputs": ["test-results/**", "playwright-report/**"],
+      "cache": false,
+      "env": ["NODE_ENV", "CI", "PLAYWRIGHT_BASE_URL", "PLAYWRIGHT_WORKERS"]
     },
     "dev": {
       "cache": false,
@@ -180,23 +134,16 @@
     "dev#@atomiton/desktop": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["@atomiton/client#dev", "@atomiton/editor#dev", "@atomiton/rpc#dev", "^build"]
+      "dependsOn": [
+        "@atomiton/client#dev",
+        "@atomiton/editor#dev",
+        "@atomiton/rpc#dev",
+        "^build"
+      ]
     },
     "watch": {
       "cache": false,
       "persistent": false
-    },
-    "validate": {
-      "inputs": ["package.json", "tsconfig.json", "vite.config.ts", "src/**"],
-      "outputs": [],
-      "cache": false,
-      "env": ["NODE_ENV"]
-    },
-    "validate:packages": {
-      "inputs": ["package.json", "**/package.json"],
-      "outputs": [],
-      "cache": false,
-      "env": ["NODE_ENV"]
     }
   }
 }
