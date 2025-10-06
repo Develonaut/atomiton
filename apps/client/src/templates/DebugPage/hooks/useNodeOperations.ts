@@ -1,10 +1,12 @@
 import conductor from "#lib/conductor";
+import { createExecutionId } from "@atomiton/conductor/browser";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import {
   createSampleGroupNode,
   createSampleTransformNode,
   createTestWriteNode,
 } from "#templates/DebugPage/utils/sampleNodes";
+import { createLogger } from "@atomiton/logger/browser";
 import {
   createNodeDefinition,
   getNodeDefinition,
@@ -15,6 +17,8 @@ import {
   registerAllNodeSchemas,
 } from "@atomiton/nodes/schemas";
 import { useCallback, useEffect, useMemo, useState } from "react";
+
+const logger = createLogger({ scope: "NODE_OPERATIONS" });
 
 export function useNodeOperations() {
   const { addLog } = useDebugLogs();
@@ -41,7 +45,7 @@ export function useNodeOperations() {
       }
     } catch (error) {
       addLog(`Validation error: ${error}`);
-      console.error("Validation error:", error);
+      logger.error("Validation error:", error);
     }
   }, [nodeContent, addLog]);
 
@@ -50,7 +54,7 @@ export function useNodeOperations() {
       addLog("Executing node...");
       setIsExecuting(true);
       const nodeData = JSON.parse(nodeContent) as NodeDefinition;
-      const executionId = `exec_${Date.now()}`;
+      const executionId = createExecutionId(`exec_${Date.now()}`);
       setCurrentExecutionId(executionId);
 
       const result = await conductor.node.run(nodeData, { executionId });
@@ -81,7 +85,7 @@ export function useNodeOperations() {
       }
     } catch (error) {
       addLog(`❌ Execution error: ${error}`);
-      console.error("Execution error:", error);
+      logger.error("Execution error:", error);
     } finally {
       setIsExecuting(false);
       setCurrentExecutionId(null);
@@ -102,7 +106,7 @@ export function useNodeOperations() {
       setCurrentExecutionId(null);
     } catch (error) {
       addLog(`Cancel error: ${error}`);
-      console.error("Cancel error:", error);
+      logger.error("Cancel error:", error);
     }
   }, [currentExecutionId, addLog]);
 
@@ -185,14 +189,14 @@ export function useNodeOperations() {
       addLog(`🚀 Executing ${selectedNodeType} node...`);
       setIsExecuting(true);
 
-      const executionId = `exec_${Date.now()}`;
+      const executionId = createExecutionId(`exec_${Date.now()}`);
       const result = await conductor.node.run(node, { executionId });
 
       addLog(`✅ ${selectedNodeType} execution complete`);
       addLog(JSON.stringify(result, null, 2));
     } catch (error) {
       addLog(`❌ Execution error: ${error}`);
-      console.error("Execution error:", error);
+      logger.error("Execution error:", error);
     } finally {
       setIsExecuting(false);
     }

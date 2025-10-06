@@ -30,6 +30,17 @@ export type {
   NodeExecutionState,
 } from "#execution/executionGraphStore";
 
+export type {
+  ConductorEventEmitter,
+  ProgressHandler,
+  StartedHandler,
+  CompletedHandler,
+  ErrorHandler,
+  Unsubscribe,
+} from "#events";
+
+export type { ProgressEvent } from "#types/events";
+
 /**
  * Desktop conductor - just the base conductor
  * IPC setup is handled by RPC channel servers, not conductor

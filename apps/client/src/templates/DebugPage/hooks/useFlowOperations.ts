@@ -1,13 +1,18 @@
 import conductor, { DEFAULT_SLOWMO_MS } from "#lib/conductor";
+import type { ProgressEvent } from "@atomiton/conductor/browser";
+import { createExecutionId } from "@atomiton/conductor/browser";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ExecutionProgress } from "#templates/DebugPage/types";
+import { createLogger } from "@atomiton/logger/browser";
+
+const logger = createLogger({ scope: "FLOW_OPERATIONS" });
 
 export function useFlowOperations() {
   const { addLog, clearLogs } = useDebugLogs();
   const [isExecuting, setIsExecuting] = useState(false);
-  const [resetKey, setResetKey] = useState(0); // Used to force remount of components
+  const [resetKey, setResetKey] = useState(0);
   const [progress, setProgress] = useState<ExecutionProgress>({
     currentNode: 0,
     totalNodes: 0,
@@ -23,27 +28,23 @@ export function useFlowOperations() {
       | "validation"
       | "permission",
     errorNode: "random" as string | "random",
-    errorDelay: 0, // 0 = immediate, >0 = delayed (simulates mid-execution failure)
+    errorDelay: 0,
     simulateLongRunning: false,
     longRunningNode: "random" as string | "random",
     longRunningDelay: 5000,
   });
 
-  // Track current execution ID to filter events
   const currentExecutionIdRef = useRef<string | null>(null);
-
-  // Track completed nodes for progress
   const completedNodesRef = useRef<Set<string>>(new Set());
-
-  // Track execution trace from result (server-side trace)
   const executionTraceRef = useRef<unknown>(null);
+  // Track last known executing node name to prevent flashing
+  const lastExecutingNodeNameRef = useRef<string | undefined>(undefined);
 
-  // Cancel execution on page unload/refresh
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (currentExecutionIdRef.current) {
-        console.log(
-          "[CLEANUP] Page unloading - canceling execution:",
+        logger.info(
+          "Page unloading - canceling execution:",
           currentExecutionIdRef.current,
         );
         conductor.node.cancel(currentExecutionIdRef.current);
@@ -53,10 +54,9 @@ export function useFlowOperations() {
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      // Also cancel on component unmount
       if (currentExecutionIdRef.current) {
-        console.log(
-          "[CLEANUP] Component unmounting - canceling execution:",
+        logger.info(
+          "Component unmounting - canceling execution:",
           currentExecutionIdRef.current,
         );
         conductor.node.cancel(currentExecutionIdRef.current);
@@ -64,37 +64,53 @@ export function useFlowOperations() {
     };
   }, []);
 
-  // Subscribe to node events for progress updates
   useEffect(() => {
-    const unsubscribeProgress = conductor.node.onProgress?.((event) => {
-      if (currentExecutionIdRef.current) {
-        // Update progress bar with graph progress
-        const executingNode = event.nodes.find((n) => n.state === "executing");
-        setProgress((prev) => ({
-          ...prev,
-          graphProgress: event.progress,
-          currentNodeName: executingNode?.name,
-        }));
-      }
-    });
+    const unsubscribeProgress = conductor.node.onProgress?.(
+      (progressData: ProgressEvent) => {
+        if (currentExecutionIdRef.current) {
+          if (
+            !progressData ||
+            !progressData.nodes ||
+            !Array.isArray(progressData.nodes)
+          ) {
+            logger.error(
+              "Invalid progress data - missing or invalid nodes array:",
+              progressData,
+            );
+            return;
+          }
+
+          const executingNode = progressData.nodes.find(
+            (n) => n.state === "executing",
+          );
+
+          // Only update node name if there's a new executing node, preventing flash
+          if (executingNode?.name) {
+            lastExecutingNodeNameRef.current = executingNode.name;
+          }
+
+          setProgress((prev) => ({
+            ...prev,
+            graphProgress: progressData.progress,
+            currentNodeName: lastExecutingNodeNameRef.current,
+          }));
+        }
+      },
+    );
 
     const unsubscribeComplete = conductor.node.onComplete((event) => {
-      // Only process events for the current execution
       if (event.executionId !== currentExecutionIdRef.current) {
         return;
       }
 
-      // Track this node as completed
       completedNodesRef.current.add(event.nodeId);
       const completedCount = completedNodesRef.current.size;
 
-      // Update progress
       setProgress((prev) => ({
         ...prev,
         currentNode: completedCount,
       }));
 
-      // Log completion
       addLog(`  ✅ Node completed: ${event.nodeId}`);
     });
 
@@ -104,7 +120,6 @@ export function useFlowOperations() {
     };
   }, [addLog]);
 
-  // Run a flow
   const runFlow = useCallback(
     async (flow: NodeDefinition | null) => {
       if (!flow) {
@@ -121,10 +136,10 @@ export function useFlowOperations() {
           `⚙️  Execution options: slowMo=${slowMo}ms, debug=${JSON.stringify(debugOptions)}`,
         );
 
-        // Initialize progress
         const totalNodes = flow.nodes?.length || 0;
         completedNodesRef.current.clear();
-        executionTraceRef.current = null; // Clear previous trace
+        executionTraceRef.current = null;
+        lastExecutingNodeNameRef.current = undefined;
         setProgress({
           currentNode: 0,
           totalNodes,
@@ -133,8 +148,7 @@ export function useFlowOperations() {
         });
         addLog(`📊 Flow has ${totalNodes} nodes to execute`);
 
-        // Generate execution ID and set it for event filtering
-        const executionId = `flow_exec_${Date.now()}`;
+        const executionId = createExecutionId(`flow_exec_${Date.now()}`);
         currentExecutionIdRef.current = executionId;
 
         const contextOptions = {
@@ -162,15 +176,13 @@ export function useFlowOperations() {
           }),
         };
 
-        console.log("[DEBUG] Debug options state:", debugOptions);
-        console.log("[DEBUG] Context options being passed:", contextOptions);
+        logger.debug("Debug options state:", debugOptions);
+        logger.debug("Context options being passed:", contextOptions);
 
         const result = await conductor.node.run(flow, contextOptions);
 
-        // Store trace from result (server-side trace)
         executionTraceRef.current = result.trace;
 
-        // Check result and update final state
         if (result.success) {
           setProgress({
             currentNode: totalNodes,
@@ -180,22 +192,22 @@ export function useFlowOperations() {
           });
           addLog("🎉 Flow execution completed!");
 
-          // Output execution trace to console
           if (result.trace) {
             const executionDuration = Date.now() - executionStartTime;
-            console.group(
+            logger.info(
               `📊 Execution Trace: ${flow.name} (${executionDuration}ms)`,
+              {
+                config: { slowMo, totalNodes, executionId },
+                trace: result.trace,
+              },
             );
-            console.log("⚙️ Config:", { slowMo, totalNodes, executionId });
-            console.log("📈 Trace:", result.trace);
-            console.groupEnd();
           }
         } else {
           addLog(`❌ Flow execution error: ${result.error?.message}`);
         }
       } catch (error) {
         addLog(`❌ Flow execution error: ${error}`);
-        console.error("Flow execution error:", error);
+        logger.error("Flow execution error:", error);
       } finally {
         setIsExecuting(false);
         currentExecutionIdRef.current = null;
@@ -204,9 +216,8 @@ export function useFlowOperations() {
     [addLog, slowMo, debugOptions],
   );
 
-  // Reset all execution state
   const reset = useCallback(() => {
-    console.log("[DEBUG] Reset button clicked");
+    logger.debug("Reset button clicked");
     setProgress({
       currentNode: 0,
       totalNodes: 0,
@@ -215,14 +226,14 @@ export function useFlowOperations() {
     });
     completedNodesRef.current.clear();
     executionTraceRef.current = null;
+    lastExecutingNodeNameRef.current = undefined;
     currentExecutionIdRef.current = null;
     clearLogs();
-    setResetKey((prev) => prev + 1); // Increment to force remount
+    setResetKey((prev) => prev + 1);
     addLog("🔄 Reset execution state");
-    console.log("[DEBUG] Reset complete");
+    logger.debug("Reset complete");
   }, [clearLogs, addLog]);
 
-  // Get current trace from server result
   const getTrace = useCallback(() => {
     return executionTraceRef.current;
   }, []);

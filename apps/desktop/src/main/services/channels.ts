@@ -2,6 +2,7 @@ import type {
   ConductorExecutionContext,
   ExecutionGraphState,
   ExecutionResult,
+  ProgressEvent,
 } from "@atomiton/conductor/desktop";
 import { createConductor } from "@atomiton/conductor/desktop";
 import { createLogger } from "@atomiton/logger/desktop";
@@ -19,7 +20,6 @@ import { ipcMain } from "electron";
 
 const logger = createLogger({ scope: "CHANNELS" });
 
-// Functional channel manager interface
 export type ChannelManager = {
   trackWindow: (window: BrowserWindow) => void;
   dispose: () => void;
@@ -27,14 +27,13 @@ export type ChannelManager = {
   getChannelNames: () => string[];
 };
 
-// Functional factory for channel manager
 export const createChannelManager = (): ChannelManager => {
   const channels: ChannelServer[] = [];
   const windows = new Set<BrowserWindow>();
   const windowListeners = new Map<BrowserWindow, (() => void)[]>();
   let isDisposed = false;
+  const cleanupFunctions: (() => void)[] = [];
 
-  // Initialize all channel servers
   const initialize = () => {
     logger.info("Initializing channel servers...");
 
@@ -43,10 +42,8 @@ export const createChannelManager = (): ChannelManager => {
     const conductor = createConductor();
     logger.info("Conductor instance created for channel servers");
 
-    // Create logger channel server
     const loggerChannel = createLoggerChannelServer(ipcMain, { logger });
 
-    // Create node channel with direct method references and type parameters
     const nodeChannel = createNodeChannelServer<
       NodeDefinition,
       ConductorExecutionContext,
@@ -55,42 +52,39 @@ export const createChannelManager = (): ChannelManager => {
       execute: conductor.node.run,
     });
 
-    // Wire conductor's execution graph store to unified progress events
-    conductor.node.store.subscribe((state: ExecutionGraphState) => {
-      // Convert Map to array for IPC serialization
-      const nodesArray = Array.from(state.nodes.values());
+    // Wire conductor's events to unified progress events using event emitter
+    // This provides cleaner decoupling and allows for proper cleanup
+    const unsubscribeProgress = conductor.events.onProgress(
+      (state: ExecutionGraphState) => {
+        const nodesArray = Array.from(state.nodes.values());
+        const progress = state.cachedProgress;
+        const executing = nodesArray.filter((n) => n.state === "executing");
+        const message =
+          executing.length > 0
+            ? `Executing: ${executing.map((n) => n.name).join(", ")}`
+            : progress === 100
+              ? "All nodes completed"
+              : "Waiting to start...";
 
-      // Use cached weighted progress from execution graph
-      const progress = state.cachedProgress;
+        const progressData: ProgressEvent = {
+          nodeId: executing[0]?.id || "",
+          nodes: nodesArray,
+          progress,
+          message,
+          graph: {
+            executionOrder: state.executionOrder,
+            criticalPath: state.criticalPath,
+            totalWeight: state.totalWeight,
+            maxParallelism: state.maxParallelism,
+            edges: state.edges,
+          },
+        };
 
-      // Generate status message
-      const executing = nodesArray.filter((n) => n.state === "executing");
-      const message =
-        executing.length > 0
-          ? `Executing: ${executing.map((n) => n.name).join(", ")}`
-          : progress === 100
-            ? "All nodes completed"
-            : "Waiting to start...";
+        nodeChannel.broadcast("progress", progressData);
+      },
+    );
 
-      // Get root node ID (first node in the graph)
-      const nodeId = nodesArray[0]?.id || "unknown";
-
-      // Broadcast unified progress event with graph data
-      nodeChannel.broadcast("progress", {
-        nodeId,
-        executionId: "current-execution", // TODO: Track execution ID properly
-        progress,
-        message,
-        nodes: nodesArray,
-        graph: {
-          executionOrder: state.executionOrder,
-          criticalPath: state.criticalPath,
-          totalWeight: state.totalWeight,
-          maxParallelism: state.maxParallelism,
-          edges: state.edges,
-        },
-      });
-    });
+    cleanupFunctions.push(unsubscribeProgress);
 
     logger.info("Execution graph store wired to IPC broadcasts");
 
@@ -116,7 +110,6 @@ export const createChannelManager = (): ChannelManager => {
       "flow",
     ]);
 
-    // Register channel discovery handler
     ipcMain.handle("channels:list", () => {
       return ["logger", "node", "storage", "system", "flow"];
     });
@@ -124,7 +117,6 @@ export const createChannelManager = (): ChannelManager => {
     logger.info("Channel discovery handler registered");
   };
 
-  // Track window for broadcasts
   const trackWindow = (window: BrowserWindow) => {
     if (isDisposed) return;
 
@@ -134,7 +126,6 @@ export const createChannelManager = (): ChannelManager => {
       `Tracking window for broadcasts. Total windows: ${windows.size}`,
     );
 
-    // Pass window to all channels for broadcasting
     channels.forEach((channel, index) => {
       if (channel.trackWindow) {
         channel.trackWindow(window);
@@ -142,7 +133,6 @@ export const createChannelManager = (): ChannelManager => {
       }
     });
 
-    // Create event handlers that can be removed later
     const onClosed = () => {
       windows.delete(window);
       windowListeners.delete(window);
@@ -153,24 +143,27 @@ export const createChannelManager = (): ChannelManager => {
       logger.info("Window webContents destroyed");
     };
 
-    // Store listener references for cleanup
     windowListeners.set(window, [onClosed, onDestroyed]);
 
-    // Add event listeners
     window.on("closed", onClosed);
     window.webContents.on("destroyed", onDestroyed);
   };
 
-  // Dispose all channels
   const dispose = () => {
     if (isDisposed) return;
 
-    console.log("[CHANNELS] Disposing channel manager...");
+    logger.info("Disposing channel manager...");
 
-    // Mark as disposed first to prevent further logging
     isDisposed = true;
 
-    // Remove all window event listeners
+    cleanupFunctions.forEach((cleanup) => {
+      try {
+        cleanup();
+      } catch (error) {
+        logger.error("Error cleaning up event subscription:", error);
+      }
+    });
+
     for (const [window, listeners] of windowListeners) {
       try {
         window.removeListener("closed", listeners[0]);
@@ -180,38 +173,32 @@ export const createChannelManager = (): ChannelManager => {
       }
     }
 
-    // Dispose all channels
     channels.forEach((channel, index) => {
       try {
         channel.dispose();
-        console.log(`[CHANNELS] Channel ${index} disposed`);
+        logger.info(`Channel ${index} disposed`);
       } catch (error) {
-        console.error(`[CHANNELS] Error disposing channel ${index}:`, error);
+        logger.error(`Error disposing channel ${index}:`, error);
       }
     });
 
-    // Clear arrays and maps
     channels.length = 0;
     windows.clear();
     windowListeners.clear();
 
-    // Remove discovery handler
     try {
       ipcMain.removeHandler("channels:list");
     } catch {
       // Ignore errors when removing handlers during shutdown
     }
 
-    console.log("[CHANNELS] Channel manager disposed");
+    logger.info("Channel manager disposed");
   };
 
-  // Get channel count
   const getChannelCount = () => channels.length;
 
-  // Get channel names
   const getChannelNames = () => ["logger", "node", "storage", "system", "flow"];
 
-  // Initialize on creation
   initialize();
 
   return {
@@ -222,17 +209,14 @@ export const createChannelManager = (): ChannelManager => {
   };
 };
 
-// Convenience function for setting up channels with a main window
 export const setupChannels = (mainWindow: BrowserWindow): ChannelManager => {
-  console.log("[CHANNELS] Setting up channels for main window");
+  logger.info("Setting up channels for main window");
 
   const channelManager = createChannelManager();
 
-  // Track the main window
   channelManager.trackWindow(mainWindow);
 
-  // Log successful setup
-  console.log("[CHANNELS] Channel setup completed:", {
+  logger.info("Channel setup completed:", {
     channelCount: channelManager.getChannelCount(),
     channels: channelManager.getChannelNames(),
   });

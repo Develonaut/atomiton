@@ -41,6 +41,16 @@ export type { NodeExecutionState } from "#execution/executionGraphStore";
 
 export { DEFAULT_SLOWMO_MS } from "#execution/constants";
 
+export type {
+  ProgressEvent,
+  ProgressNodeSnapshot,
+  ProgressGraphMetadata,
+} from "#types/events";
+export { isValidProgressEvent } from "#types/events";
+
+export { createExecutionId, toExecutionId } from "#types/branded";
+export type { ExecutionId } from "#types/branded";
+
 /**
  * Internal factory function for creating conductor instances
  */

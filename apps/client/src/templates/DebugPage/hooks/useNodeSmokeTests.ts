@@ -1,8 +1,12 @@
 import conductor from "#lib/conductor";
+import { createExecutionId } from "@atomiton/conductor/browser";
 import { nodeSmokeTests } from "#templates/DebugPage/fixtures/node-smoke-tests";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { createLogger } from "@atomiton/logger/browser";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useState } from "react";
+
+const logger = createLogger({ scope: "NODE_SMOKE_TESTS" });
 
 export function useNodeSmokeTests(selectedNodeType: string | null) {
   const { addLog, clearLogs } = useDebugLogs();
@@ -42,7 +46,7 @@ export function useNodeSmokeTests(selectedNodeType: string | null) {
         });
 
         try {
-          const executionId = `smoke_${Date.now()}`;
+          const executionId = createExecutionId(`smoke_${Date.now()}`);
           const result = await conductor.node.run(node, { executionId });
 
           // Check if execution was successful
@@ -86,7 +90,7 @@ export function useNodeSmokeTests(selectedNodeType: string | null) {
       return results;
     } catch (error) {
       addLog(`❌ Smoke test error: ${error}`);
-      console.error("Smoke test error:", error);
+      logger.error("Smoke test error:", error);
     } finally {
       setIsExecuting(false);
     }

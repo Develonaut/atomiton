@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 import conductor from "#lib/conductor";
+import { createLogger } from "@atomiton/logger/browser";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+
+const logger = createLogger({ scope: "SYSTEM_OPERATIONS" });
 
 export function useSystemOperations() {
   const { addLog } = useDebugLogs();
@@ -28,7 +31,7 @@ export function useSystemOperations() {
     } catch (error) {
       addLog(`❌ Health check failed: ${error}`);
       addLog("IPC connection may be disconnected");
-      console.error("Health check error:", error);
+      logger.error("Health check error:", error);
     }
   }, [addLog]);
 
@@ -39,7 +42,7 @@ export function useSystemOperations() {
       addLog("System restart initiated");
     } catch (error) {
       addLog(`Restart error: ${error}`);
-      console.error("Restart error:", error);
+      logger.error("Restart error:", error);
     }
   }, [addLog]);
 
@@ -58,7 +61,7 @@ export function useSystemOperations() {
       addLog(`Execute result: ${JSON.stringify(result)}`);
     } catch (error) {
       addLog(`Execute error: ${error}`);
-      console.error("Execute error:", error);
+      logger.error("Execute error:", error);
     }
   }, [addLog]);
 
@@ -69,7 +72,7 @@ export function useSystemOperations() {
       addLog(`Health result: ${JSON.stringify(result)}`);
     } catch (error) {
       addLog(`Health error: ${error}`);
-      console.error("Health error:", error);
+      logger.error("Health error:", error);
     }
   }, [addLog]);
 

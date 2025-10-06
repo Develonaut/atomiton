@@ -111,6 +111,12 @@ const createMockConductor = () => {
     system: {
       health: vi.fn(),
     },
+    events: {
+      onProgress: vi.fn(),
+      onStarted: vi.fn(),
+      onCompleted: vi.fn(),
+      onError: vi.fn(),
+    },
     store: mockStore,
     execute: vi.fn(),
     health: vi.fn(),
@@ -139,7 +145,9 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
 
     // Setup mock conductor
     mockConductor = createMockConductor();
-    mockConductor.node.store.subscribe = vi.fn((callback) => {
+
+    // Mock the events.onProgress method to capture the callback
+    mockConductor.events.onProgress = vi.fn((callback) => {
       subscribeCallback = callback;
       return vi.fn(); // unsubscribe function
     });
@@ -147,7 +155,9 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
     // Setup mock node channel
     mockNodeChannel = createMockNodeChannel();
 
-    vi.mocked(createConductor).mockReturnValue(mockConductor);
+    vi.mocked(createConductor).mockReturnValue(
+      mockConductor as unknown as ReturnType<typeof createConductor>,
+    );
     vi.mocked(createNodeChannelServer).mockReturnValue(mockNodeChannel);
   });
 
@@ -156,15 +166,15 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
   });
 
   describe("Progress Event Broadcasting", () => {
-    it("should subscribe to conductor execution graph store", async () => {
+    it("should subscribe to conductor events.onProgress", async () => {
       // Import and initialize channels
       const { createChannelManager } = await import(
         "../main/services/channels"
       );
       createChannelManager();
 
-      expect(mockConductor.node.store.subscribe).toHaveBeenCalledTimes(1);
-      expect(mockConductor.node.store.subscribe).toHaveBeenCalledWith(
+      expect(mockConductor.events.onProgress).toHaveBeenCalledTimes(1);
+      expect(mockConductor.events.onProgress).toHaveBeenCalledWith(
         expect.any(Function),
       );
     });
