@@ -15,13 +15,6 @@ export { useEditorNode } from "#hooks/useEditorNode";
 export { useEditorNodes } from "#hooks/useEditorNodes";
 export { useEditorEdges, type EditorEdge } from "#hooks/useEditorEdges";
 export { useEditorViewport } from "#hooks/useEditorViewport";
-export {
-  useAnimationPreferences,
-  type AnimationPreferences,
-  type CompletionAnimation,
-  type ErrorAnimation,
-  type HandleAnimation,
-} from "#hooks/useAnimationPreferences";
 
 export {
   getLayoutedElements,

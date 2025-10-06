@@ -1,6 +1,5 @@
 import { conductor } from "@atomiton/conductor/browser";
 import { useEffect, useRef } from "react";
-import { getAnimationPreferences } from "#hooks/useAnimationPreferences";
 
 /**
  * Hook to subscribe a node to execution progress events
@@ -50,82 +49,10 @@ export function useNodeExecutionState(
         const nodeState = event.nodes.find((n) => n.id === nodeId);
         if (!nodeState) return;
 
-        const previousState = previousStateRef.current;
         const currentState = nodeState.state;
 
         // Update execution state on ReactFlow wrapper (no React re-render)
         reactFlowNode.setAttribute("data-execution-state", currentState);
-
-        // Apply animation attributes when transitioning to completion/error states
-        const preferences = getAnimationPreferences();
-
-        // Executing animation - pulse input handles when node starts executing
-        // Delay to offset from output handle pulse of previous node
-        if (currentState === "executing" && previousState !== "executing") {
-          if (preferences.handleAnimation !== "none") {
-            const inputHandles = reactFlowNode.querySelectorAll(
-              ".react-flow__handle.target",
-            );
-            // Delay input pulse by 200ms to create visual separation from output pulse
-            setTimeout(() => {
-              inputHandles.forEach((handle) => {
-                handle.setAttribute(
-                  "data-handle-animation",
-                  preferences.handleAnimation,
-                );
-                // Remove animation attribute after animation completes
-                setTimeout(() => {
-                  handle.removeAttribute("data-handle-animation");
-                }, 400); // Match --atomiton-handle-animation-duration
-              });
-            }, 200);
-          }
-        }
-
-        // Completion animation - trigger when transitioning to completed
-        if (currentState === "completed" && previousState !== "completed") {
-          if (preferences.completionAnimation !== "none") {
-            reactFlowNode.setAttribute(
-              "data-completion-animation",
-              preferences.completionAnimation,
-            );
-            // Remove animation attribute after animation completes to allow re-triggering
-            setTimeout(() => {
-              reactFlowNode.removeAttribute("data-completion-animation");
-            }, 600); // Match --atomiton-completion-animation-duration
-          }
-
-          // Pulse output handles when node completes
-          if (preferences.handleAnimation !== "none") {
-            const outputHandles = reactFlowNode.querySelectorAll(
-              ".react-flow__handle.source",
-            );
-            outputHandles.forEach((handle) => {
-              handle.setAttribute(
-                "data-handle-animation",
-                preferences.handleAnimation,
-              );
-              // Remove animation attribute after animation completes
-              setTimeout(() => {
-                handle.removeAttribute("data-handle-animation");
-              }, 400); // Match --atomiton-handle-animation-duration
-            });
-          }
-        }
-
-        // Error animation - trigger when transitioning to error
-        if (currentState === "error" && previousState !== "error") {
-          if (preferences.errorAnimation !== "none") {
-            reactFlowNode.setAttribute(
-              "data-error-animation",
-              preferences.errorAnimation,
-            );
-            // Remove animation attribute after animation completes
-            setTimeout(() => {
-              reactFlowNode.removeAttribute("data-error-animation");
-            }, 600); // Match --atomiton-completion-animation-duration
-          }
-        }
 
         // Store current state for next comparison
         previousStateRef.current = currentState;
