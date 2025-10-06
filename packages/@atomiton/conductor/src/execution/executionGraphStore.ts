@@ -87,7 +87,8 @@ export function createExecutionGraphStore() {
     for (const node of state.nodes.values()) {
       if (node.state === "completed" || node.state === "skipped") {
         completedWeight += node.weight;
-      } else if (node.state === "executing") {
+      } else if (node.state === "executing" || node.state === "error") {
+        // Include error nodes with their frozen progress
         completedWeight += node.weight * (node.progress / 100);
       }
     }

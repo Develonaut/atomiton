@@ -34,6 +34,38 @@ export type ConductorExecutionContext = {
    * - 7500 = super slow (15s per node)
    */
   slowMo?: number;
+  /**
+   * Debug options for simulating various execution scenarios
+   */
+  debug?: {
+    /**
+     * Simulate an error on a specific node
+     */
+    simulateError?: {
+      /** Node ID to fail on (or 'random' for a random node) */
+      nodeId: string | "random";
+      /** Type of error to simulate */
+      errorType:
+        | "generic"
+        | "timeout"
+        | "network"
+        | "validation"
+        | "permission";
+      /** Custom error message (optional) */
+      message?: string;
+      /** Delay in ms before throwing error (simulates mid-execution failure) */
+      delayMs?: number;
+    };
+    /**
+     * Simulate a long-running node
+     */
+    simulateLongRunning?: {
+      /** Node ID to delay (or 'random' for a random node) */
+      nodeId: string | "random";
+      /** Delay in milliseconds */
+      delayMs: number;
+    };
+  };
 };
 
 /**

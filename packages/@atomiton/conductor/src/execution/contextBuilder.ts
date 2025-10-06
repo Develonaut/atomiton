@@ -21,5 +21,6 @@ export function buildChildExecutionContext(
     input,
     parentContext,
     slowMo: parentContext.slowMo,
+    debug: parentContext.debug,
   };
 }

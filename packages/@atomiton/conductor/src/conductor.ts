@@ -33,6 +33,7 @@ function createContext(
     input: context?.input,
     parentContext: context?.parentContext,
     slowMo: context?.slowMo,
+    debug: context?.debug,
   };
 }
 

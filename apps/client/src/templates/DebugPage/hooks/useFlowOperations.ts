@@ -17,6 +17,15 @@ export function useFlowOperations() {
     graphProgress: 0,
   });
   const [slowMo, setSlowMo] = useState(DEFAULT_SLOWMO_MS);
+  const [debugOptions, setDebugOptions] = useState({
+    simulateError: false,
+    errorType: "generic" as "generic" | "timeout" | "network" | "validation" | "permission",
+    errorNode: "random" as string | "random",
+    errorDelay: 0, // 0 = immediate, >0 = delayed (simulates mid-execution failure)
+    simulateLongRunning: false,
+    longRunningNode: "random" as string | "random",
+    longRunningDelay: 5000,
+  });
 
   // Track current execution ID to filter events
   const currentExecutionIdRef = useRef<string | null>(null);
@@ -138,7 +147,7 @@ export function useFlowOperations() {
         const executionStartTime = Date.now();
 
         addLog(`🚀 Executing flow: ${flow.name}`);
-        addLog(`⚙️  Execution options: slowMo=${slowMo}ms`);
+        addLog(`⚙️  Execution options: slowMo=${slowMo}ms, debug=${JSON.stringify(debugOptions)}`);
 
         // Initialize progress
         const totalNodes = flow.nodes?.length || 0;
@@ -169,10 +178,32 @@ export function useFlowOperations() {
           },
         });
 
-        const result = await conductor.node.run(flow, {
+        const contextOptions = {
           executionId,
           slowMo,
-        });
+          ...((debugOptions.simulateError || debugOptions.simulateLongRunning) && {
+            debug: {
+              ...(debugOptions.simulateError && {
+                simulateError: {
+                  nodeId: debugOptions.errorNode,
+                  errorType: debugOptions.errorType,
+                  ...(debugOptions.errorDelay > 0 && { delayMs: debugOptions.errorDelay }),
+                },
+              }),
+              ...(debugOptions.simulateLongRunning && {
+                simulateLongRunning: {
+                  nodeId: debugOptions.longRunningNode,
+                  delayMs: debugOptions.longRunningDelay,
+                },
+              }),
+            },
+          }),
+        };
+
+        console.log('[DEBUG] Debug options state:', debugOptions);
+        console.log('[DEBUG] Context options being passed:', contextOptions);
+
+        const result = await conductor.node.run(flow, contextOptions);
 
         // Check result and update final state
         if (result.success) {
@@ -224,7 +255,7 @@ export function useFlowOperations() {
         currentExecutionIdRef.current = null;
       }
     },
-    [addLog, slowMo],
+    [addLog, slowMo, debugOptions],
   );
 
   // Reset all execution state
@@ -253,5 +284,7 @@ export function useFlowOperations() {
     resetKey,
     slowMo,
     setSlowMo,
+    debugOptions,
+    setDebugOptions,
   };
 }

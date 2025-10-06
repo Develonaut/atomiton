@@ -59,24 +59,20 @@ export function useEdgeExecutionState(
 
       if (!sourceNode || !targetNode) return;
 
-      // Check for error states first
-      const hasError =
-        sourceNode.state === "error" || targetNode.state === "error";
-
-      // Edge progress: only fills AFTER source node completes (and no errors)
+      // Edge progress: only fills AFTER source node completes
       // Sequential flow: Node1 (0-100%) → Edge (0-100%) → Node2 (0-100%)
       let edgeProgress = 0;
 
-      if (!hasError && sourceNode.progress >= 100) {
-        // Source complete and no errors - edge fills to 100%
+      // Only fill edge if source completed successfully (not error/skipped)
+      if (sourceNode.state === "completed" && sourceNode.progress >= 100) {
         edgeProgress = 100;
       }
-      // On error, edgeProgress stays at 0 (doesn't fill)
 
-      // Determine edge state based on whether it has reached the target node
+      // Determine edge state based on progress and connected nodes
       let edgeState = "inactive";
 
-      if (hasError) {
+      // If either connected node has error, edge shows error
+      if (sourceNode.state === "error" || targetNode.state === "error") {
         edgeState = "error";
       } else if (edgeProgress === 100 && targetNode.progress > 0) {
         // Edge is complete AND target has started - turn green
@@ -111,11 +107,6 @@ export function useEdgeExecutionState(
         reactFlowEdge.setAttribute(
           "aria-label",
           `Connection from ${sourceId} to ${targetId} completed successfully`,
-        );
-      } else if (edgeState === "error") {
-        reactFlowEdge.setAttribute(
-          "aria-label",
-          `Error in connection from ${sourceId} to ${targetId}`,
         );
       } else {
         reactFlowEdge.removeAttribute("aria-label");

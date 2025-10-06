@@ -18,6 +18,7 @@ import { buildChildNodeInput } from "#execution/inputBuilder";
 import { buildChildExecutionContext } from "#execution/contextBuilder";
 import { createExecutionResult } from "#execution/resultBuilder";
 import { completeExecution } from "#execution/storeHelpers";
+import { initializeDebugOptions } from "#execution/debugUtils";
 
 /**
  * Execute a graph of nodes (handles both single nodes and groups)
@@ -41,6 +42,9 @@ export async function executeGraph(
   try {
     // Handle single nodes (no children)
     if (!node.nodes || node.nodes.length === 0) {
+      // Initialize debug options for single node
+      initializeDebugOptions([node.id], context);
+
       // TODO: Review transport usage - desktop conductor shouldn't use transport for local execution
       // Transport should only be used by browser conductor to delegate to desktop
       // This may be causing slowMo delays to be bypassed
@@ -64,6 +68,9 @@ export async function executeGraph(
     const sorted = sortedIds
       .map((id) => node.nodes!.find((n) => n.id === id)!)
       .filter(Boolean);
+
+    // Initialize debug options - resolve random node selections
+    initializeDebugOptions(sortedIds, context);
 
     for (const childNode of sorted) {
       // Build child input from edges

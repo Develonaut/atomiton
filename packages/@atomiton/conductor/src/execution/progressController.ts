@@ -1,5 +1,5 @@
 /**
- * Progress animation utilities for visual execution feedback
+ * Progress controller utilities for execution feedback
  */
 
 import { delay } from "@atomiton/utils";
@@ -12,7 +12,7 @@ type ProgressSteps = {
 };
 
 /**
- * Generate weight-based progress steps for dynamic animation
+ * Generate weight-based progress steps for dynamic progress tracking
  */
 export function generateProgressSteps(weight: number): ProgressSteps {
   if (weight < 100) {
@@ -57,25 +57,31 @@ export function generateProgressSteps(weight: number): ProgressSteps {
 }
 
 /**
- * Create a progress animation controller for a node
+ * Create a progress controller for a node
  */
-export function createProgressAnimation(
+export function createProgressController(
   node: NodeDefinition,
   executionGraphStore: ExecutionGraphStore,
   slowMo: number,
 ): {
   start: () => Promise<void>;
   markComplete: () => void;
+  cancel: () => void;
 } {
   const nodeState = executionGraphStore.getState().nodes.get(node.id);
   const weight = nodeState?.weight ?? 100;
 
   const { steps, messages } = generateProgressSteps(weight);
   let markedComplete = false;
+  let cancelled = false;
 
   return {
     start: async () => {
       for (let i = 0; i < steps.length; i++) {
+        // Check if progress was cancelled (e.g., due to error)
+        if (cancelled) {
+          break;
+        }
         executionGraphStore.setNodeProgress(node.id, steps[i], messages[i]);
         if (i < steps.length - 1) {
           await delay(slowMo);
@@ -88,6 +94,9 @@ export function createProgressAnimation(
         executionGraphStore.setNodeState(node.id, "completed");
         markedComplete = true;
       }
+    },
+    cancel: () => {
+      cancelled = true;
     },
   };
 }

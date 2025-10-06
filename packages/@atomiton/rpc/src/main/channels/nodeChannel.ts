@@ -27,6 +27,24 @@ const nodeExecuteParamsSchema = v.object({
       input: v.unknown().optional(),
       parentContext: v.any().optional(),
       slowMo: v.number().optional(),
+      debug: v
+        .object({
+          simulateError: v
+            .object({
+              nodeId: v.string(),
+              errorType: v.string(),
+              message: v.string().optional(),
+              delayMs: v.number().optional(),
+            })
+            .optional(),
+          simulateLongRunning: v
+            .object({
+              nodeId: v.string(),
+              delayMs: v.number(),
+            })
+            .optional(),
+        })
+        .optional(),
     })
     .optional(),
 });
