@@ -59,8 +59,24 @@ export function useNodeExecutionState(
         // Apply animation attributes when transitioning to completion/error states
         const preferences = getAnimationPreferences();
 
-        // Note: Input handle animation removed to avoid timing conflict with edge animation
-        // Only output handles pulse when sending data (on completion)
+        // Executing animation - pulse input handles when node starts executing
+        if (currentState === "executing" && previousState !== "executing") {
+          if (preferences.handleAnimation !== "none") {
+            const inputHandles = reactFlowNode.querySelectorAll(
+              ".react-flow__handle.target",
+            );
+            inputHandles.forEach((handle) => {
+              handle.setAttribute(
+                "data-handle-animation",
+                preferences.handleAnimation,
+              );
+              // Remove animation attribute after animation completes
+              setTimeout(() => {
+                handle.removeAttribute("data-handle-animation");
+              }, 400); // Match --atomiton-handle-animation-duration
+            });
+          }
+        }
 
         // Completion animation - trigger when transitioning to completed
         if (currentState === "completed" && previousState !== "completed") {
