@@ -91,6 +91,23 @@ export function useNodeExecutionState(
               reactFlowNode.removeAttribute("data-completion-animation");
             }, 600); // Match --atomiton-completion-animation-duration
           }
+
+          // Pulse output handles when node completes
+          if (preferences.handleAnimation !== "none") {
+            const outputHandles = reactFlowNode.querySelectorAll(
+              ".react-flow__handle.source",
+            );
+            outputHandles.forEach((handle) => {
+              handle.setAttribute(
+                "data-handle-animation",
+                preferences.handleAnimation,
+              );
+              // Remove animation attribute after animation completes
+              setTimeout(() => {
+                handle.removeAttribute("data-handle-animation");
+              }, 400); // Match --atomiton-handle-animation-duration
+            });
+          }
         }
 
         // Error animation - trigger when transitioning to error
