@@ -1,7 +1,7 @@
 import conductor from "#lib/conductor/index.js";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
-import { useEditorNodes } from "@atomiton/editor";
+import { useEditorNodes, type EditorNode } from "@atomiton/editor";
 import { Button, Icon } from "@atomiton/ui";
 import { useState } from "react";
 
@@ -47,38 +47,32 @@ function RunFlow({ onClick, isRunning = false, flow }: RunFlowProps) {
         version: "1.0.0",
         name: "Editor Flow",
         position: { x: 0, y: 0 },
-        nodes: nodeArray.map(
-          (node: {
-            id: string;
-            type: string;
-            data: unknown;
-            position?: { x: number; y: number };
-          }) =>
-            createNodeDefinition({
-              id: node.id,
-              type:
-                ((node.data as Record<string, unknown>)?.name as string) ||
-                node.type ||
-                "unknown",
-              version:
-                ((node.data as Record<string, unknown>)?.version as string) ||
-                "1.0.0",
-              name: ((node.data as Record<string, unknown>)?.label ||
-                (node.data as Record<string, unknown>)?.name ||
-                node.type) as string,
-              position: node.position,
-              metadata:
-                ((node.data as Record<string, unknown>)?.metadata as Record<
-                  string,
-                  unknown
-                >) || {},
-              parameters:
-                (((node.data as Record<string, unknown>)?.parameters ||
-                  (node.data as Record<string, unknown>)?.config) as Record<
-                  string,
-                  unknown
-                >) || {},
-            }),
+        nodes: nodeArray.map((node: EditorNode) =>
+          createNodeDefinition({
+            id: node.id,
+            type:
+              ((node.data as Record<string, unknown>)?.name as string) ||
+              node.type ||
+              "unknown",
+            version:
+              ((node.data as Record<string, unknown>)?.version as string) ||
+              "1.0.0",
+            name: ((node.data as Record<string, unknown>)?.label ||
+              (node.data as Record<string, unknown>)?.name ||
+              node.type) as string,
+            position: node.position,
+            metadata:
+              ((node.data as Record<string, unknown>)?.metadata as Record<
+                string,
+                unknown
+              >) || {},
+            parameters:
+              (((node.data as Record<string, unknown>)?.parameters ||
+                (node.data as Record<string, unknown>)?.config) as Record<
+                string,
+                unknown
+              >) || {},
+          }),
         ),
       });
 
