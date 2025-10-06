@@ -9,6 +9,7 @@ import {
   type ExecutionGraphStore,
 } from "#execution/executionGraphStore";
 import type { ConductorConfig, ConductorExecutionContext } from "#types";
+import { toNodeId, toExecutionId } from "#types";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -36,8 +37,8 @@ describe("executeGraphNode", () => {
     };
 
     context = {
-      nodeId: "test-node",
-      executionId: "exec-123",
+      nodeId: toNodeId("test-node"),
+      executionId: toExecutionId("exec-123"),
       input: { default: "test-input" },
       variables: {},
       slowMo: 0,

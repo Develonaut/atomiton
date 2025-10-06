@@ -22,6 +22,8 @@ export type {
   NodeExecutorFactory,
 } from "#types/execution";
 
+export { ErrorCode } from "#types/error";
+
 export type {
   ConductorTransport,
   HealthResult,

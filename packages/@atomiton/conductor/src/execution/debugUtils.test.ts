@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
+import { toNodeId } from "#types";
 
 describe("Debug Utils Tests", () => {
   const mockExecutable: NodeExecutable = {
@@ -221,9 +222,12 @@ describe("Debug Utils Tests", () => {
         expect(result.success).toBe(false);
 
         // Track which nodes failed
-        if (result.executedNodes?.includes("child-1") && !result.executedNodes?.includes("child-2")) {
+        if (
+          result.executedNodes?.includes(toNodeId("child-1")) &&
+          !result.executedNodes?.includes(toNodeId("child-2"))
+        ) {
           erroredNodes.add("child-1");
-        } else if (result.executedNodes?.includes("child-2")) {
+        } else if (result.executedNodes?.includes(toNodeId("child-2"))) {
           erroredNodes.add("child-2");
         }
       }

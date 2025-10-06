@@ -4,6 +4,7 @@ import Icon from "#components/Icon";
 import Zoom from "#components/Zoom";
 import conductor from "#lib/conductor";
 import type { ExecutionResult } from "@atomiton/conductor/browser";
+import { ErrorCode } from "@atomiton/conductor/browser";
 import {
   createNodeDefinition,
   type NodeDefinition,
@@ -47,6 +48,7 @@ function Toolbar() {
       setOutput({
         success: false,
         error: {
+          code: ErrorCode.EXECUTION_FAILED,
           nodeId: groupNode.id,
           message: error instanceof Error ? error.message : "Unknown error",
           timestamp: new Date(),

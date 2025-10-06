@@ -7,7 +7,8 @@
 
 import { createTransport } from "@atomiton/rpc/renderer";
 import type { Transport } from "@atomiton/rpc/renderer";
-import type { ConductorTransport, ExecutionResult } from "#types";
+import type { ConductorTransport, ExecutionResult, ErrorCode } from "#types";
+import { createExecutionId, createNodeId } from "#types/branded";
 import type { ConductorExecutionContext } from "#types/execution";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
@@ -96,7 +97,7 @@ export function createFlowAPI(transport: ConductorTransport | undefined) {
             message:
               "No transport available for execution in browser environment",
             timestamp: new Date(),
-            code: "NO_TRANSPORT",
+            code: "NO_TRANSPORT" as ErrorCode,
           },
           duration: 0,
           executedNodes: [],
@@ -105,10 +106,12 @@ export function createFlowAPI(transport: ConductorTransport | undefined) {
 
       // Execute via transport (same as node.run does)
       return transport.execute(flow, {
-        nodeId: flow.id,
+        nodeId: createNodeId(flow.id),
         executionId:
           contextOverrides?.executionId ||
-          `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          createExecutionId(
+            `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          ),
         variables: contextOverrides?.variables || {},
         input: contextOverrides?.input,
         parentContext: contextOverrides?.parentContext,

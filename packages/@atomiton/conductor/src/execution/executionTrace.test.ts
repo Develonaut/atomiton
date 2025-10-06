@@ -13,6 +13,7 @@ import type {
   ConductorExecutionContext,
   ExecutionResult,
 } from "#types";
+import { toNodeId, toExecutionId } from "#types";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -50,8 +51,8 @@ describe("Execution Trace", () => {
     };
 
     context = {
-      nodeId: "test-node",
-      executionId: "exec-123",
+      nodeId: toNodeId("test-node"),
+      executionId: toExecutionId("exec-123"),
       input: { default: "test-input" },
       variables: {},
       slowMo: 0,
@@ -322,22 +323,15 @@ describe("Execution Trace", () => {
   describe("error scenarios", () => {
     it("should capture trace even when execution fails", async () => {
       const errorMessage = "Test error";
-      const mockTransport = {
-        execute: vi.fn().mockResolvedValue({
-          success: false,
-          error: {
-            nodeId: "single-node",
-            message: errorMessage,
-            timestamp: new Date(),
-          },
-          duration: 10,
-          executedNodes: ["single-node"],
-        }),
-      };
 
-      const configWithTransport: ConductorConfig = {
+      // Mock the node executor factory to return a failing executor
+      const failingConfig: ConductorConfig = {
         ...config,
-        transport: mockTransport,
+        nodeExecutorFactory: {
+          getNodeExecutable: vi.fn().mockReturnValue({
+            execute: vi.fn().mockRejectedValue(new Error(errorMessage)),
+          }),
+        },
       };
 
       const node = createNodeDefinition({
@@ -351,7 +345,7 @@ describe("Execution Trace", () => {
       const result = await executeGraph(
         node,
         context,
-        configWithTransport,
+        failingConfig, // Use config with failing executor
         executionGraphStore,
         mockExecute,
       );

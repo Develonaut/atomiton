@@ -118,7 +118,7 @@ Orchestration Layer
 @atomiton/conductor
   Purpose: Execution orchestration and context
   Owns: ExecutionContext, ExecutionResult, orchestration logic
-  Dependencies: @atomiton/nodes only
+  Dependencies: @atomiton/nodes
 
 Transport Layer
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -286,6 +286,216 @@ This co-location means:
 - ✅ Easy to maintain - changes are localized
 - ✅ Easy to test - test the whole node unit
 - ✅ Easy to share - one export has everything
+
+---
+
+## Testing Patterns: Functional Dependency Injection
+
+### Philosophy
+
+We use **functional factory patterns** for dependency injection, not class-based
+DI containers. This keeps our codebase simple, explicit, and consistent with
+functional programming principles.
+
+### Core Pattern: Dependencies as Function Parameters
+
+The simplest and most effective dependency injection is passing dependencies as
+function arguments:
+
+```typescript
+// Define dependency interface (optional types)
+export type ConductorDependencies = {
+  transport?: Transport;
+  logger?: Logger;
+  debugController?: DebugController;
+  eventEmitter?: EventEmitter;
+  store?: ExecutionGraphStore;
+};
+
+// Factory function accepting optional dependencies
+export function createConductor(
+  config: ConductorConfig = {},
+  deps: ConductorDependencies = {},
+): Conductor {
+  // Use provided dependencies or create defaults
+  const logger = deps.logger || createDefaultLogger();
+  const debugController = deps.debugController || createDebugController();
+  const store = deps.store || createExecutionGraphStore();
+  const events = deps.eventEmitter || createConductorEventEmitter();
+
+  // Build and return the service
+  return {
+    node: { run, store },
+    system: { health },
+    events,
+  };
+}
+```
+
+### Testing with Mock Dependencies
+
+```typescript
+import { describe, it, expect, vi } from "vitest";
+import { createConductor } from "#conductor";
+
+describe("Conductor Tests", () => {
+  it("executes nodes with custom logger", async () => {
+    // Create mock logger
+    const mockLogger = {
+      info: vi.fn(),
+      error: vi.fn(),
+      debug: vi.fn(),
+    };
+
+    // Inject mock via function parameter
+    const conductor = createConductor({}, { logger: mockLogger });
+
+    const result = await conductor.node.run(testNode);
+
+    expect(result.success).toBe(true);
+    expect(mockLogger.info).toHaveBeenCalled();
+  });
+
+  it("uses custom debug controller", async () => {
+    const mockDebugController = {
+      configure: vi.fn(),
+      getSlowMoDelay: () => 0,
+      shouldSimulateError: () => false,
+    };
+
+    const conductor = createConductor(
+      {},
+      {
+        debugController: mockDebugController,
+      },
+    );
+
+    await conductor.node.run(testNode);
+
+    expect(mockDebugController.configure).toHaveBeenCalled();
+  });
+});
+```
+
+### Benefits of Functional DI
+
+1. **Explicit Dependencies**
+   - Clear from function signature what dependencies exist
+   - No hidden dependencies or magic injection
+   - TypeScript validates at compile time
+
+2. **Zero Runtime Overhead**
+   - Direct function calls, no reflection
+   - No decorator metadata
+   - No container lookup overhead
+
+3. **Easy to Mock**
+   - Just pass different arguments
+   - No need to register mocks in a container
+   - No need to reset global state between tests
+
+4. **Type Safe**
+   - TypeScript validates all dependency types
+   - No runtime type errors from container
+   - Full IDE autocomplete support
+
+5. **Simple to Understand**
+   - No decorators or reflection to learn
+   - Standard JavaScript/TypeScript patterns
+   - Easy for new developers to grasp
+
+### Pattern for React Components
+
+React components use **React Context** for dependency injection (this is React's
+built-in DI pattern):
+
+```typescript
+// DON'T use function parameters for React components
+// ❌ function MyComponent({ logger, transport }) { }
+
+// DO use React Context
+// ✅
+const LoggerContext = createContext<Logger>(defaultLogger);
+
+function MyComponent() {
+  const logger = useContext(LoggerContext);
+  // Use logger...
+}
+
+// Provide dependencies at app level
+<LoggerContext.Provider value={customLogger}>
+  <MyComponent />
+</LoggerContext.Provider>
+```
+
+### When NOT to Use DI
+
+Don't inject:
+
+- **Pure functions** - They have no dependencies
+
+  ```typescript
+  // ❌ DON'T: function transform(data, config, logger)
+  // ✅ DO: function transform(data, config)
+  ```
+
+- **Simple utilities** - Import and use directly
+
+  ```typescript
+  // ✅ Just import it
+  import { validateEmail } from "#utils/validation";
+  ```
+
+- **Business logic** - Keep execution pure
+  ```typescript
+  // ❌ DON'T inject into executeGraph
+  // ✅ Pass context and config explicitly
+  ```
+
+### Migration from Class-Based DI
+
+If you see class-based DI patterns (decorators, containers):
+
+```typescript
+// ❌ Class-based DI (overly complex)
+@Service()
+class ConductorService {
+  constructor(@Inject(TOKENS.LOGGER) private logger: Logger) {}
+}
+
+// ✅ Functional DI (simple and explicit)
+function createConductor(deps: { logger?: Logger } = {}) {
+  const logger = deps.logger || createDefaultLogger();
+  return {
+    /* conductor */
+  };
+}
+```
+
+**The class-based approach adds:**
+
+- Decorator complexity
+- Runtime reflection overhead
+- Container state management
+- Learning curve
+
+**The functional approach is:**
+
+- Simpler (just function parameters)
+- Faster (no reflection)
+- More explicit (no hidden dependencies)
+- More testable (easier to mock)
+
+### Summary
+
+**Our standard**: Pass dependencies as function parameters.
+
+- ✅ **Services**: Factory functions with dependency parameters
+- ✅ **React**: Use Context API for component trees
+- ✅ **Testing**: Pass mock implementations as arguments
+- ❌ **Don't**: Use class-based DI containers with decorators
+
+This keeps our codebase functional, explicit, and easy to understand.
 
 ---
 

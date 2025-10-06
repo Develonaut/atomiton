@@ -6,14 +6,19 @@
  */
 
 import type { NodeExecutable } from "@atomiton/nodes/executables";
+import type { ExecutionId, NodeId } from "#types/branded";
+import type { ExecutionError } from "#types/errors";
+
+// Re-export ExecutionError for convenience
+export type { ExecutionError } from "#types/errors";
 
 /**
  * Conductor's rich execution context
  * Adds orchestration metadata beyond simple parameter passing
  */
 export type ConductorExecutionContext = {
-  nodeId: string;
-  executionId: string;
+  nodeId: NodeId;
+  executionId: ExecutionId;
   variables: Record<string, unknown>;
   /**
    * Input data passed to nodes via edges
@@ -81,7 +86,7 @@ export type ExecutionTraceEvent = {
  * Node execution trace - captures execution history for a single node
  */
 export type NodeExecutionTrace = {
-  nodeId: string;
+  nodeId: NodeId;
   nodeName: string;
   nodeType: string;
   startTime: number;
@@ -97,8 +102,8 @@ export type NodeExecutionTrace = {
  * Complete execution trace - captures full execution history
  */
 export type ExecutionTrace = {
-  executionId: string;
-  rootNodeId: string;
+  executionId: ExecutionId;
+  rootNodeId: NodeId;
   startTime: number;
   endTime?: number;
   duration?: number;
@@ -119,21 +124,10 @@ export type ExecutionResult<T = unknown> = {
   error?: ExecutionError;
   /** Execution duration in milliseconds */
   duration?: number;
-  executedNodes?: string[];
+  executedNodes?: NodeId[];
   context?: ConductorExecutionContext;
   /** Execution trace - complete history of all events and node states */
   trace?: ExecutionTrace;
-};
-
-/**
- * Execution error with detailed tracking
- */
-export type ExecutionError = {
-  nodeId: string;
-  message: string;
-  code?: string;
-  timestamp: Date;
-  stack?: string;
 };
 
 /**

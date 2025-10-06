@@ -5,6 +5,7 @@ export default defineLibraryConfig({
   entry: {
     "exports/browser/index": "./src/exports/browser/index.ts",
     "exports/desktop/index": "./src/exports/desktop/index.ts",
+    "types/index": "./src/types/index.ts",
     "test-utils/factories": "./src/test-utils/factories.ts",
   },
   external: [

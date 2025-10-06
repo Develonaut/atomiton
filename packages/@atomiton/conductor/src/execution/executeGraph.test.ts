@@ -13,6 +13,7 @@ import type {
   ConductorExecutionContext,
   ExecutionResult,
 } from "#types";
+import { toNodeId, toExecutionId } from "#types";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -49,8 +50,8 @@ describe("executeGraph", () => {
     };
 
     context = {
-      nodeId: "test-node",
-      executionId: "exec-123",
+      nodeId: toNodeId("test-node"),
+      executionId: toExecutionId("exec-123"),
       input: { default: "test-input" },
       variables: {},
       slowMo: 0,
@@ -79,7 +80,9 @@ describe("executeGraph", () => {
       expect(executionGraphStore.getState().isExecuting).toBe(false);
     });
 
-    it("should use transport for single node when configured", async () => {
+    it("should NOT use transport even when configured (layering fix)", async () => {
+      // Phase 2 architectural fix: Desktop conductor should never use transport
+      // Transport is only for browser → desktop communication via RPC
       const node = createNodeDefinition({
         id: "single-node",
         type: "test-type",
@@ -107,10 +110,14 @@ describe("executeGraph", () => {
         mockExecute,
       );
 
-      expect(mockTransport.execute).toHaveBeenCalledWith(node, context);
+      // Transport should NOT be called - executeGraph always uses local execution
+      expect(mockTransport.execute).not.toHaveBeenCalled();
       expect(result.success).toBe(true);
-      expect(result.data).toBe("transport-result");
-      expect(mockExecute).not.toHaveBeenCalled();
+      // Result should come from local execution, not transport
+      expect(result.data).not.toBe("transport-result");
+      // For single nodes, executeGraph calls executeGraphNode directly,
+      // not the mockExecute (which is for recursive group execution)
+      expect(result.executedNodes).toContain("single-node");
     });
 
     it("should complete execution in store for single node", async () => {

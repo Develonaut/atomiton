@@ -13,7 +13,8 @@ import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { createProgressController } from "#execution/progressController";
 import { validateNodeExecution } from "#execution/validation";
 import { createExecutionResult } from "#execution/resultBuilder";
-import { wrapExecutorWithDebug } from "#execution/debugUtils";
+import { wrapExecutorWithDebugController } from "#execution/debugWrapper";
+import { ErrorCode } from "#types";
 
 /**
  * Execute a single graph node using the provided executor factory
@@ -52,23 +53,23 @@ export async function executeGraphNode(
     }
 
     // Start progress tracking (if store exists)
+    const slowMoDelay =
+      config.debugController?.getSlowMoDelay() ??
+      context.slowMo ??
+      DEFAULT_SLOWMO_MS;
     progressController = executionGraphStore
-      ? createProgressController(
-          node,
-          executionGraphStore,
-          context.slowMo ?? DEFAULT_SLOWMO_MS,
-        )
+      ? createProgressController(node, executionGraphStore, slowMoDelay)
       : null;
     const progressPromise = progressController?.start() ?? Promise.resolve();
 
     // Execute node (parallel with progress tracking)
     const params = { ...context, ...node.parameters };
 
-    // Wrap executor with debug behaviors (clean separation of concerns)
-    const debugExecutor = wrapExecutorWithDebug(
+    // Wrap executor with debug behaviors using debug controller
+    const debugExecutor = wrapExecutorWithDebugController(
       validation.executable.execute.bind(validation.executable),
       node.id,
-      context,
+      config.debugController,
     );
 
     const executionResult = await debugExecutor(params);
@@ -98,6 +99,7 @@ export async function executeGraphNode(
         nodeId: node.id,
         message: errorMessage,
         timestamp: new Date(),
+        code: ErrorCode.EXECUTION_FAILED,
         stack: error instanceof Error ? error.stack : undefined,
       },
       duration: Date.now() - startTime,

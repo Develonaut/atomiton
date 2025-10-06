@@ -3,8 +3,8 @@
  */
 
 import type { ConductorExecutionContext } from "#types";
+import { toNodeId, createExecutionId } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
-import { generateExecutionId } from "@atomiton/utils";
 
 /**
  * Build a child execution context from parent context
@@ -15,8 +15,8 @@ export function buildChildExecutionContext(
   input: Record<string, unknown>,
 ): ConductorExecutionContext {
   return {
-    nodeId: childNode.id,
-    executionId: generateExecutionId(`child_${childNode.id}`),
+    nodeId: toNodeId(childNode.id),
+    executionId: createExecutionId(),
     variables: parentContext.variables,
     input,
     parentContext,

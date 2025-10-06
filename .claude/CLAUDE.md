@@ -88,10 +88,10 @@ That's it - two functions!
 Foundation (no dependencies):
 └── @atomiton/nodes
 
-Depends on nodes only:
-├── @atomiton/conductor
-├── @atomiton/storage
-└── @atomiton/editor
+Depends on foundation:
+├── @atomiton/conductor → nodes
+├── @atomiton/storage → nodes
+└── @atomiton/editor → nodes
 
 Transport layer (types only):
 └── @atomiton/rpc → nodes, conductor

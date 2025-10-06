@@ -448,8 +448,9 @@ describe("SlowMo Execution Tests", () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
-      // Should error immediately, not wait for slowMo delays
-      expect(duration).toBeLessThan(100); // Fast error response
+      // Should error quickly, not wait for full slowMo delays
+      // Allow up to 150ms for throttled progress flush
+      expect(duration).toBeLessThan(150); // Fast error response with throttling
     });
 
     it("should freeze progress at current state when node errors", async () => {

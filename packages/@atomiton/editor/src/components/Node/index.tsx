@@ -1,5 +1,5 @@
-import type { EditorNodePort, NodeData } from "#types/EditorNode";
 import { useNodeExecutionState } from "#hooks/useNodeExecutionState";
+import type { EditorNodePort, NodeData } from "#types/EditorNode";
 import { Icon } from "@atomiton/ui";
 import {
   Handle,

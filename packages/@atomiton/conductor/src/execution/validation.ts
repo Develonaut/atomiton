@@ -2,6 +2,7 @@
  * Node execution validation utilities
  */
 
+import { ErrorCode } from "#types/errors";
 import type { ConductorConfig, ExecutionError } from "#types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
@@ -24,7 +25,7 @@ export function validateNodeExecution(
         nodeId: node.id,
         message: "No executor factory provided for local execution",
         timestamp: new Date(),
-        code: "NO_EXECUTOR_FACTORY",
+        code: ErrorCode.NO_EXECUTOR_FACTORY,
       },
     };
   }
@@ -40,7 +41,7 @@ export function validateNodeExecution(
         nodeId: node.id,
         message: `No implementation found for node type: ${node.type}`,
         timestamp: new Date(),
-        code: "NODE_TYPE_NOT_FOUND",
+        code: ErrorCode.NODE_TYPE_NOT_FOUND,
       },
     };
   }

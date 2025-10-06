@@ -2,56 +2,19 @@ import {
   createChannelServer,
   type ChannelServer,
 } from "#main/channels/createChannelServer";
+import {
+  executionResultSchema,
+  nodeExecuteRequestSchema,
+  nodeValidateRequestSchema,
+} from "#schemas/node";
+import {
+  ErrorCode,
+  createExecutionError,
+  toExecutionError,
+} from "@atomiton/conductor/types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
-import { v } from "@atomiton/validation";
 import type { IpcMain } from "electron";
-
-// Validation schemas
-// For IPC transport, we use a permissive schema that validates required fields
-// but allows all NodeDefinition fields to pass through during serialization
-const nodeDefinitionSchema = v
-  .object({
-    id: v.string(),
-    type: v.string(),
-  })
-  .passthrough(); // Allow all other NodeDefinition fields (nodes, edges, parameters, etc.)
-
-const nodeExecuteParamsSchema = v.object({
-  node: nodeDefinitionSchema,
-  context: v
-    .object({
-      nodeId: v.string().optional(),
-      executionId: v.string().optional(),
-      variables: v.record(v.string(), v.unknown()).optional(),
-      input: v.unknown().optional(),
-      parentContext: v.any().optional(),
-      slowMo: v.number().optional(),
-      debug: v
-        .object({
-          simulateError: v
-            .object({
-              nodeId: v.string(),
-              errorType: v.string(),
-              message: v.string().optional(),
-              delayMs: v.number().optional(),
-            })
-            .optional(),
-          simulateLongRunning: v
-            .object({
-              nodeId: v.string(),
-              delayMs: v.number(),
-            })
-            .optional(),
-        })
-        .optional(),
-    })
-    .optional(),
-});
-
-const nodeValidateParamsSchema = v.object({
-  node: nodeDefinitionSchema,
-});
 
 // Types for node channel operations
 export type NodeExecuteParams<TNode = NodeDefinition, TContext = unknown> = {
@@ -93,10 +56,22 @@ export const createNodeChannelServer = <
 
   // Register command handlers
   server.handle("execute", async (args: unknown): Promise<unknown> => {
-    // Validate input
-    const validation = nodeExecuteParamsSchema.safeParse(args);
+    // Validate input with strict schema
+    const validation = nodeExecuteRequestSchema.safeParse(args);
     if (!validation.success) {
-      throw new Error(`Invalid parameters: ${validation.error.message}`);
+      const error = createExecutionError(
+        ErrorCode.VALIDATION_FAILED,
+        `Invalid execute parameters: ${validation.error.message}`,
+        {
+          context: { validationErrors: validation.error.errors },
+        },
+      );
+      return {
+        success: false,
+        error,
+        duration: 0,
+        executedNodes: [],
+      };
     }
 
     const params = validation.data;
@@ -140,6 +115,15 @@ export const createNodeChannelServer = <
 
       const result = await handlers.execute(params.node as TNode, context);
 
+      // Validate output
+      const resultValidation = executionResultSchema.safeParse(result);
+      if (!resultValidation.success) {
+        console.warn(
+          "[NODE] Result validation warning:",
+          resultValidation.error,
+        );
+      }
+
       // Broadcast completion event
       server.broadcast("completed", {
         executionId,
@@ -158,29 +142,33 @@ export const createNodeChannelServer = <
       // Return the result directly for the browser transport
       return result;
     } catch (error) {
+      const executionError = toExecutionError(
+        error,
+        ErrorCode.EXECUTION_FAILED,
+        params.node.id,
+        executionId,
+      );
+
       console.error("[NODE] Execution failed:", {
         executionId,
         nodeId: params.node.id,
-        error: error instanceof Error ? error.message : String(error),
+        error: executionError.message,
+        code: executionError.code,
       });
 
       // Broadcast error event
       server.broadcast("error", {
         executionId,
         nodeId: params.node.id,
-        error: error instanceof Error ? error.message : String(error),
+        error: executionError.message,
+        code: executionError.code,
         timestamp: Date.now(),
       });
 
       // Return an error result for the browser transport
       return {
         success: false,
-        error: {
-          nodeId: params.node.id,
-          message: error instanceof Error ? error.message : String(error),
-          timestamp: new Date(),
-          code: "EXECUTION_FAILED",
-        },
+        error: executionError,
         duration: 0,
         executedNodes: [],
       };
@@ -220,7 +208,7 @@ export const createNodeChannelServer = <
   });
 
   server.handle("validate", async (args: unknown): Promise<unknown> => {
-    const validation = nodeValidateParamsSchema.safeParse(args);
+    const validation = nodeValidateRequestSchema.safeParse(args);
     if (!validation.success) {
       return {
         valid: false,

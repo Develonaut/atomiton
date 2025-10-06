@@ -362,9 +362,9 @@ describe("Async Progress Tracking", () => {
 
       // All nodes should be in error state
       const state = conductor.node.store.getState();
-      const errorNodes = Array.from(state.nodes.values()).filter(
-        (n: ExecutionGraphNode) => n.state === "error",
-      );
+      const errorNodes = (
+        Array.from(state.nodes.values()) as ExecutionGraphNode[]
+      ).filter((n) => n.state === "error");
 
       // At least the first failing node should be in error state
       // (execution stops on first failure)
@@ -406,12 +406,12 @@ describe("Async Progress Tracking", () => {
       expect(result.success).toBe(false);
 
       const state = conductor.node.store.getState();
-      const completedNodes = Array.from(state.nodes.values()).filter(
-        (n: ExecutionGraphNode) => n.state === "completed",
-      );
-      const errorNodes = Array.from(state.nodes.values()).filter(
-        (n: ExecutionGraphNode) => n.state === "error",
-      );
+      const completedNodes = (
+        Array.from(state.nodes.values()) as ExecutionGraphNode[]
+      ).filter((n) => n.state === "completed");
+      const errorNodes = (
+        Array.from(state.nodes.values()) as ExecutionGraphNode[]
+      ).filter((n) => n.state === "error");
 
       // Should have at least one completed (first node) and one error (second node)
       expect(completedNodes.length).toBeGreaterThan(0);

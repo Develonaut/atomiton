@@ -17,6 +17,10 @@
       "import": "./dist/exports/desktop/index.js",
       "types": "./dist/exports/desktop/index.d.ts"
     },
+    "./types": {
+      "import": "./dist/types/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
     "./test-utils/factories": {
       "import": "./dist/test-utils/factories.js",
       "types": "./dist/test-utils/factories.d.ts"

@@ -6,7 +6,7 @@ function Scene() {
 
   return (
     <div className="flex flex-col gap-1 p-3">
-      {nodes.map((node) => (
+      {nodes.map((node: { id: string }) => (
         <Item key={node.id} nodeId={node.id} />
       ))}
     </div>

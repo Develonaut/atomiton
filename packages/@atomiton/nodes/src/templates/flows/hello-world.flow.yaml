@@ -21,7 +21,7 @@ nodes:
       author: "Atomiton Core Team"
       description: "Edit existing fields or create new data fields"
       category: "data"
-      icon: "wand-2"
+      icon: "pencil-line"
     inputPorts:
       - id: "input"
         name: "Input"

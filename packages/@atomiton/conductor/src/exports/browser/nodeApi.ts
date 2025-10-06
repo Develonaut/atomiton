@@ -7,6 +7,8 @@ import type {
   ConductorTransport,
   ExecutionResult,
 } from "#types";
+import { ErrorCode } from "#types";
+import { createExecutionId, createNodeId } from "#types/branded";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
 import type { ValidationResult } from "#exports/browser/types.js";
@@ -19,8 +21,9 @@ function createContext(
   context?: Partial<ConductorExecutionContext>,
 ): ConductorExecutionContext {
   return {
-    nodeId: node.id,
-    executionId: context?.executionId || generateExecutionId(),
+    nodeId: createNodeId(node.id),
+    executionId:
+      context?.executionId || createExecutionId(generateExecutionId()),
     variables: context?.variables || {},
     input: context?.input,
     parentContext: context?.parentContext,
@@ -35,7 +38,7 @@ function createContext(
 function createErrorResult(
   nodeId: string,
   message: string,
-  code: string,
+  code: ErrorCode,
 ): ExecutionResult {
   return {
     success: false,
@@ -58,7 +61,7 @@ function validateNodeDefinition(node: NodeDefinition): ExecutionResult | null {
     return createErrorResult(
       node.id || "unknown",
       "Invalid node definition: id and type are required",
-      "INVALID_NODE",
+      ErrorCode.INVALID_NODE,
     );
   }
   return null;
@@ -91,7 +94,7 @@ async function executeWithRetry(
   return createErrorResult(
     node.id,
     lastError instanceof Error ? lastError.message : String(lastError),
-    "EXECUTION_FAILED",
+    ErrorCode.EXECUTION_FAILED,
   );
 }
 
@@ -120,7 +123,7 @@ export function createNodeAPI(transport: ConductorTransport | undefined) {
         return createErrorResult(
           node.id,
           "No transport available for execution in browser environment",
-          "NO_TRANSPORT",
+          ErrorCode.NO_TRANSPORT,
         );
       }
 

@@ -34,12 +34,10 @@ export function FlowProgressBar({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      {currentNodeName && (
-        <div className="text-sm text-gray-600">
-          {isExecuting ? "Current" : "Last"}:{" "}
-          <span className="font-medium">{currentNodeName}</span>
-        </div>
-      )}
+      <div className="text-sm text-gray-600">
+        Current:{" "}
+        <span className="font-medium">{currentNodeName || "None"}</span>
+      </div>
     </div>
   );
 }

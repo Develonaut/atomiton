@@ -46,7 +46,7 @@ export function LogsSection({ getTrace }: { getTrace?: () => unknown }) {
         </div>
       </div>
       <div
-        className="bg-gray-900 text-green-400 p-4 font-mono text-xs flex-1 overflow-auto"
+        className="bg-gray-900 text-green-400 p-4 font-mono text-xs flex-1 overflow-auto max-h-[360px]"
         data-testid="debug-logs-content"
       >
         {logs.length === 0 ? (

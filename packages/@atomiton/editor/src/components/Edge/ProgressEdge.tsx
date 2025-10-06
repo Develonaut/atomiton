@@ -1,5 +1,5 @@
-import { type EdgeProps, getBezierPath } from "@xyflow/react";
 import { useEdgeExecutionState } from "#hooks/useEdgeExecutionState";
+import { type EdgeProps, getBezierPath } from "@xyflow/react";
 
 /**
  * Custom edge component with execution progress visualization
@@ -55,13 +55,6 @@ export function ProgressEdge({
     targetX,
     targetY,
     targetPosition,
-  });
-
-  console.log("[ProgressEdge] Rendering:", {
-    id,
-    source,
-    target,
-    path: edgePath,
   });
 
   return (

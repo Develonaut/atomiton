@@ -55,6 +55,7 @@ export type NodeIcon =
   | "transform"
   | "repeat"
   | "pencil"
+  | "pencil-line"
 
   // Media
   | "image"

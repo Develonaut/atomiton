@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import type { NodeExecutable } from "@atomiton/nodes/executables";
-import { DEFAULT_SLOWMO_MS } from "#execution/constants";
 import type { ExecutionGraphState } from "#execution/executionGraphStore";
 
 describe("Sequential Progress Animation Tests", () => {
@@ -150,7 +149,7 @@ describe("Sequential Progress Animation Tests", () => {
       expect(duration).toBeGreaterThanOrEqual(expectedMinDuration * 0.8);
     });
 
-    it("should use DEFAULT_SLOWMO_MS when slowMo is not provided", async () => {
+    it("should run quickly when slowMo is not provided (no default delay)", async () => {
       const conductor = createConductor(createMockConfig());
 
       const node = createNodeDefinition({
@@ -158,14 +157,13 @@ describe("Sequential Progress Animation Tests", () => {
         type: "test",
       });
 
-      const expectedMinDuration = DEFAULT_SLOWMO_MS * 5; // 5 delays = 1250ms
-
       const startTime = Date.now();
       await conductor.node.run(node); // No slowMo parameter
       const duration = Date.now() - startTime;
 
-      // Should take at least the default slowMo duration
-      expect(duration).toBeGreaterThanOrEqual(expectedMinDuration * 0.8);
+      // Should complete quickly without slowMo delays
+      // Only progress throttling (100ms) might add slight delay
+      expect(duration).toBeLessThan(200); // Fast execution
     });
 
     it("should complete faster with slowMo=0 (no delays)", async () => {

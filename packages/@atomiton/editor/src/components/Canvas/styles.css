@@ -181,12 +181,12 @@
 
 /* Shared dual-border overlay (executing and completed states) */
 :is(
-  .react-flow__node,
-  .react-flow__node-input,
-  .react-flow__node-default,
-  .react-flow__node-output,
-  .react-flow__node-group
-):is([data-execution-state="executing"], [data-execution-state="completed"])
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  ):is([data-execution-state="executing"], [data-execution-state="completed"])
   .atomiton-node::after {
   content: "";
   position: absolute;
@@ -238,7 +238,8 @@
     );
   }
 
-  & .react-flow__handle {
+  /* Input handles turn blue when executing */
+  & .react-flow__handle.target {
     background-color: var(--atomiton-node-state-executing);
   }
 }
@@ -256,6 +257,7 @@
     --progress-deg: 360deg; /* Full progress */
   }
 
+  /* Both input and output handles turn green when completed */
   & .react-flow__handle {
     background-color: var(--atomiton-node-state-completed);
   }
