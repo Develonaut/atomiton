@@ -56,6 +56,114 @@
   /* Progress animation timings */
   --atomiton-progress-transition-duration: 0.3s;
   --atomiton-progress-deg-per-percent: 3.6deg; /* 360deg / 100 for percentage conversion */
+
+  /* Completion animation durations and effects */
+  --atomiton-completion-animation-duration: 0.6s;
+  --atomiton-handle-animation-duration: 0.4s;
+}
+
+/* ============================================================================
+ * Keyframes for Node Completion Animations
+ * ============================================================================ */
+
+@keyframes atomiton-pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
+@keyframes atomiton-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes atomiton-pulse-strong {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes atomiton-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 0px var(--atomiton-node-state-completed));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--atomiton-node-state-completed));
+  }
+}
+
+@keyframes atomiton-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes atomiton-ripple {
+  0% {
+    box-shadow: 0 0 0 0 var(--atomiton-node-state-completed);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 0 20px var(--atomiton-node-state-completed);
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+ * Keyframes for Handle Connection Animations
+ * ============================================================================ */
+
+@keyframes atomiton-handle-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 0 0 0 2px currentColor;
+    opacity: 0.6;
+  }
+}
+
+@keyframes atomiton-handle-ping {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  75%, 100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes atomiton-handle-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 0 0 var(--atomiton-node-state-executing);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    box-shadow: 0 0 0 6px var(--atomiton-node-state-executing);
+    opacity: 0;
+  }
 }
 
 :is(
@@ -297,6 +405,128 @@
   background-color: var(--atomiton-node-state-completed);
 }
 
+/* ============================================================================
+ * Node Completion Animations - Applied when node completes
+ * ============================================================================ */
+
+/* Pulse animation - subtle variant */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="completed"][data-completion-animation="pulse-subtle"]
+  .atomiton-node {
+  animation: atomiton-pulse-subtle 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Pulse animation - normal variant */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="completed"][data-completion-animation="pulse"]
+  .atomiton-node {
+  animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Pulse animation - strong variant */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="completed"][data-completion-animation="pulse-strong"]
+  .atomiton-node {
+  animation: atomiton-pulse-strong 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Glow animation - subtle drop shadow pulse */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="completed"][data-completion-animation="glow"]
+  .atomiton-node {
+  animation: atomiton-glow var(--atomiton-completion-animation-duration) ease-out;
+}
+
+/* Bounce animation - subtle vertical bounce */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="completed"][data-completion-animation="bounce"]
+  .atomiton-node {
+  animation: atomiton-bounce var(--atomiton-completion-animation-duration) ease-out;
+}
+
+/* Ripple animation - expanding box shadow */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="completed"][data-completion-animation="ripple"]
+  .atomiton-node::before {
+  animation: atomiton-ripple var(--atomiton-completion-animation-duration) ease-out;
+}
+
+/* ============================================================================
+ * Handle Connection Animations - Applied when edge connects
+ * ============================================================================ */
+
+/* Pulse animation for handles */
+.react-flow__handle[data-handle-animation="pulse"] {
+  animation: atomiton-handle-pulse var(--atomiton-handle-animation-duration) ease-out;
+}
+
+/* Ping animation for handles - expanding circle */
+.react-flow__handle[data-handle-animation="ping"] {
+  position: relative;
+}
+
+.react-flow__handle[data-handle-animation="ping"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: currentColor;
+  animation: atomiton-handle-ping var(--atomiton-handle-animation-duration) ease-out;
+  pointer-events: none;
+}
+
+/* Ripple animation for handles */
+.react-flow__handle[data-handle-animation="ripple"] {
+  position: relative;
+}
+
+.react-flow__handle[data-handle-animation="ripple"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: atomiton-handle-ripple var(--atomiton-handle-animation-duration) ease-out;
+  pointer-events: none;
+}
+
 /* Error state - red conic gradient overlay */
 :is(
     .react-flow__node,
@@ -334,6 +564,96 @@
   )[data-execution-state="error"]
   .react-flow__handle {
   background-color: var(--atomiton-node-state-error);
+}
+
+/* ============================================================================
+ * Node Error Animations - Applied when node errors
+ * ============================================================================ */
+
+/* Shake animations for errors */
+@keyframes atomiton-shake-subtle {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-0.5px);
+  }
+  40% {
+    transform: translateX(0.5px);
+  }
+}
+
+@keyframes atomiton-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-1px);
+  }
+  40% {
+    transform: translateX(1px);
+  }
+}
+
+@keyframes atomiton-shake-strong {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+}
+
+/* Pulse error animation - subtle variant */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="error"][data-error-animation="pulse-subtle"]
+  .atomiton-node {
+  animation: atomiton-pulse-subtle 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Pulse error animation - normal variant */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="error"][data-error-animation="pulse"]
+  .atomiton-node {
+  animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Pulse error animation - strong variant */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="error"][data-error-animation="pulse-strong"]
+  .atomiton-node {
+  animation: atomiton-pulse-strong 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Glow error animation */
+:is(
+    .react-flow__node,
+    .react-flow__node-input,
+    .react-flow__node-default,
+    .react-flow__node-output,
+    .react-flow__node-group
+  )[data-execution-state="error"][data-error-animation="glow"]
+  .atomiton-node {
+  animation: atomiton-glow var(--atomiton-completion-animation-duration) ease-out;
+  filter: drop-shadow(0 0 8px var(--atomiton-node-state-error));
 }
 
 :is(

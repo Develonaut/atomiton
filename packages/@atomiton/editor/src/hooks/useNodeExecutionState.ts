@@ -1,5 +1,6 @@
 import { conductor } from "@atomiton/conductor/browser";
 import { useEffect, useRef } from "react";
+import { getAnimationPreferences } from "#hooks/useAnimationPreferences";
 
 /**
  * Hook to subscribe a node to execution progress events
@@ -29,6 +30,7 @@ export function useNodeExecutionState(
   nodeId: string,
 ): React.RefObject<HTMLDivElement | null> {
   const nodeRef = useRef<HTMLDivElement>(null);
+  const previousStateRef = useRef<string | null>(null);
 
   useEffect(() => {
     // Cache DOM references once to avoid expensive .closest() calls on every event
@@ -48,8 +50,65 @@ export function useNodeExecutionState(
         const nodeState = event.nodes.find((n) => n.id === nodeId);
         if (!nodeState) return;
 
+        const previousState = previousStateRef.current;
+        const currentState = nodeState.state;
+
         // Update execution state on ReactFlow wrapper (no React re-render)
-        reactFlowNode.setAttribute("data-execution-state", nodeState.state);
+        reactFlowNode.setAttribute("data-execution-state", currentState);
+
+        // Apply animation attributes when transitioning to completion/error states
+        const preferences = getAnimationPreferences();
+
+        // Executing animation - trigger when transitioning to executing (edge just connected)
+        if (currentState === "executing" && previousState !== "executing") {
+          if (preferences.handleAnimation !== "none") {
+            // Pulse input handles when node starts executing
+            const inputHandles = reactFlowNode.querySelectorAll(
+              ".react-flow__handle.target",
+            );
+            inputHandles.forEach((handle) => {
+              handle.setAttribute(
+                "data-handle-animation",
+                preferences.handleAnimation,
+              );
+              // Remove animation attribute after animation completes
+              setTimeout(() => {
+                handle.removeAttribute("data-handle-animation");
+              }, 400); // Match --atomiton-handle-animation-duration
+            });
+          }
+        }
+
+        // Completion animation - trigger when transitioning to completed
+        if (currentState === "completed" && previousState !== "completed") {
+          if (preferences.completionAnimation !== "none") {
+            reactFlowNode.setAttribute(
+              "data-completion-animation",
+              preferences.completionAnimation,
+            );
+            // Remove animation attribute after animation completes to allow re-triggering
+            setTimeout(() => {
+              reactFlowNode.removeAttribute("data-completion-animation");
+            }, 600); // Match --atomiton-completion-animation-duration
+          }
+        }
+
+        // Error animation - trigger when transitioning to error
+        if (currentState === "error" && previousState !== "error") {
+          if (preferences.errorAnimation !== "none") {
+            reactFlowNode.setAttribute(
+              "data-error-animation",
+              preferences.errorAnimation,
+            );
+            // Remove animation attribute after animation completes
+            setTimeout(() => {
+              reactFlowNode.removeAttribute("data-error-animation");
+            }, 600); // Match --atomiton-completion-animation-duration
+          }
+        }
+
+        // Store current state for next comparison
+        previousStateRef.current = currentState;
 
         // Add accessibility attributes for screen readers
         const progressPercent = Math.round(nodeState.progress);

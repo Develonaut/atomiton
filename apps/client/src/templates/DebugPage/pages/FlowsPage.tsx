@@ -127,7 +127,12 @@ export default function FlowsPage() {
                       onChange={(e) =>
                         setDebugOptions({
                           ...debugOptions,
-                          errorType: e.target.value as any,
+                          errorType: e.target.value as
+                            | "generic"
+                            | "timeout"
+                            | "network"
+                            | "validation"
+                            | "permission",
                         })
                       }
                       disabled={isExecuting}
