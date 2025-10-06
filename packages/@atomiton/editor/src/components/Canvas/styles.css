@@ -75,6 +75,10 @@
   }
 }
 
+/* ============================================================================
+ * Node Styles
+ * ============================================================================ */
+
 :is(
   .react-flow__node,
   .react-flow__node-input,
@@ -92,104 +96,72 @@
   border-radius: var(--atomiton-node-border-radius);
   background-color: var(--atomiton-node-background);
   cursor: pointer;
+
+  /* Inner node container */
+  & .atomiton-node {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--atomiton-node-border-radius);
+    transition: box-shadow var(--atomiton-transition-duration)
+      var(--atomiton-transition-easing);
+
+    /* Always-visible gray border (base layer) */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(-1 * var(--atomiton-border-width));
+      border-radius: inherit;
+      border: var(--atomiton-border-width) solid
+        var(--atomiton-node-border-default);
+      pointer-events: none;
+      transition: border-color var(--atomiton-transition-duration)
+        var(--atomiton-transition-easing);
+    }
+  }
+
+  /* Hover state */
+  &.selectable:hover {
+    border-color: var(--atomiton-node-border-hover);
+    box-shadow: none;
+
+    & .atomiton-node {
+      box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size)
+        var(--atomiton-node-inner-ring-color) inset;
+    }
+
+    & .react-flow__handle {
+      background-color: var(--atomiton-handle-bg-hover);
+    }
+  }
+
+  /* Selected/focus state */
+  &.selectable:is(.selected, :focus, :focus-visible) {
+    border-color: var(--atomiton-node-border-selected);
+    box-shadow: var(--atomiton-node-shadow-selected);
+
+    & .atomiton-node {
+      box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size)
+        var(--atomiton-node-inner-ring-color) inset;
+
+      &::before {
+        border-color: var(--atomiton-node-border-selected);
+      }
+    }
+
+    & .react-flow__handle {
+      background-color: var(--atomiton-handle-bg-selected);
+    }
+  }
 }
 
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )
-  .atomiton-node {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: var(--atomiton-node-border-radius);
-  transition: box-shadow var(--atomiton-transition-duration)
-    var(--atomiton-transition-easing);
-}
-
-/* ::before pseudo element - always-visible gray border (base layer, like edge background path) */
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )
-  .atomiton-node::before {
-  content: "";
-  position: absolute;
-  inset: calc(-1 * var(--atomiton-border-width));
-  border-radius: inherit;
-  border: var(--atomiton-border-width) solid var(--atomiton-node-border-default);
-  pointer-events: none;
-  transition: border-color var(--atomiton-transition-duration)
-    var(--atomiton-transition-easing);
-}
-
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:hover {
-  border-color: var(--atomiton-node-border-hover);
-  box-shadow: none;
-}
-
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:hover
-  .atomiton-node {
-  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size)
-    var(--atomiton-node-inner-ring-color) inset;
-}
-
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:is(.selected, :focus, :focus-visible) {
-  border-color: var(--atomiton-node-border-selected);
-  box-shadow: var(--atomiton-node-shadow-selected);
-}
-
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:is(.selected, :focus, :focus-visible)
-  .atomiton-node {
-  box-shadow: 0 0 0 var(--atomiton-node-inner-ring-size)
-    var(--atomiton-node-inner-ring-color) inset;
-}
-
-/* Change ::before border color when selected to match handles */
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:is(.selected, :focus, :focus-visible)
-  .atomiton-node::before {
-  border-color: var(--atomiton-node-border-selected);
-}
+/* ============================================================================
+ * Handle Styles
+ * ============================================================================ */
 
 .react-flow__handle {
   z-index: 1; /* Above ::after overlay */
@@ -203,42 +175,19 @@
     var(--atomiton-transition-easing);
 }
 
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:hover
-  .react-flow__handle {
-  background-color: var(--atomiton-handle-bg-hover);
-}
+/* ============================================================================
+ * Execution State Overlays
+ * ============================================================================ */
 
+/* Shared dual-border overlay (executing and completed states) */
 :is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  ).selectable:is(.selected, :focus, :focus-visible)
-  .react-flow__handle {
-  background-color: var(--atomiton-handle-bg-selected);
-}
-
-/* ::after pseudo element - colored progress overlay (only for executing/error states) */
-
-/* Executing state - dual progress borders from left input to right output handle */
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="executing"]
+  .react-flow__node,
+  .react-flow__node-input,
+  .react-flow__node-default,
+  .react-flow__node-output,
+  .react-flow__node-group
+):is([data-execution-state="executing"], [data-execution-state="completed"])
   .atomiton-node::after {
-  --progress-deg: calc(
-    var(--progress, 0) * var(--atomiton-progress-deg-per-percent)
-  );
   content: "";
   position: absolute;
   z-index: 0; /* Below handles (z-index: 1) */
@@ -251,16 +200,15 @@
   background:
     conic-gradient(
       from 270deg,
-      var(--atomiton-node-state-executing) 0deg,
-      var(--atomiton-node-state-executing) calc(var(--progress-deg) / 2),
+      var(--border-color) 0deg,
+      var(--border-color) calc(var(--progress-deg) / 2),
       transparent calc(var(--progress-deg) / 2)
     ),
     conic-gradient(
       from 270deg,
       transparent 0deg,
       transparent calc(360deg - var(--progress-deg) / 2),
-      var(--atomiton-node-state-executing)
-        calc(360deg - var(--progress-deg) / 2)
+      var(--border-color) calc(360deg - var(--progress-deg) / 2)
     );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
@@ -275,143 +223,87 @@
     ease-out;
 }
 
+/* Executing state - blue border with dynamic progress */
 :is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="executing"]
-  .react-flow__handle {
-  background-color: var(--atomiton-node-state-executing);
-}
-
-/* Completed state - dual green borders from left input to right output handle */
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="completed"]
-  .atomiton-node::after {
-  --progress-deg: 360deg; /* Full progress - both borders meet at output handle */
-  content: "";
-  position: absolute;
-  z-index: 0; /* Below handles (z-index: 1) */
-  inset: calc(-1 * var(--atomiton-border-overlay-width));
-  border-radius: inherit;
-  padding: var(--atomiton-border-overlay-width);
-  /* Two paths from left (input) to right (output):
-     - Bottom path: left → down → right (clockwise)
-     - Top path: left → up → right (counter-clockwise) */
-  background:
-    conic-gradient(
-      from 270deg,
-      var(--atomiton-node-state-completed) 0deg,
-      var(--atomiton-node-state-completed) calc(var(--progress-deg) / 2),
-      transparent calc(var(--progress-deg) / 2)
-    ),
-    conic-gradient(
-      from 270deg,
-      transparent 0deg,
-      transparent calc(360deg - var(--progress-deg) / 2),
-      var(--atomiton-node-state-completed)
-        calc(360deg - var(--progress-deg) / 2)
+  .react-flow__node,
+  .react-flow__node-input,
+  .react-flow__node-default,
+  .react-flow__node-output,
+  .react-flow__node-group
+)[data-execution-state="executing"] {
+  & .atomiton-node::after {
+    --border-color: var(--atomiton-node-state-executing);
+    --progress-deg: calc(
+      var(--progress, 0) * var(--atomiton-progress-deg-per-percent)
     );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
+  }
+
+  & .react-flow__handle {
+    background-color: var(--atomiton-node-state-executing);
+  }
 }
 
+/* Completed state - green border at 100% */
 :is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="completed"]
-  .react-flow__handle {
-  background-color: var(--atomiton-node-state-completed);
+  .react-flow__node,
+  .react-flow__node-input,
+  .react-flow__node-default,
+  .react-flow__node-output,
+  .react-flow__node-group
+)[data-execution-state="completed"] {
+  & .atomiton-node::after {
+    --border-color: var(--atomiton-node-state-completed);
+    --progress-deg: 360deg; /* Full progress */
+  }
+
+  & .react-flow__handle {
+    background-color: var(--atomiton-node-state-completed);
+  }
+
+  /* Pulse animation when node completes */
+  & .atomiton-node {
+    animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
 }
 
-/* ============================================================================
- * Node Completion Animations - Applied when node completes
- * ============================================================================ */
-
-/* Pulse animation when node completes */
+/* Error state - red border overlay */
 :is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="completed"]
-  .atomiton-node {
-  animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  .react-flow__node,
+  .react-flow__node-input,
+  .react-flow__node-default,
+  .react-flow__node-output,
+  .react-flow__node-group
+)[data-execution-state="error"] {
+  & .atomiton-node::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: calc(-1 * var(--atomiton-border-overlay-width));
+    border-radius: inherit;
+    padding: var(--atomiton-border-overlay-width);
+    background: var(--atomiton-node-state-error);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  & .react-flow__handle {
+    background-color: var(--atomiton-node-state-error);
+  }
+
+  /* Pulse animation when node errors */
+  & .atomiton-node {
+    animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
 }
 
-/* Error state - red conic gradient overlay */
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="error"]
-  .atomiton-node::after {
-  content: "";
-  position: absolute;
-  z-index: 0; /* Below handles (z-index: 1) */
-  inset: calc(-1 * var(--atomiton-border-overlay-width));
-  border-radius: inherit;
-  padding: var(--atomiton-border-overlay-width);
-  /* Error state shows full red border, ignoring progress value */
-  background: var(--atomiton-node-state-error);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="error"]
-  .react-flow__handle {
-  background-color: var(--atomiton-node-state-error);
-}
-
-/* ============================================================================
- * Node Error Animations - Applied when node errors
- * ============================================================================ */
-
-/* Pulse animation when node errors */
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="error"]
-  .atomiton-node {
-  animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
+/* Skipped state */
 :is(
   .react-flow__node,
   .react-flow__node-input,
@@ -420,20 +312,11 @@
   .react-flow__node-group
 )[data-execution-state="skipped"] {
   border-color: var(--atomiton-node-state-skipped);
-}
 
-:is(
-    .react-flow__node,
-    .react-flow__node-input,
-    .react-flow__node-default,
-    .react-flow__node-output,
-    .react-flow__node-group
-  )[data-execution-state="skipped"]
-  .react-flow__handle {
-  background-color: var(--atomiton-node-state-skipped);
+  & .react-flow__handle {
+    background-color: var(--atomiton-node-state-skipped);
+  }
 }
-
-/* No border color transitions - border stays default gray, only overlay changes */
 
 /* ============================================================================
  * Edge Progress Animations
@@ -462,7 +345,7 @@
 
 /* Executing state - blue progress overlay */
 .react-flow__edge[data-edge-state="executing"] .react-flow__edge-path {
-  stroke: var(--atomiton-node-state-executing); /* Blue while executing */
+  stroke: var(--atomiton-node-state-executing);
   stroke-width: var(--atomiton-border-overlay-width);
   /* dasharray and dashoffset set dynamically in JS for progress effect */
   transition:
@@ -473,7 +356,7 @@
 
 /* Completed state - green progress overlay */
 .react-flow__edge[data-edge-state="completed"] .react-flow__edge-path {
-  stroke: var(--atomiton-node-state-completed); /* Green when complete */
+  stroke: var(--atomiton-node-state-completed);
   stroke-width: var(--atomiton-border-overlay-width);
   /* dasharray and dashoffset set dynamically in JS for progress effect */
   transition:
@@ -484,7 +367,7 @@
 
 /* Error state - red when connected to error nodes */
 .react-flow__edge[data-edge-state="error"] .react-flow__edge-path {
-  stroke: var(--atomiton-node-state-error); /* Red for errors */
+  stroke: var(--atomiton-node-state-error);
   stroke-width: var(--atomiton-border-overlay-width);
   /* dasharray and dashoffset set dynamically in JS for progress effect */
   transition: stroke var(--atomiton-progress-transition-duration) ease;
