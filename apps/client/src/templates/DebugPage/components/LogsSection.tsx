@@ -1,12 +1,31 @@
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import { Button } from "@atomiton/ui";
+import { useState } from "react";
 
 /**
  * Shared logs section component
  * Displays event logs from the conductor with test IDs for e2e testing
  */
-export function LogsSection() {
+export function LogsSection({ getTrace }: { getTrace?: () => unknown }) {
   const { logs, clearLogs } = useDebugLogs();
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopyTrace = async () => {
+    if (!getTrace) return;
+
+    const trace = getTrace();
+    if (!trace) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(trace, null, 2));
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy trace:", err);
+    }
+  };
 
   return (
     <div
@@ -15,9 +34,16 @@ export function LogsSection() {
     >
       <div className="flex justify-between items-center p-6 border-b border-s-01 shrink-0">
         <h2 className="text-xl font-semibold">Event Logs</h2>
-        <Button onClick={clearLogs} size="sm">
-          Clear Logs
-        </Button>
+        <div className="flex gap-2">
+          {getTrace && (
+            <Button onClick={handleCopyTrace} size="sm" disabled={!getTrace()}>
+              {copySuccess ? "✓ Copied!" : "Copy Trace"}
+            </Button>
+          )}
+          <Button onClick={clearLogs} size="sm">
+            Clear Logs
+          </Button>
+        </div>
       </div>
       <div
         className="bg-gray-900 text-green-400 p-4 font-mono text-xs flex-1 overflow-auto"

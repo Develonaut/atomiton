@@ -2,10 +2,7 @@ import conductor, { DEFAULT_SLOWMO_MS } from "#lib/conductor";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type {
-  ExecutionProgress,
-  ExecutionTraceEvent,
-} from "#templates/DebugPage/types";
+import type { ExecutionProgress } from "#templates/DebugPage/types";
 
 export function useFlowOperations() {
   const { addLog, clearLogs } = useDebugLogs();
@@ -19,7 +16,12 @@ export function useFlowOperations() {
   const [slowMo, setSlowMo] = useState(DEFAULT_SLOWMO_MS);
   const [debugOptions, setDebugOptions] = useState({
     simulateError: false,
-    errorType: "generic" as "generic" | "timeout" | "network" | "validation" | "permission",
+    errorType: "generic" as
+      | "generic"
+      | "timeout"
+      | "network"
+      | "validation"
+      | "permission",
     errorNode: "random" as string | "random",
     errorDelay: 0, // 0 = immediate, >0 = delayed (simulates mid-execution failure)
     simulateLongRunning: false,
@@ -33,8 +35,8 @@ export function useFlowOperations() {
   // Track completed nodes for progress
   const completedNodesRef = useRef<Set<string>>(new Set());
 
-  // Track execution trace
-  const executionTraceRef = useRef<ExecutionTraceEvent[]>([]);
+  // Track execution trace from result (server-side trace)
+  const executionTraceRef = useRef<unknown>(null);
 
   // Cancel execution on page unload/refresh
   useEffect(() => {
@@ -62,24 +64,10 @@ export function useFlowOperations() {
     };
   }, []);
 
-  // Subscribe to node events and capture trace
+  // Subscribe to node events for progress updates
   useEffect(() => {
     const unsubscribeProgress = conductor.node.onProgress?.((event) => {
       if (currentExecutionIdRef.current) {
-        executionTraceRef.current.push({
-          timestamp: Date.now(),
-          type: "progress",
-          data: {
-            progress: event.progress,
-            message: event.message,
-            nodes: event.nodes.map((n) => ({
-              id: n.id,
-              name: n.name,
-              state: n.state,
-            })),
-          },
-        });
-
         // Update progress bar with graph progress
         const executingNode = event.nodes.find((n) => n.state === "executing");
         setProgress((prev) => ({
@@ -96,13 +84,6 @@ export function useFlowOperations() {
         return;
       }
 
-      // Track in trace
-      executionTraceRef.current.push({
-        timestamp: Date.now(),
-        type: "complete",
-        data: { nodeId: event.nodeId, executionId: event.executionId },
-      });
-
       // Track this node as completed
       completedNodesRef.current.add(event.nodeId);
       const completedCount = completedNodesRef.current.size;
@@ -117,20 +98,9 @@ export function useFlowOperations() {
       addLog(`  ✅ Node completed: ${event.nodeId}`);
     });
 
-    const unsubscribeError = conductor.node.onError?.((event) => {
-      if (currentExecutionIdRef.current) {
-        executionTraceRef.current.push({
-          timestamp: Date.now(),
-          type: "error",
-          data: { error: event.error, nodeId: event.nodeId },
-        });
-      }
-    });
-
     return () => {
       unsubscribeProgress?.();
       unsubscribeComplete?.();
-      unsubscribeError?.();
     };
   }, [addLog]);
 
@@ -147,12 +117,14 @@ export function useFlowOperations() {
         const executionStartTime = Date.now();
 
         addLog(`🚀 Executing flow: ${flow.name}`);
-        addLog(`⚙️  Execution options: slowMo=${slowMo}ms, debug=${JSON.stringify(debugOptions)}`);
+        addLog(
+          `⚙️  Execution options: slowMo=${slowMo}ms, debug=${JSON.stringify(debugOptions)}`,
+        );
 
         // Initialize progress
         const totalNodes = flow.nodes?.length || 0;
         completedNodesRef.current.clear();
-        executionTraceRef.current = []; // Clear previous trace
+        executionTraceRef.current = null; // Clear previous trace
         setProgress({
           currentNode: 0,
           totalNodes,
@@ -165,29 +137,19 @@ export function useFlowOperations() {
         const executionId = `flow_exec_${Date.now()}`;
         currentExecutionIdRef.current = executionId;
 
-        // Add trace start event
-        executionTraceRef.current.push({
-          timestamp: Date.now(),
-          type: "started",
-          data: {
-            executionId,
-            flowName: flow.name,
-            totalNodes,
-            slowMo,
-            startTime: executionStartTime,
-          },
-        });
-
         const contextOptions = {
           executionId,
           slowMo,
-          ...((debugOptions.simulateError || debugOptions.simulateLongRunning) && {
+          ...((debugOptions.simulateError ||
+            debugOptions.simulateLongRunning) && {
             debug: {
               ...(debugOptions.simulateError && {
                 simulateError: {
                   nodeId: debugOptions.errorNode,
                   errorType: debugOptions.errorType,
-                  ...(debugOptions.errorDelay > 0 && { delayMs: debugOptions.errorDelay }),
+                  ...(debugOptions.errorDelay > 0 && {
+                    delayMs: debugOptions.errorDelay,
+                  }),
                 },
               }),
               ...(debugOptions.simulateLongRunning && {
@@ -200,10 +162,13 @@ export function useFlowOperations() {
           }),
         };
 
-        console.log('[DEBUG] Debug options state:', debugOptions);
-        console.log('[DEBUG] Context options being passed:', contextOptions);
+        console.log("[DEBUG] Debug options state:", debugOptions);
+        console.log("[DEBUG] Context options being passed:", contextOptions);
 
         const result = await conductor.node.run(flow, contextOptions);
+
+        // Store trace from result (server-side trace)
+        executionTraceRef.current = result.trace;
 
         // Check result and update final state
         if (result.success) {
@@ -215,35 +180,16 @@ export function useFlowOperations() {
           });
           addLog("🎉 Flow execution completed!");
 
-          // Output execution trace
-          const executionDuration = Date.now() - executionStartTime;
-          console.group(
-            `📊 Execution Trace: ${flow.name} (${executionDuration}ms)`,
-          );
-          console.log("⚙️ Config:", { slowMo, totalNodes, executionId });
-          console.log("📈 Events:", executionTraceRef.current);
-          console.table(
-            executionTraceRef.current
-              .filter(
-                (e): e is Extract<ExecutionTraceEvent, { type: "progress" }> =>
-                  e.type === "progress",
-              )
-              .map((e) => ({
-                time: new Date(e.timestamp).toLocaleTimeString(),
-                progress: e.data.progress,
-                message: e.data.message,
-                executing: e.data.nodes
-                  .filter((n) => n.state === "executing")
-                  .map((n) => n.name)
-                  .join(", "),
-              })),
-          );
-          console.groupEnd();
-
-          // Also add to logs for easy copy
-          addLog(
-            `📊 Trace: ${JSON.stringify(executionTraceRef.current, null, 2)}`,
-          );
+          // Output execution trace to console
+          if (result.trace) {
+            const executionDuration = Date.now() - executionStartTime;
+            console.group(
+              `📊 Execution Trace: ${flow.name} (${executionDuration}ms)`,
+            );
+            console.log("⚙️ Config:", { slowMo, totalNodes, executionId });
+            console.log("📈 Trace:", result.trace);
+            console.groupEnd();
+          }
         } else {
           addLog(`❌ Flow execution error: ${result.error?.message}`);
         }
@@ -268,13 +214,18 @@ export function useFlowOperations() {
       graphProgress: 0,
     });
     completedNodesRef.current.clear();
-    executionTraceRef.current = [];
+    executionTraceRef.current = null;
     currentExecutionIdRef.current = null;
     clearLogs();
     setResetKey((prev) => prev + 1); // Increment to force remount
     addLog("🔄 Reset execution state");
     console.log("[DEBUG] Reset complete");
   }, [clearLogs, addLog]);
+
+  // Get current trace from server result
+  const getTrace = useCallback(() => {
+    return executionTraceRef.current;
+  }, []);
 
   return {
     isExecuting,
@@ -286,5 +237,6 @@ export function useFlowOperations() {
     setSlowMo,
     debugOptions,
     setDebugOptions,
+    getTrace,
   };
 }

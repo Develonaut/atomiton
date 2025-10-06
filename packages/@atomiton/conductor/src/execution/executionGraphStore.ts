@@ -8,6 +8,8 @@
 import { createLogger } from "@atomiton/logger/browser";
 import type { ExecutionGraph, GraphNode } from "@atomiton/nodes/graph";
 import { createStore } from "@atomiton/store";
+import type { ExecutionTrace, NodeExecutionTrace } from "#types";
+import { generateExecutionId } from "@atomiton/utils";
 
 const logger = createLogger({ scope: "EXECUTION_GRAPH" });
 
@@ -75,6 +77,18 @@ export function createExecutionGraphStore() {
     { name: "ExecutionGraph" },
   );
 
+  // Trace collection
+  const trace: ExecutionTrace = {
+    executionId: "",
+    rootNodeId: "",
+    startTime: 0,
+    events: [],
+    nodes: [],
+    config: {},
+  };
+
+  const nodeTraces = new Map<string, NodeExecutionTrace>();
+
   /**
    * Internal: Calculate weighted progress from current state
    * This is O(n) but only called on state mutations, not reads
@@ -107,6 +121,36 @@ export function createExecutionGraphStore() {
       criticalPathLength: graph.criticalPath.length,
       maxParallelism: graph.maxParallelism,
       executionLayers: graph.executionOrder.length,
+    });
+
+    // Initialize trace
+    trace.executionId = generateExecutionId();
+    trace.rootNodeId = Array.from(graph.nodes.values())[0]?.id || "unknown";
+    trace.startTime = Date.now();
+    trace.config = {};
+
+    // Record start event
+    trace.events.push({
+      timestamp: Date.now(),
+      type: "started",
+      data: {
+        totalNodes: graph.nodes.size,
+        totalWeight: graph.totalWeight,
+        criticalPath: graph.criticalPath,
+      },
+    });
+
+    // Initialize node traces
+    graph.nodes.forEach((node) => {
+      nodeTraces.set(node.id, {
+        nodeId: node.id,
+        nodeName: node.name,
+        nodeType: node.type,
+        startTime: 0,
+        state: "pending",
+        progress: 0,
+        events: [],
+      });
     });
 
     store.setState((draft: ExecutionGraphState) => {
@@ -165,6 +209,34 @@ export function createExecutionGraphStore() {
       newState: state,
       error,
     });
+
+    // Record in trace
+    const nodeTrace = nodeTraces.get(nodeId);
+    if (nodeTrace) {
+      const timestamp = Date.now();
+
+      if (state === "executing" && nodeTrace.startTime === 0) {
+        nodeTrace.startTime = timestamp;
+      }
+
+      if (state === "completed" || state === "error") {
+        nodeTrace.endTime = timestamp;
+        nodeTrace.duration = timestamp - nodeTrace.startTime;
+      }
+
+      nodeTrace.state = state;
+      nodeTrace.events.push({
+        timestamp,
+        type: "state-change",
+        data: { state, errorMessage: error },
+      });
+
+      trace.events.push({
+        timestamp,
+        type: "state-change",
+        data: { nodeId, state, errorMessage: error },
+      });
+    }
 
     store.setState((draft: ExecutionGraphState) => {
       const node = draft.nodes.get(nodeId);
@@ -227,7 +299,8 @@ export function createExecutionGraphStore() {
    * Update node progress (0-100) and optional message
    */
   function setNodeProgress(nodeId: string, progress: number, message?: string) {
-    const node = store.getState().nodes.get(nodeId);
+    const state = store.getState();
+    const node = state.nodes.get(nodeId);
     if (!node) {
       logger.warn("Attempted to update progress for non-existent node", {
         nodeId,
@@ -244,6 +317,33 @@ export function createExecutionGraphStore() {
       previousProgress: node.progress,
       newProgress: clampedProgress,
       message,
+    });
+
+    // Record in trace
+    const nodeTrace = nodeTraces.get(nodeId);
+    if (nodeTrace) {
+      nodeTrace.progress = clampedProgress;
+      nodeTrace.events.push({
+        timestamp: Date.now(),
+        type: "progress",
+        data: { progress: clampedProgress, message },
+      });
+    }
+
+    trace.events.push({
+      timestamp: Date.now(),
+      type: "progress",
+      data: {
+        nodeId,
+        progress: state.cachedProgress,
+        message: message || "",
+        allNodes: Array.from(state.nodes.values()).map((n) => ({
+          id: n.id,
+          name: n.name,
+          state: n.state,
+          progress: n.progress,
+        })),
+      },
     });
 
     store.setState((draft: ExecutionGraphState) => {
@@ -278,6 +378,22 @@ export function createExecutionGraphStore() {
       totalWeight: state.totalWeight,
     });
 
+    // Finalize trace
+    trace.endTime = Date.now();
+    trace.duration = trace.endTime - trace.startTime;
+    trace.nodes = Array.from(nodeTraces.values());
+
+    trace.events.push({
+      timestamp: Date.now(),
+      type: "completed",
+      data: {
+        totalDuration: trace.duration,
+        nodesCompleted: trace.nodes.filter((n) => n.state === "completed")
+          .length,
+        nodesErrored: trace.nodes.filter((n) => n.state === "error").length,
+      },
+    });
+
     store.setState((draft: ExecutionGraphState) => {
       draft.isExecuting = false;
       draft.endTime = Date.now();
@@ -302,6 +418,18 @@ export function createExecutionGraphStore() {
     }));
   }
 
+  /**
+   * Get execution trace
+   */
+  function getTrace(): ExecutionTrace {
+    // Return a copy to prevent external modifications
+    return {
+      ...trace,
+      events: [...trace.events],
+      nodes: [...trace.nodes],
+    };
+  }
+
   return {
     ...store,
     initializeGraph,
@@ -309,88 +437,16 @@ export function createExecutionGraphStore() {
     setNodeProgress,
     completeExecution,
     reset,
+    getTrace,
   };
 }
 
-/**
- * Helper functions for querying execution graph state
- */
-
-export function getNodeState(
-  store: ReturnType<typeof createExecutionGraphStore>,
-  nodeId: string,
-): ExecutionGraphNode | undefined {
-  return store.getState().nodes.get(nodeId);
-}
-
-/**
- * Get overall execution progress (weighted by node progress)
- *
- * PERFORMANCE: This is O(1) - reads from cached value.
- * The cache is updated on state mutations (O(n) but infrequent).
- *
- * Use with Zustand selector for optimal React performance:
- * @example
- * const progress = store.useStore((state) => state.cachedProgress);
- */
-export function getExecutionProgress(
-  store: ReturnType<typeof createExecutionGraphStore>,
-): number {
-  return store.getState().cachedProgress;
-}
-
-/**
- * Calculate simple completion-based progress (old behavior)
- * Only counts fully completed nodes, ignoring individual progress
- */
-export function getCompletionProgress(
-  store: ReturnType<typeof createExecutionGraphStore>,
-): number {
-  const state = store.getState();
-  if (state.nodes.size === 0) return 0;
-
-  const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
-  const completed = nodes.filter(
-    (n) => n.state === "completed" || n.state === "skipped",
-  ).length;
-
-  return Math.round((completed / state.nodes.size) * 100);
-}
-
-export function getNodesByState(
-  store: ReturnType<typeof createExecutionGraphStore>,
-  nodeState: NodeExecutionState,
-): ExecutionGraphNode[] {
-  const state = store.getState();
-  const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
-  return nodes.filter((n) => n.state === nodeState);
-}
-
-export function getCompletedWeight(
-  store: ReturnType<typeof createExecutionGraphStore>,
-): number {
-  const state = store.getState();
-  const nodes = Array.from(state.nodes.values()) as ExecutionGraphNode[];
-  const completed = nodes.filter(
-    (n) => n.state === "completed" || n.state === "skipped",
-  );
-
-  return completed.reduce((sum, node) => sum + node.weight, 0);
-}
-
-export function getEstimatedTimeRemaining(
-  store: ReturnType<typeof createExecutionGraphStore>,
-): number | null {
-  const state = store.getState();
-  if (!state.startTime || !state.isExecuting) return null;
-
-  const elapsed = Date.now() - state.startTime;
-  const completedWeight = getCompletedWeight(store);
-
-  if (completedWeight === 0) return null;
-
-  const remainingWeight = state.totalWeight - completedWeight;
-  const avgTimePerWeight = elapsed / completedWeight;
-
-  return Math.round(remainingWeight * avgTimePerWeight);
-}
+// Re-export query helpers from separate module
+export {
+  getNodeState,
+  getExecutionProgress,
+  getCompletionProgress,
+  getNodesByState,
+  getCompletedWeight,
+  getEstimatedTimeRemaining,
+} from "#execution/executionGraphHelpers";

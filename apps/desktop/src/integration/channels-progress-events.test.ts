@@ -27,6 +27,7 @@ vi.mock("@atomiton/conductor/desktop", () => ({
       setNodeState: vi.fn(),
       completeExecution: vi.fn(),
       reset: vi.fn(),
+      getTrace: vi.fn(),
     };
 
     return {
@@ -99,6 +100,7 @@ const createMockConductor = () => {
     setNodeProgress: vi.fn(),
     completeExecution: vi.fn(),
     reset: vi.fn(),
+    getTrace: vi.fn(),
   };
 
   return {

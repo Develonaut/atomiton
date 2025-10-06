@@ -6,6 +6,7 @@ import type {
   ConductorExecutionContext,
   ExecutionError,
   ExecutionResult,
+  ExecutionTrace,
 } from "#types";
 
 type SuccessResultOptions = {
@@ -14,6 +15,7 @@ type SuccessResultOptions = {
   duration: number;
   executedNodes: string[];
   context?: ConductorExecutionContext;
+  trace?: ExecutionTrace;
 };
 
 type ErrorResultOptions = {
@@ -22,6 +24,7 @@ type ErrorResultOptions = {
   duration: number;
   executedNodes: string[];
   context?: ConductorExecutionContext;
+  trace?: ExecutionTrace;
 };
 
 /**

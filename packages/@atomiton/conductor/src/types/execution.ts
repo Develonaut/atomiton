@@ -69,6 +69,48 @@ export type ConductorExecutionContext = {
 };
 
 /**
+ * Execution trace event - captures individual events during execution
+ */
+export type ExecutionTraceEvent = {
+  timestamp: number;
+  type: "started" | "progress" | "state-change" | "completed" | "error";
+  data: unknown;
+};
+
+/**
+ * Node execution trace - captures execution history for a single node
+ */
+export type NodeExecutionTrace = {
+  nodeId: string;
+  nodeName: string;
+  nodeType: string;
+  startTime: number;
+  endTime?: number;
+  duration?: number;
+  state: string; // NodeExecutionState from executionGraphStore
+  progress: number;
+  events: ExecutionTraceEvent[];
+  childTraces?: NodeExecutionTrace[]; // For group nodes
+};
+
+/**
+ * Complete execution trace - captures full execution history
+ */
+export type ExecutionTrace = {
+  executionId: string;
+  rootNodeId: string;
+  startTime: number;
+  endTime?: number;
+  duration?: number;
+  config: {
+    slowMo?: number;
+    // ... other config
+  };
+  events: ExecutionTraceEvent[];
+  nodes: NodeExecutionTrace[];
+};
+
+/**
  * Enhanced execution result with orchestration metadata
  */
 export type ExecutionResult<T = unknown> = {
@@ -79,6 +121,8 @@ export type ExecutionResult<T = unknown> = {
   duration?: number;
   executedNodes?: string[];
   context?: ConductorExecutionContext;
+  /** Execution trace - complete history of all events and node states */
+  trace?: ExecutionTrace;
 };
 
 /**

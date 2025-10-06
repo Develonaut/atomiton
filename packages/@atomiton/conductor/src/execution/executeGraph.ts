@@ -59,7 +59,12 @@ export async function executeGraph(
           );
 
       completeExecution(executionGraphStore);
-      return result;
+
+      // Include trace in result
+      return {
+        ...result,
+        trace: executionGraphStore?.getTrace(),
+      };
     }
 
     // Use topological sort from graph analyzer and flatten levels to sequential execution
@@ -103,6 +108,7 @@ export async function executeGraph(
           error: result.error!,
           duration: Date.now() - startTime,
           executedNodes: [...executedNodes, ...(result.executedNodes || [])],
+          trace: executionGraphStore?.getTrace(),
         });
       }
 
@@ -122,6 +128,7 @@ export async function executeGraph(
       duration: Date.now() - startTime,
       executedNodes: [node.id, ...executedNodes],
       context,
+      trace: executionGraphStore?.getTrace(),
     });
   } catch (error) {
     completeExecution(executionGraphStore);
@@ -136,6 +143,7 @@ export async function executeGraph(
       },
       duration: Date.now() - startTime,
       executedNodes: [node.id, ...executedNodes],
+      trace: executionGraphStore?.getTrace(),
     });
   }
 }
