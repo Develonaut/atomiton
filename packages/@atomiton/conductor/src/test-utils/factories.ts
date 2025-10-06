@@ -19,6 +19,7 @@ export type MockNodeOptions = {
   dependents?: string[];
   level?: number;
   state?: NodeExecutionState;
+  progress?: number;
   startTime?: number;
   endTime?: number;
   error?: string;
@@ -34,42 +35,81 @@ export type MockGraphStateOptions = {
   isExecuting?: boolean;
   startTime?: number;
   endTime?: number | null;
+  cachedProgress?: number;
 };
 
 /**
  * Create a mock node with sensible defaults
  */
-export const createMockNode = (options: MockNodeOptions = {}) => ({
-  id: options.id || "mock-node",
-  name: options.name || "Mock Node",
-  type: options.type || "test",
-  weight: options.weight ?? 100,
-  dependencies: options.dependencies || [],
-  dependents: options.dependents || [],
-  level: options.level ?? 0,
-  state: options.state || "pending",
-  startTime: options.startTime,
-  endTime: options.endTime,
-  error: options.error,
-});
+export const createMockNode = (options: MockNodeOptions = {}) => {
+  const state = options.state || "pending";
+  const defaultProgress =
+    state === "completed" || state === "skipped" ? 100 : 0;
+
+  return {
+    id: options.id || "mock-node",
+    name: options.name || "Mock Node",
+    type: options.type || "test",
+    weight: options.weight ?? 100,
+    dependencies: options.dependencies || [],
+    dependents: options.dependents || [],
+    level: options.level ?? 0,
+    state,
+    progress: options.progress ?? defaultProgress,
+    startTime: options.startTime,
+    endTime: options.endTime,
+    error: options.error,
+  };
+};
+
+/**
+ * Calculate weighted progress from node states
+ * Matches the logic in executionGraphStore.ts:calculateProgress()
+ */
+const calculateMockProgress = (
+  nodes: Map<string, ReturnType<typeof createMockNode>>,
+  totalWeight: number,
+): number => {
+  if (nodes.size === 0 || totalWeight === 0) return 0;
+
+  let completedWeight = 0;
+
+  for (const node of nodes.values()) {
+    if (node.state === "completed" || node.state === "skipped") {
+      completedWeight += node.weight;
+    } else if (node.state === "executing") {
+      // Include executing nodes' partial progress
+      completedWeight += node.weight * (node.progress / 100);
+    }
+    // Error nodes contribute 0 to overall progress (execution failed)
+  }
+
+  return Math.round((completedWeight / totalWeight) * 100);
+};
 
 /**
  * Create a mock execution graph state with sensible defaults
  */
 export const createMockGraphState = (
   options: MockGraphStateOptions = {},
-): ExecutionGraphState => ({
-  nodes: options.nodes || new Map(),
-  edges: options.edges || [],
-  executionOrder: options.executionOrder || [],
-  criticalPath: options.criticalPath || [],
-  totalWeight: options.totalWeight ?? 0,
-  maxParallelism: options.maxParallelism ?? 1,
-  isExecuting: options.isExecuting ?? false,
-  startTime: options.startTime ?? Date.now(),
-  endTime: options.endTime ?? null,
-  cachedProgress: 0,
-});
+): ExecutionGraphState => {
+  const nodes = options.nodes || new Map();
+  const totalWeight = options.totalWeight ?? 0;
+
+  return {
+    nodes,
+    edges: options.edges || [],
+    executionOrder: options.executionOrder || [],
+    criticalPath: options.criticalPath || [],
+    totalWeight,
+    maxParallelism: options.maxParallelism ?? 1,
+    isExecuting: options.isExecuting ?? false,
+    startTime: options.startTime ?? Date.now(),
+    endTime: options.endTime ?? null,
+    cachedProgress:
+      options.cachedProgress ?? calculateMockProgress(nodes, totalWeight),
+  };
+};
 
 /**
  * Create a simple two-node graph for testing
