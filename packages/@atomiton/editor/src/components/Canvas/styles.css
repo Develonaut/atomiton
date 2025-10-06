@@ -5,6 +5,24 @@
   initial-value: 0deg;
 }
 
+/**
+ * Browser compatibility note for @property
+ *
+ * The @property CSS at-rule is not supported in Firefox as of 2025
+ * Without it, custom properties like --progress-deg cannot be smoothly transitioned
+ *
+ * Current behavior:
+ * - Chrome/Edge/Safari (Electron): Smooth circular progress animation ✅
+ * - Firefox: Progress updates instantly without smooth animation
+ *
+ * Note: Electron desktop app uses Chromium, so full @property support is guaranteed
+ *
+ * Future enhancement (if web support needed):
+ * - Add runtime detection using CSS.supports() or CSS.registerProperty
+ * - Dynamically disable transitions for browsers without @property support
+ * - See BROWSER_SUPPORT.md for implementation details
+ */
+
 :root {
   --atomiton-node-width: 80px;
   --atomiton-node-height: 80px;
@@ -34,6 +52,10 @@
   --atomiton-node-state-completed: var(--color-green);
   --atomiton-node-state-error: var(--color-red);
   --atomiton-node-state-skipped: var(--color-yellow);
+
+  /* Progress animation timings */
+  --atomiton-progress-transition-duration: 0.3s;
+  --atomiton-progress-deg-per-percent: 3.6deg; /* 360deg / 100 for percentage conversion */
 }
 
 :is(
@@ -197,7 +219,7 @@
     .react-flow__node-group
   )[data-execution-state="executing"]
   .atomiton-node::after {
-  --progress-deg: calc(var(--progress, 0) * 3.6deg);
+  --progress-deg: calc(var(--progress, 0) * var(--atomiton-progress-deg-per-percent));
   content: "";
   position: absolute;
   z-index: 0; /* Below handles (z-index: 1) */
@@ -218,7 +240,7 @@
     linear-gradient(#fff 0 0);
   mask-composite: exclude;
   pointer-events: none;
-  transition: --progress-deg 0.3s ease-out;
+  transition: --progress-deg var(--atomiton-progress-transition-duration) ease-out;
 }
 
 :is(
@@ -368,8 +390,8 @@
   stroke-width: var(--atomiton-border-overlay-width);
   /* dasharray and dashoffset set dynamically in JS for progress effect */
   transition:
-    stroke 0.3s ease,
-    stroke-dashoffset 0.3s ease;
+    stroke var(--atomiton-progress-transition-duration) ease,
+    stroke-dashoffset var(--atomiton-progress-transition-duration) ease;
   will-change: stroke-dashoffset; /* GPU acceleration hint */
 }
 
@@ -379,8 +401,8 @@
   stroke-width: var(--atomiton-border-overlay-width);
   /* dasharray and dashoffset set dynamically in JS for progress effect */
   transition:
-    stroke 0.3s ease,
-    stroke-dashoffset 0.3s ease;
+    stroke var(--atomiton-progress-transition-duration) ease,
+    stroke-dashoffset var(--atomiton-progress-transition-duration) ease;
   will-change: stroke-dashoffset; /* GPU acceleration hint */
 }
 
@@ -389,5 +411,5 @@
   stroke: var(--atomiton-node-state-error); /* Red for errors */
   stroke-width: var(--atomiton-border-overlay-width);
   /* dasharray and dashoffset set dynamically in JS for progress effect */
-  transition: stroke 0.3s ease;
+  transition: stroke var(--atomiton-progress-transition-duration) ease;
 }

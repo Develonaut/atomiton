@@ -10,7 +10,7 @@ describe("Debug Error Simulation", () => {
   beforeEach(() => {
     config = {
       nodeExecutorFactory: {
-        getNodeExecutable: (nodeType: string) => ({
+        getNodeExecutable: (_nodeType: string) => ({
           execute: async () => {
             // Simple executor that just completes
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -27,17 +27,17 @@ describe("Debug Error Simulation", () => {
       const node1 = createNodeDefinition({
         id: "node-1",
         type: "test",
-        label: "First Node",
+        name: "First Node",
       });
       const node2 = createNodeDefinition({
         id: "node-2",
         type: "test",
-        label: "Second Node",
+        name: "Second Node",
       });
       const node3 = createNodeDefinition({
         id: "node-3",
         type: "test",
-        label: "Third Node",
+        name: "Third Node",
       });
 
       const flow = createNodeDefinition({
@@ -58,7 +58,9 @@ describe("Debug Error Simulation", () => {
       // Verify execution failed
       expect(result.success).toBe(false);
       expect(result.error?.nodeId).toBe("node-1");
-      expect(result.error?.message).toBe("[GENERIC] Simulated error on first node");
+      expect(result.error?.message).toBe(
+        "[GENERIC] Simulated error on first node",
+      );
 
       // Verify node states
       const state = conductor.node.store.getState();
@@ -75,7 +77,7 @@ describe("Debug Error Simulation", () => {
       const node = createNodeDefinition({
         id: "error-node",
         type: "test",
-        label: "Error Node",
+        name: "Error Node",
       });
 
       const result = await conductor.node.run(node, {
@@ -104,12 +106,12 @@ describe("Debug Error Simulation", () => {
       const node1 = createNodeDefinition({
         id: "node-1",
         type: "test",
-        label: "First Node",
+        name: "First Node",
       });
       const node2 = createNodeDefinition({
         id: "node-2",
         type: "test",
-        label: "Second Node",
+        name: "Second Node",
       });
 
       const flow = createNodeDefinition({
@@ -139,12 +141,12 @@ describe("Debug Error Simulation", () => {
       const node1 = createNodeDefinition({
         id: "node-1",
         type: "test",
-        label: "Error Node",
+        name: "Error Node",
       });
       const node2 = createNodeDefinition({
         id: "node-2",
         type: "test",
-        label: "Next Node",
+        name: "Next Node",
       });
 
       const flow = createNodeDefinition({
@@ -180,7 +182,7 @@ describe("Debug Error Simulation", () => {
       const node = createNodeDefinition({
         id: "delayed-error-node",
         type: "test",
-        label: "Delayed Error Node",
+        name: "Delayed Error Node",
       });
 
       const startTime = Date.now();
@@ -201,7 +203,9 @@ describe("Debug Error Simulation", () => {
 
       // Verify execution failed after delay
       expect(result.success).toBe(false);
-      expect(result.error?.message).toBe("[NETWORK] Network failed halfway through");
+      expect(result.error?.message).toBe(
+        "[NETWORK] Network failed halfway through",
+      );
 
       // Verify the delay was applied (should be at least 150ms)
       expect(duration).toBeGreaterThanOrEqual(150);
@@ -222,7 +226,7 @@ describe("Debug Error Simulation", () => {
       const node = createNodeDefinition({
         id: "progress-then-error",
         type: "test",
-        label: "Progress Then Error",
+        name: "Progress Then Error",
       });
 
       await conductor.node.run(node, {
@@ -253,12 +257,12 @@ describe("Debug Error Simulation", () => {
       const childNode = createNodeDefinition({
         id: "child",
         type: "test",
-        label: "Child",
+        name: "Child",
       });
       const parentNode = createNodeDefinition({
         id: "parent",
         type: "group",
-        label: "Parent",
+        name: "Parent",
         nodes: [childNode],
       });
 

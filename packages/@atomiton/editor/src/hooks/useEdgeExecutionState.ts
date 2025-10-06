@@ -53,63 +53,70 @@ export function useEdgeExecutionState(
     }
 
     const unsubscribe = conductor.node.onProgress((event) => {
-      // Use find() for small arrays - faster than Map creation for typical node counts
-      const sourceNode = event.nodes.find((n) => n.id === sourceId);
-      const targetNode = event.nodes.find((n) => n.id === targetId);
+      try {
+        // Use find() for small arrays - faster than Map creation for typical node counts
+        const sourceNode = event.nodes.find((n) => n.id === sourceId);
+        const targetNode = event.nodes.find((n) => n.id === targetId);
 
-      if (!sourceNode || !targetNode) return;
+        if (!sourceNode || !targetNode) return;
 
-      // Edge progress: only fills AFTER source node completes
-      // Sequential flow: Node1 (0-100%) → Edge (0-100%) → Node2 (0-100%)
-      let edgeProgress = 0;
+        // Edge progress: only fills AFTER source node completes
+        // Sequential flow: Node1 (0-100%) → Edge (0-100%) → Node2 (0-100%)
+        let edgeProgress = 0;
 
-      // Only fill edge if source completed successfully (not error/skipped)
-      if (sourceNode.state === "completed" && sourceNode.progress >= 100) {
-        edgeProgress = 100;
-      }
+        // Only fill edge if source completed successfully (not error/skipped)
+        if (sourceNode.state === "completed" && sourceNode.progress >= 100) {
+          edgeProgress = 100;
+        }
 
-      // Determine edge state based on progress and connected nodes
-      let edgeState = "inactive";
+        // Determine edge state based on progress and connected nodes
+        let edgeState = "inactive";
 
-      // If either connected node has error, edge shows error
-      if (sourceNode.state === "error" || targetNode.state === "error") {
-        edgeState = "error";
-      } else if (edgeProgress === 100 && targetNode.progress > 0) {
-        // Edge is complete AND target has started - turn green
-        edgeState = "completed";
-      } else if (edgeProgress > 0) {
-        // Edge is filling but hasn't reached target - stay blue
-        edgeState = "executing";
-      } else if (
-        sourceNode.state === "pending" ||
-        targetNode.state === "pending"
-      ) {
-        edgeState = "pending";
-      }
+        // If either connected node has error, edge shows error
+        if (sourceNode.state === "error" || targetNode.state === "error") {
+          edgeState = "error";
+        } else if (edgeProgress === 100 && targetNode.progress > 0) {
+          // Edge is complete AND target has started - turn green
+          edgeState = "completed";
+        } else if (edgeProgress > 0) {
+          // Edge is filling but hasn't reached target - stay blue
+          edgeState = "executing";
+        } else if (
+          sourceNode.state === "pending" ||
+          targetNode.state === "pending"
+        ) {
+          edgeState = "pending";
+        }
 
-      // Update execution state on ReactFlow edge wrapper (no React re-render)
-      reactFlowEdge.setAttribute("data-edge-state", edgeState);
+        // Update execution state on ReactFlow edge wrapper (no React re-render)
+        reactFlowEdge.setAttribute("data-edge-state", edgeState);
 
-      // Update stroke-dashoffset for linear progress bar effect
-      if (pathElement && pathLength > 0) {
-        // Calculate dashoffset: as progress increases (0-100), dashoffset decreases (pathLength to 0)
-        const dashoffset = pathLength - (pathLength * edgeProgress) / 100;
-        pathElement.style.strokeDashoffset = String(dashoffset);
-      }
+        // Update stroke-dashoffset for linear progress bar effect
+        if (pathElement && pathLength > 0) {
+          // Calculate dashoffset: as progress increases (0-100), dashoffset decreases (pathLength to 0)
+          const dashoffset = pathLength - (pathLength * edgeProgress) / 100;
+          pathElement.style.strokeDashoffset = String(dashoffset);
+        }
 
-      // Add accessibility attributes for screen readers
-      if (edgeState === "executing") {
-        reactFlowEdge.setAttribute(
-          "aria-label",
-          `Connection from ${sourceId} to ${targetId} executing (${edgeProgress}%)`,
+        // Add accessibility attributes for screen readers
+        if (edgeState === "executing") {
+          reactFlowEdge.setAttribute(
+            "aria-label",
+            `Connection from ${sourceId} to ${targetId} executing (${edgeProgress}%)`,
+          );
+        } else if (edgeState === "completed") {
+          reactFlowEdge.setAttribute(
+            "aria-label",
+            `Connection from ${sourceId} to ${targetId} completed successfully`,
+          );
+        } else {
+          reactFlowEdge.removeAttribute("aria-label");
+        }
+      } catch (error) {
+        console.error(
+          `[useEdgeExecutionState] Failed to update edge ${edgeId} (${sourceId} → ${targetId}):`,
+          error,
         );
-      } else if (edgeState === "completed") {
-        reactFlowEdge.setAttribute(
-          "aria-label",
-          `Connection from ${sourceId} to ${targetId} completed successfully`,
-        );
-      } else {
-        reactFlowEdge.removeAttribute("aria-label");
       }
     });
 

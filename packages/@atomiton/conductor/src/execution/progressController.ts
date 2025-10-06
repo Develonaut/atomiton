@@ -91,8 +91,9 @@ export function createProgressController(
     markComplete: async () => {
       if (!markedComplete) {
         executionGraphStore.setNodeProgress(node.id, 100, "Complete");
-        // Wait for progress animation to complete (half of slowMo, min 300ms for CSS transition)
-        await delay(Math.max(slowMo / 2, 300));
+        // Wait for progress animation to complete (half of slowMo for snappier feel)
+        // Electron/Chromium has full @property support, so no minimum delay needed
+        await delay(slowMo / 2);
         executionGraphStore.setNodeState(node.id, "completed");
         markedComplete = true;
       }

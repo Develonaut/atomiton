@@ -14,6 +14,7 @@
 import {
   getExecutionProgress,
   type ExecutionGraphState,
+  type ExecutionGraphNode,
 } from "#execution/executionGraphStore";
 import { createConductor } from "#index";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
@@ -362,7 +363,7 @@ describe("Async Progress Tracking", () => {
       // All nodes should be in error state
       const state = conductor.node.store.getState();
       const errorNodes = Array.from(state.nodes.values()).filter(
-        (n) => n.state === "error",
+        (n: ExecutionGraphNode) => n.state === "error",
       );
 
       // At least the first failing node should be in error state
@@ -406,10 +407,10 @@ describe("Async Progress Tracking", () => {
 
       const state = conductor.node.store.getState();
       const completedNodes = Array.from(state.nodes.values()).filter(
-        (n) => n.state === "completed",
+        (n: ExecutionGraphNode) => n.state === "completed",
       );
       const errorNodes = Array.from(state.nodes.values()).filter(
-        (n) => n.state === "error",
+        (n: ExecutionGraphNode) => n.state === "error",
       );
 
       // Should have at least one completed (first node) and one error (second node)
