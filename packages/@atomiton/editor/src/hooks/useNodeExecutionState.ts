@@ -60,21 +60,25 @@ export function useNodeExecutionState(
         const preferences = getAnimationPreferences();
 
         // Executing animation - pulse input handles when node starts executing
+        // Delay to offset from output handle pulse of previous node
         if (currentState === "executing" && previousState !== "executing") {
           if (preferences.handleAnimation !== "none") {
             const inputHandles = reactFlowNode.querySelectorAll(
               ".react-flow__handle.target",
             );
-            inputHandles.forEach((handle) => {
-              handle.setAttribute(
-                "data-handle-animation",
-                preferences.handleAnimation,
-              );
-              // Remove animation attribute after animation completes
-              setTimeout(() => {
-                handle.removeAttribute("data-handle-animation");
-              }, 400); // Match --atomiton-handle-animation-duration
-            });
+            // Delay input pulse by 200ms to create visual separation from output pulse
+            setTimeout(() => {
+              inputHandles.forEach((handle) => {
+                handle.setAttribute(
+                  "data-handle-animation",
+                  preferences.handleAnimation,
+                );
+                // Remove animation attribute after animation completes
+                setTimeout(() => {
+                  handle.removeAttribute("data-handle-animation");
+                }, 400); // Match --atomiton-handle-animation-duration
+              });
+            }, 200);
           }
         }
 
