@@ -318,7 +318,7 @@
 
 /* ::after pseudo element - colored progress overlay (only for executing/error states) */
 
-/* Executing state - dual progress borders meeting at output handle */
+/* Executing state - dual progress borders from left input to right output handle */
 :is(
     .react-flow__node,
     .react-flow__node-input,
@@ -334,16 +334,18 @@
   inset: calc(-1 * var(--atomiton-border-overlay-width));
   border-radius: inherit;
   padding: var(--atomiton-border-overlay-width);
-  /* Two gradients: one clockwise from top, one counter-clockwise from top, both meeting at bottom (output handle) */
+  /* Two paths from left (input) to right (output):
+     - Bottom path: left → down → right (clockwise)
+     - Top path: left → up → right (counter-clockwise) */
   background:
     conic-gradient(
-      from -90deg,
+      from 270deg,
       var(--atomiton-node-state-executing) 0deg,
       var(--atomiton-node-state-executing) calc(var(--progress-deg) / 2),
       transparent calc(var(--progress-deg) / 2)
     ),
     conic-gradient(
-      from 90deg,
+      from 270deg,
       transparent 0deg,
       transparent calc(360deg - var(--progress-deg) / 2),
       var(--atomiton-node-state-executing) calc(360deg - var(--progress-deg) / 2)
@@ -371,7 +373,7 @@
   background-color: var(--atomiton-node-state-executing);
 }
 
-/* Completed state - dual green borders meeting at output handle */
+/* Completed state - dual green borders from left input to right output handle */
 :is(
     .react-flow__node,
     .react-flow__node-input,
@@ -387,16 +389,18 @@
   inset: calc(-1 * var(--atomiton-border-overlay-width));
   border-radius: inherit;
   padding: var(--atomiton-border-overlay-width);
-  /* Two gradients: one clockwise from top, one counter-clockwise from top, both meeting at bottom (output handle) */
+  /* Two paths from left (input) to right (output):
+     - Bottom path: left → down → right (clockwise)
+     - Top path: left → up → right (counter-clockwise) */
   background:
     conic-gradient(
-      from -90deg,
+      from 270deg,
       var(--atomiton-node-state-completed) 0deg,
       var(--atomiton-node-state-completed) calc(var(--progress-deg) / 2),
       transparent calc(var(--progress-deg) / 2)
     ),
     conic-gradient(
-      from 90deg,
+      from 270deg,
       transparent 0deg,
       transparent calc(360deg - var(--progress-deg) / 2),
       var(--atomiton-node-state-completed) calc(360deg - var(--progress-deg) / 2)
