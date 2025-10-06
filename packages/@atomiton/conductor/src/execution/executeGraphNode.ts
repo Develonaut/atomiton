@@ -75,7 +75,7 @@ export async function executeGraphNode(
 
     // Wait for progress, then mark complete
     await progressPromise;
-    progressController?.markComplete();
+    await progressController?.markComplete();
 
     return createExecutionResult({
       success: true,

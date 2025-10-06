@@ -65,7 +65,7 @@ export function createProgressController(
   slowMo: number,
 ): {
   start: () => Promise<void>;
-  markComplete: () => void;
+  markComplete: () => Promise<void>;
   cancel: () => void;
 } {
   const nodeState = executionGraphStore.getState().nodes.get(node.id);
@@ -88,9 +88,11 @@ export function createProgressController(
         }
       }
     },
-    markComplete: () => {
+    markComplete: async () => {
       if (!markedComplete) {
         executionGraphStore.setNodeProgress(node.id, 100, "Complete");
+        // Wait for progress animation to complete (half of slowMo, min 300ms for CSS transition)
+        await delay(Math.max(slowMo / 2, 300));
         executionGraphStore.setNodeState(node.id, "completed");
         markedComplete = true;
       }
