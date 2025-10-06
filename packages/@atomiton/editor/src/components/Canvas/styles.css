@@ -318,7 +318,7 @@
 
 /* ::after pseudo element - colored progress overlay (only for executing/error states) */
 
-/* Executing state - blue conic gradient progress overlay */
+/* Executing state - dual progress borders meeting at output handle */
 :is(
     .react-flow__node,
     .react-flow__node-input,
@@ -334,11 +334,20 @@
   inset: calc(-1 * var(--atomiton-border-overlay-width));
   border-radius: inherit;
   padding: var(--atomiton-border-overlay-width);
-  background: conic-gradient(
-    from -90deg,
-    var(--atomiton-node-state-executing) var(--progress-deg),
-    transparent var(--progress-deg) 360deg
-  );
+  /* Two gradients: one clockwise from top, one counter-clockwise from top, both meeting at bottom (output handle) */
+  background:
+    conic-gradient(
+      from -90deg,
+      var(--atomiton-node-state-executing) 0deg,
+      var(--atomiton-node-state-executing) calc(var(--progress-deg) / 2),
+      transparent calc(var(--progress-deg) / 2)
+    ),
+    conic-gradient(
+      from 90deg,
+      transparent 0deg,
+      transparent calc(360deg - var(--progress-deg) / 2),
+      var(--atomiton-node-state-executing) calc(360deg - var(--progress-deg) / 2)
+    );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
@@ -362,7 +371,7 @@
   background-color: var(--atomiton-node-state-executing);
 }
 
-/* Completed state - green border overlay (100%) */
+/* Completed state - dual green borders meeting at output handle */
 :is(
     .react-flow__node,
     .react-flow__node-input,
@@ -371,18 +380,27 @@
     .react-flow__node-group
   )[data-execution-state="completed"]
   .atomiton-node::after {
-  --progress-deg: 360deg; /* Always full circle for completed */
+  --progress-deg: 360deg; /* Full progress - both borders meet at output handle */
   content: "";
   position: absolute;
   z-index: 0; /* Below handles (z-index: 1) */
   inset: calc(-1 * var(--atomiton-border-overlay-width));
   border-radius: inherit;
   padding: var(--atomiton-border-overlay-width);
-  background: conic-gradient(
-    from -90deg,
-    var(--atomiton-node-state-completed) var(--progress-deg),
-    transparent var(--progress-deg) 360deg
-  );
+  /* Two gradients: one clockwise from top, one counter-clockwise from top, both meeting at bottom (output handle) */
+  background:
+    conic-gradient(
+      from -90deg,
+      var(--atomiton-node-state-completed) 0deg,
+      var(--atomiton-node-state-completed) calc(var(--progress-deg) / 2),
+      transparent calc(var(--progress-deg) / 2)
+    ),
+    conic-gradient(
+      from 90deg,
+      transparent 0deg,
+      transparent calc(360deg - var(--progress-deg) / 2),
+      var(--atomiton-node-state-completed) calc(360deg - var(--progress-deg) / 2)
+    );
   -webkit-mask:
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
