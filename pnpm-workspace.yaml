@@ -12,6 +12,7 @@ catalog:
   react-dom: ^19.1.1
   "@types/react": ^19.1.13
   "@types/react-dom": ^19.1.9
+  react-router-dom: ^7.1.4
 
   # Testing libraries
   "@testing-library/jest-dom": ^6.8.0

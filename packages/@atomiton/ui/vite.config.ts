@@ -5,7 +5,7 @@ export default defineReactLibraryConfig({
   name: "AtomitonUI",
   enableTailwind: true,
   enableTsconfigPaths: true,
-  external: [],
+  external: ["react-router-dom"],
   chunks: {
     components: ["src/components/"],
     theme: ["src/theme/"],
