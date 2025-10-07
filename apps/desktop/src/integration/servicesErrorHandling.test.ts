@@ -1,12 +1,31 @@
 import { initializeServices } from "#main/services";
+import {
+  initializePathManager,
+  resetPathManager,
+} from "#main/services/pathManager";
 import { initializeStorage } from "#main/services/storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock Electron app
 vi.mock("electron", () => ({
   app: {
-    getPath: vi.fn(() => "/mock/user/data"),
+    getPath: vi.fn((name: string) => {
+      switch (name) {
+        case "userData":
+          return "/mock/user/data";
+        case "temp":
+          return "/tmp";
+        case "home":
+          return "/tmp/test-home";
+        default:
+          return "/tmp";
+      }
+    }),
     quit: vi.fn(),
+  },
+  ipcMain: {
+    handle: vi.fn(),
+    removeHandler: vi.fn(),
   },
 }));
 
@@ -16,6 +35,12 @@ vi.mock("@atomiton/storage/desktop", () => ({
   createStorage: vi.fn(
     (config) => config?.engine || { save: vi.fn(), load: vi.fn() },
   ),
+  createPathManager: vi.fn(() => ({
+    getUserDataPath: vi.fn(() => "/mock/user/data"),
+    getLogsPath: vi.fn(() => "/mock/logs"),
+    getTempPath: vi.fn(() => "/mock/temp"),
+    getDataPath: vi.fn(() => "/mock/data"),
+  })),
 }));
 
 // Integration tests for error handling - test real failure scenarios
@@ -27,6 +52,9 @@ describe("Services Error Handling Integration", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Initialize PathManager before each test
+    initializePathManager();
+
     // Spy on console.error to verify error logging
     originalConsoleError = console.error;
     console.error = vi.fn();
@@ -39,6 +67,8 @@ describe("Services Error Handling Integration", () => {
   afterEach(() => {
     console.error = originalConsoleError;
     process.exit = originalProcessExit;
+    // Reset PathManager after each test
+    resetPathManager();
   });
 
   describe("Given storage initialization failures", () => {

@@ -8,6 +8,28 @@ import {
 } from "@atomiton/conductor/test-utils/factories";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+// Mock electron app module
+vi.mock("electron", () => ({
+  app: {
+    getPath: vi.fn((name: string) => {
+      switch (name) {
+        case "userData":
+          return "/tmp/test-user-data";
+        case "temp":
+          return "/tmp";
+        case "home":
+          return "/tmp/test-home";
+        default:
+          return "/tmp";
+      }
+    }),
+  },
+  ipcMain: {
+    handle: vi.fn(),
+    removeHandler: vi.fn(),
+  },
+}));
+
 // Mock dependencies
 vi.mock("@atomiton/conductor/desktop", () => ({
   createConductor: vi.fn(() => {
@@ -65,6 +87,11 @@ vi.mock("@atomiton/rpc/main/channels", () => ({
     dispose: vi.fn(),
   })),
   createLoggerChannelServer: vi.fn(() => ({
+    handle: vi.fn(),
+    broadcast: vi.fn(),
+    dispose: vi.fn(),
+  })),
+  createPathChannelServer: vi.fn(() => ({
     handle: vi.fn(),
     broadcast: vi.fn(),
     dispose: vi.fn(),
@@ -137,6 +164,12 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 
+    // Initialize PathManager for the test
+    const { initializePathManager } = await import(
+      "../main/services/pathManager"
+    );
+    initializePathManager();
+
     // Import the actual module implementations
     const { createConductor } = await import("@atomiton/conductor/desktop");
     const { createNodeChannelServer } = await import(
@@ -161,7 +194,10 @@ describe("Channels - Unified Progress Event Broadcasting", () => {
     vi.mocked(createNodeChannelServer).mockReturnValue(mockNodeChannel);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    // Reset PathManager after each test
+    const { resetPathManager } = await import("../main/services/pathManager");
+    resetPathManager();
     vi.restoreAllMocks();
   });
 

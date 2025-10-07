@@ -1,18 +1,37 @@
 import { initializeStorage } from "#main/services/storage";
 import {
+  initializePathManager,
+  resetPathManager,
+} from "#main/services/pathManager";
+import {
   createFileSystemEngine,
   createStorage,
   type IStorageEngine,
 } from "@atomiton/storage/desktop";
 import { app } from "electron";
 import path from "path";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock Electron app
 vi.mock("electron", () => ({
   app: {
-    getPath: vi.fn(() => "/mock/userData"),
+    getPath: vi.fn((name: string) => {
+      switch (name) {
+        case "userData":
+          return "/mock/userData";
+        case "temp":
+          return "/tmp";
+        case "home":
+          return "/tmp/test-home";
+        default:
+          return "/tmp";
+      }
+    }),
     quit: vi.fn(),
+  },
+  ipcMain: {
+    handle: vi.fn(),
+    removeHandler: vi.fn(),
   },
 }));
 
@@ -25,11 +44,24 @@ vi.spyOn(process, "exit").mockImplementation(() => {
 vi.mock("@atomiton/storage/desktop", () => ({
   createFileSystemEngine: vi.fn(),
   createStorage: vi.fn(),
+  createPathManager: vi.fn(() => ({
+    getUserDataPath: vi.fn(() => "/mock/userData"),
+    getLogsPath: vi.fn(() => "/mock/logs"),
+    getTempPath: vi.fn(() => "/mock/temp"),
+    getDataPath: vi.fn(() => "/mock/data"),
+  })),
 }));
 
 describe("Storage Service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Initialize PathManager before each test
+    initializePathManager();
+  });
+
+  afterEach(() => {
+    // Reset PathManager after each test
+    resetPathManager();
   });
 
   describe("Given storage initialization", () => {
@@ -52,7 +84,7 @@ describe("Storage Service", () => {
       const result = initializeStorage();
 
       // Assert
-      expect(app.getPath).toHaveBeenCalledWith("userData");
+      // Storage service now uses PathManager, not app.getPath directly
       expect(createFileSystemEngine).toHaveBeenCalledWith({
         baseDir: path.join("/mock/userData", "atomiton-data"),
       });
