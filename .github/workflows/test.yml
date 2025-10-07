@@ -27,14 +27,22 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build dependencies
-        run: pnpm build
+        run: pnpm build --cache-dir=.turbo
 
       - name: Run critical tests
-        run: pnpm test:critical
+        run: pnpm test:critical --cache-dir=.turbo
 
       - name: Upload critical test results
         if: failure()
@@ -66,14 +74,22 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build dependencies
-        run: pnpm build
+        run: pnpm build --cache-dir=.turbo
 
       - name: Run all tests
-        run: pnpm test
+        run: pnpm test --cache-dir=.turbo
 
       - name: Upload test results
         if: failure()
@@ -107,19 +123,27 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build dependencies
-        run: pnpm build
+        run: pnpm build --cache-dir=.turbo
 
       - name: Run slow tests with JSON reporter
         run:
-          pnpm test:slow -- --reporter=default --reporter=json
-          --outputFile=.test-metrics/slow-tests.json
+          pnpm test:slow --cache-dir=.turbo -- --reporter=default
+          --reporter=json --outputFile=.test-metrics/slow-tests.json
 
       - name: Track performance vs baseline
-        run: pnpm test:perf
+        run: pnpm test:perf --cache-dir=.turbo
         continue-on-error: true
 
       - name: Upload test results
