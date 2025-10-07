@@ -7,7 +7,7 @@ import {
   buttonVariants,
 } from "#components/Button/Button.styles";
 import type { ButtonProps } from "#components/Button/Button.types";
-import { Button as ButtonPrimitive } from "#primitives/Button";
+import { Button as ButtonPrimitive } from "#primitives";
 import { styled } from "#system/styled";
 
 const ButtonRoot = styled(ButtonPrimitive, {
