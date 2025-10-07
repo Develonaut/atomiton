@@ -5,6 +5,7 @@ import { FlowProgressBar } from "#templates/DebugPage/components/FlowProgressBar
 import { FlowSelector } from "#templates/DebugPage/components/FlowSelector";
 import { LogsSection } from "#templates/DebugPage/components/LogsSection";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { useDebugOptions } from "#templates/DebugPage/hooks/useDebugOptions";
 import { useFlowOperations } from "#templates/DebugPage/hooks/useFlowOperations";
 import { useEffect, useState } from "react";
 
@@ -12,18 +13,11 @@ export default function FlowsPage() {
   const { templates } = useTemplates();
   const [selectedFlowId, setSelectedFlowId] = useState<string | null>(null);
 
-  const {
-    isExecuting,
-    progress,
-    runFlow,
-    reset,
-    resetKey,
-    slowMo,
-    setSlowMo,
-    debugOptions,
-    setDebugOptions,
-    getTrace,
-  } = useFlowOperations();
+  const { slowMo, setSlowMo, debugOptions, setDebugOptions } =
+    useDebugOptions();
+
+  const { isExecuting, progress, runFlow, reset, resetKey, getTrace } =
+    useFlowOperations(slowMo, debugOptions);
 
   const { clearLogs } = useDebugLogs();
 

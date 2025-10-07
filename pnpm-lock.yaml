@@ -223,6 +223,9 @@ importers:
       '@atomiton/eslint-config':
         specifier: workspace:*
         version: link:../../packages/@atomiton/eslint-config
+      '@atomiton/test':
+        specifier: workspace:*
+        version: link:../../packages/@atomiton/test
       '@atomiton/typescript-config':
         specifier: workspace:*
         version: link:../../packages/@atomiton/typescript-config
@@ -830,6 +833,22 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/node@20.19.16)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
+
+  packages/@atomiton/test:
+    dependencies:
+      '@atomiton/nodes':
+        specifier: workspace:*
+        version: link:../nodes
+    devDependencies:
+      '@atomiton/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.2
+      vite:
+        specifier: 'catalog:'
+        version: 7.1.5(@types/node@22.18.5)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1)
 
   packages/@atomiton/typescript-config: {}
 
@@ -9939,6 +9958,23 @@ snapshots:
       tinyglobby: 0.2.15
     optionalDependencies:
       '@types/node': 20.19.16
+      fsevents: 2.3.3
+      jiti: 2.5.1
+      lightningcss: 1.30.1
+      terser: 5.44.0
+      tsx: 4.20.5
+      yaml: 2.8.1
+
+  vite@7.1.5(@types/node@22.18.5)(jiti@2.5.1)(lightningcss@1.30.1)(terser@5.44.0)(tsx@4.20.5)(yaml@2.8.1):
+    dependencies:
+      esbuild: 0.25.10
+      fdir: 6.5.0(picomatch@4.0.3)
+      picomatch: 4.0.3
+      postcss: 8.5.6
+      rollup: 4.50.2
+      tinyglobby: 0.2.15
+    optionalDependencies:
+      '@types/node': 22.18.5
       fsevents: 2.3.3
       jiti: 2.5.1
       lightningcss: 1.30.1

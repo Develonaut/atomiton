@@ -91,13 +91,25 @@ const node = createNodeDefinition({
 ### 2. Executing Nodes
 
 ```typescript
-import { execute } from "#lib/conductor";
+import { conductor } from "@atomiton/conductor/browser";
+// Or via convenience re-export:
+import conductor from "#lib/conductor";
 
-const result = await execute(node);
+const result = await conductor.node.run(node, {
+  executionId, // optional - unique execution ID
+  slowMo: 250, // optional - delay between nodes (ms)
+  variables: {}, // optional - execution variables
+  input: data, // optional - input data
+  debug: {
+    // optional - debug/simulation options
+    simulateError: { nodeId, errorType },
+    simulateLongRunning: { nodeId, delayMs },
+  },
+});
 ```
 
 That's it. The entire API is two functions: `createNodeDefinition()` and
-`execute()`.
+`conductor.node.run()`.
 
 ---
 
@@ -144,15 +156,16 @@ Visualization Layer
 
 ### Type Ownership Matrix
 
-| Type/Function            | Owner               | Import From             | Description         |
-| ------------------------ | ------------------- | ----------------------- | ------------------- |
-| `NodeDefinition`         | @atomiton/nodes     | `'@atomiton/nodes'`     | Structure           |
-| `NodeExecutable`         | @atomiton/nodes     | `'@atomiton/nodes'`     | Simple interface    |
-| `createNodeDefinition()` | @atomiton/nodes     | `'@atomiton/nodes'`     | Factory             |
-| `nodeRegistry`           | @atomiton/nodes     | `'@atomiton/nodes'`     | All implementations |
-| `ExecutionContext`       | @atomiton/conductor | `'@atomiton/conductor'` | Rich context        |
-| `ExecutionResult`        | @atomiton/conductor | `'@atomiton/conductor'` | Rich result         |
-| `execute()`              | @atomiton/conductor | Via client wrapper      | Orchestration       |
+| Type/Function            | Owner               | Import From                     | Description         |
+| ------------------------ | ------------------- | ------------------------------- | ------------------- |
+| `NodeDefinition`         | @atomiton/nodes     | `'@atomiton/nodes'`             | Structure           |
+| `NodeExecutable`         | @atomiton/nodes     | `'@atomiton/nodes'`             | Simple interface    |
+| `createNodeDefinition()` | @atomiton/nodes     | `'@atomiton/nodes'`             | Factory             |
+| `nodeRegistry`           | @atomiton/nodes     | `'@atomiton/nodes'`             | All implementations |
+| `ExecutionContext`       | @atomiton/conductor | `'@atomiton/conductor'`         | Rich context        |
+| `ExecutionResult`        | @atomiton/conductor | `'@atomiton/conductor'`         | Rich result         |
+| `conductor.node.run()`   | @atomiton/conductor | `'@atomiton/conductor/browser'` | Orchestration       |
+| `conductor` (re-export)  | client              | `'#lib/conductor'`              | Convenience wrapper |
 
 ---
 
@@ -509,7 +522,7 @@ This keeps our codebase functional, explicit, and easy to understand.
 - Use simple NodeExecutable interface (params → result)
 - Let Conductor add execution context
 - Use existing utilities (createNodeDefinition)
-- Keep the API simple (just execute(node))
+- Keep the API simple (just conductor.node.run(node))
 - Check `node.nodes` directly for groups
 - Execute migration steps IN ORDER
 
@@ -537,8 +550,12 @@ import { getNodeImplementation } from "@atomiton/nodes/registry";
 // Execution orchestration (only in Conductor)
 import { ExecutionContext, ExecutionResult } from "@atomiton/conductor";
 
-// Client-side execution
-import { execute } from "#lib/conductor";
+// Client-side execution (actual API)
+import { conductor } from "@atomiton/conductor/browser";
+// Or use convenience re-export:
+import conductor from "#lib/conductor";
+
+await conductor.node.run(node, contextOptions);
 
 // Storage operations
 import { saveFlowFile, loadFlowFile } from "@atomiton/storage";

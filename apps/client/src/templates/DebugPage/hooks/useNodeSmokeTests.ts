@@ -1,7 +1,7 @@
 import conductor from "#lib/conductor";
 import { createExecutionId } from "@atomiton/conductor/browser";
-import { nodeSmokeTests } from "#templates/DebugPage/fixtures/node-smoke-tests";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import { nodeSmokeTests } from "@atomiton/test/fixtures/templates/node-smoke-tests";
 import { createLogger } from "@atomiton/logger/browser";
 import { createNodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useState } from "react";

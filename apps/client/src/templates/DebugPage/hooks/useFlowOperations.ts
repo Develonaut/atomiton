@@ -1,15 +1,32 @@
-import conductor, { DEFAULT_SLOWMO_MS } from "#lib/conductor";
-import type { ProgressEvent } from "@atomiton/conductor/browser";
-import { createExecutionId } from "@atomiton/conductor/browser";
+import conductor from "#lib/conductor";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
+import type { DebugUIState } from "#templates/DebugPage/hooks/useDebugOptions";
+import type {
+  ExecutionResult,
+  ProgressEvent,
+} from "@atomiton/conductor/browser";
+import { createExecutionId } from "@atomiton/conductor/browser";
+import { createLogger } from "@atomiton/logger/browser";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ExecutionProgress } from "#templates/DebugPage/types";
-import { createLogger } from "@atomiton/logger/browser";
 
 const logger = createLogger({ scope: "FLOW_OPERATIONS" });
 
-export function useFlowOperations() {
+/**
+ * Flow execution progress tracking
+ *
+ * Tracks progress during flow execution for UI display.
+ * Note: Full execution trace is provided by @atomiton/conductor
+ * via ExecutionResult.trace - no need for client-side trace types.
+ */
+export type ExecutionProgress = {
+  currentNode: number;
+  totalNodes: number;
+  currentNodeName?: string;
+  graphProgress: number; // Overall weighted progress (0-100)
+};
+
+export function useFlowOperations(slowMo: number, debugOptions: DebugUIState) {
   const { addLog, clearLogs } = useDebugLogs();
   const [isExecuting, setIsExecuting] = useState(false);
   const [resetKey, setResetKey] = useState(0);
@@ -18,25 +35,10 @@ export function useFlowOperations() {
     totalNodes: 0,
     graphProgress: 0,
   });
-  const [slowMo, setSlowMo] = useState(DEFAULT_SLOWMO_MS);
-  const [debugOptions, setDebugOptions] = useState({
-    simulateError: false,
-    errorType: "generic" as
-      | "generic"
-      | "timeout"
-      | "network"
-      | "validation"
-      | "permission",
-    errorNode: "random" as string | "random",
-    errorDelay: 0,
-    simulateLongRunning: false,
-    longRunningNode: "random" as string | "random",
-    longRunningDelay: 5000,
-  });
 
   const currentExecutionIdRef = useRef<string | null>(null);
   const completedNodesRef = useRef<Set<string>>(new Set());
-  const executionTraceRef = useRef<unknown>(null);
+  const executionTraceRef = useRef<ExecutionResult["trace"]>(undefined);
   // Track last known executing node name to prevent flashing
   const lastExecutingNodeNameRef = useRef<string | undefined>(undefined);
 
@@ -138,7 +140,7 @@ export function useFlowOperations() {
 
         const totalNodes = flow.nodes?.length || 0;
         completedNodesRef.current.clear();
-        executionTraceRef.current = null;
+        executionTraceRef.current = undefined;
         lastExecutingNodeNameRef.current = undefined;
         setProgress({
           currentNode: 0,
@@ -225,7 +227,7 @@ export function useFlowOperations() {
       graphProgress: 0,
     });
     completedNodesRef.current.clear();
-    executionTraceRef.current = null;
+    executionTraceRef.current = undefined;
     lastExecutingNodeNameRef.current = undefined;
     currentExecutionIdRef.current = null;
     clearLogs();
@@ -244,10 +246,6 @@ export function useFlowOperations() {
     runFlow,
     reset,
     resetKey,
-    slowMo,
-    setSlowMo,
-    debugOptions,
-    setDebugOptions,
     getTrace,
   };
 }

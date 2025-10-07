@@ -40,6 +40,20 @@ vi.mock("@atomiton/logger/browser", () => ({
   }),
 }));
 
+// Default test parameters
+const DEFAULT_TEST_PARAMS = {
+  slowMo: 250,
+  debugOptions: {
+    simulateError: false,
+    errorType: "generic" as const,
+    errorNode: "random" as const,
+    errorDelay: 0,
+    simulateLongRunning: false,
+    longRunningNode: "random" as const,
+    longRunningDelay: 5000,
+  },
+};
+
 describe("useFlowOperations - Defensive Null Checks", () => {
   let mockOnProgress: ((data: unknown) => void) | undefined;
 
@@ -59,7 +73,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
 
   describe("Progress Event Validation", () => {
     it("should handle undefined progressData gracefully", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       // Simulate progress event subscription
       act(() => {
@@ -86,7 +105,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
     });
 
     it("should handle progressData with missing nodes array", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       act(() => {
         result.current.runFlow(
@@ -123,7 +147,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
     });
 
     it("should handle progressData with invalid nodes array (not an array)", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       act(() => {
         result.current.runFlow(
@@ -161,7 +190,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
     });
 
     it("should handle progressData with null nodes", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       act(() => {
         result.current.runFlow(
@@ -199,7 +233,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
     });
 
     it("should process valid progress data correctly", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       act(() => {
         result.current.runFlow(
@@ -243,7 +282,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
     });
 
     it("should preserve last known executing node name when new data has no executing node", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       act(() => {
         result.current.runFlow(
@@ -316,7 +360,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
 
   describe("Edge Cases", () => {
     it("should handle empty nodes array", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       act(() => {
         result.current.runFlow(
@@ -354,7 +403,12 @@ describe("useFlowOperations - Defensive Null Checks", () => {
     });
 
     it("should not process progress events when no execution is active", () => {
-      const { result } = renderHook(() => useFlowOperations());
+      const { result } = renderHook(() =>
+        useFlowOperations(
+          DEFAULT_TEST_PARAMS.slowMo,
+          DEFAULT_TEST_PARAMS.debugOptions,
+        ),
+      );
 
       // Don't start any flow execution
       const validData: ProgressEvent = {

@@ -1,0 +1,6 @@
+{
+  "extends": "@atomiton/eslint-config",
+  "rules": {
+    "no-restricted-imports": "off"
+  }
+}

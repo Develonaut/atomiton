@@ -48,6 +48,7 @@
     "swiper": "^11.2.8"
   },
   "devDependencies": {
+    "@atomiton/test": "workspace:*",
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@atomiton/vite-config": "workspace:*",

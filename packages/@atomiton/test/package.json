@@ -1,0 +1,27 @@
+{
+  "name": "@atomiton/test",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
+  "exports": {
+    "./fixtures/templates/node-smoke-tests": {
+      "types": "./dist/fixtures/templates/node-smoke-tests.d.ts",
+      "default": "./dist/fixtures/templates/node-smoke-tests.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@atomiton/nodes": "workspace:*"
+  },
+  "devDependencies": {
+    "@atomiton/typescript-config": "workspace:*",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

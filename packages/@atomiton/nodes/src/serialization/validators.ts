@@ -117,6 +117,7 @@ export function validateIcon(icon: string | undefined): NodeIcon | undefined {
     "users",
     "info",
     "help-circle",
+    "pencil-line",
   ];
   if (validIcons.includes(icon as NodeIcon)) {
     return icon as NodeIcon;
