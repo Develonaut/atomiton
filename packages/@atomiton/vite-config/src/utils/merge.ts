@@ -42,10 +42,7 @@ export function mergeViteConfig(
     resolve: {
       ...base.resolve,
       ...additional.resolve,
-      alias: {
-        ...getAlias(base.resolve?.alias),
-        ...getAlias(additional.resolve?.alias),
-      },
+      alias: mergeAliases(base.resolve?.alias, additional.resolve?.alias),
     },
   };
 }
@@ -60,18 +57,26 @@ function mergeArrays<T>(
   return result;
 }
 
-function getAlias(alias: AliasOptions | undefined): Record<string, string> {
-  if (!alias) return {};
-  if (Array.isArray(alias)) {
-    return alias.reduce(
-      (acc, { find, replacement }) => ({
-        ...acc,
-        [find.toString()]: replacement,
-      }),
-      {},
-    );
+function mergeAliases(
+  alias1: AliasOptions | undefined,
+  alias2: AliasOptions | undefined,
+): AliasOptions {
+  // If both are arrays, concatenate them
+  if (Array.isArray(alias1) && Array.isArray(alias2)) {
+    return [...alias1, ...alias2];
   }
-  return alias as Record<string, string>;
+
+  // If only one is an array, return that array
+  if (Array.isArray(alias1)) return alias1;
+  if (Array.isArray(alias2)) return alias2;
+
+  // If both are objects, merge them
+  if (alias1 && alias2) {
+    return { ...alias1, ...alias2 };
+  }
+
+  // Return whichever exists, or empty object
+  return alias1 || alias2 || {};
 }
 
 function mergeExternal(
