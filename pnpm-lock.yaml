@@ -749,6 +749,9 @@ importers:
 
   packages/@atomiton/rpc:
     dependencies:
+      '@atomiton/conductor':
+        specifier: workspace:*
+        version: link:../conductor
       '@atomiton/nodes':
         specifier: workspace:*
         version: link:../nodes

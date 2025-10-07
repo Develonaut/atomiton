@@ -7,14 +7,17 @@ import {
   nodeExecuteRequestSchema,
   nodeValidateRequestSchema,
 } from "#schemas/node";
-import {
-  ErrorCode,
-  createExecutionError,
-  toExecutionError,
-} from "@atomiton/conductor/types";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import { generateExecutionId } from "@atomiton/utils";
 import type { IpcMain } from "electron";
+
+// Simple error handling for RPC layer (no conductor dependency)
+const createRPCError = (code: string, message: string, context?: unknown) => ({
+  code,
+  message,
+  timestamp: new Date(),
+  context,
+});
 
 // Types for node channel operations
 export type NodeExecuteParams<TNode = NodeDefinition, TContext = unknown> = {
@@ -59,12 +62,10 @@ export const createNodeChannelServer = <
     // Validate input with strict schema
     const validation = nodeExecuteRequestSchema.safeParse(args);
     if (!validation.success) {
-      const error = createExecutionError(
-        ErrorCode.VALIDATION_FAILED,
+      const error = createRPCError(
+        "VALIDATION_FAILED",
         `Invalid execute parameters: ${validation.error.message}`,
-        {
-          context: { validationErrors: validation.error.errors },
-        },
+        { validationErrors: validation.error.errors },
       );
       return {
         success: false,
@@ -142,12 +143,12 @@ export const createNodeChannelServer = <
       // Return the result directly for the browser transport
       return result;
     } catch (error) {
-      const executionError = toExecutionError(
-        error,
-        ErrorCode.EXECUTION_FAILED,
-        params.node.id,
+      const message = error instanceof Error ? error.message : String(error);
+      const executionError = createRPCError("EXECUTION_FAILED", message, {
+        nodeId: params.node.id,
         executionId,
-      );
+        stack: error instanceof Error ? error.stack : undefined,
+      });
 
       console.error("[NODE] Execution failed:", {
         executionId,
