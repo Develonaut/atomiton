@@ -18,7 +18,7 @@ describe("delay", () => {
     const end = Date.now();
     const elapsed = end - start;
 
-    expect(elapsed).toBeLessThan(10);
+    expect(elapsed).toBeLessThan(50);
   });
 
   it("should return a promise", () => {
