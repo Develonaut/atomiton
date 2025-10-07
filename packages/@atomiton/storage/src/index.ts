@@ -32,3 +32,12 @@ export {
 export { loadFlowFile, saveFlowFile } from "#flowStorage";
 export type { FlowFile, FlowMetadata } from "#types/flowFile";
 export type { AtomitonFile } from "#types/file";
+
+// Path management
+export { createPathManager } from "#paths";
+export type {
+  PathManager,
+  PathManagerConfig,
+  PathContext,
+  PathMap,
+} from "#paths";

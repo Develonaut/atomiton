@@ -11,6 +11,7 @@ import {
   createFlowChannelServer,
   createLoggerChannelServer,
   createNodeChannelServer,
+  createPathChannelServer,
   createStorageChannelServer,
   createSystemChannelServer,
   type ChannelServer,
@@ -27,14 +28,14 @@ export type ChannelManager = {
   getChannelNames: () => string[];
 };
 
-export const createChannelManager = (): ChannelManager => {
+export const createChannelManager = async (): Promise<ChannelManager> => {
   const channels: ChannelServer[] = [];
   const windows = new Set<BrowserWindow>();
   const windowListeners = new Map<BrowserWindow, (() => void)[]>();
   let isDisposed = false;
   const cleanupFunctions: (() => void)[] = [];
 
-  const initialize = () => {
+  const initialize = async () => {
     logger.info("Initializing channel servers...");
 
     // Create conductor instance ONCE for all channels
@@ -90,14 +91,19 @@ export const createChannelManager = (): ChannelManager => {
 
     const systemChannel = createSystemChannelServer(ipcMain);
 
-    const storageChannel = createStorageChannelServer(ipcMain);
+    // Get PathManager for path channel
+    const { getPathManager } = await import("#main/services/pathManager");
+    const pathManager = getPathManager();
 
+    const pathChannel = createPathChannelServer(ipcMain, pathManager);
+    const storageChannel = createStorageChannelServer(ipcMain);
     const flowChannel = createFlowChannelServer(ipcMain);
 
     channels.push(
       loggerChannel,
       nodeChannel,
       systemChannel,
+      pathChannel,
       storageChannel,
       flowChannel,
     );
@@ -106,12 +112,13 @@ export const createChannelManager = (): ChannelManager => {
       "logger",
       "node",
       "system",
+      "path",
       "storage",
       "flow",
     ]);
 
     ipcMain.handle("channels:list", () => {
-      return ["logger", "node", "storage", "system", "flow"];
+      return ["logger", "node", "system", "path", "storage", "flow"];
     });
 
     logger.info("Channel discovery handler registered");
@@ -197,9 +204,16 @@ export const createChannelManager = (): ChannelManager => {
 
   const getChannelCount = () => channels.length;
 
-  const getChannelNames = () => ["logger", "node", "storage", "system", "flow"];
+  const getChannelNames = () => [
+    "logger",
+    "node",
+    "system",
+    "path",
+    "storage",
+    "flow",
+  ];
 
-  initialize();
+  await initialize();
 
   return {
     trackWindow,
@@ -209,10 +223,12 @@ export const createChannelManager = (): ChannelManager => {
   };
 };
 
-export const setupChannels = (mainWindow: BrowserWindow): ChannelManager => {
+export const setupChannels = async (
+  mainWindow: BrowserWindow,
+): Promise<ChannelManager> => {
   logger.info("Setting up channels for main window");
 
-  const channelManager = createChannelManager();
+  const channelManager = await createChannelManager();
 
   channelManager.trackWindow(mainWindow);
 
@@ -233,7 +249,7 @@ export const checkChannelHealth = async (): Promise<{
 
   try {
     // Only check channels that actually exist (removed "auth" which is not created)
-    const channelNames = ["node", "storage", "system", "flow"];
+    const channelNames = ["node", "system", "path", "storage", "flow"];
 
     for (const channelName of channelNames) {
       try {

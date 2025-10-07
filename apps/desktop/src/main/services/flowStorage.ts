@@ -1,4 +1,3 @@
-import { app } from "electron";
 import fs from "fs/promises";
 import path from "path";
 import { toYaml, parse } from "@atomiton/yaml";
@@ -8,11 +7,13 @@ import type {
   ServiceResult,
   StorageResult,
 } from "#main/services/types";
+import { getPathManager } from "#main/services/pathManager";
 
 export type FlowStorageService = IStorageService;
 
 export const createFlowStorageService = (): FlowStorageService => {
-  const flowsDir = path.join(app.getPath("documents"), "Atomiton", "flows");
+  const pathManager = getPathManager();
+  const flowsDir = pathManager.getFlowsDirectory();
 
   const save = async (
     node: NodeDefinition,

@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from "electron";
 import { electronApp } from "@electron-toolkit/utils";
-import { join } from "path";
 
 export type AppConfig = {
   name: string;
@@ -39,10 +38,6 @@ export function createAppLifecycleManager(
 
   const configureApp = (): void => {
     app.setName(config.name);
-
-    if (config.isDev) {
-      app.setPath("userData", join(app.getPath("userData"), "AtomitonDev"));
-    }
   };
 
   const setupEventHandlers = (): void => {

@@ -38,16 +38,21 @@
     "dev": "vite build --watch",
     "build": "vite build",
     "clean": "rm -rf dist",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "electron": "^38.0.0",
-    "@atomiton/nodes": "workspace:*"
+    "@atomiton/nodes": "workspace:*",
+    "@atomiton/storage": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
   }
 }

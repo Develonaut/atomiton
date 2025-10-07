@@ -3,6 +3,7 @@ export * from "#main/channels/createChannelServer";
 export * from "#main/channels/flowChannel";
 export * from "#main/channels/loggerChannel";
 export * from "#main/channels/nodeChannel";
+export * from "#main/channels/pathChannel";
 export * from "#main/channels/storageChannel";
 export * from "#main/channels/systemChannel";
 
@@ -17,6 +18,16 @@ export type {
   NodeValidateParams,
   NodeValidateResult,
 } from "#main/channels/nodeChannel";
+
+export type {
+  EnsureDirectoryParams,
+  GetConfigPathParams,
+  GetDatabasePathParams,
+  GetExportPathParams,
+  GetFlowPathParams,
+  GetFlowsDirectoryParams,
+  GetWorkspacePathParams,
+} from "#main/channels/pathChannel";
 
 export type {
   DeleteFlowParams,

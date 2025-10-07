@@ -71,7 +71,10 @@ export type DeleteFlowParams = {
   id: string;
 };
 
-// Functional factory for storage channel server
+/**
+ * Creates a channel server for flow storage operations
+ * Handles CRUD operations for flows (save, load, list, delete)
+ */
 export const createStorageChannelServer = (ipcMain: IpcMain): ChannelServer => {
   const server = createChannelServer("storage", ipcMain);
 
@@ -102,13 +105,6 @@ export const createStorageChannelServer = (ipcMain: IpcMain): ChannelServer => {
 
       flows.set(flowId, flowData);
 
-      console.log("Flow saved", {
-        flowId,
-        name: typedParams.flow.name,
-        nodeCount: typedParams.flow.nodes.length,
-        edgeCount: typedParams.flow.edges?.length || 0,
-      });
-
       // Broadcast flow saved event
       server.broadcast("flowSaved", {
         id: flowId,
@@ -133,12 +129,6 @@ export const createStorageChannelServer = (ipcMain: IpcMain): ChannelServer => {
       if (!flow) {
         throw new Error(`Flow with id ${typedParams.id} not found`);
       }
-
-      console.log("Flow loaded", {
-        flowId: typedParams.id,
-        name: flow.name,
-        nodeCount: flow.nodes.length,
-      });
 
       return flow;
     },
@@ -202,13 +192,6 @@ export const createStorageChannelServer = (ipcMain: IpcMain): ChannelServer => {
         total: allFlows.length,
       };
 
-      console.log("Flows listed", {
-        total: result.total,
-        returned: result.flows.length,
-        limit,
-        offset,
-      });
-
       return result;
     },
   );
@@ -222,11 +205,6 @@ export const createStorageChannelServer = (ipcMain: IpcMain): ChannelServer => {
     }
 
     flows.delete(typedParams.id);
-
-    console.log("Flow deleted", {
-      flowId: typedParams.id,
-      name: flow.name,
-    });
 
     // Broadcast flow deleted event
     server.broadcast("flowDeleted", {

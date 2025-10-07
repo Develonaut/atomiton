@@ -124,12 +124,12 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"]
+      "dependsOn": ["^dev"]
     },
     "dev#@atomiton/client": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"]
+      "dependsOn": ["^dev"]
     },
     "dev#@atomiton/desktop": {
       "cache": false,

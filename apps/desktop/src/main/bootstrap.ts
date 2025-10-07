@@ -7,6 +7,7 @@ import {
   setupChannels,
   type ChannelManager,
 } from "#main/services/channels";
+import { initializePathManager } from "#main/services/pathManager";
 import { createDevToolsManager } from "#main/window/devtools";
 import { createWindowManager } from "#main/window/manager";
 import { createLogger } from "@atomiton/logger/desktop";
@@ -76,6 +77,13 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
     await appLifecycleManager.onReady(async () => {
       logger.info("Electron app ready, initializing desktop application");
 
+      // Initialize PathManager first (other services may depend on it)
+      logger.info("Initializing PathManager...");
+      const pathManager = initializePathManager();
+      logger.info(
+        `PathManager initialized with context: ${pathManager.getContext()}`,
+      );
+
       const config = configManager.getConfig();
 
       await serviceRegistryManager.initializeServices();
@@ -89,7 +97,7 @@ export const createDesktopAppBootstrap = (): DesktopAppBootstrap => {
 
       // Initialize channels after window creation
       logger.info("Setting up functional channels...");
-      channelManager = setupChannels(mainWindow);
+      channelManager = await setupChannels(mainWindow);
       logger.info("Functional channels initialized successfully");
 
       if (config.app.isDev) {

@@ -1,12 +1,12 @@
 /**
  * Desktop-specific storage exports
- * Includes all storage engines including filesystem
+ * Includes all storage engines including filesystem and path management
  */
 
 import type { IStorageEngine } from "#types";
 import { createFileSystemEngine } from "#index";
 
-// Export essential types only
+// Export essential storage types
 export type {
   IStorageEngine,
   StorageOptions,
@@ -24,6 +24,16 @@ export {
   type FileSystemStorageConfig,
   type InMemoryStorageConfig,
 } from "#index";
+
+// Export path management (desktop-only)
+export { createPathManager } from "#paths";
+export type {
+  PathManager,
+  PathManagerConfig,
+  PathContext,
+  PathMap,
+  ElectronPathName,
+} from "#paths";
 
 /**
  * Creates a storage instance for desktop environments
