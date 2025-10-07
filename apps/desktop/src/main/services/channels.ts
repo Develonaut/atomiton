@@ -18,6 +18,7 @@ import {
 } from "@atomiton/rpc/main/channels";
 import type { BrowserWindow } from "electron";
 import { ipcMain } from "electron";
+import { getPathManager } from "#main/services/pathManager";
 
 const logger = createLogger({ scope: "CHANNELS" });
 
@@ -92,7 +93,6 @@ export const createChannelManager = async (): Promise<ChannelManager> => {
     const systemChannel = createSystemChannelServer(ipcMain);
 
     // Get PathManager for path channel
-    const { getPathManager } = await import("#main/services/pathManager");
     const pathManager = getPathManager();
 
     const pathChannel = createPathChannelServer(ipcMain, pathManager);

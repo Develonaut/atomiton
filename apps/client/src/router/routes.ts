@@ -116,9 +116,4 @@ export const routes: RouteConfig[] = [
         },
       ]
     : []),
-  {
-    name: "notFound",
-    path: "*",
-    component: () => import("../templates/NotFoundPage"),
-  },
 ];

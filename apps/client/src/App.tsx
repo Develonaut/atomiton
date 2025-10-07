@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import ErrorBoundary from "#components/ErrorBoundary";
 import Providers from "#components/Providers";
 import { RouterProvider } from "#router";
-import { errorReporter } from "#utils/errorReporting";
 import type { ErrorInfo } from "react";
 
 function AppContent() {
@@ -16,9 +15,13 @@ function AppContent() {
 }
 
 function App() {
-  const handleError = useCallback((error: Error, errorInfo: ErrorInfo) => {
-    errorReporter.handleError(error, errorInfo);
-  }, []);
+  const handleError = useCallback(
+    async (error: Error, errorInfo: ErrorInfo) => {
+      const { errorReporter } = await import("#utils/errorReporting");
+      errorReporter.handleError(error, errorInfo);
+    },
+    [],
+  );
 
   return (
     <ErrorBoundary onError={handleError}>
