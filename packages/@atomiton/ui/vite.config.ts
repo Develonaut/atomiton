@@ -13,9 +13,9 @@ export default defineReactLibraryConfig({
   },
   additionalConfig: {
     resolve: {
-      alias: {
-        "#": resolve(__dirname, "src"),
-      },
+      alias: [
+        { find: /^#(.*)$/, replacement: resolve(__dirname, "src/$1") },
+      ],
     },
     server: {
       port: parseInt(process.env.VITE_UI_PORT || "5174"),
