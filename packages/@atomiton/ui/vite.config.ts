@@ -1,4 +1,5 @@
 import { defineReactLibraryConfig } from "@atomiton/vite-config";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default defineReactLibraryConfig({
   name: "AtomitonUI",
@@ -13,6 +14,15 @@ export default defineReactLibraryConfig({
   additionalConfig: {
     resolve: {
       extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+    },
+    build: {
+      rollupOptions: {
+        plugins: [
+          nodeResolve({
+            extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+          }),
+        ],
+      },
     },
     server: {
       port: parseInt(process.env.VITE_UI_PORT || "5174"),

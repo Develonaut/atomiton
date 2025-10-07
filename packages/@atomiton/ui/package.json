@@ -57,16 +57,17 @@
     "react-router-dom": "catalog:"
   },
   "devDependencies": {
-    "react-router-dom": "catalog:",
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
     "@atomiton/vite-config": "workspace:*",
+    "@rollup/plugin-node-resolve": "^16.0.2",
     "@testing-library/jest-dom": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "eslint": "catalog:",
     "jsdom": "catalog:",
+    "react-router-dom": "catalog:",
     "terser": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
