@@ -61,6 +61,7 @@
     "eslint": "catalog:",
     "jsdom": "catalog:",
     "kill-port": "catalog:",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-tsconfig-paths": "catalog:",

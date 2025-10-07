@@ -69,6 +69,7 @@
     "eslint": "catalog:",
     "jsdom": "catalog:",
     "react-router-dom": "catalog:",
+    "tailwindcss": "catalog:",
     "terser": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
