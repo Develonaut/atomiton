@@ -100,63 +100,6 @@ jobs:
             **/test-results/
             **/.vitest-cache/
 
-  # Performance tests (runs in parallel with unit tests)
-  performance-tests:
-    name: Performance & Slow Tests
-    runs-on: ubuntu-latest
-    needs: critical-tests
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Need full history for Turbo filtering
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.14.4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "pnpm"
-
-      - name: Cache Turborepo
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build dependencies
-        run: pnpm exec turbo run build --cache-dir=.turbo
-
-      - name: Run slow tests with JSON reporter
-        run:
-          pnpm exec turbo run test --cache-dir=.turbo -- -- -t "slow:"
-          --reporter=default --reporter=json
-          --outputFile=.test-metrics/slow-tests.json
-
-      - name: Track performance vs baseline
-        run:
-          pnpm exec turbo run test --cache-dir=.turbo -- -- --reporter=json
-          --outputFile=.test-metrics/current.json && tsx
-          scripts/compare-test-performance.ts
-        continue-on-error: true
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-json
-          path: .test-metrics/*.json
-
   # Integration tests (only runs if unit tests pass)
   integration-tests:
     name: Integration Tests
@@ -206,10 +149,15 @@ jobs:
 
   # E2E tests (final gate - only runs if integration tests pass)
   e2e-tests:
-    name: E2E Tests
+    name: E2E Tests (Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
     runs-on: ubuntu-latest
     needs: integration-tests
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
 
     steps:
       - uses: actions/checkout@v4
@@ -244,8 +192,12 @@ jobs:
       - name: Build dependencies
         run: pnpm exec turbo run build --cache-dir=.turbo
 
-      - name: Run E2E tests
-        run: pnpm exec turbo run test:e2e --cache-dir=.turbo
+      - name:
+          Run E2E tests (Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal
+          }})
+        run:
+          pnpm --filter @atomiton/e2e exec playwright test --shard=${{
+          matrix.shardIndex }}/${{ matrix.shardTotal }}
         env:
           CI: true
           PLAYWRIGHT_HEADED: false
@@ -254,7 +206,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-test-results
+          name: e2e-test-results-${{ matrix.shardIndex }}
           path: |
             **/test-results/
             **/playwright-report/
