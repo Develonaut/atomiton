@@ -1,2 +1,2 @@
-export { cn } from "#utils/cn";
-export type { StyleProps } from "#utils/extractStyleProps";
+export { cn } from "./cn";
+export type { StyleProps } from "./extractStyleProps";

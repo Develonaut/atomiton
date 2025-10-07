@@ -90,8 +90,22 @@ const baseConfig: Linter.Config[] = [
       "no-empty": ["error", { allowEmptyCatch: true }],
       "no-useless-catch": "error",
       "no-constant-condition": ["error", { checkLoops: false }],
+    },
+  } satisfies Linter.Config,
 
-      // Import restrictions for # imports
+  // Allow relative imports in index files to avoid circular alias resolution
+  {
+    files: ["**/index.ts", "**/index.tsx"],
+    rules: {
+      "no-restricted-imports": "off",
+    },
+  } satisfies Linter.Config,
+
+  // Enforce # imports for all non-index files
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    ignores: ["**/index.ts", "**/index.tsx"],
+    rules: {
       "no-restricted-imports": [
         "error",
         {

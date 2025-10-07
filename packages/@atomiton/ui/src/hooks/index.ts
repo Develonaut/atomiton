@@ -1,1 +1,1 @@
-export { useScrollbarWidth } from "#hooks/useScrollbarWidth";
+export { useScrollbarWidth } from "./useScrollbarWidth";

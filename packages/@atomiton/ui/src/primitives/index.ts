@@ -1,4 +1,4 @@
-export { Box } from "#primitives/Box";
-export { Button, type ButtonProps } from "#primitives/Button";
-export { CodeInput, type CodeInputProps } from "#primitives/CodeInput";
-export { JsonTreeView } from "#primitives/JsonTreeView";
+export { Box } from "./Box";
+export { Button, type ButtonProps } from "./Button";
+export { CodeInput, type CodeInputProps } from "./CodeInput";
+export { JsonTreeView } from "./JsonTreeView";

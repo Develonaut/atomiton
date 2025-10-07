@@ -1,4 +1,4 @@
-export * from "#test-utils/mocks";
+export * from "./mocks";
 
 /**
  * Test utility to render and get class names
