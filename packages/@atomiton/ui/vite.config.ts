@@ -1,5 +1,4 @@
 import { defineReactLibraryConfig } from "@atomiton/vite-config";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default defineReactLibraryConfig({
   name: "AtomitonUI",
@@ -17,11 +16,11 @@ export default defineReactLibraryConfig({
     },
     build: {
       rollupOptions: {
-        plugins: [
-          nodeResolve({
-            extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
-          }),
-        ],
+        // Explicitly set Rollup's module resolution options
+        preserveSymlinks: false,
+        treeshake: {
+          moduleSideEffects: false,
+        },
       },
     },
     server: {
