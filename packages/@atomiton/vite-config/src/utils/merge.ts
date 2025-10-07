@@ -21,6 +21,14 @@ export function mergeViteConfig(
           base.build?.rollupOptions?.external,
           additional.build?.rollupOptions?.external,
         ),
+        plugins: [
+          ...(Array.isArray(base.build?.rollupOptions?.plugins)
+            ? base.build.rollupOptions.plugins
+            : []),
+          ...(Array.isArray(additional.build?.rollupOptions?.plugins)
+            ? additional.build.rollupOptions.plugins
+            : []),
+        ],
         output: {
           ...base.build?.rollupOptions?.output,
           ...additional.build?.rollupOptions?.output,
