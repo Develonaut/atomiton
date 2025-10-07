@@ -70,6 +70,7 @@ export default defineConfig({
         "@atomiton/conductor",
         "@atomiton/conductor/types",
         "@atomiton/nodes",
+        "@atomiton/validation",
       ],
     },
   },
