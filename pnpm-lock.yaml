@@ -292,6 +292,9 @@ importers:
       '@atomiton/storage':
         specifier: workspace:*
         version: link:../../packages/@atomiton/storage
+      '@atomiton/yaml':
+        specifier: workspace:*
+        version: link:../../packages/@atomiton/yaml
     devDependencies:
       '@atomiton/eslint-config':
         specifier: workspace:*
@@ -314,6 +317,9 @@ importers:
       cross-env:
         specifier: ^10.0.0
         version: 10.0.0
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       electron:
         specifier: ^38.0.0
         version: 38.1.2
