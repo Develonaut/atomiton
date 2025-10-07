@@ -14,15 +14,49 @@ export default defineReactLibraryConfig({
   additionalConfig: {
     resolve: {
       extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
-      alias: {
-        "#primitives": resolve(__dirname, "src/primitives"),
-        "#components": resolve(__dirname, "src/components"),
-        "#system": resolve(__dirname, "src/system"),
-        "#theme": resolve(__dirname, "src/theme"),
-        "#utils": resolve(__dirname, "src/utils"),
-        "#types": resolve(__dirname, "src/types"),
-        "#hooks": resolve(__dirname, "src/hooks"),
-      },
+      alias: [
+        {
+          find: /^#primitives\/(.*)$/,
+          replacement: resolve(__dirname, "src/primitives/$1.tsx"),
+        },
+        {
+          find: "#primitives",
+          replacement: resolve(__dirname, "src/primitives"),
+        },
+        {
+          find: /^#components\/(.*)$/,
+          replacement: resolve(__dirname, "src/components/$1"),
+        },
+        {
+          find: "#components",
+          replacement: resolve(__dirname, "src/components"),
+        },
+        {
+          find: /^#system\/(.*)$/,
+          replacement: resolve(__dirname, "src/system/$1"),
+        },
+        { find: "#system", replacement: resolve(__dirname, "src/system") },
+        {
+          find: /^#theme\/(.*)$/,
+          replacement: resolve(__dirname, "src/theme/$1"),
+        },
+        { find: "#theme", replacement: resolve(__dirname, "src/theme") },
+        {
+          find: /^#utils\/(.*)$/,
+          replacement: resolve(__dirname, "src/utils/$1"),
+        },
+        { find: "#utils", replacement: resolve(__dirname, "src/utils") },
+        {
+          find: /^#types\/(.*)$/,
+          replacement: resolve(__dirname, "src/types/$1"),
+        },
+        { find: "#types", replacement: resolve(__dirname, "src/types") },
+        {
+          find: /^#hooks\/(.*)$/,
+          replacement: resolve(__dirname, "src/hooks/$1"),
+        },
+        { find: "#hooks", replacement: resolve(__dirname, "src/hooks") },
+      ],
     },
     build: {
       rollupOptions: {
