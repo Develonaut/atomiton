@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@atomiton/router": "workspace:*",
+    "@babel/runtime": "^7.26.0",
     "@codemirror/lang-javascript": "^6.2.4",
     "@headlessui/react": "^2.2.4",
     "@radix-ui/react-slot": "^1.2.3",
