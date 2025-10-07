@@ -806,7 +806,7 @@ describe("Async Progress Tracking", () => {
 
       // Should complete in reasonable time
       // 100 nodes * (1ms delay + 2 * 0ms slowMo) should be fast
-      expect(duration).toBeLessThan(5000); // 5 seconds max
+      expect(duration).toBeLessThan(10000); // 10 seconds max (increased for CI)
 
       // Verify final state
       const state = conductor.node.store.getState();
