@@ -1,5 +1,5 @@
-export { Box } from "./Box.js";
-export { Button, type ButtonProps } from "./Button.js";
-export { CodeInput, type CodeInputProps } from "./CodeInput.js";
-export { Input } from "./Input.js";
-export { JsonTreeView } from "./JsonTreeView.js";
+export { Box } from "./Box";
+export { Button, type ButtonProps } from "./Button";
+export { CodeInput, type CodeInputProps } from "./CodeInput";
+export { Input } from "./Input";
+export { JsonTreeView } from "./JsonTreeView";
