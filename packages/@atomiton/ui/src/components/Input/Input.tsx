@@ -1,4 +1,4 @@
-import { Input as InputPrimitive } from "#primitives/Input";
+import { Input as InputPrimitive } from "#primitives";
 import { styled } from "#system/styled";
 
 const Input = styled(InputPrimitive, {
