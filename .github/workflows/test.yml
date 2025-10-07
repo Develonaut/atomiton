@@ -237,7 +237,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run:
+          pnpm --filter @atomiton/e2e exec playwright install --with-deps
+          chromium
 
       - name: Build dependencies
         run: pnpm exec turbo run build --cache-dir=.turbo
