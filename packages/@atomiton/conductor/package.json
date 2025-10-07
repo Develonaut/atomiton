@@ -57,6 +57,7 @@
   "devDependencies": {
     "@atomiton/eslint-config": "workspace:*",
     "@atomiton/typescript-config": "workspace:*",
+    "@atomiton/vite-config": "workspace:*",
     "@types/node": "^20.0.0",
     "eslint": "^9",
     "terser": "^5.44.0",
