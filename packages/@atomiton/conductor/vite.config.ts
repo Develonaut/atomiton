@@ -12,6 +12,7 @@ export default defineLibraryConfig({
     "@atomiton/nodes",
     "@atomiton/nodes/definitions",
     "@atomiton/nodes/executables",
+    "@atomiton/store",
     "@atomiton/utils",
     "@atomiton/rpc",
     "@atomiton/rpc/renderer",
