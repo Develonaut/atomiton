@@ -11,6 +11,9 @@ export default defineReactLibraryConfig({
     utils: ["src/utils/"],
   },
   additionalConfig: {
+    resolve: {
+      extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+    },
     server: {
       port: parseInt(process.env.VITE_UI_PORT || "5174"),
       strictPort: true,
