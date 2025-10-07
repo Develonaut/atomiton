@@ -5,7 +5,8 @@ import Notifications from "#components/Notifications";
 import Search from "#components/Search";
 import User from "#components/User";
 import { useScrollbarWidth } from "#hooks/useScrollbarWidth";
-import { Link, useLink, usePathname } from "#router";
+import { Link, usePathname } from "#router";
+import { useLink } from "#router/hooks/useLink";
 import { Button } from "@atomiton/ui";
 import { useState } from "react";
 

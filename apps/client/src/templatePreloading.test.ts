@@ -57,9 +57,9 @@ describe("Template Preloading Smoke Tests", () => {
   });
 
   it("should have useLink hook available for Create button", async () => {
-    // Verify useLink hook is available for other components
-    const routerModule = await import("#router");
-    expect(routerModule.useLink).toBeDefined();
-    expect(typeof routerModule.useLink).toBe("function");
+    // Verify useLink hook is available from hooks directory
+    const { useLink } = await import("#router/hooks/useLink");
+    expect(useLink).toBeDefined();
+    expect(typeof useLink).toBe("function");
   });
 });

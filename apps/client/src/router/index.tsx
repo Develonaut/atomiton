@@ -22,6 +22,7 @@ export const {
   defaultNotFoundComponent: NotFoundPage,
 });
 
-export { useLink } from "#router/hooks/useLink";
+// Don't re-export useLink here to avoid circular dependency
+// Import it directly from "#router/hooks/useLink" instead
 export type { UseLinkOptions, AppNavigateOptions } from "#router/hooks/useLink";
 export type { EditorRouteState, AppRouteState } from "#router/types";

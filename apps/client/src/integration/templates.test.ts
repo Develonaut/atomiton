@@ -31,8 +31,10 @@ describe("Templates Integration Tests", () => {
     if (fs.existsSync(templatesPath)) {
       const source = fs.readFileSync(templatesPath, "utf-8");
 
-      // Verify it imports useLink hook from router
-      expect(source).toContain('import { useLink } from "#router"');
+      // Verify it imports useLink hook from router/hooks directory
+      expect(source).toContain(
+        'import { useLink } from "#router/hooks/useLink"',
+      );
 
       // Verify it uses useLink hook
       expect(source).toContain("useLink(");

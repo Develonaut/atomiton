@@ -1,5 +1,5 @@
 import Image from "#components/Image";
-import { useLink } from "#router";
+import { useLink } from "#router/hooks/useLink";
 import { useTemplates } from "#store/useTemplates";
 import type { NodeDefinition } from "@atomiton/nodes/definitions";
 
