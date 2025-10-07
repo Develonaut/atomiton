@@ -17,9 +17,8 @@ export default defineReactLibraryConfig({
   },
   additionalConfig: {
     resolve: {
-      alias: [
-        { find: /^#(.*)$/, replacement: resolve(__dirname, "src/$1") },
-      ],
+      alias: [{ find: /^#(.*)$/, replacement: resolve(__dirname, "src/$1") }],
+      extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
     },
     server: {
       port: parseInt(process.env.VITE_UI_PORT || "5174"),
