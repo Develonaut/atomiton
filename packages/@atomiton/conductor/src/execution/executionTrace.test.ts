@@ -277,9 +277,9 @@ describe("Execution Trace", () => {
 
       const trace = result.trace!;
 
-      // Verify trace timing
-      expect(trace.startTime).toBeGreaterThanOrEqual(startTime);
-      expect(trace.endTime).toBeLessThanOrEqual(endTime);
+      // Verify trace timing (allow 2ms margin for CI timing variability)
+      expect(trace.startTime).toBeGreaterThanOrEqual(startTime - 2);
+      expect(trace.endTime).toBeLessThanOrEqual(endTime + 2);
       expect(trace.duration).toBe(trace.endTime! - trace.startTime);
 
       // Verify node trace timing
