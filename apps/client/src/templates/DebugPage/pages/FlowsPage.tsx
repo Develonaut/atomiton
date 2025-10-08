@@ -16,8 +16,10 @@ export default function FlowsPage() {
   const { slowMo, setSlowMo, debugOptions, setDebugOptions } =
     useDebugOptions();
 
-  const { isExecuting, progress, runFlow, reset, resetKey, getTrace } =
-    useFlowOperations(slowMo, debugOptions);
+  const { isExecuting, progress, runFlow, reset, resetKey } = useFlowOperations(
+    slowMo,
+    debugOptions,
+  );
 
   const { clearLogs } = useDebugLogs();
 
@@ -312,7 +314,7 @@ export default function FlowsPage() {
 
         {/* Activity Logs */}
         <div className="flex-1 overflow-hidden">
-          <LogsSection getTrace={getTrace} />
+          <LogsSection />
         </div>
       </div>
     </div>

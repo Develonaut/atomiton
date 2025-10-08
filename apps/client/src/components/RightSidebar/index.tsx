@@ -2,7 +2,6 @@ import Tabs from "#components/Tabs";
 import ViewController from "#components/ViewController";
 import Design from "#components/RightSidebar/Design";
 import Head from "#components/RightSidebar/Head";
-import { LogsSection } from "#components/LogsSection";
 import { Box } from "@atomiton/ui";
 import { useState } from "react";
 
@@ -22,7 +21,11 @@ function RightSidebar() {
       </Box>
       <Box className="grow overflow-y-auto scrollbar-none rounded-b-[1.25rem]">
         {tab.id === 0 && <Design />}
-        {tab.id === 1 && <LogsSection />}
+        {tab.id === 1 && (
+          <Box className="p-4 text-secondary text-sm">
+            Animation controls coming soon...
+          </Box>
+        )}
       </Box>
       <ViewController vertical />
     </Box>

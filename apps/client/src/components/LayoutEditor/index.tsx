@@ -1,6 +1,7 @@
 import LeftSidebar from "#components/LeftSidebar";
 import RightSidebar from "#components/RightSidebar";
 import Toolbar from "#components/Toolbar";
+import { useEditorUI } from "#store/editorUI";
 import { useLocation, useParams } from "#router";
 import type { EditorRouteState } from "#router/types";
 import { Canvas, Editor } from "@atomiton/editor";
@@ -12,6 +13,7 @@ function LayoutEditor() {
   const { id } = useParams<{ id?: string }>();
   const { state: locationState } = useLocation();
   const editorState = locationState as EditorRouteState | undefined;
+  const { showMinimap } = useEditorUI();
 
   // Create a flow (NodeDefinition) from the editor state
   // TODO: Load actual flow from storage using id
@@ -69,10 +71,12 @@ function LayoutEditor() {
           <Box className="relative w-full h-full">
             <Canvas>
               <Canvas.Grid variant="dots" gap={12} size={1} />
-              <Canvas.Minimap
-                placement="bottom-right"
-                className="!right-66 !bottom-3"
-              />
+              {showMinimap && (
+                <Canvas.Minimap
+                  placement="bottom-right"
+                  className="!right-66 !bottom-3"
+                />
+              )}
             </Canvas>
           </Box>
         </Box>

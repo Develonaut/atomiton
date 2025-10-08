@@ -73,40 +73,68 @@ export const useDebugStore = debugStore.useStore;
 const setupConductorSubscriptions = () => {
   const addLog = debugStore.getState().addLog;
 
+  // Track executions to log start message only once per execution
+  const executionStarted = new Map<string, boolean>();
+
   const subscriptions = [
     conductor.node?.onProgress?.((event: NodeProgressEvent) => {
       // Find the current executing node
       const executingNode = event.nodes.find((n) => n.state === "executing");
 
+      // Track execution for cleanup purposes
+      if (!executionStarted.get(event.executionId)) {
+        executionStarted.set(event.executionId, true);
+      }
+
       // Skip generic "Waiting to start..." messages - they're noise
       if (event.message === "Waiting to start...") return;
 
-      // Only log if we have a meaningful message or an executing node
+      // Skip completion-related messages - we have a dedicated onComplete handler
+      if (
+        event.message?.toLowerCase().includes("completed") ||
+        event.message?.toLowerCase().includes("finished")
+      ) {
+        return;
+      }
+
+      // Only log progress if we have a meaningful message or an executing node
       if (!event.message && !executingNode) return;
 
-      const nodeIndex = executingNode
-        ? event.nodes.findIndex((n) => n.id === executingNode.id) + 1
-        : 0;
-      const nodeInfo =
-        nodeIndex > 0 ? `[Node ${nodeIndex}/${event.nodes.length}] ` : "";
+      // Calculate node position (current/total)
+      const completedCount = event.nodes.filter(
+        (n) => n.state === "completed",
+      ).length;
+      const currentNodeIndex = completedCount + 1; // +1 because we're executing the next one
+      const totalNodes = event.nodes.length;
+      const nodePosition = `[${currentNodeIndex}/${totalNodes}]`;
 
-      // Format individual node progress for display
-      // Note: Individual node progress is not available in the event,
-      // only overall graph progress. Using state instead.
-      const nodeProgress = executingNode
-        ? `Node: ${executingNode.state}`
-        : "Node: --";
+      // Extract node name from message (remove "Executing: " prefix)
+      const nodeName =
+        event.message?.replace(/^(Executing|Creating|Running):\s*/, "") || "";
 
       // Format overall graph progress
-      const graphProgress = `Graph: ${event.progress}%`;
+      const graphProgress = `${event.progress}%`;
 
-      addLog(
-        `📊 ${nodeInfo}${graphProgress} | ${nodeProgress} | ${event.message || ""}`,
-      );
+      // Get state indicator with text
+      const state = executingNode?.state || "pending";
+      const stateText =
+        state === "executing"
+          ? "Running"
+          : state === "completed"
+            ? "Completed"
+            : state === "error"
+              ? "Error"
+              : "Pending";
+
+      addLog(`${nodePosition} ${graphProgress} - ${stateText} ${nodeName}`);
     }),
 
     conductor.node?.onComplete?.((event: NodeCompleteEvent) => {
-      addLog(`✅ Node complete: ${event.nodeId}`);
+      // Clean up execution tracking
+      executionStarted.delete(event.executionId);
+
+      // Only log completion message
+      addLog(`🎉 Execution completed!`);
     }),
 
     conductor.node?.onError?.((event: NodeErrorEvent) => {
