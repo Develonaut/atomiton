@@ -1,40 +1,28 @@
-import Animation from "#components/RightSidebar/Animation";
 import Tabs from "#components/Tabs";
 import ViewController from "#components/ViewController";
 import Design from "#components/RightSidebar/Design";
 import Head from "#components/RightSidebar/Head";
+import { LogsSection } from "#components/LogsSection";
 import { Box } from "@atomiton/ui";
 import { useState } from "react";
 
+const tabs = [
+  { id: 0, name: "Config" },
+  { id: 1, name: "Logs" },
+];
+
 function RightSidebar() {
-  const [activeTab, setActiveTab] = useState<"design" | "animation">("design");
+  const [tab, setTab] = useState(tabs[0]);
 
   return (
     <Box className="sidebar right-3 flex flex-col" data-testid="right-sidebar">
       <Head />
       <Box className="px-4 py-3 border-b border-s-01">
-        <Tabs
-          value={activeTab}
-          onChange={(value) => setActiveTab(value as "design" | "animation")}
-        >
-          <Tabs.List>
-            <Tabs.Trigger value="design">Design</Tabs.Trigger>
-            <Tabs.Trigger value="animation">Animation</Tabs.Trigger>
-          </Tabs.List>
-        </Tabs>
+        <Tabs items={tabs} value={tab} setValue={setTab} />
       </Box>
       <Box className="grow overflow-y-auto scrollbar-none rounded-b-[1.25rem]">
-        <Tabs
-          value={activeTab}
-          onChange={(value) => setActiveTab(value as "design" | "animation")}
-        >
-          <Tabs.Content value="design">
-            <Design />
-          </Tabs.Content>
-          <Tabs.Content value="animation">
-            <Animation />
-          </Tabs.Content>
-        </Tabs>
+        {tab.id === 0 && <Design />}
+        {tab.id === 1 && <LogsSection />}
       </Box>
       <ViewController vertical />
     </Box>

@@ -1,4 +1,4 @@
-import { LogsSection } from "#templates/DebugPage/components/LogsSection";
+import { LogsSection } from "#components/LogsSection";
 import { NodeActionButtons } from "#templates/DebugPage/components/NodeActionButtons";
 import { NodeFieldsForm } from "#templates/DebugPage/components/NodeFieldsForm";
 import { NodeTypeSelector } from "#templates/DebugPage/components/NodeTypeSelector";
