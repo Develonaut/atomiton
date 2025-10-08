@@ -75,6 +75,27 @@
   }
 }
 
+@keyframes atomiton-ping {
+  0% {
+    box-shadow:
+      0 0 0 0 currentColor,
+      0 0 0 0 currentColor;
+    opacity: 0.6;
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px currentColor,
+      0 0 0 8px currentColor;
+    opacity: 0.3;
+  }
+  100% {
+    box-shadow:
+      0 0 0 8px currentColor,
+      0 0 0 12px currentColor;
+    opacity: 0;
+  }
+}
+
 /* ============================================================================
  * Node Styles
  * ============================================================================ */
@@ -109,6 +130,14 @@
     border-radius: var(--atomiton-node-border-radius);
     transition: box-shadow var(--atomiton-transition-duration)
       var(--atomiton-transition-easing);
+
+    /* Icon sizing and color */
+    & svg {
+      width: 24px;
+      height: 24px;
+      transition: color var(--atomiton-transition-duration)
+        var(--atomiton-transition-easing);
+    }
 
     /* Always-visible gray border (base layer) */
     &::before {
@@ -262,9 +291,26 @@
     background-color: var(--atomiton-node-state-completed);
   }
 
+  /* Icon turns green when completed */
+  & .atomiton-node svg {
+    color: var(--atomiton-node-state-completed);
+  }
+
   /* Pulse animation when node completes */
   & .atomiton-node {
     animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Ping effect - expanding green shadow */
+  & .atomiton-node::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    color: var(--atomiton-node-state-completed);
+    animation: atomiton-ping 0.8s cubic-bezier(0, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: -1;
   }
 }
 
@@ -299,9 +345,26 @@
     background-color: var(--atomiton-node-state-error);
   }
 
+  /* Icon turns red when error */
+  & .atomiton-node svg {
+    color: var(--atomiton-node-state-error);
+  }
+
   /* Pulse animation when node errors */
   & .atomiton-node {
     animation: atomiton-pulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* Ping effect - expanding red shadow */
+  & .atomiton-node::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    color: var(--atomiton-node-state-error);
+    animation: atomiton-ping 0.8s cubic-bezier(0, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: -1;
   }
 }
 
