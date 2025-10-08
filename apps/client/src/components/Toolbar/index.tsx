@@ -1,18 +1,16 @@
 import Export from "#components/Export";
 import Icon from "#components/Icon";
-// import RunFlow, { type ExecuteHandler } from "#components/RunFlow";
 import Zoom from "#components/Zoom";
-import conductor from "#lib/conductor";
-import type { ExecutionResult } from "@atomiton/conductor/browser";
-import { ErrorCode } from "@atomiton/conductor/browser";
+import { useNodeExecution } from "#hooks/useNodeExecution";
+import type { NodeDefinition } from "@atomiton/nodes/definitions";
 import {
-  createNodeDefinition,
-  type NodeDefinition,
-} from "@atomiton/nodes/definitions";
+  useSelectedNode,
+  useEditorNodes,
+  useEditorEdges,
+  reactFlowToFlow,
+} from "@atomiton/editor";
 import { Box, Button } from "@atomiton/ui";
 import { useCallback, useState } from "react";
-
-type ExecuteHandler = (nodes: NodeDefinition[]) => Promise<void>;
 
 function Toolbar() {
   // TODO: Re-implement undo/redo functionality
@@ -21,43 +19,35 @@ function Toolbar() {
   const undo = () => {};
   const redo = () => {};
   const [active, setActive] = useState<number | null>(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [output, setOutput] = useState<ExecutionResult | null>(null);
   const [showOutput, setShowOutput] = useState(false);
 
-  const handleExecute: ExecuteHandler = useCallback(async (nodeDefinitions) => {
-    setIsRunning(true);
-    setOutput(null);
-    setShowOutput(true);
+  // Get selected node and editor state
+  const selectedNode = useSelectedNode() as NodeDefinition | null;
+  const { nodes } = useEditorNodes();
+  const { edges } = useEditorEdges();
 
-    // Create a group node with the node definitions as children
-    const groupNode = createNodeDefinition({
-      type: "group",
-      nodes: nodeDefinitions,
-    });
+  // Use shared execution hook
+  const { execute, isExecuting, result } = useNodeExecution({
+    validateBeforeRun: true,
+    onExecutionStart: (node) => {
+      console.log(
+        `Executing ${selectedNode ? "selected node" : "flow"}: ${node.name || node.id}`,
+      );
+      setShowOutput(true);
+    },
+    onExecutionComplete: (result) => {
+      console.log("Execution complete:", result);
+    },
+    onValidationError: (errors) => {
+      console.error("Validation failed:", errors);
+    },
+  });
 
-    try {
-      console.log("Executing flow with Conductor API...");
-      const response = await conductor.node.run(groupNode);
-
-      console.log("Flow execution response:", response);
-
-      setOutput(response);
-    } catch (error) {
-      console.error("Failed to execute flow:", error);
-      setOutput({
-        success: false,
-        error: {
-          code: ErrorCode.EXECUTION_FAILED,
-          nodeId: groupNode.id,
-          message: error instanceof Error ? error.message : "Unknown error",
-          timestamp: new Date(),
-        },
-      });
-    } finally {
-      setIsRunning(false);
-    }
-  }, []);
+  const handleRun = useCallback(async () => {
+    // Determine what to run: selected node or entire flow
+    const nodeToRun = selectedNode || reactFlowToFlow(nodes, edges);
+    await execute(nodeToRun);
+  }, [selectedNode, nodes, edges, execute]);
 
   const actions = [
     {
@@ -127,19 +117,23 @@ function Toolbar() {
         </Button>
       </Box>
       <Box className="p-2 flex gap-2">
-        {/* <RunFlow onClick={handleExecute} isRunning={isRunning} /> */}
         <Button
-          onClick={() => handleExecute([])}
-          disabled={isRunning}
+          onClick={handleRun}
+          disabled={isExecuting}
           variant="default"
+          title={selectedNode ? "Run selected node" : "Run entire flow"}
         >
-          {isRunning ? "Running..." : "Run"}
+          <Icon
+            name={isExecuting ? "loader" : "play"}
+            className={isExecuting ? "animate-spin" : ""}
+          />
+          {isExecuting ? "Running..." : "Run"}
         </Button>
-        <Export />
+        <Export disabled />
       </Box>
 
       {/* Output Panel */}
-      {showOutput && (
+      {showOutput && result && (
         <div className="fixed bottom-20 right-4 z-50 w-96 max-h-96 bg-surface-01 rounded-xl border border-s-01 shadow-lg overflow-hidden">
           <div className="p-4 border-b border-s-01 flex items-center justify-between">
             <h3 className="font-semibold text-primary flex items-center gap-2">
@@ -156,38 +150,36 @@ function Toolbar() {
 
           <div className="p-4 max-h-80 overflow-y-auto">
             {/* Output */}
-            {output && (
-              <div
-                className={`p-3 rounded-lg border ${
-                  output.success
-                    ? "bg-success/5 border-success/20"
-                    : "bg-error/5 border-error/20"
-                }`}
-              >
-                <p className="text-sm font-medium mb-2 flex items-center gap-2">
-                  <Icon
-                    name={output.success ? "check-circle" : "x-circle"}
-                    className={output.success ? "text-success" : "text-error"}
-                  />
-                  {output.success ? "Success" : "Error"}
-                </p>
-                {output.error && (
-                  <p className="text-sm text-error">{output.error.message}</p>
-                )}
-                {output.data !== null && output.data !== undefined && (
-                  <div className="mt-2">
-                    <p className="text-xs text-secondary mb-1">Result:</p>
-                    <pre className="text-xs bg-surface-02 p-2 rounded overflow-x-auto">
-                      {JSON.stringify(output.data, null, 2)}
-                    </pre>
-                  </div>
-                )}
-              </div>
-            )}
+            <div
+              className={`p-3 rounded-lg border ${
+                result.success
+                  ? "bg-success/5 border-success/20"
+                  : "bg-error/5 border-error/20"
+              }`}
+            >
+              <p className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Icon
+                  name={result.success ? "check-circle" : "x-circle"}
+                  className={result.success ? "text-success" : "text-error"}
+                />
+                {result.success ? "Success" : "Error"}
+              </p>
+              {result.error && (
+                <p className="text-sm text-error">{result.error.message}</p>
+              )}
+              {result.data !== null && result.data !== undefined && (
+                <div className="mt-2">
+                  <p className="text-xs text-secondary mb-1">Result:</p>
+                  <pre className="text-xs bg-surface-02 p-2 rounded overflow-x-auto">
+                    {JSON.stringify(result.data, null, 2)}
+                  </pre>
+                </div>
+              )}
+            </div>
 
             {/* Show message if not in Electron */}
             {!("electron" in window) && (
-              <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
+              <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg mt-2">
                 <p className="text-sm text-warning">
                   Run functionality requires the desktop application
                 </p>

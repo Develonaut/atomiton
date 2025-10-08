@@ -15,6 +15,7 @@ export { useEditorNode } from "#hooks/useEditorNode";
 export { useEditorNodes } from "#hooks/useEditorNodes";
 export { useEditorEdges, type EditorEdge } from "#hooks/useEditorEdges";
 export { useEditorViewport } from "#hooks/useEditorViewport";
+export { useSelectedNode } from "#hooks/useSelectedNode";
 
 export {
   getLayoutedElements,
@@ -22,6 +23,13 @@ export {
   type LayoutDirection,
   type LayoutOptions,
 } from "#utils/layout";
+
+export {
+  flowToReactFlow,
+  reactFlowToFlow,
+  type ReactFlowData,
+  type TransformedFlow,
+} from "#utils/transform";
 
 export type { ViewportOptions } from "#hooks/useEditorViewport";
 export type { EditorNode, NodeData, NodePosition } from "#types/EditorNode";

@@ -1,4 +1,4 @@
-import conductor from "#lib/conductor";
+import { useNodeExecution } from "#hooks/useNodeExecution";
 import { createExecutionId } from "@atomiton/conductor/browser";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import {
@@ -11,6 +11,7 @@ import {
   createNodeDefinition,
   getNodeDefinition,
   type NodeDefinition,
+  type NodeFieldsConfig,
 } from "@atomiton/nodes/definitions";
 import {
   getNodeSchemaTypes,
@@ -20,13 +21,40 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 const logger = createLogger({ scope: "NODE_OPERATIONS" });
 
-export function useNodeOperations() {
+export type UseNodeOperationsReturn = {
+  nodeContent: string;
+  setNodeContent: (content: string) => void;
+  isExecuting: boolean;
+  currentExecutionId: string | null;
+  validateNode: () => Promise<void>;
+  executeNode: () => Promise<void>;
+  cancelExecution: () => Promise<void>;
+  createSampleNode: () => void;
+  createGroupNode: () => void;
+  createTestNode: () => void;
+  selectedNodeType: string | null;
+  setSelectedNodeType: (type: string | null) => void;
+  availableNodeTypes: string[];
+  nodeFieldsConfig: NodeFieldsConfig;
+  nodeFieldValues: Record<string, unknown>;
+  setNodeFieldValue: (key: string, value: unknown) => void;
+  executeSelectedNode: () => Promise<void>;
+};
+
+export function useNodeOperations(): UseNodeOperationsReturn {
   const { addLog } = useDebugLogs();
   const [nodeContent, setNodeContent] = useState<string>("");
-  const [isExecuting, setIsExecuting] = useState(false);
   const [currentExecutionId, setCurrentExecutionId] = useState<string | null>(
     null,
   );
+
+  // Use shared execution hook
+  const { execute, validate, cancel, isExecuting } = useNodeExecution({
+    validateBeforeRun: false, // Debug page handles validation explicitly
+    onValidationError: (errors) => {
+      addLog(`Validation errors: ${errors.join(", ")}`);
+    },
+  });
 
   // Dynamic node selection state
   const [selectedNodeType, setSelectedNodeType] = useState<string | null>(null);
@@ -38,7 +66,7 @@ export function useNodeOperations() {
     try {
       addLog("Validating node...");
       const nodeData = JSON.parse(nodeContent) as NodeDefinition;
-      const result = await conductor.node.validate(nodeData);
+      const result = await validate(nodeData);
       addLog(`Validation result: ${result.valid ? "Valid" : "Invalid"}`);
       if (!result.valid) {
         addLog(`Validation errors: ${result.errors.join(", ")}`);
@@ -47,17 +75,16 @@ export function useNodeOperations() {
       addLog(`Validation error: ${error}`);
       logger.error("Validation error:", error);
     }
-  }, [nodeContent, addLog]);
+  }, [nodeContent, addLog, validate]);
 
   const executeNode = useCallback(async () => {
     try {
       addLog("Executing node...");
-      setIsExecuting(true);
       const nodeData = JSON.parse(nodeContent) as NodeDefinition;
       const executionId = createExecutionId(`exec_${Date.now()}`);
       setCurrentExecutionId(executionId);
 
-      const result = await conductor.node.run(nodeData, { executionId });
+      const result = await execute(nodeData, { executionId });
 
       // Log the full result for debugging
       addLog("Execution result:");
@@ -83,14 +110,14 @@ export function useNodeOperations() {
       } else {
         addLog(`❌ Execution error: No result returned`);
       }
+
+      setCurrentExecutionId(null);
     } catch (error) {
       addLog(`❌ Execution error: ${error}`);
       logger.error("Execution error:", error);
-    } finally {
-      setIsExecuting(false);
       setCurrentExecutionId(null);
     }
-  }, [nodeContent, addLog]);
+  }, [nodeContent, addLog, execute]);
 
   const cancelExecution = useCallback(async () => {
     if (!currentExecutionId) {
@@ -100,15 +127,14 @@ export function useNodeOperations() {
 
     try {
       addLog(`Canceling execution: ${currentExecutionId}`);
-      await conductor.node.cancel(currentExecutionId);
+      await cancel();
       addLog("Execution canceled");
-      setIsExecuting(false);
       setCurrentExecutionId(null);
     } catch (error) {
       addLog(`Cancel error: ${error}`);
       logger.error("Cancel error:", error);
     }
-  }, [currentExecutionId, addLog]);
+  }, [currentExecutionId, addLog, cancel]);
 
   const createSampleNode = useCallback(() => {
     const sampleNode = createSampleTransformNode();
@@ -185,22 +211,14 @@ export function useNodeOperations() {
       return;
     }
 
-    try {
-      addLog(`🚀 Executing ${selectedNodeType} node...`);
-      setIsExecuting(true);
+    addLog(`🚀 Executing ${selectedNodeType} node...`);
 
-      const executionId = createExecutionId(`exec_${Date.now()}`);
-      const result = await conductor.node.run(node, { executionId });
+    const executionId = createExecutionId(`exec_${Date.now()}`);
+    const result = await execute(node, { executionId });
 
-      addLog(`✅ ${selectedNodeType} execution complete`);
-      addLog(JSON.stringify(result, null, 2));
-    } catch (error) {
-      addLog(`❌ Execution error: ${error}`);
-      logger.error("Execution error:", error);
-    } finally {
-      setIsExecuting(false);
-    }
-  }, [buildNodeFromFields, selectedNodeType, addLog]);
+    addLog(`✅ ${selectedNodeType} execution complete`);
+    addLog(JSON.stringify(result, null, 2));
+  }, [buildNodeFromFields, selectedNodeType, addLog, execute]);
 
   // Initialize with first available node type
   useEffect(() => {

@@ -1,4 +1,5 @@
 import conductor from "#lib/conductor";
+import { useNodeExecution } from "#hooks/useNodeExecution";
 import { useDebugLogs } from "#templates/DebugPage/hooks/useDebugLogs";
 import type { DebugUIState } from "#templates/DebugPage/hooks/useDebugOptions";
 import type {
@@ -26,14 +27,30 @@ export type ExecutionProgress = {
   graphProgress: number; // Overall weighted progress (0-100)
 };
 
-export function useFlowOperations(slowMo: number, debugOptions: DebugUIState) {
+export type UseFlowOperationsReturn = {
+  isExecuting: boolean;
+  progress: ExecutionProgress;
+  runFlow: (flow: NodeDefinition | null) => Promise<void>;
+  reset: () => void;
+  resetKey: number;
+  getTrace: () => ExecutionResult["trace"] | undefined;
+};
+
+export function useFlowOperations(
+  slowMo: number,
+  debugOptions: DebugUIState,
+): UseFlowOperationsReturn {
   const { addLog, clearLogs } = useDebugLogs();
-  const [isExecuting, setIsExecuting] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const [progress, setProgress] = useState<ExecutionProgress>({
     currentNode: 0,
     totalNodes: 0,
     graphProgress: 0,
+  });
+
+  // Use shared execution hook as foundation
+  const { execute, isExecuting } = useNodeExecution({
+    validateBeforeRun: false, // Debug page may want to test invalid nodes
   });
 
   const currentExecutionIdRef = useRef<string | null>(null);
@@ -129,93 +146,87 @@ export function useFlowOperations(slowMo: number, debugOptions: DebugUIState) {
         return;
       }
 
-      try {
-        setIsExecuting(true);
-        const executionStartTime = Date.now();
+      const executionStartTime = Date.now();
+      addLog(`🚀 Executing flow: ${flow.name}`);
+      addLog(
+        `⚙️  Execution options: slowMo=${slowMo}ms, debug=${JSON.stringify(debugOptions)}`,
+      );
 
-        addLog(`🚀 Executing flow: ${flow.name}`);
-        addLog(
-          `⚙️  Execution options: slowMo=${slowMo}ms, debug=${JSON.stringify(debugOptions)}`,
-        );
+      const totalNodes = flow.nodes?.length || 0;
+      completedNodesRef.current.clear();
+      executionTraceRef.current = undefined;
+      lastExecutingNodeNameRef.current = undefined;
+      setProgress({
+        currentNode: 0,
+        totalNodes,
+        currentNodeName: undefined,
+        graphProgress: 0,
+      });
+      addLog(`📊 Flow has ${totalNodes} nodes to execute`);
 
-        const totalNodes = flow.nodes?.length || 0;
-        completedNodesRef.current.clear();
-        executionTraceRef.current = undefined;
-        lastExecutingNodeNameRef.current = undefined;
+      const executionId = createExecutionId(`flow_exec_${Date.now()}`);
+      currentExecutionIdRef.current = executionId;
+
+      const contextOptions = {
+        executionId,
+        slowMo,
+        ...((debugOptions.simulateError ||
+          debugOptions.simulateLongRunning) && {
+          debug: {
+            ...(debugOptions.simulateError && {
+              simulateError: {
+                nodeId: debugOptions.errorNode,
+                errorType: debugOptions.errorType,
+                ...(debugOptions.errorDelay > 0 && {
+                  delayMs: debugOptions.errorDelay,
+                }),
+              },
+            }),
+            ...(debugOptions.simulateLongRunning && {
+              simulateLongRunning: {
+                nodeId: debugOptions.longRunningNode,
+                delayMs: debugOptions.longRunningDelay,
+              },
+            }),
+          },
+        }),
+      };
+
+      logger.debug("Debug options state:", debugOptions);
+      logger.debug("Context options being passed:", contextOptions);
+
+      // Use shared execution hook
+      const result = await execute(flow, contextOptions);
+
+      executionTraceRef.current = result?.trace;
+      currentExecutionIdRef.current = null;
+
+      if (result?.success) {
         setProgress({
-          currentNode: 0,
+          currentNode: totalNodes,
           totalNodes,
           currentNodeName: undefined,
-          graphProgress: 0,
+          graphProgress: 100,
         });
-        addLog(`📊 Flow has ${totalNodes} nodes to execute`);
+        addLog("🎉 Flow execution completed!");
 
-        const executionId = createExecutionId(`flow_exec_${Date.now()}`);
-        currentExecutionIdRef.current = executionId;
-
-        const contextOptions = {
-          executionId,
-          slowMo,
-          ...((debugOptions.simulateError ||
-            debugOptions.simulateLongRunning) && {
-            debug: {
-              ...(debugOptions.simulateError && {
-                simulateError: {
-                  nodeId: debugOptions.errorNode,
-                  errorType: debugOptions.errorType,
-                  ...(debugOptions.errorDelay > 0 && {
-                    delayMs: debugOptions.errorDelay,
-                  }),
-                },
-              }),
-              ...(debugOptions.simulateLongRunning && {
-                simulateLongRunning: {
-                  nodeId: debugOptions.longRunningNode,
-                  delayMs: debugOptions.longRunningDelay,
-                },
-              }),
+        if (result.trace) {
+          const executionDuration = Date.now() - executionStartTime;
+          logger.info(
+            `📊 Execution Trace: ${flow.name} (${executionDuration}ms)`,
+            {
+              config: { slowMo, totalNodes, executionId },
+              trace: result.trace,
             },
-          }),
-        };
-
-        logger.debug("Debug options state:", debugOptions);
-        logger.debug("Context options being passed:", contextOptions);
-
-        const result = await conductor.node.run(flow, contextOptions);
-
-        executionTraceRef.current = result.trace;
-
-        if (result.success) {
-          setProgress({
-            currentNode: totalNodes,
-            totalNodes,
-            currentNodeName: undefined,
-            graphProgress: 100,
-          });
-          addLog("🎉 Flow execution completed!");
-
-          if (result.trace) {
-            const executionDuration = Date.now() - executionStartTime;
-            logger.info(
-              `📊 Execution Trace: ${flow.name} (${executionDuration}ms)`,
-              {
-                config: { slowMo, totalNodes, executionId },
-                trace: result.trace,
-              },
-            );
-          }
-        } else {
-          addLog(`❌ Flow execution error: ${result.error?.message}`);
+          );
         }
-      } catch (error) {
-        addLog(`❌ Flow execution error: ${error}`);
-        logger.error("Flow execution error:", error);
-      } finally {
-        setIsExecuting(false);
-        currentExecutionIdRef.current = null;
+      } else if (result) {
+        addLog(`❌ Flow execution error: ${result.error?.message}`);
+      } else {
+        addLog(`❌ Flow execution error: No result returned`);
       }
     },
-    [addLog, slowMo, debugOptions],
+    [addLog, slowMo, debugOptions, execute],
   );
 
   const reset = useCallback(() => {
