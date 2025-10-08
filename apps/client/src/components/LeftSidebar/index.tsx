@@ -6,8 +6,8 @@ import Search from "#components/LeftSidebar/Search";
 import { useState } from "react";
 
 const tabs = [
-  { id: 0, name: "Scene" },
-  { id: 1, name: "Assets" },
+  { id: 0, name: "Flow" },
+  { id: 1, name: "Nodes" },
 ];
 
 function LeftSidebar() {
