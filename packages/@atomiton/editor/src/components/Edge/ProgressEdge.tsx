@@ -17,7 +17,7 @@ import { type EdgeProps, getBezierPath } from "@xyflow/react";
  * @performance
  * - Uses direct DOM manipulation (no React re-renders)
  * - GPU-accelerated CSS animations
- * - Efficient for graphs with 500+ edges
+ * - Suitable for large graphs
  */
 export function ProgressEdge({
   id,
@@ -73,6 +73,7 @@ export function ProgressEdge({
         id={id}
         className="react-flow__edge-path"
         d={edgePath}
+        pathLength={100}
         fill="none"
         strokeWidth={2}
         markerEnd={markerEnd}

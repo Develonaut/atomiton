@@ -5,25 +5,13 @@ import { useEffect, useRef } from "react";
  * Hook to subscribe an edge to execution progress events
  * Updates DOM attributes directly for performance (no React re-renders)
  *
+ * Uses CSS variables with SVG pathLength normalization for optimal performance
  * Mirrors the pattern from useNodeExecutionState for consistency
  *
  * @param edgeId - The ID of the edge to track
  * @param sourceId - ID of source node
  * @param targetId - ID of target node
  * @returns ref to attach to the edge's SVG group element
- *
- * @example
- * ```tsx
- * function ProgressEdge({ id, source, target, ...props }: EdgeProps) {
- *   const edgeRef = useEdgeExecutionState(id, source, target);
- *   return <g ref={edgeRef}>...</g>;
- * }
- * ```
- *
- * @performance
- * - Uses direct DOM manipulation (no React re-renders)
- * - Caches DOM references to avoid repeated traversals
- * - Efficient for graphs with 500+ edges
  */
 export function useEdgeExecutionState(
   edgeId: string,
@@ -40,17 +28,12 @@ export function useEdgeExecutionState(
 
     if (!reactFlowEdge) return;
 
-    // Cache path element and calculate its length once
+    // Cache path element reference
     const pathElement = reactFlowEdge.querySelector(
       ".react-flow__edge-path",
     ) as SVGPathElement | null;
-    const pathLength = pathElement?.getTotalLength() || 0;
 
-    // Initialize dasharray for progress effect
-    if (pathElement && pathLength > 0) {
-      pathElement.style.strokeDasharray = String(pathLength);
-      pathElement.style.strokeDashoffset = String(pathLength); // Start fully hidden
-    }
+    if (!pathElement) return;
 
     const unsubscribe = conductor.node.onProgress((event) => {
       try {
@@ -91,12 +74,8 @@ export function useEdgeExecutionState(
         // Update execution state on ReactFlow edge wrapper (no React re-render)
         reactFlowEdge.setAttribute("data-edge-state", edgeState);
 
-        // Update stroke-dashoffset for linear progress bar effect
-        if (pathElement && pathLength > 0) {
-          // Calculate dashoffset: as progress increases (0-100), dashoffset decreases (pathLength to 0)
-          const dashoffset = pathLength - (pathLength * edgeProgress) / 100;
-          pathElement.style.strokeDashoffset = String(dashoffset);
-        }
+        // Set CSS variable for progress - CSS handles the rest via pathLength normalization
+        pathElement.style.setProperty("--edge-progress", String(edgeProgress));
 
         // Add accessibility attributes for screen readers
         if (edgeState === "executing") {

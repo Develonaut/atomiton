@@ -349,7 +349,9 @@
 .react-flow__edge[data-edge-state="executing"] .react-flow__edge-path {
   stroke: var(--atomiton-node-state-executing);
   stroke-width: var(--atomiton-border-overlay-width);
-  /* dasharray and dashoffset set dynamically in JS for progress effect */
+  /* With pathLength="100", use CSS calc for progress */
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--edge-progress, 0));
   transition:
     stroke var(--atomiton-progress-transition-duration) ease,
     stroke-dashoffset var(--atomiton-progress-transition-duration) ease;
@@ -360,7 +362,9 @@
 .react-flow__edge[data-edge-state="completed"] .react-flow__edge-path {
   stroke: var(--atomiton-node-state-completed);
   stroke-width: var(--atomiton-border-overlay-width);
-  /* dasharray and dashoffset set dynamically in JS for progress effect */
+  /* With pathLength="100", use CSS calc for progress */
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--edge-progress, 0));
   transition:
     stroke var(--atomiton-progress-transition-duration) ease,
     stroke-dashoffset var(--atomiton-progress-transition-duration) ease;
@@ -371,6 +375,11 @@
 .react-flow__edge[data-edge-state="error"] .react-flow__edge-path {
   stroke: var(--atomiton-node-state-error);
   stroke-width: var(--atomiton-border-overlay-width);
-  /* dasharray and dashoffset set dynamically in JS for progress effect */
-  transition: stroke var(--atomiton-progress-transition-duration) ease;
+  /* With pathLength="100", use CSS calc for progress */
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--edge-progress, 0));
+  transition:
+    stroke var(--atomiton-progress-transition-duration) ease,
+    stroke-dashoffset var(--atomiton-progress-transition-duration) ease;
+  will-change: stroke-dashoffset; /* GPU acceleration hint */
 }
