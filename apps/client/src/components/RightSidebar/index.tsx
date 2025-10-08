@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const tabs = [
   { id: 0, name: "Config" },
-  { id: 1, name: "Logs" },
+  { id: 1, name: "Output" },
 ];
 
 function RightSidebar() {
